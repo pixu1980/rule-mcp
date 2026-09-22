@@ -12,8 +12,7 @@ import { listAreaPrompts } from "./_areas.js";
  * @returns {Array<{ name: string, description: string, arguments: Array<{ name: string, description: string, required?: boolean }> }>}
  */
 export function listPrompts() {
-  // The area prompts are one per skill, derived from the resolved catalog, so
-  // a skill any layer adds brings its command with it (ADR 079).
+  // The area prompts are one per area hub (ADR 117); leaf skills keep tools only.
   const areas = listAreaPrompts().map(({ name, description, arguments: args }) => ({ name, description, arguments: args }));
 
   return [...PROMPT_DEFS, ...areas, ...rolePrompts()].sort((left, right) => left.name.localeCompare(right.name));

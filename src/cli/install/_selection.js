@@ -5,11 +5,10 @@
  *
  * Which commands an install writes.
  *
- * Every skill owns a command, so writing all of them is 152 files in every
- * agent directory. That is the right default for nobody: this turns the choice
- * into data - a preset, or families plus areas plus skills - so the
- * interactive picker and the flags decide the same thing the same way, and a
- * test can assert what each choice produces.
+ * Area slash commands are hubs only (ADR 117); leaf skills stay as tools.
+ * Personas and session tasks still fan out. Selection is data - a preset, or
+ * families plus areas - so the interactive picker and the flags decide the
+ * same thing the same way, and a test can assert what each choice produces.
  *
  * The router is always written. It is the dispatcher every other command
  * routes through, and an install without it is an install that does nothing.
@@ -22,7 +21,7 @@ import { areaOf, skillAreas } from "../../prompts/_areas.js";
 export const FAMILIES = [
   { id: "areas", label: "Areas and skills", hint: "one command per skill, grouped by area" },
   { id: "personas", label: "Review personas", hint: "audit, review and plan as a specialist" },
-  { id: "tasks", label: "One-shot tasks", hint: "handoff, handon, init, flight, update, check" },
+  { id: "tasks", label: "One-shot tasks", hint: "handoff, handon, init, compress, stats, usage, update, check" },
 ];
 
 /** The family a command name belongs to. */
@@ -41,15 +40,14 @@ function familyOf(name) {
 /**
  * The presets, in the order a picker offers them.
  *
- * `minimal` takes the area hubs without their members: eleven commands that
- * can reach every skill through the router, for someone who wants the surface
- * small. `standard` adds the personas and the tasks but still no per-skill
- * command. `full` is everything.
+ * Area slash commands are hubs only (ADR 117). `minimal` is router + area hubs.
+ * `standard` adds personas and tasks. `full` is the same area set plus every
+ * persona and task (no per-skill slash).
  */
 export const PRESETS = {
   minimal: { families: ["areas"], hubsOnly: true, label: "Minimal", hint: "the router and the area hubs" },
-  standard: { families: ["areas", "personas", "tasks"], hubsOnly: true, label: "Standard", hint: "areas, personas and tasks, without a command per skill" },
-  full: { families: ["areas", "personas", "tasks"], hubsOnly: false, label: "Full", hint: "every command, including one per skill" },
+  standard: { families: ["areas", "personas", "tasks"], hubsOnly: true, label: "Standard", hint: "area hubs, personas and tasks" },
+  full: { families: ["areas", "personas", "tasks"], hubsOnly: true, label: "Full", hint: "area hubs plus every persona and task (no leaf area slash)" },
 };
 
 /** The hub command name of every area. */

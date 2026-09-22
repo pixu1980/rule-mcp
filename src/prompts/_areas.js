@@ -3,16 +3,15 @@
 /**
  * @module prompts/areas
  *
- * One prompt per skill, grouped into areas read from the skill names.
+ * One MCP/slash prompt per area hub, grouped from skill names.
  *
  * The area is already in the name: `rule-frontend-react` is frontend, and
  * `rule-frontend` is frontend itself. Deriving the grouping means a skill that
  * joins any layer - this repository, a project, a user's own - joins its area
  * without a second place remembering it.
  *
- * The hub skill owns its area's command rather than competing with a prompt of
- * the same name: `/rule-area-frontend` IS `rule-frontend`. Its members nest
- * under it, so an agent's command list sorts them together.
+ * The hub skill owns its area's command: `/rule-area-frontend` IS `rule-frontend`.
+ * Leaf skills keep their tools; the hub routes to them from free text (ADR 117).
  */
 
 import { getSkillNames } from "../tools/router/index.js";
@@ -38,7 +37,7 @@ export function areaOf(skillName) {
 }
 
 /**
- * The command a skill owns.
+ * The slash/MCP area command a skill routes through (always the hub; ADR 117).
  *
  * @param {string} skillName
  * @returns {string|null}
@@ -50,7 +49,21 @@ export function areaCommandName(skillName) {
     return null;
   }
 
-  return parsed.member === "" ? `rule-area-${parsed.area}` : `rule-area-${parsed.area}-${parsed.member}`;
+  return `rule-area-${parsed.area}`;
+}
+
+/**
+ * Skill name → MCP tool name (`rule-frontend-react` → `rule_tool_frontend_react`).
+ *
+ * @param {string} skillName
+ * @returns {string|null}
+ */
+export function skillToolName(skillName) {
+  if (typeof skillName !== "string" || !skillName.startsWith("rule-")) {
+    return null;
+  }
+
+  return `rule_tool_${skillName.slice("rule-".length).replaceAll("-", "_")}`;
 }
 
 /**
@@ -82,12 +95,26 @@ export function skillAreas() {
   return areas;
 }
 
-/** The lines every area prompt shares: route, load evidence, check, commit. */
-function promptLines(area, subject, evidence) {
+/** Readable skill + tool pairs for hub routing prose. */
+function memberRoutingList(members) {
+  const pairs = members.map((skill) => `\`${skill}\` / \`${skillToolName(skill)}\``);
+  const shown = pairs.slice(0, 12);
+
+  return pairs.length > shown.length ? `${shown.join(", ")}, and ${pairs.length - shown.length} more` : shown.join(", ");
+}
+
+/** The lines every area hub prompt shares: route leaves from free text, check, commit. */
+function hubPromptLines(area, hub, members) {
+  const evidence =
+    members.length > 0
+      ? `the hub \`${hub}\` and whichever leaf skills the request names: ${memberRoutingList(members)}`
+      : `the \`${hub}\` skill`;
+
   return [
-    subject,
+    `You are the ${area} area specialist for rule-mcp (collector slash only; ADR 117).`,
     `Route this request through \`pix_tool\` first, then load ${evidence} as source of truth.`,
-    "The request is free text: extract the target framework, platform, database or tool from it when present; never invent APIs, files, dependencies, commands, or requirements not present in the skill evidence.",
+    "The request is free text: extract every framework, platform, database or tool it names (e.g. rspack, pnpm, eslint, husky, react) and call the matching leaf `rule_tool_*` / load that skill; call several when the request spans several leaves. Never invent APIs, files, dependencies, commands, or requirements not present in the skill evidence.",
+    "If the request is a check (whole tokens such as check, controlla, validate, verify, guardrail, lint), call `rule_tool_check` on the named paths or the git diff against the routed skill(s) and skip the implement path (ADR 116).",
     "Baseline: involve TDD (write failing tests first) and a11y (WCAG 2.2 AA, axe-core where applicable). If the request has no test/a11y surface, ask the user what to cover before finishing.",
     "Validate generated code with `rule_tool_check` and iterate until all guardrails pass.",
     "Compression is implicit: if the user is working in compression mode, keep the response compressed.",
@@ -95,47 +122,30 @@ function promptLines(area, subject, evidence) {
   ].join("\n");
 }
 
-/** A readable list of an area's skills, capped so a prompt stays a prompt. */
-function skillList(members) {
-  const shown = members.slice(0, 12);
-
-  return members.length > shown.length ? `${shown.join(", ")}, and ${members.length - shown.length} more` : shown.join(", ");
-}
-
 /**
- * One prompt per skill: the hub speaks for its area, a member for itself.
+ * One prompt per area hub only (ADR 117). Leaf skills stay as tools, not slash.
  *
- * @returns {Array<{ name: string, description: string, text: string, skill: string, area: string, arguments: object[] }>}
+ * @returns {Array<{ name: string, description: string, text: string, skill: string, area: string, members: string[], arguments: object[] }>}
  */
 export function listAreaPrompts() {
   const prompts = [];
 
   for (const [area, entry] of skillAreas()) {
-    if (entry.hub) {
-      prompts.push({
-        name: `rule-area-${area}`,
-        skill: entry.hub,
-        area,
-        description: `${area} work, across every ${area} skill`,
-        text: promptLines(
-          area,
-          `You are the ${area} area specialist for rule-mcp.`,
-          entry.members.length > 0 ? `the \`${entry.hub}\` skill and whichever of these the request needs: ${skillList(entry.members)}` : `the \`${entry.hub}\` skill`,
-        ),
-        arguments: [{ name: "request", description: `A ${area} task, in free text`, required: true }],
-      });
+    if (!entry.hub) {
+      continue;
     }
 
-    for (const skill of entry.members) {
-      prompts.push({
-        name: areaCommandName(skill),
-        skill,
-        area,
-        description: `${area}: the ${skill.slice(`rule-${area}-`.length)} skill`,
-        text: promptLines(area, `You are working with the \`${skill}\` skill.`, `the \`${skill}\` skill`),
-        arguments: [{ name: "request", description: `A task for ${skill}, in free text`, required: true }],
-      });
-    }
+    const members = [...entry.members].sort((a, b) => a.localeCompare(b));
+
+    prompts.push({
+      name: `rule-area-${area}`,
+      skill: entry.hub,
+      area,
+      members,
+      description: `${area} work: route free text to the right ${area} leaf skills/tools`,
+      text: hubPromptLines(area, entry.hub, members),
+      arguments: [{ name: "request", description: `A ${area} task, in free text (name leaves like rspack/pnpm/react when known)`, required: true }],
+    });
   }
 
   return prompts;

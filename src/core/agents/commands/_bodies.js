@@ -2,6 +2,29 @@
 
 /** @module core/agents/commands/bodies - the router, handoff and area command bodies */
 
+import { CHECK_INTENT_KEYWORDS_LIST } from "./_check-intent.js";
+
+/**
+ * Shared guardrail-only steps once check intent is detected.
+ *
+ * @param {string} skillClause - how to name the skill for rule_tool_check
+ * @returns {string[]}
+ */
+function checkModeSteps(skillClause) {
+  return [
+    "Check-intent path (do this instead of the normal route/implement path):",
+    "1. Determine what to check:",
+    "   - If $ARGUMENTS name paths/files after the intent words, use those as the target.",
+    "   - Otherwise, use the current git diff (staged + unstaged) as the target.",
+    "   - If no diff, check the entire project.",
+    `2. Call \`rule_tool_check\` with the target and ${skillClause}.`,
+    "3. Fix every guardrail failure and rerun until all pass.",
+    "4. Report the commands run and real outcomes; never claim unexecuted checks passed.",
+    "5. Write every comment and identifier in English, American spelling.",
+    "6. Finish by proposing a conventional commit message with a mandatory scope if the tree changed.",
+  ];
+}
+
 /**
  * The router command's description + body (mirrors prompts/rule.md).
  * Kept inline so the generator has no filesystem dependency.
@@ -14,7 +37,11 @@ export const ROUTER = {
     "",
     "$ARGUMENTS",
     "",
-    "Strongly recommended sequence:",
+    `Check intent: if $ARGUMENTS contain any of these whole tokens (case-insensitive) — ${CHECK_INTENT_KEYWORDS_LIST} — run the guardrail-only path below and skip the normal implement sequence.`,
+    "",
+    ...checkModeSteps("the auto-detected skill (from changed files, chat context, and codebase frameworks)"),
+    "",
+    "Otherwise (no check intent), strongly recommended sequence:",
     "1. Call MCP tool `pix_tool` with the complete request and project path/framework when known.",
     "2. Load the primary routed `rule-*` skill and only the necessary secondary skills.",
     "3. Use the returned skill/tool evidence as source of truth. Never invent APIs, files, dependencies, commands, requirements, or successful checks.",
@@ -54,7 +81,6 @@ export const HANDOFF_BODY = [
   "6. Write the handoff and every commit message in English, American spelling (color, behavior, organize).",
   "7. Responses are compressed automatically by the server: keep the handoff factual and free of filler.",
 ].join("\n");
-
 
 /**
  * The handon command body: verify the last handoff via rule_tool_handon.
@@ -104,26 +130,50 @@ export const INIT_BODY = [
   "Prepare this project for rule-mcp: $ARGUMENTS",
   "",
   "1. Call `rule_tool_init` (or `rule-mcp init`). Pass `no-tokensave` / noTokensave when requested.",
-  "2. For a brand-new project, bootstrap via `/rule-area-styleguide*` and `rule_tool_detect` before finishing.",
+  "2. For a brand-new project, bootstrap via `/rule-area-styleguide` / `/rule-area-toolchain` (name leaves in the request) and `rule_tool_detect` before finishing.",
   "3. Confirm nothing was written into the repository: recording lives in the state directory.",
   "4. Check the project's test setup exists; if there is no test surface, ask the user what to cover.",
   "5. Finish by proposing a conventional commit with a mandatory scope, e.g. `chore(init): ...`.",
 ].join("\n");
 
 /**
- * Uniform body for an area/workflow command: route through rule, honor the
- * TDD/a11y baseline, validate, and close with a scoped commit.
+ * Uniform body for an area hub command (ADR 117: collectors only). Check intent
+ * in $ARGUMENTS flips to the guardrail-only path (ADR 116).
  *
  * @param {string} description - the prompt's registry description
+ * @param {{ skill?: string, members?: string[] }} [opts]
  * @returns {string}
  */
-export function areaBody(description) {
+export function areaBody(description, { skill, members = [] } = {}) {
+  const skillClause = skill
+    ? `the routed leaf skill(s), defaulting to hub \`${skill}\` when the request names none`
+    : "the routed leaf skill(s) for this area";
+
+  const leafLines =
+    members.length > 0
+      ? [
+          `Leaf skills/tools in this area (call those the request names; several when needed): ${members
+            .map((name) => {
+              const tool = `rule_tool_${name.slice("rule-".length).replaceAll("-", "_")}`;
+              return `\`${name}\` / \`${tool}\``;
+            })
+            .join(", ")}.`,
+          "",
+        ]
+      : [];
+
   return [
     "Route this request through rule: $ARGUMENTS",
     "",
     `Scope: ${description}`,
     "",
-    "1. Call `pix_tool` first to select the exact `rule-*` skill, then load the returned skill evidence as source of truth.",
+    ...leafLines,
+    `Check intent: if $ARGUMENTS contain any of these whole tokens (case-insensitive) — ${CHECK_INTENT_KEYWORDS_LIST} — run the guardrail-only path and skip the normal route/implement path.`,
+    "",
+    ...checkModeSteps(skillClause),
+    "",
+    "Otherwise (no check intent):",
+    "1. Parse $ARGUMENTS for every leaf topic (framework, tool, database, …). Call `pix_tool` and/or each matching leaf `rule_tool_*`, then load that skill evidence as source of truth.",
     "2. Never invent APIs, files, dependencies, commands, or requirements not present in the evidence; if evidence is missing, call `pix_search` or state uncertainty.",
     "3. Baseline: write failing tests first (TDD) and cover a11y (WCAG 2.2 AA) where applicable; if there is no test/a11y surface, ask the user what to cover.",
     "4. Validate generated code with `pix_check`; iterate until all guardrails pass.",
@@ -134,35 +184,8 @@ export function areaBody(description) {
 }
 
 /**
- * Body for an area-specific check command (rule-area-*-check).
- *
- * @param {string} area - the area name (e.g., "frontend", "ui")
- * @param {string} skill - the skill name (e.g., "rule-frontend-react")
- * @returns {string}
- */
-export function checkBody(area, skill) {
-  return [
-    `Validate code against ${area} skill guardrails: $ARGUMENTS`,
-    "",
-    `Target skill: ${skill}`,
-    "",
-    "1. Determine what to check:",
-    "   - If $ARGUMENTS is provided, use those paths/files as the target.",
-    "   - Otherwise, use the current git diff (staged + unstaged) as the target.",
-    "   - If no diff, check the entire project.",
-    "2. Call `rule_tool_check` with the target and the skill's framework/context.",
-    "3. Fix every guardrail failure and rerun until all pass.",
-    "4. Report the commands run and real outcomes; never claim unexecuted checks passed.",
-    "5. Write every comment and identifier in English, American spelling.",
-    "6. Finish by proposing a conventional commit message with a mandatory scope.",
-    "7. Responses are compressed automatically by the server: keep it factual and free of filler.",
-  ].join("\n");
-}
-
-/**
- * Body for the general rule-check command (auto-detects area from context).
- *
- * @returns {string}
+ * Body for the general `/rule-check` command (auto-detects area from context).
+ * Kept as an explicit workflow; area siblings were folded into parents (ADR 116).
  */
 export const generalCheckBody = [
   "Auto-detect area and run rule guardrails validation: $ARGUMENTS",
@@ -182,3 +205,4 @@ export const generalCheckBody = [
   "7. Finish by proposing a conventional commit message with a mandatory scope.",
   "8. Responses are compressed automatically by the server: keep it factual and free of filler.",
 ].join("\n");
+

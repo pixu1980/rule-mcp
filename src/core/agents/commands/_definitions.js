@@ -4,7 +4,17 @@
 
 import { listPrompts } from "@src/prompts/index.js";
 import { listAreaPrompts } from "@src/prompts/_areas.js";
-import { areaBody, HANDOFF_BODY, HANDON_BODY, COMPRESS_BODY, STATS_BODY, USAGE_BODY, INIT_BODY, ROUTER, checkBody, generalCheckBody } from "./_bodies.js";
+import {
+  areaBody,
+  HANDOFF_BODY,
+  HANDON_BODY,
+  COMPRESS_BODY,
+  STATS_BODY,
+  USAGE_BODY,
+  INIT_BODY,
+  ROUTER,
+  generalCheckBody,
+} from "./_bodies.js";
 import { commandNames, ROUTER_COMMAND, CHECK_COMMAND } from "./_names.js";
 import { personaBody, personaTarget } from "./_personas.js";
 
@@ -28,21 +38,6 @@ export function commandDefinition(name) {
     };
   }
 
-  // Handle area check subcommands (rule-area-*-check)
-  if (name.endsWith("-check")) {
-    const areaName = name.slice(0, -6); // Remove "-check" suffix
-    const areaPrompt = listAreaPrompts().find((p) => p.name === areaName);
-
-    if (areaPrompt) {
-      return {
-        name,
-        description: `Validate code against ${areaPrompt.area} skill guardrails`,
-        argumentHint: "[target]",
-        body: checkBody(areaPrompt.area, areaPrompt.skill),
-      };
-    }
-  }
-
   const prompt = listPrompts().find((p) => p.name === name);
 
   if (!prompt) {
@@ -60,10 +55,14 @@ export function commandDefinition(name) {
     "rule-usage": USAGE_BODY,
     "rule-init": INIT_BODY,
   };
-  const body = persona ? personaBody(persona) : sessionBodies[name] ?? areaBody(prompt.description);
+  const area = name.startsWith("rule-area-") ? listAreaPrompts().find((p) => p.name === name) : null;
+  const body = persona
+    ? personaBody(persona)
+    : sessionBodies[name] ?? areaBody(prompt.description, { skill: area?.skill, members: area?.members ?? [] });
 
   return { name, description: prompt.description, argumentHint, body };
 }
+
 
 /**
  * Every command definition, in canonical order.

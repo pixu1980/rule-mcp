@@ -3,10 +3,9 @@
 /**
  * What an install writes, chosen rather than assumed.
  *
- * Every skill owns a command now, so a full install is 152 files per agent
- * directory. Most people want a fraction of that, and the ones who want all of
- * it should say so. The selection is data - families, areas, skills - so the
- * interactive picker and the flags decide the same thing the same way.
+ * Area slash commands are hubs only (ADR 117). Personas and tasks still fan
+ * out. The selection is data - families, areas - so the interactive picker and
+ * the flags decide the same thing the same way.
  */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
@@ -18,7 +17,8 @@ test("the families partition the command surface, with nothing left over", () =>
   const everything = resolveSelection({ preset: "full" }).commands;
 
   assert.deepEqual(new Set(all), new Set(everything), "selecting every family is the same as asking for everything");
-  assert.ok(all.length > 140, `the full surface is what it is: ${all.length}`);
+  assert.ok(all.length > 60, `hubs + personas + tasks: ${all.length}`);
+  assert.ok(!all.some((name) => /^rule-area-[a-z]+-/.test(name)), "no leaf area slash");
 });
 
 test("each preset is a subset of the next", () => {
@@ -34,7 +34,10 @@ test("each preset is a subset of the next", () => {
     assert.ok(full.has(name), `${name}: standard must fit inside full`);
   }
 
-  assert.ok(minimal.size < standard.size && standard.size < full.size, `the presets differ: ${minimal.size} < ${standard.size} < ${full.size}`);
+  // ADR 117: full and standard share the same area hubs; full equals standard
+  // when both include personas+tasks. minimal stays smaller.
+  assert.ok(minimal.size < standard.size, `minimal < standard: ${minimal.size} < ${standard.size}`);
+  assert.deepEqual(standard, full, "standard and full match once leaf area slash is gone");
 });
 
 test("the router is in every preset, because nothing works without it", () => {
@@ -43,7 +46,7 @@ test("the router is in every preset, because nothing works without it", () => {
   }
 });
 
-test("minimal is the router and the area hubs, without the per-skill commands", () => {
+test("minimal is the router and the area hubs, without leaf area slash", () => {
   const { commands } = resolveSelection({ preset: "minimal" });
 
   assert.ok(commands.includes("rule-area-frontend"), "the hub is there");
@@ -54,23 +57,23 @@ test("minimal is the router and the area hubs, without the per-skill commands", 
   );
 });
 
-test("picking areas narrows the skill commands to those areas", () => {
+test("picking areas keeps only those hubs", () => {
   const { commands } = resolveSelection({ families: ["areas"], areas: ["frontend", "data"] });
 
   assert.ok(commands.includes("rule-area-frontend"), "a chosen area keeps its hub");
-  assert.ok(commands.includes("rule-area-frontend-react"), "and its members");
+  assert.ok(commands.includes("rule-area-data"), "and data");
+  assert.ok(!commands.includes("rule-area-frontend-react"), "no leaf slash");
   assert.ok(
     commands.every((name) => !name.startsWith("rule-area-backend")),
     "an area nobody chose is absent",
   );
 });
 
-test("picking skills narrows further, inside the areas chosen", () => {
+test("picking skills still keeps the hub of that area (leaves are tools, not slash)", () => {
   const { commands } = resolveSelection({ families: ["areas"], areas: ["frontend"], skills: ["rule-frontend-react"] });
 
-  assert.ok(commands.includes("rule-area-frontend-react"), "the chosen skill is there");
-  assert.ok(!commands.includes("rule-area-frontend-vue"), "one it did not choose is not");
-  assert.ok(commands.includes("rule-area-frontend"), "the hub of a chosen area stays, so the area is still reachable");
+  assert.ok(commands.includes("rule-area-frontend"), "the hub stays reachable");
+  assert.ok(!commands.includes("rule-area-frontend-react"), "no leaf slash to select");
 });
 
 test("personas and tasks are their own families", () => {

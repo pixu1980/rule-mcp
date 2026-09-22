@@ -7,112 +7,34 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## MCP prompts (153)
+## MCP prompts (75)
 
-96 reusable prompts, plus 57 generated from the persona registry.
+18 reusable prompts, plus 57 generated from the persona registry.
 Claude Code installs clean `/rule-*` commands instead and suppresses these
 (ADR 029), so the two names are deliberately the same.
 
 ### Reusable
 
-| Prompt                                | Arguments | Description                                                                                                                                               |
-| ------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/rule-area-ai`                        | <request> | ai work, across every ai skill                                                                                                                            |
-| `/rule-area-ai-agent-architecture`     | <request> | ai: the agent-architecture skill                                                                                                                          |
-| `/rule-area-ai-context-engineering`    | <request> | ai: the context-engineering skill                                                                                                                         |
-| `/rule-area-ai-evals`                  | <request> | ai: the evals skill                                                                                                                                       |
-| `/rule-area-ai-prompting`              | <request> | ai: the prompting skill                                                                                                                                   |
-| `/rule-area-backend`                   | <request> | backend work, across every backend skill                                                                                                                  |
-| `/rule-area-backend-express`           | <request> | backend: the express skill                                                                                                                                |
-| `/rule-area-backend-fastify`           | <request> | backend: the fastify skill                                                                                                                                |
-| `/rule-area-backend-graphql`           | <request> | backend: the graphql skill                                                                                                                                |
-| `/rule-area-backend-hono`              | <request> | backend: the hono skill                                                                                                                                   |
-| `/rule-area-backend-nestjs`            | <request> | backend: the nestjs skill                                                                                                                                 |
-| `/rule-area-backend-node`              | <request> | backend: the node skill                                                                                                                                   |
-| `/rule-area-backend-security`          | <request> | backend: the security skill                                                                                                                               |
-| `/rule-area-backend-workers`           | <request> | backend: the workers skill                                                                                                                                |
-| `/rule-area-data`                      | <request> | data work, across every data skill                                                                                                                        |
-| `/rule-area-data-duckdb`               | <request> | data: the duckdb skill                                                                                                                                    |
-| `/rule-area-data-indexed-db`           | <request> | data: the indexed-db skill                                                                                                                                |
-| `/rule-area-data-mongodb`              | <request> | data: the mongodb skill                                                                                                                                   |
-| `/rule-area-data-mysql`                | <request> | data: the mysql skill                                                                                                                                     |
-| `/rule-area-data-postgresql`           | <request> | data: the postgresql skill                                                                                                                                |
-| `/rule-area-data-sql`                  | <request> | data: the sql skill                                                                                                                                       |
-| `/rule-area-data-sqlite`               | <request> | data: the sqlite skill                                                                                                                                    |
-| `/rule-area-devops`                    | <request> | devops work, across every devops skill                                                                                                                    |
-| `/rule-area-devops-deploy-preview`     | <request> | devops: the deploy-preview skill                                                                                                                          |
-| `/rule-area-devops-docker`             | <request> | devops: the docker skill                                                                                                                                  |
-| `/rule-area-devops-observability`      | <request> | devops: the observability skill                                                                                                                           |
-| `/rule-area-devops-testing`            | <request> | devops: the testing skill                                                                                                                                 |
-| `/rule-area-frontend`                  | <request> | frontend work, across every frontend skill                                                                                                                |
-| `/rule-area-frontend-angular`          | <request> | frontend: the angular skill                                                                                                                               |
-| `/rule-area-frontend-custom-element`   | <request> | frontend: the custom-element skill                                                                                                                        |
-| `/rule-area-frontend-react`            | <request> | frontend: the react skill                                                                                                                                 |
-| `/rule-area-frontend-solidjs`          | <request> | frontend: the solidjs skill                                                                                                                               |
-| `/rule-area-frontend-svelte`           | <request> | frontend: the svelte skill                                                                                                                                |
-| `/rule-area-frontend-template-engine`  | <request> | frontend: the template-engine skill                                                                                                                       |
-| `/rule-area-frontend-vanilla-reactive` | <request> | frontend: the vanilla-reactive skill                                                                                                                      |
-| `/rule-area-frontend-vue`              | <request> | frontend: the vue skill                                                                                                                                   |
-| `/rule-area-frontend-workers`          | <request> | frontend: the workers skill                                                                                                                               |
-| `/rule-area-meta`                      | <request> | meta work, across every meta skill                                                                                                                        |
-| `/rule-area-meta-astro`                | <request> | meta: the astro skill                                                                                                                                     |
-| `/rule-area-meta-next`                 | <request> | meta: the next skill                                                                                                                                      |
-| `/rule-area-meta-nuxt`                 | <request> | meta: the nuxt skill                                                                                                                                      |
-| `/rule-area-meta-remix`                | <request> | meta: the remix skill                                                                                                                                     |
-| `/rule-area-platform`                  | <request> | platform work, across every platform skill                                                                                                                |
-| `/rule-area-platform-agent`            | <request> | platform: the agent skill                                                                                                                                 |
-| `/rule-area-platform-auth`             | <request> | platform: the auth skill                                                                                                                                  |
-| `/rule-area-platform-desktop`          | <request> | platform: the desktop skill                                                                                                                               |
-| `/rule-area-platform-library`          | <request> | platform: the library skill                                                                                                                               |
-| `/rule-area-platform-web`              | <request> | platform: the web skill                                                                                                                                   |
-| `/rule-area-process`                   | <request> | process work, across every process skill                                                                                                                  |
-| `/rule-area-process-adr`               | <request> | process: the adr skill                                                                                                                                    |
-| `/rule-area-process-ai-sdlc`           | <request> | process: the ai-sdlc skill                                                                                                                                |
-| `/rule-area-process-bmad`              | <request> | process: the bmad skill                                                                                                                                   |
-| `/rule-area-process-changelog`         | <request> | process: the changelog skill                                                                                                                              |
-| `/rule-area-process-code-review`       | <request> | process: the code-review skill                                                                                                                            |
-| `/rule-area-process-npm-release`       | <request> | process: the npm-release skill                                                                                                                            |
-| `/rule-area-process-simplicity`        | <request> | process: the simplicity skill                                                                                                                             |
-| `/rule-area-process-tdd`               | <request> | process: the tdd skill                                                                                                                                    |
-| `/rule-area-styleguide`                | <request> | styleguide work, across every styleguide skill                                                                                                            |
-| `/rule-area-styleguide-a11y`           | <request> | styleguide: the a11y skill                                                                                                                                |
-| `/rule-area-styleguide-baseline`       | <request> | styleguide: the baseline skill                                                                                                                            |
-| `/rule-area-styleguide-comments`       | <request> | styleguide: the comments skill                                                                                                                            |
-| `/rule-area-styleguide-css`            | <request> | styleguide: the css skill                                                                                                                                 |
-| `/rule-area-styleguide-english`        | <request> | styleguide: the english skill                                                                                                                             |
-| `/rule-area-styleguide-file-tree`      | <request> | styleguide: the file-tree skill                                                                                                                           |
-| `/rule-area-styleguide-fingerprint`    | <request> | styleguide: the fingerprint skill                                                                                                                         |
-| `/rule-area-styleguide-html`           | <request> | styleguide: the html skill                                                                                                                                |
-| `/rule-area-styleguide-i18n`           | <request> | styleguide: the i18n skill                                                                                                                                |
-| `/rule-area-styleguide-javascript`     | <request> | styleguide: the javascript skill                                                                                                                          |
-| `/rule-area-styleguide-json`           | <request> | styleguide: the json skill                                                                                                                                |
-| `/rule-area-styleguide-markdown`       | <request> | styleguide: the markdown skill                                                                                                                            |
-| `/rule-area-styleguide-naming`         | <request> | styleguide: the naming skill                                                                                                                              |
-| `/rule-area-styleguide-patterns`       | <request> | styleguide: the patterns skill                                                                                                                            |
-| `/rule-area-styleguide-readme`         | <request> | styleguide: the readme skill                                                                                                                              |
-| `/rule-area-styleguide-typescript`     | <request> | styleguide: the typescript skill                                                                                                                          |
-| `/rule-area-styleguide-validation`     | <request> | styleguide: the validation skill                                                                                                                          |
-| `/rule-area-toolchain`                 | <request> | toolchain work, across every toolchain skill                                                                                                              |
-| `/rule-area-toolchain-biome`           | <request> | toolchain: the biome skill                                                                                                                                |
-| `/rule-area-toolchain-commits`         | <request> | toolchain: the commits skill                                                                                                                              |
-| `/rule-area-toolchain-eslint`          | <request> | toolchain: the eslint skill                                                                                                                               |
-| `/rule-area-toolchain-husky`           | <request> | toolchain: the husky skill                                                                                                                                |
-| `/rule-area-toolchain-parcel`          | <request> | toolchain: the parcel skill                                                                                                                               |
-| `/rule-area-toolchain-pnpm`            | <request> | toolchain: the pnpm skill                                                                                                                                 |
-| `/rule-area-toolchain-project`         | <request> | toolchain: the project skill                                                                                                                              |
-| `/rule-area-toolchain-rspack`          | <request> | toolchain: the rspack skill                                                                                                                               |
-| `/rule-area-toolchain-turborepo`       | <request> | toolchain: the turborepo skill                                                                                                                            |
-| `/rule-area-toolchain-typescript`      | <request> | toolchain: the typescript skill                                                                                                                           |
-| `/rule-area-toolchain-vite`            | <request> | toolchain: the vite skill                                                                                                                                 |
-| `/rule-area-ui`                        | <request> | ui work, across every ui skill                                                                                                                            |
-| `/rule-area-ui-design-system`          | <request> | ui: the design-system skill                                                                                                                               |
-| `/rule-compress`                       | [options] | Run rule_tool_compress: sole engine for prompt/context preprocessing and prose postprocessing                                                              |
-| `/rule-handoff`                        | [options] | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. |
-| `/rule-handon`                         | [options] | Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream                               |
-| `/rule-init`                           | [options] | Prepare a project for rule-mcp: the central recorder directory and tokensave                                                                        |
-| `/rule-stats`                          | [options] | Read local telemetry via rule_tool_stats: calls, cache hits, tokens, latency                                                                               |
-| `/rule-update`                         | [options] | Apply an available server update explicitly, and report what changed                                                                                      |
-| `/rule-usage`                          | [options] | Declare a usage sidecar via rule_tool_usage when no transcript is available                                                                                |
+| Prompt                 | Arguments | Description                                                                                                                                               |
+| ---------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/rule-area-ai`         | <request> | ai work: route free text to the right ai leaf skills/tools                                                                                                |
+| `/rule-area-backend`    | <request> | backend work: route free text to the right backend leaf skills/tools                                                                                      |
+| `/rule-area-data`       | <request> | data work: route free text to the right data leaf skills/tools                                                                                            |
+| `/rule-area-devops`     | <request> | devops work: route free text to the right devops leaf skills/tools                                                                                        |
+| `/rule-area-frontend`   | <request> | frontend work: route free text to the right frontend leaf skills/tools                                                                                    |
+| `/rule-area-meta`       | <request> | meta work: route free text to the right meta leaf skills/tools                                                                                            |
+| `/rule-area-platform`   | <request> | platform work: route free text to the right platform leaf skills/tools                                                                                    |
+| `/rule-area-process`    | <request> | process work: route free text to the right process leaf skills/tools                                                                                      |
+| `/rule-area-styleguide` | <request> | styleguide work: route free text to the right styleguide leaf skills/tools                                                                                |
+| `/rule-area-toolchain`  | <request> | toolchain work: route free text to the right toolchain leaf skills/tools                                                                                  |
+| `/rule-area-ui`         | <request> | ui work: route free text to the right ui leaf skills/tools                                                                                                |
+| `/rule-compress`        | [options] | Run rule_tool_compress: sole engine for prompt/context preprocessing and prose postprocessing                                                              |
+| `/rule-handoff`         | [options] | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. |
+| `/rule-handon`          | [options] | Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream                               |
+| `/rule-init`            | [options] | Prepare a project for rule-mcp: the central recorder directory and tokensave                                                                        |
+| `/rule-stats`           | [options] | Read local telemetry via rule_tool_stats: calls, cache hits, tokens, latency                                                                               |
+| `/rule-update`          | [options] | Apply an available server update explicitly, and report what changed                                                                                      |
+| `/rule-usage`           | [options] | Declare a usage sidecar via rule_tool_usage when no transcript is available                                                                                |
 
 ### Persona, one per role and operation
 

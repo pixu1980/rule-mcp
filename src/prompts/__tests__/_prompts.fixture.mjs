@@ -19,9 +19,9 @@ console.log("prompts registry test");
 
 export const WORKFLOW_PROMPTS = ["rule-handoff"];
 
-// The area prompts are derived from the resolved skill catalog, one per skill
-// (ADR 089), so the fixture asks the catalog rather than freezing a list that
-// a new skill would silently contradict.
+// The area prompts are derived from the resolved skill catalog, one per area hub
+// (ADR 117), so the fixture asks the catalog rather than freezing a list that
+// a new hub would silently contradict.
 export const AREA_PROMPTS = listAreaPrompts().map((prompt) => prompt.name);
 
 export const ONE_SHOT_PROMPTS = ["rule-compress", "rule-handon", "rule-init", "rule-stats", "rule-update", "rule-usage"];

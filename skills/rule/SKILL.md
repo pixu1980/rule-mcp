@@ -65,7 +65,7 @@ Prompt
 | `pix_scaffold`        | Scaffold   | Generate project scaffolding files. Returns one or all config file templates.                                                            |
 | `pix_detect`          | Detection  | Detect project framework, TypeScript usage, and build tool from package.json.                                                            |
 | `rule_tool_process_adr`     | ADR        | Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.                            |
-| `/rule-area-styleguide-file-tree`             | Auto-fix   | Validate and auto-fix project file tree structure against rule conventions (barrel files, _PascalCase naming, etc.).                      |
+| `/rule-area-styleguide` (request: file-tree) | Auto-fix   | Validate and auto-fix project file tree via styleguide leaf skills/tools (ADR 117: hub slash only).                      |
 | `rule_tool_handoff` | Handoff    | Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly. |
 | `pix_component`       | Templates  | Generate component or test templates following rule principles.                                                                           |
 
@@ -235,13 +235,13 @@ Design and route visible interface work while preserving rule implementation con
 | React/Vite app           | `rule-frontend-react`                                | `rule-toolchain-vite`, `rule-styleguide`            | `pix_scaffold`, `pix_check`              |
 | Backend API              | `rule-backend-node`                                  | `rule-backend-security`                            | `pix_check`, `rule_tool_process_adr`           |
 | Database work            | database skill                                      | `rule-data`                                        | `pix_search`, `pix_check`                |
-| Docker/CI/tests          | `rule-devops` focused skill                          | platform skill                                    | `pix_scaffold`, `/rule-area-styleguide-file-tree`                |
+| Docker/CI/tests          | `rule-devops` focused skill                          | platform skill                                    | `rule_tool_detect`, `/rule-area-styleguide` (file-tree)           |
 | GraphQL API              | `rule-backend-graphql`                               | runtime skill, `rule-backend-security`             | `pix_search`, `pix_check`                |
 | Production observability | `rule-devops-observability`                          | runtime and platform skill                        | `pix_check`, `rule_tool_process_adr`           |
 | Code review              | `rule-process-code-review`                           | feature workflow, relevant domain skill           | `pix_check`                              |
 | Commit/push              | `rule-toolchain-commits`                             | `rule-toolchain-husky`                             | `pix_check`                              |
 | Docs/ADR                 | `rule-styleguide-markdown`                           | `rule-process-adr`                                 | `rule_tool_process_adr`, `rule_tool_handoff` |
-| File-tree cleanup        | `rule-styleguide-naming`                             | `rule-toolchain-project`                           | `/rule-area-styleguide-file-tree`, `pix_check`                   |
+| File-tree cleanup        | `rule-styleguide-naming`                             | `rule-toolchain-project`                           | `/rule-area-styleguide` (file-tree), `pix_check`                |
 
 ## Operational sequence
 
@@ -251,7 +251,7 @@ Design and route visible interface work while preserving rule implementation con
 4. Generate deterministic artifacts with `pix_component` or `pix_scaffold`.
 5. Validate with `pix_check`; pass `previousPassed` on subsequent iterations.
 6. Record major decisions with `rule_tool_process_adr`.
-7. Use `/rule-area-styleguide-file-tree` for file-tree convention fixes and `rule_tool_handoff` before context switches.
+7. Use `/rule-area-styleguide` with file-tree in the request (or `rule_tool_styleguide_file_tree`) for file-tree convention fixes and `rule_tool_handoff` before context switches.
 
 ## Conventions (rules -> skills merge)
 
