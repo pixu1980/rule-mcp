@@ -13,8 +13,8 @@ The live surface mixed three naming systems that looked alike but meant differen
 
 ### Keep
 
-1. Skill-backed triple 1:1: `rule_tool_<x>` ↔ `/rule-area-<x>`[+`-check`] ↔ skill `rule-<x>` (collector and leaf).
-2. Check in three forms: `rule_tool_check`, `/rule-check`, `/rule-area-*-check`.
+1. Skill-backed tool↔skill 1:1: `rule_tool_<x>` ↔ skill `rule-<x>`. Area slash is hub-only `/rule-area-<area>` (ADR 117); leaves route from free text on the collector.
+2. Check forms: `rule_tool_check`, `/rule-check`, and keyword intent on `/rule-area-*` hubs (ADR 116).
 3. Personas: 57 `/rule-persona-*-{plan|audit|review}` → `rule_tool_plan` / `rule_tool_audit` / `rule_tool_review` (+ `rule_tool_plan_docs` tool-only).
 4. Router: `pix_tool` and `/rule`. Update: `rule_tool_update` and `/rule-update`. ADR area: `rule_tool_process_adr` + skill + `/rule-area-process-adr*`.
 5. Tool-only: `rule_tool_gateway`, `rule_tool_apply`, `rule_tool_search`, `rule_tool_detect`, `rule_tool_plan_docs`.

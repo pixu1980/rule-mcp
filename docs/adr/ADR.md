@@ -8,6 +8,8 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [117](117-area-slash-commands-are-collectors-only-leaves-route-from-the-prompt.md)                                      | Area slash commands are collectors only; leaves route from the prompt                                     | 2026-09-22 | accepted   | commands, prompts, areas, breaking                                                  |
+| [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md)                                                  | Fold check slash siblings into the parent via keyword intent                                              | 2026-09-22 | accepted   | commands, guardrails, breaking, check                                               |
 | [115](115-map-tools-slash-commands-and-skills-into-one-surface.md)                                                      | Map tools, slash commands, and skills into one surface                                                    | 2026-09-22 | accepted   | tools, commands, skills, breaking, compress, handoff                                |
 | [114](114-flight-is-process-area-guidance-injected-on-every-prompt-not-a-slash-command.md)                              | Flight is process-area guidance injected on every prompt, not a slash command                             | 2026-09-22 | accepted   | commands, prompts, telemetry, directive, breaking                                   |
 | [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md)                                           | Rename the command surface under process and persona namespaces                                           | 2026-09-22 | accepted   | commands, prompts, personas, compression, breaking, release                         |
@@ -17,7 +19,7 @@ this directory are the source of truth; this index is generated from them by
 | [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md)                                   | No corepack activation and no engines field in a generated package.json                                   | 2026-09-20 | accepted   | guardrails, pnpm, corepack, manifest, gateway, toolchain                            |
 | [108](108-the-handoff-family-gets-a-generated-index-and-the-root-handoff-summary-retires.md)                            | The handoff family gets a generated index, and the root HANDOFF summary retires                           | 2026-09-20 | accepted   | handoff, docs, cli, doctor, code-graph                                              |
 | [107](107-the-design-system-persona-becomes-the-ui-ux-lead.md)                                                          | The design-system persona becomes the UI/UX lead                                                          | 2026-09-18 | accepted   | personas, ui, review                                                                |
-| [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md)                                                 | Check runs per area, and the general check auto-detects it                                                | 2026-09-18 | accepted   | commands, prompts, guardrails                                                       |
+| [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md)                                                 | Check runs per area, and the general check auto-detects it                                                | 2026-09-18 | superseded | commands, prompts, guardrails                                                       |
 | [105](105-opencode-gets-a-dedicated-installer-writing-its-own-config-shape.md)                                          | opencode gets a dedicated installer writing its own config shape                                          | 2026-09-17 | accepted   | installer, cli, opencode, mcp                                                       |
 | [104](104-the-handoff-document-closes-with-the-resume-prompt.md)                                                        | The handoff document closes with the resume prompt                                                        | 2026-09-17 | accepted   | handoff, handon, prompts, docs                                                      |
 | [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md)                          | Every handoff mode sweeps completed working papers, and closeout false is the read-only run               | 2026-09-17 | accepted   | docs, closeout, handoff, handon, process                                            |
@@ -131,6 +133,8 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [117](117-area-slash-commands-are-collectors-only-leaves-route-from-the-prompt.md)                                      | 1. **Slash and MCP area prompts**: emit only hub collectors (`/rule-area-ai`, `/rule-area-backend`, …).                                                                                                                           | Agent slash and MCP area-prompt counts fall by one per leaf skill (~78).                                                                                                                                                        |
+| [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md)                                                  | 1. Delete every agent slash `/rule-area-*-check` sibling.                                                                                                                                                                        | Agent slash count drops by one per area prompt (~89).                                                                                                                                                                           |
 | [115](115-map-tools-slash-commands-and-skills-into-one-surface.md)                                                      | ### Keep.                                                                                                                                                                                                                       | MCP tool count falls (removed form/scaffold/component/a11y_report/process-compression skill-tool; renames handoff/handon; add init).                                                                                            |
 | [114](114-flight-is-process-area-guidance-injected-on-every-prompt-not-a-slash-command.md)                              | 1. Drop `/rule-process-flight` (and any `rule-flight` leftover) from the MCP prompt registry and from agent command install.                                                                                                      | Agent slash commands fall by one (246 to 245).                                                                                                                                                                                  |
 | [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md)                                           | Breaking rename of the public command/skill/tool surface:.                                                                                                                                                                      | Every future install writes the new names only.                                                                                                                                                                                 |
@@ -337,6 +341,32 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
 - [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
 
+### commands
+
+- [117](117-area-slash-commands-are-collectors-only-leaves-route-from-the-prompt.md) Area slash commands are collectors only; leaves route from the prompt
+- [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
+- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
+- [114](114-flight-is-process-area-guidance-injected-on-every-prompt-not-a-slash-command.md) Flight is process-area guidance injected on every prompt, not a slash command
+- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
+- [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
+- [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
+- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
+- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+- [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
+
+### prompts
+
+- [117](117-area-slash-commands-are-collectors-only-leaves-route-from-the-prompt.md) Area slash commands are collectors only; leaves route from the prompt
+- [114](114-flight-is-process-area-guidance-injected-on-every-prompt-not-a-slash-command.md) Flight is process-area guidance injected on every prompt, not a slash command
+- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
+- [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
+- [104](104-the-handoff-document-closes-with-the-resume-prompt.md) The handoff document closes with the resume prompt
+- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
+- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
+- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
+- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+- [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
+
 ### testing
 
 - [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
@@ -350,17 +380,17 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
 - [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
-### prompts
+### guardrails
 
-- [114](114-flight-is-process-area-guidance-injected-on-every-prompt-not-a-slash-command.md) Flight is process-area guidance injected on every prompt, not a slash command
-- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
+- [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
+- [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md) No corepack activation and no engines field in a generated package.json
 - [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
-- [104](104-the-handoff-document-closes-with-the-resume-prompt.md) The handoff document closes with the resume prompt
-- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
-- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
-- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
-- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
-- [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
+- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
+- [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
+- [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
+- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
+- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
+- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
 ### routing
 
@@ -373,28 +403,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
 - [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
 - [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
-
-### commands
-
-- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
-- [114](114-flight-is-process-area-guidance-injected-on-every-prompt-not-a-slash-command.md) Flight is process-area guidance injected on every prompt, not a slash command
-- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
-- [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
-- [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
-- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
-- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
-- [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
-
-### guardrails
-
-- [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md) No corepack activation and no engines field in a generated package.json
-- [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
-- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
-- [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
-- [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
-- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
-- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
-- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
 ### personas
 
@@ -471,6 +479,14 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
 - [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
 
+### breaking
+
+- [117](117-area-slash-commands-are-collectors-only-leaves-route-from-the-prompt.md) Area slash commands are collectors only; leaves route from the prompt
+- [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
+- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
+- [114](114-flight-is-process-area-guidance-injected-on-every-prompt-not-a-slash-command.md) Flight is process-area guidance injected on every prompt, not a slash command
+- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
+
 ### compression
 
 - [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
@@ -543,12 +559,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
 - [010](010-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
-
-### breaking
-
-- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
-- [114](114-flight-is-process-area-guidance-injected-on-every-prompt-not-a-slash-command.md) Flight is process-area guidance injected on every prompt, not a slash command
-- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
 
 ### code-graph
 

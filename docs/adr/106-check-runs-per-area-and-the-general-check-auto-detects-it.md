@@ -1,9 +1,10 @@
 # 106: Check runs per area, and the general check auto-detects it
 
 - **Date**: 2026-09-18
-- **Status**: accepted
+- **Status**: superseded (area siblings; `/rule-check` kept by ADR 116)
 - **Tags**: commands, prompts, guardrails
 - **Author**: Emiliano Pisu <pisuemiliano.1980@gmail.com>
+- **Superseded by**: [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) (folds `/rule-area-*-check` into parents; keeps `/rule-check`)
 
 ## Context
 
