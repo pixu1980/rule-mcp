@@ -31,7 +31,7 @@ export const BASELINE_TOKENS = 3820;
 export const SESSION_CALLS = 30;
 export const SESSION_TOOLS = [
   "pix_tool",
-  "rule_tool_component",
+  "rule_tool_styleguide",
   "rule_tool_check",
   "rule_tool_search",
   "rule_tool_plan",

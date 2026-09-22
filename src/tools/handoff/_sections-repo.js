@@ -98,7 +98,7 @@ export function footerLines({ projectName, isMinimal, isCloseSession }) {
       "",
       "To resume this session in a new chat:",
       "",
-      "1. Run `rule_tool_process_handoff` to load this context.",
+      "1. Run `rule_tool_handoff` to load this context.",
       "2. Review the ADR log in `docs/adr/` for all decisions made.",
       "3. Check the working tree changes listed above.",
       "4. Review planning artifacts in `_bmad-output/` or `.context/` if applicable.",

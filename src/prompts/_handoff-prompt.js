@@ -28,7 +28,7 @@ export function handoffPrompt(args, user) {
     messages: user(
       "You are a handoff specialist for rule-mcp.\n" +
         "The user invoked `/rule-handoff`; every option is optional and defaults are applied server-side. The requested options are already resolved here into exact tool arguments - do not reinterpret them.\n" +
-        "Resolved arguments for `rule_tool_process_handoff` (mode: handoff | close-session):\n" +
+        "Resolved arguments for `rule_tool_handoff` (mode: handoff | close-session):\n" +
         `- mode=${options.mode}\n` +
         `- compress=${options.compress ? "true" : "false"}\n` +
         `- format=${options.format}\n` +
@@ -41,7 +41,7 @@ export function handoffPrompt(args, user) {
         "  c. Make ONE SEPARATE final commit for decision documents already pending in the tree (ADR, CHANGELOG, docs/): `docs(adr): ...` or `docs(handoff): ...`.\n" +
         "  d. NEVER push. Leave every commit local for review.\n" +
         "  e. If the grouping into atomic commits is ambiguous, ask the user how to split before committing.\n" +
-        "Step 2 - Run `rule_tool_process_handoff` with EXACTLY the resolved arguments above; do not change them.\n" +
+        "Step 2 - Run `rule_tool_handoff` with EXACTLY the resolved arguments above; do not change them.\n" +
         "Include the ADR summary (docs/adr) and git context in the output.\n" +
         "Step 3 - With closeout=true the run writes to the tree: one ADR per completed working paper, the deleted sources, and any ADR renumbering. Stage exactly those paths and commit them as ONE `docs(adr): ...` commit before going on.\n" +
         "Step 4 - Persist the handoff: write its text to `docs/handoff/<NN>-<slug>.md` where NN is the next free two-digit number and <slug> is kebab-case (e.g. `13-security-audit-remediation.md`). Open with the branch, the commit range it covers, and the date. The document ENDS with its `### Resume Prompt` section - complete the block the renderer emitted, in place, with the path of this file and the first step of the next session, and leave nothing after the closing fence. Then commit that file ALONE - no other paths - as `chore(handoff): add session handoff <NN>-<slug>`. A handoff that exists only in the chat is lost when the session ends.\n" +

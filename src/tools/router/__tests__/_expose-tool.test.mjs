@@ -52,14 +52,14 @@ test("a custom skill that asks for a tool gets one", () => {
 test("exposeTool false on a bundled skill removes its tool", () => {
   // The flag reads both ways, so a fork can shrink the surface it ships
   // without deleting the skill and the rules it owns.
-  assert.equal(exposesTool("rule-process-compression"), true);
+  assert.equal(exposesTool("rule-process-tdd"), true);
 
-  const dir = join(home, "skills", "rule-process-compression");
+  const dir = join(home, "skills", "rule-process-tdd");
   mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "SKILL.md"), "---\nname: rule-process-compression\nexposeTool: false\n---\n\n# Overridden\n");
+  writeFileSync(join(dir, "SKILL.md"), "---\nname: rule-process-tdd\nexposeTool: false\n---\n\n# Overridden\n");
   clearSkillResolution();
 
-  assert.equal(exposesTool("rule-process-compression"), false, "the layer that won decides");
+  assert.equal(exposesTool("rule-process-tdd"), false, "the layer that won decides");
 });
 
 test("a name nothing resolves to exposes nothing", () => {

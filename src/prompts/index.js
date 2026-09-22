@@ -5,8 +5,10 @@
  *
  * MCP Prompt registry for rule-mcp.
  * Provides reusable prompt templates that guide agents through rule AI
- * workflow phases: 5 one-shot workflow prompts (orchestrate multiple tools),
- * 15 area prompts (one per tool area).
+ * workflow phases: one-shot workflow prompts (orchestrate multiple tools),
+ * area prompts (one per skill), and persona prompts. Flight costing is not a
+ * prompt: it injects via the session directive as `rule-area-process-flight`
+ * (ADR 114).
  *
  * Every prompt:
  *   - routes through the pix_tool dispatcher to the right rule-* skill

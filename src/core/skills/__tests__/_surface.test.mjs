@@ -20,7 +20,7 @@ const SKILLS = [
   "rule-frontend",
   "rule-frontend-react",
   "rule-process",
-  "rule-process-compression",
+  "rule-process-tdd",
 ];
 
 test("parseSurface reads presets", () => {
@@ -46,7 +46,7 @@ test("areasOfSkills lists the roots, sorted", () => {
   assert.ok(isRootSkill("rule-data"));
   assert.ok(!isRootSkill("rule-data-sql"));
   assert.ok(isRootSkill("rule-process"));
-  assert.ok(!isRootSkill("rule-process-compression"), "compression is a process member, not its own area");
+  assert.ok(!isRootSkill("rule-process-tdd"), "tdd is a process member, not its own area");
 });
 
 test("standard keeps the roots only", () => {
@@ -63,11 +63,11 @@ test("areas keep their roots and members", () => {
   assert.deepEqual([...skills].sort(), ["rule-frontend", "rule-frontend-react"]);
 });
 
-test("process area keeps compression as a member", () => {
+test("process area keeps tdd as a member", () => {
   const { skills, problems } = filterSurfaceSkills({ areas: ["process"] }, SKILLS);
 
   assert.deepEqual(problems, []);
-  assert.deepEqual([...skills].sort(), ["rule-process", "rule-process-compression"]);
+  assert.deepEqual([...skills].sort(), ["rule-process", "rule-process-tdd"]);
 });
 
 test("skills keep their area root either way", () => {

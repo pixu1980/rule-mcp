@@ -24,7 +24,7 @@ test("a real call records the dependencies of its answer", async () => {
 
 test("a template call records no dependencies, so no skill edit can touch it", async () => {
   cacheClear();
-  await callTool("rule_tool_component", { component: "button", framework: "react" });
+  await callTool("rule_tool_styleguide", { component: "button", framework: "react" });
   const [entry] = cacheEntries();
 
   assert.ok(entry, "the call was stored");
@@ -68,7 +68,7 @@ const WORKLOAD = [
   ["rule_tool_frontend_react", { mode: "tldr", query: "hooks" }],
   ["rule_tool_check", { skill: "rule-styleguide-css", code: "a{color:red}" }],
   ["rule_tool_search", { query: "container query" }],
-  ["rule_tool_component", { component: "button", framework: "react" }],
+  ["rule_tool_styleguide", { component: "button", framework: "react" }],
   ["rule_tool_compress", { text: "It is important to note that this is filler." }],
 ];
 

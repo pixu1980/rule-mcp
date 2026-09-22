@@ -64,14 +64,14 @@ Prompt
 | `pix_check`           | Guardrails | Run blocking guardrail checks against any rule skill. Pass `previousPassed` while iterating; finalize only when all checks pass.          |
 | `pix_scaffold`        | Scaffold   | Generate project scaffolding files. Returns one or all config file templates.                                                            |
 | `pix_detect`          | Detection  | Detect project framework, TypeScript usage, and build tool from package.json.                                                            |
-| `pix_process_adr`     | ADR        | Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.                            |
-| `pix_fix`             | Auto-fix   | Validate and auto-fix project file tree structure against rule conventions (barrel files, _PascalCase naming, etc.).                      |
-| `pix_process_handoff` | Handoff    | Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly. |
+| `rule_tool_process_adr`     | ADR        | Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.                            |
+| `/rule-area-styleguide-file-tree`             | Auto-fix   | Validate and auto-fix project file tree structure against rule conventions (barrel files, _PascalCase naming, etc.).                      |
+| `rule_tool_handoff` | Handoff    | Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly. |
 | `pix_component`       | Templates  | Generate component or test templates following rule principles.                                                                           |
 
 ### Skill tool naming
 
-Every regular skill is also exposed as `pix_` + skill name without `rule-` + hyphens converted to underscores. Example: `rule-frontend-react` -> `pix_frontend_react`. Some process skills use dedicated action tools instead of generic skill tools: `rule-process-adr` -> `pix_process_adr`, `rule-process-handoff` -> `pix_process_handoff`.
+Every regular skill is also exposed as `pix_` + skill name without `rule-` + hyphens converted to underscores. Example: `rule-frontend-react` -> `pix_frontend_react`. Some process skills use dedicated action tools instead of generic skill tools: `rule-process-adr` -> `rule_tool_process_adr`, `rule-process-adr` -> `rule_tool_process_adr`; session handoff/handon -> `rule_tool_handoff` / `rule_tool_handon`.
 
 ## Complete skill inventory
 
@@ -175,10 +175,10 @@ Write ADRs/docs, follow BMAD, feature workflow, and handoff.
 | Skill                                                          | Tool                      | Frameworks | Use when                                                                                                                 |
 | -------------------------------------------------------------- | ------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
 | [rule-process](../rule-process/SKILL.md)                         | `pix_process`             | all        | Index of process skills: ADR, BMAD, code review, documentation, feature workflow, and LLM handoff.                       |
-| [rule-process-adr](../rule-process-adr/SKILL.md)                 | `pix_process_adr`         | all        | Architecture Decision Records (ADR) for rule projects. Capture, store, and manage architectural decisions in docs/...     |
+| [rule-process-adr](../rule-process-adr/SKILL.md)                 | `rule_tool_process_adr`         | all        | Architecture Decision Records (ADR) for rule projects. Capture, store, and manage architectural decisions in docs/...     |
 | [rule-process-bmad](../rule-process-bmad/SKILL.md)               | `pix_process_bmad`        | all        | BMAD Method (Build More Architect Dreams) - AI-driven development framework for structured software delivery through...  |
 | [rule-process-code-review](../rule-process-code-review/SKILL.md) | `pix_process_code_review` | all        | Prepare and conduct risk-based PR/MR reviews with explicit quality, safety, and follow-up gates.                         |
-| [rule-process-handoff](../rule-process-handoff/SKILL.md)         | `pix_process_handoff`     | all        | Generate a compressed LLM handoff summary from ADR logs and project context. Enables cross-chat recovery, model-switc... |
+| `rule_tool_handoff` / `/rule-handoff`         | `rule_tool_handoff`     | all        | Generate a compressed LLM handoff summary from ADR logs and project context. Enables cross-chat recovery, model-switc... |
 
 ### Styleguide
 
@@ -230,18 +230,18 @@ Design and route visible interface work while preserving rule implementation con
 | Task                     | Primary                                             | Secondary                                         | Deterministic tools                      |
 | ------------------------ | --------------------------------------------------- | ------------------------------------------------- | ---------------------------------------- |
 | Unknown project          | `rule`                                               | `rule-process-adr`                                 | `pix_detect`, `pix_search`               |
-| AI agent app             | `rule-ai` + `rule-platform-agent`                     | `rule-ai-agent-architecture`, `rule-devops-testing` | `pix_check`, `pix_process_adr`           |
+| AI agent app             | `rule-ai` + `rule-platform-agent`                     | `rule-ai-agent-architecture`, `rule-devops-testing` | `pix_check`, `rule_tool_process_adr`           |
 | New web UI               | `rule-ui` + `rule-ui-design-system` + framework skill | `rule-styleguide`, `rule-platform-web`              | `pix_component`, `pix_check`             |
 | React/Vite app           | `rule-frontend-react`                                | `rule-toolchain-vite`, `rule-styleguide`            | `pix_scaffold`, `pix_check`              |
-| Backend API              | `rule-backend-node`                                  | `rule-backend-security`                            | `pix_check`, `pix_process_adr`           |
+| Backend API              | `rule-backend-node`                                  | `rule-backend-security`                            | `pix_check`, `rule_tool_process_adr`           |
 | Database work            | database skill                                      | `rule-data`                                        | `pix_search`, `pix_check`                |
-| Docker/CI/tests          | `rule-devops` focused skill                          | platform skill                                    | `pix_scaffold`, `pix_fix`                |
+| Docker/CI/tests          | `rule-devops` focused skill                          | platform skill                                    | `pix_scaffold`, `/rule-area-styleguide-file-tree`                |
 | GraphQL API              | `rule-backend-graphql`                               | runtime skill, `rule-backend-security`             | `pix_search`, `pix_check`                |
-| Production observability | `rule-devops-observability`                          | runtime and platform skill                        | `pix_check`, `pix_process_adr`           |
+| Production observability | `rule-devops-observability`                          | runtime and platform skill                        | `pix_check`, `rule_tool_process_adr`           |
 | Code review              | `rule-process-code-review`                           | feature workflow, relevant domain skill           | `pix_check`                              |
 | Commit/push              | `rule-toolchain-commits`                             | `rule-toolchain-husky`                             | `pix_check`                              |
-| Docs/ADR                 | `rule-styleguide-markdown`                           | `rule-process-adr`                                 | `pix_process_adr`, `pix_process_handoff` |
-| File-tree cleanup        | `rule-styleguide-naming`                             | `rule-toolchain-project`                           | `pix_fix`, `pix_check`                   |
+| Docs/ADR                 | `rule-styleguide-markdown`                           | `rule-process-adr`                                 | `rule_tool_process_adr`, `rule_tool_handoff` |
+| File-tree cleanup        | `rule-styleguide-naming`                             | `rule-toolchain-project`                           | `/rule-area-styleguide-file-tree`, `pix_check`                   |
 
 ## Operational sequence
 
@@ -250,8 +250,8 @@ Design and route visible interface work while preserving rule implementation con
 3. Read the primary skill in `mode=tldr` or `mode=search` before `mode=full`.
 4. Generate deterministic artifacts with `pix_component` or `pix_scaffold`.
 5. Validate with `pix_check`; pass `previousPassed` on subsequent iterations.
-6. Record major decisions with `pix_process_adr`.
-7. Use `pix_fix` for file-tree convention fixes and `pix_process_handoff` before context switches.
+6. Record major decisions with `rule_tool_process_adr`.
+7. Use `/rule-area-styleguide-file-tree` for file-tree convention fixes and `rule_tool_handoff` before context switches.
 
 ## Conventions (rules -> skills merge)
 

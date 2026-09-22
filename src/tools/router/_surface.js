@@ -9,17 +9,17 @@ import { _tools, toolsGeneration } from "./_hooks.js";
 
 const MUTATING_TOOLS = new Set([
   "rule_tool_apply",
-  "rule_tool_fix",
   "rule_tool_process_adr",
   "rule_tool_plan_docs",
-  "rule_tool_process_handoff",
+  "rule_tool_handoff",
   "rule_tool_update",
-  "rule_tool_process_handon",
+  "rule_tool_handon",
+  "rule_tool_init",
 ]);
 
 /** Tools whose answer depends on state outside their arguments, so a repeat
  * call can legitimately differ: the working tree, the clock, the code graph. */
-const NON_IDEMPOTENT_READS = new Set(["rule_tool_detect", "rule_tool_gateway", "rule_tool_stats", "rule_tool_usage", "rule_tool_a11y_report", "rule_tool_process_handon"]);
+const NON_IDEMPOTENT_READS = new Set(["rule_tool_detect", "rule_tool_gateway", "rule_tool_stats", "rule_tool_usage", "rule_tool_handon", "rule_tool_init"]);
 
 /**
  * MCP tool annotations, emitting only what differs from the spec defaults.

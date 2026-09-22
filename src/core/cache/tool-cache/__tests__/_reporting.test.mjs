@@ -21,7 +21,7 @@ test("every call is classified by the path it arrived on", () => {
   assert.equal(entryPathOf("rule_tool_frontend_react"), "skill");
   assert.equal(entryPathOf("rule_tool_styleguide_css"), "skill");
   assert.equal(entryPathOf("rule_tool_check"), "action");
-  assert.equal(entryPathOf("rule_tool_process_handon"), "action");
+  assert.equal(entryPathOf("rule_tool_handon"), "action");
 });
 
 // ── Aggregation reports both facets ──

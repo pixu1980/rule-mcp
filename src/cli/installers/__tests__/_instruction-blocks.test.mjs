@@ -31,7 +31,7 @@ test("an install writes both blocks, each inside its own sentinels", () => {
 test("the rules name the tools this server registers", () => {
   const text = written();
 
-  for (const tool of ["pix_tool -", "rule_tool_process_adr", "rule_tool_process_handoff", "rule_tool_check"]) {
+  for (const tool of ["pix_tool -", "rule_tool_process_adr", "rule_tool_handoff", "rule_tool_check"]) {
     assert.ok(text.includes(tool), `the rules must reference ${tool}`);
   }
   // The node block advertised a surface that does not exist: `pix_component`,

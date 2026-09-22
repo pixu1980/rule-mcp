@@ -41,13 +41,13 @@ export function handoffBlock(cwd, occasion) {
     return "";
   }
 
-  const body = report.text.length > MAX_CHARS ? `${report.text.slice(0, MAX_CHARS)}\n\n(truncated: call \`rule_tool_process_handon\` for the rest)` : report.text;
+  const body = report.text.length > MAX_CHARS ? `${report.text.slice(0, MAX_CHARS)}\n\n(truncated: call \`rule_tool_handon\` for the rest)` : report.text;
 
   const block = [
     "## PIX RESUMED SESSION",
     "",
     `${occasion} \`${report.source}\` was verified against the repository as it is` +
-      " now, by `rule_tool_process_handon`. Every claim below carries its own" +
+      " now, by `rule_tool_handon`. Every claim below carries its own" +
       " verdict: act on what is still true, re-derive what changed, and treat" +
       " unverified as unknown.",
     "",

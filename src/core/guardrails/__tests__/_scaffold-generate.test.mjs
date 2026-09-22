@@ -3,24 +3,20 @@
 /**
  * @module test/scaffold-generate.test
  *
- * `rule_tool_scaffold mode=generate` could not produce a single file.
+ * Unit coverage for the scaffold generator module (ADR 115: `rule_tool_scaffold`
+ * is no longer on the public MCP surface; callers use `/rule-area-styleguide*`).
+ * The module still exists, so its generate/list contract stays pinned here.
  *
- * It reads templates from a `## Project Scaffolding` section of
- * `rule-styleguide`, and that section did not exist. So every request
- * answered `File ".nvmrc" not found. Available: ...` against a hardcoded list of
- * files it could not actually produce, while `mode=list` advertised all of them.
- *
- * Three things are pinned here, because a template that exists is not the same
- * as a template that is right:
+ * Three things are pinned:
  *   - every advertised file generates something
- *   - what it generates passes the scaffold guardrail for that same file, so the
- *     generator and the checker cannot drift apart
+ *   - what it generates passes the scaffold guardrail for that same file
  *   - an unknown file lists what is really there, not a hardcoded list
  */
 
 import { checkCode } from "../index.js";
 import { loadAllSkills } from "../../skills/index.js";
 import { callTool } from "../../../tools/router/index.js";
+import { registerScaffoldTool } from "../../../tools/skill/index.js";
 import "./_install.fixture.mjs";
 
 let pass = 0;
@@ -39,6 +35,7 @@ console.log("=== Scaffold generation ===\n");
 
 process.env.RULE_MCP_NO_CACHE = "1";
 await loadAllSkills(true);
+registerScaffoldTool();
 
 const text = (result) => result.content.map((part) => part.text).join("\n");
 
@@ -58,7 +55,6 @@ for (const file of listed) {
   check(`T2.1 ${file} passes its own scaffold guardrail`, own.length === 0);
 }
 
-// ── T3: the whole section, and an honest error ──
 const all = text(await callTool("rule_tool_scaffold", { mode: "generate" }));
 check(
   "T3 generating everything returns every file",

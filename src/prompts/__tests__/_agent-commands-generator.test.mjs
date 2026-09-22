@@ -76,7 +76,7 @@ test("handoff command drives atomic scoped commits, a separate docs commit, and 
   const handoff = listAgentCommands().find((c) => c.name === "rule-handoff");
   assert.ok(handoff, "rule-handoff command must exist");
   const body = handoff.body;
-  assert.match(body, /pix_process_handoff/, "must run the handoff tool");
+  assert.match(body, /rule_tool_handoff/, "must run the handoff tool");
   assert.match(body, /atomic/i, "must describe atomic commits");
   assert.match(body, /docs\(handoff\)|docs\(adr\)/, "must make a separate docs commit");
   assert.match(body, /never push/i, "must never push");

@@ -7,15 +7,11 @@ export function skillNextTools(skillName) {
 
   suggestions.push(`rule_tool_${base}`);
 
-  if (skillName === "rule-styleguide") {
-    suggestions.push("rule_tool_scaffold");
+  if (skillName.startsWith("rule-styleguide")) {
+    suggestions.push("rule_tool_styleguide");
   }
 
-  suggestions.push("rule_tool_check", "rule_tool_search");
-
-  if (skillName !== "rule-frontend-vanilla-reactive") {
-    suggestions.push("rule_tool_component");
-  }
+  suggestions.push("rule_tool_check", "rule_tool_search", "rule_tool_compress");
 
   return suggestions;
 }

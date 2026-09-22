@@ -3,18 +3,13 @@
 /**
  * @module tools/compress
  *
- * `rule_tool_compress`: runs the two output passes over arbitrary prose.
+ * `rule_tool_compress` (ADR 115): the sole compression engine. Covers
+ * postprocessing of model prose (answers, commits, reviews) and is the place
+ * callers run the same deterministic passes the server already applies to tool
+ * results - filler strip, fingerprint/ASCII, structural guard. Prompt/context
+ * preprocessing that enriches then compresses inbound text also routes here.
  *
- * The passes already run on every tool result, but the model writes plenty of
- * text the server never sees - an answer, a commit message, a PR description.
- * This exposes the same deterministic transformation so that text can be run
- * through it before it is written out, instead of the model trying to apply
- * the rules from memory.
- *
- * This is the one place where the original and the compressed text are both in
- * hand, so it is also where the structural guard runs on the result of every
- * mode: a pass that loses a heading, a code block or a URL is reported and the
- * original is returned instead.
+ * The process-compression skill/area was removed; this tool owns those rules.
  *
  * No model call, no filesystem, no clock: same input, same output, so the
  * result cache can replay it.
@@ -67,8 +62,9 @@ export function registerCompressTool() {
     name: "rule_tool_compress",
     entry: "action",
     description:
-      "Compress prose deterministically: strip filler and leading articles, replace typographic characters " +
-      "with ASCII, convert British spelling to American. Code, inline spans, URLs and JSON are never touched.",
+      "Sole compression engine (ADR 115): preprocess enriched prompts/contexts and postprocess model prose. " +
+      "Strip filler and leading articles, replace typographic characters with ASCII, convert British spelling " +
+      "to American. Code, inline spans, URLs and JSON are never touched. Prefer /rule-compress.",
     zodSchema: CompressSchema,
     handler: async (arguments_) => {
       const { text, mode = "both", fileName } = arguments_;

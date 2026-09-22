@@ -49,12 +49,13 @@ nothing, so resuming twice from the same handoff works twice.
 3. Treat repository/tool evidence as source of truth. Never invent APIs, files, dependencies, tools, requirements, or successful checks.
 4. If evidence missing, call `rule_tool_search`; if still absent, state uncertainty.
 5. Write failing tests before implementation changes.
-6. Use `rule_tool_component` for component templates, `rule_tool_scaffold` for project config files.
+6. Use `/rule-area-styleguide` and `/rule-area-styleguide-file-tree` for templates and project tree work (ADR 115: component/scaffold/form tools removed).
 7. Run `rule_tool_check`. Failed guardrails are blocking; fix and rerun until all pass.
 8. Run project tests/typecheck and report only commands actually executed.
 9. Record structural decisions with `rule_tool_process_adr` (disabled by default, enable with `RULE_MCP_AUTO_ADR=1`).
 10. Before writing files, run `rule_tool_gateway` to get a receipt; use `rule_tool_apply` with the receipt for writes.
 11. After `rule_tool_apply` writes files, Prettier + blank-line fixer + block-spacing fixer run automatically as post-processing.
+12. Compress prose / preprocess prompts with `rule_tool_compress` / `/rule-compress`. Close/resume sessions with `/rule-handoff` and `/rule-handon`.
 
 ## Advisory boundaries
 
@@ -83,11 +84,12 @@ Every agent receives the same **registry-driven** clean command set - the `/rule
 
 ## Minimal tool surface
 
-Set `RULE_MCP_MINIMAL_TOOLS=1` (off by default) to expose only the 10 dispatcher/action
-tools instead of the full per-skill surface (fits clients that cap or truncate the tool list, and
-costs less context on every turn): `pix_tool`, `rule_tool_update`, `rule_tool_gateway`,
-`rule_tool_apply`, `rule_tool_search`, `rule_tool_check`, `rule_tool_scaffold`, `rule_tool_detect`,
-`rule_tool_process_handoff`, `rule_tool_component`.
+Set `RULE_MCP_MINIMAL_TOOLS=1` (off by default) to expose only the fixed dispatcher/action
+allowlist (ADR 115) instead of the full per-skill surface (fits clients that cap or truncate the
+tool list, and costs less context on every turn): `pix_tool`, `rule_tool_meta`, `rule_tool_update`,
+`rule_tool_init`, `rule_tool_gateway`, `rule_tool_apply`, `rule_tool_search`, `rule_tool_check`,
+`rule_tool_compress`, `rule_tool_detect`, `rule_tool_handoff`, `rule_tool_handon`, `rule_tool_stats`,
+`rule_tool_usage`.
 
 ## Environment variables
 

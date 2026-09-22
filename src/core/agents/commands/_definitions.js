@@ -4,7 +4,7 @@
 
 import { listPrompts } from "@src/prompts/index.js";
 import { listAreaPrompts } from "@src/prompts/_areas.js";
-import { areaBody, HANDOFF_BODY, ROUTER, checkBody, generalCheckBody } from "./_bodies.js";
+import { areaBody, HANDOFF_BODY, HANDON_BODY, COMPRESS_BODY, STATS_BODY, USAGE_BODY, INIT_BODY, ROUTER, checkBody, generalCheckBody } from "./_bodies.js";
 import { commandNames, ROUTER_COMMAND, CHECK_COMMAND } from "./_names.js";
 import { personaBody, personaTarget } from "./_personas.js";
 
@@ -52,7 +52,15 @@ export function commandDefinition(name) {
   const primary = prompt.arguments?.[0];
   const argumentHint = primary ? (primary.required ? `<${primary.name}>` : `[${primary.name}]`) : "<request>";
   const persona = personaTarget(name);
-  const body = persona ? personaBody(persona) : name === "rule-handoff" ? HANDOFF_BODY : areaBody(prompt.description);
+  const sessionBodies = {
+    "rule-handoff": HANDOFF_BODY,
+    "rule-handon": HANDON_BODY,
+    "rule-compress": COMPRESS_BODY,
+    "rule-stats": STATS_BODY,
+    "rule-usage": USAGE_BODY,
+    "rule-init": INIT_BODY,
+  };
+  const body = persona ? personaBody(persona) : sessionBodies[name] ?? areaBody(prompt.description);
 
   return { name, description: prompt.description, argumentHint, body };
 }

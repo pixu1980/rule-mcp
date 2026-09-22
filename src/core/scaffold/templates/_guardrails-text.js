@@ -21,7 +21,7 @@ export function buildGuardrailsText() {
     "- [ ] **a11y-test-components**: tests/a11y/_components.spec.js - per-component a11y checks",
     "- [ ] **playwright-config**: playwright.config.js with Chromium target",
     "",
-    "Use rule_tool_component component=a11y-test-basic to generate test templates.",
+    "Use /rule-area-styleguide and /rule-persona-a11y-audit for a11y test templates and audits.",
     "Use rule_tool_check for automated validation.",
     "Iterate: generate, rule_tool_check, fix, rule_tool_check, all pass.",
   ];

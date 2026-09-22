@@ -5,7 +5,7 @@
  *
  * The handoff a resumed session would otherwise have to be asked for.
  *
- * `rule_tool_process_handoff` writes the snapshot and `rule_tool_process_handon`
+ * `rule_tool_handoff` writes the snapshot and `rule_tool_handon`
  * verifies it against the repository as it is now (ADR 051). Both are typed by
  * hand, and the session that most needs them is the one where nobody types
  * anything: the user reopens the agent with `resume` hours later and asks the

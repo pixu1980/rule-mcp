@@ -19,7 +19,7 @@ export async function autoLog(toolName, arguments_, result) {
     return;
   }
 
-  const relevant = ["pix_tool", "rule_tool_scaffold", "rule_tool_detect", "rule_tool_fix"];
+  const relevant = ["pix_tool", "rule_tool_detect"];
 
   if (!relevant.includes(toolName)) {
     return;

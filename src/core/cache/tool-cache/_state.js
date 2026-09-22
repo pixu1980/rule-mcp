@@ -15,9 +15,9 @@ export const NON_CACHEABLE = new Set([
   "rule_tool_apply",
   "rule_tool_fix",
   "rule_tool_process_adr",
-  "rule_tool_process_handoff",
+  "rule_tool_handoff",
   // handon reads git: a replayed answer describes a repository that has moved.
-  "rule_tool_process_handon",
+  "rule_tool_handon",
   "rule_tool_gateway",
   "rule_tool_detect",
   "rule_tool_update",

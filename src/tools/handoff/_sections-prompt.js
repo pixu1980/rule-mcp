@@ -33,7 +33,7 @@ export function resumePromptLines({ projectName }, { isMinimal, heading = "###" 
     "The next session opens with this block. Add the path of this document and the first step of the next session before saving it.",
     "",
     "```prompt",
-    `Resume work on ${projectName}. Run \`rule_tool_process_handon\` first: it checks which claims in this handoff still hold before any of them are trusted.`,
+    `Resume work on ${projectName}. Run \`rule_tool_handon\` first: it checks which claims in this handoff still hold before any of them are trusted.`,
     "The ADR log and the context snapshot capture what has been decided; do not re-ask answered questions.",
     "Every commit is `type(scope): subject`; the commit-msg hook rejects a scope-less message.",
     "```",

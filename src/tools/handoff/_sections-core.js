@@ -13,7 +13,7 @@ export function headerLines({ projectName, isMinimal, isCloseSession }) {
 
   if (isCloseSession) {
     const now = new Date().toISOString().slice(0, 19).replace("T", " ");
-    lines.push(`_Session closed at ${now}_`, `_Run \`rule_tool_process_handoff\` in a new session to resume._`, "");
+    lines.push(`_Session closed at ${now}_`, `_Run \`rule_tool_handoff\` in a new session to resume._`, "");
   }
 
   return lines;

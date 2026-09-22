@@ -48,19 +48,10 @@ export const CORPUS = [
   { prompt: "how granular should my mcp tools be", expect: "ai-agent-architecture", area: "ai" },
   { prompt: "agent loop or a graph for orchestration", expect: "ai-agent-architecture", area: "ai" },
 
-  // ── Session boundaries: handoff writes, handon reads back ──
-  // Passed until R4 added two AI skills, then lost to rule-ai-prompting: two
-  // more documents shift the term statistics for every query, and this one has
-  // no distinctive term left after stopwords - "leave", "off" and "last" are all
-  // filtered, so it is competing on "session" alone. Kept as a near miss rather
-  // than fixed, because fixing it means writing prose to satisfy a scorer.
-  {
-    prompt: "where did I leave off last session",
-    expect: "process-handoff",
-    area: "process",
-    note: "low-signal query, offered as an alternative",
-  },
-  { prompt: "resume from the last handoff", expect: "process-handoff", area: "process" },
+  // ── Session boundaries (ADR 115): handoff/handon are tool+slash only ──
+  // (`rule_tool_handoff` / `/rule-handoff`, `rule_tool_handon` / `/rule-handon`).
+  // Compression is likewise tool-only (`rule_tool_compress` / `/rule-compress`).
+  // No skill-route corpus rows: BM25 cannot target a removed skill.
 
   // ── Internationalization: the skill R0 added ──
   { prompt: "how do I format a date for a different locale", expect: "styleguide-i18n", area: "styleguide" },
@@ -98,9 +89,8 @@ export const CORPUS = [
 
   // ── Process and AI: added in P2 and P4 ──
   { prompt: "should I extract this into a helper function", expect: "process-simplicity", area: "process" },
-  { prompt: "compress the output to save tokens", expect: "compression", area: "output" },
-  { prompt: "write a compression style code review", expect: "compression", area: "output" },
-  { prompt: "make this text shorter and less verbose", expect: "compression", area: "output" },
+  // Compression is tool-only after ADR 115 (rule_tool_compress / /rule-compress), not a skill route.
+
   {
     prompt: "remove em dashes and use american english spelling",
     expect: "styleguide-english",

@@ -20,7 +20,7 @@ Node ≥ 20 · [MIT license](LICENSE) · MCP SDK 1.30.0 (from package.json).
 - [What is rule-mcp](#what-is-rule-mcp)
 - [Architecture overview](#architecture-overview)
 - [Tool reference](#tool-reference)
-  - [All 110 tools (normal mode)](#all-110-tools-normal-mode)
+  - [All 106 tools (normal mode)](#all-110-tools-normal-mode)
   - [Minimal tool surface (10 tools)](#minimal-tool-surface-10-tools)
   - [Gateway deterministic mode](#gateway-deterministic-mode)
 - [MCP Resources (186)](#mcp-resources-186)
@@ -90,7 +90,7 @@ shasum -a 256 -c SHA256SUMS
 
 ## What is rule-mcp
 
-rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **110 tools**, **190 resources**, and **153 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
+rule-mcp is an [MCP](https://modelcontextprotocol.io) server that exposes **106 tools**, **190 resources**, and **153 prompts** to any MCP-compatible AI coding agent. Because the server never calls an LLM (every output is deterministic), it is **model-agnostic** - it behaves identically behind Claude, GPT, Gemini, Llama, Qwen, or any other model. It provides:
 
 - **92 modular skills** covering frontend, backend, database, devops, toolchain, styleguide, process, platform, and ai domains
 - **BM25 full-text search** across all skill content
@@ -130,7 +130,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Devin (for
 ├───────────────────────────────────────────────────────────────┤
 │  Tool Registry              │  Resources Registry             │
 │  src/tools/router.js        │  src/resources/index.js         │
-│  110 tools                  │  190 resources                  │
+│  106 tools                  │  190 resources                  │
 ├──────────────────┬───────────┴────────────────┬───────────────┤
 │  Orchestration   │  Skills & BM25            │  Guardrails    │
 │  pix_gateway     │  90 skill dirs            │  18 shared     │
@@ -175,7 +175,7 @@ Claude Code, Cursor, Cline, Roo Code, Copilot, Gemini CLI, Codex CLI, Devin (for
 
 ## Tool reference
 
-### All 110 tools (normal mode)
+### All 106 tools (normal mode)
 
 #### Deterministic tools (9)
 
@@ -342,9 +342,8 @@ invoking the model.
 | Prompt                                        | Description                                                                                                                                                                                                                                                                                               | Arguments                                                                                                                                                                                          |
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `rule` (router)                                | Route a request through the rule workflow (`/rule-mcp` became `/rule`)                                                                                                                                                                                                                                | `<request>` (required)                                                                                                                                                                             |
-| `rule-area-*`                                  | Area specialists derived from skills (incl. `/rule-area-process-adr`, `/rule-area-process-compression`)                                                                                                                                                                                                     | `request` (required, free text)                                                                                                                                                                    |
+| `rule-area-*`                                  | Area specialists derived from skills (incl. `/rule-area-process-adr`, `/rule-compress`)                                                                                                                                                                                                     | `request` (required, free text)                                                                                                                                                                    |
 | `rule-handoff`                                 | Compressed context handoff (ADR + git) for a new session; commits pending work first, and archives completed audits/reviews/plans as ADRs                                                                                                                                                                 | `options` (optional: `handoff` \| `close-session`, `compress` \| `no-compress` (default: compress), `full` \| `brief` \| `minimal`, `no-*`, `no-archive`, `max=<n>`, `help`; empty = all defaults) |
-| `rule-process-flight`                          | Read the flight recorder: what this server cost and what to do about it                                                                                                                                                                                                                                   | `options` (optional: export \| show <file> \| prune \| redact)                                                                                                                                     |
 | `rule-handon`                                  | Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream                                                                                                                                                                               | `options` (optional: list \| file=<path> \| no-archive)                                                                                                                                            |
 | `rule-init`                                    | Prepare a project for rule-mcp: recorder dir + tokensave                                                                                                                                                                                                                                            | `options` (optional: no-tokensave)                                                                                                                                                                 |
 | `rule-update`                                  | Apply an available server update explicitly, and report what changed                                                                                                                                                                                                                                      | `options` (optional: check \| apply)                                                                                                                                                               |

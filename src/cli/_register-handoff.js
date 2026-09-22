@@ -52,10 +52,10 @@ export function registerHandoffCommand(program) {
         return;
       }
 
-      const { registerProcessHandoffTool } = await import("../tools/handoff/index.js");
+      const { registerHandoffTool } = await import("../tools/handoff/index.js");
       const { callTool: ct } = await import("../tools/router/index.js");
-      registerProcessHandoffTool();
-      const handoffRes = await ct("rule_tool_process_handoff", {
+      registerHandoffTool();
+      const handoffRes = await ct("rule_tool_handoff", {
         projectDir: options.dir,
         compress: options.compress,
         format: options.format ?? "full",

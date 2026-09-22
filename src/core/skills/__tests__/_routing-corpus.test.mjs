@@ -39,9 +39,11 @@ const { loadAllSkills } = await import("../index.js");
 const { callTool } = await import("../../../tools/router/index.js");
 const { CORPUS, NONSENSE, PERSONAS, NOT_PERSONAS } = await import("../../../../tests/fixtures/routing-corpus.mjs");
 
-/** Measured at 87% exact and 100% top-or-alt when BM25 landed (ADR 048). */
-const MIN_EXACT = 0.8;
-const MIN_TOP_OR_ALT = 0.95;
+/** Measured at 87% exact and 100% top-or-alt when BM25 landed (ADR 048).
+ * Floors eased slightly after ADR 115 removed process-handoff/compression skills
+ * from the searchable catalog (those intents are tool/slash only now). */
+const MIN_EXACT = 0.78;
+const MIN_TOP_OR_ALT = 0.93;
 
 await loadAllSkills(true);
 

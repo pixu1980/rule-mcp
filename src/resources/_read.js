@@ -72,9 +72,8 @@ export async function serveResource(uri) {
           uri,
           mimeType: "text/markdown",
           text:
-            "For the full a11y testing guide with Playwright + axe-core, see rule-styleguide a11y.md Section 12: Automated Testing.\n\n" +
-            "Use `rule_tool_component component=a11y-test-basic` to generate test files.\n" +
-            "Use `rule_tool_component component=playwright-config` to generate Playwright config.",
+            "For a11y testing with Playwright + axe-core, see rule-styleguide-a11y and /rule-persona-a11y-audit.\n\n" +
+            "Use `/rule-area-styleguide` (and related styleguide skills) for templates and config generation.",
         },
       ],
     };
@@ -123,7 +122,7 @@ export async function serveResource(uri) {
     const result = {
       ...profile,
       suggested_skills: [skillName],
-      suggested_tools: [toolName, "rule_tool_check", "rule_tool_scaffold", "rule_tool_component"],
+      suggested_tools: [toolName, "rule_tool_check", "rule_tool_styleguide"],
       message: `Detected ${profile.framework} project "${profile.projectName}". Use ${toolName} for rule-compliant code generation.`,
     };
 

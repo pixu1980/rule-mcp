@@ -1,6 +1,6 @@
 
 
-/** Register the rule_tool_process_handon MCP tool. */
+/** Register the rule_tool_handon MCP tool. */
 import { z } from "zod/v4";
 import { registerTool } from "../router/index.js";
 import { handon } from "./_handon.js";
@@ -12,10 +12,10 @@ const HandonSchema = z.object({
   closeout: z.boolean().optional().default(true).describe("Archive completed audits/reviews/plans into ADRs before verifying (default on; false = verify only, nothing written)"),
 });
 
-/** Register the rule_tool_process_handon tool. */
-export function registerProcessHandonTool() {
+/** Register the rule_tool_handon tool. */
+export function registerHandonTool() {
   registerTool({
-    name: "rule_tool_process_handon",
+    name: "rule_tool_handon",
     entry: "action",
     description:
       "Read the last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work. Sweeps completed audits/reviews/plans into ADRs first, then proposes the next workstream each open plan still carries, for the user to confirm. Never re-runs a claimed command.",

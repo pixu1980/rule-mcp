@@ -153,7 +153,7 @@ reading often beats three more attempts, and it leaves you knowing something.
 ## See also
 
 - [rule-process-ai-sdlc](../rule-process-ai-sdlc/SKILL.md) - where these prompts sit in the lifecycle
-- [rule-process-compression](../rule-process-compression/SKILL.md) - keeping the answers short
+- `rule_tool_compress` / `/rule-compress` - sole compression engine (ADR 115)
 - [rule-process-simplicity](../rule-process-simplicity/SKILL.md) - the scope contract to hold agents to
 - [rule-ai-context-engineering](../rule-ai-context-engineering/SKILL.md) - managing the window this prompt lands in
 - [rule-ai-evals](../rule-ai-evals/SKILL.md) - measuring an AI feature rather than trusting it

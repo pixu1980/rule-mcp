@@ -93,6 +93,6 @@ test("a malformed handoff reports what parsed and what did not", () => {
 //
 // The last two suite checks - "the MCP tool is registered" and "it is never
 // served from cache" - move with the MCP surface phase, where
-// registerProcessHandonTool() wires `rule_tool_process_handon` into the router
+// registerHandonTool() wires `rule_tool_handon` into the router
 // and handon joins the cache denylist. Until then the core verification
 // (handon(), the fixture claims, read-only behavior) is what this suite pins.

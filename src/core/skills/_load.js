@@ -15,21 +15,21 @@
  * coupling graph, which is the measurement the phase split exists to protect.
  *
  * Called once at startup, or on demand via `skills reload`.
+ *
+ * ADR 115: form/scaffold/component/a11y_report are not registered - callers use
+ * styleguide area slash/skills or persona a11y instead.
  */
 
-import { registerA11yReportTool } from "../../tools/a11y/index.js";
 import { registerActionTools } from "../../tools/actions/index.js";
 import { registerProcessAdrTool } from "../../tools/adr/index.js";
 import { registerAiTool } from "../../tools/ai/index.js";
-import { registerFixTool } from "../../tools/fix/index.js";
-import { registerProcessHandoffTool } from "../../tools/handoff/index.js";
-import { registerProcessHandonTool } from "../../tools/handon/index.js";
+import { registerHandoffTool } from "../../tools/handoff/index.js";
+import { registerHandonTool } from "../../tools/handon/index.js";
 import { registerMetaTool } from "../../tools/meta/index.js";
 import { clearSkillResolution, clearTools } from "../../tools/router/index.js";
-import { registerCheckTool, registerScaffoldTool, registerSearchTool } from "../../tools/skill/index.js";
+import { registerCheckTool, registerSearchTool } from "../../tools/skill/index.js";
 import { buildIndex, clearIndex } from "../bm25/index.js";
 import { cacheClear, clearSkillDigests } from "../cache/tool-cache/index.js";
-import { registerTemplateTool } from "../scaffold/templates/index.js";
 import { registerDetectTool } from "./_detect-tool.js";
 import { installSkillGuardrails } from "./_guardrail-layers.js";
 import { skillCache } from "./_lru.js";
@@ -59,7 +59,7 @@ export function resetForReload() {
 
 /**
  * Register the families the catalog owns: everything that is not minted per
- * skill, plus the index and the templates the skill tools read.
+ * skill, plus the index the skill tools read.
  *
  * The gateway and the apply tool are deliberately absent. They belong to the
  * invocation path the catalog is loaded by, and `bootstrapCoreTools()` is what
@@ -74,26 +74,22 @@ export async function registerCoreTools() {
   registerMetaTool();
   registerSearchTool();
   registerCheckTool();
-  registerScaffoldTool();
   registerDetectTool();
   // Action tools: the collection-helpers of the rule surface. All read-only
   // except the plan/plan-docs writers, which are operationally useful in every
   // mode.
   registerActionTools();
-  registerA11yReportTool();
-  registerProcessHandonTool();
+  registerHandonTool();
 
   // Mutation tools: hidden in minimal mode
   if (!IS_MINIMAL_TOOLS) {
     registerProcessAdrTool();
-    registerFixTool();
   }
 
-  registerProcessHandoffTool();
+  registerHandoffTool();
   // The index is built from the skill files on disk, not from the tools
   // registered above, so it does not wait for the per-skill pass.
   buildIndex();
-  registerTemplateTool();
 }
 
 /**

@@ -26,7 +26,7 @@ const body = [
   "The next session opens with this block.",
   "",
   "```prompt",
-  "Read `docs/handoff/09-fixture.md`, then run `rule_tool_process_handon`.",
+  "Read `docs/handoff/09-fixture.md`, then run `rule_tool_handon`.",
   "Every commit is `type(scope): subject`.",
   "```",
   "",
@@ -36,7 +36,7 @@ test("the fenced block under the Resume Prompt heading is the prompt", () => {
   // The workflow asks the handoff to close with a prompt the next session can
   // be handed as its first message. Reading it back is what makes the block
   // worth writing: a prompt trapped in a markdown tail is read by humans only.
-  assert.equal(resumePrompt(body), "Read `docs/handoff/09-fixture.md`, then run `rule_tool_process_handon`.\nEvery commit is `type(scope): subject`.");
+  assert.equal(resumePrompt(body), "Read `docs/handoff/09-fixture.md`, then run `rule_tool_handon`.\nEvery commit is `type(scope): subject`.");
   assert.doesNotMatch(resumePrompt(body), /The next session opens with this block/, "the prose introducing the block is not part of it");
 });
 
@@ -100,7 +100,7 @@ test("the report closes with the prompt the handoff wrote", () => {
       "## Resume Prompt",
       "",
       "```prompt",
-      "Read `docs/handoff/01-fixture.md` and run `rule_tool_process_handon` first.",
+      "Read `docs/handoff/01-fixture.md` and run `rule_tool_handon` first.",
       "```",
       "",
     ].join("\n"),
@@ -111,7 +111,7 @@ test("the report closes with the prompt the handoff wrote", () => {
   const { text } = handon({ projectDir: root });
 
   assert.match(text, /## Prompt to run next/, "the report carries the prompt");
-  assert.match(text, /run `rule_tool_process_handon` first/, "and quotes it verbatim");
+  assert.match(text, /run `rule_tool_handon` first/, "and quotes it verbatim");
   assert.ok(text.trimEnd().endsWith("```"), "the prompt is the last thing in the report, so copying it is one block");
 });
 

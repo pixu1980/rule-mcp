@@ -16,7 +16,7 @@ test("a rendered handoff closes with the prompt the next session opens with", ()
   assert.equal(lines[0], "### Resume Prompt", "the section is a heading like every other one");
   assert.match(text, /```prompt/, "the block is fenced, so a parser reads one span");
   assert.match(text, /Resume work on demo-proj/, "the prompt names the project");
-  assert.match(text, /`rule_tool_process_handon`/, "it tells the next session how to check the claims first");
+  assert.match(text, /`rule_tool_handon`/, "it tells the next session how to check the claims first");
   assert.match(text, /`type\(scope\): subject`/, "the commit-scope convention travels with it");
   assert.match(text, /scope-less message/, "and the reason the scope is not optional");
 });

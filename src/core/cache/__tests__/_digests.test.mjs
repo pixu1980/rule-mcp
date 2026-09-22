@@ -59,9 +59,9 @@ test("one skill changing leaves the entries that do not depend on it alone", () 
 test("an entry with no dependencies survives every skill edit", () => {
   cacheClear();
   const args = { component: "button", framework: "react" };
-  cacheStore("rule_tool_component", args, result("template"), {});
+  cacheStore("rule_tool_styleguide", args, result("template"), {});
 
-  assert.equal(cacheLookup("rule_tool_component", args)?.result.content[0].text, "template");
+  assert.equal(cacheLookup("rule_tool_styleguide", args)?.result.content[0].text, "template");
 });
 
 test("a dropped entry is actually removed, not merely hidden", () => {

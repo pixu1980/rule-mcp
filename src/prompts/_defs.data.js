@@ -23,17 +23,6 @@ export const PROMPT_DEFS = [
     ],
   },
   {
-    name: "rule-process-flight",
-    description: "Read the flight recorder: what this server cost, and what to do about it",
-    arguments: [
-      {
-        name: "options",
-        description: "Space-separated: export, show <file>, prune, redact. Default: export.",
-        required: false,
-      },
-    ],
-  },
-  {
     name: "rule-handon",
     description: "Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream",
     arguments: [
@@ -48,6 +37,27 @@ export const PROMPT_DEFS = [
     name: "rule-init",
     description: "Prepare a project for rule-mcp: the central recorder directory and tokensave",
     arguments: [{ name: "options", description: "Space-separated: no-tokensave. Default: the full init.", required: false }],
+  },
+  {
+    name: "rule-compress",
+    description: "Run rule_tool_compress: sole engine for prompt/context preprocessing and prose postprocessing",
+    arguments: [
+      {
+        name: "options",
+        description: "Space-separated: both | compression | fingerprint (default: both). Pass text via the chat.",
+        required: false,
+      },
+    ],
+  },
+  {
+    name: "rule-stats",
+    description: "Read local telemetry via rule_tool_stats: calls, cache hits, tokens, latency",
+    arguments: [{ name: "options", description: "Reserved. Default: full readout.", required: false }],
+  },
+  {
+    name: "rule-usage",
+    description: "Declare a usage sidecar via rule_tool_usage when no transcript is available",
+    arguments: [{ name: "options", description: "Reserved. Default: follow the tool schema in the reply.", required: false }],
   },
   {
     name: "rule-update",

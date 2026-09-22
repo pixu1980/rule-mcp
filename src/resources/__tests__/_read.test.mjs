@@ -66,12 +66,12 @@ test("rule://ai serves the routing skill as markdown", async () => {
   assert.ok(content.text.length > 0, "the rule skill is bundled, so this is never empty");
 });
 
-test("rule://a11y points at the guide and the generators", async () => {
+test("rule://a11y points at the guide and styleguide/persona surfaces", async () => {
   const content = await body("rule://a11y");
 
   assert.equal(content.mimeType, "text/markdown");
   assert.match(content.text, /Playwright \+ axe-core/, "it names the tooling");
-  assert.match(content.text, /rule_tool_component/, "and the tool that generates the specs");
+  assert.match(content.text, /rule-styleguide-a11y|rule-persona-a11y|rule-area-styleguide/, "and the a11y surface (ADR 115)");
 });
 
 test("the a11y test templates serve as plain text", async () => {
