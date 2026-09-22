@@ -163,7 +163,7 @@ Run `pix_tool_compress` to apply the passes to arbitrary prose before writing it
 
 ## See also
 
-- [pix-compression](../pix-compression/SKILL.md) - the compression pass that runs alongside this one
+- [pix-process-compression](../pix-process-compression/SKILL.md) - the compression pass that runs alongside this one
 - [pix-styleguide-markdown](../pix-styleguide-markdown/SKILL.md) - the document structure this writes into
 - [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md) - naming, where code wins over prose style
 - [pix-toolchain-commits](../pix-toolchain-commits/SKILL.md) - commit messages follow these rules too

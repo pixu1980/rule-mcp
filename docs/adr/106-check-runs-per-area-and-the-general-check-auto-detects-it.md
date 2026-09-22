@@ -15,7 +15,7 @@ Remove `/pix-adr` and `/pix-process-check` from the MCP prompt registry. Give th
 
 ## Consequences
 
-MCP prompts fall 155 to 153; reusable prompts 98 to 96. Agent slash commands rise 156 to 246, since one command per area now has a check sibling. A check is reachable both per area and generically, and the two-name collision around `pix-check` is gone. The persona and session families are untouched.
+MCP prompts fall 155 to 153; reusable prompts 98 to 96. Agent slash commands rise 156 to 246, since one command per area now has a check sibling. A check is reachable both per area and generically, and the two-name collision around `pix-check` is gone. The persona and session families are untouched. ADR 113 later hard-deletes any leftover `pix-adr` / `pix-process-check` task-prompt cases and documents `/pix-area-process-adr` / `/pix-area-process-check` as the only ADR/check entry points beside `/pix-check`.
 
 ## What would end this
 

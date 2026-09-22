@@ -25,6 +25,8 @@ test("refactor: areas are pix-area-*, removed commands gone", () => {
     "pix-a11y-audit",
     "pix-code-review",
     "pix-compression",
+    "pix-process-compression",
+    "pix-flight",
     "pix-tdd",
     "pix-new-feature",
     "pix-pull-request",
@@ -35,6 +37,9 @@ test("refactor: areas are pix-area-*, removed commands gone", () => {
     "pix-a11y-review",
     "pix-adr",
     "pix-process-check",
+    "pix-audit-security",
+    "pix-plan-security",
+    "pix-review-security",
   ]) {
     assert.ok(!names.has(removed), `${removed} must be removed`);
   }

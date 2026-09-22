@@ -11,7 +11,7 @@ The deterministic compressor was branded "caveman" in module names, exports, env
 
 ## Decision
 
-Rename the code, comments and configuration to neutral compression names: `_caveman*.js` becomes `_compression*.js`, `cavemanLevel`/`cavemanEnabled` become `compressionLevel`/`compressionEnabled`, `PIX_GALAXY_MCP_CAVEMAN_LEVEL` becomes `PIX_GALAXY_MCP_COMPRESSION_LEVEL`, `PIX_GALAXY_MCP_NO_CAVEMAN` becomes `PIX_GALAXY_MCP_NO_COMPRESSION`, and the served skill moves from `pix-caveman` to `pix-compression`. README.md keeps the single phrase `compression system inspired by caveman`. The MCP middleware (`finalize` for tool results, `compressMessages` for prompts, `readResource` for resources) now skips compression below `MIN_COMPRESS_LENGTH` (100) characters. The compressor itself stays length-agnostic so the unit tests and the `pix_tool_compress` tool keep their exact behavior.
+Rename the code, comments and configuration to neutral compression names: `_caveman*.js` becomes `_compression*.js`, `cavemanLevel`/`cavemanEnabled` become `compressionLevel`/`compressionEnabled`, `PIX_GALAXY_MCP_CAVEMAN_LEVEL` becomes `PIX_GALAXY_MCP_COMPRESSION_LEVEL`, `PIX_GALAXY_MCP_NO_CAVEMAN` becomes `PIX_GALAXY_MCP_NO_COMPRESSION`, and the served skill moves from `pix-caveman` to `pix-compression` (renamed again to `pix-process-compression` in ADR 113). README.md keeps the single phrase `compression system inspired by caveman`. The MCP middleware (`finalize` for tool results, `compressMessages` for prompts, `readResource` for resources) now skips compression below `MIN_COMPRESS_LENGTH` (100) characters. The compressor itself stays length-agnostic so the unit tests and the `pix_tool_compress` tool keep their exact behavior.
 
 ## Consequences
 

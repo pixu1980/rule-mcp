@@ -20,11 +20,11 @@ test("generatePersonaSkills writes one skill per role and operation", () => {
   try {
     const written = generatePersonaSkills(dir, { roles: [ROLE], operations: ["plan", "audit", "review"] });
 
-    assert.deepEqual(written, ["pix-plan-architect", "pix-audit-architect", "pix-review-architect"]);
+    assert.deepEqual(written, ["pix-persona-architect-plan", "pix-persona-architect-audit", "pix-persona-architect-review"]);
 
-    const content = readFileSync(join(dir, "pix-audit-architect/SKILL.md"), "utf8");
+    const content = readFileSync(join(dir, "pix-persona-architect-audit/SKILL.md"), "utf8");
 
-    assert.match(content, /^name: pix-audit-architect$/m, "the skill name is the operation and role");
+    assert.match(content, /^name: pix-persona-architect-audit$/m, "the skill name is the operation and role");
     assert.match(content, /exposeTool: false/, "a persona skill never mints a tool");
     assert.match(content, /pix_tool_audit/, "the audit skill points at the audit tool");
   } finally {
@@ -38,8 +38,8 @@ test("generatePersonaSkills dry-run writes nothing", () => {
   try {
     const written = generatePersonaSkills(dir, { roles: [ROLE], operations: ["plan"], dryRun: true });
 
-    assert.deepEqual(written, ["pix-plan-architect"]);
-    assert.equal(existsSync(join(dir, "pix-plan-architect")), false);
+    assert.deepEqual(written, ["pix-persona-architect-plan"]);
+    assert.equal(existsSync(join(dir, "pix-persona-architect-plan")), false);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

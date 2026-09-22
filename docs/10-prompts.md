@@ -31,7 +31,6 @@ Claude Code installs clean `/pix-*` commands instead and suppresses these
 | `/pix-area-backend-node`              | <request> | backend: the node skill                                                                                                                                   |
 | `/pix-area-backend-security`          | <request> | backend: the security skill                                                                                                                               |
 | `/pix-area-backend-workers`           | <request> | backend: the workers skill                                                                                                                                |
-| `/pix-area-compression`               | <request> | compression work, across every compression skill                                                                                                          |
 | `/pix-area-data`                      | <request> | data work, across every data skill                                                                                                                        |
 | `/pix-area-data-duckdb`               | <request> | data: the duckdb skill                                                                                                                                    |
 | `/pix-area-data-indexed-db`           | <request> | data: the indexed-db skill                                                                                                                                |
@@ -72,6 +71,7 @@ Claude Code installs clean `/pix-*` commands instead and suppresses these
 | `/pix-area-process-bmad`              | <request> | process: the bmad skill                                                                                                                                   |
 | `/pix-area-process-changelog`         | <request> | process: the changelog skill                                                                                                                              |
 | `/pix-area-process-code-review`       | <request> | process: the code-review skill                                                                                                                            |
+| `/pix-area-process-compression`       | <request> | process: the compression skill                                                                                                                            |
 | `/pix-area-process-handoff`           | <request> | process: the handoff skill                                                                                                                                |
 | `/pix-area-process-npm-release`       | <request> | process: the npm-release skill                                                                                                                            |
 | `/pix-area-process-simplicity`        | <request> | process: the simplicity skill                                                                                                                             |
@@ -108,39 +108,39 @@ Claude Code installs clean `/pix-*` commands instead and suppresses these
 | `/pix-area-toolchain-vite`            | <request> | toolchain: the vite skill                                                                                                                                 |
 | `/pix-area-ui`                        | <request> | ui work, across every ui skill                                                                                                                            |
 | `/pix-area-ui-design-system`          | <request> | ui: the design-system skill                                                                                                                               |
-| `/pix-flight`                         | [options] | Read the flight recorder: what this server cost, and what to do about it                                                                                  |
 | `/pix-handoff`                        | [options] | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. |
 | `/pix-handon`                         | [options] | Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream                               |
 | `/pix-init`                           | [options] | Prepare a project for pix-galaxy-mcp: the central recorder directory and tokensave                                                                        |
+| `/pix-process-flight`                 | [options] | Read the flight recorder: what this server cost, and what to do about it                                                                                  |
 | `/pix-update`                         | [options] | Apply an available server update explicitly, and report what changed                                                                                      |
 
 ### Persona, one per role and operation
 
-An operation is a prefix of the trio (ADR 057): `audit` writes `docs/audits/`
-and stops, `review` adds `docs/reviews/`, `plan` adds `docs/plans/`. Each
-takes an optional free-text `request` naming the focus for the run.
+An operation is a suffix of the persona command (ADR 113): `pix-persona-<role>-audit`
+writes `docs/audits/` and stops, `-review` adds `docs/reviews/`, `-plan` adds
+`docs/plans/`. Each takes an optional free-text `request` naming the focus for the run.
 
-| Role           | plan                     | audit                     | review                     |
-| -------------- | ------------------------ | ------------------------- | -------------------------- |
-| `a11y`         | `/pix-plan-a11y`         | `/pix-audit-a11y`         | `/pix-review-a11y`         |
-| `ai`           | `/pix-plan-ai`           | `/pix-audit-ai`           | `/pix-review-ai`           |
-| `architect`    | `/pix-plan-architect`    | `/pix-audit-architect`    | `/pix-review-architect`    |
-| `auth`         | `/pix-plan-auth`         | `/pix-audit-auth`         | `/pix-review-auth`         |
-| `backend`      | `/pix-plan-backend`      | `/pix-audit-backend`      | `/pix-review-backend`      |
-| `data`         | `/pix-plan-data`         | `/pix-audit-data`         | `/pix-review-data`         |
-| `devops`       | `/pix-plan-devops`       | `/pix-audit-devops`       | `/pix-review-devops`       |
-| `devx`         | `/pix-plan-devx`         | `/pix-audit-devx`         | `/pix-review-devx`         |
-| `docs`         | `/pix-plan-docs`         | `/pix-audit-docs`         | `/pix-review-docs`         |
-| `frontend`     | `/pix-plan-frontend`     | `/pix-audit-frontend`     | `/pix-review-frontend`     |
-| `i18n`         | `/pix-plan-i18n`         | `/pix-audit-i18n`         | `/pix-review-i18n`         |
-| `oss`          | `/pix-plan-oss`          | `/pix-audit-oss`          | `/pix-review-oss`          |
-| `performance`  | `/pix-plan-performance`  | `/pix-audit-performance`  | `/pix-review-performance`  |
-| `privacy`      | `/pix-plan-privacy`      | `/pix-audit-privacy`      | `/pix-review-privacy`      |
-| `qa`           | `/pix-plan-qa`           | `/pix-audit-qa`           | `/pix-review-qa`           |
-| `security`     | `/pix-plan-security`     | `/pix-audit-security`     | `/pix-review-security`     |
-| `simplicity`   | `/pix-plan-simplicity`   | `/pix-audit-simplicity`   | `/pix-review-simplicity`   |
-| `supply-chain` | `/pix-plan-supply-chain` | `/pix-audit-supply-chain` | `/pix-review-supply-chain` |
-| `ui`           | `/pix-plan-ui`           | `/pix-audit-ui`           | `/pix-review-ui`           |
+| Role           | plan                             | audit                             | review                             |
+| -------------- | -------------------------------- | --------------------------------- | ---------------------------------- |
+| `a11y`         | `/pix-persona-a11y-plan`         | `/pix-persona-a11y-audit`         | `/pix-persona-a11y-review`         |
+| `ai`           | `/pix-persona-ai-plan`           | `/pix-persona-ai-audit`           | `/pix-persona-ai-review`           |
+| `architect`    | `/pix-persona-architect-plan`    | `/pix-persona-architect-audit`    | `/pix-persona-architect-review`    |
+| `auth`         | `/pix-persona-auth-plan`         | `/pix-persona-auth-audit`         | `/pix-persona-auth-review`         |
+| `backend`      | `/pix-persona-backend-plan`      | `/pix-persona-backend-audit`      | `/pix-persona-backend-review`      |
+| `data`         | `/pix-persona-data-plan`         | `/pix-persona-data-audit`         | `/pix-persona-data-review`         |
+| `devops`       | `/pix-persona-devops-plan`       | `/pix-persona-devops-audit`       | `/pix-persona-devops-review`       |
+| `devx`         | `/pix-persona-devx-plan`         | `/pix-persona-devx-audit`         | `/pix-persona-devx-review`         |
+| `docs`         | `/pix-persona-docs-plan`         | `/pix-persona-docs-audit`         | `/pix-persona-docs-review`         |
+| `frontend`     | `/pix-persona-frontend-plan`     | `/pix-persona-frontend-audit`     | `/pix-persona-frontend-review`     |
+| `i18n`         | `/pix-persona-i18n-plan`         | `/pix-persona-i18n-audit`         | `/pix-persona-i18n-review`         |
+| `oss`          | `/pix-persona-oss-plan`          | `/pix-persona-oss-audit`          | `/pix-persona-oss-review`          |
+| `performance`  | `/pix-persona-performance-plan`  | `/pix-persona-performance-audit`  | `/pix-persona-performance-review`  |
+| `privacy`      | `/pix-persona-privacy-plan`      | `/pix-persona-privacy-audit`      | `/pix-persona-privacy-review`      |
+| `qa`           | `/pix-persona-qa-plan`           | `/pix-persona-qa-audit`           | `/pix-persona-qa-review`           |
+| `security`     | `/pix-persona-security-plan`     | `/pix-persona-security-audit`     | `/pix-persona-security-review`     |
+| `simplicity`   | `/pix-persona-simplicity-plan`   | `/pix-persona-simplicity-audit`   | `/pix-persona-simplicity-review`   |
+| `supply-chain` | `/pix-persona-supply-chain-plan` | `/pix-persona-supply-chain-audit` | `/pix-persona-supply-chain-review` |
+| `ui`           | `/pix-persona-ui-plan`           | `/pix-persona-ui-audit`           | `/pix-persona-ui-review`           |
 
 ## The rest of the census
 

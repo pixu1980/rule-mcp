@@ -191,5 +191,5 @@ start fresh more often, index instead of reading, then improve the prompts.
 - [pix-ai-prompting](../pix-ai-prompting/SKILL.md) - what to write, once the window is right
 - [pix-ai-agent-architecture](../pix-ai-agent-architecture/SKILL.md) - the loop that fills the window
 - [pix-process-handoff](../pix-process-handoff/SKILL.md) - writing a boundary down, and reading it back verified
-- [pix-compression](../pix-compression/SKILL.md) - compressing output without losing substance
+- [pix-process-compression](../pix-process-compression/SKILL.md) - compressing output without losing substance
 - [pix-ai-evals](../pix-ai-evals/SKILL.md) - measuring whether any of this helped

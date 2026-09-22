@@ -21,3 +21,4 @@ export * from "./_catalog.js";
 export * from "./_validate.js";
 export * from "./_query.js";
 export * from "./_detect.js";
+export * from "./_command-name.js";

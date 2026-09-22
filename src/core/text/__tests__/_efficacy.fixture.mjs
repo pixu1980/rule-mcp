@@ -18,8 +18,8 @@ import { mkdirSync, mkdtempSync, realpathSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const stateDir = mkdtempSync(join(tmpdir(), "pix-compression-eval-"));
-const projectDir = realpathSync(mkdtempSync(join(tmpdir(), "pix-compression-project-")));
+const stateDir = mkdtempSync(join(tmpdir(), "pix-process-compression-eval-"));
+const projectDir = realpathSync(mkdtempSync(join(tmpdir(), "pix-process-compression-project-")));
 mkdirSync(join(projectDir, ".git"), { recursive: true });
 process.env.PIX_GALAXY_MCP_STATE_DIR = stateDir;
 process.env.PIX_GALAXY_MCP_NO_CACHE = "1";
@@ -43,7 +43,7 @@ export const CORPUS = [
   ["pix_tool_styleguide_css", {}],
   ["pix_tool_backend_node", {}],
   ["pix_tool_process_code_review", {}],
-  ["pix_tool_compression", {}],
+  ["pix_tool_process_compression", {}],
 ];
 
 export const text = (result) => (result?.content ?? []).map((item) => item.text ?? "").join("");

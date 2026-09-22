@@ -5,7 +5,7 @@
       "file": "02-product-architecture.md",
       "kind": "block",
       "marker": "surface-counts",
-      "sha256": "e455dc1eefe8312e48c791515d61111e3e6867eca6bc7b420c382355872f847e"
+      "sha256": "683599d895d9e8037f6b5259e635cb5dbe6fc9c9f2b8c71608132fbed9ee7d6e"
     },
     {
       "file": "05-env-variables.md",
@@ -17,27 +17,27 @@
       "file": "07-engineering-guides.md",
       "kind": "block",
       "marker": "command-surface",
-      "sha256": "037c8a364a74cadb8dc2ac411bf59929ef14c3ba48d99284821206e255b89217"
+      "sha256": "92ad86f97b54b0456d19a584145f5557531147b859c1787247cd44f52454074e"
     },
     {
       "file": "08-skills.md",
       "kind": "document",
-      "sha256": "708a43b0a62626efebf8e4704f05ff205f9cd14b8bcc81159d77a8c000cd8bfe"
+      "sha256": "ac2498961290b9ef131359a9439f040c0de9e2dffb9e65875b08196ac9448404"
     },
     {
       "file": "09-tools.md",
       "kind": "document",
-      "sha256": "78fedd6c4fabe8b4417b9031c6b9182c531091be481c7777fcee785cc31905e5"
+      "sha256": "c71354bf4773a53480ad6da64abe07ffd3f9f22ae71a70b0fc748914ece1fe5c"
     },
     {
       "file": "10-prompts.md",
       "kind": "document",
-      "sha256": "2dfdbff722c3b508f9771429241597eae8fd9d4d771fbd772b0b057a90da9650"
+      "sha256": "c66838e5a35d038006f1dbe77b215aa8992027200de4bb7d2693c908205a70f7"
     },
     {
       "file": "11-instructions.md",
       "kind": "document",
-      "sha256": "53bb30ce894c21ea9eecf0056df3848ba37bfdbf52243c100110a0c498012a31"
+      "sha256": "50881f64821a2ece143c411e58090daf86bddb7d6d0b3517bc3156906cbc2c29"
     },
     {
       "file": "12-cli.md",

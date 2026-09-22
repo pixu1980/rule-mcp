@@ -12,7 +12,16 @@ import { test } from "node:test";
 
 import { areasOfSkills, filterSurfaceSkills, isRootSkill, parseSurface } from "../_surface.js";
 
-const SKILLS = ["pix-ai", "pix-ai-prompting", "pix-data", "pix-data-sql", "pix-frontend", "pix-frontend-react", "pix-compression"];
+const SKILLS = [
+  "pix-ai",
+  "pix-ai-prompting",
+  "pix-data",
+  "pix-data-sql",
+  "pix-frontend",
+  "pix-frontend-react",
+  "pix-process",
+  "pix-process-compression",
+];
 
 test("parseSurface reads presets", () => {
   assert.deepEqual(parseSurface("minimal"), { preset: "minimal" });
@@ -32,17 +41,19 @@ test("parseSurface treats empty and unknown as untouched", () => {
   assert.equal(parseSurface("areas:"), null, "an empty list filters nothing, it does not filter everything");
 });
 
-test("areasOfSkills lists the eleven roots, sorted", () => {
-  assert.deepEqual(areasOfSkills(SKILLS), ["ai", "compression", "data", "frontend"]);
+test("areasOfSkills lists the roots, sorted", () => {
+  assert.deepEqual(areasOfSkills(SKILLS), ["ai", "data", "frontend", "process"]);
   assert.ok(isRootSkill("pix-data"));
   assert.ok(!isRootSkill("pix-data-sql"));
+  assert.ok(isRootSkill("pix-process"));
+  assert.ok(!isRootSkill("pix-process-compression"), "compression is a process member, not its own area");
 });
 
 test("standard keeps the roots only", () => {
   const { skills, problems } = filterSurfaceSkills({ preset: "standard" }, SKILLS);
 
   assert.deepEqual(problems, []);
-  assert.deepEqual([...skills].sort(), ["pix-ai", "pix-compression", "pix-data", "pix-frontend"]);
+  assert.deepEqual([...skills].sort(), ["pix-ai", "pix-data", "pix-frontend", "pix-process"]);
 });
 
 test("areas keep their roots and members", () => {
@@ -50,6 +61,13 @@ test("areas keep their roots and members", () => {
 
   assert.deepEqual(problems, []);
   assert.deepEqual([...skills].sort(), ["pix-frontend", "pix-frontend-react"]);
+});
+
+test("process area keeps compression as a member", () => {
+  const { skills, problems } = filterSurfaceSkills({ areas: ["process"] }, SKILLS);
+
+  assert.deepEqual(problems, []);
+  assert.deepEqual([...skills].sort(), ["pix-process", "pix-process-compression"]);
 });
 
 test("skills keep their area root either way", () => {

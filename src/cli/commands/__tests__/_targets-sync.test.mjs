@@ -70,7 +70,7 @@ test("a real sync writes the whole command set into the target", () => {
     written.every((name) => /^pix[-.]/.test(name)),
     `every file belongs to the pix namespace: ${written.join(", ")}`,
   );
-  assert.ok(written.includes("pix-audit-security.md"), "a persona command is part of the set");
+  assert.ok(written.includes("pix-persona-security-audit.md"), "a persona command is part of the set");
   assert.ok(written.includes("pix.md"), "so is the root routing command");
 });
 
@@ -131,5 +131,5 @@ test("a comma-separated agent list writes every named agent", () => {
   assert.match(text, /across 2 directory/, "both named agents are covered in one call");
   assert.ok(readdirSync(claude).includes("pix.md"), "claude receives the router");
   assert.ok(readdirSync(pi).includes("pix.md"), "pi receives the router too");
-  assert.ok(readdirSync(pi).includes("pix-audit-security.md"), "and the rest of the clean set");
+  assert.ok(readdirSync(pi).includes("pix-persona-security-audit.md"), "and the rest of the clean set");
 });

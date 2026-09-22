@@ -49,7 +49,7 @@ test("minimal is the router and the area hubs, without the per-skill commands", 
   assert.ok(commands.includes("pix-area-frontend"), "the hub is there");
   assert.ok(!commands.includes("pix-area-frontend-react"), "the member is not");
   assert.ok(
-    commands.every((name) => !name.startsWith("pix-audit-")),
+    commands.every((name) => !name.startsWith("pix-persona-")),
     "and neither are the personas",
   );
 });
@@ -76,11 +76,11 @@ test("picking skills narrows further, inside the areas chosen", () => {
 test("personas and tasks are their own families", () => {
   const personas = resolveSelection({ families: ["personas"] }).commands;
   assert.ok(
-    personas.some((name) => name.startsWith("pix-audit-")),
+    personas.some((name) => name.endsWith("-audit") && name.startsWith("pix-persona-")),
     "the audit personas",
   );
   assert.ok(
-    personas.some((name) => name.startsWith("pix-plan-")),
+    personas.some((name) => name.endsWith("-plan") && name.startsWith("pix-persona-")),
     "the plan personas",
   );
   assert.ok(

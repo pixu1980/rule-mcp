@@ -11,7 +11,7 @@ Each of the 7 active review personas shipped as one combined command, pix-plan-<
 
 ## Decision
 
-Give each active role three slash commands - pix-plan-<role>, pix-audit-<role>, pix-review-<role> (21 persona commands total), all generated from the same registry and all routing through the tools under the hood: the command body calls pix_tool_plan (with role and operation) to fetch the operation contract, and pix_tool_plan_docs for the trio bookkeeping. The template's header clause and operation section are now operation-aware; pix_tool_plan gained an optional operation parameter (default all three, unchanged for existing callers). Combined pix-plan-<role> becomes plan-only.
+Give each active role three slash commands - `pix-persona-<role>-plan`, `pix-persona-<role>-audit`, `pix-persona-<role>-review` (naming finalized in ADR 113; originally shipped as `pix-plan-<role>` / `pix-audit-<role>` / `pix-review-<role>`), all generated from the same registry and all routing through the tools under the hood: the command body calls pix_tool_plan (with role and operation) to fetch the operation contract, and pix_tool_plan_docs for the trio bookkeeping. The template's header clause and operation section are now operation-aware; pix_tool_plan gained an optional operation parameter (default all three, unchanged for existing callers). Combined plan command becomes plan-only.
 
 ## Consequences
 
@@ -26,6 +26,6 @@ fourth operation (e.g. `pix-close-*`) if the lifecycle needs it.
 
 ## Alternatives Considered
 
-1. Keep pix-plan-* only and run audit/review via pix_tool_plan explicitly (option 2: 7 commands)
-1. Ship pix-plan-* + pix-audit-* as commands, pix-review-* via tool only (option 3: 14 commands)
+1. Keep plan-only commands and run audit/review via pix_tool_plan explicitly (option 2: 7 commands)
+1. Ship plan + audit as commands, review via tool only (option 3: 14 commands)
 1. Only the 4 core personas get commands (option 4: 12 commands)

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2025-2026 pixu1980
 // SPDX-License-Identifier: MIT
 /** The prompt registry: static definitions plus generated persona prompts. */
-import { activeRoles } from "../core/review/roles/index.js";
+import { activeRoles, personaCommandName } from "../core/review/roles/index.js";
 import { OPERATIONS } from "../core/review/template/index.js";
 import { PROMPT_DEFS } from "./_defs.data.js";
 import { listAreaPrompts } from "./_areas.js";
@@ -21,8 +21,8 @@ export function listPrompts() {
 
 /**
  * One prompt per active review persona per operation, generated from the
- * registry: `pix-plan-<role>`, `pix-audit-<role>`, `pix-review-<role>` - 54
- * persona commands for the 18 active roles.
+ * registry: `pix-persona-<role>-<operation>` - 57 persona commands for the
+ * 19 active roles.
  *
  * The names are shared with the agent commands on purpose: the command
  * generator derives its set from this registry, so a second name for the same
@@ -35,7 +35,7 @@ function rolePrompts() {
 
   return activeRoles().flatMap((role) =>
     OPERATIONS.map((operation) => ({
-      name: `pix-${operation}-${role.id}`,
+      name: personaCommandName(role.id, operation),
       description: `${verb[operation]} as a ${role.role} with ${role.yearsOfExperience} years of experience`,
       arguments: [
         {

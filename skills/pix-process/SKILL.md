@@ -25,6 +25,7 @@ frameworks: [all]
 | [pix-process-bmad](../pix-process-bmad/SKILL.md)               | BMAD Method Framework                               | Full-project AI-driven delivery lifecycle                                         |
 | [pix-process-code-review](../pix-process-code-review/SKILL.md) | Code Review Workflow                                | Preparing and conducting risk-based PR/MR review                                  |
 | [pix-process-changelog](../pix-process-changelog/SKILL.md)     | Changelog generated from the commits                | Adding a changelog, or fixing one that drifted from the history                   |
+| [pix-process-compression](../pix-process-compression/SKILL.md) | Say it in fewer tokens                              | Writing answers, commits, reviews, docs without filler                            |
 | [pix-process-handoff](../pix-process-handoff/SKILL.md)         | LLM Session Handoff                                 | Closing a session, resuming in new chat                                           |
 | [pix-process-npm-release](../pix-process-npm-release/SKILL.md) | Secure npm Release                                  | Publishing a package: Trusted Publishing, staged releases, supply-chain hardening |
 | [pix-process-simplicity](../pix-process-simplicity/SKILL.md)   | Build Only What Was Asked                           | Before and during implementation, to keep the change minimal                      |
@@ -35,6 +36,7 @@ frameworks: [all]
 Need to record a decision?              → pix-process-adr
 Need a development methodology?         → pix-process-bmad
 Need PR/MR review guidance?             → pix-process-code-review
+Need shorter answers without losing facts? → pix-process-compression
 Need to close/resume a session?         → pix-process-handoff
 Need to publish an npm package safely?  → pix-process-npm-release
 Need to keep a change minimal?          → pix-process-simplicity

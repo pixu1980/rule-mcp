@@ -8,7 +8,7 @@
  *
  * One composable entry point (`pix_tool_plan`, with an `operation`) plus one
  * tool per operation, so a custom IDE that lists tools instead of slash
- * commands can reach `/pix-audit-*` and `/pix-review-*` without knowing the
+ * commands can reach `/pix-persona-*-audit` and `/pix-persona-*-review` without knowing the
  * `operation` parameter. The per-role prompts and agent commands are
  * conveniences generated from the same registry, so whatever these tools
  * answer, they answer too.

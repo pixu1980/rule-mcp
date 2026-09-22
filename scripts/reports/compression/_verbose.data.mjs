@@ -12,7 +12,7 @@
  * hedging, throat-clearing, long-form connectives - and they are labeled
  * synthetic everywhere the number is quoted.
  *
- * @see skills/pix-compression/SKILL.md - every construct here appears in its rule table
+ * @see skills/pix-process-compression/SKILL.md - every construct here appears in its rule table
  */
 
 /** @type {Array<{ name: string, text: string }>} */

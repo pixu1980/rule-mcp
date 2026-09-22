@@ -19,7 +19,7 @@
  *   node scripts/reports/compression/index.mjs --json    # machine-readable
  *
  * @see src/core/text/__tests__/_efficacy.test.mjs - the CI floors
- * @see skills/pix-compression/SKILL.md - the rules this ports
+ * @see skills/pix-process-compression/SKILL.md - the rules this ports
  */
 
 process.env.PIX_GALAXY_MCP_NO_TELEMETRY ??= "1";

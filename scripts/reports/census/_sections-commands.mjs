@@ -16,7 +16,7 @@ import { table } from "./_format.mjs";
 import { ROUTER_COMMAND, parsePersonaName } from "./_registries.mjs";
 
 /** The commands that carry a session across a context boundary. */
-const SESSION = new Set(["pix-handoff", "pix-handon", "pix-init", "pix-process-check", "pix-update"]);
+const SESSION = new Set(["pix-handoff", "pix-handon", "pix-init", "pix-process-flight", "pix-update"]);
 
 /**
  * Every command, in its kind.

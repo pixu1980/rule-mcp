@@ -8,7 +8,7 @@
  * every entry point at once - that is the whole reason the registry exists.
  *
  * Naming note: the prompts and the agent commands share the names
- * `pix-plan-<role>`, `pix-audit-<role>`, `pix-review-<role>`. The agent-command
+ * `pix-persona-<role>-plan`, `pix-persona-<role>-audit`, `pix-persona-<role>-review`. The agent-command
  * generator derives its set from the prompt registry, so two names for one
  * operation would be exactly the drift ADR 028 removed.
  */

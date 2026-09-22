@@ -22,7 +22,7 @@
     "pix_tool_check",
     "pix_tool_component",
     "pix_tool_compress",
-    "pix_tool_compression",
+    "pix_tool_process_compression",
     "pix_tool_data",
     "pix_tool_data_duckdb",
     "pix_tool_data_indexed_db",

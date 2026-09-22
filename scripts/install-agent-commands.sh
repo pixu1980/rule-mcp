@@ -7,7 +7,7 @@
 # A command renamed or deleted in the registry disappears from this installer
 # too - there is no second, hand-maintained list to drift. The set includes
 # the /pix router, the /pix-area-* commands, the one-shot workflow prompts
-# and the review-persona commands (pix-plan-* / pix-audit-* / pix-review-*).
+# and the review-persona commands (pix-persona-*-plan / pix-persona-*-audit / pix-persona-*-review).
 #
 # Supported agents: Pi, Claude Code, Gemini CLI, Windsurf, Cline, Cursor
 
