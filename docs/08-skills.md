@@ -7,14 +7,14 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Skills (91)
+## Skills (89)
 
 The catalog. A skill is the source of truth for its topic; the tool that
 serves it carries no rules of its own, and the guardrails it is checked
 against are in [`14-guardrails.md`](14-guardrails.md).
 
 The router's own directory, `skills/rule/`, mints no skill tool, which is why
-the catalog is 91 and the directory count is 92.
+the catalog is 89 and the directory count is 90.
 
 | Area                      | Skills | Covers                                                            |
 | ------------------------- | ------ | ----------------------------------------------------------------- |
@@ -25,7 +25,7 @@ the catalog is 91 and the directory count is 92.
 | [frontend](#frontend)     | 10     | Frameworks and the code that runs in a browser                    |
 | [meta](#meta)             | 5      |                                                                   |
 | [platform](#platform)     | 6      | Where the code ships: web, desktop, mobile, library, agent        |
-| [process](#process)       | 11     | How work is done: reviews, ADRs, changelogs, handoffs, simplicity |
+| [process](#process)       | 9      | How work is done: reviews, ADRs, changelogs, handoffs, simplicity |
 | [styleguide](#styleguide) | 18     | The rules code is written to, per language and concern            |
 | [toolchain](#toolchain)   | 12     | Build tools, linters, package manager, commit hooks               |
 | [ui](#ui)                 | 2      | The design system and its components                              |
@@ -117,14 +117,12 @@ the catalog is 91 and the directory count is 92.
 
 | Skill                     | Tool                           | Frameworks          | Description                                                                                                                                                                                                                                                                                            |
 | ------------------------- | ------------------------------ | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `rule-process`             | `rule_tool_process`             | all                 | Use when following development methodologies to route to the correct process skill. Covers ADRs, BMAD, code review, documentation, feature workflow, and handoffs.                                                                                                                                     |
+| `rule-process`             | `rule_tool_process`             | all                 | Use when following development methodologies to route to the correct process skill. Covers ADRs, BMAD, code review, documentation, feature workflow, session handoff and handon, and prose/prompt compression via rule_tool_compress.                                                                   |
 | `rule-process-adr`         | `rule_tool_process_adr`         | all                 | Use when recording architecture decisions. Covers auto-numbered ADRs with Nygard template, searchable index, and chronological ordering.                                                                                                                                                               |
 | `rule-process-ai-sdlc`     | `rule_tool_process_ai_sdlc`     | all                 | Use when planning how AI fits the delivery lifecycle rather than a single task. Covers the artifact chain from intent to incident, plan before code, feedback loops that verify their own work, hooks as approval gates, bidirectional review, and control-band maintenance.                           |
 | `rule-process-bmad`        | `rule_tool_process_bmad`        | all                 | Use when following the BMad structured delivery method. Covers 4-phase workflow (analysis, planning, solution, implementation) with agent-guided execution.                                                                                                                                            |
 | `rule-process-changelog`   | `rule_tool_process_changelog`   | all                 | Use when a project needs a CHANGELOG, when deciding where changelog entries come from, or when one has drifted from the commits. Covers generating it from conventional commits, which commit types earn an entry, and why the release tag is the moment to build it rather than the commit hook.      |
 | `rule-process-code-review` | `rule_tool_process_code_review` | all                 | Use when preparing, conducting, or improving a pull or merge request review. Covers review readiness, risk-based review, constructive feedback, approval gates, and follow-up ownership.                                                                                                               |
-| `rule-process-compression` | `rule_tool_process_compression` | all                 | Use when writing anything a human will read: answers, commit messages, code reviews, docs. Covers the compression rules, the intensity levels, what must never be compressed, and how the server enforces the output style deterministically.                                                          |
-| `rule-process-handoff`     | `rule_tool_process_handoff`     | all                 | Use when closing a session or resuming one. Covers writing a compressed handoff (ADR log, project context, git state) and reading the last one back with handon, which verifies which of its claims are still true.                                                                                    |
 | `rule-process-npm-release` | `rule_tool_process_npm_release` | npm, github-actions | "Set up a secure release process for an npm package to protect it from supply chain attacks. Use for any request to create and publish a new npm package, secure npm publishing or releasing, set up npm Trusted Publishing, provenance, or Staged Publishing, harden a release workflow."             |
 | `rule-process-simplicity`  | `rule_tool_process_simplicity`  | all                 | Use before and during implementation to keep the change minimal. Covers the scope contract, the over-engineering catalog, the removal pass, and when a structural decision earns an ADR instead of code.                                                                                               |
 | `rule-process-tdd`         | `rule_tool_process_tdd`         | all                 | Use when developing test-first (red-green-refactor) or when writing tests: unit tests via TDD, accessibility tests with Playwright + axe-core, or test setup for a project. Covers failing-test-first discipline, choosing what to cover, assertion quality, and closing the loop with rule_tool_check. |

@@ -819,21 +819,21 @@ Refresh with `pnpm census`; full inventories in `docs/07-` .. `docs/12-`.
 
 | Surface                   | Count | Defined in                                    |
 | ------------------------- | ----- | --------------------------------------------- |
-| MCP tools                 | 110   | `src/tools/*` via `src/tools/router/index.js` |
-| - action tools            | 19    | one per module, registered explicitly         |
-| - skill tools             | 91    | one per catalog skill, generated              |
-| MCP resources             | 190   | `src/resources/index.js`                      |
+| MCP tools                 | 106   | `src/tools/*` via `src/tools/router/index.js` |
+| - action tools            | 17    | one per module, registered explicitly         |
+| - skill tools             | 89    | one per catalog skill, generated              |
+| MCP resources             | 186   | `src/resources/index.js`                      |
 | MCP prompts               | 153   | `src/prompts/index.js`                        |
 | - reusable                | 96    | workflow and area prompts                     |
 | - persona                 | 57    | 19 active roles x 3 operations                |
-| Skills                    | 91    | `skills/rule-*/SKILL.md`                       |
+| Skills                    | 89    | `skills/rule-*/SKILL.md`                       |
 | Review personas           | 19    | `src/core/review/roles/index.js`              |
 | Guardrail rules           | 8     | `src/core/guardrails/index.js`                |
-| Agent slash commands      | 246   | `src/core/agents/commands/index.js`           |
+| Agent slash commands      | 244   | `src/core/agents/commands/index.js`           |
 | Agent/IDE command targets | 13    | `src/core/agents/command-targets/index.js`    |
 | CLI commands              | 23    | `src/cli/_program.js`                         |
 | Hook events               | 3     | `src/core/agents/_hooks.js`                   |
-| Architecture decisions    | 113   | [`docs/adr/ADR.md`](adr/ADR.md)               |
+| Architecture decisions    | 115   | [`docs/adr/ADR.md`](adr/ADR.md)               |
 
 Regenerate with `pnpm census`. The inventories themselves are
 [`08-skills.md`](08-skills.md) through [`15-resources.md`](15-resources.md).

@@ -7,33 +7,31 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Action tools (19)
+## Action tools (17)
 
 The tools that do something rather than serve a skill. Every one is
 deterministic: none of them calls a model, so the same arguments return the
 same result behind any client.
 
-| Tool                                               | What it does                                                                                                                                          |
-| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`pix_tool`](#pixtool)                             | Route prompt to correct rule skill.                                                                                                                    |
-| [`rule_tool_search`](#pixtoolsearch)                | Semantic search across ALL rule skills using BM25 ranking.                                                                                             |
-| [`rule_tool_check`](#pixtoolcheck)                  | Run guardrail checks on code against any rule skill.                                                                                                   |
-| [`rule_tool_scaffold`](#pixtoolscaffold)            | Generate project scaffolding files.                                                                                                                   |
-| [`rule_tool_detect`](#pixtooldetect)                | Detect project framework, TypeScript usage, and build tool from package.json.                                                                         |
-| [`rule_tool_compress`](#pixtoolcompress)            | Compress prose deterministically: strip filler and leading articles, replace typographic characters with ASCII, convert British spelling to American. |
-| [`rule_tool_plan`](#pixtoolplan)                    | Ask expert review persona to audit, review or plan this project; returns operation contract.                                                          |
-| [`rule_tool_audit`](#pixtoolaudit)                  | Run audit as expert review persona; returns audit operation contract.                                                                                 |
-| [`rule_tool_review`](#pixtoolreview)                | Run review as expert review persona; returns review operation contract.                                                                               |
-| [`rule_tool_plan_docs`](#pixtoolplandocs)           | Create or refresh audit/review/plan documents for review persona run: bookkeeping half.                                                               |
-| [`rule_tool_stats`](#pixtoolstats)                  | Read the local telemetry log and summarize it: call counts, cache hit rate, saved/estimated tokens, latency.                                          |
-| [`rule_tool_usage`](#pixtoolusage)                  | Declare an agent usage sidecar for this project when no transcript can be read: input/output tokens, cost.                                            |
-| [`rule_tool_update`](#pixtoolupdate)                | Force-update this local MCP server from its upstream git repo (fast-forward only), hot-reload skills, and restart if server code changed.             |
-| [`rule_tool_a11y_report`](#pixtoola11yreport)       | Build WCAG-EM accessibility report from criteria and audit results; returns findings and verdict.                                                     |
-| [`rule_tool_process_handon`](#pixtoolprocesshandon) | Read last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work.                       |
-| [`rule_tool_fix`](#pixtoolfix)                      | Validate and auto-fix project file tree structure against rule AI conventions (barrel files, _PascalCase naming, etc.).                                |
-| [`rule_tool_component`](#pixtoolcomponent)          | Generate component or test templates following rule AI principles.                                                                                     |
-| [`rule_tool_gateway`](#pixtoolgateway)              | Single-entry orchestrator: routes prompt → loads skill evidence → checks code against guardrails → returns receipt.                                   |
-| [`rule_tool_apply`](#pixtoolapply)                  | Write files to disk after rule_tool_gateway validation.                                                                                                |
+| Tool                                     | What it does                                                                                                                                                                    |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`pix_tool`](#pixtool)                   | Route prompt to correct rule skill.                                                                                                                                              |
+| [`rule_tool_search`](#pixtoolsearch)      | Semantic search across ALL rule skills using BM25 ranking.                                                                                                                       |
+| [`rule_tool_check`](#pixtoolcheck)        | Run guardrail checks on code against any rule skill.                                                                                                                             |
+| [`rule_tool_detect`](#pixtooldetect)      | Detect project framework, TypeScript usage, and build tool from package.json.                                                                                                   |
+| [`rule_tool_compress`](#pixtoolcompress)  | Sole compression engine (ADR 115): preprocess enriched prompts/contexts and postprocess model prose.                                                                            |
+| [`rule_tool_init`](#pixtoolinit)          | Prepare project for rule-mcp: create central recorder directory under state dir, migrate leftover local.rule-mcp if present, and run tokensave init when installed. |
+| [`rule_tool_plan`](#pixtoolplan)          | Ask expert review persona to audit, review or plan this project; returns operation contract.                                                                                    |
+| [`rule_tool_audit`](#pixtoolaudit)        | Run audit as expert review persona; returns audit operation contract.                                                                                                           |
+| [`rule_tool_review`](#pixtoolreview)      | Run review as expert review persona; returns review operation contract.                                                                                                         |
+| [`rule_tool_plan_docs`](#pixtoolplandocs) | Create or refresh audit/review/plan documents for review persona run: bookkeeping half.                                                                                         |
+| [`rule_tool_stats`](#pixtoolstats)        | Read the local telemetry log and summarize it: call counts, cache hit rate, saved/estimated tokens, latency.                                                                    |
+| [`rule_tool_usage`](#pixtoolusage)        | Declare an agent usage sidecar for this project when no transcript can be read: input/output tokens, cost.                                                                      |
+| [`rule_tool_update`](#pixtoolupdate)      | Force-update this local MCP server from its upstream git repo (fast-forward only), hot-reload skills, and restart if server code changed.                                       |
+| [`rule_tool_handon`](#pixtoolhandon)      | Read last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work.                                                 |
+| [`rule_tool_handoff`](#pixtoolhandoff)    | Generate compressed LLM handoff summary from ADR logs and project context.                                                                                                      |
+| [`rule_tool_gateway`](#pixtoolgateway)    | Single-entry orchestrator: routes prompt → loads skill evidence → checks code against guardrails → returns receipt.                                                             |
+| [`rule_tool_apply`](#pixtoolapply)        | Write files to disk after rule_tool_gateway validation.                                                                                                                          |
 
 Call any of them from a shell with `rule-mcp tools call <name> --json '{...}'`.
 
@@ -72,17 +70,6 @@ Run guardrail checks on code against any rule skill. Returns guardrail results w
 | `projectDir`          | string          | no       | -       | Project root for mode=project (default: cwd)                                        |
 | `diagnostics`         | boolean         | no       | -       | Run the optional type-checker check in mode=project                                 |
 
-### rule_tool_scaffold
-
-Generate project scaffolding files. Returns one or all config file templates.
-
-| Parameter    | Type                               | Required | Default      | Description                                    |
-| ------------ | ---------------------------------- | -------- | ------------ | ---------------------------------------------- |
-| `mode`       | `generate` \| `list` \| `validate` | no       | `"generate"` | Scaffold operation mode                        |
-| `file`       | string                             | no       | -            | Specific file to generate (omit for all)       |
-| `projectDir` | string                             | no       | -            | Project root path (for validate mode)          |
-| `framework`  | string                             | no       | -            | Framework hint (tsconfig only for TS projects) |
-
 ### rule_tool_detect
 
 Detect project framework, TypeScript usage, and build tool from package.json.
@@ -93,13 +80,22 @@ Detect project framework, TypeScript usage, and build tool from package.json.
 
 ### rule_tool_compress
 
-Compress prose deterministically: strip filler and leading articles, replace typographic characters with ASCII, convert British spelling to American. Code, inline spans, URLs and JSON are never touched.
+Sole compression engine (ADR 115): preprocess enriched prompts/contexts and postprocess model prose. Strip filler and leading articles, replace typographic characters with ASCII, convert British spelling to American. Code, inline spans, URLs and JSON are never touched. Prefer /rule-compress.
 
 | Parameter  | Type                                     | Required | Default  | Description                                                                                                                       |
 | ---------- | ---------------------------------------- | -------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `text`     | string                                   | yes      | -        | Prose to compress. Code fences, inline code, URLs and JSON pass through untouched                                                 |
 | `mode`     | `both` \| `compression` \| `fingerprint` | no       | `"both"` | both (default), compression (filler only), fingerprint (punctuation and spelling only)                                            |
 | `fileName` | string                                   | no       | -        | Where the prose came from, when it came from a file. A sensitive name (.env, credentials, id_rsa, anything under .ssh) is refused |
+
+### rule_tool_init
+
+Prepare project for rule-mcp: create central recorder directory under state dir, migrate leftover local.rule-mcp if present, and run tokensave init when installed. Nothing is written into repository. Pass noTokensave: true to skip tokensave.
+
+| Parameter     | Type    | Required | Default | Description                 |
+| ------------- | ------- | -------- | ------- | --------------------------- |
+| `projectDir`  | string  | no       | -       | Project root (default: cwd) |
+| `noTokensave` | boolean | no       | `false` | Skip tokensave init         |
 
 ### rule_tool_plan
 
@@ -184,19 +180,7 @@ Force-update this local MCP server from its upstream git repo (fast-forward only
 
 Takes no parameters.
 
-### rule_tool_a11y_report
-
-Build WCAG-EM accessibility report from criteria and audit results; returns findings and verdict.
-
-| Parameter   | Type            | Required | Default | Description            |
-| ----------- | --------------- | -------- | ------- | ---------------------- |
-| `scope`     | object          | yes      | -       | WCAG-EM step 1 scope   |
-| `sample`    | array of string | no       | `[]`    | WCAG-EM step 3 sample  |
-| `results`   | array of object | no       | `[]`    | WCAG-EM step 4 results |
-| `evaluator` | string          | no       | -       | Evaluator              |
-| `date`      | string          | no       | -       | Date (ISO)             |
-
-### rule_tool_process_handon
+### rule_tool_handon
 
 Read last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work. Sweeps completed audits/reviews/plans into ADRs first, then proposes next workstream each open plan still carries, for user to confirm. Never re-runs claimed command.
 
@@ -207,30 +191,24 @@ Read last handoff in docs/handoff/ and report which of its claims are still true
 | `list`       | boolean | no       | `false` | List the handoffs and verify nothing                                                                                 |
 | `closeout`   | boolean | no       | `true`  | Archive completed audits/reviews/plans into ADRs before verifying (default on; false = verify only, nothing written) |
 
-### rule_tool_fix
+### rule_tool_handoff
 
-Validate and auto-fix project file tree structure against rule AI conventions (barrel files, _PascalCase naming, etc.).
+Generate compressed LLM handoff summary from ADR logs and project context. Archives completed audits/reviews/plans as ADRs and repairs ADR numbering first (pass closeout: false to diagnose without writing). Paste output into new chat to resume work seamlessly.
 
-| Parameter   | Type                          | Required | Default            | Description                                                                                   |
-| ----------- | ----------------------------- | -------- | ------------------ | --------------------------------------------------------------------------------------------- |
-| `path`      | string                        | no       | `"."`              | Project root directory to scan                                                                |
-| `srcDir`    | string                        | no       | `"src"`            | Source directory (default: src)                                                               |
-| `mode`      | `lint` \| `fix` \| `generate` | no       | `"lint"`           | lint: scan and report issues. fix: scan and auto-fix. generate: generate component file tree. |
-| `name`      | string                        | no       | -                  | Component name (PascalCase) for mode=generate                                                 |
-| `framework` | string                        | no       | `"vanilla"`        | Framework for mode=generate                                                                   |
-| `baseDir`   | string                        | no       | `"src/components"` | Base output directory for mode=generate                                                       |
-| `dryRun`    | boolean                       | no       | `true`             | Preview fixes without applying (default: true). Set false to apply.                           |
-
-### rule_tool_component
-
-Generate component or test templates following rule AI principles.
-
-| Parameter   | Type                                                                         | Required | Default      | Description                              |
-| ----------- | ---------------------------------------------------------------------------- | -------- | ------------ | ---------------------------------------- |
-| `component` | string                                                                       | yes      | -            | Component or test type                   |
-| `framework` | `vanilla` \| `react` \| `vue` \| `svelte` \| `angular` \| `solid` \| `astro` | no       | `"vanilla"`  |                                          |
-| `name`      | string                                                                       | no       | -            | Component name for multi-file generation |
-| `mode`      | `generate` \| `multi` \| `guardrails`                                        | no       | `"generate"` |                                          |
+| Parameter         | Type                           | Required | Default     | Description                                                                                                                                    |
+| ----------------- | ------------------------------ | -------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `projectDir`      | string                         | no       | `"."`       | Project root directory                                                                                                                         |
+| `mode`            | `handoff` \| `close-session`   | no       | `"handoff"` | handoff: generate context summary. close-session: the same, with the session-close banner.                                                     |
+| `closeout`        | boolean                        | no       | `true`      | Archive completed audits/reviews/plans into ADRs and repair the ADR numbering first (default on; false = read-only diagnosis, nothing written) |
+| `includeContext`  | boolean                        | no       | `true`      | Include .context/ values                                                                                                                       |
+| `includeAdrs`     | boolean                        | no       | `true`      | Include ADR summaries                                                                                                                          |
+| `includeIdentity` | boolean                        | no       | `true`      | Include project identity                                                                                                                       |
+| `includeGitDiff`  | boolean                        | no       | `true`      | Include git working tree diff                                                                                                                  |
+| `includeGitLog`   | boolean                        | no       | `true`      | Include recent git log                                                                                                                         |
+| `includeRoadmap`  | boolean                        | no       | `true`      | Include roadmap/docs scan                                                                                                                      |
+| `compress`        | boolean                        | no       | `true`      | Aggressively compress output (default: on)                                                                                                     |
+| `maxTokens`       | number                         | no       | `0`         | Target max tokens (0 = no limit)                                                                                                               |
+| `format`          | `full` \| `brief` \| `minimal` | no       | `"full"`    | Output detail level                                                                                                                            |
 
 ### rule_tool_gateway
 
@@ -255,7 +233,7 @@ Write files to disk after rule_tool_gateway validation. Needs valid receipt from
 | `path`    | string          | no       | `"."`   | Project root directory                                             |
 | `dryRun`  | boolean         | no       | `true`  | Preview without writing (default: true)                            |
 
-## Skill tools (91)
+## Skill tools (89)
 
 One per catalog skill, generated from the directory. Each serves its
 `SKILL.md` and the sections a route selected, and every one takes the same
@@ -272,12 +250,12 @@ The catalog itself, with what each skill covers, is
 | frontend   | `rule_tool_frontend`, `rule_tool_frontend_angular`, `rule_tool_frontend_custom_element`, `rule_tool_frontend_react`, `rule_tool_frontend_solidjs`, `rule_tool_frontend_svelte`, `rule_tool_frontend_template_engine`, `rule_tool_frontend_vanilla_reactive`, `rule_tool_frontend_vue`, `rule_tool_frontend_workers`                                                                                                                                                                                                                                                             |
 | meta       | `rule_tool_meta`, `rule_tool_meta_astro`, `rule_tool_meta_next`, `rule_tool_meta_nuxt`, `rule_tool_meta_remix`                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | platform   | `rule_tool_platform`, `rule_tool_platform_agent`, `rule_tool_platform_auth`, `rule_tool_platform_desktop`, `rule_tool_platform_library`, `rule_tool_platform_web`                                                                                                                                                                                                                                                                                                                                                                                                           |
-| process    | `rule_tool_process`, `rule_tool_process_adr`, `rule_tool_process_ai_sdlc`, `rule_tool_process_bmad`, `rule_tool_process_changelog`, `rule_tool_process_code_review`, `rule_tool_process_compression`, `rule_tool_process_handoff`, `rule_tool_process_npm_release`, `rule_tool_process_simplicity`, `rule_tool_process_tdd`                                                                                                                                                                                                                                                      |
+| process    | `rule_tool_process`, `rule_tool_process_adr`, `rule_tool_process_ai_sdlc`, `rule_tool_process_bmad`, `rule_tool_process_changelog`, `rule_tool_process_code_review`, `rule_tool_process_npm_release`, `rule_tool_process_simplicity`, `rule_tool_process_tdd`                                                                                                                                                                                                                                                                                                                  |
 | styleguide | `rule_tool_styleguide`, `rule_tool_styleguide_a11y`, `rule_tool_styleguide_baseline`, `rule_tool_styleguide_comments`, `rule_tool_styleguide_css`, `rule_tool_styleguide_english`, `rule_tool_styleguide_file_tree`, `rule_tool_styleguide_fingerprint`, `rule_tool_styleguide_html`, `rule_tool_styleguide_i18n`, `rule_tool_styleguide_javascript`, `rule_tool_styleguide_json`, `rule_tool_styleguide_markdown`, `rule_tool_styleguide_naming`, `rule_tool_styleguide_patterns`, `rule_tool_styleguide_readme`, `rule_tool_styleguide_typescript`, `rule_tool_styleguide_validation` |
 | toolchain  | `rule_tool_toolchain`, `rule_tool_toolchain_biome`, `rule_tool_toolchain_commits`, `rule_tool_toolchain_eslint`, `rule_tool_toolchain_husky`, `rule_tool_toolchain_parcel`, `rule_tool_toolchain_pnpm`, `rule_tool_toolchain_project`, `rule_tool_toolchain_rspack`, `rule_tool_toolchain_turborepo`, `rule_tool_toolchain_typescript`, `rule_tool_toolchain_vite`                                                                                                                                                                                                                |
 | ui         | `rule_tool_ui`, `rule_tool_ui_design_system`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
-### Arguments, the same for all 91
+### Arguments, the same for all 89
 
 | Parameter   | Type   | Required | Default | Description                                                                               |
 | ----------- | ------ | -------- | ------- | ----------------------------------------------------------------------------------------- |

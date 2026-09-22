@@ -50,12 +50,14 @@ check("T2.1 no subagents, verbatim", session.includes(NO_SUBAGENTS));
 check("T2.2 compression output", /compression/i.test(session));
 check("T2.3 the mantra closes it", session.includes(MANTRA));
 check("T2.4 plain ASCII only", /^[ -~\n]*$/.test(session));
+check("T2.5 flight rides along under rule-area-process-flight", /rule-area-process-flight/.test(session) && /telemetry/i.test(session));
 
 // ── T3: the per-prompt line is one short line, or it is not worth sending ──
 const line = promptDirective();
 check("T3 a single line", !line.includes("\n"));
 check("T3.1 short enough to ride on every prompt", line.length <= 120);
 check("T3.2 it still names all three rules", /rule/i.test(line) && /compression/i.test(line) && /subagent/i.test(line) && /token/i.test(line));
+check("T3.3 it re-anchors flight when costing", /flight/i.test(line));
 
 // ── T4: one opt-out, honored by both forms ──
 const previous = process.env.RULE_MCP_NO_PROMPT_DIRECTIVE;
@@ -68,6 +70,20 @@ if (previous === undefined) {
   process.env.RULE_MCP_NO_PROMPT_DIRECTIVE = previous;
 }
 check("T4.2 enabled by default", directiveEnabled() === true);
+
+// ── T4b: flight can opt out alone without silencing the rest of the directive ──
+import { FLIGHT_CONCEPT, flightEnabled, sessionFlight } from "../directive/_flight.js";
+const previousFlight = process.env.RULE_MCP_NO_FLIGHT;
+process.env.RULE_MCP_NO_FLIGHT = "1";
+check("T4b NO_FLIGHT disables flight alone", flightEnabled() === false && sessionFlight() === "");
+check("T4b.1 the rest of the directive still injects", /rule first/i.test(promptDirective()) && !/flight/i.test(promptDirective()));
+check("T4b.2 SessionStart keeps the session rules without the flight block", sessionDirective().includes(NO_SUBAGENTS) && !sessionDirective().includes(FLIGHT_CONCEPT));
+if (previousFlight === undefined) {
+  delete process.env.RULE_MCP_NO_FLIGHT;
+} else {
+  process.env.RULE_MCP_NO_FLIGHT = previousFlight;
+}
+check("T4b.3 flight is on by default", flightEnabled() === true && sessionFlight().includes(FLIGHT_CONCEPT));
 
 // ── T5: three hook events, one spawn each ──
 const entries = hookEntries(LAUNCHER);

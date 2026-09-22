@@ -71,8 +71,6 @@ Claude Code installs clean `/rule-*` commands instead and suppresses these
 | `/rule-area-process-bmad`              | <request> | process: the bmad skill                                                                                                                                   |
 | `/rule-area-process-changelog`         | <request> | process: the changelog skill                                                                                                                              |
 | `/rule-area-process-code-review`       | <request> | process: the code-review skill                                                                                                                            |
-| `/rule-area-process-compression`       | <request> | process: the compression skill                                                                                                                            |
-| `/rule-area-process-handoff`           | <request> | process: the handoff skill                                                                                                                                |
 | `/rule-area-process-npm-release`       | <request> | process: the npm-release skill                                                                                                                            |
 | `/rule-area-process-simplicity`        | <request> | process: the simplicity skill                                                                                                                             |
 | `/rule-area-process-tdd`               | <request> | process: the tdd skill                                                                                                                                    |
@@ -108,11 +106,13 @@ Claude Code installs clean `/rule-*` commands instead and suppresses these
 | `/rule-area-toolchain-vite`            | <request> | toolchain: the vite skill                                                                                                                                 |
 | `/rule-area-ui`                        | <request> | ui work, across every ui skill                                                                                                                            |
 | `/rule-area-ui-design-system`          | <request> | ui: the design-system skill                                                                                                                               |
+| `/rule-compress`                       | [options] | Run rule_tool_compress: sole engine for prompt/context preprocessing and prose postprocessing                                                              |
 | `/rule-handoff`                        | [options] | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. |
 | `/rule-handon`                         | [options] | Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream                               |
 | `/rule-init`                           | [options] | Prepare a project for rule-mcp: the central recorder directory and tokensave                                                                        |
-| `/rule-process-flight`                 | [options] | Read the flight recorder: what this server cost, and what to do about it                                                                                  |
+| `/rule-stats`                          | [options] | Read local telemetry via rule_tool_stats: calls, cache hits, tokens, latency                                                                               |
 | `/rule-update`                         | [options] | Apply an available server update explicitly, and report what changed                                                                                      |
+| `/rule-usage`                          | [options] | Declare a usage sidecar via rule_tool_usage when no transcript is available                                                                                |
 
 ### Persona, one per role and operation
 
