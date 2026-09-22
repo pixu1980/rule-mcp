@@ -8,6 +8,7 @@ them by `handoff doctor`, so editing it by hand is work the next run throws away
 
 | #                                                                  | Title                                                                     | Date       | Branch            |
 | ------------------------------------------------------------------ | ------------------------------------------------------------------------- | ---------- | ----------------- |
+| [17](17-flight-directive-and-surface-mapping.md)                   | flight directive and surface mapping                                      | 2026-09-22 | main              |
 | [16](16-arch-7.1-shipped-god-file-splits.md)                       | ARCH-7.1 shipped god-file splits                                          | -          | -                 |
 | [15](15-security-argv-and-shim-trust.md)                           | the corepack guardrails, a completed roadmap, and the shell-out surface   | 2026-09-20 | main              |
 | [14](14-handoff-index-and-missing-index-creation.md)               | the handoff index, and a doctor that creates the indexes it finds missing | 2026-09-20 | main              |
