@@ -13,12 +13,16 @@ The slash-command surface still mixed namespaces: flight lived as a top-level on
 
 Breaking rename of the public command/skill/tool surface:
 
-1. `/pix-flight` → `/pix-process-flight` (one-shot stays a task prompt, not an area skill).
+1. Flight leaves the slash/prompt surface: conceptual id `pix-area-process-flight`, injected on every prompt via the session directive (ADR 114). `/pix-flight` and `/pix-process-flight` are hard-deleted.
 2. Hard-delete `/pix-adr` and `/pix-process-check`; callers use `/pix-area-process-adr` and `/pix-area-process-check`. `/pix-check` remains the auto-detecting agent command.
 3. Rename skill `pix-compression` → `pix-process-compression` (inherits `pix-process`). Area commands become `/pix-area-process-compression[-check]`. Skill tool becomes `pix_tool_process_compression`. `pix_tool_compress` (pure text) is unchanged.
 4. Persona commands become `pix-persona-<role>-<operation>` (operation last). Shared helpers `personaCommandName` / `parsePersonaCommand` drive registry, MCP getPrompt, agent commands, and skills-install. Legacy `pix-{op}-{role}` persona skill dirs are purged on regenerate.
 5. `/pix-handoff`, `/pix-handon`, and `/pix-check` stay as named.
 6. No compatibility aliases. Package version bumps to `0.2.0-rc`.
+
+## Note
+
+Superseded in part by ADR 115: flight moved to directive injection (ADR 114); process-compression and process-handoff skills/areas were removed in favour of `pix_tool_compress`/`/pix-compress` and `pix_tool_handoff`/`/pix-handoff`.
 
 ## Consequences
 
@@ -26,7 +30,7 @@ Every future install writes the new names only. Stale agent command files and `~
 
 ## What would end this
 
-A need for short aliases (`/pix-flight`, `/pix-audit-security`) that outweighs a single discoverable namespace would revive shims; until then the hard delete stands.
+A need for short aliases (`/pix-audit-security`) that outweighs a single discoverable namespace would revive shims; until then the hard delete stands. Flight injection policy lives in ADR 114.
 
 ## Alternatives Considered
 
