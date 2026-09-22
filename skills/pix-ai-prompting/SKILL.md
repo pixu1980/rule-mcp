@@ -153,7 +153,7 @@ reading often beats three more attempts, and it leaves you knowing something.
 ## See also
 
 - [pix-process-ai-sdlc](../pix-process-ai-sdlc/SKILL.md) - where these prompts sit in the lifecycle
-- [pix-process-compression](../pix-process-compression/SKILL.md) - keeping the answers short
+- `pix_tool_compress` / `/pix-compress` - sole compression engine (ADR 115)
 - [pix-process-simplicity](../pix-process-simplicity/SKILL.md) - the scope contract to hold agents to
 - [pix-ai-context-engineering](../pix-ai-context-engineering/SKILL.md) - managing the window this prompt lands in
 - [pix-ai-evals](../pix-ai-evals/SKILL.md) - measuring an AI feature rather than trusting it

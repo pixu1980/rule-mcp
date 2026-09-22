@@ -9,17 +9,17 @@ import { _tools, toolsGeneration } from "./_hooks.js";
 
 const MUTATING_TOOLS = new Set([
   "pix_tool_apply",
-  "pix_tool_fix",
   "pix_tool_process_adr",
   "pix_tool_plan_docs",
-  "pix_tool_process_handoff",
+  "pix_tool_handoff",
   "pix_tool_update",
-  "pix_tool_process_handon",
+  "pix_tool_handon",
+  "pix_tool_init",
 ]);
 
 /** Tools whose answer depends on state outside their arguments, so a repeat
  * call can legitimately differ: the working tree, the clock, the code graph. */
-const NON_IDEMPOTENT_READS = new Set(["pix_tool_detect", "pix_tool_gateway", "pix_tool_stats", "pix_tool_usage", "pix_tool_a11y_report", "pix_tool_process_handon"]);
+const NON_IDEMPOTENT_READS = new Set(["pix_tool_detect", "pix_tool_gateway", "pix_tool_stats", "pix_tool_usage", "pix_tool_handon", "pix_tool_init"]);
 
 /**
  * MCP tool annotations, emitting only what differs from the spec defaults.

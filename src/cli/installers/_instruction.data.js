@@ -8,12 +8,9 @@
  * Two blocks, because they answer two questions. The short one routes a task
  * to a skill; the long one is the workflow the server enforces - evidence
  * before implementation, failing tests before code, guardrails before done.
- * The shell installer owned the long block until the bootstraps stopped
- * installing anything (ADR 090), and it is the copy that named the tools
- * correctly, so it is the copy that survived.
  *
- * Every name here is a registered tool: they are all `pix_tool*`, and a bare
- * `pix_check` is a tool nothing answers to. Data file: exempt from the size cap.
+ * Every name here is a registered tool: they are all `pix_tool*`. Data file:
+ * exempt from the size cap. ADR 115 dropped component/scaffold/form tools.
  */
 
 /** Sentinel of the short routing block. */
@@ -27,20 +24,16 @@ export const closingMarker = (marker) => marker.replace("<!-- ", "<!-- /");
 
 /**
  * Where to route, and what the layout rule is.
- *
- * The blank line after the sentinel is not decoration: prettier inserts one
- * between an HTML comment and the paragraph under it, and a block written
- * without it is a block reformatted by the next `pnpm format` - which is a
- * diff on every machine the installer has touched.
  */
 export const INSTRUCTION_BLOCK = [
   INSTRUCTION_MARKER,
   "",
   "Before writing any frontend/styling code, call `pix_tool` to route the task to the correct pix skill. " +
     "Follow pix AI principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via " +
-    "adoptedStyleSheets. Available tools: pix_tool, pix_tool_component, pix_tool_check, pix_tool_search, " +
-    "pix_tool_scaffold, pix_tool_process_adr. Flex first: display:grid only for named areas, subgrid, " +
-    "explicit placement, or auto-fit tracks - what a flex row or column can do, flex does.",
+    "adoptedStyleSheets. Available tools: pix_tool, pix_tool_check, pix_tool_search, pix_tool_process_adr, " +
+    "pix_tool_compress. Prefer `/pix-area-styleguide*` for templates and file-tree work. Flex first: " +
+    "display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks - what a flex " +
+    "row or column can do, flex does.",
   "",
   closingMarker(INSTRUCTION_MARKER),
 ].join("\n");
@@ -57,23 +50,23 @@ export const RULES_BLOCK = [
   "- Never invent APIs, files, dependencies, tools, requirements, or successful checks.",
   "- If evidence is missing, call `pix_tool_search` or state uncertainty.",
   "- Write failing tests before implementation changes.",
-  "- Use deterministic `pix_tool_component`, `pix_tool_scaffold`, and `pix_tool_fix` outputs when applicable.",
+  "- Use `/pix-area-styleguide` / `/pix-area-styleguide-file-tree` (and related area skills) for templates and tree work.",
   "- Run `pix_tool_check`; failed guardrails block completion. Fix and rerun until all pass.",
   "- Run project tests/typecheck; report only commands actually executed.",
   "- Record structural decisions with `pix_tool_process_adr`.",
+  "- Compress prose and preprocess prompts with `pix_tool_compress` / `/pix-compress`.",
   "- Frontend remains zero CSS classes, zero inline styles, semantic HTML, and external CSS.",
   "",
   "Available pix-galaxy-mcp tools:",
   "",
   "- pix_tool - Route to correct pix skill",
-  "- pix_tool_component - Generate component templates",
   "- pix_tool_check - Blocking code validation",
   "- pix_tool_search - Evidence search across all skills",
-  "- pix_tool_scaffold - Bootstrap projects/components",
-  "- pix_tool_fix - Validate/fix file tree",
+  "- pix_tool_compress - Sole compression engine (pre + post)",
   "- pix_tool_process_adr - Architecture Decision Records",
-  "- pix_tool_process_handoff - Context handoff",
+  "- pix_tool_handoff / pix_tool_handon - Session handoff and resume",
   "- pix_tool_detect - Detect project framework",
+  "- pix_tool_init / pix_tool_update - Project init and server update",
   "- Flex first: layout with display:flex; display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks, justified with /* grid: why */",
   "- pix://resources - Skill documentation as MCP resources",
   "",

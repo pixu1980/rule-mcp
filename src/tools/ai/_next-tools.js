@@ -7,15 +7,11 @@ export function skillNextTools(skillName) {
 
   suggestions.push(`pix_tool_${base}`);
 
-  if (skillName === "pix-styleguide") {
-    suggestions.push("pix_tool_scaffold");
+  if (skillName.startsWith("pix-styleguide")) {
+    suggestions.push("pix_tool_styleguide");
   }
 
-  suggestions.push("pix_tool_check", "pix_tool_search");
-
-  if (skillName !== "pix-frontend-vanilla-reactive") {
-    suggestions.push("pix_tool_component");
-  }
+  suggestions.push("pix_tool_check", "pix_tool_search", "pix_tool_compress");
 
   return suggestions;
 }

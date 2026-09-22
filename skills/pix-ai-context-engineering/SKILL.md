@@ -133,7 +133,7 @@ The rule: **compaction for length, handoff for a boundary, fresh for a new
 phase.** And a handoff is written in the present tense, so it stops being true
 without saying so - read it back with something that verifies its claims rather
 than trusting them. See
-[pix-process-handoff](../pix-process-handoff/SKILL.md).
+`pix_tool_handoff` / `/pix-handoff`.
 
 ## Techniques that survive contact
 
@@ -190,6 +190,6 @@ start fresh more often, index instead of reading, then improve the prompts.
 
 - [pix-ai-prompting](../pix-ai-prompting/SKILL.md) - what to write, once the window is right
 - [pix-ai-agent-architecture](../pix-ai-agent-architecture/SKILL.md) - the loop that fills the window
-- [pix-process-handoff](../pix-process-handoff/SKILL.md) - writing a boundary down, and reading it back verified
-- [pix-process-compression](../pix-process-compression/SKILL.md) - compressing output without losing substance
+- `pix_tool_handoff` / `/pix-handoff` - writing a boundary down, and reading it back verified
+- `pix_tool_compress` / `/pix-compress` - compressing output without losing substance
 - [pix-ai-evals](../pix-ai-evals/SKILL.md) - measuring whether any of this helped

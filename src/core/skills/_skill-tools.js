@@ -7,7 +7,7 @@ import { registerSkillTool } from "../../tools/skill/index.js";
 import { IS_MINIMAL_TOOLS } from "./_minimal.js";
 
 /** The three names the server registers itself rather than as a per-skill tool. */
-export const REGISTERED_BY_CODE = new Set(["pix", "pix-meta", "pix-process-adr", "pix-process-handoff"]);
+export const REGISTERED_BY_CODE = new Set(["pix", "pix-meta", "pix-process-adr"]);
 
 /**
  * Register one tool per skill that asks for one.

@@ -101,10 +101,10 @@ function guardrailRulesOf(result) {
  * does for every entry it cannot narrow - and never serving a stale answer.
  */
 const SKILL_INDEPENDENT = new Set([
-  "pix_tool_component", // templates.js
   "pix_tool_compress", // pure text transformation
-  "pix_tool_a11y_report", // vendored WCAG criteria
   "pix_tool_stats", // the telemetry log
+  "pix_tool_usage", // usage sidecar
+  "pix_tool_init", // project init
 ]);
 
 export { withBanner, finalize, estimateTokens, textBytes, argsBytes, guardrailRulesOf, SKILL_INDEPENDENT };

@@ -24,7 +24,7 @@ test("a real call records the dependencies of its answer", async () => {
 
 test("a template call records no dependencies, so no skill edit can touch it", async () => {
   cacheClear();
-  await callTool("pix_tool_component", { component: "button", framework: "react" });
+  await callTool("pix_tool_styleguide", { component: "button", framework: "react" });
   const [entry] = cacheEntries();
 
   assert.ok(entry, "the call was stored");
@@ -68,7 +68,7 @@ const WORKLOAD = [
   ["pix_tool_frontend_react", { mode: "tldr", query: "hooks" }],
   ["pix_tool_check", { skill: "pix-styleguide-css", code: "a{color:red}" }],
   ["pix_tool_search", { query: "container query" }],
-  ["pix_tool_component", { component: "button", framework: "react" }],
+  ["pix_tool_styleguide", { component: "button", framework: "react" }],
   ["pix_tool_compress", { text: "It is important to note that this is filler." }],
 ];
 

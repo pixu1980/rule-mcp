@@ -5,7 +5,7 @@
  *
  * Resuming a session should not require remembering to resume it.
  *
- * `pix_tool_process_handoff` writes the snapshot and `pix_tool_process_handon`
+ * `pix_tool_handoff` writes the snapshot and `pix_tool_handon`
  * verifies it, but both are typed by hand: the one session that most needs the
  * handoff is the one where the user reopened the agent hours later and started
  * asking questions, and nothing reminded either side that a handoff exists.

@@ -49,12 +49,13 @@ nothing, so resuming twice from the same handoff works twice.
 3. Treat repository/tool evidence as source of truth. Never invent APIs, files, dependencies, tools, requirements, or successful checks.
 4. If evidence missing, call `pix_tool_search`; if still absent, state uncertainty.
 5. Write failing tests before implementation changes.
-6. Use `pix_tool_component` for component templates, `pix_tool_scaffold` for project config files.
+6. Use `/pix-area-styleguide` and `/pix-area-styleguide-file-tree` for templates and project tree work (ADR 115: component/scaffold/form tools removed).
 7. Run `pix_tool_check`. Failed guardrails are blocking; fix and rerun until all pass.
 8. Run project tests/typecheck and report only commands actually executed.
 9. Record structural decisions with `pix_tool_process_adr` (disabled by default, enable with `PIX_GALAXY_MCP_AUTO_ADR=1`).
 10. Before writing files, run `pix_tool_gateway` to get a receipt; use `pix_tool_apply` with the receipt for writes.
 11. After `pix_tool_apply` writes files, Prettier + blank-line fixer + block-spacing fixer run automatically as post-processing.
+12. Compress prose / preprocess prompts with `pix_tool_compress` / `/pix-compress`. Close/resume sessions with `/pix-handoff` and `/pix-handon`.
 
 ## Advisory boundaries
 
@@ -83,11 +84,12 @@ Every agent receives the same **registry-driven** clean command set - the `/pix`
 
 ## Minimal tool surface
 
-Set `PIX_GALAXY_MCP_MINIMAL_TOOLS=1` (off by default) to expose only the 10 dispatcher/action
-tools instead of the full per-skill surface (fits clients that cap or truncate the tool list, and
-costs less context on every turn): `pix_tool`, `pix_tool_update`, `pix_tool_gateway`,
-`pix_tool_apply`, `pix_tool_search`, `pix_tool_check`, `pix_tool_scaffold`, `pix_tool_detect`,
-`pix_tool_process_handoff`, `pix_tool_component`.
+Set `PIX_GALAXY_MCP_MINIMAL_TOOLS=1` (off by default) to expose only the fixed dispatcher/action
+allowlist (ADR 115) instead of the full per-skill surface (fits clients that cap or truncate the
+tool list, and costs less context on every turn): `pix_tool`, `pix_tool_meta`, `pix_tool_update`,
+`pix_tool_init`, `pix_tool_gateway`, `pix_tool_apply`, `pix_tool_search`, `pix_tool_check`,
+`pix_tool_compress`, `pix_tool_detect`, `pix_tool_handoff`, `pix_tool_handon`, `pix_tool_stats`,
+`pix_tool_usage`.
 
 ## Environment variables
 

@@ -21,14 +21,14 @@ export function registerDetectTool() {
       const profile = detectProjectGraph(projectDir);
       // Suggest relevant skill tools based on detected framework
       const { skillName, toolName } = getFrameworkSuggestion(profile.framework);
-      const suggestions = [toolName, "pix_tool_check", "pix_tool_scaffold", "pix_tool_component"];
+      const suggestions = [toolName, "pix_tool_check", "pix_tool_styleguide"];
       const result = {
         ...profile,
         suggested_skills: [skillName],
         suggested_tools: suggestions,
         message:
           `Detected ${profile.framework === "vanilla" ? "vanilla JS" : profile.framework} project "${profile.projectName}". ` +
-          `Use ${suggestions.join(", ")} for pix-compliant code generation.`,
+          `Use ${suggestions.join(", ")} and /pix-area-styleguide* for pix-compliant generation.`,
       };
 
       return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };

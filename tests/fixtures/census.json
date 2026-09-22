@@ -5,39 +5,39 @@
       "file": "02-product-architecture.md",
       "kind": "block",
       "marker": "surface-counts",
-      "sha256": "683599d895d9e8037f6b5259e635cb5dbe6fc9c9f2b8c71608132fbed9ee7d6e"
+      "sha256": "a63aae568067dce814430779d1944384c5dd1d8f0a7b3b4934f5bb451181cfa9"
     },
     {
       "file": "05-env-variables.md",
       "kind": "block",
       "marker": "env-registry",
-      "sha256": "672f56d20c01779fef8c9f9cc7ba0213efaebb0dbf058c76837fc3c20118732b"
+      "sha256": "64501c41967b2c0b0fdeb4962ca3e5e8cfd8e629bb0a071d9f4ce0fcba1da312"
     },
     {
       "file": "07-engineering-guides.md",
       "kind": "block",
       "marker": "command-surface",
-      "sha256": "92ad86f97b54b0456d19a584145f5557531147b859c1787247cd44f52454074e"
+      "sha256": "a0e4515f76c1d9f103cd6ab9698a558dad589b14fe48e9f5197e19018bac98ad"
     },
     {
       "file": "08-skills.md",
       "kind": "document",
-      "sha256": "ac2498961290b9ef131359a9439f040c0de9e2dffb9e65875b08196ac9448404"
+      "sha256": "a1c4e47229843f35d1174a9775c7e4012357889d8595b5dc053f2815aebf91a3"
     },
     {
       "file": "09-tools.md",
       "kind": "document",
-      "sha256": "c71354bf4773a53480ad6da64abe07ffd3f9f22ae71a70b0fc748914ece1fe5c"
+      "sha256": "31f4ebe5f121d96d42597bb19f408378f61ab0985e3d818d22c1c2207627196e"
     },
     {
       "file": "10-prompts.md",
       "kind": "document",
-      "sha256": "c66838e5a35d038006f1dbe77b215aa8992027200de4bb7d2693c908205a70f7"
+      "sha256": "3d6b61d970ad0d0e277e8ad7fdbaf86b975ac469306bca4ee9a1fd2ab366cfdf"
     },
     {
       "file": "11-instructions.md",
       "kind": "document",
-      "sha256": "50881f64821a2ece143c411e58090daf86bddb7d6d0b3517bc3156906cbc2c29"
+      "sha256": "bd3d15d9c91463d116558ec1c231655eb62a3f0353f7215cb77b8584fc5d621e"
     },
     {
       "file": "12-cli.md",
@@ -57,7 +57,7 @@
     {
       "file": "15-resources.md",
       "kind": "document",
-      "sha256": "85213348775addd1ab8ac2a8aa044eea73a6b28475bccca1210c65f1b771abec"
+      "sha256": "6ece4ec68fc7814d303be067daf4575de9f8af857630a53608a74a721a51281a"
     }
   ]
 }

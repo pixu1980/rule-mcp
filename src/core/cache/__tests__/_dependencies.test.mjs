@@ -31,7 +31,7 @@ test("a check depends on the skill it checked", () => {
 });
 
 test("a template tool depends on no skill", () => {
-  assert.deepEqual(dependenciesOf("pix_tool_component", { component: "button" }, result("x")), {});
+  assert.deepEqual(dependenciesOf("pix_tool_styleguide", { component: "button" }, result("x")), {});
   assert.deepEqual(dependenciesOf("pix_tool_compress", { text: "x" }, result("x")), {});
 });
 

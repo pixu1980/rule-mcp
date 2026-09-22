@@ -1,17 +1,17 @@
 // SPDX-FileCopyrightText: 2025-2026 pixu1980
 // SPDX-License-Identifier: MIT
-/** Register the pix_tool_process_handoff MCP tool. */
+/** Register the pix_tool_handoff MCP tool. */
 import { registerTool } from "../router/index.js";
 import { HandoffSchema } from "./_schema.js";
 import { buildHandoff } from "./_build.js";
 
 /**
- * Register the pix_tool_process_handoff tool.
+ * Register the pix_tool_handoff tool.
  */
-export function registerProcessHandoffTool() {
+export function registerHandoffTool() {
   registerTool({
-    name: "pix_tool_process_handoff",
-    entry: "skill",
+    name: "pix_tool_handoff",
+    entry: "action",
     description:
       "Generate a compressed LLM handoff summary from ADR logs and project context. Archives completed audits/reviews/plans as ADRs and repairs the ADR numbering first (pass closeout: false to diagnose without writing). Paste the output into a new chat to resume work seamlessly.",
     zodSchema: HandoffSchema,

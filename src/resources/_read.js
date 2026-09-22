@@ -72,9 +72,8 @@ export async function serveResource(uri) {
           uri,
           mimeType: "text/markdown",
           text:
-            "For the full a11y testing guide with Playwright + axe-core, see pix-styleguide a11y.md Section 12: Automated Testing.\n\n" +
-            "Use `pix_tool_component component=a11y-test-basic` to generate test files.\n" +
-            "Use `pix_tool_component component=playwright-config` to generate Playwright config.",
+            "For a11y testing with Playwright + axe-core, see pix-styleguide-a11y and /pix-persona-a11y-audit.\n\n" +
+            "Use `/pix-area-styleguide` (and related styleguide skills) for templates and config generation.",
         },
       ],
     };
@@ -123,7 +122,7 @@ export async function serveResource(uri) {
     const result = {
       ...profile,
       suggested_skills: [skillName],
-      suggested_tools: [toolName, "pix_tool_check", "pix_tool_scaffold", "pix_tool_component"],
+      suggested_tools: [toolName, "pix_tool_check", "pix_tool_styleguide"],
       message: `Detected ${profile.framework} project "${profile.projectName}". Use ${toolName} for pix-compliant code generation.`,
     };
 

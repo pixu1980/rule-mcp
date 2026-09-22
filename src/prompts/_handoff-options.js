@@ -7,7 +7,7 @@
  *
  * `/pix-handoff` accepts a single free-form `options` string of
  * space-separated tokens. This module translates that vocabulary into the
- * concrete arguments of the `pix_tool_process_handoff` tool, so the prompt
+ * concrete arguments of the `pix_tool_handoff` tool, so the prompt
  * handler can tell the model exactly which values to pass - no ambiguity.
  *
  * Vocabulary:

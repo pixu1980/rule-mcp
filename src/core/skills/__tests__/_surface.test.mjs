@@ -20,7 +20,7 @@ const SKILLS = [
   "pix-frontend",
   "pix-frontend-react",
   "pix-process",
-  "pix-process-compression",
+  "pix-process-tdd",
 ];
 
 test("parseSurface reads presets", () => {
@@ -46,7 +46,7 @@ test("areasOfSkills lists the roots, sorted", () => {
   assert.ok(isRootSkill("pix-data"));
   assert.ok(!isRootSkill("pix-data-sql"));
   assert.ok(isRootSkill("pix-process"));
-  assert.ok(!isRootSkill("pix-process-compression"), "compression is a process member, not its own area");
+  assert.ok(!isRootSkill("pix-process-tdd"), "tdd is a process member, not its own area");
 });
 
 test("standard keeps the roots only", () => {
@@ -63,11 +63,11 @@ test("areas keep their roots and members", () => {
   assert.deepEqual([...skills].sort(), ["pix-frontend", "pix-frontend-react"]);
 });
 
-test("process area keeps compression as a member", () => {
+test("process area keeps tdd as a member", () => {
   const { skills, problems } = filterSurfaceSkills({ areas: ["process"] }, SKILLS);
 
   assert.deepEqual(problems, []);
-  assert.deepEqual([...skills].sort(), ["pix-process", "pix-process-compression"]);
+  assert.deepEqual([...skills].sort(), ["pix-process", "pix-process-tdd"]);
 });
 
 test("skills keep their area root either way", () => {

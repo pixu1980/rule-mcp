@@ -15,9 +15,9 @@ export const NON_CACHEABLE = new Set([
   "pix_tool_apply",
   "pix_tool_fix",
   "pix_tool_process_adr",
-  "pix_tool_process_handoff",
+  "pix_tool_handoff",
   // handon reads git: a replayed answer describes a repository that has moved.
-  "pix_tool_process_handon",
+  "pix_tool_handon",
   "pix_tool_gateway",
   "pix_tool_detect",
   "pix_tool_update",

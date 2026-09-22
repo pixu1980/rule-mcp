@@ -21,7 +21,7 @@ export function buildGuardrailsText() {
     "- [ ] **a11y-test-components**: tests/a11y/_components.spec.js - per-component a11y checks",
     "- [ ] **playwright-config**: playwright.config.js with Chromium target",
     "",
-    "Use pix_tool_component component=a11y-test-basic to generate test templates.",
+    "Use /pix-area-styleguide and /pix-persona-a11y-audit for a11y test templates and audits.",
     "Use pix_tool_check for automated validation.",
     "Iterate: generate, pix_tool_check, fix, pix_tool_check, all pass.",
   ];

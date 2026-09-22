@@ -82,12 +82,12 @@ test("two tools never share a normalized key", () => {
 
 test("no normalizable argument means no normalized key", () => {
   assert.equal(normalizedKey("pix_tool_detect", { path: "." }), null, "nothing to normalize");
-  assert.equal(normalizedKey("pix_tool_component", { component: "button" }), null);
+  assert.equal(normalizedKey("pix_tool_styleguide", { component: "button" }), null);
   assert.equal(normalizedKey("pix_tool", { prompt: "the and for" }), null, "a prompt of only stopwords");
 });
 
 test("a non-cacheable tool has no key at either tier", () => {
-  for (const tool of ["pix_tool_apply", "pix_tool_fix", "pix_tool_process_handon", "pix_tool_gateway"]) {
+  for (const tool of ["pix_tool_apply", "pix_tool_fix", "pix_tool_handon", "pix_tool_gateway"]) {
     assert.equal(cacheKey(tool, { prompt: "x" }), null, `${tool} must not be keyed`);
     assert.equal(normalizedKey(tool, { prompt: "x" }), null, `${tool} must not be keyed`);
   }

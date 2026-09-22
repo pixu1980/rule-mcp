@@ -26,7 +26,7 @@ check("T2.1 a directory that does not exist injects nothing", resumeContext({ so
 // ── T3: verified, not restated ──
 check("T3 the claims are verified, not repeated", resumed.includes("Still true"));
 check("T3.1 the open items survive", resumed.includes("pix_tool_gateway"));
-check("T3.2 it says the check was automatic", /pix_tool_process_handon/.test(resumed));
+check("T3.2 it says the check was automatic", /pix_tool_handon/.test(resumed));
 
 // ── T4: the opt-out ──
 process.env.PIX_GALAXY_MCP_NO_RESUME_HANDON = "1";

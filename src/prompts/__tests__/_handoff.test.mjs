@@ -80,7 +80,7 @@ test("pix-handoff getPrompt interpolates the parsed options into the message", (
   assert.match(text, /close-session/, "message must carry the requested mode");
   assert.match(text, /compress=true/, "message must carry compress=true");
   assert.match(text, /format=minimal/, "message must carry format=minimal");
-  assert.match(text, /pix_tool_process_handoff/, "message must still route to the tool");
+  assert.match(text, /pix_tool_handoff/, "message must still route to the tool");
 });
 
 test("pix-handoff help returns the usage list as an instant assistant message", () => {
