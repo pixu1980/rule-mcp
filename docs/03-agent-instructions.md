@@ -77,8 +77,8 @@ See `src/core/enforcement.js` for details.
 Every agent receives the same **registry-driven** clean command set - the `/rule` router pinned first, then one `/rule-*` command per MCP prompt in alphabetical order (`/rule-a11y-audit` ... `/rule-update`). Regenerate or list it with `rule-mcp agent-commands`.
 
 - Pi, Claude Code, Gemini CLI, Cursor, Windsurf, Cline: `/rule <request>` plus the full `/rule-*` set.
-- Claude Code: the clean `/rule-*` commands replace the MCP prompts - the install sets `RULE_MCP_NO_PROMPTS=1`, so the prefixed `/rule-mcp:… (MCP)` duplicates are hidden.
-- `/rule-handoff` also commits pending work as atomic, scoped conventional commits (plus one separate `docs(adr):`/`docs(handoff):` commit for pending decision docs), writes the generated handoff to `docs/handoff/<NN>-<slug>.md` and commits it alone as `chore(handoff): …`, and never pushes.
+- Claude Code: the clean `/rule-*` commands replace the MCP prompts - the install sets `RULE_MCP_NO_PROMPTS=1`, so the prefixed `/rule-mcp:... (MCP)` duplicates are hidden.
+- `/rule-handoff` also commits pending work as atomic, scoped conventional commits (plus one separate `docs(adr):`/`docs(handoff):` commit for pending decision docs), writes the generated handoff to `docs/handoff/<NN>-<slug>.md` and commits it alone as `chore(handoff): ...`, and never pushes.
 - GitHub Copilot CLI: `/agent`, select `rule-mcp`.
 - Codex CLI: invoke globally installed `rule` skill; exact custom prompt support varies by version.
 

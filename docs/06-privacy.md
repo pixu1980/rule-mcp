@@ -4,7 +4,7 @@
 - **Last reviewed**: 2026-09-06
 - **Related**: ADR 019 (persistent local bearer token), ADR 034 (SSE bearer auth),
   ADR 040 (per-invocation self-update with throttle, fire-and-forget), ADR 051
-  (token-efficiency pipeline), `docs/02-product-architecture.md`,
+  (token-efficiency pipeline), `docs/02-architecture.md`,
   `docs/07-engineering-guides.md`
 - **Enforced by**: `tests/core/self-guardrails.test.mjs`, `tests/core/flight-redact.test.mjs`,
   `tests/core/flight-exports-retention.test.mjs`, `tests/cli/uninstall-purge-home.test.mjs`
@@ -14,7 +14,7 @@
 Everything this server records stays on the machine that runs it. There is no
 remote telemetry channel: the transport module exists but is **off by a code
 constant** (`REMOTE_ENABLED = false` in `src/core/telemetry-transport.js`), not
-by a setting — turning it on is a reviewed code change, not an environment
+by a setting, so turning it on is a reviewed code change, not an environment
 variable somebody exports. Nothing is sent anywhere unless you export a file
 and send it yourself, and the redacted export exists so that sharing one does
 not mean sharing your prompts.
