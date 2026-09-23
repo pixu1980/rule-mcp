@@ -44,12 +44,12 @@ test("routing off a restored index answers exactly as a freshly built one", asyn
 
   const PROBES = ["react button component", "postgres index slow query", "docker healthcheck", "enum or union type"];
 
-  buildIndex(true);
+  await buildIndex(true);
   const fresh = getIndexStats();
   const before = PROBES.map((probe) => search(probe, 3).map((hit) => `${hit.skill}:${Math.round(hit.score * 1000)}`));
 
   clearIndex();
-  buildIndex();
+  await buildIndex();
   const restored = getIndexStats();
   const after = PROBES.map((probe) => search(probe, 3).map((hit) => `${hit.skill}:${Math.round(hit.score * 1000)}`));
 

@@ -89,7 +89,7 @@ export async function registerCoreTools() {
   registerHandoffTool();
   // The index is built from the skill files on disk, not from the tools
   // registered above, so it does not wait for the per-skill pass.
-  buildIndex();
+  await buildIndex();
 }
 
 /**

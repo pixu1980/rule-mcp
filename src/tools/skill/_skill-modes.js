@@ -99,7 +99,7 @@ export async function tldrMode(skillName, displayName, query) {
   const { search, buildIndex, isIndexReady } = await import("../../core/bm25/index.js");
 
   if (!isIndexReady()) {
-    buildIndex();
+    await buildIndex();
   }
   // Search with larger limit (50) then filter by skill - avoids top-5-before-filter bug
   const results = query

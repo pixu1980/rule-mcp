@@ -4,6 +4,7 @@
 import { autoUpdateEnabled, intervalMs } from "./_config.js";
 import { runSelfUpdate } from "./_run.js";
 import { buildBanner } from "./_banner.js";
+import { loadLastCheck, saveLastCheck } from "./_state-store.js";
 
 /** Timestamp of the last kicked-off check (0 = never). */
 export let _lastCheckAt = 0;
@@ -13,6 +14,29 @@ export let _inflight = null;
 
 /** Banner to prepend to the next tool result (consumed once). */
 export let _pendingBanner = null;
+
+/** Whether `_lastCheckAt` has been seeded from the persisted state yet. */
+let _stateLoaded = false;
+
+/**
+ * Seed `_lastCheckAt` from disk on the first call in this process, so a
+ * restart resumes the throttle window instead of starting it over at zero.
+ * A missing or unreadable file leaves `_lastCheckAt` at 0, same as before
+ * this existed.
+ */
+function loadPersistedState() {
+  if (_stateLoaded) {
+    return;
+  }
+
+  _stateLoaded = true;
+
+  const saved = loadLastCheck();
+
+  if (saved && typeof saved.lastCheckAt === "number") {
+    _lastCheckAt = saved.lastCheckAt;
+  }
+}
 
 /**
  * Decide and schedule a restart when server code changed. Returns a short note
@@ -74,6 +98,8 @@ export function maybeSelfUpdate() {
     return;
   }
 
+  loadPersistedState();
+
   if (_inflight) {
     return _inflight;
   } // concurrent invocations share one check
@@ -89,6 +115,7 @@ export function maybeSelfUpdate() {
     .catch(() => ({ checked: false, updated: false, skipped: true, reason: "error" }))
     .then((result) => {
       _inflight = null;
+      saveLastCheck({ lastCheckAt: _lastCheckAt, checked: result.checked, updated: result.updated, reason: result.reason });
       let banner = buildBanner(result);
       const restartNote = scheduleRestartIfNeeded(result);
 

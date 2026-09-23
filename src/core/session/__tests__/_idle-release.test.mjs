@@ -44,7 +44,7 @@ test("an idle server drops the search index and the skill cache", async () => {
   const activity = await import("../_activity.js");
 
   await loadAllSkills();
-  buildIndex();
+  await buildIndex();
   assert.equal(isIndexReady(), true, "the index was not built");
 
   activity.touchActivity(1000);
@@ -60,7 +60,7 @@ test("an idle server drops the search index and the skill cache", async () => {
   assert.equal(reclaim.reclaimIfIdle({ now: 1000 + reclaim.IDLE_RECLAIM_MS + 2 }), null);
 
   // The index rebuilds on demand, so the drop costs correctness nothing.
-  buildIndex();
+  await buildIndex();
   assert.equal(isIndexReady(), true);
 });
 
