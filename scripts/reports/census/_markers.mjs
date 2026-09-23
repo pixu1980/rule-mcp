@@ -17,6 +17,7 @@ import { documentedEnvVars, envVarsInCode } from "./_env-scan.mjs";
 import { table } from "./_format.mjs";
 import { DOCS } from "./_registries.mjs";
 import { commandSurfaceBlock } from "./_sections-commands.mjs";
+import { agentTargetSection } from "./_sections-install.mjs";
 import { summarySection } from "./_sections-surface.mjs";
 
 const begin = (marker) => `<!-- census:begin:${marker} -->`;
@@ -93,7 +94,8 @@ function envRegistry() {
 
 /** One entry per fenced block: which document, which fence, what goes in it. */
 export const MARKER_TARGETS = [
-  { file: "02-product-architecture.md", marker: "surface-counts", build: (data) => surfaceCounts(data) },
+  { file: "01-getting-started.md", marker: "agent-targets", build: (data) => agentTargetSection(data) },
+  { file: "02-architecture.md", marker: "surface-counts", build: (data) => surfaceCounts(data) },
   { file: "07-engineering-guides.md", marker: "command-surface", build: (data) => commandSurfaceBlock(data) },
   { file: "05-env-variables.md", marker: "env-registry", build: () => envRegistry() },
 ];
