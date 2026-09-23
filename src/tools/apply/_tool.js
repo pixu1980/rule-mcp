@@ -12,7 +12,7 @@ import { resolveProjectRoot } from "./_roots.js";
 import { resolveWriteTarget } from "./_target.js";
 
 /**
- * Register the pix_apply write tool.
+ * Register the rule_tool_apply write tool.
  */
 export async function registerApplyTool() {
   const { registerTool } = await import("../router/index.js");
@@ -57,8 +57,8 @@ export async function registerApplyTool() {
             {
               type: "text",
               text:
-                `# pix_apply: Project root REJECTED\n\n**Root:** ${rootPath}\n**Error:** ${error.message}\n\n` +
-                `Pass the project directory you are working in - pix_apply never writes outside it.`,
+                `# rule_tool_apply: Project root REJECTED\n\n**Root:** ${rootPath}\n**Error:** ${error.message}\n\n` +
+                `Pass the project directory you are working in - rule_tool_apply never writes outside it.`,
             },
           ],
           _meta: { pixApply: { receiptValid: false, rootError: error.message, filesWritten: 0 } },
@@ -66,7 +66,7 @@ export async function registerApplyTool() {
       }
 
       // ── Step 1: Validate the receipt against the exact file set ──
-      // The receipt binds (path, content) tuples when pix_gateway received
+      // The receipt binds (path, content) tuples when rule_tool_gateway received
       // `files`; a content-only receipt still covers a single file.
       const receiptCheck = validateApply(receipt, files);
 
@@ -77,9 +77,9 @@ export async function registerApplyTool() {
             {
               type: "text",
               text:
-                `# pix_apply: Receipt validation FAILED\n\n**Reason:** ${receiptCheck.reason || "Invalid receipt"}\n\n` +
-                `The receipt must be obtained from pix_gateway after ALL guardrails pass. ` +
-                `If you modified the code after pix_gateway, run pix_gateway again with the updated code.`,
+                `# rule_tool_apply: Receipt validation FAILED\n\n**Reason:** ${receiptCheck.reason || "Invalid receipt"}\n\n` +
+                `The receipt must be obtained from rule_tool_gateway after ALL guardrails pass. ` +
+                `If you modified the code after rule_tool_gateway, run rule_tool_gateway again with the updated code.`,
             },
           ],
           _meta: { pixApply: { receiptValid: false, reason: receiptCheck.reason, filesWritten: 0 } },
@@ -100,7 +100,7 @@ export async function registerApplyTool() {
             content: [
               {
                 type: "text",
-                text: `# pix_apply: Path validation FAILED\n\n**File:** ${file.path}\n**Error:** ${error.message}`,
+                text: `# rule_tool_apply: Path validation FAILED\n\n**File:** ${file.path}\n**Error:** ${error.message}`,
               },
             ],
             _meta: { pixApply: { receiptValid: true, pathError: error.message, filesWritten: 0 } },

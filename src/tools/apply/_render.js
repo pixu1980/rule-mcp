@@ -10,7 +10,7 @@
  */
 export function renderApplyResult({ dryRun, receiptCheck, rootDir, results }) {
   const lines = [
-    `# pix_apply: ${dryRun ? "DRY RUN (preview)" : "FILES WRITTEN"}`,
+    `# rule_tool_apply: ${dryRun ? "DRY RUN (preview)" : "FILES WRITTEN"}`,
     "",
     dryRun ? "> This is a preview. Set `dryRun: false` to write files." : "",
     "",

@@ -68,16 +68,15 @@ async function updateCommand() {
 }
 
 /**
- * Validate and auto-fix project file tree structure.
- * Delegates to the pix_fix MCP tool.
+ * Apply the deterministic guardrail fixes of every skill.
+ * Delegates to the rule_tool_fix MCP tool.
  *
- * @param {{ dir?: string, srcDir?: string, mode?: string, dryRun?: boolean }} opts
+ * @param {{ path?: string, mode?: string, dryRun?: boolean }} opts
  */
 async function fixCommand(opts = {}) {
   await loadAllSkills();
   const result = await callTool("rule_tool_fix", {
-    path: opts.dir || ".",
-    srcDir: opts.srcDir || "src",
+    path: opts.path || ".",
     mode: opts.mode || "lint",
     dryRun: opts.dryRun !== false,
   });

@@ -34,10 +34,11 @@ test("coverage: one clean command per prompt, plus the router, plus /rule-check 
   for (const p of promptNames) {
     assert.ok(names.includes(p), `missing command for prompt ${p}`);
   }
-  // router + every prompt + general rule-check; ADR 116 dropped area *-check siblings
+  // router + every prompt + the two general commands (rule-check, rule-fix); ADR 116 dropped area *-check siblings
   assert.ok(!promptNames.includes(ROUTER_COMMAND), "router must not also be a prompt");
-  assert.equal(names.length, promptNames.length + 1 + 1, "router + all prompts + rule-check");
+  assert.equal(names.length, promptNames.length + 1 + 2, "router + all prompts + rule-check + rule-fix");
   assert.ok(names.includes("rule-check"), "rule-check remains");
+  assert.ok(names.includes("rule-fix"), "rule-fix remains");
   assert.ok(
     names.filter((name) => name.endsWith("-check")).every((name) => name === "rule-check"),
     "only /rule-check ends with -check; no area siblings",

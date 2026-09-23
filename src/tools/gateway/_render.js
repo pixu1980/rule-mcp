@@ -66,13 +66,13 @@ export function renderGatewayReply(core, arguments_, fileSet, lines, stripped = 
       // cache hit still gets a token bound to this call and expiring now.
       receipt = fileSet ? issueFilesReceipt(fileSet, skillName, true) : issueReceipt(code, skillName, true);
       lines.push(
-        `**Receipt:** \`${receipt}\` (valid 5 min, pass to pix_apply)`,
+        `**Receipt:** \`${receipt}\` (valid 5 min, pass to rule_tool_apply)`,
         fileSet
           ? "Bound to these exact paths and contents - writing elsewhere is refused."
           : "Content-only receipt: authorizes a single-file write. Pass `files` here for a path-bound receipt.",
       );
     } else {
-      lines.push(`❌ ${checkResult.failCount} guardrails FAIL. Fix and re-check via pix_gateway.`);
+      lines.push(`❌ ${checkResult.failCount} guardrails FAIL. Fix and re-check via rule_tool_gateway.`);
 
       for (const f of checkResult.failed) {
         lines.push(`- **${f.id}**${f.file ? ` (${f.file})` : ""}: ${f.label} - ${f.suggestion}`);
@@ -83,14 +83,14 @@ export function renderGatewayReply(core, arguments_, fileSet, lines, stripped = 
   }
 
   // ── Next tools hint ──
-  const nextTools = [...new Set([...(route.next_tools || []), "pix_gateway", "pix_apply", "pix_search"])].slice(0, 10);
+  const nextTools = [...new Set([...(route.next_tools || []), "rule_tool_gateway", "rule_tool_apply", "rule_tool_search"])].slice(0, 10);
 
   lines.push("## Next Steps", "");
   lines.push(
     `Available tools: ${nextTools.join(", ")}`,
     receipt
-      ? `\nTo write files, call pix_apply with the receipt above. The receipt proves pix_gateway validated this exact code.`
-      : `\nFix failures, then run pix_gateway again with the updated code.`,
+      ? `\nTo write files, call rule_tool_apply with the receipt above. The receipt proves rule_tool_gateway validated this exact code.`
+      : `\nFix failures, then run rule_tool_gateway again with the updated code.`,
   );
 
   const response = {

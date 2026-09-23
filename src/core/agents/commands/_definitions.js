@@ -4,9 +4,9 @@
 
 import { listPrompts } from "@src/prompts/index.js";
 import { listAreaPrompts } from "@src/prompts/_areas.js";
-import { areaBody, ROUTER, generalCheckBody } from "./_bodies.js";
+import { areaBody, ROUTER, generalCheckBody, generalFixBody } from "./_bodies.js";
 import { COMPRESS_BODY, HANDOFF_BODY, HANDON_BODY, INIT_BODY, STATS_BODY, USAGE_BODY } from "./_bodies-session.js";
-import { commandNames, ROUTER_COMMAND, CHECK_COMMAND } from "./_names.js";
+import { commandNames, ROUTER_COMMAND, CHECK_COMMAND, FIX_COMMAND } from "./_names.js";
 import { personaBody, personaTarget } from "./_personas.js";
 
 /**
@@ -26,6 +26,15 @@ export function commandDefinition(name) {
       description: "Auto-detect area from context and run rule guardrails validation",
       argumentHint: "[target]",
       body: generalCheckBody,
+    };
+  }
+
+  if (name === FIX_COMMAND) {
+    return {
+      name,
+      description: "Apply the deterministic guardrail fixes of every skill to the changed files",
+      argumentHint: "[target]",
+      body: generalFixBody,
     };
   }
 

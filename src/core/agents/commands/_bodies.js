@@ -45,10 +45,10 @@ export const ROUTER = {
     "1. Call MCP tool `pix_tool` with the complete request and project path/framework when known.",
     "2. Load the primary routed `rule-*` skill and only the necessary secondary skills.",
     "3. Use the returned skill/tool evidence as source of truth. Never invent APIs, files, dependencies, commands, requirements, or successful checks.",
-    "4. If evidence is missing, call `pix_search`; if still missing, state uncertainty instead of guessing.",
+    "4. If evidence is missing, call `rule_tool_search`; if still missing, state uncertainty instead of guessing.",
     "5. Write every comment, identifier, commit message and generated document in English, American spelling (color, behavior, organize - see rule-styleguide-english).",
     "6. Implement with failing tests first when code changes.",
-    "7. Run `pix_check` against generated code. Fix every failure and rerun until all guardrails pass.",
+    "7. Run `rule_tool_check` against generated code. Fix every failure and rerun until all guardrails pass.",
     "8. Run project tests/typecheck. Report commands and real outcomes; never claim unexecuted checks passed.",
     "9. Finish by proposing a conventional commit message with a mandatory scope.",
     "",
@@ -95,9 +95,9 @@ export function areaBody(description, { skill, members = [] } = {}) {
     "",
     "Otherwise (no check intent):",
     "1. Parse $ARGUMENTS for every leaf topic (framework, tool, database, ...). Call `pix_tool` and/or each matching leaf `rule_tool_*`, then load that skill evidence as source of truth.",
-    "2. Never invent APIs, files, dependencies, commands, or requirements not present in the evidence; if evidence is missing, call `pix_search` or state uncertainty.",
+    "2. Never invent APIs, files, dependencies, commands, or requirements not present in the evidence; if evidence is missing, call `rule_tool_search` or state uncertainty.",
     "3. Baseline: write failing tests first (TDD) and cover a11y (WCAG 2.2 AA) where applicable; if there is no test/a11y surface, ask the user what to cover.",
-    "4. Validate generated code with `pix_check`; iterate until all guardrails pass.",
+    "4. Validate generated code with `rule_tool_check`; iterate until all guardrails pass.",
     "5. Write every comment, identifier and generated document in English, American spelling (color, behavior, organize - see rule-styleguide-english).",
     "6. Finish by proposing a conventional commit message with a mandatory scope.",
     "7. Responses are compressed automatically by the server: keep it factual and free of filler.",
@@ -125,4 +125,26 @@ export const generalCheckBody = [
   "6. Write every comment and identifier in English, American spelling.",
   "7. Finish by proposing a conventional commit message with a mandatory scope.",
   "8. Responses are compressed automatically by the server: keep it factual and free of filler.",
+].join("\n");
+
+/**
+ * Body for the general `/rule-fix` command: apply the deterministic guardrails
+ * every skill owns, then hand the rest to the check. The split matters - the
+ * machine settles the mechanical findings and the model spends its turns on the
+ * ones that need judgment.
+ */
+export const generalFixBody = [
+  "Apply the deterministic guardrail fixes to the changed files: $ARGUMENTS",
+  "",
+  "1. Determine the target:",
+  "   - If $ARGUMENTS names paths/files, use those.",
+  "   - Otherwise, use the current git diff (staged + unstaged).",
+  "   - If no diff, fix the entire project.",
+  "2. Call `rule_tool_fix` with `mode=fix` over that target. It applies the fixes a machine can settle",
+  "   without judgment: blank lines, braces, single-line bodies, ASCII typography, American spelling.",
+  "3. Call `rule_tool_check` on the same target for the findings that need judgment, and fix those.",
+  "4. Report the files changed and the commands run; never claim an unexecuted fix.",
+  "5. Write every comment and identifier in English, American spelling.",
+  "6. Finish by proposing a conventional commit with a mandatory scope if the tree changed.",
+  "7. Responses are compressed automatically by the server: keep it factual and free of filler.",
 ].join("\n");

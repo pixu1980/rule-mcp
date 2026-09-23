@@ -9,7 +9,7 @@
  * - TypeScript vs JavaScript
  * - Build tool: vite, webpack, esbuild, tsc, etc.
  *
- * @see module:tools/router - pix_detect tool registered here
+ * @see module:tools/router - rule_tool_detect tool registered here
  */
 
 import { existsSync } from "node:fs";

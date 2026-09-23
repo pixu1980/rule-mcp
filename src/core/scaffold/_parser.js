@@ -15,7 +15,7 @@ export function extractScaffoldSection(content) {
   const start = content.indexOf(startMarker);
 
   if (start === -1) {
-    return "Scaffolding section not found. Use pix_styleguide mode=full to read the full skill.";
+    return "Scaffolding section not found. Use rule_tool_styleguide mode=full to read the full skill.";
   }
 
   const end = content.indexOf(endMarker, start + 1);

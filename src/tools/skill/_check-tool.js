@@ -7,7 +7,7 @@ import { registerTool, readSkill, getSkillNames } from "../router/index.js";
 import { checkCodeGuarded, checkProjectGuarded } from "../../core/guardrails/index.js";
 
 /**
- * Register the pix_check tool for running guardrail checks on code.
+ * Register the rule_tool_check tool for running guardrail checks on code.
  */
 export function registerCheckTool() {
   const CheckSchema = z.object({
@@ -128,7 +128,7 @@ export function registerCheckTool() {
           "---",
           "❌ " + result.failCount + " guardrails FAIL. Fix and re-check.",
           "",
-          "Re-check with the same code after fixing failures. Run: pix_check with same skill + updated code.",
+          "Re-check with the same code after fixing failures. Run: rule_tool_check with same skill + updated code.",
           "",
           "Currently passing guardrails (for reference):",
           "```",

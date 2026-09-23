@@ -9,6 +9,7 @@ import { _tools, toolsGeneration } from "./_hooks.js";
 
 const MUTATING_TOOLS = new Set([
   "rule_tool_apply",
+  "rule_tool_fix",
   "rule_tool_process_adr",
   "rule_tool_plan_docs",
   "rule_tool_handoff",

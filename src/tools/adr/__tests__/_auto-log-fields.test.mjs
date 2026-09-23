@@ -57,30 +57,23 @@ test("a long prompt is truncated in the body and again in the title", () => {
   assert.equal(fields.title, `Skill routing: ${"x".repeat(80)}`, "the title keeps 80");
 });
 
-test("scaffold, detect and fix each record their own arguments", () => {
-  const scaffold = autoLogFields("rule_tool_scaffold", { mode: "validate", file: "tsconfig.json" });
-  assert.equal(scaffold.title, "Scaffold: validate tsconfig.json");
-  assert.deepEqual(scaffold.contextLines, ["Scaffold operation: validate", "File: tsconfig.json"]);
-
+test("detect and fix each record their own arguments", () => {
   const detect = autoLogFields("rule_tool_detect", { path: "./app" }, jsonResult({ framework: "svelte" }));
   assert.equal(detect.title, "Framework detection for ./app");
   assert.deepEqual(detect.decisionLines, ["Use svelte tooling for this project."]);
 
-  const fix = autoLogFields("rule_tool_fix", { mode: "apply", srcDir: "lib" });
-  assert.equal(fix.title, "File tree fix: apply on .");
-  assert.equal(fix.tags, "tool, auto-log, file-tree");
-  assert.deepEqual(fix.contextLines, ["Mode: apply", "Source: lib"]);
+  const fix = autoLogFields("rule_tool_fix", { mode: "fix", path: "src" });
+  assert.equal(fix.title, "Guardrail fix: fix on src");
+  assert.equal(fix.tags, "tool, auto-log, guardrails");
+  assert.deepEqual(fix.contextLines, ["Mode: fix", "Scope: src"]);
 });
 
 test("each arm names its default when the call carried no arguments", () => {
-  assert.equal(autoLogFields("rule_tool_scaffold", {}).title, "Scaffold: generate all files");
-  assert.deepEqual(autoLogFields("rule_tool_scaffold", {}).contextLines, ["Scaffold operation: generate", "File: all"]);
-
   const detect = autoLogFields("rule_tool_detect", {}, { content: [{ type: "text", text: "<html>" }] });
   assert.equal(detect.title, "Framework detection for .", "the path defaults to the working directory");
   assert.deepEqual(detect.contextLines, ["Path: .", "Detected framework: unknown"], "an unparseable result is unknown, not a crash");
 
-  assert.equal(autoLogFields("rule_tool_fix", {}).title, "File tree fix: lint on .");
+  assert.equal(autoLogFields("rule_tool_fix", {}).title, "Guardrail fix: lint on .");
 });
 
 test("any other tool gets the generic entry, with its arguments truncated", () => {

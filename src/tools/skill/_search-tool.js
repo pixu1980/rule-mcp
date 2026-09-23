@@ -6,7 +6,7 @@ import { z } from "zod/v4";
 import { registerTool } from "../router/index.js";
 
 /**
- * Register the pix_search tool for full-text search across ALL rule skills.
+ * Register the rule_tool_search tool for full-text search across ALL rule skills.
  */
 export function registerSearchTool() {
   // Lazy imports

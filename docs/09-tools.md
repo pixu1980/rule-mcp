@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Action tools (17)
+## Action tools (18)
 
 The tools that do something rather than serve a skill. Every one is
 deterministic: none of them calls a model, so the same arguments return the
@@ -20,6 +20,7 @@ same result behind any client.
 | [`rule_tool_check`](#pixtoolcheck)        | Run guardrail checks on code against any rule skill.                                                                                                                             |
 | [`rule_tool_detect`](#pixtooldetect)      | Detect project framework, TypeScript usage, and build tool from package.json.                                                                                                   |
 | [`rule_tool_compress`](#pixtoolcompress)  | Sole compression engine (ADR 115): preprocess enriched prompts/contexts and postprocess model prose.                                                                            |
+| [`rule_tool_fix`](#pixtoolfix)            | Apply deterministic guardrail fixes of every skill (blank lines, braces, ASCII typography, American spelling) to changed files or explicit list.                                |
 | [`rule_tool_init`](#pixtoolinit)          | Prepare project for rule-mcp: create central recorder directory under state dir, migrate leftover local.rule-mcp if present, and run tokensave init when installed. |
 | [`rule_tool_plan`](#pixtoolplan)          | Ask expert review persona to audit, review or plan this project; returns operation contract.                                                                                    |
 | [`rule_tool_audit`](#pixtoolaudit)        | Run audit as expert review persona; returns audit operation contract.                                                                                                           |
@@ -87,6 +88,17 @@ Sole compression engine (ADR 115): preprocess enriched prompts/contexts and post
 | `text`     | string                                   | yes      | -        | Prose to compress. Code fences, inline code, URLs and JSON pass through untouched                                                 |
 | `mode`     | `both` \| `compression` \| `fingerprint` | no       | `"both"` | both (default), compression (filler only), fingerprint (punctuation and spelling only)                                            |
 | `fileName` | string                                   | no       | -        | Where the prose came from, when it came from a file. A sensitive name (.env, credentials, id_rsa, anything under .ssh) is refused |
+
+### rule_tool_fix
+
+Apply deterministic guardrail fixes of every skill (blank lines, braces, ASCII typography, American spelling) to changed files or explicit list.
+
+| Parameter | Type            | Required | Default  | Description                                                                                           |
+| --------- | --------------- | -------- | -------- | ----------------------------------------------------------------------------------------------------- |
+| `files`   | array of string | no       | -        | Files to fix, relative to the project root. Default: the changed files (working tree plus untracked). |
+| `path`    | string          | no       | `"."`    | Only files under this prefix are touched (default: the whole project)                                 |
+| `mode`    | `lint` \| `fix` | no       | `"lint"` | lint: report what a fix would change. fix: write the deterministic fixes.                             |
+| `dryRun`  | boolean         | no       | -        | Preview even in fix mode                                                                              |
 
 ### rule_tool_init
 

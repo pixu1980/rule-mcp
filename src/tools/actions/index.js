@@ -8,6 +8,7 @@
  * rather than siblings of the tools barrel.
  */
 import { registerCompressTool } from "./_compress.js";
+import { registerFixTool } from "../fix/index.js";
 import { registerInitTool } from "./_init.js";
 import { registerPlanDocsTool } from "./_plan-docs.js";
 import { registerPlanTool } from "./_plan.js";
@@ -28,6 +29,7 @@ export * from "./_usage.js";
  */
 export function registerActionTools() {
   registerCompressTool();
+  registerFixTool();
   registerInitTool();
   registerPlanTool();
   registerPlanDocsTool();

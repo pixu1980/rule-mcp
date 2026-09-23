@@ -7,7 +7,7 @@ import { canonicalFilesDigest, openReceipt } from "./_receipts.js";
 /**
  * Validate a receipt against current code.
  *
- * @param {string} token - Receipt from pix_gateway
+ * @param {string} token - Receipt from rule_tool_gateway
  * @param {string} code - Code to validate against
  * @param {number} [now] - Injectable clock (ms) for deterministic testing
  * @returns {{ valid: boolean, allPass?: boolean, reason?: string }}
@@ -39,7 +39,7 @@ export function validateReceipt(token, code, now = Date.now()) {
 
 /**
  * Validate a receipt for an actual write, i.e. against the file set that
- * pix_apply is about to put on disk. This is the only validation the write
+ * rule_tool_apply is about to put on disk. This is the only validation the write
  * path uses; it accepts both bindings and states which one carried the proof.
  *
  * - "files"   receipt: the ordered (path, content) tuples must match exactly.
@@ -47,7 +47,7 @@ export function validateReceipt(token, code, now = Date.now()) {
  *   from a bare `code` string, which cannot describe more than one destination,
  *   so a multi-file write requires the path-bound flow.
  *
- * @param {string} token - Receipt from pix_gateway
+ * @param {string} token - Receipt from rule_tool_gateway
  * @param {Array<{ path: string, content: string }>} files - Files to be written
  * @param {number} [now] - Injectable clock (ms) for deterministic testing
  * @returns {{ valid: boolean, binding?: "files"|"content", allPass?: boolean, reason?: string }}
@@ -76,7 +76,7 @@ export function validateApply(token, files, now = Date.now()) {
       return {
         valid: false,
         binding: "content",
-        reason: "Content-only receipt cannot authorize a multi-file write - pass `files` to pix_gateway for a path-bound receipt",
+        reason: "Content-only receipt cannot authorize a multi-file write - pass `files` to rule_tool_gateway for a path-bound receipt",
       };
     }
 

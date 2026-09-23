@@ -99,7 +99,7 @@ test("a failing verdict renders every failure with and without file labels", () 
   assert.match(ui, /js-if-braces/, "a nameless failure still renders the rule id");
   assert.equal(receipt, null, "no receipt on failure");
   assert.equal(response.receipt_binding, undefined, "no binding without a receipt");
-  assert.match(ui, /Fix failures, then run pix_gateway/, "the next-steps hint asks for a recheck");
+  assert.match(ui, /Fix failures, then run rule_tool_gateway/, "the next-steps hint asks for a recheck");
 });
 
 test("an unrouteable core renders no evidence and a fallback check title", () => {
@@ -120,10 +120,10 @@ test("an unrouteable core renders no evidence and a fallback check title", () =>
 
 test("next tools dedupe and cap at five, with an empty tool list tolerated", () => {
   const core = (next, overrides = {}) => ({ ...fullCore(), routeNextTools: next, ...overrides });
-  const { response: withList } = renderGatewayReply(core(["pix_gateway", "pix_gateway", "pix_apply", "pix_search", "rule_tool_check", "rule_tool_render"]), {}, null, []);
+  const { response: withList } = renderGatewayReply(core(["rule_tool_gateway", "rule_tool_gateway", "rule_tool_apply", "rule_tool_search", "rule_tool_check", "rule_tool_render"]), {}, null, []);
   const { response: withoutList } = renderGatewayReply(core(), {}, null, []);
 
   assert.equal(withList.next_tools.length, 5, "the list is capped");
-  assert.deepEqual(withList.next_tools.slice(0, 2), ["pix_gateway", "pix_apply"], "duplicates collapse");
-  assert.ok(withoutList.next_tools.includes("pix_apply"), "a missing tool list still carries the defaults");
+  assert.deepEqual(withList.next_tools.slice(0, 2), ["rule_tool_gateway", "rule_tool_apply"], "duplicates collapse");
+  assert.ok(withoutList.next_tools.includes("rule_tool_apply"), "a missing tool list still carries the defaults");
 });

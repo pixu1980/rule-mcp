@@ -124,7 +124,7 @@ export function openReceipt(token, now) {
   if (now > entry.expiresAt) {
     receiptStore.delete(token);
 
-    return { error: "Receipt expired - re-run pix_gateway" };
+    return { error: "Receipt expired - re-run rule_tool_gateway" };
   }
 
   return { entry };

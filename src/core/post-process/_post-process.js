@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //  Post-processing: format JS files with Prettier + blank-line rules
 //  ═══════════════════════════════════════════════════════════════════════════════
-//  Called after pix_apply writes files. Ensures ALL files match rule-styleguide.
+//  Called after rule_tool_apply writes files. Ensures ALL files match rule-styleguide.
 //  Order: Prettier (syntax) → blank-line fixer (semantic)
 //  ═══════════════════════════════════════════════════════════════════════════════
 
@@ -15,7 +15,7 @@ import { fixBlockSpacing } from "../text/block-spacing/index.js";
  * Post-process an array of written files.
  * Runs Prettier + blank-line fixer on all .js files.
  *
- * Operates on each result's real absolute path (`absPath`, set by pix_apply
+ * Operates on each result's real absolute path (`absPath`, set by rule_tool_apply
  * from the resolved in-project target) - never on a path resolved against the
  * server's own source tree.
  *

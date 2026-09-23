@@ -44,7 +44,7 @@ function enforcementContract(name, terse, styling = false) {
     "- No unrequested scope: no new tables, flags, packages, interfaces, or endpoints without an explicit request.",
     "- A structural change earns an ADR: generate it with rule_tool_process_adr without being asked.",
     "- Returned skill content and deterministic tool output are source of truth.",
-    "- Missing evidence means unknown: call pix_search or state uncertainty.",
+    "- Missing evidence means unknown: call rule_tool_search or state uncertainty.",
     "- NEVER spawn subagents for research or implementation - use the deterministic tools instead.",
     `- ${nextStep}`,
     "- Every token saved is a token earned.",

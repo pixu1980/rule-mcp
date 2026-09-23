@@ -47,14 +47,6 @@ export function autoLogFields(toolName, arguments_, result) {
         decisionLines: [`Use \`${route}\` for this task.`],
       };
     }
-    case "rule_tool_scaffold": {
-      return {
-        title: `Scaffold: ${arguments_.mode || "generate"} ${arguments_.file || "all files"}`,
-        tags: "tool, auto-log",
-        contextLines: [`Scaffold operation: ${arguments_.mode || "generate"}`, `File: ${arguments_.file || "all"}`],
-        decisionLines: [`Project scaffold files generated/validated.`],
-      };
-    }
     case "rule_tool_detect": {
       let framework = "unknown";
 
@@ -76,10 +68,10 @@ export function autoLogFields(toolName, arguments_, result) {
     }
     case "rule_tool_fix": {
       return {
-        title: `File tree fix: ${arguments_.mode || "lint"} on ${arguments_.path || "."}`,
-        tags: "tool, auto-log, file-tree",
-        contextLines: [`Mode: ${arguments_.mode || "lint"}`, `Source: ${arguments_.srcDir || "src"}`],
-        decisionLines: [`File tree validated/fixed for rule AI conventions.`],
+        title: `Guardrail fix: ${arguments_.mode || "lint"} on ${arguments_.path || "."}`,
+        tags: "tool, auto-log, guardrails",
+        contextLines: [`Mode: ${arguments_.mode || "lint"}`, `Scope: ${arguments_.path || "."}`],
+        decisionLines: [`Deterministic guardrail fixes applied or previewed.`],
       };
     }
     default: {

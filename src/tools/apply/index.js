@@ -3,9 +3,9 @@
 /**
  * @module tools/apply
  *
- * pix_apply - The ONLY tool that writes files to disk.
+ * rule_tool_apply - The ONLY tool that writes files to disk.
  *
- * Requires a valid receipt from pix_gateway proving that
+ * Requires a valid receipt from rule_tool_gateway proving that
  * the exact code being written passed all guardrails.
  *
  * Input:  { files: [{ path, content }], receipt }
