@@ -51,13 +51,13 @@ Numbered docs are partly generated. `scripts/reports/census/index.mjs` refreshes
 blocks between `<!-- census:begin/end:<marker> -->` markers in the numbered
 docs and is wired into `prebuild`:
 
-- `docs/02-product-architecture.md` - tool-family counts
-- `docs/04-operations.md` - tools in detail, resources, review personas,
-  `.roo/commands` snapshot
-- `docs/03-agent-instructions.md` - the command surface and persona table
+- `docs/01-getting-started.md` - the install targets
+- `docs/02-architecture.md` - tool-family counts
 - `docs/05-env-variables.md` - the environment registry
+- `docs/07-engineering-guides.md` - the command surface
 
-`docs/README.md` is the index. ADRs in `docs/adr/` are immutable decision
+The remaining generated documents (`08` to `16`) are whole files, not blocks,
+and `docs/README.md` is the index. ADRs in `docs/adr/` are immutable decision
 records (a merger or a reversal writes a new ADR). A roadmap or plan never
 claims a numbered slot: it is deleted when fully executed or obsolete.
 `01-getting-started.md` is the first-run guide.

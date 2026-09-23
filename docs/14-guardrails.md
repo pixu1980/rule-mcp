@@ -40,3 +40,4 @@ the shared rules always, plus whatever that skill's area adds.
 - [12 - CLI](12-cli.md)
 - [13 - Personas](13-personas.md)
 - [15 - Resources](15-resources.md)
+- [16 - Surface map](16-surface-map.md)
