@@ -4,12 +4,12 @@
  * @module scripts/docs-site/serve - preview the built site locally.
  *
  * Serves the build.mjs output over HTTP (`pnpm docs:dev [port]`, first
- * free port from 3000 up). Builds first when the directory is missing,
- * so a fresh clone previews with one command.
+ * free port from 3000 up). Always rebuilds site-dist/ first so the preview
+ * mirrors the current Markdown handbook.
  */
 
 import { createServer } from "node:http";
-import { promises as fsp, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { createConnection } from "node:net";
 import { dirname, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -58,11 +58,9 @@ function serve(request, response) {
 
 const wanted = Number(process.argv[2] ?? 3000) || 3000;
 
-try {
-  await fsp.access(outDir);
-} catch {
-  buildSite({ outDir });
-}
+// Always rebuild so `pnpm docs:dev` reflects the current Markdown (titles,
+// chapters, ADR index) instead of serving a stale site-dist/.
+buildSite({ outDir });
 
 const port = await freePort(wanted);
 createServer(serve).listen(port, () => process.stdout.write(`docs-site: preview at http://localhost:${port}/\n`));
