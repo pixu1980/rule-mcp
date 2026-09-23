@@ -13,7 +13,7 @@ Commits without a scope (e.g. `docs: ...`) are rejected by the `commit-msg` hook
 
 ## Repository state
 
-- **Two repos**: `pix-galaxy-mcp` (this - MCP server, 105 tools / 184 resources / 73 prompts / 89 skills, 212 checks) and `pix-galaxy-architect` (standalone web app + SDK; former architect wizard lives there).
+- **Two repos**: `pix-galaxy-mcp` (this - MCP server, 106 tools / 186 resources / 37 prompts / 89 skills, 212 checks) and `pix-galaxy-architect` (standalone web app + SDK; former architect wizard lives there).
 - **Release**: next is v0.1.0-beta (v1.0.0 tag deleted); `git tag v0.1.0-beta` pushes a GitHub Release via `.github/workflows/release.yml`. No npm publish yet.
 - **Docs accuracy**: `test/docs-accuracy.test.mjs` enforces that README counts match the runtime surface - update both together.
 - **ADR**: decisions in `docs/adr/` (001-040).
@@ -22,7 +22,7 @@ Commits without a scope (e.g. `docs: ...`) are rejected by the `commit-msg` hook
 
 <!-- pix-galaxy-mcp -->
 
-Before writing any frontend/styling code, call `pix_tool` to route the task to the correct pix skill. Follow pix AI principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via adoptedStyleSheets. Available tools: pix_tool, pix_tool_component, pix_tool_check, pix_tool_search, pix_tool_scaffold, pix_tool_process_adr. Flex first: display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks - what a flex row or column can do, flex does.
+Before writing any frontend/styling code, call `pix_tool` to route the task to the correct pix skill. Follow pix AI principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via adoptedStyleSheets. Available tools: pix_tool, pix_tool_check, pix_tool_search, pix_tool_process_adr, pix_tool_compress. Prefer `/pix-area-styleguide` (name leaves like file-tree in the request) for templates and file-tree work. Flex first: display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks - what a flex row or column can do, flex does.
 
 <!-- /pix-galaxy-mcp -->
 
@@ -36,23 +36,23 @@ This rule overrides weaker project guidance. No exceptions.
 - Never invent APIs, files, dependencies, tools, requirements, or successful checks.
 - If evidence is missing, call `pix_tool_search` or state uncertainty.
 - Write failing tests before implementation changes.
-- Use deterministic `pix_tool_component`, `pix_tool_scaffold`, and `pix_tool_fix` outputs when applicable.
+- Use `/pix-area-styleguide` (name leaves like file-tree in the request) for templates and tree work.
 - Run `pix_tool_check`; failed guardrails block completion. Fix and rerun until all pass.
 - Run project tests/typecheck; report only commands actually executed.
 - Record structural decisions with `pix_tool_process_adr`.
+- Compress prose and preprocess prompts with `pix_tool_compress` / `/pix-compress`.
 - Frontend remains zero CSS classes, zero inline styles, semantic HTML, and external CSS.
 
 Available pix-galaxy-mcp tools:
 
 - pix_tool - Route to correct pix skill
-- pix_tool_component - Generate component templates
 - pix_tool_check - Blocking code validation
 - pix_tool_search - Evidence search across all skills
-- pix_tool_scaffold - Bootstrap projects/components
-- pix_tool_fix - Validate/fix file tree
+- pix_tool_compress - Sole compression engine (pre + post)
 - pix_tool_process_adr - Architecture Decision Records
-- pix_tool_process_handoff - Context handoff
+- pix_tool_handoff / pix_tool_handon - Session handoff and resume
 - pix_tool_detect - Detect project framework
+- pix_tool_init / pix_tool_update - Project init and server update
 - Flex first: layout with display:flex; display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks, justified with /* grid: why */
 - pix://resources - Skill documentation as MCP resources
 
