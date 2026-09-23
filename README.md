@@ -7,8 +7,8 @@
 <li><strong>89 skills</strong></li>
 <li><strong>106 tools</strong></li>
 <li><strong>186 resources</strong></li>
-<li><strong>75 prompts</strong></li>
-<li><strong>77 slash commands</strong></li>
+<li><strong>37 prompts</strong></li>
+<li><strong>39 slash commands</strong></li>
 </ul>
 <p data-part="cta"><a href="docs/01-getting-started.md">Get started</a> <a href="docs/README.md">Browse reference</a></p>
 </section>

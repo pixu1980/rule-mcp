@@ -11,19 +11,19 @@
       "file": "02-architecture.md",
       "kind": "block",
       "marker": "surface-counts",
-      "sha256": "2bb55b6776dace43166360cdc5c87c9ef1842b4fb8d15a6016a089ae99c9f6b6"
+      "sha256": "16f78f28fe5e2c76a212c27b57e56661bc8ae3914ec1c8072133173318243767"
     },
     {
       "file": "05-env-variables.md",
       "kind": "block",
       "marker": "env-registry",
-      "sha256": "64501c41967b2c0b0fdeb4962ca3e5e8cfd8e629bb0a071d9f4ce0fcba1da312"
+      "sha256": "e53450abf8b8b4f362e6895d2192803f1f3733dd8e3da70361c32849857aa1e2"
     },
     {
       "file": "07-engineering-guides.md",
       "kind": "block",
       "marker": "command-surface",
-      "sha256": "784fdc421e449e9a1c4915e653a1e66e214b75eb0dcef9d3e26913a795379934"
+      "sha256": "65c37304f756fe4a85f3b213a6313f6dcd5b9312da887ec185e2d1cb2e0a46d8"
     },
     {
       "file": "08-skills.md",
@@ -38,12 +38,12 @@
     {
       "file": "10-prompts.md",
       "kind": "document",
-      "sha256": "b00bf59ea0fdefd3b932b58eedc57734ace17d9f7bdd9afc1d80b386dfc55c0a"
+      "sha256": "a53bbfb165df51dae21da097acb745c3eb72713dbed57180057f4ff52f653913"
     },
     {
       "file": "11-instructions.md",
       "kind": "document",
-      "sha256": "dee63c619ca24bcdfba09a2db3ff3e1c8daf4646ee39a2247159cca94061368c"
+      "sha256": "53bddab2dc1defbd84dd2930eb04ed46a41edaa743b489eadfd94483715e7677"
     },
     {
       "file": "12-cli.md",
@@ -68,7 +68,7 @@
     {
       "file": "16-surface-map.md",
       "kind": "document",
-      "sha256": "74e4478032f7d483d50aae53c4ba0daaa646af7bc4912ed5bb679efc71a72a56"
+      "sha256": "c084ecbf57ded932330d161844010fd5a002ab834cd1ea3506badf57e4c29fdc"
     }
   ]
 }

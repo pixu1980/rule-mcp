@@ -20,7 +20,7 @@ every generated `/rule-*` command. Opt out with `RULE_MCP_NO_PROMPT_DIRECTIVE=1`
 ## Resuming a session
 
 `SessionStart` fires with `source: "resume"` when the user reopens the agent (`claude --resume`,
-`claude --continue`). If `docs/handoff/` holds a handoff, the hook runs `rule_tool_process_handon` and
+`claude --continue`). If `docs/handoff/` holds a handoff, the hook runs `rule_tool_handon` and
 injects the **verified** result before the first prompt: each claim from the handoff arrives labeled
 still true, changed, or unverified, so a merged branch or a landed ADR is not restated as fact.
 
