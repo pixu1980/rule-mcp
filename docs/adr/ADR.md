@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [121](121-the-install-reconciles-the-bundled-skills-when-the-step-is-not-selected.md)                                   | The install reconciles the bundled skills when the step is not selected                                   | 2026-09-23 | accepted   | installer, skills, commands                                                         |
 | [120](120-fold-the-per-operation-persona-commands-into-one-per-role-with-the-depth-read-fr.md)                          | Fold the per-operation persona commands into one per role, with the depth read from the request           | 2026-09-23 | accepted   | commands, personas, prompts, breaking                                               |
 | [119](119-close-out-audit-ui.md)                                                                                        | Close out audit ui                                                                                        | 2026-09-23 | accepted   | docs, closeout, audit                                                               |
 | [118](118-close-out-review-ui.md)                                                                                       | Close out review ui                                                                                       | 2026-09-23 | accepted   | docs, closeout, review                                                              |
@@ -136,6 +137,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [121](121-the-install-reconciles-the-bundled-skills-when-the-step-is-not-selected.md)                                   | 1. skills uninstall is a real CLI action, with --scope and --dry-run, that removes only the names the installer owns: the catalog skills plus the generated persona skills.                                                     | The skills choice becomes two-way, which is what the checkbox already promised.                                                                                                                                                 |
 | [120](120-fold-the-per-operation-persona-commands-into-one-per-role-with-the-depth-read-fr.md)                          | 1. One prompt, one slash command and one skill per role: rule-persona-<role> (57 to 19 on each surface). 2. The depth is read from the request by a single whole-token keyword module, core/review/roles/operation-intent,...    | The persona surface drops from 57 to 19 on all three surfaces (prompts 37, slash commands 39, README counts updated).                                                                                                           |
 | [119](119-close-out-audit-ui.md)                                                                                        | Fold the record into this ADR and the session handoff, then delete the source file.                                                                                                                                             | docs/audits/ui.md is gone from the tree; the handoff of this session names what it carried.                                                                                                                                     |
 | [118](118-close-out-review-ui.md)                                                                                       | Fold the record into this ADR and the session handoff, then delete the source file.                                                                                                                                             | docs/reviews/ui.md is gone from the tree; the handoff of this session names what it carried.                                                                                                                                    |
@@ -284,6 +286,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### installer
 
+- [121](121-the-install-reconciles-the-bundled-skills-when-the-step-is-not-selected.md) The install reconciles the bundled skills when the step is not selected
 - [105](105-opencode-gets-a-dedicated-installer-writing-its-own-config-shape.md) opencode gets a dedicated installer writing its own config shape
 - [102](102-reinstall-is-one-shell-script-behind-three-entry-points.md) Reinstall is one shell script behind three entry points
 - [101](101-accept-a-comma-separated-agent-list-in-agent-commands.md) Accept a comma-separated agent list in agent-commands
@@ -303,6 +306,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### skills
 
+- [121](121-the-install-reconciles-the-bundled-skills-when-the-step-is-not-selected.md) The install reconciles the bundled skills when the step is not selected
 - [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
 - [112](112-extend-the-file-size-cap-to-the-shipped-skill-trees.md) Extend the file-size cap to the shipped skill trees
 - [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
@@ -338,6 +342,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### commands
 
+- [121](121-the-install-reconciles-the-bundled-skills-when-the-step-is-not-selected.md) The install reconciles the bundled skills when the step is not selected
 - [120](120-fold-the-per-operation-persona-commands-into-one-per-role-with-the-depth-read-fr.md) Fold the per-operation persona commands into one per role, with the depth read from the request
 - [117](117-area-slash-commands-are-collectors-only-leaves-route-from-the-prompt.md) Area slash commands are collectors only; leaves route from the prompt
 - [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
