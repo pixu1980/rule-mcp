@@ -33,7 +33,7 @@ the package version from anywhere. An error exits 1 and prints to stderr;
 | [`doctor`](#pix-galaxy-mcp-doctor)                 | 4       | Run system health check                                                       |
 | [`adr`](#pix-galaxy-mcp-adr)                       | 5       | Create a new Architecture Decision Record (ADR)                               |
 | [`handoff`](#pix-galaxy-mcp-handoff)               | 7       | Generate a compressed LLM context handoff summary                             |
-| [`skills`](#pix-galaxy-mcp-skills)                 | 3       | Manage the pix AI skill system                                                |
+| [`skills`](#pix-galaxy-mcp-skills)                 | 4       | Manage the pix AI skill system                                                |
 | [`fix`](#pix-galaxy-mcp-fix)                       | 4       | Validate and auto-fix project file tree structure                             |
 | [`completions`](#pix-galaxy-mcp-completions)       | 1       | Generate shell auto-completion script                                         |
 | [`handon`](#pix-galaxy-mcp-handon)                 | 4       | Verify the last handoff against the repo now                                  |
@@ -332,7 +332,7 @@ pix-galaxy-mcp skills action
 
 | Argument | Default | Description |
 | -------- | ------- | ----------- |
-| `action` | -       | install \\  | list \\ | reload |
+| `action` | -       | install \\  | uninstall \\ | list \\ | reload |
 
 **Options**
 
@@ -340,6 +340,7 @@ pix-galaxy-mcp skills action
 | ------------- | ------- | ------- | ---------------------------------------------------------------- |
 | `--scope <s>` | global  | -       | global (default, ~/.agents/skills/) or project (.agents/skills/) |
 | `--all`       | -       | -       | pre-select all skills                                            |
+| `--dry-run`   | -       | -       | report what would be removed without removing it                 |
 | `--json`      | -       | -       | list as machine-readable JSON                                    |
 
 ## pix-galaxy-mcp fix

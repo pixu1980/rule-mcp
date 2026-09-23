@@ -11,11 +11,11 @@
  * uninstall that swept only the current one left the other two behind.
  */
 
-import { existsSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 
-import { getAvailableSkills } from "../skills-install/_catalog.js";
+import { isInstallerOwned } from "../skills-install/index.js";
 import { getSkillsDirs as getSkillsDirectories } from "../paths/index.js";
 
 /** Where Claude Code reads user skills from (mirrors skills-install/_native.js). */
@@ -25,12 +25,12 @@ const nativeSkillsDir = (home = homedir()) => join(home, ".claude", "skills");
 const legacyNativeDir = (home = homedir()) => join(home, ".claude");
 
 /** Catalog skills present at a target dir (mirrors old skills-install/_installed.js). */
-const installedSkills = (targetDir, names = getAvailableSkills().map((skill) => skill.name)) => {
+const installedSkills = (targetDir) => {
   if (!existsSync(targetDir)) {
     return [];
   }
 
-  return names.filter((name) => existsSync(join(targetDir, name, "SKILL.md")));
+  return readdirSync(targetDir).filter((entry) => isInstallerOwned(entry) && existsSync(join(targetDir, entry, "SKILL.md")));
 };
 
 /**
