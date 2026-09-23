@@ -70,8 +70,24 @@ test("a real sync writes the whole command set into the target", () => {
     written.every((name) => /^pix[-.]/.test(name)),
     `every file belongs to the pix namespace: ${written.join(", ")}`,
   );
-  assert.ok(written.includes("pix-persona-security-audit.md"), "a persona command is part of the set");
+  assert.ok(written.includes("pix-persona-security.md"), "a persona command is part of the set");
   assert.ok(written.includes("pix.md"), "so is the root routing command");
+});
+
+test("a normal sync purges the folded persona commands", () => {
+  const directory = claudeDir();
+
+  out(() => syncCommandTargets({ agent: "claude" }));
+  // A machine that ran the 57-command release still has the old files.
+  writeFileSync(join(directory, "pix-persona-security-audit.md"), "an older release\n");
+  writeFileSync(join(directory, "pix-persona-security-plan.md"), "an older release\n");
+
+  out(() => syncCommandTargets({ agent: "claude" }));
+
+  const written = readdirSync(directory);
+  assert.ok(written.includes("pix-persona-security.md"), "the current command is there");
+  assert.ok(!written.includes("pix-persona-security-audit.md"), "the old per-operation command is swept");
+  assert.ok(!written.includes("pix-persona-security-plan.md"), "including the plan sibling");
 });
 
 test("remove sweeps the whole pix namespace, including names the registry dropped", () => {
@@ -131,5 +147,5 @@ test("a comma-separated agent list writes every named agent", () => {
   assert.match(text, /across 2 directory/, "both named agents are covered in one call");
   assert.ok(readdirSync(claude).includes("pix.md"), "claude receives the router");
   assert.ok(readdirSync(pi).includes("pix.md"), "pi receives the router too");
-  assert.ok(readdirSync(pi).includes("pix-persona-security-audit.md"), "and the rest of the clean set");
+  assert.ok(readdirSync(pi).includes("pix-persona-security.md"), "and the rest of the clean set");
 });

@@ -1,11 +1,12 @@
 // SPDX-FileCopyrightText: 2025-2026 pixu1980
 // SPDX-License-Identifier: MIT
 /**
- * Persona skill generation: one SKILL.md per active role and operation, with
- * `exposeTool: false` so the tool surface is unchanged.
+ * Persona skill generation: one SKILL.md per active role, with
+ * `exposeTool: false` so the tool surface is unchanged. The depth of the run is
+ * read from the request, so the per-operation skills are gone (ADR 120).
  */
 import { strict as assert } from "node:assert";
-import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -14,19 +15,41 @@ import { generatePersonaSkills } from "../_personas.js";
 
 const ROLE = { id: "architect", role: "Software Architect", yearsOfExperience: 30 };
 
-test("generatePersonaSkills writes one skill per role and operation", () => {
+test("generatePersonaSkills writes one skill per role", () => {
   const dir = mkdtempSync(join(tmpdir(), "pix-persona-skills-"));
 
   try {
-    const written = generatePersonaSkills(dir, { roles: [ROLE], operations: ["plan", "audit", "review"] });
+    const written = generatePersonaSkills(dir, { roles: [ROLE] });
 
-    assert.deepEqual(written, ["pix-persona-architect-plan", "pix-persona-architect-audit", "pix-persona-architect-review"]);
+    assert.deepEqual(written, ["pix-persona-architect"]);
 
-    const content = readFileSync(join(dir, "pix-persona-architect-audit/SKILL.md"), "utf8");
+    const content = readFileSync(join(dir, "pix-persona-architect/SKILL.md"), "utf8");
 
-    assert.match(content, /^name: pix-persona-architect-audit$/m, "the skill name is the operation and role");
+    assert.match(content, /^name: pix-persona-architect$/m, "the skill name is the role");
     assert.match(content, /exposeTool: false/, "a persona skill never mints a tool");
-    assert.match(content, /pix_tool_audit/, "the audit skill points at the audit tool");
+    assert.match(content, /pix_tool_plan/, "the skill points at the composable operation tool");
+    assert.match(content, /operation: "plan"/, "the depth intent reaches the skill");
+    assert.match(content, /operation: "audit"/, "the audit fallback reaches the skill");
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("generatePersonaSkills purges the per-operation and legacy names", () => {
+  const dir = mkdtempSync(join(tmpdir(), "pix-persona-skills-"));
+
+  try {
+    for (const stale of ["pix-persona-architect-audit", "pix-persona-architect-plan", "pix-plan-architect"]) {
+      mkdirSync(join(dir, stale), { recursive: true });
+      writeFileSync(join(dir, stale, "SKILL.md"), "---\nname: stale\n---\n");
+    }
+
+    generatePersonaSkills(dir, { roles: [ROLE] });
+
+    for (const stale of ["pix-persona-architect-audit", "pix-persona-architect-plan", "pix-plan-architect"]) {
+      assert.equal(existsSync(join(dir, stale)), false, `${stale} must not survive the fold`);
+    }
+    assert.ok(existsSync(join(dir, "pix-persona-architect")), "the current skill is written");
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -36,10 +59,10 @@ test("generatePersonaSkills dry-run writes nothing", () => {
   const dir = mkdtempSync(join(tmpdir(), "pix-persona-skills-"));
 
   try {
-    const written = generatePersonaSkills(dir, { roles: [ROLE], operations: ["plan"], dryRun: true });
+    const written = generatePersonaSkills(dir, { roles: [ROLE], dryRun: true });
 
-    assert.deepEqual(written, ["pix-persona-architect-plan"]);
-    assert.equal(existsSync(join(dir, "pix-persona-architect-plan")), false);
+    assert.deepEqual(written, ["pix-persona-architect"]);
+    assert.equal(existsSync(join(dir, "pix-persona-architect")), false);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

@@ -7,9 +7,9 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## MCP prompts (75)
+## MCP prompts (37)
 
-18 reusable prompts, plus 57 generated from the persona registry.
+18 reusable prompts, plus 19 generated from the persona registry.
 Claude Code installs clean `/pix-*` commands instead and suppresses these
 (ADR 029), so the two names are deliberately the same.
 
@@ -36,33 +36,34 @@ Claude Code installs clean `/pix-*` commands instead and suppresses these
 | `/pix-update`          | [options] | Apply an available server update explicitly, and report what changed                                                                                      |
 | `/pix-usage`           | [options] | Declare a usage sidecar via pix_tool_usage when no transcript is available                                                                                |
 
-### Persona, one per role and operation
+### Persona, one per role
 
-An operation is a suffix of the persona command (ADR 113): `pix-persona-<role>-audit`
-writes `docs/audits/` and stops, `-review` adds `docs/reviews/`, `-plan` adds
-`docs/plans/`. Each takes an optional free-text `request` naming the focus for the run.
+One command per role (ADR 120). The depth of the run is read from the request: naming a
+review runs the audit and the review, naming a plan runs the audit, the review and the plan,
+and anything else runs the audit alone. Each takes an optional free-text `topic` naming the
+focus for the run.
 
-| Role           | plan                             | audit                             | review                             |
-| -------------- | -------------------------------- | --------------------------------- | ---------------------------------- |
-| `a11y`         | `/pix-persona-a11y-plan`         | `/pix-persona-a11y-audit`         | `/pix-persona-a11y-review`         |
-| `ai`           | `/pix-persona-ai-plan`           | `/pix-persona-ai-audit`           | `/pix-persona-ai-review`           |
-| `architect`    | `/pix-persona-architect-plan`    | `/pix-persona-architect-audit`    | `/pix-persona-architect-review`    |
-| `auth`         | `/pix-persona-auth-plan`         | `/pix-persona-auth-audit`         | `/pix-persona-auth-review`         |
-| `backend`      | `/pix-persona-backend-plan`      | `/pix-persona-backend-audit`      | `/pix-persona-backend-review`      |
-| `data`         | `/pix-persona-data-plan`         | `/pix-persona-data-audit`         | `/pix-persona-data-review`         |
-| `devops`       | `/pix-persona-devops-plan`       | `/pix-persona-devops-audit`       | `/pix-persona-devops-review`       |
-| `devx`         | `/pix-persona-devx-plan`         | `/pix-persona-devx-audit`         | `/pix-persona-devx-review`         |
-| `docs`         | `/pix-persona-docs-plan`         | `/pix-persona-docs-audit`         | `/pix-persona-docs-review`         |
-| `frontend`     | `/pix-persona-frontend-plan`     | `/pix-persona-frontend-audit`     | `/pix-persona-frontend-review`     |
-| `i18n`         | `/pix-persona-i18n-plan`         | `/pix-persona-i18n-audit`         | `/pix-persona-i18n-review`         |
-| `oss`          | `/pix-persona-oss-plan`          | `/pix-persona-oss-audit`          | `/pix-persona-oss-review`          |
-| `performance`  | `/pix-persona-performance-plan`  | `/pix-persona-performance-audit`  | `/pix-persona-performance-review`  |
-| `privacy`      | `/pix-persona-privacy-plan`      | `/pix-persona-privacy-audit`      | `/pix-persona-privacy-review`      |
-| `qa`           | `/pix-persona-qa-plan`           | `/pix-persona-qa-audit`           | `/pix-persona-qa-review`           |
-| `security`     | `/pix-persona-security-plan`     | `/pix-persona-security-audit`     | `/pix-persona-security-review`     |
-| `simplicity`   | `/pix-persona-simplicity-plan`   | `/pix-persona-simplicity-audit`   | `/pix-persona-simplicity-review`   |
-| `supply-chain` | `/pix-persona-supply-chain-plan` | `/pix-persona-supply-chain-audit` | `/pix-persona-supply-chain-review` |
-| `ui`           | `/pix-persona-ui-plan`           | `/pix-persona-ui-audit`           | `/pix-persona-ui-review`           |
+| Role           | Command                     |
+| -------------- | --------------------------- |
+| `a11y`         | `/pix-persona-a11y`         |
+| `ai`           | `/pix-persona-ai`           |
+| `architect`    | `/pix-persona-architect`    |
+| `auth`         | `/pix-persona-auth`         |
+| `backend`      | `/pix-persona-backend`      |
+| `data`         | `/pix-persona-data`         |
+| `devops`       | `/pix-persona-devops`       |
+| `devx`         | `/pix-persona-devx`         |
+| `docs`         | `/pix-persona-docs`         |
+| `frontend`     | `/pix-persona-frontend`     |
+| `i18n`         | `/pix-persona-i18n`         |
+| `oss`          | `/pix-persona-oss`          |
+| `performance`  | `/pix-persona-performance`  |
+| `privacy`      | `/pix-persona-privacy`      |
+| `qa`           | `/pix-persona-qa`           |
+| `security`     | `/pix-persona-security`     |
+| `simplicity`   | `/pix-persona-simplicity`   |
+| `supply-chain` | `/pix-persona-supply-chain` |
+| `ui`           | `/pix-persona-ui`           |
 
 ## The rest of the census
 
