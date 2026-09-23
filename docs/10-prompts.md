@@ -7,9 +7,9 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## MCP prompts (75)
+## MCP prompts (37)
 
-18 reusable prompts, plus 57 generated from the persona registry.
+18 reusable prompts, plus 19 generated from the persona registry.
 Claude Code installs clean `/rule-*` commands instead and suppresses these
 (ADR 029), so the two names are deliberately the same.
 
@@ -36,33 +36,34 @@ Claude Code installs clean `/rule-*` commands instead and suppresses these
 | `/rule-update`          | [options] | Apply an available server update explicitly, and report what changed                                                                                      |
 | `/rule-usage`           | [options] | Declare a usage sidecar via rule_tool_usage when no transcript is available                                                                                |
 
-### Persona, one per role and operation
+### Persona, one per role
 
-An operation is a suffix of the persona command (ADR 113): `rule-persona-<role>-audit`
-writes `docs/audits/` and stops, `-review` adds `docs/reviews/`, `-plan` adds
-`docs/plans/`. Each takes an optional free-text `request` naming the focus for the run.
+One command per role (ADR 120). The depth of the run is read from the request: naming a
+review runs the audit and the review, naming a plan runs the audit, the review and the plan,
+and anything else runs the audit alone. Each takes an optional free-text `topic` naming the
+focus for the run.
 
-| Role           | plan                             | audit                             | review                             |
-| -------------- | -------------------------------- | --------------------------------- | ---------------------------------- |
-| `a11y`         | `/rule-persona-a11y-plan`         | `/rule-persona-a11y-audit`         | `/rule-persona-a11y-review`         |
-| `ai`           | `/rule-persona-ai-plan`           | `/rule-persona-ai-audit`           | `/rule-persona-ai-review`           |
-| `architect`    | `/rule-persona-architect-plan`    | `/rule-persona-architect-audit`    | `/rule-persona-architect-review`    |
-| `auth`         | `/rule-persona-auth-plan`         | `/rule-persona-auth-audit`         | `/rule-persona-auth-review`         |
-| `backend`      | `/rule-persona-backend-plan`      | `/rule-persona-backend-audit`      | `/rule-persona-backend-review`      |
-| `data`         | `/rule-persona-data-plan`         | `/rule-persona-data-audit`         | `/rule-persona-data-review`         |
-| `devops`       | `/rule-persona-devops-plan`       | `/rule-persona-devops-audit`       | `/rule-persona-devops-review`       |
-| `devx`         | `/rule-persona-devx-plan`         | `/rule-persona-devx-audit`         | `/rule-persona-devx-review`         |
-| `docs`         | `/rule-persona-docs-plan`         | `/rule-persona-docs-audit`         | `/rule-persona-docs-review`         |
-| `frontend`     | `/rule-persona-frontend-plan`     | `/rule-persona-frontend-audit`     | `/rule-persona-frontend-review`     |
-| `i18n`         | `/rule-persona-i18n-plan`         | `/rule-persona-i18n-audit`         | `/rule-persona-i18n-review`         |
-| `oss`          | `/rule-persona-oss-plan`          | `/rule-persona-oss-audit`          | `/rule-persona-oss-review`          |
-| `performance`  | `/rule-persona-performance-plan`  | `/rule-persona-performance-audit`  | `/rule-persona-performance-review`  |
-| `privacy`      | `/rule-persona-privacy-plan`      | `/rule-persona-privacy-audit`      | `/rule-persona-privacy-review`      |
-| `qa`           | `/rule-persona-qa-plan`           | `/rule-persona-qa-audit`           | `/rule-persona-qa-review`           |
-| `security`     | `/rule-persona-security-plan`     | `/rule-persona-security-audit`     | `/rule-persona-security-review`     |
-| `simplicity`   | `/rule-persona-simplicity-plan`   | `/rule-persona-simplicity-audit`   | `/rule-persona-simplicity-review`   |
-| `supply-chain` | `/rule-persona-supply-chain-plan` | `/rule-persona-supply-chain-audit` | `/rule-persona-supply-chain-review` |
-| `ui`           | `/rule-persona-ui-plan`           | `/rule-persona-ui-audit`           | `/rule-persona-ui-review`           |
+| Role           | Command                     |
+| -------------- | --------------------------- |
+| `a11y`         | `/rule-persona-a11y`         |
+| `ai`           | `/rule-persona-ai`           |
+| `architect`    | `/rule-persona-architect`    |
+| `auth`         | `/rule-persona-auth`         |
+| `backend`      | `/rule-persona-backend`      |
+| `data`         | `/rule-persona-data`         |
+| `devops`       | `/rule-persona-devops`       |
+| `devx`         | `/rule-persona-devx`         |
+| `docs`         | `/rule-persona-docs`         |
+| `frontend`     | `/rule-persona-frontend`     |
+| `i18n`         | `/rule-persona-i18n`         |
+| `oss`          | `/rule-persona-oss`          |
+| `performance`  | `/rule-persona-performance`  |
+| `privacy`      | `/rule-persona-privacy`      |
+| `qa`           | `/rule-persona-qa`           |
+| `security`     | `/rule-persona-security`     |
+| `simplicity`   | `/rule-persona-simplicity`   |
+| `supply-chain` | `/rule-persona-supply-chain` |
+| `ui`           | `/rule-persona-ui`           |
 
 ## The rest of the census
 

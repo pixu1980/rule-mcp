@@ -28,7 +28,6 @@ export const { listTools } = await import("../../../src/tools/router/index.js");
 export const { listResources } = await import("../../../src/resources/index.js");
 export const { listPrompts } = await import("../../../src/prompts/index.js");
 export const { allRoles, activeRoles, parsePersonaCommand, personaCommandName } = await import("../../../src/core/review/roles/index.js");
-export const { OPERATIONS } = await import("../../../src/core/review/template/index.js");
 export const { commandNames, commandDefinition, listAgentCommands, ROUTER_COMMAND } = await import("../../../src/core/agents/commands/index.js");
 export const { listAreaPrompts } = await import("../../../src/prompts/_areas.js");
 export const { allAgents, remoteModeAgents } = await import("../../../src/cli/installers/_catalog.js");
@@ -41,15 +40,15 @@ const guardrails = await import("../../../src/core/guardrails/index.js");
 
 /**
  * The role a persona name addresses, or nothing when the name is not one.
- * Canonical form: `rule-persona-<role>-<operation>` (ADR 113).
+ * Canonical form: `rule-persona-<role>` (ADR 120).
  *
  * @param {string} name
- * @returns {{operation: string, role: string} | undefined}
+ * @returns {{role: string} | undefined}
  */
 export function parsePersonaName(name) {
   const found = parsePersonaCommand(name);
 
-  return found ? { operation: found.operation, role: found.roleId } : undefined;
+  return found ? { role: found.roleId } : undefined;
 }
 
 /** Every guardrail id, with the families that carry it. */

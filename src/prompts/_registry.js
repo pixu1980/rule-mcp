@@ -2,7 +2,6 @@
 
 /** The prompt registry: static definitions plus generated persona prompts. */
 import { activeRoles, personaCommandName } from "../core/review/roles/index.js";
-import { OPERATIONS } from "../core/review/template/index.js";
 import { PROMPT_DEFS } from "./_defs.data.js";
 import { listAreaPrompts } from "./_areas.js";
 
@@ -19,33 +18,30 @@ export function listPrompts() {
 }
 
 /**
- * One prompt per active review persona per operation, generated from the
- * registry: `rule-persona-<role>-<operation>` - 57 persona commands for the
- * 19 active roles.
+ * One prompt per active review persona: `rule-persona-<role>` - 19 persona
+ * commands for the 19 active roles (ADR 120). The depth of the run (audit,
+ * audit+review, audit+review+plan) is read from the request, not from the
+ * command name; see `core/review/roles/operation-intent`.
  *
  * The names are shared with the agent commands on purpose: the command
  * generator derives its set from this registry, so a second name for the same
- * operation would be the drift ADR 028 removed.
+ * role would be the drift ADR 028 removed.
  *
  * @returns {Array<{ name: string, description: string, arguments: object[] }>}
  */
 function rolePrompts() {
-  const verb = { plan: "Plan", audit: "Audit", review: "Review" };
-
-  return activeRoles().flatMap((role) =>
-    OPERATIONS.map((operation) => ({
-      name: personaCommandName(role.id, operation),
-      description: `${verb[operation]} as a ${role.role} with ${role.yearsOfExperience} years of experience`,
-      arguments: [
-        {
-          name: "topic",
-          description:
-            "Extra request for this run (free text: what to audit/review/plan, e.g. a component, a directory, a concern). It becomes the binding scope of the run. Default: the whole project.",
-          required: false,
-        },
-      ],
-    })),
-  );
+  return activeRoles().map((role) => ({
+    name: personaCommandName(role.id),
+    description: `Audit, review and plan as a ${role.role} with ${role.yearsOfExperience} years of experience - the request decides how deep the run goes`,
+    arguments: [
+      {
+        name: "topic",
+        description:
+          "Free-text request for this run (what to look at, e.g. a component, a directory, a concern). Naming a review or a plan in it raises the run to audit+review or audit+review+plan; default: audit only, over the whole project.",
+        required: false,
+      },
+    ],
+  }));
 }
 
 /**

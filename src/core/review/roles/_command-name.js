@@ -3,49 +3,36 @@
 /**
  * @module core/review/roles/command-name
  *
- * Canonical slash-command / prompt names for review personas.
- * Format: `rule-persona-<roleId>-<operation>` (operation is plan|audit|review).
+ * Canonical slash-command / prompt name for a review persona: one command per
+ * role, `rule-persona-<roleId>`. The operation is no longer part of the name;
+ * it is decided from the request (ADR 120, see `./_operation-intent.js`).
  */
 
-import { OPERATIONS } from "../template/_operation.js";
-
-const OPERATIONS_SET = new Set(OPERATIONS);
+const PREFIX = "rule-persona-";
 
 /**
- * The command/prompt name for one role and operation.
+ * The command/prompt name for one role.
  *
  * @param {string} roleId
- * @param {"plan"|"audit"|"review"} operation
  * @returns {string}
  */
-export function personaCommandName(roleId, operation) {
-  return `rule-persona-${roleId}-${operation}`;
+export function personaCommandName(roleId) {
+  return `${PREFIX}${roleId}`;
 }
 
 /**
- * Parse a persona command name into role id and operation.
+ * The role id in a persona command name: whatever follows the prefix, including
+ * a dash (`supply-chain`). Callers reject a name whose id is no active role.
  *
  * @param {string} name
- * @returns {{ roleId: string, operation: "plan"|"audit"|"review" }|null}
+ * @returns {{ roleId: string }|null}
  */
 export function parsePersonaCommand(name) {
-  if (typeof name !== "string" || !name.startsWith("rule-persona-")) {
+  if (typeof name !== "string" || !name.startsWith(PREFIX)) {
     return null;
   }
 
-  const rest = name.slice("rule-persona-".length);
-  const lastDash = rest.lastIndexOf("-");
+  const roleId = name.slice(PREFIX.length);
 
-  if (lastDash <= 0) {
-    return null;
-  }
-
-  const operation = rest.slice(lastDash + 1);
-  const roleId = rest.slice(0, lastDash);
-
-  if (!OPERATIONS_SET.has(operation) || roleId === "") {
-    return null;
-  }
-
-  return { roleId, operation };
+  return roleId === "" ? null : { roleId };
 }

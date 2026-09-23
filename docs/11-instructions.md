@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Agent slash commands (77)
+## Agent slash commands (39)
 
 The router `/rule` is pinned first; the rest follow in
 locale-alphabetical order. The same set is written for every agent and IDE,
@@ -52,7 +52,7 @@ which agents are installed and where their homes are.
 | `emacs`       | mcp.el exposes prompts directly; there is no command-file convention to write to.                                                                                      |
 | `devin`       | Devin runs commands in its own workspace runtime, not from local slash-command files; MCP prompts remain the entry point.                                              |
 
-### The kinds (77 commands)
+### The kinds (39 commands)
 
 | Kind       | Count | What it is for                                                  |
 | ---------- | ----- | --------------------------------------------------------------- |
@@ -60,7 +60,7 @@ which agents are installed and where their homes are.
 | `area`     | 11    | Area hub: free text routes to leaf skills/tools (ADR 117)       |
 | `workflow` | 1     | Runs a named workflow (e.g. /rule-check auto-detects guardrails) |
 | `session`  | 7     | Carries a session across a context boundary                     |
-| `persona`  | 57    | Runs one review role at one operation, and writes its documents |
+| `persona`  | 19    | Runs one review role at one operation, and writes its documents |
 
 **router**: `/rule`
 
@@ -70,7 +70,7 @@ which agents are installed and where their homes are.
 
 **session**: `/rule-compress`, `/rule-handoff`, `/rule-handon`, `/rule-init`, `/rule-stats`, `/rule-update`, `/rule-usage`
 
-The 57 persona commands are one per role and operation
+The 19 persona commands are one per role and operation
 ([`13-personas.md`](13-personas.md)).
 
 ## Hooks (3 entries across 3 events)

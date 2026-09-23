@@ -4,6 +4,7 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 import { EXPECTED, ONE_SHOT_PROMPTS, names, prompts } from "./_prompts.fixture.mjs";
+import { activeRoles } from "../../core/review/roles/index.js";
 
 test("names are unique and kebab-case", () => {
   assert.equal(new Set(names).size, names.length, "prompt names must be unique");
@@ -21,9 +22,10 @@ test("registry covers workflow, area, one-shot, and persona prompts", () => {
   for (const expected of [...EXPECTED, ...ONE_SHOT_PROMPTS]) {
     assert.ok(names.includes(expected), `missing prompt ${expected}`);
   }
-  // 1 workflow (handoff) + area prompts + 6 one-shot (compress/handon/init/stats/update/usage) + 57 personas.
-  // Flight is directive-only (ADR 114). process-handoff/compression areas removed (ADR 115).
-  assert.equal(names.length, EXPECTED.length + 63, "no unexpected prompts");
+  // 1 workflow (handoff) + area prompts + 6 one-shot (compress/handon/init/stats/update/usage)
+  // + one persona prompt per active role (ADR 120). Flight is directive-only (ADR 114).
+  // process-handoff/compression areas removed (ADR 115).
+  assert.equal(names.length, EXPECTED.length + ONE_SHOT_PROMPTS.length + activeRoles().length, "no unexpected prompts");
 });
 
 test("strict argument schema on every prompt", () => {

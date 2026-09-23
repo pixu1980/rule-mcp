@@ -2,7 +2,7 @@
 
 /** Resolve one prompt by name: help, persona, workflow, area or task. */
 import { HANDOFF_USAGE } from "./_handoff-options.js";
-import { roleById, parsePersonaCommand } from "../core/review/roles/index.js";
+import { operationForPrompt, roleById, parsePersonaCommand } from "../core/review/roles/index.js";
 import { fillRoleTemplate } from "../core/review/template/index.js";
 import { HELP_TOKENS, promptExamples, buildHelpMessage } from "./_help.js";
 import { listPrompts } from "./_registry.js";
@@ -39,17 +39,19 @@ export function getPrompt(name, args = {}) {
     };
   }
 
-  // ── Review personas: one prompt per active role and operation, filled from the registry ──
+  // ── Review personas: one prompt per active role, filled from the registry ──
   const parsed = parsePersonaCommand(name);
 
   if (parsed) {
-    const { operation, roleId } = parsed;
-    const role = roleById(roleId);
+    const role = roleById(parsed.roleId);
 
     if (role) {
+      const operation = operationForPrompt(args?.topic);
+      const label = { audit: "Audit", review: "Audit and review", plan: "Audit, review and plan" }[operation];
+
       return {
         name,
-        description: `${operation[0].toUpperCase() + operation.slice(1)} as a ${role.role}`,
+        description: `${label} as a ${role.role}`,
         messages: user(fillRoleTemplate(role, { operation, topic: args?.topic })),
       };
     }

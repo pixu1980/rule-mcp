@@ -45,6 +45,15 @@ function resolveScopeSection(tokensave) {
   ];
 }
 
+/** The commit subject that names the documents a depth produces. */
+function commitSubject(operation) {
+  if (operation === "audit") {
+    return "audit";
+  }
+
+  return operation === "review" ? "audit and review" : "audit, review and plan";
+}
+
 /**
  * Fill the template for one role and operation.
  *
@@ -98,6 +107,6 @@ export function fillRoleTemplate(role, overrides = {}) {
     "Where a decision belongs to the user, stop and ask instead of guessing.",
     "",
     "Finish by proposing a conventional commit with a mandatory scope for the documents this run wrote,",
-    `for example \`docs(${role.id}): ${operation === "all" ? "audit, review and plan" : operation}\`.`,
+    `for example \`docs(${role.id}): ${commitSubject(operation)}\`.`,
   ].join("\n");
 }

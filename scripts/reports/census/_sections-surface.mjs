@@ -9,7 +9,7 @@
 
 import { AREA_SUBJECT } from "./_areas.data.mjs";
 import { firstSentence, table, toolOf } from "./_format.mjs";
-import { COMMAND_TARGETS, HOOK_EVENTS, OPERATIONS, activeRoles, cliCommands, getSkillMetadata, personaCommandName } from "./_registries.mjs";
+import { COMMAND_TARGETS, HOOK_EVENTS, activeRoles, cliCommands, getSkillMetadata, personaCommandName } from "./_registries.mjs";
 
 /** The counted summary, and the one number that needs explaining. */
 export function summarySection(data) {
@@ -25,7 +25,7 @@ export function summarySection(data) {
         ["MCP resources", data.resources.length, "`src/resources/index.js`"],
         ["MCP prompts", data.prompts.length, "`src/prompts/index.js`"],
         ["- reusable", data.reusablePrompts.length, "workflow and area prompts"],
-        ["- persona", data.personaPrompts.length, `${activeRoles().length} active roles x ${OPERATIONS.length} operations`],
+        ["- persona", data.personaPrompts.length, `${activeRoles().length} active roles, one command each`],
         ["Skills", data.catalog.length, "`skills/rule-*/SKILL.md`"],
         ["Review personas", data.roles.length, "`src/core/review/roles/index.js`"],
         ["Guardrail rules", data.guardrailIds.size, "`src/core/guardrails/index.js`"],
@@ -95,15 +95,16 @@ export function promptSection(data) {
       ]),
     ),
     "",
-    "### Persona, one per role and operation",
+    "### Persona, one per role",
     "",
-    "An operation is a suffix of the persona command (ADR 113): `rule-persona-<role>-audit`",
-    "writes `docs/audits/` and stops, `-review` adds `docs/reviews/`, `-plan` adds",
-    "`docs/plans/`. Each takes an optional free-text `request` naming the focus for the run.",
+    "One command per role (ADR 120). The depth of the run is read from the request: naming a",
+    "review runs the audit and the review, naming a plan runs the audit, the review and the plan,",
+    "and anything else runs the audit alone. Each takes an optional free-text `topic` naming the",
+    "focus for the run.",
     "",
     ...table(
-      ["Role", ...OPERATIONS],
-      activeRoles().map((role) => [`\`${role.id}\``, ...OPERATIONS.map((operation) => `\`/${personaCommandName(role.id, operation)}\``)]),
+      ["Role", "Command"],
+      activeRoles().map((role) => [`\`${role.id}\``, `\`/${personaCommandName(role.id)}\``]),
     ),
     "",
   ];

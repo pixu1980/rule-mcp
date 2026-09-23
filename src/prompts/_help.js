@@ -9,10 +9,9 @@ export const HELP_TOKENS = new Set(["help", "--help", "-h"]);
 
 /**
  * Invocation examples for the help block. Area/workflow prompts carry
- * hand-written examples; persona prompts (`/rule-persona-*-plan`,
- * `/rule-persona-*-audit`, `/rule-persona-*-review`) get one generated per
- * operation so the help shows how the free-form request slots into the
- * command, exactly like the other prompts.
+ * hand-written examples; a persona prompt (`/rule-persona-<role>`) gets one
+ * generated set showing how the request slots into the command and how naming
+ * a review or a plan deepens the run.
  *
  * @param {string} name
  * @returns {string[]}
@@ -30,14 +29,12 @@ export function promptExamples(name) {
     return [];
   }
 
-  const operation = persona.operation;
-  const focus = {
-    plan: "fix the SSE daemon auth flow",
-    audit: "the /rule-handoff commit flow",
-    review: "the new checkout page",
-  }[operation];
-
-  return [`/${name} help`, `/${name} ${focus}`];
+  return [
+    `/${name} help`,
+    `/${name} the /rule-handoff commit flow`,
+    `/${name} review the new checkout page`,
+    `/${name} plan the SSE daemon auth fix`,
+  ];
 }
 
 /**
