@@ -73,6 +73,7 @@ export const guardrails = [
     description: "Code must use 2-space indentation.",
     check: (code) => {
       const twoSpaceIndent = code.match(/^(\s{2})[^\s]/gm);
+
       return {
         pass: !twoSpaceIndent || twoSpaceIndent.length === 0,
         failCount: twoSpaceIndent?.length || 0,

@@ -77,8 +77,8 @@ See `src/core/enforcement.js` for details.
 Every agent receives the same **registry-driven** clean command set - the `/pix` router pinned first, then one `/pix-*` command per MCP prompt in alphabetical order (`/pix-a11y-audit` ... `/pix-update`). Regenerate or list it with `pix-galaxy-mcp agent-commands`.
 
 - Pi, Claude Code, Gemini CLI, Cursor, Windsurf, Cline: `/pix <request>` plus the full `/pix-*` set.
-- Claude Code: the clean `/pix-*` commands replace the MCP prompts - the install sets `PIX_GALAXY_MCP_NO_PROMPTS=1`, so the prefixed `/pix-galaxy-mcp:… (MCP)` duplicates are hidden.
-- `/pix-handoff` also commits pending work as atomic, scoped conventional commits (plus one separate `docs(adr):`/`docs(handoff):` commit for pending decision docs), writes the generated handoff to `docs/handoff/<NN>-<slug>.md` and commits it alone as `chore(handoff): …`, and never pushes.
+- Claude Code: the clean `/pix-*` commands replace the MCP prompts - the install sets `PIX_GALAXY_MCP_NO_PROMPTS=1`, so the prefixed `/pix-galaxy-mcp:... (MCP)` duplicates are hidden.
+- `/pix-handoff` also commits pending work as atomic, scoped conventional commits (plus one separate `docs(adr):`/`docs(handoff):` commit for pending decision docs), writes the generated handoff to `docs/handoff/<NN>-<slug>.md` and commits it alone as `chore(handoff): ...`, and never pushes.
 - GitHub Copilot CLI: `/agent`, select `pix-galaxy-mcp`.
 - Codex CLI: invoke globally installed `pix` skill; exact custom prompt support varies by version.
 
