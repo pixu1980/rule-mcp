@@ -125,6 +125,32 @@ export default defineConfig([
     },
   },
   {
+    // Playwright specs: page.evaluate/addInitScript callbacks run in the
+    // browser, where document/window are globals rather than closure leaks.
+    files: ["tests/e2e/**/*.mjs"],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+      },
+    },
+    rules: {
+      "unicorn/isolated-functions": "off",
+    },
+  },
+  {
+    // Browser scripts shipped to the docs site are browser code, not node.
+    files: ["scripts/docs-site/prefs.js", "scripts/docs-site/transitions.js", "scripts/docs-site/architecture-diagram.js"],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        d3: "readonly",
+      },
+    },
+    rules: {
+      "unicorn/isolated-functions": "off",
+    },
+  },
+  {
     ignores: ["node_modules/", "dist/", "coverage/", ".tokensave/", ".git/", ".DS_Store"],
   },
 ]);
