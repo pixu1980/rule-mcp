@@ -1,28 +1,9 @@
 
 
-/** Tool registry state and hook management (before/post/after), plus register/clear/retain. */
-import { IS_MINIMAL_TOOLS, MINIMAL_ALLOWLIST } from "../../core/skills/_minimal.js";
+/** Hook registry (before/post/after) plus the tool registry's public surface. */
+import { resetTools } from "./_registry.js";
 
-/** The entries a tool may declare. */
-const ENTRIES = new Set(["router", "gateway", "skill", "action"]);
-
-const _tools = [];
-
-/**
- * Bumped by every mutation of the registry.
- *
- * `listTools()` converts 105 Zod schemas to JSON Schema, which costs ~8 ms and
- * produces the same answer until the registry changes. stdio spawns a process
- * per client, but a daemon serves many connects from one process and paid that
- * conversion on each of them. The counter is what makes the memo safe: a
- * register, clear or retain invalidates it by construction.
- */
-let _generation = 0;
-
-/** @returns {number} the current registry generation. */
-function toolsGeneration() {
-  return _generation;
-}
+export { registerTool, retainTools, toolsGeneration, _tools } from "./_registry.js";
 
 /** Mandatory before-tool hooks. Failures block execution. */
 const _beforeHooks = {};
@@ -75,78 +56,11 @@ function addAfterToolHook(toolName, fn) {
  * allow re-registration without duplicate entries.
  */
 function clearTools() {
-  _tools.length = 0;
-  _generation += 1;
+  resetTools();
 
   for (const key of Object.keys(_afterHooks)) {
     delete _afterHooks[key];
   }
 }
 
-/**
- * Retain only tools whose name is in `allowed`; drop the rest. Used by the
- * minimal tool-surface mode to guarantee a small, fixed registry regardless of
- * how many tools were registered upstream.
- *
- * @param {Set<string>|Iterable<string>} allowed
- */
-function retainTools(allowed) {
-  const keep = allowed instanceof Set ? allowed : new Set(allowed);
-
-  for (let index = _tools.length - 1; index >= 0; index--) {
-    if (!keep.has(_tools[index].name)) {
-      _tools.splice(index, 1);
-    }
-  }
-
-  _generation += 1;
-}
-
-/**
- * Register a tool definition.
- *
- * `entry` is required and declared rather than derived from the name, so a name
- * that no longer maps to a skill cannot silently classify as an action.
- *
- * In minimal mode a tool outside the allowlist is never registered at all, so
- * the surface is never built only to be cut down afterwards.
- *
- * @param {{
- *   name: string,
- *   entry: "router"|"gateway"|"skill"|"action",
- *   description: string,
- *   inputSchema?: object,
- *   zodSchema?: import("zod/v4").ZodObject<any>,
- *   handler: (args: object) => Promise<{ isError?: boolean, content: Array<{ type: string, text: string }> }>
- * }} tool
- */
-function registerTool(tool) {
-  if (!ENTRIES.has(tool.entry)) {
-    throw new Error(`registerTool(${tool.name}): entry must be one of ${[...ENTRIES].join(", ")}, got ${String(tool.entry)}`);
-  }
-
-  if (IS_MINIMAL_TOOLS && !MINIMAL_ALLOWLIST.has(tool.name)) {
-    return;
-  }
-
-  _tools.push(tool);
-  _generation += 1;
-}
-
-/** Tools that change something on disk or in the project. Everything else is a
- * read, so clients use readOnlyHint to skip a confirmation prompt. */
-
-export {
-  countAfterHooks,
-  addBeforeToolHook,
-  addPostToolHook,
-  addAfterToolHook,
-  clearTools,
-  retainTools,
-  registerTool,
-  toolsGeneration,
-  _tools,
-  _beforeHooks,
-  _postHooks,
-  _afterHooks,
-};
+export { countAfterHooks, addBeforeToolHook, addPostToolHook, addAfterToolHook, clearTools, _beforeHooks, _postHooks, _afterHooks };
