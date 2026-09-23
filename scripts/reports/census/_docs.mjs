@@ -17,6 +17,7 @@ import { cliSection } from "./_sections-cli.mjs";
 import { commandKindsSection } from "./_sections-commands.mjs";
 import { guardrailSection, personaSection, resourceSection } from "./_sections-quality.mjs";
 import { promptSection, skillCatalogSection } from "./_sections-surface.mjs";
+import { surfaceMapSection } from "./_sections-surface-map.mjs";
 import { actionToolSection, skillToolSection } from "./_sections-tools.mjs";
 
 /** Every generated document, in the order the numbers put them. */
@@ -29,6 +30,7 @@ const INDEX = [
   ["13-personas.md", "Personas"],
   ["14-guardrails.md", "Guardrails"],
   ["15-resources.md", "Resources"],
+  ["16-surface-map.md", "Surface map"],
 ];
 
 /**
@@ -82,4 +84,5 @@ export const GENERATED_DOCS = [
   doc("13-personas.md", "Personas", (data) => personaSection(data)),
   doc("14-guardrails.md", "Guardrails", (data) => guardrailSection(data)),
   doc("15-resources.md", "Resources", (data) => resourceSection(data)),
+  doc("16-surface-map.md", "Surface map", (data) => surfaceMapSection(data)),
 ];
