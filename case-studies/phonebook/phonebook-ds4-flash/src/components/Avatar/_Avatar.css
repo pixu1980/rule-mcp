@@ -1,0 +1,63 @@
+/**
+ * FILE: _Avatar.css
+ * USAGE: Avatar component — circular colored badge with initials.
+ * SCOPE: figure[data-part="avatar"] and children.
+ */
+
+/* ─── Base ─── */
+
+figure[data-part="avatar"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: var(--ds-radius-full);
+
+  transition: transform var(--ds-duration-fast) var(--ds-easing-spring);
+}
+
+figure[data-part="avatar"]:hover {
+  transform: scale(1.05);
+}
+
+/* ─── Sizes ─── */
+
+figure[data-part="avatar"][data-size="sm"] {
+  width: 3.2rem;
+  height: 3.2rem;
+}
+
+figure[data-part="avatar"][data-size="md"] {
+  width: 4.2rem;
+  height: 4.2rem;
+}
+
+figure[data-part="avatar"][data-size="lg"] {
+  width: 8.0rem;
+  height: 8.0rem;
+}
+
+/* ─── Initials ─── */
+
+[data-part="avatar-initials"] {
+  font-family: var(--ds-font-family-display);
+  font-weight: var(--ds-font-weight-semibold);
+  color: var(--ds-color-white);
+  line-height: 1;
+  text-align: center;
+  user-select: none;
+}
+
+figure[data-part="avatar"][data-size="sm"] [data-part="avatar-initials"] {
+  font-size: var(--ds-font-size-xs);
+}
+
+figure[data-part="avatar"][data-size="md"] [data-part="avatar-initials"] {
+  font-size: var(--ds-font-size-base);
+}
+
+figure[data-part="avatar"][data-size="lg"] [data-part="avatar-initials"] {
+  font-size: var(--ds-font-size-2xl);
+}

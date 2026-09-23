@@ -1,0 +1,42 @@
+[
+  {
+    "id": "0a0d516a-2bb0-48c4-9d2b-431a35c8010d",
+    "url": "https://css-tricks.com/css-random-function-polyfill/",
+    "title": "Let’s Use the Emergent CSS random() Function in all the Browsers | CSS-Tricks",
+    "description": "The journey to create a polyfill for the upcoming CSS random() function that works in all browsers.",
+    "ogImage": "https://i0.wp.com/css-tricks.com/wp-content/uploads/2026/08/random-stars-shuffle.webp",
+    "domain": "css-tricks.com",
+    "createdAt": "2026-09-23T16:13:18.107Z",
+    "updatedAt": "2026-09-23T16:13:18.107Z"
+  },
+  {
+    "id": "b8d70987-df18-4e82-b538-2ef8bf8a3161",
+    "url": "https://www.repubblica.it/cronaca/2026/07/23/news/bambino_morto_ospedale_catanzaro-425488544/?ref=RHLF-BG-P1-S1-T1-s2033",
+    "title": "Catanzaro, bambino di 18 mesi muore in ospedale, altri quattro ricoverati e cinque con sintomi lievi",
+    "description": "Frequentavano tutti lo stesso asilo di Tropea, sintomi forse riconducibili a un batterio. Tre sono stati dimessi, indaga la procura di Vibo Valentia",
+    "ogImage": "https://www.repstatic.it/content/nazionale/img/2026/07/23/134952844-ff4e3d65-5e4c-4deb-8c09-1dab9b6a469a.jpg",
+    "domain": "www.repubblica.it",
+    "createdAt": "2026-07-23T15:43:41.660Z",
+    "updatedAt": "2026-07-23T15:43:41.660Z"
+  },
+  {
+    "id": "63d5fcb3-e488-462b-a290-aaa429a3eb4f",
+    "url": "https://css-tricks.com/get-ready-for-the-powerful-css-border-shape-property/",
+    "title": "Get Ready For the Powerful CSS border-shape Property! | CSS-Tricks",
+    "description": "We recently got the shape() function and corner-shape property. What else could we possibly need as far as making shapes in CSS? Let me tell you: the border-shape property!",
+    "ogImage": "https://i0.wp.com/css-tricks.com/wp-content/uploads/2026/06/css-border-shape-examples.jpg",
+    "domain": "css-tricks.com",
+    "createdAt": "2026-07-11T14:57:19.420Z",
+    "updatedAt": "2026-07-11T14:57:19.420Z"
+  },
+  {
+    "id": "d42fe7dc-876b-49e9-943c-b82077aa0726",
+    "url": "https://ilfattoalimentare.it/ciclosporiasi-usa.html",
+    "title": "Ciclosporiasi: impennata di casi negli USA",
+    "description": "Almeno 19 Stati hanno registrato un numero di casi di ciclosporiasi superiore alla media: quasi mille solo in Michigan",
+    "ogImage": "https://ilfattoalimentare.it/wp-content/uploads/2021/12/infezioni-alimentari-dolore-pancia-stomaco-donna-Depositphotos_80092940_S.jpg",
+    "domain": "ilfattoalimentare.it",
+    "createdAt": "2026-07-11T14:56:56.877Z",
+    "updatedAt": "2026-07-11T14:56:56.877Z"
+  }
+]

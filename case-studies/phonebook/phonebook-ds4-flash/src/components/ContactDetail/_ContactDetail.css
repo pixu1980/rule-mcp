@@ -1,0 +1,164 @@
+/**
+ * FILE: _ContactDetail.css
+ * USAGE: Full contact detail view — header, fields, actions, footer.
+ * SCOPE: article[data-part="detail"] and children.
+ */
+
+/* ─── Container ─── */
+
+article[data-part="detail"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-7);
+
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: var(--ds-space-9) var(--ds-space-8);
+  padding-top: calc(var(--ds-space-9) + var(--ds-top-inset));
+
+  animation: fade-in-up var(--ds-duration-normal) var(--ds-easing-emphasized-decelerate) both;
+}
+
+/* ─── Header ─── */
+
+[data-part="detail-header"] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-6);
+}
+
+[data-part="detail-title-group"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+}
+
+[data-part="detail-name"] {
+  font-size: var(--ds-font-size-2xl);
+  font-weight: var(--ds-font-weight-bold);
+  letter-spacing: var(--ds-letter-spacing-tight);
+}
+
+[data-part="detail-category"] {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: var(--ds-space-1) var(--ds-space-4);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-medium);
+  border-radius: var(--ds-radius-full);
+}
+
+[data-part="detail-category"][data-category="friends"] {
+  color: #007AFF;
+  background: rgba(0, 122, 255, 0.1);
+}
+
+[data-part="detail-category"][data-category="family"] {
+  color: #FF9500;
+  background: rgba(255, 149, 0, 0.1);
+}
+
+[data-part="detail-category"][data-category="work"] {
+  color: #34C759;
+  background: rgba(52, 199, 89, 0.1);
+}
+
+/* ─── Actions ─── */
+
+[data-part="detail-actions"] {
+  display: flex;
+  gap: var(--ds-space-3);
+}
+
+[data-part="action-btn"] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+
+  padding: var(--ds-space-3) var(--ds-space-5);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-medium);
+  border-radius: var(--ds-radius-lg);
+  transition:
+    transform var(--ds-duration-fast) var(--ds-easing-spring),
+    background var(--ds-duration-fast) var(--ds-easing-standard);
+}
+
+[data-part="action-btn"][data-action="edit"] {
+  color: var(--ds-text-primary);
+  background: var(--ds-bg-tertiary);
+}
+
+[data-part="action-btn"][data-action="edit"]:hover {
+  background: var(--ds-gray-200);
+  transform: scale(1.03);
+}
+
+[data-part="action-btn"][data-action="delete"] {
+  color: var(--ds-danger);
+  background: var(--ds-red-50);
+}
+
+[data-part="action-btn"][data-action="delete"]:hover {
+  background: rgba(255, 59, 48, 0.15);
+  transform: scale(1.03);
+}
+
+[data-part="action-btn"]:active {
+  transform: scale(0.97);
+}
+
+/* ─── Fields ─── */
+
+[data-part="detail-fields"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-5);
+}
+
+[data-part="field"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+  padding: var(--ds-space-3) 0;
+  border-bottom: 0.1rem solid var(--ds-border-secondary);
+}
+
+[data-part="field-label"] {
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--ds-letter-spacing-wide);
+  color: var(--ds-text-secondary);
+}
+
+[data-part="field-value"] {
+  font-size: var(--ds-font-size-md);
+  color: var(--ds-text-primary);
+  word-break: break-word;
+}
+
+a[data-part="field-value"] {
+  color: var(--ds-text-link);
+  text-decoration: none;
+  transition: opacity var(--ds-duration-fast) var(--ds-easing-standard);
+}
+
+a[data-part="field-value"]:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* ─── Footer ─── */
+
+[data-part="detail-footer"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+  margin-top: var(--ds-space-4);
+}
+
+[data-part="detail-meta"] {
+  font-size: var(--ds-font-size-xs);
+  color: var(--ds-text-tertiary);
+}

@@ -1,0 +1,37 @@
+---
+title: Development
+---
+
+# Development
+
+## Requirements
+
+- Node 22 (`.nvmrc`)
+- pnpm 9+
+
+## Run locally
+
+```bash
+pnpm install
+pnpm dev
+```
+
+The web app runs on Vite’s default port `5173`; the API runs on `8787`. Set `VITE_API_URL` when the API is hosted elsewhere.
+
+## Quality gates
+
+```bash
+pnpm test
+pnpm type-check
+pnpm build
+pnpm lint
+```
+
+Tests follow red-green-refactor. Backend tests cover extraction, SSRF URL validation, health, pagination, and structured errors. Frontend tests cover the typed API boundary and the accessible capture shell.
+
+## Project structure
+
+- `apps/web` — React, Vite, React Hook Form, zod, external attribute-based CSS.
+- `apps/api` — Express 5, Helmet, CORS, pino, zod, Readability, JSDOM.
+- `docs/api/openapi.yaml` — versioned API contract.
+- `docs/adr` — architecture decisions recorded during development.

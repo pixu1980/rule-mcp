@@ -1,0 +1,45 @@
+/**
+ * @module components/Header/_Header
+ * App header with title and navigation.
+ */
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+header[data-part="app-header"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-bg-elevated);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+header[data-part="app-header"] [data-part="logo"] {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  color: var(--color-ink-primary);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+}
+
+header[data-part="app-header"] [data-part="logo-icon"] {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-accent);
+}
+
+header[data-part="app-header"] [data-part="bookmark-count"] {
+  font-size: var(--fs-sm);
+  color: var(--color-ink-secondary);
+  font-weight: var(--fw-normal);
+  font-family: var(--font-body);
+}

@@ -1,0 +1,143 @@
+/**
+ * FILE: _Sidebar.css
+ * USAGE: Sidebar panel — frosted glass effect, header, category nav, footer.
+ * SCOPE: aside[data-part="sidebar"] and its children.
+ */
+
+/* ─── Sidebar Container ─── */
+
+aside[data-part="sidebar"] {
+  --sidebar-pad: var(--ds-space-5);
+
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  width: var(--ds-sidebar-width);
+  min-width: var(--ds-sidebar-width);
+  height: 100vh;
+
+  background: var(--ds-bg-sidebar);
+  backdrop-filter: var(--ds-bg-sidebar-blur);
+  -webkit-backdrop-filter: var(--ds-bg-sidebar-blur);
+  border-right: 0.1rem solid var(--ds-border-secondary);
+
+  animation: slide-in-right var(--ds-duration-slow) var(--ds-easing-emphasized-decelerate) both;
+}
+
+/* ─── Header ─── */
+
+[data-part="sidebar-header"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+  padding: var(--ds-space-9) var(--sidebar-pad) var(--ds-space-5);
+  padding-top: calc(var(--ds-space-9) + var(--ds-top-inset));
+}
+
+[data-part="sidebar-title"] {
+  font-size: var(--ds-font-size-2xl);
+  font-weight: var(--ds-font-weight-bold);
+  letter-spacing: var(--ds-letter-spacing-tight);
+}
+
+[data-part="sidebar-count"] {
+  font-size: var(--ds-font-size-sm);
+  color: var(--ds-text-secondary);
+}
+
+/* ─── Category Nav ─── */
+
+[data-part="category-nav"] {
+  display: flex;
+  gap: var(--ds-space-2);
+  padding: 0 var(--sidebar-pad) var(--ds-space-4);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+[data-part="category-nav"]::-webkit-scrollbar {
+  display: none;
+}
+
+[data-part="category-chip"] {
+  padding: var(--ds-space-1) var(--ds-space-4);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-medium);
+  color: var(--ds-text-secondary);
+  background: transparent;
+  border-radius: var(--ds-radius-full);
+  transition: all var(--ds-duration-fast) var(--ds-easing-standard);
+  white-space: nowrap;
+}
+
+[data-part="category-chip"]:hover {
+  color: var(--ds-text-primary);
+  background: var(--ds-bg-hover);
+}
+
+[data-part="category-chip"][data-selected] {
+  color: var(--ds-text-inverse);
+  background: var(--ds-accent);
+}
+
+/* ─── List Container ─── */
+
+[data-part="list-container"] {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 var(--sidebar-pad) var(--ds-space-3);
+}
+
+[data-part="list-container"]::-webkit-scrollbar {
+  width: 0.4rem;
+}
+
+[data-part="list-container"]::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+[data-part="list-container"]::-webkit-scrollbar-thumb {
+  background: var(--ds-gray-300);
+  border-radius: var(--ds-radius-full);
+}
+
+/* ─── Footer ─── */
+
+[data-part="sidebar-footer"] {
+  padding: var(--ds-space-4) var(--sidebar-pad);
+  padding-bottom: calc(var(--ds-space-4) + env(safe-area-inset-bottom, 0px));
+  border-top: 0.1rem solid var(--ds-border-secondary);
+}
+
+[data-part="add-button"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-3);
+
+  width: 100%;
+  padding: var(--ds-space-3) var(--ds-space-5);
+
+  font-size: var(--ds-font-size-base);
+  font-weight: var(--ds-font-weight-medium);
+  color: var(--ds-text-inverse);
+  background: var(--ds-accent);
+  border-radius: var(--ds-radius-lg);
+
+  transition:
+    transform var(--ds-duration-fast) var(--ds-easing-spring),
+    background var(--ds-duration-fast) var(--ds-easing-standard);
+}
+
+[data-part="add-button"]:hover {
+  background: var(--ds-accent-hover);
+  transform: scale(1.02);
+}
+
+[data-part="add-button"]:active {
+  background: var(--ds-accent-active);
+  transform: scale(0.98);
+}

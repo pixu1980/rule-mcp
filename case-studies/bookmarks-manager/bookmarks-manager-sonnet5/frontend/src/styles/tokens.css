@@ -1,0 +1,143 @@
+/**
+ * FILE: tokens.css
+ * USAGE: Root design tokens for the bookmarks-manager design system —
+ *        color, typography, spacing, radii, elevation, motion, and
+ *        breakpoints. Every other stylesheet in the app reads from these
+ *        custom properties instead of hard-coding literal values.
+ * SCOPE: :root (global), plus a `prefers-color-scheme: dark` override.
+ */
+
+@layer base {
+  :root {
+    /* ─── Typographic scale ───
+       Modular scale, ratio 1.25 (major third), base 1rem = 16px.
+       Root font-size is 62.5% so 1rem == 10px, making the rem math
+       predictable while the body resets to 1.6rem (16px) for a11y. */
+    --font-family-display: -apple-system, "SF Pro Display", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+    --font-family-text: -apple-system, "SF Pro Text", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+    --font-family-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+    --font-size-xs: 1.28rem; /* 12.8px */
+    --font-size-sm: 1.44rem; /* 14.4px */
+    --font-size-base: 1.6rem; /* 16px — body text */
+    --font-size-md: 1.8rem; /* 18px */
+    --font-size-lg: 2rem; /* 20px */
+    --font-size-xl: 2.5rem; /* 25px */
+    --font-size-2xl: 3.13rem; /* ~31.3px */
+    --font-size-3xl: 3.9rem; /* ~39px */
+    --font-size-4xl: 4.88rem; /* ~48.8px — hero */
+
+    --line-height-tight: 1.1;
+    --line-height-snug: 1.3;
+    --line-height-base: 1.5;
+    --line-height-relaxed: 1.7;
+
+    --letter-spacing-tight: -0.02em;
+    --letter-spacing-normal: 0;
+    --letter-spacing-wide: 0.08em;
+    --letter-spacing-wider: 0.16em;
+
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* ─── Spacing scale ───
+       Geometric scale, base unit 0.4rem (4px), roughly ×1.6 growth so
+       proportions stay consistent from the tightest gap to page gutters. */
+    --space-3xs: 0.4rem; /* 4px */
+    --space-2xs: 0.8rem; /* 8px */
+    --space-xs: 1.2rem; /* 12px */
+    --space-sm: 1.6rem; /* 16px */
+    --space-md: 2.4rem; /* 24px */
+    --space-lg: 3.2rem; /* 32px */
+    --space-xl: 4.8rem; /* 48px */
+    --space-2xl: 6.4rem; /* 64px */
+    --space-3xl: 9.6rem; /* 96px */
+
+    /* ─── Radii scale ─── proportional to spacing, rounded family. */
+    --radius-sm: 0.8rem;
+    --radius-md: 1.2rem;
+    --radius-lg: 1.8rem;
+    --radius-xl: 2.4rem;
+    --radius-full: 999rem;
+
+    /* ─── Elevation scale ───
+       Soft, layered shadows (never a single hard drop-shadow) to match a
+       glass/frosted, depth-aware aesthetic. */
+    --elevation-0: none;
+    --elevation-1: 0 0.1rem 0.2rem rgba(15, 15, 20, 0.06), 0 0.1rem 0.3rem rgba(15, 15, 20, 0.08);
+    --elevation-2: 0 0.2rem 0.6rem rgba(15, 15, 20, 0.08), 0 0.4rem 1.2rem rgba(15, 15, 20, 0.1);
+    --elevation-3: 0 0.6rem 1.8rem rgba(15, 15, 20, 0.12), 0 1rem 3.2rem rgba(15, 15, 20, 0.14);
+    --elevation-4: 0 1.2rem 3.2rem rgba(15, 15, 20, 0.16), 0 2rem 6rem rgba(15, 15, 20, 0.2);
+    --elevation-focus: 0 0 0 0.4rem var(--color-focus-ring);
+
+    /* ─── Motion ───
+       Two durations (quick feedback, considered transition) and one
+       spring-flavored easing shared by every animated property. */
+    --motion-duration-fast: 140ms;
+    --motion-duration-base: 240ms;
+    --motion-duration-slow: 420ms;
+    --motion-easing-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --motion-easing-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+
+    /* ─── Color — dominant neutral palette + one sharp accent (oklch). ───
+       Numeric weights: lower = brighter, higher = darker. */
+    --color-neutral-0: oklch(100% 0 0);
+    --color-neutral-50: oklch(98.5% 0.003 240);
+    --color-neutral-100: oklch(96% 0.004 240);
+    --color-neutral-200: oklch(91% 0.006 240);
+    --color-neutral-300: oklch(83% 0.008 240);
+    --color-neutral-400: oklch(68% 0.012 240);
+    --color-neutral-500: oklch(54% 0.014 240);
+    --color-neutral-600: oklch(42% 0.016 240);
+    --color-neutral-700: oklch(30% 0.016 240);
+    --color-neutral-800: oklch(20% 0.014 240);
+    --color-neutral-900: oklch(13% 0.012 240);
+    --color-neutral-950: oklch(8% 0.01 240);
+
+    --color-accent-400: oklch(70% 0.16 258);
+    --color-accent-500: oklch(60% 0.19 258); /* borders, focus rings — not used for text-on-fill contrast */
+    --color-accent-600: oklch(50% 0.19 258); /* solid-fill buttons + link text: clears 4.5:1 on white/light canvas */
+    --color-accent-700: oklch(42% 0.18 258); /* hover/active state for solid-fill buttons */
+    --color-accent-contrast: oklch(99% 0 0);
+
+    --color-danger-500: oklch(55% 0.21 25);
+    --color-danger-600: oklch(46% 0.21 25);
+    --color-success-500: oklch(62% 0.15 152);
+
+    --color-canvas: var(--color-neutral-50);
+    --color-surface: var(--color-neutral-0);
+    --color-surface-sunken: var(--color-neutral-100);
+    --color-border: var(--color-neutral-200);
+    --color-border-strong: var(--color-neutral-300);
+    --color-ink: var(--color-neutral-900);
+    --color-ink-muted: var(--color-neutral-600);
+    --color-ink-subtle: var(--color-neutral-700); /* darkened from -400 to clear 4.5:1 on light canvas */
+    --color-focus-ring: color-mix(in oklch, var(--color-accent-500), transparent 55%);
+
+    /* ─── Layout ─── */
+    --content-max-width: 76rem;
+    --page-gutter: clamp(var(--space-md), 4vw, var(--space-2xl));
+  }
+
+  /* Dark theme: same structural tokens, inverted neutral ramp. Kept
+     minimal — only the tokens that must flip for legible contrast. */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-canvas: var(--color-neutral-950);
+      --color-surface: var(--color-neutral-900);
+      --color-surface-sunken: var(--color-neutral-800);
+      --color-border: var(--color-neutral-800);
+      --color-border-strong: var(--color-neutral-700);
+      --color-ink: var(--color-neutral-50);
+      --color-ink-muted: var(--color-neutral-300);
+      --color-ink-subtle: var(--color-neutral-400); /* lightened back up for contrast against dark canvas */
+
+      --elevation-1: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.3), 0 0.1rem 0.3rem rgba(0, 0, 0, 0.36);
+      --elevation-2: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.32), 0 0.4rem 1.2rem rgba(0, 0, 0, 0.4);
+      --elevation-3: 0 0.6rem 1.8rem rgba(0, 0, 0, 0.36), 0 1rem 3.2rem rgba(0, 0, 0, 0.44);
+      --elevation-4: 0 1.2rem 3.2rem rgba(0, 0, 0, 0.4), 0 2rem 6rem rgba(0, 0, 0, 0.5);
+    }
+  }
+}

@@ -1,0 +1,136 @@
+/**
+ * FILE: base.css
+ * USAGE: Global reset and base element styling shared by the whole app.
+ *        Defines the cascade layer order for the project and sets the
+ *        typographic root (see tokens.css for the rem-base rationale).
+ * SCOPE: html, body, and bare element defaults (headings, links, media,
+ *        form controls, focus rings).
+ */
+
+@layer base, components, utilities;
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  /* Root at 62.5% makes 1rem == 10px; body resets to 1.6rem == 16px, the
+     minimum accessible base body size. */
+  html {
+    font-size: 62.5%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    margin: 0;
+
+    color: var(--color-ink);
+    background-color: var(--color-canvas);
+
+    font-family: var(--font-family-text);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    margin: 0;
+    font-family: var(--font-family-display);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-tight);
+    line-height: var(--line-height-tight);
+  }
+
+  p {
+    margin: 0;
+    max-inline-size: 65ch; /* comfortable reading measure */
+  }
+
+  img,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  button,
+  input {
+    font: inherit;
+    color: inherit;
+  }
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  a {
+    color: var(--color-accent-600); /* darker than the -500 background accent to clear 4.5:1 text contrast on light canvas */
+  }
+
+  /* Never remove focus outlines — style them to match the design instead. */
+  :focus {
+    outline: none;
+  }
+
+  :focus-visible {
+    outline: 0.2rem solid var(--color-accent-500);
+    outline-offset: 0.2rem;
+    border-radius: var(--radius-sm);
+  }
+
+  [data-part="skip-link"] {
+    position: absolute;
+    top: -10rem;
+    left: var(--space-sm);
+    z-index: 100;
+
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+
+    color: var(--color-accent-contrast);
+    background: var(--color-accent-600); /* solid fill: needs 4.5:1 against white label text */
+
+    transition: top var(--motion-duration-base) var(--motion-easing-standard);
+  }
+
+  [data-part="skip-link"]:focus-visible {
+    top: var(--space-sm);
+  }
+
+}
+
+@layer utilities {
+  /* Visually hidden but still announced by assistive tech — used for live
+     region status announcements that have no permanent visual presence. */
+  [data-part="visually-hidden"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+@layer base {
+  /* Respect the user's reduced-motion preference everywhere. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

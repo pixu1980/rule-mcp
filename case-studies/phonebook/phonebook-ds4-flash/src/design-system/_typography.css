@@ -1,0 +1,51 @@
+/**
+ * FILE: _typography.css
+ * USAGE: Typographic styles — headings, body text, utility classes via data-part.
+ * SCOPE: Root-level typography tokens applied to body and semantic elements.
+ */
+
+body {
+  font-family: var(--ds-font-family-text);
+  font-size: var(--ds-font-size-base);
+  font-weight: var(--ds-font-weight-regular);
+  line-height: var(--ds-line-height-base);
+  color: var(--ds-text-primary);
+  letter-spacing: var(--ds-letter-spacing-base);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--ds-font-family-display);
+  font-weight: var(--ds-font-weight-semibold);
+  line-height: var(--ds-line-height-tight);
+  letter-spacing: var(--ds-letter-spacing-tight);
+  color: var(--ds-text-primary);
+}
+
+h1 { font-size: var(--ds-font-size-3xl); }
+h2 { font-size: var(--ds-font-size-2xl); }
+h3 { font-size: var(--ds-font-size-xl); }
+h4 { font-size: var(--ds-font-size-lg); }
+h5 { font-size: var(--ds-font-size-md); }
+h6 { font-size: var(--ds-font-size-base); }
+
+p, li {
+  max-inline-size: 60ch;
+}
+
+small, [data-part="caption"] {
+  font-size: var(--ds-font-size-sm);
+  color: var(--ds-text-secondary);
+}
+
+[data-part="label"] {
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--ds-letter-spacing-wide);
+  color: var(--ds-text-secondary);
+}
+
+code, pre {
+  font-family: var(--ds-font-family-mono);
+  font-size: 0.9em;
+}

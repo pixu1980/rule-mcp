@@ -1,0 +1,179 @@
+/**
+ * FILE: _BookmarkCard.css
+ * USAGE: Individual bookmark preview card — image, favicon/domain byline,
+ *        title, description, excerpt, and delete affordance.
+ * SCOPE: article[data-part="card"] and its children.
+ */
+
+@layer components {
+  article[data-part="card"] {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    border: 0.1rem solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: clip;
+
+    background: var(--color-surface);
+    box-shadow: var(--elevation-1);
+
+    transition:
+      transform var(--motion-duration-base) var(--motion-easing-standard),
+      box-shadow var(--motion-duration-base) var(--motion-easing-standard);
+
+    /* staged entry so cards cascade in rather than popping in all at once;
+       the actual per-card delay is staggered by the grid via :nth-child
+       (see _BookmarkGrid.css) so no inline style is needed here */
+    animation: card-enter var(--motion-duration-slow) var(--motion-easing-decelerate) both;
+  }
+
+  article[data-part="card"]:hover {
+    transform: translateY(-0.3rem);
+    box-shadow: var(--elevation-3);
+  }
+
+  article[data-part="card"]:focus-within {
+    box-shadow: var(--elevation-3), var(--elevation-focus);
+  }
+
+  figure[data-part="preview"] {
+    aspect-ratio: 1.9 / 1;
+    margin: 0;
+    background: var(--color-surface-sunken);
+  }
+
+  figure[data-part="preview"] img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  [data-part="body"] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+
+    padding: var(--space-md);
+  }
+
+  [data-part="byline"] {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  img[data-part="favicon"] {
+    border-radius: var(--radius-sm);
+  }
+
+  [data-part="domain"] {
+    color: var(--color-ink-subtle);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+  }
+
+  h2[data-part="title"] {
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-snug);
+  }
+
+  h2[data-part="title"] a {
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  /* keep color + underline together, never rely on color alone to signal a link */
+  h2[data-part="title"] a:hover,
+  h2[data-part="title"] a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+
+  [data-part="description"] {
+    color: var(--color-ink-muted);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-base);
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  [data-part="excerpt"] {
+    padding-top: var(--space-3xs);
+    border-top: 0.1rem dashed var(--color-border);
+
+    color: var(--color-ink-subtle);
+    font-size: var(--font-size-xs);
+    font-style: italic;
+    line-height: var(--line-height-relaxed);
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  button[data-part="delete"] {
+    position: absolute;
+    top: var(--space-xs);
+    right: var(--space-xs);
+    z-index: 1;
+
+    display: grid;
+    place-items: center;
+
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: var(--radius-full);
+
+    color: var(--color-neutral-0);
+    background: color-mix(in oklch, var(--color-neutral-900), transparent 35%);
+
+    opacity: 0;
+    transition:
+      opacity var(--motion-duration-fast) var(--motion-easing-standard),
+      background-color var(--motion-duration-fast) var(--motion-easing-standard),
+      transform var(--motion-duration-fast) var(--motion-easing-standard);
+  }
+
+  article[data-part="card"]:hover button[data-part="delete"],
+  article[data-part="card"]:focus-within button[data-part="delete"],
+  button[data-part="delete"]:focus-visible {
+    opacity: 1;
+  }
+
+  button[data-part="delete"]:hover {
+    background: var(--color-danger-500);
+    transform: scale(1.06);
+  }
+
+  @keyframes card-enter {
+    from {
+      opacity: 0;
+      transform: translateY(1.2rem) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    article[data-part="card"] {
+      animation: none;
+    }
+  }
+
+  /* touch devices have no hover — keep the delete action reachable */
+  @media (hover: none) {
+    button[data-part="delete"] {
+      opacity: 1;
+    }
+  }
+}

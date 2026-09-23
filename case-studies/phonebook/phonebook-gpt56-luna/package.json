@@ -1,0 +1,68 @@
+{
+  "name": "orbit-contacts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A refined Electron contact book built with React and rule-mcp standards.",
+  "main": "electron/main.cjs",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "dev:electron": "concurrently -k \"pnpm dev\" \"wait-on http://127.0.0.1:3000 && ELECTRON_RENDERER_URL=http://127.0.0.1:3000 electron .\"",
+    "build": "vite build",
+    "start": "electron .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:a11y": "playwright test tests/a11y",
+    "lint": "eslint .",
+    "check": "pnpm test && pnpm build"
+  },
+  "dependencies": {
+    "electron": "44.4.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.63.0",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@vitejs/plugin-react": "6.1.1",
+    "concurrently": "10.0.5",
+    "eslint": "10.11.0",
+    "jsdom": "30.1.1",
+    "vitest": "5.0.1",
+    "vite": "8.3.0",
+    "wait-on": "9.1.0"
+  },
+  "build": {
+    "appId": "com.rule-mcp.orbitcontacts",
+    "productName": "Orbit Contacts",
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "dist/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    }
+  }
+}

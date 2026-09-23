@@ -1,0 +1,15 @@
+{
+  "name": "bookmarks-manager-ds4-flash",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Full-stack bookmarks manager with React + Express/TypeScript",
+  "scripts": {
+    "dev": "pnpm -r --parallel run dev",
+    "dev:server": "pnpm --filter server run dev",
+    "dev:client": "pnpm --filter client run dev",
+    "build": "pnpm -r run build",
+    "lint": "pnpm -r run lint",
+    "type-check": "pnpm -r run type-check",
+    "test": "pnpm -r run test"
+  }
+}

@@ -1,0 +1,102 @@
+/* =============================================================================
+ * Sidebar — _Sidebar.css
+ * Fixed-width left panel: traffic-light area, header, search, filter, list.
+ * =============================================================================
+ */
+
+/* Panel */
+aside[data-part="sidebar"] {
+  width: var(--sidebar-width);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-subtle);
+  overflow: hidden;
+}
+
+/* ----------------------------------------------------------------------------
+ * macOS traffic-light drag region (hiddenInset titlebar)
+ * ---------------------------------------------------------------------------- */
+div[data-part="titlebar"] {
+  height: var(--titlebar-height);
+  flex-shrink: 0;
+  -webkit-app-region: drag;
+  /* Subtle gradient to blend into header */
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.02),
+    transparent
+  );
+}
+
+/* ----------------------------------------------------------------------------
+ * Header row — title + count badge + add button
+ * ---------------------------------------------------------------------------- */
+header[data-part="sidebar-header"] {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-4) var(--space-3);
+  gap: var(--space-2);
+}
+
+h1[data-part="sidebar-title"] {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-primary);
+  flex: 1;
+  line-height: var(--leading-none);
+}
+
+span[data-part="contact-count"] {
+  font-size: var(--text-2xs);
+  font-weight: var(--font-medium);
+  color: var(--text-tertiary);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  padding: 1px var(--space-1-5);
+  line-height: var(--leading-tight);
+}
+
+/* Add button */
+button[data-part="add-btn"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-md);
+  background: var(--accent-subtle);
+  color: var(--accent);
+  border: 1px solid var(--border-accent);
+  transition:
+    background var(--duration-fast) var(--ease-default),
+    transform var(--duration-fast) var(--ease-spring),
+    box-shadow var(--duration-fast) var(--ease-default);
+}
+
+button[data-part="add-btn"]:hover {
+  background: var(--accent-subtle-hover);
+  transform: scale(1.08);
+  box-shadow: var(--shadow-accent);
+}
+
+button[data-part="add-btn"]:active {
+  transform: scale(0.94);
+}
+
+button[data-part="add-btn"]:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+/* ----------------------------------------------------------------------------
+ * Scrollable list region
+ * ---------------------------------------------------------------------------- */
+div[data-part="list-scroll"] {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}

@@ -1,0 +1,83 @@
+/**
+ * FILE: _SearchBar.css
+ * USAGE: Search input with icon and clear button.
+ * SCOPE: search[data-part="search-bar"] and children.
+ */
+
+/* ─── Container ─── */
+
+search[data-part="search-bar"] {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  margin: 0 var(--sidebar-pad) var(--ds-space-3);
+  padding: var(--ds-space-1);
+  padding-left: var(--ds-space-4);
+
+  background: var(--ds-bg-tertiary);
+  border-radius: var(--ds-radius-xl);
+
+  transition:
+    box-shadow var(--ds-duration-fast) var(--ds-easing-standard),
+    background var(--ds-duration-fast) var(--ds-easing-standard);
+}
+
+search[data-part="search-bar"]:focus-within {
+  background: var(--ds-bg-secondary);
+  box-shadow: 0 0 0 0.2rem var(--ds-focus-ring);
+}
+
+/* ─── Icon ─── */
+
+[data-part="search-icon"] {
+  flex-shrink: 0;
+  color: var(--ds-text-tertiary);
+  margin-right: var(--ds-space-3);
+}
+
+/* ─── Input ─── */
+
+[data-part="search-input"] {
+  flex: 1;
+  min-width: 0;
+
+  padding: var(--ds-space-2) 0;
+
+  font-size: var(--ds-font-size-base);
+  color: var(--ds-text-primary);
+  background: transparent;
+}
+
+[data-part="search-input"]::placeholder {
+  color: var(--ds-text-tertiary);
+}
+
+[data-part="search-input"]::-webkit-search-decoration,
+[data-part="search-input"]::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* ─── Clear Button ─── */
+
+[data-part="search-clear"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 2.4rem;
+  height: 2.4rem;
+
+  color: var(--ds-text-tertiary);
+  border-radius: var(--ds-radius-full);
+
+  transition:
+    color var(--ds-duration-fast) var(--ds-easing-standard),
+    background var(--ds-duration-fast) var(--ds-easing-standard);
+}
+
+[data-part="search-clear"]:hover {
+  color: var(--ds-text-secondary);
+  background: var(--ds-bg-hover);
+}

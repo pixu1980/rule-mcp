@@ -1,0 +1,77 @@
+/**
+ * FILE: _Layout.css
+ * USAGE: Masthead, main content landmark, and footer chrome shared by the
+ *        whole single-page app.
+ * SCOPE: header[data-part="masthead"], main[data-part="content"],
+ *        footer[data-part="site-footer"].
+ */
+
+@layer components {
+  /* ─── Masthead ─── */
+
+  header[data-part="masthead"] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+
+    max-width: var(--content-max-width);
+    padding: var(--space-3xl) var(--page-gutter) var(--space-lg);
+    margin-inline: auto;
+
+    text-align: center;
+  }
+
+  [data-part="eyebrow"] {
+    color: var(--color-accent-600); /* darker than the -500 background accent to clear 4.5:1 text contrast */
+    font-family: var(--font-family-display);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-wider);
+    text-transform: uppercase;
+  }
+
+  header[data-part="masthead"] h1 {
+    font-size: var(--font-size-3xl);
+  }
+
+  [data-part="tagline"] {
+    color: var(--color-ink-muted);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-relaxed);
+    margin-inline: auto;
+  }
+
+  /* ─── Main landmark ─── */
+
+  main[data-part="content"] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+
+    max-width: var(--content-max-width);
+    padding: 0 var(--page-gutter) var(--space-3xl);
+    margin-inline: auto;
+  }
+
+  /* removes the default focus ring that would otherwise show a thick box
+     around the whole page every time the skip-link target is focused */
+  main[data-part="content"]:focus-visible {
+    outline: none;
+  }
+
+  /* ─── Footer ─── */
+
+  footer[data-part="site-footer"] {
+    padding: var(--space-lg) var(--page-gutter) var(--space-2xl);
+
+    color: var(--color-ink-subtle);
+    font-size: var(--font-size-xs);
+    text-align: center;
+  }
+
+  @media (width >= 640px) {
+    header[data-part="masthead"] h1 {
+      font-size: var(--font-size-4xl);
+    }
+  }
+}

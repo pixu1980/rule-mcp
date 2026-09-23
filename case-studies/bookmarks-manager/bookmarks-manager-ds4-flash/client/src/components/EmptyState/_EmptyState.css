@@ -1,0 +1,35 @@
+/**
+ * @module components/EmptyState/_EmptyState
+ * Empty state with illustration and message.
+ */
+
+section[data-part="empty-state"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-16) var(--space-6);
+  gap: var(--space-4);
+}
+
+[data-part="empty-icon"] {
+  width: 3rem;
+  height: 3rem;
+  color: var(--color-ink-tertiary);
+  opacity: 0.5;
+}
+
+[data-part="empty-title"] {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  color: var(--color-ink-primary);
+}
+
+[data-part="empty-text"] {
+  font-size: var(--fs-sm);
+  color: var(--color-ink-secondary);
+  max-width: 24rem;
+  line-height: var(--lh-relaxed);
+}

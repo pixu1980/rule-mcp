@@ -19,6 +19,7 @@
   },
   "scripts": {
     "dev": "node ./bin/rule-mcp.js serve",
+    "case-studies": "node scripts/case-studies/index.mjs",
     "docs:dev": "node scripts/docs-site/serve.mjs",
     "docs:build": "node scripts/docs-site/build.mjs",
     "dev:sse": "node ./bin/rule-mcp.js serve --transport sse",

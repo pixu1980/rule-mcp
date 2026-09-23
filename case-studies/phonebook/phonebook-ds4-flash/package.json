@@ -1,0 +1,64 @@
+{
+  "name": "phonebook-ds4-flash",
+  "version": "1.0.0",
+  "description": "Rubrica elettronica con design system Apple-inspired — rule-mcp standards",
+  "main": "electron/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "electron:dev": "vite build && electron .",
+    "electron:start": "electron ."
+  },
+  "keywords": [
+    "phonebook",
+    "contacts",
+    "electron",
+    "react",
+    "design-system"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "6.1.1",
+    "electron": "44.4.5",
+    "vite": "8.3.0"
+  },
+  "build": {
+    "appId": "com.rule-mcp.phonebook-ds4-flash",
+    "productName": "PhoneBook DS4",
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "dist/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm"
+      ]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "bookmarks-manager",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Bookmarks manager monorepo: React frontend + Express/TypeScript backend with automatic link scraping, OG metadata extraction and text preview.",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "pnpm --parallel --filter ./frontend --filter ./backend dev",
+    "dev:frontend": "pnpm --filter ./frontend dev",
+    "dev:backend": "pnpm --filter ./backend dev",
+    "build": "pnpm --filter ./backend build && pnpm --filter ./frontend build",
+    "test": "pnpm --filter ./frontend test && pnpm --filter ./backend test",
+    "lint": "pnpm --filter ./frontend lint && pnpm --filter ./backend lint"
+  }
+}

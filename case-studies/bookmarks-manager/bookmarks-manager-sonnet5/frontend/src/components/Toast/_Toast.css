@@ -1,0 +1,73 @@
+/**
+ * FILE: _Toast.css
+ * USAGE: Transient status/error banner shown above the bookmark grid.
+ * SCOPE: section[data-part="toast"] and its children.
+ */
+
+@layer components {
+  section[data-part="toast"] {
+    --toast--accent: var(--color-danger-500);
+    --toast--background: color-mix(in oklch, var(--color-danger-500), white 92%);
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+
+    padding: var(--space-sm) var(--space-md);
+    border: 0.1rem solid color-mix(in oklch, var(--toast--accent), transparent 60%);
+    border-radius: var(--radius-md);
+
+    color: var(--color-ink);
+    background: var(--toast--background);
+    box-shadow: var(--elevation-1);
+
+    /* staged entry: the one memorable motion moment for feedback */
+    animation: toast-enter var(--motion-duration-slow) var(--motion-easing-decelerate) both;
+  }
+
+  section[data-part="toast"][data-tone="info"] {
+    --toast--accent: var(--color-success-500);
+    --toast--background: color-mix(in oklch, var(--color-success-500), white 92%);
+  }
+
+  [data-part="message"] {
+    flex: 1;
+    color: var(--color-ink);
+    font-size: var(--font-size-sm);
+  }
+
+  button[data-part="dismiss"] {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: var(--radius-full);
+
+    color: var(--toast--accent);
+
+    transition: background-color var(--motion-duration-fast) var(--motion-easing-standard);
+  }
+
+  button[data-part="dismiss"]:hover {
+    background-color: color-mix(in oklch, var(--toast--accent), transparent 88%);
+  }
+
+  @keyframes toast-enter {
+    from {
+      opacity: 0;
+      transform: translateY(-0.6rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    section[data-part="toast"] {
+      animation: none;
+    }
+  }
+}

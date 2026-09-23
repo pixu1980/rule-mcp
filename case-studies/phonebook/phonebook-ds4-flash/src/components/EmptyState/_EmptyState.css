@@ -1,0 +1,47 @@
+/**
+ * FILE: _EmptyState.css
+ * USAGE: Empty state placeholder — icon, title, description.
+ * SCOPE: section[data-part="empty-state"] and children.
+ */
+
+/* ─── Container ─── */
+
+section[data-part="empty-state"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-5);
+
+  height: 100%;
+  padding: var(--ds-space-8);
+
+  color: var(--ds-text-tertiary);
+
+  animation: fade-in var(--ds-duration-slow) var(--ds-easing-standard) both;
+}
+
+/* ─── Icon ─── */
+
+[data-part="empty-icon"] {
+  opacity: 0.4;
+  margin-bottom: var(--ds-space-3);
+
+  animation: pulse-subtle 3s var(--ds-easing-standard) infinite;
+}
+
+/* ─── Text ─── */
+
+[data-part="empty-title"] {
+  font-size: var(--ds-font-size-xl);
+  font-weight: var(--ds-font-weight-semibold);
+  color: var(--ds-text-secondary);
+  text-align: center;
+}
+
+[data-part="empty-description"] {
+  font-size: var(--ds-font-size-base);
+  color: var(--ds-text-tertiary);
+  text-align: center;
+  max-width: 28rem;
+}

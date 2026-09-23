@@ -1,0 +1,95 @@
+/* =============================================================================
+ * ContactCard — _ContactCard.css
+ * Compact contact row for the sidebar list.
+ * Selected: accent left border + tinted background.
+ * Hover: gentle translateX and background shift.
+ * =============================================================================
+ */
+
+/* Row wrapper */
+button[data-part="contact-card"] {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  width: 100%;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-lg);
+  border-left: 2.5px solid transparent;
+  background: transparent;
+  text-align: left;
+  cursor: default;
+  position: relative;
+  transition:
+    background var(--duration-fast) var(--ease-default),
+    border-color var(--duration-fast) var(--ease-default),
+    transform var(--duration-normal) var(--ease-spring);
+}
+
+button[data-part="contact-card"]:hover {
+  background: var(--bg-elevated);
+  transform: translateX(2px);
+}
+
+button[data-part="contact-card"]:active {
+  transform: scale(0.98) translateX(1px);
+  background: var(--bg-overlay);
+}
+
+button[data-part="contact-card"]:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+/* Selected state */
+button[data-part="contact-card"][data-selected] {
+  background: var(--accent-subtle);
+  border-left-color: var(--accent);
+  transform: none;
+}
+
+button[data-part="contact-card"][data-selected]:hover {
+  background: var(--accent-subtle-hover);
+  transform: none;
+}
+
+/* Info column */
+span[data-part="card-info"] {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Name */
+span[data-part="card-name"] {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-tight);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: var(--leading-tight);
+}
+
+/* Subtitle — phone or email preview */
+span[data-part="card-subtitle"] {
+  font-size: var(--text-2xs);
+  font-weight: var(--font-regular);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: var(--leading-tight);
+}
+
+/* Favourite indicator dot */
+span[data-part="favorite-dot"] {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--orange);
+  flex-shrink: 0;
+  box-shadow: 0 0 6px var(--orange-subtle);
+}

@@ -1,0 +1,111 @@
+openapi: "3.1.0"
+info:
+  title: Bookmarks Manager API
+  version: "1.0.0"
+  description: >
+    Scrapes a submitted URL for Open Graph metadata, favicon, and a short
+    text preview, then persists it as a bookmark.
+servers:
+  - url: http://localhost:4000/api/v1
+paths:
+  /bookmarks:
+    get:
+      summary: List bookmarks
+      parameters:
+        - in: query
+          name: offset
+          schema: { type: integer, minimum: 0, default: 0 }
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+      responses:
+        "200":
+          description: Paginated list of bookmarks.
+          headers:
+            X-Total-Count:
+              schema: { type: integer }
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Bookmark" }
+    post:
+      summary: Create a bookmark by scraping a URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url: { type: string, format: uri, maxLength: 2048 }
+      responses:
+        "201":
+          description: Bookmark created.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Bookmark" }
+        "400": { $ref: "#/components/responses/Error" }
+        "422": { $ref: "#/components/responses/Error" }
+        "429": { $ref: "#/components/responses/Error" }
+        "502": { $ref: "#/components/responses/Error" }
+        "504": { $ref: "#/components/responses/Error" }
+  /bookmarks/{id}:
+    get:
+      summary: Get a bookmark by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200":
+          description: Bookmark found.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Bookmark" }
+        "404": { $ref: "#/components/responses/Error" }
+    delete:
+      summary: Delete a bookmark by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "204": { description: Deleted. }
+        "404": { $ref: "#/components/responses/Error" }
+components:
+  schemas:
+    Bookmark:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        url: { type: string, format: uri }
+        canonicalUrl: { type: string, nullable: true }
+        title: { type: string, nullable: true }
+        description: { type: string, nullable: true }
+        imageUrl: { type: string, nullable: true }
+        faviconUrl: { type: string, nullable: true }
+        siteName: { type: string, nullable: true }
+        textPreview: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+    ApiError:
+      type: object
+      properties:
+        statusCode: { type: integer }
+        correlationId: { type: string }
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              code: { type: string }
+              message: { type: string }
+  responses:
+    Error:
+      description: Structured error response.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ApiError" }
