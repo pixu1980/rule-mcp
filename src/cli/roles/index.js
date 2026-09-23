@@ -25,3 +25,5 @@
 export * from "./_store.js";
 export * from "./_render.js";
 export * from "./_command.js";
+export * from "./_command-new.js";
+export * from "./_command-deprecate.js";

@@ -30,8 +30,8 @@ test("a check depends on the skill it checked", () => {
   assert.deepEqual(Object.keys(deps), ["rule-styleguide-css"]);
 });
 
-test("a template tool depends on no skill", () => {
-  assert.deepEqual(dependenciesOf("rule_tool_styleguide", { component: "button" }, result("x")), {});
+test("an action tool depends on no skill", () => {
+  assert.deepEqual(dependenciesOf("rule_tool_stats", {}, result("x")), {});
   assert.deepEqual(dependenciesOf("rule_tool_compress", { text: "x" }, result("x")), {});
 });
 

@@ -5,10 +5,14 @@
  *
  * Verifies guardrails are ALWAYS involved and enforce the core skill rules:
  *   - the baseline applies to every skill (frontend, backend, data, devops).
- *   - rule_tool_styleguide generation self-validates and always emits a guardrail
- *     summary (guardrails involved even without an explicit rule_tool_check call).
- *   - The core rule principles - no CSS classes, no inline styles - pass on
- *     generated component templates across frameworks.
+ *   - the shipped component templates carry the core rule principles - no CSS
+ *     classes, no inline styles - across frameworks.
+ *   - the JS/TS idiom guardrails fire on stale patterns and pass on the modern
+ *     idioms the styleguide mandates.
+ *
+ * The component templates are data served through `rule://templates` (the
+ * template tool was removed by ADR 115), so the check reads them where they
+ * live rather than through a tool that no longer exists.
  */
 
 let pass = 0;
@@ -31,7 +35,7 @@ process.env.RULE_MCP_NO_AUTOUPDATE = "1"; // hermetic: no real git ops in tests
 
 import { getGuardrails, checkCode, BASELINE_SKILLS, ownedGuardrails } from "../index.js";
 import { loadAllSkills } from "../../skills/index.js";
-import { callTool } from "../../../tools/router/index.js";
+import { getTemplate } from "../../scaffold/templates/index.js";
 
 // The baseline now lives in the skills that own it (ADR 089); what every
 // domain must still carry is the union of those skills' rules.
@@ -47,33 +51,17 @@ for (const skill of ["rule-frontend-react", "rule-frontend-vue", "rule-backend-e
   );
 }
 
-// ── T2: component generation always involves guardrails ──
-for (const [component, framework] of [
-  ["button", "react"],
-  ["card", "vue"],
-  ["button", "vanilla"],
-]) {
-  const r = await callTool("rule_tool_styleguide", { component, framework });
-  const text = r.content.map((c) => c.text).join("\n");
-  check(`T2 ${component}/${framework} output carries a guardrail summary`, text.includes("## Guardrails"));
-}
-
-// ── T3: core principles hold on generated templates ──
+// ── T2/T3: the shipped templates exist and hold the core principles ──
 const CORE_IDS = new Set(["no-css-classes", "no-inline-styles"]);
 for (const [component, framework, skill] of [
   ["button", "react", "rule-frontend-react"],
-  ["button", "vanilla", "rule-styleguide"],
   ["card", "vue", "rule-frontend-vue"],
+  ["button", "vanilla", "rule-styleguide"],
 ]) {
-  const tmpl = await callTool("rule_tool_styleguide", { component, framework });
-  // Extract fenced code from the output for a faithful check.
-  const code =
-    tmpl.content
-      .map((c) => c.text)
-      .join("\n")
-      .match(/```[a-z]*\n([\s\S]*?)```/gi)
-      ?.map((b) => b.replaceAll(/```[a-z]*\n?/gi, "").replaceAll("```", ""))
-      .join("\n") ?? "";
+  const template = getTemplate(component, framework);
+  const code = typeof template === "string" ? template : [template?.html, template?.css].filter(Boolean).join("\n");
+  check(`T2 ${component}/${framework} template is shipped`, typeof code === "string" && code.length > 0);
+
   const report = checkCode(skill, code, { framework, isComponent: true });
   const failedCore = report.failed.filter((f) => CORE_IDS.has(f.id));
   check(`T3 ${component}/${framework} passes core principles (no classes/inline styles)`, failedCore.length === 0);

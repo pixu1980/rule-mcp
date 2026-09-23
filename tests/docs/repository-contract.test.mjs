@@ -101,7 +101,7 @@ execFileSync("bash", [universalInstallerPath, "--agent", "pi", "--force", "--dry
 // The bootstrap forwards to `rule-mcp setup` and writes nothing itself
 // (ADR 090), so the rules it used to carry are read where they live now.
 const installerRules = readFileSync(join(root, "src", "cli", "installers", "_instruction.data.js"), "utf8");
-for (const tool of ["pix_tool -", "rule_tool_process_adr", "rule_tool_process_handoff"]) {
+for (const tool of ["pix_tool -", "rule_tool_process_adr", "rule_tool_handoff", "rule_tool_handon"]) {
   assert.ok(installerRules.includes(tool), `universal installer rules must reference ${tool}`);
 }
 for (const tool of ["rule_tool_ai", "pix_adr", "pix_handoff"]) {

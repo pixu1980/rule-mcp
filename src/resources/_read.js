@@ -72,7 +72,7 @@ export async function serveResource(uri) {
           uri,
           mimeType: "text/markdown",
           text:
-            "For a11y testing with Playwright + axe-core, see rule-styleguide-a11y and /rule-persona-a11y-audit.\n\n" +
+            "For a11y testing with Playwright + axe-core, see rule-styleguide-a11y and /rule-persona-a11y.\n\n" +
             "Use `/rule-area-styleguide` (and related styleguide skills) for templates and config generation.",
         },
       ],
@@ -129,7 +129,7 @@ export async function serveResource(uri) {
     return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result, null, 2) }] };
   }
 
-  // ── Dynamic: rule://<skill-name> or rule://<skill-name>/<section> ──
+  // ── Dynamic: rule://<skill-name> or rule://<skill-name>/<part> ──
   const m = uri?.match(/^rule:\/\/(rule(?:-[a-z0-9]+)*)(?:\/(\w+))?$/);
 
   if (m) {

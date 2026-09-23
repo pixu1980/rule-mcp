@@ -22,13 +22,13 @@ test("a real call records the dependencies of its answer", async () => {
   );
 });
 
-test("a template call records no dependencies, so no skill edit can touch it", async () => {
+test("an action call records no dependencies, so no skill edit can touch it", async () => {
   cacheClear();
-  await callTool("rule_tool_styleguide", { component: "button", framework: "react" });
+  await callTool("rule_tool_compress", { text: "It is important to note that this is filler." });
   const [entry] = cacheEntries();
 
   assert.ok(entry, "the call was stored");
-  assert.deepEqual(entry.deps, {}, "a template does not come from a skill");
+  assert.deepEqual(entry.deps, {}, "an action tool does not come from a skill");
 });
 
 // ── The number ──
@@ -68,7 +68,7 @@ const WORKLOAD = [
   ["rule_tool_frontend_react", { mode: "tldr", query: "hooks" }],
   ["rule_tool_check", { skill: "rule-styleguide-css", code: "a{color:red}" }],
   ["rule_tool_search", { query: "container query" }],
-  ["rule_tool_styleguide", { component: "button", framework: "react" }],
+  ["rule_tool_stats", {}],
   ["rule_tool_compress", { text: "It is important to note that this is filler." }],
 ];
 
@@ -109,9 +109,9 @@ test("a workload that is not only the router leaves entries no skill edit can to
   const independent = entries.filter((entry) => Object.keys(entry.deps ?? {}).length === 0);
 
   // The first version of the report said zero, which was true of the report and
-  // not of the cache: it only ever called the router. A template tool reads no
+  // not of the cache: it only ever called the router. An action tool reads no
   // skill, so its entry is valid until the server version changes.
-  assert.ok(independent.length >= 2, `expected template calls to record no dependencies, got ${independent.length} of ${entries.length}`);
+  assert.ok(independent.length >= 2, `expected action calls to record no dependencies, got ${independent.length} of ${entries.length}`);
   console.log(`  ${entries.length} entries, ${independent.length} independent of every skill`);
 });
 
