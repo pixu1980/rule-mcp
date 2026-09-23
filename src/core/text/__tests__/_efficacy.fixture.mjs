@@ -43,7 +43,7 @@ export const CORPUS = [
   ["pix_tool_styleguide_css", {}],
   ["pix_tool_backend_node", {}],
   ["pix_tool_process_code_review", {}],
-  ["pix_tool_process_compression", {}],
+  ["pix_tool_compress", { text: "It is important to note that this is filler prose for the corpus." }],
 ];
 
 export const text = (result) => (result?.content ?? []).map((item) => item.text ?? "").join("");

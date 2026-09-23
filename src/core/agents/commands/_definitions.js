@@ -4,17 +4,8 @@
 
 import { listPrompts } from "@src/prompts/index.js";
 import { listAreaPrompts } from "@src/prompts/_areas.js";
-import {
-  areaBody,
-  HANDOFF_BODY,
-  HANDON_BODY,
-  COMPRESS_BODY,
-  STATS_BODY,
-  USAGE_BODY,
-  INIT_BODY,
-  ROUTER,
-  generalCheckBody,
-} from "./_bodies.js";
+import { areaBody, ROUTER, generalCheckBody } from "./_bodies.js";
+import { COMPRESS_BODY, HANDOFF_BODY, HANDON_BODY, INIT_BODY, STATS_BODY, USAGE_BODY } from "./_bodies-session.js";
 import { commandNames, ROUTER_COMMAND, CHECK_COMMAND } from "./_names.js";
 import { personaBody, personaTarget } from "./_personas.js";
 

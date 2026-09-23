@@ -72,7 +72,7 @@ export async function serveResource(uri) {
           uri,
           mimeType: "text/markdown",
           text:
-            "For a11y testing with Playwright + axe-core, see pix-styleguide-a11y and /pix-persona-a11y-audit.\n\n" +
+            "For a11y testing with Playwright + axe-core, see pix-styleguide-a11y and /pix-persona-a11y.\n\n" +
             "Use `/pix-area-styleguide` (and related styleguide skills) for templates and config generation.",
         },
       ],
@@ -129,7 +129,7 @@ export async function serveResource(uri) {
     return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result, null, 2) }] };
   }
 
-  // ── Dynamic: pix://<skill-name> or pix://<skill-name>/<section> ──
+  // ── Dynamic: pix://<skill-name> or pix://<skill-name>/<part> ──
   const m = uri?.match(/^pix:\/\/(pix(?:-[a-z0-9]+)*)(?:\/(\w+))?$/);
 
   if (m) {

@@ -106,7 +106,7 @@
     "zod": "4.6.5"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.13.0",
+    "@axe-core/playwright": "4.13.0",
     "@eslint/js": "10.0.1",
     "@modelcontextprotocol/inspector": "2.7.0",
     "@playwright/test": "1.63.0",

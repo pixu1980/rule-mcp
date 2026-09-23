@@ -115,7 +115,7 @@ function offenders(startFiles, prefixes) {
 
 test("the graph resolves both specifier forms", () => {
   // Without this, every invariant below would pass on an empty graph.
-  assert.ok(graph.get("src/tools/router/call/_pipeline.js").includes("src/core/cache/tool-cache/index.js"), "the @src/ alias must resolve to a file");
+  assert.ok(graph.get("src/tools/router/call/_stages.js").includes("src/core/cache/tool-cache/index.js"), "the @src/ alias must resolve to a file");
   assert.ok(graph.get("src/cli/commands/_help.js").includes("src/core/skills/index.js"), "a dynamic import must resolve to a file");
 });
 

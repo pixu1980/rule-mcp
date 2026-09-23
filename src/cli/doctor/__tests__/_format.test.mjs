@@ -4,7 +4,8 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
-import { agentIcon, formatDoctorTerminal, statusIcon, truncate, yesNo } from "../_format.js";
+import { formatDoctorTerminal } from "../_format.js";
+import { agentIcon, statusIcon, truncate, yesNo } from "../_sections.js";
 
 // Hermetic: color is decided by NO_COLOR / FORCE_COLOR / TTY; a runner exporting
 // FORCE_COLOR would turn plain-substring assertions into escape soup.
