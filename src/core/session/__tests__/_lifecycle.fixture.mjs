@@ -17,6 +17,9 @@ import "node:path";
 
 export const lifecycle = await import("../../../core/session/lifecycle/index.js");
 
+export { isAlive as alive } from "../../../cli/daemon/_process-status.js";
+export { until } from "../../../shared/_testkit.js";
+
 /**
  * A stand-in for `process` as a signal source: the handlers under test only
  * need on/off/emit, and a real emitter here would mean sending real signals to
@@ -41,28 +44,4 @@ export function signalTarget() {
       }
     },
   };
-}
-
-/** Wait until `predicate()` is true, or fail after `timeout` ms. */
-export async function until(predicate, timeout = 4000, step = 25) {
-  const deadline = Date.now() + timeout;
-  while (Date.now() < deadline) {
-    if (await predicate()) {
-      return true;
-    }
-    await new Promise((resolve) => setTimeout(resolve, step));
-  }
-
-  return false;
-}
-
-/** True while the pid is alive. */
-export function alive(pid) {
-  try {
-    process.kill(pid, 0);
-
-    return true;
-  } catch {
-    return false;
-  }
 }

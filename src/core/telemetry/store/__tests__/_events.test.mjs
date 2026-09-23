@@ -5,12 +5,12 @@
  * hermetic PIX_GALAXY_MCP_HOME per scenario.
  */
 import { strict as assert } from "node:assert";
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import test from "node:test";
 
 import { appendEvents, ensureDirectory, eventsFile, readEvents, stateSize, writeEvents } from "../index.js";
+import { withHome as withHomePrefix } from "../../../../shared/_testkit.js";
 
 const PREV_HOME = process.env.PIX_GALAXY_MCP_HOME;
 
@@ -22,14 +22,7 @@ function write(path, content) {
 
 /** Point PIX_GALAXY_MCP_HOME at a fresh temp dir for one scenario. */
 function withHome(fn) {
-  const home = mkdtempSync(join(tmpdir(), "pix-store-"));
-  process.env.PIX_GALAXY_MCP_HOME = home;
-  try {
-    fn(home);
-  } finally {
-    delete process.env.PIX_GALAXY_MCP_HOME;
-    rmSync(home, { recursive: true, force: true });
-  }
+  return withHomePrefix(fn, "pix-store-");
 }
 
 test.after(() => {
