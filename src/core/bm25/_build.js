@@ -10,7 +10,15 @@ import { extractSections, HEADING_BOOST } from "./_extract.js";
 import { _index, setIndex } from "./_state.js";
 import { persistIndex, restoreIndex } from "./_cache.js";
 
-export function buildIndex(force = false) {
+/**
+ * Build (or restore) the BM25 index over the skills catalog. Yields the
+ * event loop every 15 skills on a cold build so the ~95ms tokenize pass
+ * never blocks it in one stretch.
+ *
+ * @param {boolean} [force] - skip the cache and rebuild from scratch
+ * @returns {Promise<void>}
+ */
+export async function buildIndex(force = false) {
   if (_index && !force) {
     return;
   }
@@ -28,8 +36,18 @@ export function buildIndex(force = false) {
   const documentLength = new Map();
   const docs = [];
   let documentId = 0;
+  let processed = 0;
 
   for (const skillName of skillNames) {
+    // Yield every 15 skills so a cold build never blocks the event loop for
+    // its full ~95ms in one stretch; the index is still complete before this
+    // function returns, just built across several cooperative turns.
+    processed += 1;
+
+    if (processed % 15 === 0) {
+      await new Promise((resolve) => setImmediate(resolve));
+    }
+
     // A hub skill ("rule", "rule-meta") is a dispatcher's own directory, not a
     // body of knowledge: indexed, its near-ubiquitous vocabulary dilutes the
     // document frequency of every common term and drags the whole routing

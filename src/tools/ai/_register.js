@@ -61,7 +61,7 @@ export function registerAiTool() {
       const { buildIndex, isIndexReady, searchSkills } = await import("../../core/bm25/index.js");
 
       if (!isIndexReady()) {
-        buildIndex();
+        await buildIndex();
       }
 
       const ranked = new Map(searchSkills(prompt).map((hit) => [hit.skill, hit]));

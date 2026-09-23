@@ -32,7 +32,7 @@ export function registerSearchTool() {
       const { search, buildIndex, isIndexReady, getIndexStats } = await getBm25();
       // Ensure index is built
       if (!isIndexReady()) {
-        buildIndex();
+        await buildIndex();
       }
       // Stats line for diagnostics
       const stats = getIndexStats();

@@ -25,6 +25,7 @@ import { fileURLToPath } from "node:url";
 // process loads it too, so it registers the hook as every entry point does.
 const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 
+/** Run one git command in `cwd`, quietly, returning its stdout. */
 export const g = (arguments_, cwd) => execFileSync("git", arguments_, { cwd, stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" });
 
 /** Build a bare "upstream" + a working clone that tracks it (same as self-update.test). */
@@ -48,6 +49,7 @@ export function makeClonePair() {
   g(["clone", upstream, clone], base);
   g(["config", "user.email", "t@t.t"], clone);
   g(["config", "user.name", "t"], clone);
+
   return { base, upstream, clone, seed };
 }
 
@@ -71,6 +73,7 @@ exec ${REAL_GIT} "$@"
 `;
   writeFileSync(join(dir, "git"), stub);
   chmodSync(join(dir, "git"), 0o755);
+
   return { dir, log };
 }
 
@@ -90,19 +93,35 @@ export function runScenario(clone, scriptBody, environment = {}) {
     env: {
       ...process.env,
       RULE_MCP_REPO_ROOT: clone,
+      // A scenario runs the persisted-throttle-state path (_state-store.js)
+      // for real, so it needs its own home - without this it would read and
+      // write the developer's actual ~/.rule-mcp/state.
+      RULE_MCP_HOME: mkdtempSync(join(tmpdir(), "rule-sut-home-")),
       PATH: `${stub.dir}:${process.env.PATH}`,
       RULE_MCP_GIT_LOG: stub.log,
       ...environment,
     },
     encoding: "utf8",
   });
+
   return { out: JSON.parse(out), logPath: stub.log };
 }
 
-export const fetchCount = (logPath) =>
-  readFileSync(logPath, "utf8")
+/**
+ * How many times the stubbed git ran "fetch". The stub only creates the log
+ * file on its first invocation, so a scenario that short-circuits before any
+ * git call (a persisted-throttle skip) leaves no file at all - that is 0
+ * fetches, not a read error.
+ */
+export const fetchCount = (logPath) => {
+  if (!existsSync(logPath)) {
+    return 0;
+  }
+
+  return readFileSync(logPath, "utf8")
     .split("\n")
     .filter((l) => l === "fetch").length;
+};
 
 /** The clone's upstream URL, so the pin allows the fetch. */
 export const upstreamOf = (clone) => execFileSync("git", ["remote", "get-url", "origin"], { cwd: clone, encoding: "utf8" }).trim();
