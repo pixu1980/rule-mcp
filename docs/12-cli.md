@@ -34,7 +34,7 @@ the package version from anywhere. An error exits 1 and prints to stderr;
 | [`adr`](#pix-galaxy-mcp-adr)                       | 5       | Create a new Architecture Decision Record (ADR)                               |
 | [`handoff`](#pix-galaxy-mcp-handoff)               | 7       | Generate a compressed LLM context handoff summary                             |
 | [`skills`](#pix-galaxy-mcp-skills)                 | 4       | Manage the pix AI skill system                                                |
-| [`fix`](#pix-galaxy-mcp-fix)                       | 4       | Validate and auto-fix project file tree structure                             |
+| [`fix`](#pix-galaxy-mcp-fix)                       | 3       | Apply the deterministic guardrail fixes of every skill                        |
 | [`completions`](#pix-galaxy-mcp-completions)       | 1       | Generate shell auto-completion script                                         |
 | [`handon`](#pix-galaxy-mcp-handon)                 | 4       | Verify the last handoff against the repo now                                  |
 | [`stats`](#pix-galaxy-mcp-stats)                   | 0       | Show telemetry statistics from the local log                                  |
@@ -345,7 +345,7 @@ pix-galaxy-mcp skills action
 
 ## pix-galaxy-mcp fix
 
-Validate and auto-fix project file tree structure
+Apply the deterministic guardrail fixes of every skill
 
 ```sh
 pix-galaxy-mcp fix
@@ -353,12 +353,11 @@ pix-galaxy-mcp fix
 
 **Options**
 
-| Flag               | Default | Choices | Description                                       |
-| ------------------ | ------- | ------- | ------------------------------------------------- |
-| `--dir <path>`     | .       | -       | project root (default: .)                         |
-| `--src-dir <path>` | src     | -       | source directory (default: src)                   |
-| `--mode <m>`       | lint    | -       | lint (scan + report) or fix (scan + auto-correct) |
-| `--no-dry-run`     | -       | -       | apply fixes instead of previewing                 |
+| Flag           | Default | Choices | Description                                    |
+| -------------- | ------- | ------- | ---------------------------------------------- |
+| `--dir <path>` | .       | -       | project root (default: .)                      |
+| `--mode <m>`   | lint    | -       | lint (report what would change) or fix (write) |
+| `--no-dry-run` | -       | -       | apply fixes instead of previewing              |
 
 ## pix-galaxy-mcp completions
 

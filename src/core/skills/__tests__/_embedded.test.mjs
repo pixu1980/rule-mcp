@@ -30,6 +30,7 @@ test("every tool traces back to a pix-* directory in ./skills", () => {
     "pix_tool_check",
     "pix_tool_compress",
     "pix_tool_detect",
+    "pix_tool_fix",
     "pix_tool_gateway",
     "pix_tool_handoff",
     "pix_tool_handon",

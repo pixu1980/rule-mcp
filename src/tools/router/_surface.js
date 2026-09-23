@@ -9,6 +9,7 @@ import { _tools, toolsGeneration } from "./_hooks.js";
 
 const MUTATING_TOOLS = new Set([
   "pix_tool_apply",
+  "pix_tool_fix",
   "pix_tool_process_adr",
   "pix_tool_plan_docs",
   "pix_tool_handoff",

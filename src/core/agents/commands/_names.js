@@ -10,6 +10,9 @@ export const ROUTER_COMMAND = "pix";
 /** General auto-detecting check workflow (ADR 106; kept by ADR 116). */
 export const CHECK_COMMAND = "pix-check";
 
+/** Deterministic guardrail fixer for the changed files. */
+export const FIX_COMMAND = "pix-fix";
+
 /**
  * Canonical command order: the router first, then all prompt names and
  * `/pix-check`, sorted locale-alphabetically. This is the single ordering used
@@ -26,7 +29,7 @@ export function commandNames() {
     .filter((name) => name !== ROUTER_COMMAND)
     .sort((a, b) => a.localeCompare(b));
 
-  const rest = [...prompts, CHECK_COMMAND].sort((a, b) => a.localeCompare(b));
+  const rest = [...prompts, CHECK_COMMAND, FIX_COMMAND].sort((a, b) => a.localeCompare(b));
 
   return [ROUTER_COMMAND, ...rest];
 }

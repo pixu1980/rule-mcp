@@ -11,4 +11,3 @@
 export * from "./_skill-tool.js";
 export * from "./_search-tool.js";
 export * from "./_check-tool.js";
-export * from "./_scaffold-tool.js";

@@ -201,19 +201,19 @@ Measured on 2026-09-15, `develop`:
 
 <!-- census:begin:command-surface -->
 
-### The command surface today (39)
+### The command surface today (40)
 
 | Kind       | Count | Example             | Reach for it when                                               |
 | ---------- | ----- | ------------------- | --------------------------------------------------------------- |
 | `router`   | 1     | `/pix`              | Routes a free-text request to the skill that answers it         |
 | `area`     | 11    | `/pix-area-ai`      | Area hub: free text routes to leaf skills/tools (ADR 117)       |
-| `workflow` | 1     | `/pix-check`        | Runs a named workflow (e.g. /pix-check auto-detects guardrails) |
+| `workflow` | 2     | `/pix-check`        | Runs a named workflow (e.g. /pix-check auto-detects guardrails) |
 | `session`  | 7     | `/pix-compress`     | Carries a session across a context boundary                     |
 | `persona`  | 19    | `/pix-persona-a11y` | Runs one review role at one operation, and writes its documents |
 
 **Areas**: `/pix-area-ai`, `/pix-area-backend`, `/pix-area-data`, `/pix-area-devops`, `/pix-area-frontend`, `/pix-area-meta`, `/pix-area-platform`, `/pix-area-process`, `/pix-area-styleguide`, `/pix-area-toolchain`, `/pix-area-ui`
 
-**Workflows**: `/pix-check`
+**Workflows**: `/pix-check`, `/pix-fix`
 
 **Sessions**: `/pix-compress`, `/pix-handoff`, `/pix-handon`, `/pix-init`, `/pix-stats`, `/pix-update`, `/pix-usage`
 

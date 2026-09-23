@@ -34,10 +34,11 @@ test("coverage: one clean command per prompt, plus the router, plus /pix-check (
   for (const p of promptNames) {
     assert.ok(names.includes(p), `missing command for prompt ${p}`);
   }
-  // router + every prompt + general pix-check; ADR 116 dropped area *-check siblings
+  // router + every prompt + the two general commands (pix-check, pix-fix); ADR 116 dropped area *-check siblings
   assert.ok(!promptNames.includes(ROUTER_COMMAND), "router must not also be a prompt");
-  assert.equal(names.length, promptNames.length + 1 + 1, "router + all prompts + pix-check");
+  assert.equal(names.length, promptNames.length + 1 + 2, "router + all prompts + pix-check + pix-fix");
   assert.ok(names.includes("pix-check"), "pix-check remains");
+  assert.ok(names.includes("pix-fix"), "pix-fix remains");
   assert.ok(
     names.filter((name) => name.endsWith("-check")).every((name) => name === "pix-check"),
     "only /pix-check ends with -check; no area siblings",

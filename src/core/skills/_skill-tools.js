@@ -12,7 +12,7 @@ export const REGISTERED_BY_CODE = new Set(["pix", "pix-meta", "pix-process-adr"]
 /**
  * Register one tool per skill that asks for one.
  *
- * Minimal mode registers none - evidence is loaded through pix_gateway there.
+ * Minimal mode registers none - evidence is loaded through pix_tool_gateway there.
  * A skill from a project or a home directory mints a tool only when its
  * frontmatter asks (ADR 089), so dropping a folder in adds rules and
  * searchable evidence without growing the surface every turn pays for.

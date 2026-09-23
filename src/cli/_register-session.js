@@ -94,13 +94,12 @@ export function registerSkillsCommand(program) {
 export function registerFixCommand(program) {
   program
     .command("fix")
-    .description("Validate and auto-fix project file tree structure")
+    .description("Apply the deterministic guardrail fixes of every skill")
     .option("--dir <path>", "project root (default: .)", ".")
-    .option("--src-dir <path>", "source directory (default: src)", "src")
-    .option("--mode <m>", "lint (scan + report) or fix (scan + auto-correct)", "lint")
+    .option("--mode <m>", "lint (report what would change) or fix (write)", "lint")
     .option("--no-dry-run", "apply fixes instead of previewing")
     .allowExcessArguments(false)
-    .action(async (options) => (await import("./commands/_health.js")).fixCommand({ dir: options.dir, srcDir: options.srcDir, mode: options.mode, dryRun: options.dryRun }));
+    .action(async (options) => (await import("./commands/_health.js")).fixCommand({ path: options.dir, mode: options.mode, dryRun: options.dryRun }));
 }
 
 /** Register the `handon` command. */

@@ -4,7 +4,7 @@
 
 /**
  * Minimal tool surface: expose only the dispatcher + action tools and hide the
- * per-skill tools (their guidance is reached via pix_gateway / resources).
+ * per-skill tools (their guidance is reached via pix_tool_gateway / resources).
  *
  * Off by default; enable with PIX_GALAXY_MCP_MINIMAL_TOOLS=1, or pick a narrower
  * surface with PIX_GALAXY_MCP_SURFACE (see core/skills/_surface.js).
