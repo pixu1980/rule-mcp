@@ -45,6 +45,7 @@
     "test:foundations": "node --import ./scripts/alias-hook.mjs scripts/ci/run-tests/index.mjs foundations",
     "test:installer": "node --import ./scripts/alias-hook.mjs scripts/ci/run-tests/index.mjs installer",
     "test:all": "node --import ./scripts/alias-hook.mjs scripts/ci/run-tests/index.mjs all",
+    "test:e2e:docs-site": "playwright test tests/e2e/docs-site",
     "lint": "eslint bin/ src/ tests/ --max-warnings 50",
     "lint:fix": "eslint bin/ src/ tests/ --max-warnings 50 --fix",
     "format": "prettier --check '**/*.{js,mjs,json,md}' --ignore-path .gitignore",
@@ -105,6 +106,7 @@
     "zod": "4.6.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "10.0.1",
     "@modelcontextprotocol/inspector": "2.7.0",
     "@playwright/test": "1.63.0",

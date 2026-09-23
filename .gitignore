@@ -2,6 +2,8 @@ node_modules/
 .tokensave/
 dist/
 site-dist/
+test-results/
+playwright-report/
 *.pid
 *.log
 .env
