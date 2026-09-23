@@ -18,6 +18,7 @@ import { commandDefinition, getSkillMetadata, listAreaPrompts } from "./_registr
 const COMMAND_TO_TOOL = {
   rule: "pix_tool",
   "rule-check": "rule_tool_check",
+  "rule-fix": "rule_tool_fix",
   "rule-compress": "rule_tool_compress",
   "rule-handoff": "rule_tool_handoff",
   "rule-handon": "rule_tool_handon",
