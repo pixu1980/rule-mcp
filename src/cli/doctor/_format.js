@@ -43,20 +43,9 @@ export function truncate(value, max = 96) {
   return text.length > max ? text.slice(0, max - 1) + "..." : text;
 }
 
-/**
- * Format a doctor report for humans in the terminal.
- * JSON remains available through `rule-mcp doctor --json`.
- *
- * @param {object} report - Result from runDoctor()
- * @returns {string}
- */
-export function formatDoctorTerminal(report) {
-  const native = report.daemon?.nativeService || {};
-  const configuredAgents = (report.agents || []).filter((agent) => agent.configured);
-  const missingAgents = (report.unconfigured || []).slice(0, 10);
-  const sampleTools = (report.tools || []).slice(0, 12);
-
-  const lines = [
+/** Banner, status line, and the System section. */
+export function systemSection(report) {
+  return [
     banner("🩺 rule-mcp doctor", report.ok ? "healthy" : "needs attention"),
     "",
     `${color("Status", "bold")}: ${statusIcon(report.ok)} ${report.ok ? color("healthy", "green") : color("needs attention", "red")}`,
@@ -68,13 +57,26 @@ export function formatDoctorTerminal(report) {
     `Platform:    ${color(`${report.platform}/${report.arch}`, "magenta")}`,
     `Entrypoint:  ${color(truncate(report.entrypoint, 100), "dim")}`,
     "",
+  ];
+}
+
+/** The MCP Tools section: registered count and a sample of names. */
+export function toolsSection(report) {
+  const sampleTools = (report.tools || []).slice(0, 12);
+
+  return [
     section("MCP Tools", "🧰"),
     `Registered:  ${color((report.tools || []).length, "green")}`,
     `Examples:    ${sampleTools.map((tool) => color(tool, "cyan")).join(", ")}${(report.tools || []).length > sampleTools.length ? color(", ...", "dim") : ""}`,
     "",
-    section("Agents", "🤖"),
-    `Configured:  ${color(report.agentsConfigured, "green")}/${report.agentsTotal}`,
   ];
+}
+
+/** The Agents section: configured rows, an overflow note, and a missing-agents note. */
+export function agentsSection(report) {
+  const configuredAgents = (report.agents || []).filter((agent) => agent.configured);
+  const missingAgents = (report.unconfigured || []).slice(0, 10);
+  const lines = [section("Agents", "🤖"), `Configured:  ${color(report.agentsConfigured, "green")}/${report.agentsTotal}`];
 
   for (const agent of configuredAgents.slice(0, 12)) {
     lines.push(`  ${agentIcon(agent)} ${color(agent.name.padEnd(12), agent.validated === false ? "yellow" : "bold")} ${color(truncate(agent.configFile || "", 90), "dim")}`);
@@ -90,7 +92,14 @@ export function formatDoctorTerminal(report) {
     );
   }
 
-  lines.push(
+  return lines;
+}
+
+/** The Daemon section: pid-file process state and the native service. */
+export function daemonSection(report) {
+  const native = report.daemon?.nativeService || {};
+
+  return [
     "",
     section("Daemon", "🚀"),
     `Process:     ${report.daemon?.running ? color(`running (pid ${report.daemon.pid})`, "green") : color("not running via pid file", "yellow")}`,
@@ -102,19 +111,52 @@ export function formatDoctorTerminal(report) {
     `PID file:    ${color(truncate(report.daemon?.pidFile || "", 100), "dim")}`,
     `Log file:    ${color(truncate(report.daemon?.logFile || "", 100), "dim")}`,
     `Wrapper:     ${color(truncate(WRAPPER_SCRIPT_PATH, 100), "dim")}`,
-    "",
-    section("Models", "🧠"),
-    `Configured providers: ${color(report.models?.totalConfigured ?? 0, (report.models?.totalConfigured ?? 0) > 0 ? "green" : "yellow")}`,
+  ];
+}
+
+/** The Models section: how many providers have a configured key. */
+export function modelsSection(report) {
+  return ["", section("Models", "🧠"), `Configured providers: ${color(report.models?.totalConfigured ?? 0, (report.models?.totalConfigured ?? 0) > 0 ? "green" : "yellow")}`];
+}
+
+/** The Runtime paths section. */
+export function pathsSection(report) {
+  return [
     "",
     section("Runtime paths", "📁"),
     `State:       ${color(truncate(report.stateDir, 100), "dim")}`,
     `Data:        ${color(truncate(report.dataDir, 100), "dim")}`,
     `Config:      ${color(truncate(report.configDir, 100), "dim")}`,
+  ];
+}
+
+/** The Automation section: how to get machine-readable output. */
+export function automationSection() {
+  return [
     "",
     section("Automation", "⚙️"),
     `📤 Use ${color("`rule-mcp doctor --json`", "cyan")} to print machine-readable JSON.`,
     `💾 Use ${color("`rule-mcp doctor --json-out <file>`", "cyan")} to export JSON while keeping this UI.`,
-  );
+  ];
+}
+
+/**
+ * Format a doctor report for humans in the terminal.
+ * JSON remains available through `rule-mcp doctor --json`.
+ *
+ * @param {object} report - Result from runDoctor()
+ * @returns {string}
+ */
+export function formatDoctorTerminal(report) {
+  const lines = [
+    ...systemSection(report),
+    ...toolsSection(report),
+    ...agentsSection(report),
+    ...daemonSection(report),
+    ...modelsSection(report),
+    ...pathsSection(report),
+    ...automationSection(),
+  ];
 
   return lines.join("\n") + "\n";
 }

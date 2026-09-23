@@ -2,18 +2,15 @@
 
 /** Tool invocation: hooks, cache read-through, banner, telemetry. */
 import { _tools } from "../_hooks.js";
-import { estimateTokens, finalize, withBanner } from "../_helpers.js";
-import { cacheLookup, cacheStore } from "@src/core/cache/tool-cache/index.js";
-import { computeCore, estimateRoutingSaving } from "../_compute.js";
+import { withBanner } from "../_helpers.js";
+import { computeCore } from "../_compute.js";
 import { hostBanner, hostBeforeCall } from "./_host.js";
-import { dependenciesOf } from "../_entry.js";
 import { enforcementError } from "@src/core/enforcement/index.js";
 import { resumeAnnouncement } from "@src/core/session/resume/index.js";
 import { touchActivity } from "@src/core/session/_activity.js";
-import { guardrailRulesOf } from "../_helpers.js";
 import { z } from "zod/v4";
-import { runAfterHooks } from "./_after.js";
-import { recordCrashed, recordFailure, recordHit, recordMiss } from "./_telemetry.js";
+import { recordCrashed } from "./_telemetry.js";
+import { replayIfCached, storeAndFinalize } from "./_stages.js";
 
 /**
  * Run one tool call end to end: activity, self-update, resume banner, cache
@@ -69,49 +66,18 @@ export async function callTool(name, args) {
     // tier that answered is reported, because a cache nobody can explain is a
     // cache nobody debugs.
     stage = "cache";
-    const cached = cacheLookup(name, validated);
+    const replayed = replayIfCached(name, validated, startedAt);
 
-    if (cached) {
-      const replay = { ...cached.result, _meta: { ...cached.result._meta, pixCache: { tier: cached.tier } } };
-      const { final, compressionSaved, reminderTokens } = finalize(name, replay);
-      recordHit({ tool: name, args: validated, startedAt, cached, final, compressionSaved, reminderTokens });
-
-      return withBanner(banner, final);
+    if (replayed) {
+      return withBanner(banner, replayed);
     }
 
     stage = "preprocessing";
-    const computed = await computeCore(name, tool, validated);
-    const { arguments: processedArguments, core } = computed;
+    const { arguments: processedArguments, core } = await computeCore(name, tool, validated);
 
     stage = "finalize";
 
-    if (!core?.isError) {
-      // Cache the deterministic core; the reminder/compression/fingerprint
-      // decoration is re-applied per call.
-      cacheStore(name, processedArguments, core, dependenciesOf(name, processedArguments, core));
-      const { final, compressionSaved, reminderTokens } = finalize(name, core);
-      recordMiss({
-        tool: name,
-        args: processedArguments,
-        startedAt,
-        core,
-        final,
-        compressionSaved,
-        reminderTokens,
-        estimatedRouting: estimateRoutingSaving(name, core, final),
-        guardrailFailures: core?._meta?.pixGuardrails?.failCount,
-        guardrailRules: guardrailRulesOf(core),
-      });
-      runAfterHooks(name, processedArguments, final);
-
-      return withBanner(banner, final);
-    }
-
-    // A failing guardrail check IS an error result, so its count still has to
-    // be recorded here.
-    recordFailure({ tool: name, args: processedArguments, startedAt, core });
-
-    return withBanner(banner, finalize(name, core).final);
+    return withBanner(banner, storeAndFinalize(name, processedArguments, core, startedAt));
   } catch (error) {
     if (error instanceof z.ZodError) {
       const issues = error.issues.map((index) => `- ${index.path.join(".")}: ${index.message}`).join("\n");

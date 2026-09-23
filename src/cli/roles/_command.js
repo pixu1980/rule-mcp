@@ -10,6 +10,102 @@ import { loadRoleOverlays } from "../../core/review/_overlays.js";
 import { renderList, renderRole, unknownRole } from "./_render.js";
 import { list, mergedRoles, print, userRolesDir, writeUserRole } from "./_store.js";
 
+/** `roles list`: the table, or the merged catalog as JSON. */
+function listSubcommand(roles, problems, options) {
+  if (options.json) {
+    print(JSON.stringify({ roles, problems }, null, 2));
+
+    return;
+  }
+
+  print(renderList(roles, problems));
+}
+
+/** `roles show <id>`: one role, in full. */
+function showSubcommand(roles, options) {
+  const role = roles.find((entry) => entry.id === options.id);
+
+  if (!role) {
+    unknownRole(options.id, roles);
+
+    return;
+  }
+
+  print(options.json ? JSON.stringify(role, null, 2) : renderRole(role));
+}
+
+/** `roles new <id> --role <title> --skills <a,b,c>`: write a role into the user layer. */
+function newSubcommand(options) {
+  if (!options.id) {
+    print("Usage: rule-mcp roles new <id> --role <title> --skills <a,b,c> [--years N]");
+    process.exitCode = 1;
+
+    return;
+  }
+
+  if (existsSync(join(userRolesDir(), `${options.id}.md`))) {
+    print(`The user layer already has "${options.id}". Edit or delete ${join(userRolesDir(), `${options.id}.md`)}.`);
+    process.exitCode = 1;
+
+    return;
+  }
+
+  if (!options.role || list(options.skills).length === 0) {
+    print(`A role needs a title and at least one skill: --role "<title>" --skills "<a,b>".`);
+    process.exitCode = 1;
+
+    return;
+  }
+
+  const created = {
+    id: options.id,
+    role: options.role,
+    yearsOfExperience: Number(options.years) > 0 ? Math.trunc(Number(options.years)) : 10,
+    skills: list(options.skills),
+    evidenceSkills: list(options.evidenceSkills),
+    lenses: list(options.lenses),
+    status: "active",
+    version: 1,
+    deprecatedBy: null,
+  };
+
+  if (writeUserRole(created)) {
+    print(`Wrote ${join(userRolesDir(), `${created.id}.md`)}. It takes precedence over the embedded catalog.`);
+  }
+}
+
+/** `roles deprecate <id> --by <role-id>`: write a deprecated copy into the user layer. */
+function deprecateSubcommand(roles, options) {
+  const role = roleById(options.id, loadRoleOverlays({ projectDir: options.projectDir }).roles);
+
+  if (!role) {
+    unknownRole(options.id, roles);
+
+    return;
+  }
+
+  if (!options.by) {
+    print(`A deprecated role has to name its replacement: --by <role-id>.`);
+    process.exitCode = 1;
+
+    return;
+  }
+
+  if (roles.every((entry) => entry.id !== options.by)) {
+    unknownRole(options.by, roles);
+
+    return;
+  }
+
+  // The embedded catalog ships with this repository and is not edited; the
+  // user's copy of the role is what carries their decision.
+  const { layer, ...fields } = role;
+
+  if (writeUserRole({ ...fields, status: "deprecated", deprecatedBy: options.by })) {
+    print(`${role.id} is deprecated in the user layer, replaced by ${options.by} (was ${layer ?? "embedded"}).`);
+  }
+}
+
 /**
  * `roles list|show|new|deprecate`.
  *
@@ -30,101 +126,25 @@ export function rolesCommand(subcommand = "list", options = {}) {
 
   switch (subcommand) {
     case "list": {
-      if (options.json) {
-        print(JSON.stringify({ roles, problems }, null, 2));
-
-        return;
-      }
-
-      print(renderList(roles, problems));
+      listSubcommand(roles, problems, options);
 
       return;
     }
 
     case "show": {
-      const role = roles.find((entry) => entry.id === options.id);
-
-      if (!role) {
-        unknownRole(options.id, roles);
-
-        return;
-      }
-
-      print(options.json ? JSON.stringify(role, null, 2) : renderRole(role));
+      showSubcommand(roles, options);
 
       return;
     }
 
     case "new": {
-      if (!options.id) {
-        print("Usage: rule-mcp roles new <id> --role <title> --skills <a,b,c> [--years N]");
-        process.exitCode = 1;
-
-        return;
-      }
-
-      if (existsSync(join(userRolesDir(), `${options.id}.md`))) {
-        print(`The user layer already has "${options.id}". Edit or delete ${join(userRolesDir(), `${options.id}.md`)}.`);
-        process.exitCode = 1;
-
-        return;
-      }
-
-      if (!options.role || list(options.skills).length === 0) {
-        print(`A role needs a title and at least one skill: --role "<title>" --skills "<a,b>".`);
-        process.exitCode = 1;
-
-        return;
-      }
-
-      const created = {
-        id: options.id,
-        role: options.role,
-        yearsOfExperience: Number(options.years) > 0 ? Math.trunc(Number(options.years)) : 10,
-        skills: list(options.skills),
-        evidenceSkills: list(options.evidenceSkills),
-        lenses: list(options.lenses),
-        status: "active",
-        version: 1,
-        deprecatedBy: null,
-      };
-
-      if (writeUserRole(created)) {
-        print(`Wrote ${join(userRolesDir(), `${created.id}.md`)}. It takes precedence over the embedded catalog.`);
-      }
+      newSubcommand(options);
 
       return;
     }
 
     case "deprecate": {
-      const role = roleById(options.id, loadRoleOverlays({ projectDir: options.projectDir }).roles);
-
-      if (!role) {
-        unknownRole(options.id, roles);
-
-        return;
-      }
-
-      if (!options.by) {
-        print(`A deprecated role has to name its replacement: --by <role-id>.`);
-        process.exitCode = 1;
-
-        return;
-      }
-
-      if (roles.every((entry) => entry.id !== options.by)) {
-        unknownRole(options.by, roles);
-
-        return;
-      }
-
-      // The embedded catalog ships with this repository and is not edited; the
-      // user's copy of the role is what carries their decision.
-      const { layer, ...fields } = role;
-
-      if (writeUserRole({ ...fields, status: "deprecated", deprecatedBy: options.by })) {
-        print(`${role.id} is deprecated in the user layer, replaced by ${options.by} (was ${layer ?? "embedded"}).`);
-      }
+      deprecateSubcommand(roles, options);
 
       return;
     }
