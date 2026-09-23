@@ -12,6 +12,7 @@
 
 import { agentInstallTask, runtimeHomeTask, shimTask } from "./_task-core.js";
 import { commandsTask, dockerTask, doctorTask, rulesTask, serviceTask, skillsTask } from "./_task-extras.js";
+import { skillsRemovalTask } from "./_task-remove.js";
 import { cliVerifyTask } from "./_task-cli.js";
 
 /**
@@ -42,6 +43,12 @@ export function buildInstallPlan({ agents = [], mode = "stdio", extras = {}, for
 
   if (extras.skills) {
     plan.push(skillsTask());
+  } else {
+    // The step owns the skill directories, so not selecting it means absent:
+    // reconcile away whatever an earlier install copied, or the host keeps
+    // discovering `/skill:rule-*` the user did not ask for. The task reports
+    // "nothing to remove" when there is nothing to reconcile.
+    plan.push(skillsRemovalTask());
   }
 
   if (mode === "daemon" && extras.service) {

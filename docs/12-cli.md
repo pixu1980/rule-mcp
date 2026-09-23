@@ -33,7 +33,7 @@ the package version from anywhere. An error exits 1 and prints to stderr;
 | [`doctor`](#rule-mcp-doctor)                 | 4       | Run system health check                                                       |
 | [`adr`](#rule-mcp-adr)                       | 5       | Create a new Architecture Decision Record (ADR)                               |
 | [`handoff`](#rule-mcp-handoff)               | 7       | Generate a compressed LLM context handoff summary                             |
-| [`skills`](#rule-mcp-skills)                 | 3       | Manage the rule AI skill system                                                |
+| [`skills`](#rule-mcp-skills)                 | 4       | Manage the rule AI skill system                                                |
 | [`fix`](#rule-mcp-fix)                       | 4       | Validate and auto-fix project file tree structure                             |
 | [`completions`](#rule-mcp-completions)       | 1       | Generate shell auto-completion script                                         |
 | [`handon`](#rule-mcp-handon)                 | 4       | Verify the last handoff against the repo now                                  |
@@ -332,7 +332,7 @@ rule-mcp skills action
 
 | Argument | Default | Description |
 | -------- | ------- | ----------- |
-| `action` | -       | install \\  | list \\ | reload |
+| `action` | -       | install \\  | uninstall \\ | list \\ | reload |
 
 **Options**
 
@@ -340,6 +340,7 @@ rule-mcp skills action
 | ------------- | ------- | ------- | ---------------------------------------------------------------- |
 | `--scope <s>` | global  | -       | global (default, ~/.agents/skills/) or project (.agents/skills/) |
 | `--all`       | -       | -       | pre-select all skills                                            |
+| `--dry-run`   | -       | -       | report what would be removed without removing it                 |
 | `--json`      | -       | -       | list as machine-readable JSON                                    |
 
 ## rule-mcp fix

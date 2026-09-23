@@ -16,8 +16,8 @@ import { runPlan, tally } from "../_run-plan.js";
 
 const ids = (plan) => plan.map((task) => task.id);
 
-test("a minimal install plan is the runtime home and the cli check", () => {
-  assert.deepEqual(ids(buildInstallPlan({})), ["runtime-home", "cli"]);
+test("a minimal install plan is the runtime home, the skills reconcile and the cli check", () => {
+  assert.deepEqual(ids(buildInstallPlan({})), ["runtime-home", "skills", "cli"]);
 });
 
 test("building a plan touches no filesystem", () => {
@@ -31,7 +31,15 @@ test("building a plan touches no filesystem", () => {
 test("every selected agent gets its own row", () => {
   const plan = buildInstallPlan({ agents: ["claude", "cursor", "pi"] });
 
-  assert.deepEqual(ids(plan), ["runtime-home", "agent:claude", "agent:cursor", "agent:pi", "cli"]);
+  assert.deepEqual(ids(plan), ["runtime-home", "agent:claude", "agent:cursor", "agent:pi", "skills", "cli"]);
+});
+
+test("the skills row installs when selected and reconciles when not", () => {
+  const install = buildInstallPlan({ extras: { skills: true } }).find((task) => task.id === "skills");
+  const reconcile = buildInstallPlan({ extras: {} }).find((task) => task.id === "skills");
+
+  assert.match(install.detail, /^~\/\.agents\/skills$/, "the selected step copies the catalog");
+  assert.match(reconcile.detail, /\.claude\/skills/, "the declined step removes what an earlier install copied");
 });
 
 test("the service step only appears in daemon mode", () => {

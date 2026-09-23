@@ -50,9 +50,10 @@ export function registerSkillsCommand(program) {
   program
     .command("skills")
     .description("Manage the rule AI skill system")
-    .argument("[action]", "install | list | reload")
+    .argument("[action]", "install | uninstall | list | reload")
     .option("--scope <s>", "global (default, ~/.agents/skills/) or project (.agents/skills/)", "global")
     .option("--all", "pre-select all skills")
+    .option("--dry-run", "report what would be removed without removing it")
     .option("--json", "list as machine-readable JSON")
     .allowExcessArguments(false)
     .action(async function skillsAction(action, options, command) {
@@ -66,6 +67,11 @@ export function registerSkillsCommand(program) {
         case "install": {
           const { skillsInstallCommand } = await import("./skills-install/index.js");
           await skillsInstallCommand({ scope: options.scope, selectAll: options.all });
+          break;
+        }
+        case "uninstall": {
+          const { skillsUninstallCommand } = await import("./skills-install/index.js");
+          skillsUninstallCommand({ scope: options.scope, dryRun: options.dryRun });
           break;
         }
         case "list": {
