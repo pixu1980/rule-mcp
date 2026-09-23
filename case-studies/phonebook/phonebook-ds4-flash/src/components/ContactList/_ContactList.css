@@ -1,0 +1,62 @@
+/**
+ * FILE: _ContactList.css
+ * USAGE: Contact list with alphabetical grouping and selection.
+ * SCOPE: section[data-part="contact-list"] and children.
+ */
+
+/* ─── Container ─── */
+
+section[data-part="contact-list"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-6);
+}
+
+/* ─── States ─── */
+
+[data-part="loading-text"],
+[data-part="empty-text"] {
+  padding: var(--ds-space-8) var(--ds-space-4);
+  text-align: center;
+  font-size: var(--ds-font-size-sm);
+  color: var(--ds-text-tertiary);
+}
+
+/* ─── Group ─── */
+
+[data-part="group"] {
+  display: flex;
+  flex-direction: column;
+}
+
+[data-part="group-header"] {
+  display: flex;
+  align-items: center;
+  padding: var(--ds-space-2) var(--ds-space-4);
+}
+
+[data-part="group-letter"] {
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-semibold);
+  color: var(--ds-text-secondary);
+  letter-spacing: var(--ds-letter-spacing-wide);
+}
+
+[data-part="group-list"] {
+  display: flex;
+  flex-direction: column;
+}
+
+[data-part="group-item"] {
+  margin: 0;
+  border-radius: var(--ds-radius-lg);
+  transition: background var(--ds-duration-fast) var(--ds-easing-standard);
+}
+
+[data-part="group-item"]:hover {
+  background: var(--ds-bg-hover);
+}
+
+[data-part="group-item"][data-selected] {
+  background: var(--ds-bg-selected);
+}

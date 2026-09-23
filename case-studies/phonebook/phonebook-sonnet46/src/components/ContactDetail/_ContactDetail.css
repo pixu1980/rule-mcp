@@ -1,0 +1,414 @@
+/* =============================================================================
+ * ContactDetail — _ContactDetail.css
+ * Full-page detail view: hero, quick actions, info sections, and footer.
+ * Rich with microinteractions: spring physics on action buttons,
+ * glowing favourite toggle, staggered section entrance animation.
+ * =============================================================================
+ */
+
+/* Outer scroll container */
+section[data-part="contact-detail"] {
+  min-height: 100%;
+  animation: detail-enter var(--duration-slow) var(--ease-out) both;
+}
+
+@keyframes detail-enter {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================================================
+ * HERO
+ * ============================================================================ */
+header[data-part="detail-hero"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-12) var(--space-8) var(--space-8);
+  background: linear-gradient(
+    180deg,
+    var(--bg-elevated) 0%,
+    var(--bg-base) 100%
+  );
+  border-bottom: 1px solid var(--border-subtle);
+  gap: var(--space-4);
+}
+
+/* Avatar + favourite button */
+div[data-part="hero-avatar"] {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Favourite toggle — absolute badge on avatar */
+button[data-part="favorite-btn"] {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: var(--bg-elevated);
+  border: 2px solid var(--bg-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  transition:
+    color var(--duration-fast) var(--ease-default),
+    background var(--duration-fast) var(--ease-default),
+    transform var(--duration-normal) var(--ease-spring);
+}
+
+button[data-part="favorite-btn"]:hover {
+  color: var(--orange);
+  background: var(--orange-subtle);
+  transform: scale(1.15);
+}
+
+button[data-part="favorite-btn"]:active {
+  transform: scale(0.9);
+}
+
+button[data-part="favorite-btn"]:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+button[data-part="favorite-btn"][data-active] {
+  color: var(--yellow);
+  background: var(--orange-subtle);
+  animation: star-pulse var(--duration-normal) var(--ease-spring) both;
+}
+
+@keyframes star-pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.25) rotate(20deg); }
+  100% { transform: scale(1); }
+}
+
+/* Hero text */
+div[data-part="hero-info"] {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+h1[data-part="detail-name"] {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-tighter);
+  color: var(--text-primary);
+  line-height: var(--leading-tight);
+}
+
+p[data-part="detail-subtitle"] {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-weight: var(--font-regular);
+  line-height: var(--leading-snug);
+}
+
+/* ============================================================================
+ * QUICK ACTIONS
+ * ============================================================================ */
+nav[data-part="quick-actions"] {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  padding-top: var(--space-2);
+}
+
+button[data-part="quick-action"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1-5);
+  border: none;
+  background: transparent;
+  cursor: default;
+  transition: transform var(--duration-normal) var(--ease-spring);
+}
+
+button[data-part="quick-action"]:hover {
+  transform: translateY(-3px);
+}
+
+button[data-part="quick-action"]:active {
+  transform: translateY(0) scale(0.94);
+}
+
+button[data-part="quick-action"]:focus-visible span[data-part="qa-icon-wrap"] {
+  box-shadow: var(--focus-ring);
+}
+
+/* Icon container */
+span[data-part="qa-icon-wrap"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-xl);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  transition:
+    background var(--duration-fast) var(--ease-default),
+    border-color var(--duration-fast) var(--ease-default),
+    color var(--duration-fast) var(--ease-default),
+    box-shadow var(--duration-fast) var(--ease-default);
+}
+
+button[data-part="quick-action"]:hover span[data-part="qa-icon-wrap"] {
+  box-shadow: var(--shadow-sm);
+}
+
+/* Colour variants */
+button[data-part="quick-action"][data-color="blue"]:hover span[data-part="qa-icon-wrap"] {
+  background: var(--accent-subtle);
+  border-color: var(--border-accent);
+  color: var(--accent);
+}
+
+button[data-part="quick-action"][data-color="green"]:hover span[data-part="qa-icon-wrap"] {
+  background: var(--green-subtle);
+  border-color: rgba(52, 199, 122, 0.35);
+  color: var(--green);
+}
+
+button[data-part="quick-action"][data-color="teal"]:hover span[data-part="qa-icon-wrap"] {
+  background: rgba(90, 200, 250, 0.10);
+  border-color: rgba(90, 200, 250, 0.30);
+  color: var(--teal);
+}
+
+button[data-part="quick-action"][data-color="purple"]:hover span[data-part="qa-icon-wrap"] {
+  background: var(--purple-subtle);
+  border-color: rgba(191, 90, 242, 0.35);
+  color: var(--purple);
+}
+
+/* Label */
+span[data-part="qa-label"] {
+  font-size: var(--text-2xs);
+  font-weight: var(--font-medium);
+  color: var(--text-secondary);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ============================================================================
+ * DETAIL BODY — info section cards
+ * ============================================================================ */
+div[data-part="detail-body"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-8) var(--space-12);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ---- Section card ---- */
+article[data-part="info-section"] {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  animation: section-in var(--duration-slow) var(--ease-out) both;
+}
+
+article[data-part="info-section"]:nth-child(1) { animation-delay: 40ms; }
+article[data-part="info-section"]:nth-child(2) { animation-delay: 80ms; }
+article[data-part="info-section"]:nth-child(3) { animation-delay: 120ms; }
+article[data-part="info-section"]:nth-child(4) { animation-delay: 160ms; }
+article[data-part="info-section"]:nth-child(5) { animation-delay: 200ms; }
+article[data-part="info-section"]:nth-child(6) { animation-delay: 240ms; }
+article[data-part="info-section"]:nth-child(7) { animation-delay: 280ms; }
+
+@keyframes section-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Section header label row */
+header[data-part="section-header"] {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  padding: var(--space-2-5) var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-tertiary);
+}
+
+span[data-part="section-title"] {
+  font-size: var(--text-2xs);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+}
+
+/* Rows list */
+ul[data-part="section-rows"] {
+  list-style: none;
+  padding: 0 var(--space-4);
+}
+
+/* Individual row */
+li[data-part="info-row"] {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+li[data-part="info-row"]:last-child {
+  border-bottom: none;
+}
+
+li[data-part="info-row"][data-multiline] {
+  align-items: flex-start;
+}
+
+/* Label */
+span[data-part="row-label"] {
+  font-size: var(--text-2xs);
+  font-weight: var(--font-medium);
+  color: var(--text-tertiary);
+  width: 72px;
+  flex-shrink: 0;
+  padding-top: 1px;
+  letter-spacing: var(--tracking-wide);
+  text-align: right;
+}
+
+/* Value */
+span[data-part="row-value"],
+a[data-part="row-value"] {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  font-weight: var(--font-regular);
+  line-height: var(--leading-snug);
+  flex: 1;
+  text-decoration: none;
+}
+
+a[data-part="row-value"][data-accent],
+span[data-part="row-value"][data-accent] {
+  color: var(--accent-text);
+}
+
+a[data-part="row-value"]:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+a[data-part="row-value"]:focus-visible {
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-xs);
+}
+
+/* Address block */
+address[data-part="row-address"] {
+  font-style: normal;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+span[data-part="address-line"] {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  line-height: var(--leading-snug);
+}
+
+/* Notes paragraph */
+p[data-part="row-notes"] {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  flex: 1;
+}
+
+/* ============================================================================
+ * FOOTER ACTIONS — Edit + Delete
+ * ============================================================================ */
+footer[data-part="detail-actions"] {
+  display: flex;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+  animation: section-in var(--duration-slow) var(--ease-out) both;
+  animation-delay: 320ms;
+}
+
+button[data-part="action-btn"] {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 40px;
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  border: 1px solid;
+  transition:
+    background var(--duration-fast) var(--ease-default),
+    transform var(--duration-fast) var(--ease-spring),
+    box-shadow var(--duration-fast) var(--ease-default);
+}
+
+button[data-part="action-btn"]:active {
+  transform: scale(0.96);
+}
+
+button[data-part="action-btn"]:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+/* Secondary (Edit) */
+button[data-part="action-btn"][data-variant="secondary"] {
+  background: var(--bg-elevated);
+  border-color: var(--border-default);
+  color: var(--text-primary);
+}
+
+button[data-part="action-btn"][data-variant="secondary"]:hover {
+  background: var(--bg-overlay);
+  border-color: var(--border-strong);
+}
+
+/* Danger (Delete) */
+button[data-part="action-btn"][data-variant="danger"] {
+  background: var(--bg-elevated);
+  border-color: var(--border-default);
+  color: var(--text-secondary);
+}
+
+button[data-part="action-btn"][data-variant="danger"]:hover {
+  background: var(--red-subtle);
+  border-color: rgba(242, 82, 74, 0.35);
+  color: var(--red);
+}
+
+/* Danger confirm (pulsing) */
+button[data-part="action-btn"][data-variant="danger-confirm"] {
+  background: var(--red-subtle);
+  border-color: rgba(242, 82, 74, 0.50);
+  color: var(--red);
+  animation: danger-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes danger-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(242, 82, 74, 0.2); }
+  50%       { box-shadow: 0 0 0 5px rgba(242, 82, 74, 0); }
+}

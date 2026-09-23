@@ -1,0 +1,121 @@
+/**
+ * FILE: _Modal.css
+ * USAGE: Modal overlay and dialog — backdrop, sheet, confirm/cancel actions.
+ * SCOPE: section[data-part="modal-backdrop"] and children.
+ */
+
+/* ─── Backdrop ─── */
+
+section[data-part="modal-backdrop"] {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(0.8rem);
+  -webkit-backdrop-filter: blur(0.8rem);
+
+  animation: fade-in var(--ds-duration-fast) var(--ds-easing-standard) both;
+}
+
+/* ─── Dialog ─── */
+
+dialog[data-part="modal-dialog"] {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-5);
+
+  width: 90%;
+  max-width: 40rem;
+  padding: var(--ds-space-7);
+
+  color: var(--ds-text-primary);
+  background: var(--ds-bg-secondary);
+  border: 0.1rem solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-xl);
+  box-shadow: var(--ds-elevation-4);
+
+  animation: scale-in var(--ds-duration-normal) var(--ds-easing-spring) both;
+}
+
+dialog[data-part="modal-dialog"]::backdrop {
+  display: none; /* handled by backdrop overlay */
+}
+
+/* ─── Header ─── */
+
+[data-part="modal-header"] {
+  display: flex;
+  align-items: center;
+}
+
+[data-part="modal-title"] {
+  font-size: var(--ds-font-size-lg);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+/* ─── Message ─── */
+
+[data-part="modal-message"] {
+  font-size: var(--ds-font-size-base);
+  color: var(--ds-text-secondary);
+  line-height: var(--ds-line-height-loose);
+}
+
+/* ─── Footer ─── */
+
+[data-part="modal-footer"] {
+  display: flex;
+  gap: var(--ds-space-3);
+  justify-content: flex-end;
+  margin-top: var(--ds-space-2);
+}
+
+/* ─── Buttons ─── */
+
+[data-part="modal-btn"] {
+  padding: var(--ds-space-3) var(--ds-space-6);
+  font-size: var(--ds-font-size-base);
+  font-weight: var(--ds-font-weight-medium);
+  border-radius: var(--ds-radius-lg);
+  transition:
+    transform var(--ds-duration-fast) var(--ds-easing-spring),
+    background var(--ds-duration-fast) var(--ds-easing-standard);
+}
+
+[data-part="modal-btn"][data-variant="cancel"] {
+  color: var(--ds-text-secondary);
+  background: var(--ds-bg-tertiary);
+}
+
+[data-part="modal-btn"][data-variant="cancel"]:hover {
+  background: var(--ds-gray-200);
+}
+
+[data-part="modal-btn"][data-variant="confirm"] {
+  color: var(--ds-text-inverse);
+  background: var(--ds-accent);
+}
+
+[data-part="modal-btn"][data-variant="confirm"]:hover {
+  background: var(--ds-accent-hover);
+}
+
+[data-part="modal-btn"][data-variant="danger"] {
+  color: var(--ds-text-inverse);
+  background: var(--ds-danger);
+}
+
+[data-part="modal-btn"][data-variant="danger"]:hover {
+  background: var(--ds-red-600);
+}
+
+[data-part="modal-btn"]:active {
+  transform: scale(0.97);
+}

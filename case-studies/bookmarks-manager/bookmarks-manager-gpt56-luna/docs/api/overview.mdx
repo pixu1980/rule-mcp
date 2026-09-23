@@ -1,0 +1,20 @@
+---
+title: API overview
+---
+
+# API overview
+
+Base URL: `http://localhost:8787`
+
+All versioned routes live under `/api/v1`. Requests and responses use JSON. Invalid requests return the structured error contract with `statusCode`, `correlation-id`, and `errors[]`.
+
+## Endpoints
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `GET` | `/health` | Liveness signal |
+| `GET` | `/api/v1/bookmarks?offset=0&limit=20` | List bookmarks |
+| `POST` | `/api/v1/bookmarks/preview` | Scrape a URL without saving |
+| `POST` | `/api/v1/bookmarks` | Scrape and persist a bookmark |
+
+See [`openapi.yaml`](https://github.com/example/luma-bookmarks/blob/main/docs/api/openapi.yaml) for request, response, and error schemas.

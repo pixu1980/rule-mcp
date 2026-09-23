@@ -1,0 +1,32 @@
+---
+title: Architecture
+---
+
+# Architecture
+
+```text
+apps/
+├── api/   Express 5 + TypeScript
+└── web/   Vite + React + TypeScript
+```
+
+## Flow
+
+1. User pastes a URL into the primary capture form.
+2. React Hook Form and zod validate a complete HTTP(S) URL.
+3. `POST /api/v1/bookmarks/preview` fetches public HTML server-side.
+4. The scraper extracts Open Graph/Twitter metadata and readable text with Mozilla Readability.
+5. The preview renders before persistence.
+6. `POST /api/v1/bookmarks` re-fetches and stores the approved bookmark in the in-memory repository.
+7. `GET /api/v1/bookmarks` returns the newest items with `X-Total-Count`.
+
+## Boundaries
+
+- Client never scrapes remote pages directly; this avoids CORS and keeps parsing server-side.
+- Zod schemas validate requests and responses at both network boundaries.
+- The repository is a replaceable persistence seam for SQLite/Postgres.
+- Helmet, CORS allowlisting, bounded JSON, timeout, content-type checks, and local/private URL rejection protect the fetch boundary.
+
+## UI system
+
+Tokens live in `apps/web/src/styles/_global.css`. The stylesheet is external and adopted once at bootstrap. Selectors use semantic elements and `data-part` attributes only: no classes, inline styles, Tailwind, or CSS-in-JS. Focus, reduced motion, responsive layout, and labelled status feedback are first-class states.

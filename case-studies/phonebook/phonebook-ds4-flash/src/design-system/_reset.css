@@ -1,0 +1,85 @@
+/**
+ * FILE: _reset.css
+ * USAGE: Global CSS reset — normalises box model, margins, fonts across browsers.
+ * SCOPE: All elements via universal selector.
+ */
+
+/* ─── Box Model ─── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Document ─── */
+
+html {
+  font-size: 62.5%; /* 1rem = 10px for accessibility-friendly base-10 math */
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Body ─── */
+
+body {
+  min-height: 100vh;
+  font-size: 1.6rem;
+  line-height: 1.5;
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ─── Lists ─── */
+
+ul, ol {
+  list-style: none;
+}
+
+/* ─── Links ─── */
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ─── Buttons ─── */
+
+button {
+  font: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ─── Inputs ─── */
+
+input, textarea, select {
+  font: inherit;
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ─── Images ─── */
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* ─── Focus ─── */
+
+:focus-visible {
+  outline: 0.3rem solid var(--ds-focus-ring);
+  outline-offset: 0.2rem;
+  border-radius: var(--ds-radius-md);
+}

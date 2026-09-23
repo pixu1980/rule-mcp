@@ -1,0 +1,83 @@
+/**
+ * FILE: _ContactCard.css
+ * USAGE: Compact contact card for the sidebar list.
+ * SCOPE: article[data-part="contact-card"] and children.
+ */
+
+/* ─── Card ─── */
+
+article[data-part="contact-card"] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-4);
+
+  padding: var(--ds-space-3) var(--ds-space-4);
+
+  border-radius: var(--ds-radius-lg);
+  cursor: pointer;
+
+  transition:
+    transform var(--ds-duration-fast) var(--ds-easing-spring),
+    background var(--ds-duration-fast) var(--ds-easing-standard),
+    box-shadow var(--ds-duration-fast) var(--ds-easing-standard);
+}
+
+article[data-part="contact-card"]:hover {
+  transform: translateX(0.2rem);
+}
+
+article[data-part="contact-card"]:active {
+  transform: scale(0.98);
+}
+
+/* ─── Info ─── */
+
+[data-part="card-info"] {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+}
+
+[data-part="card-name"] {
+  font-size: var(--ds-font-size-base);
+  font-weight: var(--ds-font-weight-regular);
+  color: var(--ds-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-part="card-phone"] {
+  font-size: var(--ds-font-size-sm);
+  color: var(--ds-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── Category Badge ─── */
+
+[data-part="card-category"] {
+  padding: var(--ds-space-1) var(--ds-space-3);
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-medium);
+  border-radius: var(--ds-radius-full);
+  white-space: nowrap;
+}
+
+[data-part="card-category"][data-category="friends"] {
+  color: #007AFF;
+  background: rgba(0, 122, 255, 0.1);
+}
+
+[data-part="card-category"][data-category="family"] {
+  color: #FF9500;
+  background: rgba(255, 149, 0, 0.1);
+}
+
+[data-part="card-category"][data-category="work"] {
+  color: #34C759;
+  background: rgba(52, 199, 89, 0.1);
+}

@@ -1,0 +1,12 @@
+{
+  "name": "luma-bookmarks",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @luma/api --filter @luma/web dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "type-check": "pnpm -r type-check",
+    "lint": "pnpm -r lint"
+  }
+}

@@ -1,0 +1,89 @@
+/* =============================================================================
+ * Avatar — _Avatar.css
+ * Circular initials avatar with 12 colour slots (data-color="0"…"11")
+ * and five size variants (data-size="xs|sm|md|lg|xl").
+ * =============================================================================
+ */
+
+/* Base */
+[data-part="avatar"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-tight);
+  color: rgba(255, 255, 255, 0.94);
+  flex-shrink: 0;
+  user-select: none;
+  transition:
+    transform var(--duration-normal) var(--ease-spring),
+    box-shadow var(--duration-normal) var(--ease-default);
+}
+
+/* ----------------------------------------------------------------------------
+ * Size variants
+ * ---------------------------------------------------------------------------- */
+[data-part="avatar"][data-size="xs"] {
+  width: 24px;
+  height: 24px;
+  font-size: var(--text-2xs);
+}
+
+[data-part="avatar"][data-size="sm"] {
+  width: 32px;
+  height: 32px;
+  font-size: var(--text-xs);
+}
+
+[data-part="avatar"][data-size="md"] {
+  width: 44px;
+  height: 44px;
+  font-size: var(--text-sm);
+}
+
+[data-part="avatar"][data-size="lg"] {
+  width: 72px;
+  height: 72px;
+  font-size: var(--text-xl);
+}
+
+[data-part="avatar"][data-size="xl"] {
+  width: 88px;
+  height: 88px;
+  font-size: var(--text-2xl);
+  box-shadow: var(--shadow-md);
+}
+
+/* ----------------------------------------------------------------------------
+ * Ring state (shown when the contact is selected in detail view)
+ * ---------------------------------------------------------------------------- */
+[data-part="avatar"][data-ring] {
+  box-shadow:
+    0 0 0 3px var(--bg-base),
+    0 0 0 5px var(--accent),
+    var(--shadow-md);
+}
+
+/* ----------------------------------------------------------------------------
+ * Colour palette — 12 deterministic slots
+ * ---------------------------------------------------------------------------- */
+[data-part="avatar"][data-color="0"]  { background: var(--avatar-0); }
+[data-part="avatar"][data-color="1"]  { background: var(--avatar-1); }
+[data-part="avatar"][data-color="2"]  { background: var(--avatar-2); }
+[data-part="avatar"][data-color="3"]  { background: var(--avatar-3); }
+[data-part="avatar"][data-color="4"]  { background: var(--avatar-4); }
+[data-part="avatar"][data-color="5"]  { background: var(--avatar-5); }
+[data-part="avatar"][data-color="6"]  { background: var(--avatar-6); }
+[data-part="avatar"][data-color="7"]  { background: var(--avatar-7); }
+[data-part="avatar"][data-color="8"]  { background: var(--avatar-8); }
+[data-part="avatar"][data-color="9"]  { background: var(--avatar-9); }
+[data-part="avatar"][data-color="10"] { background: var(--avatar-10); }
+[data-part="avatar"][data-color="11"] { background: var(--avatar-11); }
+
+/* Slightly dim warm yellows/oranges for legibility */
+[data-part="avatar"][data-color="3"],
+[data-part="avatar"][data-color="10"] {
+  color: rgba(0, 0, 0, 0.78);
+}

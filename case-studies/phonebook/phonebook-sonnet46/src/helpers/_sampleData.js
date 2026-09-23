@@ -1,0 +1,666 @@
+/**
+ * @file src/helpers/_sampleData.js
+ * @description 24 rich sample contacts seeded on first application launch.
+ * Each contact carries phones, emails, address, birthday, company, notes,
+ * social handles, group memberships, and a favourite flag.
+ *
+ * @typedef {Object} PhoneEntry
+ * @property {string} id
+ * @property {string} label  mobile|home|work|fax|other
+ * @property {string} value
+ *
+ * @typedef {Object} EmailEntry
+ * @property {string} id
+ * @property {string} label  personal|work|school|other
+ * @property {string} value
+ *
+ * @typedef {Object} SocialEntry
+ * @property {string} id
+ * @property {string} platform  twitter|linkedin|instagram|github|website|other
+ * @property {string} handle
+ *
+ * @typedef {Object} Address
+ * @property {string} street
+ * @property {string} city
+ * @property {string} state
+ * @property {string} zip
+ * @property {string} country
+ *
+ * @typedef {Object} Contact
+ * @property {string} id
+ * @property {string} firstName
+ * @property {string} lastName
+ * @property {string} [company]
+ * @property {string} [jobTitle]
+ * @property {PhoneEntry[]} phones
+ * @property {EmailEntry[]} emails
+ * @property {Address} [address]
+ * @property {string} [birthday]  YYYY-MM-DD
+ * @property {string} [notes]
+ * @property {SocialEntry[]} social
+ * @property {string[]} groups   all|favorites|family|friends|work
+ * @property {boolean} favorite
+ */
+
+/** @type {Contact[]} */
+export const SAMPLE_CONTACTS = [
+  {
+    id: "c-001",
+    firstName: "Emma",
+    lastName: "Anderson",
+    company: "Meridian Design Studio",
+    jobTitle: "Creative Director",
+    phones: [
+      { id: "p1", label: "mobile", value: "+1 (415) 555-0142" },
+      { id: "p2", label: "work", value: "+1 (415) 555-0900 x204" },
+    ],
+    emails: [
+      { id: "e1", label: "personal", value: "emma@icloud.com" },
+      { id: "e2", label: "work", value: "emma@meridiandesign.io" },
+    ],
+    address: {
+      street: "240 Columbus Ave",
+      city: "San Francisco",
+      state: "CA",
+      zip: "94133",
+      country: "United States",
+    },
+    birthday: "1988-03-14",
+    notes: "Met at WWDC 2023. Expert in design systems and motion design.",
+    social: [
+      { id: "s1", platform: "twitter", handle: "@emmadesigns" },
+      { id: "s2", platform: "linkedin", handle: "in/emma-anderson" },
+    ],
+    groups: ["friends", "work"],
+    favorite: true,
+  },
+  {
+    id: "c-002",
+    firstName: "James",
+    lastName: "Chen",
+    company: "Apple Inc.",
+    jobTitle: "Senior Software Engineer",
+    phones: [
+      { id: "p1", label: "mobile", value: "+1 (408) 555-0277" },
+      { id: "p2", label: "work", value: "+1 (408) 996-1010" },
+    ],
+    emails: [
+      { id: "e1", label: "work", value: "j.chen@apple.com" },
+      { id: "e2", label: "personal", value: "james.chen@me.com" },
+    ],
+    address: {
+      street: "1 Apple Park Way",
+      city: "Cupertino",
+      state: "CA",
+      zip: "95014",
+      country: "United States",
+    },
+    birthday: "1990-07-22",
+    notes: "Specialist in SwiftUI and Core ML. Gym partner on Thursdays.",
+    social: [
+      { id: "s1", platform: "github", handle: "jchen-dev" },
+      { id: "s2", platform: "twitter", handle: "@jameschen_swiftui" },
+    ],
+    groups: ["friends", "work"],
+    favorite: true,
+  },
+  {
+    id: "c-003",
+    firstName: "Sophia",
+    lastName: "Williams",
+    company: "Herzog & de Meuron",
+    jobTitle: "Principal Architect",
+    phones: [{ id: "p1", label: "mobile", value: "+44 7700 900142" }],
+    emails: [
+      { id: "e1", label: "personal", value: "sophia.w@proton.me" },
+      { id: "e2", label: "work", value: "swilliams@herzogdemeuron.com" },
+    ],
+    address: {
+      street: "Rheinschanze 6",
+      city: "Basel",
+      state: "",
+      zip: "4056",
+      country: "Switzerland",
+    },
+    birthday: "1985-11-03",
+    notes: "Thesis advisor from ETH Zürich. Visiting SF every April.",
+    social: [{ id: "s1", platform: "linkedin", handle: "in/sophia-williams-arch" }],
+    groups: ["friends"],
+    favorite: false,
+  },
+  {
+    id: "c-004",
+    firstName: "Olivia",
+    lastName: "Johnson",
+    company: "",
+    jobTitle: "",
+    phones: [
+      { id: "p1", label: "mobile", value: "+1 (617) 555-0181" },
+      { id: "p2", label: "home", value: "+1 (617) 555-0310" },
+    ],
+    emails: [{ id: "e1", label: "personal", value: "mom@johnson-family.net" }],
+    address: {
+      street: "42 Maple Street",
+      city: "Brookline",
+      state: "MA",
+      zip: "02445",
+      country: "United States",
+    },
+    birthday: "1958-05-18",
+    notes: "Call every Sunday morning. Loves gardening and mystery novels.",
+    social: [],
+    groups: ["family"],
+    favorite: true,
+  },
+  {
+    id: "c-005",
+    firstName: "William",
+    lastName: "Johnson",
+    company: "Johnson & Partners Law",
+    jobTitle: "Senior Partner",
+    phones: [
+      { id: "p1", label: "mobile", value: "+1 (617) 555-0092" },
+      { id: "p2", label: "work", value: "+1 (617) 555-0700" },
+    ],
+    emails: [
+      { id: "e1", label: "personal", value: "dad@johnson-family.net" },
+      { id: "e2", label: "work", value: "william@johnsonpartners.law" },
+    ],
+    address: {
+      street: "42 Maple Street",
+      city: "Brookline",
+      state: "MA",
+      zip: "02445",
+      country: "United States",
+    },
+    birthday: "1956-09-27",
+    notes: "Ask about the Celtics season. Retired? No, never.",
+    social: [{ id: "s1", platform: "linkedin", handle: "in/william-johnson-law" }],
+    groups: ["family"],
+    favorite: true,
+  },
+  {
+    id: "c-006",
+    firstName: "Isabella",
+    lastName: "Davis",
+    company: "Pixar Animation Studios",
+    jobTitle: "Character Animator",
+    phones: [{ id: "p1", label: "mobile", value: "+1 (510) 555-0249" }],
+    emails: [
+      { id: "e1", label: "personal", value: "isabelladavis@icloud.com" },
+      { id: "e2", label: "work", value: "i.davis@pixar.com" },
+    ],
+    address: {
+      street: "1200 Park Ave",
+      city: "Emeryville",
+      state: "CA",
+      zip: "94608",
+      country: "United States",
+    },
+    birthday: "1991-02-08",
+    notes: "College roommate. Best pasta in the Bay. Wine nights every Friday.",
+    social: [
+      { id: "s1", platform: "instagram", handle: "@belladavis.art" },
+      { id: "s2", platform: "twitter", handle: "@bella_animates" },
+    ],
+    groups: ["friends"],
+    favorite: true,
+  },
+  {
+    id: "c-007",
+    firstName: "Lucas",
+    lastName: "Martinez",
+    company: "Stripe",
+    jobTitle: "Product Manager",
+    phones: [
+      { id: "p1", label: "mobile", value: "+1 (628) 555-0178" },
+      { id: "p2", label: "work", value: "+1 (628) 555-0500" },
+    ],
+    emails: [
+      { id: "e1", label: "work", value: "lucas@stripe.com" },
+      { id: "e2", label: "personal", value: "lucasmartinez@gmail.com" },
+    ],
+    address: {
+      street: "510 Townsend St",
+      city: "San Francisco",
+      state: "CA",
+      zip: "94103",
+      country: "United States",
+    },
+    birthday: "1992-06-14",
+    notes: "Lunch every other Wednesday at Tartine. Obsessed with payments infra.",
+    social: [
+      { id: "s1", platform: "twitter", handle: "@lucasmartinez_pm" },
+      { id: "s2", platform: "linkedin", handle: "in/lucas-martinez" },
+    ],
+    groups: ["friends", "work"],
+    favorite: false,
+  },
+  {
+    id: "c-008",
+    firstName: "Ava",
+    lastName: "Thompson",
+    company: "Yoga Flow Studio",
+    jobTitle: "Head Instructor",
+    phones: [{ id: "p1", label: "mobile", value: "+1 (415) 555-0388" }],
+    emails: [{ id: "e1", label: "personal", value: "ava@yogaflowsf.com" }],
+    address: {
+      street: "180 Valencia St",
+      city: "San Francisco",
+      state: "CA",
+      zip: "94103",
+      country: "United States",
+    },
+    birthday: "1989-08-30",
+    notes: "Tuesday 7am class. Also does private sessions.",
+    social: [{ id: "s1", platform: "instagram", handle: "@avathompsonflow" }],
+    groups: ["friends"],
+    favorite: false,
+  },
+  {
+    id: "c-009",
+    firstName: "Noah",
+    lastName: "Garcia",
+    company: "Freelance",
+    jobTitle: "Photographer",
+    phones: [{ id: "p1", label: "mobile", value: "+1 (347) 555-0211" }],
+    emails: [{ id: "e1", label: "personal", value: "noah@noahgarcia.photo" }],
+    address: {
+      street: "37 W 26th St",
+      city: "New York",
+      state: "NY",
+      zip: "10010",
+      country: "United States",
+    },
+    birthday: "1993-12-05",
+    notes: "Shot our team photos last year. Specialises in architecture and portrait.",
+    social: [
+      { id: "s1", platform: "instagram", handle: "@noahgarcia.photo" },
+      { id: "s2", platform: "website", handle: "noahgarcia.photo" },
+    ],
+    groups: ["friends"],
+    favorite: false,
+  },
+  {
+    id: "c-010",
+    firstName: "Mia",
+    lastName: "Rodriguez",
+    company: "UCSF Medical Center",
+    jobTitle: "Internist — Primary Care",
+    phones: [
+      { id: "p1", label: "mobile", value: "+1 (415) 555-0455" },
+      { id: "p2", label: "work", value: "+1 (415) 476-1000" },
+    ],
+    emails: [
+      { id: "e1", label: "work", value: "mia.rodriguez@ucsf.edu" },
+      { id: "e2", label: "personal", value: "miarodriguez@icloud.com" },
+    ],
+    address: {
+      street: "505 Parnassus Ave",
+      city: "San Francisco",
+      state: "CA",
+      zip: "94143",
+      country: "United States",
+    },
+    birthday: "1984-04-19",
+    notes: "Annual checkup in March. Brilliant diagnostician.",
+    social: [],
+    groups: ["work"],
+    favorite: false,
+  },
+  {
+    id: "c-011",
+    firstName: "Ethan",
+    lastName: "Wilson",
+    company: "Blue Bottle Coffee",
+    jobTitle: "Head Barista",
+    phones: [{ id: "p1", label: "mobile", value: "+1 (415) 555-0399" }],
+    emails: [{ id: "e1", label: "personal", value: "ethan.wilson@bluebottlecoffee.com" }],
+    address: {
+      street: "66 Mint St",
+      city: "San Francisco",
+      state: "CA",
+      zip: "94103",
+      country: "United States",
+    },
+    birthday: "1995-10-11",
+    notes: "Has my usual order memorised. Saturday regulars.",
+    social: [{ id: "s1", platform: "instagram", handle: "@ethanbrews" }],
+    groups: ["friends"],
+    favorite: false,
+  },
+  {
+    id: "c-012",
+    firstName: "Charlotte",
+    lastName: "Moore",
+    company: "Morrison & Foerster LLP",
+    jobTitle: "Partner — Tech & IP",
+    phones: [
+      { id: "p1", label: "mobile", value: "+1 (415) 555-0611" },
+      { id: "p2", label: "work", value: "+1 (415) 268-7000" },
+    ],
+    emails: [
+      { id: "e1", label: "work", value: "cmoore@mofo.com" },
+      { id: "e2", label: "personal", value: "charlotte.moore@proton.me" },
+    ],
+    address: {
+      street: "425 Market St",
+      city: "San Francisco",
+      state: "CA",
+      zip: "94105",
+      country: "United States",
+    },
+    birthday: "1982-01-28",
+    notes: "Handled our IP portfolio in 2022. Sharp, fast, reliable.",
+    social: [{ id: "s1", platform: "linkedin", handle: "in/charlotte-moore-mofo" }],
+    groups: ["work"],
+    favorite: false,
+  },
+  {
+    id: "c-013",
+    firstName: "Oliver",
+    lastName: "Taylor",
+    company: "Self-Employed",
+    jobTitle: "Music Producer",
+    phones: [{ id: "p1", label: "mobile", value: "+1 (323) 555-0182" }],
+    emails: [{ id: "e1", label: "personal", value: "oliver@olivertaylor.music" }],
+    address: {
+      street: "1234 N Highland Ave",
+      city: "Los Angeles",
+      state: "CA",
+      zip: "90038",
+      country: "United States",
+    },
+    birthday: "1987-07-07",
+    notes: "Collaborates with Interscope. In SF every other month. Great ears.",
+    social: [
+      { id: "s1", platform: "instagram", handle: "@olivertaylormusic" },
+      { id: "s2", platform: "twitter", handle: "@oxtaylor" },
+    ],
+    groups: ["friends"],
+    favorite: false,
+  },
+  {
+    id: "c-014",
+    firstName: "Amelia",
+    lastName: "Brown",
+    company: "Stanford University",
+    jobTitle: "Research Scientist — HCI",
+    phones: [
+      { id: "p1", label: "mobile", value: "+1 (650) 555-0348" },
+      { id: "p2", label: "work", value: "+1 (650) 723-2300" },
+    ],
+    emails: [
+      { id: "e1", label: "work", value: "abrown@cs.stanford.edu" },
+      { id: "e2", label: "personal", value: "amelia.brown@gmail.com" },
+    ],
+    address: {
+      street: "353 Serra Mall",
+      city: "Stanford",
+      state: "CA",
+      zip: "94305",
+      country: "United States",
+    },
+    birthday: "1986-09-16",
+    notes: "Co-authored the haptics paper. Great collaborator and even better cook.",
+    social: [
+      { id: "s1", platform: "twitter", handle: "@ameliabrown_hci" },
+      { id: "s2", platform: "linkedin", handle: "in/ameliabrown-stanford" },
+    ],
+    groups: ["friends", "work"],
+    favorite: false,
+  },
+  {
+    id: "c-015",
+    firstName: "Liam",
+    lastName: "Jackson",
+    company: "Zaha Hadid Architects",
+    jobTitle: "Senior Associate",
+    phones: [{ id: "p1", label: "mobile", value: "+44 7911 123456" }],
+    emails: [
+      { id: "e1", label: "work", value: "l.jackson@zaha-hadid.com" },
+      { id: "e2", label: "personal", value: "liamjackson@me.com" },
+    ],
+    address: {
+      street: "10 Bowling Green Lane",
+      city: "London",
+      state: "England",
+      zip: "EC1R 0BQ",
+      country: "United Kingdom",
+    },
+    birthday: "1989-03-22",
+    notes: "Met at Pritzker ceremony, Venice 2022. Will be in SF in December.",
+    social: [{ id: "s1", platform: "linkedin", handle: "in/liam-jackson-arch" }],
+    groups: ["work"],
+    favorite: false,
+  },
+  {
+    id: "c-016",
+    firstName: "Harper",
+    lastName: "White",
+    company: "Saison Restaurant",
+    jobTitle: "Executive Chef",
+    phones: [{ id: "p1", label: "mobile", value: "+1 (415) 555-0552" }],
+    emails: [{ id: "e1", label: "personal", value: "harperwhite@gmail.com" }],
+    address: {
+      street: "178 Townsend St",
+      city: "San Francisco",
+      state: "CA",
+      zip: "94107",
+      country: "United States",
+    },
+    birthday: "1985-05-09",
+    notes: "Reserve a table two months in advance. His sourdough is otherworldly.",
+    social: [
+      { id: "s1", platform: "instagram", handle: "@chefharperwhite" },
+    ],
+    groups: ["friends"],
+    favorite: false,
+  },
+  {
+    id: "c-017",
+    firstName: "Benjamin",
+    lastName: "Harris",
+    company: "A24",
+    jobTitle: "Director of Photography",
+    phones: [{ id: "p1", label: "mobile", value: "+1 (212) 555-0423" }],
+    emails: [{ id: "e1", label: "personal", value: "benharris@proton.me" }],
+    address: {
+      street: "31 West 27th St",
+      city: "New York",
+      state: "NY",
+      zip: "10001",
+      country: "United States",
+    },
+    birthday: "1983-11-29",
+    notes: "Shot the Sundance short. Genius framing sense. Moving to LA in spring.",
+    social: [
+      { id: "s1", platform: "instagram", handle: "@benharris_dop" },
+      { id: "s2", platform: "twitter", handle: "@benjaminharrisfilm" },
+    ],
+    groups: ["friends"],
+    favorite: false,
+  },
+  {
+    id: "c-018",
+    firstName: "Evelyn",
+    lastName: "Carter",
+    company: "Figma",
+    jobTitle: "Principal Product Designer",
+    phones: [
+      { id: "p1", label: "mobile", value: "+1 (415) 555-0630" },
+      { id: "p2", label: "work", value: "+1 (415) 814-7550" },
+    ],
+    emails: [
+      { id: "e1", label: "work", value: "evelyn@figma.com" },
+      { id: "e2", label: "personal", value: "evelyncarter@icloud.com" },
+    ],
+    address: {
+      street: "760 Market St",
+      city: "San Francisco",
+      state: "CA",
+      zip: "94102",
+      country: "United States",
+    },
+    birthday: "1991-08-12",
+    notes: "Works on the components team. Met at Config 2023.",
+    social: [
+      { id: "s1", platform: "twitter", handle: "@evelyncarter_ux" },
+      { id: "s2", platform: "linkedin", handle: "in/evelyn-carter-design" },
+    ],
+    groups: ["friends", "work"],
+    favorite: false,
+  },
+  {
+    id: "c-019",
+    firstName: "Aiden",
+    lastName: "Clark",
+    company: "Wealth Advisory Partners",
+    jobTitle: "Financial Advisor",
+    phones: [
+      { id: "p1", label: "mobile", value: "+1 (415) 555-0741" },
+      { id: "p2", label: "work", value: "+1 (415) 555-0800 x12" },
+    ],
+    emails: [
+      { id: "e1", label: "work", value: "aiden.clark@wealthadvisory.com" },
+    ],
+    address: {
+      street: "One Market Plaza",
+      city: "San Francisco",
+      state: "CA",
+      zip: "94105",
+      country: "United States",
+    },
+    birthday: "1979-02-17",
+    notes: "Portfolio review in Q1. Very conservative, thorough.",
+    social: [{ id: "s1", platform: "linkedin", handle: "in/aiden-clark-cfa" }],
+    groups: ["work"],
+    favorite: false,
+  },
+  {
+    id: "c-020",
+    firstName: "Luna",
+    lastName: "Lewis",
+    company: "Petal & Stem",
+    jobTitle: "Florist & Owner",
+    phones: [{ id: "p1", label: "mobile", value: "+1 (415) 555-0812" }],
+    emails: [{ id: "e1", label: "personal", value: "luna@petalandstem.co" }],
+    address: {
+      street: "558 Haight St",
+      city: "San Francisco",
+      state: "CA",
+      zip: "94117",
+      country: "United States",
+    },
+    birthday: "1994-04-22",
+    notes: "Does all our office florals. Ask for seasonal arrangements, they're best.",
+    social: [{ id: "s1", platform: "instagram", handle: "@petalandstem_sf" }],
+    groups: ["friends"],
+    favorite: false,
+  },
+  {
+    id: "c-021",
+    firstName: "Henry",
+    lastName: "Robinson",
+    company: "Acquerello Restaurant",
+    jobTitle: "Head Sommelier",
+    phones: [{ id: "p1", label: "mobile", value: "+1 (415) 555-0923" }],
+    emails: [{ id: "e1", label: "personal", value: "h.robinson@acquerello.com" }],
+    address: {
+      street: "1722 Sacramento St",
+      city: "San Francisco",
+      state: "CA",
+      zip: "94109",
+      country: "United States",
+    },
+    birthday: "1980-10-04",
+    notes: "Incredible Barolo recommendations. Hosts cellar tours on Mondays.",
+    social: [{ id: "s1", platform: "instagram", handle: "@henryrobinson_wine" }],
+    groups: ["friends"],
+    favorite: false,
+  },
+  {
+    id: "c-022",
+    firstName: "Penelope",
+    lastName: "Johnson",
+    company: "MIT Media Lab",
+    jobTitle: "PhD Candidate",
+    phones: [
+      { id: "p1", label: "mobile", value: "+1 (617) 555-0288" },
+      { id: "p2", label: "home", value: "+1 (617) 555-0310" },
+    ],
+    emails: [
+      { id: "e1", label: "work", value: "pjohnson@media.mit.edu" },
+      { id: "e2", label: "personal", value: "penelope@icloud.com" },
+    ],
+    address: {
+      street: "77 Mass Ave",
+      city: "Cambridge",
+      state: "MA",
+      zip: "02139",
+      country: "United States",
+    },
+    birthday: "1996-07-03",
+    notes: "My sister. Thesis on biosensing interfaces. Comes home for Thanksgiving.",
+    social: [
+      { id: "s1", platform: "twitter", handle: "@penelope_research" },
+      { id: "s2", platform: "github", handle: "penelope-johnson" },
+    ],
+    groups: ["family"],
+    favorite: true,
+  },
+  {
+    id: "c-023",
+    firstName: "Jackson",
+    lastName: "Walker",
+    company: "Walker Architecture Group",
+    jobTitle: "Founding Partner",
+    phones: [
+      { id: "p1", label: "mobile", value: "+1 (617) 555-0174" },
+      { id: "p2", label: "work", value: "+1 (617) 555-0440" },
+    ],
+    emails: [
+      { id: "e1", label: "personal", value: "jackson.walker@me.com" },
+      { id: "e2", label: "work", value: "jackson@walkerarch.com" },
+    ],
+    address: {
+      street: "390 Congress St",
+      city: "Boston",
+      state: "MA",
+      zip: "02210",
+      country: "United States",
+    },
+    birthday: "1984-12-15",
+    notes: "Penny's husband and my brother-in-law. Brilliant structural engineer.",
+    social: [{ id: "s1", platform: "linkedin", handle: "in/jackson-walker-arch" }],
+    groups: ["family"],
+    favorite: false,
+  },
+  {
+    id: "c-024",
+    firstName: "Michael",
+    lastName: "Torres",
+    company: "Horizon Capital",
+    jobTitle: "Chief Financial Officer",
+    phones: [
+      { id: "p1", label: "mobile", value: "+1 (650) 555-0566" },
+      { id: "p2", label: "work", value: "+1 (650) 555-0200" },
+    ],
+    emails: [
+      { id: "e1", label: "work", value: "mtorres@horizoncap.com" },
+      { id: "e2", label: "personal", value: "michael.torres@gmail.com" },
+    ],
+    address: {
+      street: "3000 Sand Hill Rd",
+      city: "Menlo Park",
+      state: "CA",
+      zip: "94025",
+      country: "United States",
+    },
+    birthday: "1977-03-30",
+    notes: "Quarterly board meetings. Very data-driven, loves dashboards.",
+    social: [{ id: "s1", platform: "linkedin", handle: "in/michael-torres-cfo" }],
+    groups: ["work"],
+    favorite: false,
+  },
+];

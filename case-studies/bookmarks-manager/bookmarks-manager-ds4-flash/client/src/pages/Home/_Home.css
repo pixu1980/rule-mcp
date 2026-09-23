@@ -1,0 +1,32 @@
+/**
+ * @module pages/Home/_Home
+ * Home page: bookmark list with search bar.
+ */
+
+/* ==========================================================================
+   Bookmark list
+   ========================================================================== */
+section[data-part="bookmark-list"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ==========================================================================
+   Section header
+   ========================================================================== */
+[data-part="list-header"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+[data-part="list-title"] {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-ink-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}

@@ -1,0 +1,64 @@
+/* =============================================================================
+ * GroupFilter — _GroupFilter.css
+ * Horizontal scrollable row of pill tabs. Active pill: accent tint.
+ * =============================================================================
+ */
+
+nav[data-part="group-filter"] {
+  display: flex;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-4);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+nav[data-part="group-filter"]::-webkit-scrollbar {
+  display: none;
+}
+
+/* Individual tab */
+button[data-part="group-tab"] {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-1) var(--space-2-5);
+  border-radius: var(--radius-full);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-wide);
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  transition:
+    background var(--duration-fast) var(--ease-default),
+    color var(--duration-fast) var(--ease-default),
+    border-color var(--duration-fast) var(--ease-default),
+    transform var(--duration-fast) var(--ease-spring);
+}
+
+button[data-part="group-tab"]:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+button[data-part="group-tab"]:active {
+  transform: scale(0.94);
+}
+
+button[data-part="group-tab"]:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+/* Active state */
+button[data-part="group-tab"][data-active] {
+  background: var(--accent-subtle);
+  color: var(--accent-text);
+  border-color: var(--border-accent);
+}
+
+button[data-part="group-tab"][data-active]:hover {
+  background: var(--accent-subtle-hover);
+  transform: none;
+}

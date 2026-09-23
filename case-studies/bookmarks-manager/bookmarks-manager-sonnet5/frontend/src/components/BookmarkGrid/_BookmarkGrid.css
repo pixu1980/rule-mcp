@@ -1,0 +1,81 @@
+/**
+ * FILE: _BookmarkGrid.css
+ * USAGE: Responsive card grid, its loading skeleton, and the staggered
+ *        entrance animation applied per grid position.
+ * SCOPE: ul[data-part="grid"] and its list-item children.
+ */
+
+@layer components {
+  ul[data-part="grid"] {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
+    gap: var(--space-lg);
+
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  li[data-part="grid-item"] {
+    display: contents;
+  }
+
+  /* stagger the card entrance by grid position without any inline style */
+  li[data-part="grid-item"]:nth-child(1) article[data-part="card"] {
+    animation-delay: 0ms;
+  }
+  li[data-part="grid-item"]:nth-child(2) article[data-part="card"] {
+    animation-delay: 45ms;
+  }
+  li[data-part="grid-item"]:nth-child(3) article[data-part="card"] {
+    animation-delay: 90ms;
+  }
+  li[data-part="grid-item"]:nth-child(4) article[data-part="card"] {
+    animation-delay: 135ms;
+  }
+  li[data-part="grid-item"]:nth-child(5) article[data-part="card"] {
+    animation-delay: 180ms;
+  }
+  li[data-part="grid-item"]:nth-child(n + 6) article[data-part="card"] {
+    animation-delay: 225ms;
+  }
+
+  /* ─── Skeleton loading state ─── */
+
+  li[data-part="skeleton-item"] {
+    display: block;
+  }
+
+  [data-part="skeleton-card"] {
+    display: block;
+
+    aspect-ratio: 4 / 3.6;
+    border: 0.1rem solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    background: linear-gradient(
+      100deg,
+      var(--color-surface-sunken) 30%,
+      var(--color-neutral-200) 50%,
+      var(--color-surface-sunken) 70%
+    );
+    background-size: 200% 100%;
+
+    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  }
+
+  @keyframes skeleton-shimmer {
+    from {
+      background-position: 150% 0;
+    }
+    to {
+      background-position: -50% 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-part="skeleton-card"] {
+      animation: none;
+    }
+  }
+}

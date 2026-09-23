@@ -1,0 +1,236 @@
+/**
+ * FILE: _ContactForm.css
+ * USAGE: Contact create/edit form with sections, validation, color picker.
+ * SCOPE: article[data-part="form-container"] and children.
+ */
+
+/* ─── Container ─── */
+
+article[data-part="form-container"] {
+  display: flex;
+  flex-direction: column;
+
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: var(--ds-space-9) var(--ds-space-8);
+  padding-top: calc(var(--ds-space-9) + var(--ds-top-inset));
+
+  animation: fade-in-up var(--ds-duration-normal) var(--ds-easing-emphasized-decelerate) both;
+}
+
+/* ─── Header ─── */
+
+[data-part="form-header"] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-4);
+  margin-bottom: var(--ds-space-7);
+}
+
+[data-part="form-back"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 3.6rem;
+  height: 3.6rem;
+
+  color: var(--ds-accent);
+  border-radius: var(--ds-radius-full);
+
+  transition:
+    background var(--ds-duration-fast) var(--ds-easing-standard),
+    transform var(--ds-duration-fast) var(--ds-easing-spring);
+}
+
+[data-part="form-back"]:hover {
+  background: var(--ds-bg-hover);
+  transform: scale(1.1);
+}
+
+[data-part="form-back"]:active {
+  transform: scale(0.95);
+}
+
+[data-part="form-title"] {
+  font-size: var(--ds-font-size-xl);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+/* ─── Form ─── */
+
+[data-part="form"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-7);
+}
+
+/* ─── Section ─── */
+
+[data-part="form-section"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4);
+}
+
+[data-part="section-label"] {
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--ds-letter-spacing-wide);
+  color: var(--ds-text-secondary);
+}
+
+/* ─── Fields ─── */
+
+[data-part="form-field"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+}
+
+[data-part="input"],
+[data-part="textarea"] {
+  width: 100%;
+  padding: var(--ds-space-3) var(--ds-space-4);
+  font-size: var(--ds-font-size-base);
+  color: var(--ds-text-primary);
+  background: var(--ds-bg-secondary);
+  border: 0.1rem solid var(--ds-border-primary);
+  border-radius: var(--ds-radius-lg);
+  transition:
+    border-color var(--ds-duration-fast) var(--ds-easing-standard),
+    box-shadow var(--ds-duration-fast) var(--ds-easing-standard);
+}
+
+[data-part="input"]:focus,
+[data-part="textarea"]:focus {
+  border-color: var(--ds-accent);
+  box-shadow: 0 0 0 0.3rem var(--ds-focus-ring);
+}
+
+[data-part="input"][aria-invalid="true"],
+[data-part="textarea"][aria-invalid="true"] {
+  border-color: var(--ds-danger);
+}
+
+[data-part="input"]::placeholder,
+[data-part="textarea"]::placeholder {
+  color: var(--ds-text-tertiary);
+}
+
+[data-part="textarea"] {
+  resize: vertical;
+  min-height: 8rem;
+}
+
+/* ─── Error ─── */
+
+[data-part="field-error"] {
+  font-size: var(--ds-font-size-sm);
+  color: var(--ds-danger);
+}
+
+/* ─── Category Picker ─── */
+
+[data-part="category-picker"] {
+  display: flex;
+  gap: var(--ds-space-2);
+}
+
+[data-part="category-option"] {
+  padding: var(--ds-space-2) var(--ds-space-4);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-medium);
+  color: var(--ds-text-secondary);
+  background: var(--ds-bg-tertiary);
+  border-radius: var(--ds-radius-full);
+  transition:
+    all var(--ds-duration-fast) var(--ds-easing-standard),
+    transform var(--ds-duration-fast) var(--ds-easing-spring);
+}
+
+[data-part="category-option"]:hover {
+  color: var(--ds-text-primary);
+  background: var(--ds-gray-200);
+}
+
+[data-part="category-option"][data-selected] {
+  color: var(--ds-text-inverse);
+  background: var(--ds-accent);
+  transform: scale(1.05);
+}
+
+/* ─── Color Picker ─── */
+
+[data-part="color-picker"] {
+  display: flex;
+  gap: var(--ds-space-2);
+  flex-wrap: wrap;
+}
+
+[data-part="color-swatch"] {
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: var(--ds-radius-full);
+  border: 0.2rem solid transparent;
+  transition:
+    transform var(--ds-duration-fast) var(--ds-easing-spring),
+    border-color var(--ds-duration-fast) var(--ds-easing-standard);
+}
+
+[data-part="color-swatch"]:hover {
+  transform: scale(1.15);
+}
+
+[data-part="color-swatch"][data-selected] {
+  border-color: var(--ds-text-primary);
+  transform: scale(1.15);
+}
+
+/* ─── Footer ─── */
+
+[data-part="form-footer"] {
+  display: flex;
+  gap: var(--ds-space-3);
+  justify-content: flex-end;
+  padding-top: var(--ds-space-4);
+  border-top: 0.1rem solid var(--ds-border-secondary);
+}
+
+[data-part="form-cancel"] {
+  padding: var(--ds-space-3) var(--ds-space-6);
+  font-size: var(--ds-font-size-base);
+  font-weight: var(--ds-font-weight-medium);
+  color: var(--ds-text-secondary);
+  border-radius: var(--ds-radius-lg);
+  transition:
+    background var(--ds-duration-fast) var(--ds-easing-standard),
+    transform var(--ds-duration-fast) var(--ds-easing-spring);
+}
+
+[data-part="form-cancel"]:hover {
+  background: var(--ds-bg-hover);
+}
+
+[data-part="form-submit"] {
+  padding: var(--ds-space-3) var(--ds-space-6);
+  font-size: var(--ds-font-size-base);
+  font-weight: var(--ds-font-weight-medium);
+  color: var(--ds-text-inverse);
+  background: var(--ds-accent);
+  border-radius: var(--ds-radius-lg);
+  transition:
+    background var(--ds-duration-fast) var(--ds-easing-standard),
+    transform var(--ds-duration-fast) var(--ds-easing-spring);
+}
+
+[data-part="form-submit"]:hover {
+  background: var(--ds-accent-hover);
+  transform: scale(1.02);
+}
+
+[data-part="form-submit"]:active {
+  background: var(--ds-accent-active);
+  transform: scale(0.98);
+}

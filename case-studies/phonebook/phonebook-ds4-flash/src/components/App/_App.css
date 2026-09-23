@@ -1,0 +1,32 @@
+/**
+ * FILE: _App.css
+ * USAGE: Root layout — split-pane sidebar + detail panel.
+ * SCOPE: section[data-part="app"] and its children.
+ */
+
+/* ─── Root Layout ─── */
+
+section[data-part="app"] {
+  position: relative;
+  z-index: 0;
+
+  display: flex;
+  flex-direction: row;
+
+  width: 100vw;
+  height: 100vh;
+
+  color: var(--ds-text-primary);
+  background-color: var(--ds-bg-primary);
+}
+
+/* ─── Detail Panel ─── */
+
+[data-part="detail-panel"] {
+  position: relative;
+
+  flex: 1;
+  overflow-y: auto;
+
+  animation: fade-in var(--ds-duration-normal) var(--ds-easing-standard) both;
+}

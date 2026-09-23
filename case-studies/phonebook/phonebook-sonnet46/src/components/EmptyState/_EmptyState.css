@@ -1,0 +1,51 @@
+/* =============================================================================
+ * EmptyState — _EmptyState.css
+ * Centered placeholder shown when no contact is selected.
+ * =============================================================================
+ */
+
+section[data-part="empty-state"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 400px;
+  gap: var(--space-3);
+  padding: var(--space-10);
+  animation: empty-in var(--duration-slow) var(--ease-out) both;
+}
+
+@keyframes empty-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+figure[data-part="empty-icon"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: icon-float 6s ease-in-out infinite;
+}
+
+@keyframes icon-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+p[data-part="empty-heading"] {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-secondary);
+  line-height: var(--leading-tight);
+}
+
+p[data-part="empty-sub"] {
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  text-align: center;
+  max-width: 240px;
+  line-height: var(--leading-relaxed);
+}

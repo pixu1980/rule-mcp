@@ -1,0 +1,39 @@
+/**
+ * @module pages/NotFound/_NotFound
+ * 404 page styles.
+ */
+
+section[data-part="not-found"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-16) var(--space-6);
+  gap: var(--space-4);
+  min-height: 40vh;
+}
+
+[data-part="not-found-code"] {
+  font-family: var(--font-display);
+  font-size: var(--fs-4xl);
+  font-weight: var(--fw-black);
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+[data-part="not-found-title"] {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+}
+
+[data-part="not-found-text"] {
+  font-size: var(--fs-sm);
+  color: var(--color-ink-secondary);
+  max-width: 20rem;
+}
+
+[data-part="not-found-link"] {
+  margin-top: var(--space-2);
+}

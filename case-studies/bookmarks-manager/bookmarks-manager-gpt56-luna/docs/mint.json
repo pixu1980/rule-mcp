@@ -1,0 +1,11 @@
+{
+  "name": "Luma Bookmarks",
+  "logo": { "light": "/logo-light.svg", "dark": "/logo-dark.svg" },
+  "favicon": "/favicon.svg",
+  "colors": { "primary": "#587a1e", "light": "#f4f2ec", "dark": "#20211f" },
+  "navigation": [
+    { "group": "Start here", "pages": ["introduction", "development", "architecture"] },
+    { "group": "API", "pages": ["api-reference/overview"] },
+    { "group": "Decisions", "pages": ["adr/003-react-and-express-bookmarks-manager-architecture", "handoff"] }
+  ]
+}

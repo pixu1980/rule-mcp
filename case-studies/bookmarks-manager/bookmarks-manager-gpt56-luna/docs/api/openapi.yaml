@@ -1,0 +1,111 @@
+openapi: 3.1.0
+info:
+  title: Luma Bookmarks API
+  version: 0.1.0
+  description: Server-side URL metadata and readable preview service.
+servers:
+  - url: http://localhost:8787
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Service is ready
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, service, timestamp]
+                properties:
+                  status: { type: string, example: ok }
+                  service: { type: string, example: luma-api }
+                  timestamp: { type: string, format: date-time }
+  /api/v1/bookmarks:
+    get:
+      summary: List saved bookmarks
+      parameters:
+        - { in: query, name: offset, schema: { type: integer, minimum: 0, default: 0 } }
+        - { in: query, name: limit, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+      responses:
+        '200':
+          description: Newest bookmarks
+          headers:
+            X-Total-Count: { schema: { type: integer } }
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: '#/components/schemas/Bookmark' } }
+    post:
+      summary: Scrape and save a bookmark
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/BookmarkInput' }
+      responses:
+        '201':
+          description: Saved bookmark
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Bookmark' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+  /api/v1/bookmarks/preview:
+    post:
+      summary: Scrape a URL without saving
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/BookmarkInput' }
+      responses:
+        '200':
+          description: Scraped preview
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BookmarkPreview' }
+        '400': { $ref: '#/components/responses/BadRequest' }
+components:
+  schemas:
+    BookmarkInput:
+      type: object
+      required: [url]
+      properties:
+        url: { type: string, format: uri, maxLength: 2048, example: https://example.com/story }
+    BookmarkPreview:
+      type: object
+      required: [url, title, description, image, domain, preview]
+      properties:
+        url: { type: string, format: uri }
+        title: { type: string }
+        description: { type: string }
+        image: { type: [string, 'null'], format: uri }
+        domain: { type: string }
+        preview: { type: string, maxLength: 420 }
+    Bookmark:
+      allOf:
+        - $ref: '#/components/schemas/BookmarkPreview'
+        - type: object
+          required: [id, createdAt]
+          properties:
+            id: { type: string }
+            createdAt: { type: string, format: date-time }
+    ApiError:
+      type: object
+      required: [statusCode, correlation-id, errors]
+      properties:
+        statusCode: { type: integer }
+        correlation-id: { type: string }
+        errors:
+          type: array
+          items:
+            type: object
+            required: [code, message]
+            properties:
+              code: { type: string }
+              message: { type: string }
+  responses:
+    BadRequest:
+      description: Invalid request or blocked URL
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ApiError' }
