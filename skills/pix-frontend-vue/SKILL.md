@@ -194,7 +194,7 @@ Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 ## Project Scaffolding
 
 All pix projects include standard config files. See [`pix-styleguide`](../pix-styleguide/SKILL.md) -> Project Scaffolding.
-Use `pix_tool_styleguide mode=scaffold` or `pix_tool_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
+Use `pix_tool_styleguide mode=scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
 `.gitignore`, `.eslintrc.json`, `tsconfig.json`, `jsconfig.json`.
 
 Iterate: `generate → pix_tool_check → fix → pix_tool_check → all pass`.

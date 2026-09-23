@@ -70,7 +70,7 @@ automated coverage for a11y and project infrastructure.
 - Run the tests and report the real outcome: the command you executed and its result. Never claim
   unexecuted checks passed.
 - Validate the test code itself with `pix_tool_check` and iterate until the guardrails pass.
-- For component templates use `pix_tool_component` (component=a11y-test-basic / a11y-test-forms /
+- For component templates read the `pix://templates` resource (a11y-test-basic, a11y-test-forms,
   components, playwright-config).
 - Finish by proposing a conventional commit with a mandatory scope, e.g. `test(<scope>): add ...`.
 

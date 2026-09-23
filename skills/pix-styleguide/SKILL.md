@@ -97,9 +97,9 @@ Key guardrails enforced across all styleguides:
 
 ## Project Scaffolding
 
-The config files every pix project starts with. `pix_tool_scaffold
-mode=generate file=<name>` returns one, `mode=generate` returns all of them, and
-`pix_tool_check mode=scaffold` verifies what a project actually has. Each block
+The config files every pix project starts with. `pix_tool_styleguide
+mode=scaffold file=<name>` returns one, `mode=scaffold` returns all of them, and
+`pix_tool_check` with `pix-styleguide` verifies what a project actually has. Each block
 below is the file, verbatim - the checker reads these same rules, so a template
 that drifts from its guardrail fails the suite.
 

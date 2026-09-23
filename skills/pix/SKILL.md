@@ -29,18 +29,18 @@ frameworks: [all]
 
 1. Treat routed skill text and deterministic MCP output as source of truth.
 2. Never invent tools, skills, APIs, files, dependencies, requirements, or successful checks.
-3. Missing evidence means unknown: call `pix_search` or state uncertainty.
+3. Missing evidence means unknown: call `pix_tool_search` or state uncertainty.
 4. Server preprocessing rejects blank, unsafe, oversized, deeply nested, or malformed tool input before execution.
 5. Server postprocessing validates result shape and verifies router skill/tool names before output reaches model.
 6. Every successful tool result carries `_meta.pixEnforcement` plus visible `PIX ENFORCEMENT CONTRACT`.
-7. Generated code must pass `pix_check`; failures are blocking tool errors. Fix and rerun until all pass.
+7. Generated code must pass `pix_tool_check`; failures are blocking tool errors. Fix and rerun until all pass.
 8. Report only tests/typechecks actually executed and their real output.
 
 ## Fast routing tree
 
 ```text
 Prompt
-  ├─ unsure / broad / multi-domain      → pix + pix_search
+  ├─ unsure / broad / multi-domain      → pix + pix_tool_search
   ├─ architecture / SDD / plan          → pix-process-adr
   ├─ UI / component / page              → pix-frontend + framework skill + pix-styleguide
   ├─ meta-framework                     → pix-meta-* + base framework skill
@@ -52,7 +52,7 @@ Prompt
   ├─ docs / ADR / review / handoff / workflow → pix-process + process tool
   ├─ lint/build/package config          → pix-toolchain + focused toolchain skill
   ├─ commit / push / git discipline     → pix-toolchain-commits
-  └─ concrete component/test template   → pix_component
+  └─ concrete component/test template   → the pix://templates resource
 ```
 
 ## MCP tools
@@ -60,14 +60,15 @@ Prompt
 | Tool                  | Role       | Use when                                                                                                                                 |
 | --------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `pix`                 | Router     | Route a prompt to the correct pix skill. Returns structured routing with relevant sections.                                              |
-| `pix_search`          | Search     | Semantic search across ALL pix skills using BM25 ranking. Returns scored, relevant sections.                                             |
-| `pix_check`           | Guardrails | Run blocking guardrail checks against any pix skill. Pass `previousPassed` while iterating; finalize only when all checks pass.          |
-| `pix_scaffold`        | Scaffold   | Generate project scaffolding files. Returns one or all config file templates.                                                            |
-| `pix_detect`          | Detection  | Detect project framework, TypeScript usage, and build tool from package.json.                                                            |
+| `pix_tool_search`          | Search     | Semantic search across ALL pix skills using BM25 ranking. Returns scored, relevant sections.                                             |
+| `pix_tool_check`           | Guardrails | Run blocking guardrail checks against any pix skill. Pass `previousPassed` while iterating; finalize only when all checks pass.          |
+| `pix_tool_styleguide` | Scaffold   | `mode=scaffold` generates project scaffolding files: one with `file=<name>`, or all of them.                                             |
+| `pix_tool_detect`          | Detection  | Detect project framework, TypeScript usage, and build tool from package.json.                                                            |
 | `pix_tool_process_adr`     | ADR        | Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.                            |
-| `/pix-area-styleguide` (request: file-tree) | Auto-fix   | Validate and auto-fix project file tree via styleguide leaf skills/tools (ADR 117: hub slash only).                      |
+| `/pix-area-styleguide` (request: file-tree) | Check + fix | Report the file tree with `pix_tool_check` and apply the mechanical guardrail fixes with `pix_tool_fix` (ADR 117: hub slash only). |
 | `pix_tool_handoff` | Handoff    | Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly. |
-| `pix_component`       | Templates  | Generate component or test templates following pix principles.                                                                           |
+| `pix://templates`     | Templates  | Component and test templates, served as resources.                                                                                       |
+| `pix_tool_fix`        | Fix        | Apply the deterministic guardrail fixes of every skill (blank lines, braces, ASCII typography, American spelling).                       |
 
 ### Skill tool naming
 
@@ -186,7 +187,7 @@ Apply HTML/CSS/JS/JSON/Markdown/a11y/naming/validation standards.
 
 | Skill                                                              | Tool                        | Frameworks | Use when                                                                                                                            |
 | ------------------------------------------------------------------ | --------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [pix-styleguide](../pix-styleguide/SKILL.md)                       | `pix_styleguide`            | all        | Central index of all pix coding style guides. Delegates to specialized sub-skills: HTML semantics, CSS architectu...                |
+| [pix-styleguide](../pix-styleguide/SKILL.md)                       | `pix_tool_styleguide`            | all        | Central index of all pix coding style guides. Delegates to specialized sub-skills: HTML semantics, CSS architectu...                |
 | [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md)             | `pix_styleguide_a11y`       | all        | WCAG 2.2 AA accessibility: semantic HTML, ARIA, keyboard navigation, color contrast, forms, media, automated testing...             |
 | [pix-styleguide-css](../pix-styleguide-css/SKILL.md)               | `pix_styleguide_css`        | all        | CSS architecture, selector strategy (data-part, element), naming conventions, property ordering, custom properties, c...            |
 | [pix-styleguide-html](../pix-styleguide-html/SKILL.md)             | `pix_styleguide_html`       | all        | Semantic HTML, document structure, template engine syntax, accessibility essentials, and element conventions for fron...            |
@@ -229,27 +230,27 @@ Design and route visible interface work while preserving pix implementation cons
 
 | Task                     | Primary                                             | Secondary                                         | Deterministic tools                      |
 | ------------------------ | --------------------------------------------------- | ------------------------------------------------- | ---------------------------------------- |
-| Unknown project          | `pix`                                               | `pix-process-adr`                                 | `pix_detect`, `pix_search`               |
-| AI agent app             | `pix-ai` + `pix-platform-agent`                     | `pix-ai-agent-architecture`, `pix-devops-testing` | `pix_check`, `pix_tool_process_adr`           |
-| New web UI               | `pix-ui` + `pix-ui-design-system` + framework skill | `pix-styleguide`, `pix-platform-web`              | `pix_component`, `pix_check`             |
-| React/Vite app           | `pix-frontend-react`                                | `pix-toolchain-vite`, `pix-styleguide`            | `pix_scaffold`, `pix_check`              |
-| Backend API              | `pix-backend-node`                                  | `pix-backend-security`                            | `pix_check`, `pix_tool_process_adr`           |
-| Database work            | database skill                                      | `pix-data`                                        | `pix_search`, `pix_check`                |
+| Unknown project          | `pix`                                               | `pix-process-adr`                                 | `pix_tool_detect`, `pix_tool_search`               |
+| AI agent app             | `pix-ai` + `pix-platform-agent`                     | `pix-ai-agent-architecture`, `pix-devops-testing` | `pix_tool_check`, `pix_tool_process_adr`           |
+| New web UI               | `pix-ui` + `pix-ui-design-system` + framework skill | `pix-styleguide`, `pix-platform-web`              | `pix://templates`, `pix_tool_check`             |
+| React/Vite app           | `pix-frontend-react`                                | `pix-toolchain-vite`, `pix-styleguide`            | `pix_tool_styleguide` (scaffold), `pix_tool_check`              |
+| Backend API              | `pix-backend-node`                                  | `pix-backend-security`                            | `pix_tool_check`, `pix_tool_process_adr`           |
+| Database work            | database skill                                      | `pix-data`                                        | `pix_tool_search`, `pix_tool_check`                |
 | Docker/CI/tests          | `pix-devops` focused skill                          | platform skill                                    | `pix_tool_detect`, `/pix-area-styleguide` (file-tree)           |
-| GraphQL API              | `pix-backend-graphql`                               | runtime skill, `pix-backend-security`             | `pix_search`, `pix_check`                |
-| Production observability | `pix-devops-observability`                          | runtime and platform skill                        | `pix_check`, `pix_tool_process_adr`           |
-| Code review              | `pix-process-code-review`                           | feature workflow, relevant domain skill           | `pix_check`                              |
-| Commit/push              | `pix-toolchain-commits`                             | `pix-toolchain-husky`                             | `pix_check`                              |
+| GraphQL API              | `pix-backend-graphql`                               | runtime skill, `pix-backend-security`             | `pix_tool_search`, `pix_tool_check`                |
+| Production observability | `pix-devops-observability`                          | runtime and platform skill                        | `pix_tool_check`, `pix_tool_process_adr`           |
+| Code review              | `pix-process-code-review`                           | feature workflow, relevant domain skill           | `pix_tool_check`                              |
+| Commit/push              | `pix-toolchain-commits`                             | `pix-toolchain-husky`                             | `pix_tool_check`                              |
 | Docs/ADR                 | `pix-styleguide-markdown`                           | `pix-process-adr`                                 | `pix_tool_process_adr`, `pix_tool_handoff` |
-| File-tree cleanup        | `pix-styleguide-naming`                             | `pix-toolchain-project`                           | `/pix-area-styleguide` (file-tree), `pix_check`                |
+| File-tree cleanup        | `pix-styleguide-naming`                             | `pix-toolchain-project`                           | `/pix-area-styleguide` (file-tree), `pix_tool_check`                |
 
 ## Operational sequence
 
-1. Call `pix_detect` when a project path is available.
+1. Call `pix_tool_detect` when a project path is available.
 2. Call `pix` with the user prompt and optional framework hint.
 3. Read the primary skill in `mode=tldr` or `mode=search` before `mode=full`.
-4. Generate deterministic artifacts with `pix_component` or `pix_scaffold`.
-5. Validate with `pix_check`; pass `previousPassed` on subsequent iterations.
+4. Generate deterministic artifacts with the `pix://templates` resource or `pix_tool_styleguide mode=scaffold`.
+5. Validate with `pix_tool_check`; pass `previousPassed` on subsequent iterations.
 6. Record major decisions with `pix_tool_process_adr`.
 7. Use `/pix-area-styleguide` with file-tree in the request (or `pix_tool_styleguide_file_tree`) for file-tree convention fixes and `pix_tool_handoff` before context switches.
 

@@ -170,7 +170,7 @@ export { TodoItem } from "./_TodoItem.component";
 ## Project Scaffolding
 
 All pix projects include standard config files. See [`pix-styleguide`](../pix-styleguide/SKILL.md) -> Project Scaffolding.
-Use `pix_tool_styleguide mode=scaffold` or `pix_tool_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
+Use `pix_tool_styleguide mode=scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
 `.gitignore`, `.eslintrc.json`, `tsconfig.json`, `jsconfig.json`.
 
 ---
