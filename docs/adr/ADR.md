@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md)                             | The fix tool and command apply the deterministic guardrails, not the file tree                            | 2026-09-23 | accepted   | tools, commands, guardrails                                                         |
 | [121](121-the-install-reconciles-the-bundled-skills-when-the-step-is-not-selected.md)                                   | The install reconciles the bundled skills when the step is not selected                                   | 2026-09-23 | accepted   | installer, skills, commands                                                         |
 | [120](120-fold-the-per-operation-persona-commands-into-one-per-role-with-the-depth-read-fr.md)                          | Fold the per-operation persona commands into one per role, with the depth read from the request           | 2026-09-23 | accepted   | commands, personas, prompts, breaking                                               |
 | [119](119-close-out-audit-ui.md)                                                                                        | Close out audit ui                                                                                        | 2026-09-23 | accepted   | docs, closeout, audit                                                               |
@@ -137,6 +138,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md)                             | 1. rule_tool_fix is registered again, through registerActionTools, with a new job: apply the deterministic guardrail fixes every skill owns - blank lines, braces, single-line bodies, ASCII typography, American spelling -...  | The surface is 107 tools and 40 commands.                                                                                                                                                                                       |
 | [121](121-the-install-reconciles-the-bundled-skills-when-the-step-is-not-selected.md)                                   | 1. skills uninstall is a real CLI action, with --scope and --dry-run, that removes only the names the installer owns: the catalog skills plus the generated persona skills.                                                     | The skills choice becomes two-way, which is what the checkbox already promised.                                                                                                                                                 |
 | [120](120-fold-the-per-operation-persona-commands-into-one-per-role-with-the-depth-read-fr.md)                          | 1. One prompt, one slash command and one skill per role: rule-persona-<role> (57 to 19 on each surface). 2. The depth is read from the request by a single whole-token keyword module, core/review/roles/operation-intent,...    | The persona surface drops from 57 to 19 on all three surfaces (prompts 37, slash commands 39, README counts updated).                                                                                                           |
 | [119](119-close-out-audit-ui.md)                                                                                        | Fold the record into this ADR and the session handoff, then delete the source file.                                                                                                                                             | docs/audits/ui.md is gone from the tree; the handoff of this session names what it carried.                                                                                                                                     |
@@ -324,6 +326,22 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [005](005-backend-framework-skills.md) Backend Framework Skills
 - [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
 
+### commands
+
+- [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md) The fix tool and command apply the deterministic guardrails, not the file tree
+- [121](121-the-install-reconciles-the-bundled-skills-when-the-step-is-not-selected.md) The install reconciles the bundled skills when the step is not selected
+- [120](120-fold-the-per-operation-persona-commands-into-one-per-role-with-the-depth-read-fr.md) Fold the per-operation persona commands into one per role, with the depth read from the request
+- [117](117-area-slash-commands-are-collectors-only-leaves-route-from-the-prompt.md) Area slash commands are collectors only; leaves route from the prompt
+- [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
+- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
+- [114](114-flight-is-process-area-guidance-injected-on-every-prompt-not-a-slash-command.md) Flight is process-area guidance injected on every prompt, not a slash command
+- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
+- [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
+- [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
+- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
+- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+- [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
+
 ### docs
 
 - [119](119-close-out-audit-ui.md) Close out audit ui
@@ -339,21 +357,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [086](086-documentation-site-is-hand-written-static-html-from-docs.md) Documentation site is hand-written static HTML from docs
 - [071](071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) The census generates eight numbered documents and three fenced blocks inside the chapters a person writes
 - [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
-
-### commands
-
-- [121](121-the-install-reconciles-the-bundled-skills-when-the-step-is-not-selected.md) The install reconciles the bundled skills when the step is not selected
-- [120](120-fold-the-per-operation-persona-commands-into-one-per-role-with-the-depth-read-fr.md) Fold the per-operation persona commands into one per role, with the depth read from the request
-- [117](117-area-slash-commands-are-collectors-only-leaves-route-from-the-prompt.md) Area slash commands are collectors only; leaves route from the prompt
-- [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
-- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
-- [114](114-flight-is-process-area-guidance-injected-on-every-prompt-not-a-slash-command.md) Flight is process-area guidance injected on every prompt, not a slash command
-- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
-- [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
-- [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
-- [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
-- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
-- [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
 
 ### prompts
 
@@ -382,6 +385,19 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
 - [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
 
+### guardrails
+
+- [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md) The fix tool and command apply the deterministic guardrails, not the file tree
+- [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
+- [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md) No corepack activation and no engines field in a generated package.json
+- [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
+- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
+- [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
+- [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
+- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
+- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
+- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+
 ### testing
 
 - [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
@@ -394,18 +410,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
 - [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
 - [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
-
-### guardrails
-
-- [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
-- [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md) No corepack activation and no engines field in a generated package.json
-- [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
-- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
-- [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
-- [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
-- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
-- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
-- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
 ### personas
 
@@ -580,6 +584,13 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
 - [051](051-token-efficiency-pipeline.md) Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)
 
+### tools
+
+- [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md) The fix tool and command apply the deterministic guardrails, not the file tree
+- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
+- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
+- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
+
 ### backend
 
 - [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
@@ -663,12 +674,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [078](078-compress-agent-command-files-at-write-time.md) Compress agent command files at write time
 - [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
 - [051](051-token-efficiency-pipeline.md) Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)
-
-### tools
-
-- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
-- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
-- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
 
 ### tui
 

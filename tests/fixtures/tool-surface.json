@@ -1,5 +1,5 @@
 {
-  "count": 106,
+  "count": 107,
   "tools": [
     "pix_tool",
     "rule_tool_ai",
@@ -34,6 +34,7 @@
     "rule_tool_devops_docker",
     "rule_tool_devops_observability",
     "rule_tool_devops_testing",
+    "rule_tool_fix",
     "rule_tool_frontend",
     "rule_tool_frontend_angular",
     "rule_tool_frontend_custom_element",
