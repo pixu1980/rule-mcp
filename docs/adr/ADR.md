@@ -8,6 +8,8 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [119](119-close-out-audit-ui.md)                                                                                        | Close out audit ui                                                                                        | 2026-09-23 | accepted   | docs, closeout, audit                                                               |
+| [118](118-close-out-review-ui.md)                                                                                       | Close out review ui                                                                                       | 2026-09-23 | accepted   | docs, closeout, review                                                              |
 | [117](117-area-slash-commands-are-collectors-only-leaves-route-from-the-prompt.md)                                      | Area slash commands are collectors only; leaves route from the prompt                                     | 2026-09-22 | accepted   | commands, prompts, areas, breaking                                                  |
 | [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md)                                                  | Fold check slash siblings into the parent via keyword intent                                              | 2026-09-22 | accepted   | commands, guardrails, breaking, check                                               |
 | [115](115-map-tools-slash-commands-and-skills-into-one-surface.md)                                                      | Map tools, slash commands, and skills into one surface                                                    | 2026-09-22 | accepted   | tools, commands, skills, breaking, compress, handoff                                |
@@ -133,6 +135,8 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [119](119-close-out-audit-ui.md)                                                                                        | Fold the record into this ADR and the session handoff, then delete the source file.                                                                                                                                             | docs/audits/ui.md is gone from the tree; the handoff of this session names what it carried.                                                                                                                                     |
+| [118](118-close-out-review-ui.md)                                                                                       | Fold the record into this ADR and the session handoff, then delete the source file.                                                                                                                                             | docs/reviews/ui.md is gone from the tree; the handoff of this session names what it carried.                                                                                                                                    |
 | [117](117-area-slash-commands-are-collectors-only-leaves-route-from-the-prompt.md)                                      | 1. **Slash and MCP area prompts**: emit only hub collectors (`/rule-area-ai`, `/rule-area-backend`, …).                                                                                                                           | Agent slash and MCP area-prompt counts fall by one per leaf skill (~78).                                                                                                                                                        |
 | [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md)                                                  | 1. Delete every agent slash `/rule-area-*-check` sibling.                                                                                                                                                                        | Agent slash count drops by one per area prompt (~89).                                                                                                                                                                           |
 | [115](115-map-tools-slash-commands-and-skills-into-one-surface.md)                                                      | ### Keep.                                                                                                                                                                                                                       | MCP tool count falls (removed form/scaffold/component/a11y_report/process-compression skill-tool; renames handoff/handon; add init).                                                                                            |
@@ -316,6 +320,8 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### docs
 
+- [119](119-close-out-audit-ui.md) Close out audit ui
+- [118](118-close-out-review-ui.md) Close out review ui
 - [111](111-close-out-audit-security.md) Close out audit security
 - [110](110-close-out-review-security.md) Close out review security
 - [108](108-the-handoff-family-gets-a-generated-index-and-the-root-handoff-summary-retires.md) The handoff family gets a generated index, and the root HANDOFF summary retires
@@ -404,6 +410,17 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
 - [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
 
+### closeout
+
+- [119](119-close-out-audit-ui.md) Close out audit ui
+- [118](118-close-out-review-ui.md) Close out review ui
+- [111](111-close-out-audit-security.md) Close out audit security
+- [110](110-close-out-review-security.md) Close out review security
+- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
+- [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
+- [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
+- [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
+
 ### personas
 
 - [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
@@ -442,15 +459,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [064](064-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
 - [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 - [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
-
-### closeout
-
-- [111](111-close-out-audit-security.md) Close out audit security
-- [110](110-close-out-review-security.md) Close out review security
-- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
-- [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
-- [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
-- [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
 
 ### coverage
 
@@ -547,6 +555,13 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [050](050-round-two-hardening-cycles-daemon-cleanup-diagnostics.md) Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification
 - [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
 
+### review
+
+- [118](118-close-out-review-ui.md) Close out review ui
+- [110](110-close-out-review-security.md) Close out review security
+- [107](107-the-design-system-persona-becomes-the-ui-ux-lead.md) The design-system persona becomes the UI/UX lead
+- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
+
 ### tokensave
 
 - [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
@@ -619,12 +634,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
 - [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
 - [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
-
-### review
-
-- [110](110-close-out-review-security.md) Close out review security
-- [107](107-the-design-system-persona-becomes-the-ui-ux-lead.md) The design-system persona becomes the UI/UX lead
-- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
 
 ### security
 
