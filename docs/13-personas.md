@@ -143,3 +143,4 @@ it, and resolving one is how a free-text ask reaches the right persona.
 - [12 - CLI](12-cli.md)
 - [14 - Guardrails](14-guardrails.md)
 - [15 - Resources](15-resources.md)
+- [16 - Surface map](16-surface-map.md)
