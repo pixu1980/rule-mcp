@@ -10,34 +10,7 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import { globalBinDir, linkCandidates, shimCandidates, skipGlobalLink } from "../_shim.js";
-
-function withEnv(patch, fn) {
-  const saved = {};
-
-  for (const key of Object.keys(patch)) {
-    saved[key] = process.env[key];
-  }
-
-  for (const [key, value] of Object.entries(patch)) {
-    if (value === undefined) {
-      delete process.env[key];
-    } else {
-      process.env[key] = value;
-    }
-  }
-
-  try {
-    return fn();
-  } finally {
-    for (const [key, value] of Object.entries(saved)) {
-      if (value === undefined) {
-        delete process.env[key];
-      } else {
-        process.env[key] = value;
-      }
-    }
-  }
-}
+import { withEnv } from "../../../shared/_testkit.js";
 
 test("skipGlobalLink follows the sandbox flag", () => {
   withEnv({ RULE_MCP_SKIP_GLOBAL_LINK: "1" }, () => {

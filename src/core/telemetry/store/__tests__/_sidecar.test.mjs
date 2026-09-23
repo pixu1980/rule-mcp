@@ -2,26 +2,18 @@
 
 /** The usage sidecar: bad input, missing and corrupt files, and the round trip. */
 import { strict as assert } from "node:assert";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { mkdirSync, writeFileSync } from "node:fs";
+import { dirname } from "node:path";
 import test from "node:test";
 
 import { readSidecarUsage, usageFile, writeSidecarUsage } from "../index.js";
+import { withHome as withHomePrefix } from "../../../../shared/_testkit.js";
 
 const PREV_HOME = process.env.RULE_MCP_HOME;
 
 /** Point RULE_MCP_HOME at a fresh temp dir for one scenario. */
 function withHome(fn) {
-  const home = mkdtempSync(join(tmpdir(), "rule-sidecar-"));
-  process.env.RULE_MCP_HOME = home;
-
-  try {
-    fn(home);
-  } finally {
-    delete process.env.RULE_MCP_HOME;
-    rmSync(home, { recursive: true, force: true });
-  }
+  return withHomePrefix(fn, "rule-sidecar-");
 }
 
 test.after(() => {

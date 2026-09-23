@@ -2,12 +2,12 @@
 
 /** The daily rollup: empty folds, today-skip, merges, and failing writes. */
 import { strict as assert } from "node:assert";
-import { mkdirSync, mkdtempSync, writeFileSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import test from "node:test";
 
 import { eventsFile, readRollups, rollup, rollupFile } from "../index.js";
+import { withHome as withHomePrefix } from "../../../../shared/_testkit.js";
 
 const PREV_HOME = process.env.RULE_MCP_HOME;
 const DAY = 86_400_000;
@@ -21,14 +21,7 @@ function write(path, content) {
 
 /** Point RULE_MCP_HOME at a fresh temp dir for one scenario. */
 function withHome(fn) {
-  const home = mkdtempSync(join(tmpdir(), "rule-store-"));
-  process.env.RULE_MCP_HOME = home;
-  try {
-    fn(home);
-  } finally {
-    delete process.env.RULE_MCP_HOME;
-    rmSync(home, { recursive: true, force: true });
-  }
+  return withHomePrefix(fn, "rule-store-");
 }
 
 test.after(() => {

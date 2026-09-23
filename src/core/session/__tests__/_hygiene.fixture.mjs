@@ -10,6 +10,9 @@ import { createServer } from "node:net";
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
 
+export { isAlive as alive } from "../../../cli/daemon/_process-status.js";
+export { until } from "../../../shared/_testkit.js";
+
 export const root = fileURLToPath(new URL("../../../..", import.meta.url));
 export const bin = join(root, "bin", "rule-mcp.js");
 
@@ -23,30 +26,6 @@ export function reservePort() {
       server.close((error) => (error ? reject(error) : resolve(port)));
     });
   });
-}
-
-/** True while the pid is alive. */
-export function alive(pid) {
-  try {
-    process.kill(pid, 0);
-
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-/** Wait until `predicate()` is true, or give up after `timeout` ms. */
-export async function until(predicate, timeout = 5000, step = 50) {
-  const deadline = Date.now() + timeout;
-  while (Date.now() < deadline) {
-    if (await predicate()) {
-      return true;
-    }
-    await new Promise((resolve) => setTimeout(resolve, step));
-  }
-
-  return false;
 }
 
 /**

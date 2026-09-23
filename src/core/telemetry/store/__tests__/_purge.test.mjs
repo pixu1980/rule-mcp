@@ -2,27 +2,17 @@
 
 /** purge drops expired and timestamp-less events and keeps the fresh ones. */
 import { strict as assert } from "node:assert";
-import { mkdtempSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import test from "node:test";
 
 import { purge, readEvents, writeEvents } from "../index.js";
+import { withHome as withHomePrefix } from "../../../../shared/_testkit.js";
 
 const PREV_HOME = process.env.RULE_MCP_HOME;
 const DAY_MS = 86_400_000;
 
 /** Point RULE_MCP_HOME at a fresh temp dir for one scenario. */
 function withHome(fn) {
-  const home = mkdtempSync(join(tmpdir(), "rule-purge-"));
-  process.env.RULE_MCP_HOME = home;
-
-  try {
-    fn(home);
-  } finally {
-    delete process.env.RULE_MCP_HOME;
-    rmSync(home, { recursive: true, force: true });
-  }
+  return withHomePrefix(fn, "rule-purge-");
 }
 
 test.after(() => {
