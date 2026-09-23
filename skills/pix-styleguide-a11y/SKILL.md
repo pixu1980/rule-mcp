@@ -362,11 +362,11 @@ Reporting `inapplicable` where you mean `untested` is how a claim becomes wrong.
 
 ### Building the report
 
-`rule_tool_a11y_report` turns per-criterion outcomes into a WCAG-EM structured
-report plus EARL JSON-LD. It is deterministic: no model, no network.
+The a11y persona (`/rule-persona-a11y`) turns per-criterion outcomes into a
+WCAG-EM structured report. The report carries the shape below.
 
 ```
-rule_tool_a11y_report
+report
   scope:   { title: "Checkout flow", url: "https://example.com/checkout", level: "AA" }
   sample:  ["/checkout", "/checkout/payment", "/checkout/confirmation"]
   results: [{ criterion: "1.1.1", outcome: "failed", note: "Product images have no alt", location: "img.product" },

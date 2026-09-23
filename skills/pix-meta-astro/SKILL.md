@@ -178,7 +178,7 @@ Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 ## Project Scaffolding
 
 All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) -> Project Scaffolding.
-Use `rule_tool_styleguide mode=scaffold` or `rule_tool_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
+Use `rule_tool_styleguide mode=scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
 `.gitignore`, `.eslintrc.json`, `tsconfig.json`, `jsconfig.json`.
 
 Iterate: `generate → rule_tool_check → fix → rule_tool_check → all pass`.

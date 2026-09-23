@@ -225,7 +225,7 @@ with the lockfile. Guardrails: `pkg-no-corepack`, `pkg-no-engines` (owned by
 ## How to scaffold
 
 1. Run `rule_tool_toolchain_project mode=scaffold` to see all config file templates.
-2. Or call `rule_tool_scaffold mode=generate file=.prettierrc` for a single file.
+2. Or call `rule_tool_styleguide mode=scaffold file=.prettierrc` for a single file.
 3. Create/paste each file at the project root.
 4. Run `rule_tool_check` to validate the files are present.
 

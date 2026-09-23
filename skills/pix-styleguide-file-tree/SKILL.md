@@ -38,9 +38,9 @@ document in someone's head.
 
 ## Checking and fixing
 
-`rule_tool_fix mode=lint` reports the drift, `mode=fix dryRun=false` repairs
-what is mechanical: it renames an unprefixed component, creates a missing
-barrel, and fills an empty one from the components beside it. An orphan
+`rule_tool_check` with this skill reports the drift. The repairs - renaming an
+unprefixed component, creating a missing barrel, filling an empty one from the
+components beside it - are judgment calls the run makes from the report. An orphan
 stylesheet is reported and never guessed at - deleting it and creating the
 missing component are both plausible, and only a person knows which.
 

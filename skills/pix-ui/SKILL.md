@@ -28,10 +28,10 @@ validate any visible interface.
 | --------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | Visual direction, aesthetics, UI polish | [rule-ui-design-system](../rule-ui-design-system/SKILL.md)      | [rule-styleguide](../rule-styleguide/SKILL.md)                                                           |
 | Framework component implementation      | [rule-frontend](../rule-frontend/SKILL.md) or a framework skill | [rule-ui-design-system](../rule-ui-design-system/SKILL.md), [rule-styleguide](../rule-styleguide/SKILL.md) |
-| Component template generation           | MCP `rule_tool_component`                                      | `rule_tool_check`                                                                                       |
+| Component template generation           | the `rule://templates` resource                                | `rule_tool_check`                                                                                       |
 | Accessibility review                    | [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md)        | `rule_tool_check`                                                                                       |
 | CSS architecture                        | [rule-styleguide-css](../rule-styleguide-css/SKILL.md)          | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md)                                             |
-| File tree and naming                    | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md)    | MCP `rule_tool_fix`                                                                                     |
+| File tree and naming                    | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md)    | `rule_tool_check` with `rule-styleguide-file-tree`                                                       |
 
 ## Required workflow
 
@@ -40,7 +40,7 @@ validate any visible interface.
 3. Use `rule-ui-design-system` to define the aesthetic direction.
 4. Use the framework skill (`rule-frontend-react`, `rule-frontend-vue`,
    `rule-frontend-svelte`, etc.) for implementation details.
-5. Generate deterministic templates with `rule_tool_component` when possible.
+5. Read the template you need from the `rule://templates` resource.
 6. Validate with `rule_tool_check` before final handoff.
 
 ## Non-negotiable UI constraints
@@ -63,7 +63,7 @@ validate any visible interface.
 - [ ] Semantic HTML and accessibility requirements are mapped.
 - [ ] CSS selectors avoid classes and inline styles.
 - [ ] Component/file tree follows `rule-styleguide-naming`.
-- [ ] `rule_tool_component` is used where a template exists.
+- [ ] the `rule://templates` resource is used where a template exists.
 - [ ] `rule_tool_check` passes or reports known exceptions.
 
 ## See also

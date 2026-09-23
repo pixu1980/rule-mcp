@@ -445,7 +445,7 @@ See `patterns.md` in this directory for full migration tables.
 ## Guardrails
 
 Run `pix_frontend_vanilla_reactive` mode=check to validate code against these rules.
-Use `pix_check` tool for automated guardrail checking.
+Use `rule_tool_check` tool for automated guardrail checking.
 
 Key assertions enforced by guardrails engine:
 
@@ -466,10 +466,10 @@ Key assertions enforced by guardrails engine:
 ## Project Scaffolding
 
 All rule projects include standard config files. See [`rule-styleguide`](../rule-styleguide/SKILL.md) → Project Scaffolding.
-Use `pix_styleguide mode=scaffold` or `pix_scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
+Use `rule_tool_styleguide mode=scaffold` to generate: `.prettierrc`, `.nvmrc`, `.editorconfig`,
 `.gitignore`, `.eslintrc.json`, `tsconfig.json`, `jsconfig.json`.
 
-Iterate: `generate → pix_check → fix → pix_check → all pass`.
+Iterate: `generate → rule_tool_check → fix → rule_tool_check → all pass`.
 
 ---
 
