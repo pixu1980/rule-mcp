@@ -8,6 +8,7 @@ them by `handoff doctor`, so editing it by hand is work the next run throws away
 
 | #                                                                  | Title                                                                     | Date       | Branch            |
 | ------------------------------------------------------------------ | ------------------------------------------------------------------------- | ---------- | ----------------- |
+| [19](19-ui-plan-fixes-and-docs-site-refactor-commit.md)            | ui plan fixes and docs site refactor commit                               | 2026-09-23 | main              |
 | [18](18-check-intent-and-area-hub-collectors.md)                   | check intent and area hub collectors                                      | 2026-09-22 | main              |
 | [17](17-flight-directive-and-surface-mapping.md)                   | flight directive and surface mapping                                      | 2026-09-22 | main              |
 | [16](16-arch-7.1-shipped-god-file-splits.md)                       | ARCH-7.1 shipped god-file splits                                          | -          | -                 |
