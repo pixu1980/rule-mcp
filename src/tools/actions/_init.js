@@ -20,8 +20,10 @@ export function registerInitTool() {
     entry: "action",
     description:
       "Prepare a project for rule-mcp: create the central recorder directory under the state dir, " +
-      "migrate a leftover local .rule-mcp if present, and run tokensave init when installed. " +
-      "Nothing is written into the repository. Pass noTokensave: true to skip tokensave.",
+      "install or integrate the git governance (a commit-msg gate and a pre-push gate that enforce type(scope): subject, " +
+      "installing Husky only when a Node project has no hook mechanism), migrate a leftover local .rule-mcp if " +
+      "present, and run tokensave init when installed. Recorder state is never written into the repository. " +
+      "Pass noTokensave: true to skip tokensave.",
     zodSchema: z.object({
       projectDir: z.string().optional().describe("Project root (default: cwd)"),
       noTokensave: z.boolean().optional().default(false).describe("Skip tokensave init"),

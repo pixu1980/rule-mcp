@@ -8,6 +8,9 @@ import { git, gitLines } from "./_run.js";
 const FIELD = "\u001F";
 const RECORD = "\u001E";
 
+/** One `git log` record format, shared by every read below. */
+const LOG_FORMAT = `--format=%H${FIELD}%h${FIELD}%P${FIELD}%an${FIELD}%aI${FIELD}%s${FIELD}%b${RECORD}`;
+
 /**
  * One commit, as `git log` reports it.
  *
@@ -45,21 +48,12 @@ function parseRecord(record) {
 }
 
 /**
- * Every commit in a revision range, newest first.
+ * Parse a whole `git log` read into records.
  *
- * @param {string} projectDir
- * @param {string} [range] a revspec such as "abc123..HEAD"; "" means all history
+ * @param {string} out
  * @returns {CommitRecord[]}
  */
-export function listCommits(projectDir, range = "") {
-  const args = ["log", `--format=%H${FIELD}%h${FIELD}%P${FIELD}%an${FIELD}%aI${FIELD}%s${FIELD}%b${RECORD}`];
-
-  if (range) {
-    args.push(range);
-  }
-
-  const out = git(projectDir, args);
-
+function parseLog(out) {
   if (!out) {
     return [];
   }
@@ -69,6 +63,42 @@ export function listCommits(projectDir, range = "") {
     .map((record) => record.trim())
     .filter(Boolean)
     .map(parseRecord);
+}
+
+/**
+ * Every commit in a revision range, newest first.
+ *
+ * @param {string} projectDir
+ * @param {string} [range] a revspec such as "abc123..HEAD"; "" means all history
+ * @returns {CommitRecord[]}
+ */
+export function listCommits(projectDir, range = "") {
+  const args = ["log", LOG_FORMAT];
+
+  if (range) {
+    args.push(range);
+  }
+
+  return parseLog(git(projectDir, args));
+}
+
+/**
+ * Metadata for an explicit set of commits.
+ *
+ * A pre-push check knows the shas git is about to send but not a range they
+ * form - a branch with no remote counterpart has none - so it resolves the shas
+ * itself and asks for exactly those.
+ *
+ * @param {string} projectDir
+ * @param {string[]} shas
+ * @returns {CommitRecord[]} in the order given
+ */
+export function listCommitsByShas(projectDir, shas) {
+  if (shas.length === 0) {
+    return [];
+  }
+
+  return parseLog(git(projectDir, ["log", "--no-walk=unsorted", LOG_FORMAT, ...shas]));
 }
 
 /**

@@ -1,30 +1,30 @@
 #!/bin/sh
-# rule-mcp: enforce conventional commits WITH scope on every commit.
+# rule-mcp: enforce type(scope): subject and the DCO sign-off.
+#
+# The rule lives in src/core/commit - this hook only wires it to git, so the
+# hook, the pre-push gate, the CLI and CI cannot drift apart.
+#
 #   format:   type(scope): subject
 #   example:  feat(skills): add rule naming
 #   rejected: docs: port documentation
 #
-# Install: cp .githooks/commit-msg .git/hooks/commit-msg && chmod +x .git/hooks/commit-msg
+# Install: pnpm hooks:install
+set -e
+cd "$(git rev-parse --show-toplevel)" || exit 1
 
 msg_file="$1"
 first="$(sed -n '1p' "$msg_file" 2>/dev/null)"
 
-# System-generated messages (merge / revert) cannot carry a scope.
+# System-generated messages (merge / revert) cannot carry a scope, and are
+# exempt from the DCO trailer for the same reason. The rule exempts them too.
 case "$first" in
   "Merge "*|"Revert "*) exit 0 ;;
 esac
 
-if ! printf '%s\n' "$first" | grep -Eq '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)\([a-z0-9._-]+\): .+$'; then
-  echo "commit-msg: rejected - conventional commit WITH scope required" >&2
-  echo "  format:   type(scope): subject" >&2
-  echo "  example:  feat(skills): add rule naming" >&2
-  echo "  got:      $first" >&2
-  exit 1
-fi
+node scripts/build/commit-types/index.mjs --msg-file "$msg_file" || exit 1
 
 # DCO sign-off (OSS-10): every human commit certifies the Developer
-# Certificate of Origin with a trailer. Merges and reverts are exempt
-# above, like for the scope check.
+# Certificate of Origin with a trailer.
 if ! grep -Eq '^Signed-off-by: .+ <[^<>]+>$' "$msg_file"; then
   echo "commit-msg: rejected - DCO sign-off required" >&2
   echo "  add:      Signed-off-by: Your Name <you@example.com>" >&2

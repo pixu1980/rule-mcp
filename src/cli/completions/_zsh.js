@@ -31,6 +31,7 @@ _pix_galaxy_mcp_commands() {
     'update:Self-update from the upstream repo'
     'agent-commands:Manage agent slash commands'
     'reinstall:Purge node_modules and the lockfile, install again, refresh the global bin'
+    'commit-lint:Validate commits against type(scope): subject'
     'completions:Generate shell completion script'
     'help:Show this help message'
   )

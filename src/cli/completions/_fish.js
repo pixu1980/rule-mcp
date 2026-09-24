@@ -31,6 +31,7 @@ complete -c rule-mcp -n "__fish_use_subcommand" -a guard     -d "Permission-guar
 complete -c rule-mcp -n "__fish_use_subcommand" -a update    -d "Self-update from upstream"
 complete -c rule-mcp -n "__fish_use_subcommand" -a agent-commands -d "Manage agent slash commands"
 complete -c rule-mcp -n "__fish_use_subcommand" -a reinstall -d "Purge deps, install again, refresh global bin"
+complete -c rule-mcp -n "__fish_use_subcommand" -a commit-lint -d "Validate commit messages"
 complete -c rule-mcp -n "__fish_use_subcommand" -a completions -d "Generate shell completion"
 complete -c rule-mcp -n "__fish_use_subcommand" -a help      -d "Show help"
 

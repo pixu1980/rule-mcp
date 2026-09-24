@@ -5,75 +5,71 @@
 /**
  * @module scripts/build/commit-types
  *
- * The single source of truth for commit types (OSS-19).
+ * The commit gates' entry point (OSS-19).
  *
- * The commit-msg hook, the semantic.yml PR-title check, and the commit-lint
- * CI job all accept this exact type list, so the pattern lives in exactly
- * one place:
+ * The rule itself lives in `src/core/commit` and this file only parses argv, so
+ * the type list, the subject pattern and the system-message exemption have one
+ * definition shared by the `commit-msg` hook, the `pre-push` hook, the CLI and
+ * the CI lint:
  *
  *   node scripts/build/commit-types/index.mjs --lint-range <base> <head>
+ *   node scripts/build/commit-types/index.mjs --msg-file <path>
+ *   node scripts/build/commit-types/index.mjs --stdin-push
+ *
+ * Relative imports on purpose: CI runs this file with no alias hook loaded.
  */
 
-import { execFileSync } from "node:child_process";
-/** The one accepted type list for every commit gate (OSS-19). */
-export const COMMIT_TYPES = ["feat", "fix", "docs", "style", "refactor", "perf", "test", "build", "ci", "chore", "revert"];
+import { readFileSync } from "node:fs";
+
+import { commitLintCommand } from "../../../src/cli/commands/_commit.js";
+
+export { COMMIT_TYPES, SYSTEM_MESSAGE_PREFIXES, isSystemSubject } from "../../../src/core/commit/index.js";
+
+const USAGE = "usage: commit-types/index.mjs --lint-range <base> <head> | --msg-file <path> | --stdin-push\n";
 
 /**
- * System-generated subjects, which cannot carry a scope: GitHub's merge ref
- * ("Merge <sha> into <sha>"), PR merges ("Merge pull request #N from ..."),
- * and web reverts ("Revert \"...\""). The commit-msg hook exempts the same
- * two prefixes, and tests/docs/commit-gates.test.mjs pins the parity.
+ * Read the ref lines a `pre-push` hook receives on stdin, or "" off a terminal.
+ *
+ * @returns {string}
  */
-export const SYSTEM_MESSAGE_PREFIXES = ["Merge", "Revert"];
-export const SYSTEM_SUBJECT = new RegExp(`^(?:${SYSTEM_MESSAGE_PREFIXES.join("|")}) `, "u");
-
-export function isSystemSubject(subject) {
-  return SYSTEM_SUBJECT.test(subject);
+function readStdin() {
+  try {
+    return readFileSync(0, "utf8");
+  } catch {
+    return "";
+  }
 }
 
-const SUBJECT = new RegExp(String.raw`^(${COMMIT_TYPES.join("|")})\([a-z0-9._-]+\): .+$`, "u");
+/**
+ * Run one gate mode and return its exit code.
+ *
+ * @param {string[]} args
+ * @returns {number}
+ */
+function run(args) {
+  const [flag, first, second] = args;
 
-function lintRange(base, head) {
-  const commits = execFileSync("git", ["rev-list", `${base}..${head}`], { encoding: "utf8" })
-    .split("\n")
-    .filter(Boolean);
-  const bad = [];
-  let linted = 0;
-
-  for (const commit of commits) {
-    const subject = execFileSync("git", ["log", "-1", "--format=%s", commit], { encoding: "utf8" }).trim();
-
-    if (isSystemSubject(subject)) {
-      continue;
-    }
-
-    linted += 1;
-
-    if (!SUBJECT.test(subject)) {
-      bad.push(`${commit}: ${subject}`);
-    }
+  if (flag === "--lint-range" && first && second) {
+    return commitLintCommand({ range: `${first}..${second}` });
   }
 
-  if (bad.length > 0) {
-    for (const line of bad) {
-      process.stderr.write(`commit-lint: ${line}\n`);
-    }
-
-    process.exitCode = 1;
-
-    return;
+  if (flag === "--msg-file" && first) {
+    return commitLintCommand({ msgFile: first });
   }
 
-  process.stdout.write(`commit-lint: ${linted} commit(s) follow type(scope).\n`);
+  if (flag === "--stdin-push") {
+    return commitLintCommand({ stdinPush: true }, { stdin: readStdin() });
+  }
+
+  process.stderr.write(USAGE);
+
+  return 1;
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const [flag, base, head] = process.argv.slice(2);
+  const code = run(process.argv.slice(2));
 
-  if (flag === "--lint-range" && base && head) {
-    lintRange(base, head);
-  } else {
-    process.stderr.write("usage: commit-types/index.mjs --lint-range <base> <head>\n");
-    process.exitCode = 1;
+  if (code !== 0) {
+    process.exitCode = code;
   }
 }

@@ -77,7 +77,7 @@ export const INIT_BODY = [
   "",
   "1. Call `rule_tool_init` (or `rule-mcp init`). Pass `no-tokensave` / noTokensave when requested.",
   "2. For a brand-new project, bootstrap via `/rule-area-styleguide` / `/rule-area-toolchain` (name leaves in the request) and `rule_tool_detect` before finishing.",
-  "3. Confirm nothing was written into the repository: recording lives in the state directory.",
+  "3. Report the git governance it installs or integrates: a `commit-msg` gate and a `pre-push` gate that enforce `type(scope): subject`. Husky is installed only when a Node project has no hook mechanism; an existing `.husky/`, `.githooks/` or `core.hooksPath` is integrated, never replaced. Re-running is safe.",
   "4. Check the project's test setup exists; if there is no test surface, ask the user what to cover.",
   "5. Finish by proposing a conventional commit with a mandatory scope, e.g. `chore(init): ...`.",
 ].join("\n");

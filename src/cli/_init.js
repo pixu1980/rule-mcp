@@ -3,24 +3,31 @@
 /**
  * @module cli/init
  *
- * `rule-mcp init`: prepare a project to be recorded in.
+ * `rule-mcp init`: prepare a project for this server.
  *
- * Two things, both idempotent:
+ * Three things, all idempotent:
  *
  *   1. Move a local `./.rule-mcp` into `~/.rule-mcp/projects/`, if
  *      an earlier version left one behind, and create the central directory
- *      this project records into. Nothing is written into the project.
- *   2. Run `tokensave init` when tokensave is installed. The two
- *      tools are used together, tokensave's code graph is what lets this server
- *      stop dumping file trees into the context, and a project prepared for one
- *      is almost always meant to be prepared for the other. Its failure is
- *      reported, never inherited - it is not our command.
+ *      this project records into. No recorder state is written into the project.
+ *   2. Give the repository git governance: detect its hook mechanism (Husky, a
+ *      tracked `.githooks/`, a configured `core.hooksPath`, or git's own hooks
+ *      directory), install Husky when a Node project has none, and install the
+ *      `commit-msg` and `pre-push` gates that enforce `type(scope): subject`.
+ *      What already exists is integrated, never replaced.
+ *   3. Run `tokensave init` when tokensave is installed. The two tools are used
+ *      together, tokensave's code graph is what lets this server stop dumping
+ *      file trees into the context, and a project prepared for one is almost
+ *      always meant to be prepared for the other. Its failure is reported,
+ *      never inherited - it is not our command.
  *
  * @see module:cli/paths - where a project's recording lives, and the migration
+ * @see module:core/commit - the git governance step
  */
 
 import { execFileSync } from "node:child_process";
 import { mkdirSync } from "node:fs";
+import { installGitGovernance } from "../core/commit/index.js";
 import { findProjectRoot, getProjectPaths } from "./paths/index.js";
 
 /**
@@ -82,7 +89,17 @@ export function initProject(options = {}) {
     }
   }
 
-  return { projectDir, dir, created, tokensave };
+  let governance;
+
+  if (options.gitGovernance !== false) {
+    try {
+      governance = installGitGovernance(projectDir, { run: options.run, husky: options.husky, command: options.command });
+    } catch (error) {
+      governance = { mechanism: "none", hooks: {}, prepare: "missing", actions: [`failed: ${error.message}`] };
+    }
+  }
+
+  return { projectDir, dir, created, tokensave, governance };
 }
 
 /**
@@ -96,6 +113,19 @@ export function renderInit(result) {
 
   if (result.tokensave) {
     lines.push(`tokensave:    ${result.tokensave}`);
+  }
+
+  if (result.governance) {
+    const { mechanism, hooks = {}, actions = [] } = result.governance;
+    const installed = Object.entries(hooks)
+      .map(([name, outcome]) => `${name} ${outcome}`)
+      .join(", ");
+
+    lines.push(`Git:          ${mechanism === "none" ? "no git repository" : mechanism}${installed ? ` (${installed})` : ""}`);
+
+    for (const action of actions) {
+      lines.push(`              ${action}`);
+    }
   }
 
   return lines.join("\n");

@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## The commands (23)
+## The commands (24)
 
 Every command is listed with the arguments and options it reads, taken from
 the commander definitions that parse them. The same definitions answer
@@ -44,6 +44,7 @@ the package version from anywhere. An error exits 1 and prints to stderr;
 | [`update`](#rule-mcp-update)                 | 0       | Self-update from the upstream git repo (fast-forward only)                    |
 | [`agent-commands`](#rule-mcp-agent-commands) | 13      | Registry-driven agent slash-command management                                |
 | [`reinstall`](#rule-mcp-reinstall)           | 0       | Purge node_modules and pnpm-lock.yaml, install again, refresh the global bin  |
+| [`commit-lint`](#rule-mcp-commit-lint)       | 6       | Validate commits against type(scope): subject (the git hooks call this)       |
 
 ## rule-mcp help
 
@@ -508,6 +509,25 @@ rule-mcp reinstall
 ```
 
 Takes no options beyond the global `-h, --help`.
+
+## rule-mcp commit-lint
+
+Validate commits against type(scope): subject (the git hooks call this)
+
+```sh
+rule-mcp commit-lint
+```
+
+**Options**
+
+| Flag                | Default | Choices | Description                                                             |
+| ------------------- | ------- | ------- | ----------------------------------------------------------------------- |
+| `--msg-file <path>` | -       | -       | validate a commit-message file (commit-msg hook)                        |
+| `--range <revspec>` | -       | -       | validate every commit in a revision range                               |
+| `--base <ref>`      | -       | -       | base ref for the range                                                  |
+| `--head <ref>`      | -       | -       | head ref for the range (default: HEAD)                                  |
+| `--stdin-push`      | -       | -       | validate the refs git is about to push, read from stdin (pre-push hook) |
+| `--dir <path>`      | -       | -       | project directory (default: cwd)                                        |
 
 ## The rest of the census
 
