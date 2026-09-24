@@ -8,15 +8,10 @@ import test from "node:test";
 import { COMMIT_TYPES, isSystemSubject, SYSTEM_MESSAGE_PREFIXES } from "../../scripts/build/commit-types/index.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
-const TYPE_ALTERNATION = /\^\(([^)]+)\)\\\(/;
 
-function hookTypes() {
-  const hook = readFileSync(join(root, ".githooks", "commit-msg"), "utf8");
-  const alternation = TYPE_ALTERNATION.exec(hook);
-
-  assert.ok(alternation, "the hook carries no type alternation");
-
-  return alternation[1].match(/[a-z]+/gu);
+/** The `commit-msg` hook, which must delegate rather than carry its own rule. */
+function commitMsgHook() {
+  return readFileSync(join(root, ".githooks", "commit-msg"), "utf8");
 }
 
 function semanticTypes() {
@@ -27,8 +22,14 @@ function semanticTypes() {
   return [...body.matchAll(/^\s*-\s*([a-z]+)\s*$/gmu)].map((match) => match[1]);
 }
 
-test("the hook and the PR title check share one type list", () => {
-  assert.deepEqual(hookTypes(), COMMIT_TYPES, "the hook drifted from the source of truth");
+test("the commit-msg hook delegates to the shared validator", () => {
+  const hook = commitMsgHook();
+
+  assert.match(hook, /commit-types\/index\.mjs --msg-file/u, "the hook must call the shared entry point");
+  assert.doesNotMatch(hook, /feat\|fix\|docs/u, "the type list lives in src/core/commit, not in the hook");
+});
+
+test("the PR title check shares the one type list", () => {
   assert.deepEqual(semanticTypes(), COMMIT_TYPES, "semantic.yml drifted from the source of truth");
 });
 
@@ -38,7 +39,7 @@ test("the hook and the PR title check share one type list", () => {
  * subjects or a bot-perfect gate still fails that gate (merge ref in range).
  */
 function systemSubjects() {
-  const hook = readFileSync(join(root, ".githooks", "commit-msg"), "utf8");
+  const hook = commitMsgHook();
   const at = hook.search(/case "\$first" in/u);
   const block = at === -1 ? "" : hook.slice(at, hook.indexOf(";;", at));
 
