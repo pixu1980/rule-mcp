@@ -11,7 +11,7 @@
  * goes stale.
  */
 
-import { readdirSync, statSync } from "node:fs";
+import { readdirSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -44,14 +44,29 @@ function isPublicSource(rel) {
 function markdownUnder(absolute) {
   const found = [];
   const walk = (dir) => {
-    for (const entry of readdirSync(dir)) {
-      const full = join(dir, entry);
+    let entries;
 
-      if (statSync(full).isDirectory()) {
-        if (!PRUNE.has(entry)) {
+    // The tree is read while other processes run in it: the shipped
+    // template-engine tests create and delete a `test-tmp` directory at the
+    // repository root, so a directory read here can be gone before it is
+    // read, and a file can be gone before it is typed. Both are simply not
+    // part of the snapshot this call is taking. `withFileTypes` answers
+    // directory-ness from the directory read itself, so no second stat can
+    // fail on an entry that just vanished.
+    try {
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+
+    for (const entry of entries) {
+      const full = join(dir, entry.name);
+
+      if (entry.isDirectory()) {
+        if (!PRUNE.has(entry.name)) {
           walk(full);
         }
-      } else if (entry.endsWith(".md")) {
+      } else if (entry.name.endsWith(".md")) {
         found.push(full);
       }
     }
