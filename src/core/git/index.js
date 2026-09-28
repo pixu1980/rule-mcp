@@ -16,6 +16,7 @@
 
 export * from "./_base.js";
 export * from "./_commits.js";
+export * from "./_freshness.js";
 export * from "./_range.js";
 export * from "./_repo.js";
 export * from "./_run.js";

@@ -42,6 +42,7 @@ test("every tool traces back to a rule-* directory in ./skills", () => {
     "rule_tool_review",
     "rule_tool_search",
     "rule_tool_stats",
+    "rule_tool_sync",
     "rule_tool_update",
     "rule_tool_usage",
   ]);

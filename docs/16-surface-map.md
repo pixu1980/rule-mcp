@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Command / Tool / Skill map (126)
+## Command / Tool / Skill map (127)
 
 One row per slash command, then every catalog skill that has no slash of its
 own (ADR 117: leaf skills are reached through area hubs or the router), then
@@ -141,6 +141,7 @@ Regenerate with `pnpm census`.
 | -                          | `rule_tool_audit`                     | -                               | Run audit as expert review persona; returns audit operation contract.                                                                                                                                                                                            |
 | -                          | `rule_tool_review`                    | -                               | Run review as expert review persona; returns review operation contract.                                                                                                                                                                                          |
 | -                          | `rule_tool_plan_docs`                 | -                               | Create or refresh audit/review/plan documents for review persona run: bookkeeping half.                                                                                                                                                                          |
+| -                          | `rule_tool_sync`                      | -                               | Check how far base branch has moved since this branch forked, and propose rebase.                                                                                                                                                                                |
 | -                          | `rule_tool_gateway`                   | -                               | Single-entry orchestrator: routes prompt → loads skill evidence → checks code against guardrails → returns receipt.                                                                                                                                              |
 | -                          | `rule_tool_apply`                     | -                               | Write files to disk after rule_tool_gateway validation.                                                                                                                                                                                                           |
 

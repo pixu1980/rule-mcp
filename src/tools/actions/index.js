@@ -13,6 +13,7 @@ import { registerInitTool } from "./_init.js";
 import { registerPlanDocsTool } from "./_plan-docs.js";
 import { registerPlanTool } from "./_plan.js";
 import { registerStatsTool } from "./_stats.js";
+import { registerSyncTool } from "./_sync.js";
 import { registerUpdateTool } from "./_update.js";
 import { registerUsageTool } from "./_usage.js";
 
@@ -21,6 +22,7 @@ export * from "./_init.js";
 export * from "./_plan-docs.js";
 export * from "./_plan.js";
 export * from "./_stats.js";
+export * from "./_sync.js";
 export * from "./_update.js";
 export * from "./_usage.js";
 
@@ -34,6 +36,7 @@ export function registerActionTools() {
   registerPlanTool();
   registerPlanDocsTool();
   registerStatsTool();
+  registerSyncTool();
   registerUsageTool();
   registerUpdateTool();
 }

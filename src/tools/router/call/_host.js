@@ -6,43 +6,59 @@
  * The host seam for one tool call: what the invocation path may ask of the
  * process hosting it, without importing the module that answers.
  *
- * The pipeline asks the host for two things - kick the throttled check, read
- * the banner it left - and importing self-update to get them puts the router at
- * the bottom of a five-module cycle: router to self-update to skills to tools
- * to router. Here the pipeline asks a port instead and self-update registers
- * itself into it, so the edge runs one way and this module imports nothing.
+ * Several hosts register here - self-update for its throttled check, the
+ * branch-sync guard for its staleness notice - so the port holds a list and
+ * every host is asked. A single slot would have made the second registrar
+ * silently evict the first.
+ *
+ * The pipeline asks the hosts for two things - kick the per-call work, read the
+ * banner they left - and importing each of them to get those puts the router at
+ * the bottom of a cycle. Here the pipeline asks the port instead and each host
+ * registers itself into it, so the edge runs one way and this module imports
+ * nothing.
  */
 
-let host = {};
+/** The registered hosts, in registration order. */
+let hosts = [];
 
 /**
- * Register the host hooks for tool calls.
+ * Register one host's hooks for tool calls.
  *
- * Self-update registers itself when it loads. A process that never loads it
- * simply has no kick and no banner, which is the same process that would have
- * had nothing to kick.
+ * Called at import time by each host module, so loading the module is the
+ * registration. A call runs every registered `beforeCall` in order, and the
+ * banners every host left are joined.
  *
  * @param {{ beforeCall?: (name: string) => void, banner?: () => string|null }} hooks
  */
 export function registerCallHost(hooks) {
-  host = hooks;
+  hosts.push(hooks);
+}
+
+/** Clear every registered host. Tests only. */
+export function resetCallHosts() {
+  hosts = [];
 }
 
 /**
- * Kick the host's pre-call work, if any. The caller decides whether a failure
- * may fail the call: a self-update check never does.
+ * Kick each host's pre-call work. The caller decides whether a failure may fail
+ * the call: neither a self-update nor a sync check ever does.
  *
  * @param {string} name - the tool about to be called
  */
 export function hostBeforeCall(name) {
-  host.beforeCall?.(name);
+  for (const host of hosts) {
+    host.beforeCall?.(name);
+  }
 }
 
 /**
- * The banner the host wants prepended to this reply, or "".
+ * The banner the hosts want prepended to this reply, or "".
  *
  * @returns {string}
  */
 export function hostBanner() {
-  return host.banner?.() ?? "";
+  return hosts
+    .map((host) => host.banner?.() ?? "")
+    .filter(Boolean)
+    .join("\n\n");
 }

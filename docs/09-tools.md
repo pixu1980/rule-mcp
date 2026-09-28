@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Action tools (18)
+## Action tools (19)
 
 The tools that do something rather than serve a skill. Every one is
 deterministic: none of them calls a model, so the same arguments return the
@@ -27,6 +27,7 @@ same result behind any client.
 | [`rule_tool_review`](#pixtoolreview)      | Run review as expert review persona; returns review operation contract.                                                                                                                                                                                                                                                                                   |
 | [`rule_tool_plan_docs`](#pixtoolplandocs) | Create or refresh audit/review/plan documents for review persona run: bookkeeping half.                                                                                                                                                                                                                                                                   |
 | [`rule_tool_stats`](#pixtoolstats)        | Read the local telemetry log and summarize it: call counts, cache hit rate, saved/estimated tokens, latency.                                                                                                                                                                                                                                              |
+| [`rule_tool_sync`](#pixtoolsync)          | Check how far base branch has moved since this branch forked, and propose rebase.                                                                                                                                                                                                                                                                         |
 | [`rule_tool_usage`](#pixtoolusage)        | Declare an agent usage sidecar for this project when no transcript can be read: input/output tokens, cost.                                                                                                                                                                                                                                                |
 | [`rule_tool_update`](#pixtoolupdate)      | Force-update this local MCP server from its upstream git repo (fast-forward only), hot-reload skills, and restart if server code changed.                                                                                                                                                                                                                 |
 | [`rule_tool_handon`](#pixtoolhandon)      | Read last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work.                                                                                                                                                                                                                           |
@@ -165,6 +166,18 @@ Read the local telemetry log and summarize it: call counts, cache hit rate, save
 | --------- | ---------------------------- | -------- | -------- | ---------------------- |
 | `scope`   | `session` \| `week` \| `all` | no       | `"week"` | session\\              | week\\ | all |
 | `flight`  | string                       | no       | -        | Path to a .flight file |
+
+### rule_tool_sync
+
+Check how far base branch has moved since this branch forked, and propose rebase. Read-only by default; `action: rebase` needs `confirm: true` and refuses on dirty tree. conflict is reported with its files and never resolved automatically.
+
+| Parameter    | Type                | Required | Default   | Description                                                          |
+| ------------ | ------------------- | -------- | --------- | -------------------------------------------------------------------- |
+| `projectDir` | string              | no       | `"."`     | Project root (default: cwd)                                          |
+| `action`     | `check` \| `rebase` | no       | `"check"` | check (read-only) or rebase (needs confirm)                          |
+| `confirm`    | boolean             | no       | `false`   | Required for action=rebase; the confirmation gate                    |
+| `baseBranch` | string              | no       | -         | Override the detected base branch                                    |
+| `fetch`      | boolean             | no       | `false`   | Fetch the base remote first, so the check sees the remote's position |
 
 ### rule_tool_usage
 

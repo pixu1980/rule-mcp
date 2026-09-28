@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md)                                                | Make the tool-call host a list so invocation hosts coexist                                                | 2026-09-28 | accepted   | architecture, mcp, git, workflow                                                    |
 | [123](123-start-the-six-case-study-apps-with-one-port-allocating-command.md)                                            | Start the six case-study apps with one port-allocating command                                            | 2026-09-23 | accepted   | tooling, case-studies, dev-server, pnpm, electron                                   |
 | [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md)                             | The fix tool and command apply the deterministic guardrails, not the file tree                            | 2026-09-23 | accepted   | tools, commands, guardrails                                                         |
 | [121](121-the-install-reconciles-the-bundled-skills-when-the-step-is-not-selected.md)                                   | The install reconciles the bundled skills when the step is not selected                                   | 2026-09-23 | accepted   | installer, skills, commands                                                         |
@@ -139,6 +140,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md)                                                | `registerCallHost` appends to a list.                                                                                                                                                                                           | Two hosts coexist: self-update's throttled check and the branch-sync guard's staleness notice.                                                                                                                                  |
 | [123](123-start-the-six-case-study-apps-with-one-port-allocating-command.md)                                            | Add `pnpm case-studies` (scripts/case-studies/index.mjs) as the single entry point.                                                                                                                                             | Positive: one command starts all six without port collisions; one Ctrl-C stops everything; the apps stay runnable standalone with their original defaults; missing node_modules install automatically with...                   |
 | [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md)                             | 1. rule_tool_fix is registered again, through registerActionTools, with a new job: apply the deterministic guardrail fixes every skill owns - blank lines, braces, single-line bodies, ASCII typography, American spelling -...  | The surface is 107 tools and 40 commands.                                                                                                                                                                                       |
 | [121](121-the-install-reconciles-the-bundled-skills-when-the-step-is-not-selected.md)                                   | 1. skills uninstall is a real CLI action, with --scope and --dry-run, that removes only the names the installer owns: the catalog skills plus the generated persona skills.                                                     | The skills choice becomes two-way, which is what the checkbox already promised.                                                                                                                                                 |
@@ -270,6 +272,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### architecture
 
+- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
 - [112](112-extend-the-file-size-cap-to-the-shipped-skill-trees.md) Extend the file-size cap to the shipped skill trees
 - [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
 - [096](096-tokensave-is-the-primary-code-graph-javascript-is-the-fallback.md) TokenSave is the primary code graph, JavaScript is the fallback
@@ -536,6 +539,14 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
 - [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
 
+### mcp
+
+- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
+- [105](105-opencode-gets-a-dedicated-installer-writing-its-own-config-shape.md) opencode gets a dedicated installer writing its own config shape
+- [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
+- [019](019-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
+- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+
 ### taxonomy
 
 - [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
@@ -550,13 +561,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
-
-### mcp
-
-- [105](105-opencode-gets-a-dedicated-installer-writing-its-own-config-shape.md) opencode gets a dedicated installer writing its own config shape
-- [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
-- [019](019-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
-- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
 ### ratchet
 
@@ -616,6 +620,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [102](102-reinstall-is-one-shell-script-behind-three-entry-points.md) Reinstall is one shell script behind three entry points
 - [072](072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
 - [070](070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
+
+### git
+
+- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
+- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
+- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
 
 ### install
 

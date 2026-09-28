@@ -5,7 +5,7 @@
 <p>An MCP server that routes free-text requests to the right skill, serves styleguides and templates as tools and resources, and validates generated code with guardrails. Same behavior behind Claude, GPT, Gemini, Llama, or Qwen. Local-first. Model-agnostic.</p>
 <ul data-part="stats">
 <li><strong>89 skills</strong></li>
-<li><strong>107 tools</strong></li>
+<li><strong>108 tools</strong></li>
 <li><strong>186 resources</strong></li>
 <li><strong>37 prompts</strong></li>
 <li><strong>40 slash commands</strong></li>
