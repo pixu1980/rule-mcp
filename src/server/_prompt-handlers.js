@@ -11,6 +11,7 @@
 
 import { GetPromptRequestSchema, ListPromptsRequestSchema, ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
 import { compressSurfaceText, MIN_COMPRESS_LENGTH } from "../core/text/_compression.js";
+import { maybeSyncCheck } from "../core/sync/index.js";
 import { recordToolCall } from "../core/telemetry/recorder/index.js";
 import { getPrompt, listActivePrompts } from "../prompts/index.js";
 
@@ -49,6 +50,11 @@ export function registerPromptHandlers(server) {
     if (!name) {
       throw new McpError(ErrorCode.InvalidParams, "Prompt name is required");
     }
+
+    // A slash command is real activity, so it is one of the events the
+    // branch-sync guard hangs off. Fire-and-forget: the prompt is returned now
+    // and any staleness notice lands on a later tool result.
+    void maybeSyncCheck();
 
     const startedAt = Date.now();
     const prompt = getPrompt(name, request.params.arguments ?? {});

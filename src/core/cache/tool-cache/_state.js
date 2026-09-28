@@ -18,6 +18,10 @@ export const NON_CACHEABLE = new Set([
   "pix_tool_handoff",
   // handon reads git: a replayed answer describes a repository that has moved.
   "pix_tool_handon",
+  // sync reads git and, on action=rebase, rewrites the branch: a replayed
+  // answer would describe a repository that has moved and could report a
+  // rebase that never ran.
+  "pix_tool_sync",
   "pix_tool_gateway",
   "pix_tool_detect",
   "pix_tool_update",

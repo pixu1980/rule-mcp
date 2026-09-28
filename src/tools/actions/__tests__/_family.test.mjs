@@ -9,13 +9,13 @@ import { test } from "node:test";
 import { clearTools, listTools } from "../../router/index.js";
 import { registerActionTools } from "../index.js";
 
-test("registerActionTools mints the six action-family tools", () => {
+test("registerActionTools mints the action-family tools", () => {
   clearTools();
   registerActionTools();
 
   const names = new Set(listTools().map((tool) => tool.name));
 
-  for (const name of ["pix_tool_compress", "pix_tool_plan", "pix_tool_plan_docs", "pix_tool_stats", "pix_tool_usage", "pix_tool_update"]) {
+  for (const name of ["pix_tool_compress", "pix_tool_plan", "pix_tool_plan_docs", "pix_tool_stats", "pix_tool_sync", "pix_tool_usage", "pix_tool_update"]) {
     assert.ok(names.has(name), `${name} is registered by the family`);
   }
 });

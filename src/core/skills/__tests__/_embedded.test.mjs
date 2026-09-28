@@ -42,6 +42,7 @@ test("every tool traces back to a pix-* directory in ./skills", () => {
     "pix_tool_review",
     "pix_tool_search",
     "pix_tool_stats",
+    "pix_tool_sync",
     "pix_tool_update",
     "pix_tool_usage",
   ]);

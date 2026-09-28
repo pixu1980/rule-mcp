@@ -1,5 +1,5 @@
 {
-  "count": 107,
+  "count": 108,
   "tools": [
     "pix_tool",
     "pix_tool_ai",
@@ -74,6 +74,7 @@
     "pix_tool_review",
     "pix_tool_search",
     "pix_tool_stats",
+    "pix_tool_sync",
     "pix_tool_styleguide",
     "pix_tool_styleguide_a11y",
     "pix_tool_styleguide_baseline",
