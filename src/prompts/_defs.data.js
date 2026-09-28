@@ -34,6 +34,18 @@ export const PROMPT_DEFS = [
     ],
   },
   {
+    name: "pix-git",
+    description:
+      "Audit the feature history and normalize it: Conventional Commit violations, merge commits, and (with --force) merge-commit removal - every rewrite behind a confirmation gate",
+    arguments: [
+      {
+        name: "options",
+        description: "Space-separated: --force (enable history-normalization proposals). Default: read-only audit.",
+        required: false,
+      },
+    ],
+  },
+  {
     name: "pix-init",
     description: "Prepare a project for pix-galaxy-mcp: the central recorder directory and tokensave",
     arguments: [{ name: "options", description: "Space-separated: no-tokensave. Default: the full init.", required: false }],
@@ -89,4 +101,5 @@ export const PROMPT_EXAMPLES = {
   "pix-area-toolchain": ["/pix-area-toolchain help", "/pix-area-toolchain set up vite + biome"],
   "pix-area-ui": ["/pix-area-ui help", "/pix-area-ui design-system button component"],
   "pix-handoff": ["/pix-handoff help", "/pix-handoff close-session"],
+  "pix-git": ["/pix-git", "/pix-git --force"],
 };

@@ -24,7 +24,7 @@ export const WORKFLOW_PROMPTS = ["pix-handoff"];
 // a new hub would silently contradict.
 export const AREA_PROMPTS = listAreaPrompts().map((prompt) => prompt.name);
 
-export const ONE_SHOT_PROMPTS = ["pix-compress", "pix-handon", "pix-init", "pix-stats", "pix-update", "pix-usage"];
+export const ONE_SHOT_PROMPTS = ["pix-compress", "pix-git", "pix-handon", "pix-init", "pix-stats", "pix-update", "pix-usage"];
 
 export const EXPECTED = [...WORKFLOW_PROMPTS, ...AREA_PROMPTS];
 

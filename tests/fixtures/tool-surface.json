@@ -1,5 +1,5 @@
 {
-  "count": 108,
+  "count": 109,
   "tools": [
     "pix_tool",
     "pix_tool_ai",
@@ -46,6 +46,7 @@
     "pix_tool_frontend_vue",
     "pix_tool_frontend_workers",
     "pix_tool_gateway",
+    "pix_tool_git",
     "pix_tool_handoff",
     "pix_tool_handon",
     "pix_tool_init",

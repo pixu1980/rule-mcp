@@ -9,6 +9,7 @@
  */
 import { registerCompressTool } from "./_compress.js";
 import { registerFixTool } from "../fix/index.js";
+import { registerGitTool } from "./_git.js";
 import { registerInitTool } from "./_init.js";
 import { registerPlanDocsTool } from "./_plan-docs.js";
 import { registerPlanTool } from "./_plan.js";
@@ -18,6 +19,7 @@ import { registerUpdateTool } from "./_update.js";
 import { registerUsageTool } from "./_usage.js";
 
 export * from "./_compress.js";
+export * from "./_git.js";
 export * from "./_init.js";
 export * from "./_plan-docs.js";
 export * from "./_plan.js";
@@ -32,6 +34,7 @@ export * from "./_usage.js";
 export function registerActionTools() {
   registerCompressTool();
   registerFixTool();
+  registerGitTool();
   registerInitTool();
   registerPlanTool();
   registerPlanDocsTool();

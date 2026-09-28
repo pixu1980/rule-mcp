@@ -22,7 +22,7 @@ test("registry covers workflow, area, one-shot, and persona prompts", () => {
   for (const expected of [...EXPECTED, ...ONE_SHOT_PROMPTS]) {
     assert.ok(names.includes(expected), `missing prompt ${expected}`);
   }
-  // 1 workflow (handoff) + area prompts + 6 one-shot (compress/handon/init/stats/update/usage)
+  // 1 workflow (handoff) + area prompts + the one-shot prompts
   // + one persona prompt per active role (ADR 120). Flight is directive-only (ADR 114).
   // process-handoff/compression areas removed (ADR 115).
   assert.equal(names.length, EXPECTED.length + ONE_SHOT_PROMPTS.length + activeRoles().length, "no unexpected prompts");

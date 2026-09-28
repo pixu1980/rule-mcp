@@ -7,34 +7,35 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## MCP prompts (37)
+## MCP prompts (38)
 
-18 reusable prompts, plus 19 generated from the persona registry.
+19 reusable prompts, plus 19 generated from the persona registry.
 Claude Code installs clean `/pix-*` commands instead and suppresses these
 (ADR 029), so the two names are deliberately the same.
 
 ### Reusable
 
-| Prompt                 | Arguments | Description                                                                                                                                               |
-| ---------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/pix-area-ai`         | <request> | ai work: route free text to the right ai leaf skills/tools                                                                                                |
-| `/pix-area-backend`    | <request> | backend work: route free text to the right backend leaf skills/tools                                                                                      |
-| `/pix-area-data`       | <request> | data work: route free text to the right data leaf skills/tools                                                                                            |
-| `/pix-area-devops`     | <request> | devops work: route free text to the right devops leaf skills/tools                                                                                        |
-| `/pix-area-frontend`   | <request> | frontend work: route free text to the right frontend leaf skills/tools                                                                                    |
-| `/pix-area-meta`       | <request> | meta work: route free text to the right meta leaf skills/tools                                                                                            |
-| `/pix-area-platform`   | <request> | platform work: route free text to the right platform leaf skills/tools                                                                                    |
-| `/pix-area-process`    | <request> | process work: route free text to the right process leaf skills/tools                                                                                      |
-| `/pix-area-styleguide` | <request> | styleguide work: route free text to the right styleguide leaf skills/tools                                                                                |
-| `/pix-area-toolchain`  | <request> | toolchain work: route free text to the right toolchain leaf skills/tools                                                                                  |
-| `/pix-area-ui`         | <request> | ui work: route free text to the right ui leaf skills/tools                                                                                                |
-| `/pix-compress`        | [options] | Run pix_tool_compress: sole engine for prompt/context preprocessing and prose postprocessing                                                              |
-| `/pix-handoff`         | [options] | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. |
-| `/pix-handon`          | [options] | Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream                               |
-| `/pix-init`            | [options] | Prepare a project for pix-galaxy-mcp: the central recorder directory and tokensave                                                                        |
-| `/pix-stats`           | [options] | Read local telemetry via pix_tool_stats: calls, cache hits, tokens, latency                                                                               |
-| `/pix-update`          | [options] | Apply an available server update explicitly, and report what changed                                                                                      |
-| `/pix-usage`           | [options] | Declare a usage sidecar via pix_tool_usage when no transcript is available                                                                                |
+| Prompt                 | Arguments | Description                                                                                                                                                                   |
+| ---------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/pix-area-ai`         | <request> | ai work: route free text to the right ai leaf skills/tools                                                                                                                    |
+| `/pix-area-backend`    | <request> | backend work: route free text to the right backend leaf skills/tools                                                                                                          |
+| `/pix-area-data`       | <request> | data work: route free text to the right data leaf skills/tools                                                                                                                |
+| `/pix-area-devops`     | <request> | devops work: route free text to the right devops leaf skills/tools                                                                                                            |
+| `/pix-area-frontend`   | <request> | frontend work: route free text to the right frontend leaf skills/tools                                                                                                        |
+| `/pix-area-meta`       | <request> | meta work: route free text to the right meta leaf skills/tools                                                                                                                |
+| `/pix-area-platform`   | <request> | platform work: route free text to the right platform leaf skills/tools                                                                                                        |
+| `/pix-area-process`    | <request> | process work: route free text to the right process leaf skills/tools                                                                                                          |
+| `/pix-area-styleguide` | <request> | styleguide work: route free text to the right styleguide leaf skills/tools                                                                                                    |
+| `/pix-area-toolchain`  | <request> | toolchain work: route free text to the right toolchain leaf skills/tools                                                                                                      |
+| `/pix-area-ui`         | <request> | ui work: route free text to the right ui leaf skills/tools                                                                                                                    |
+| `/pix-compress`        | [options] | Run pix_tool_compress: sole engine for prompt/context preprocessing and prose postprocessing                                                                                  |
+| `/pix-git`             | [options] | Audit the feature history and normalize it: Conventional Commit violations, merge commits, and (with --force) merge-commit removal - every rewrite behind a confirmation gate |
+| `/pix-handoff`         | [options] | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first.                     |
+| `/pix-handon`          | [options] | Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream                                                   |
+| `/pix-init`            | [options] | Prepare a project for pix-galaxy-mcp: the central recorder directory and tokensave                                                                                            |
+| `/pix-stats`           | [options] | Read local telemetry via pix_tool_stats: calls, cache hits, tokens, latency                                                                                                   |
+| `/pix-update`          | [options] | Apply an available server update explicitly, and report what changed                                                                                                          |
+| `/pix-usage`           | [options] | Declare a usage sidecar via pix_tool_usage when no transcript is available                                                                                                    |
 
 ### Persona, one per role
 
