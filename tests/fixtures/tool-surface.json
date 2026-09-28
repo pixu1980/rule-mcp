@@ -1,5 +1,5 @@
 {
-  "count": 108,
+  "count": 109,
   "tools": [
     "pix_tool",
     "rule_tool_ai",
@@ -46,6 +46,7 @@
     "rule_tool_frontend_vue",
     "rule_tool_frontend_workers",
     "rule_tool_gateway",
+    "rule_tool_git",
     "rule_tool_handoff",
     "rule_tool_handon",
     "rule_tool_init",

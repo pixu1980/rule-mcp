@@ -18,6 +18,9 @@ export const NON_CACHEABLE = new Set([
   "rule_tool_handoff",
   // handon reads git: a replayed answer describes a repository that has moved.
   "rule_tool_handon",
+  // git audits and can rewrite the feature history: a replayed audit would
+  // describe a repository that has moved.
+  "rule_tool_git",
   // sync reads git and, on action=rebase, rewrites the branch: a replayed
   // answer would describe a repository that has moved and could report a
   // rebase that never ran.

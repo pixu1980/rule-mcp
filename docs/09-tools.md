@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Action tools (19)
+## Action tools (20)
 
 The tools that do something rather than serve a skill. Every one is
 deterministic: none of them calls a model, so the same arguments return the
@@ -21,6 +21,7 @@ same result behind any client.
 | [`rule_tool_detect`](#pixtooldetect)      | Detect project framework, TypeScript usage, and build tool from package.json.                                                                                                                                                                                                                                                                             |
 | [`rule_tool_compress`](#pixtoolcompress)  | Sole compression engine (ADR 115): preprocess enriched prompts/contexts and postprocess model prose.                                                                                                                                                                                                                                                      |
 | [`rule_tool_fix`](#pixtoolfix)            | Apply deterministic guardrail fixes of every skill (blank lines, braces, ASCII typography, American spelling) to changed files or explicit list.                                                                                                                                                                                                          |
+| [`rule_tool_git`](#pixtoolgit)            | Audit the feature history and normalize it: base branch, merge base, commit range, Conventional Commit violations and merge commits.                                                                                                                                                                                                                      |
 | [`rule_tool_init`](#pixtoolinit)          | Prepare project for rule-mcp: create central recorder directory under state dir, install or integrate git governance (commit-msg gate and pre-push gate that enforce type(scope): subject, installing Husky only when Node project has no hook mechanism), migrate leftover local.rule-mcp if present, and run tokensave init when installed. |
 | [`rule_tool_plan`](#pixtoolplan)          | Ask expert review persona to audit, review or plan this project; returns operation contract.                                                                                                                                                                                                                                                              |
 | [`rule_tool_audit`](#pixtoolaudit)        | Run audit as expert review persona; returns audit operation contract.                                                                                                                                                                                                                                                                                     |
@@ -100,6 +101,19 @@ Apply deterministic guardrail fixes of every skill (blank lines, braces, ASCII t
 | `path`    | string          | no       | `"."`    | Only files under this prefix are touched (default: the whole project)                                 |
 | `mode`    | `lint` \| `fix` | no       | `"lint"` | lint: report what a fix would change. fix: write the deterministic fixes.                             |
 | `dryRun`  | boolean         | no       | -        | Preview even in fix mode                                                                              |
+
+### rule_tool_git
+
+Audit the feature history and normalize it: base branch, merge base, commit range, Conventional Commit violations and merge commits. `reword` applies proposed messages; `linearize` removes merge commits and needs force:true to be proposed and confirm:true to run. Every rewrite verifies the final tree is unchanged and rolls back when it is not. Never resolves a conflict.
+
+| Parameter    | Type                               | Required | Default   | Description                                                       |
+| ------------ | ---------------------------------- | -------- | --------- | ----------------------------------------------------------------- |
+| `projectDir` | string                             | no       | `"."`     | Project root (default: cwd)                                       |
+| `action`     | `audit` \| `reword` \| `linearize` | no       | `"audit"` | audit (read-only), reword, or linearize                           |
+| `force`      | boolean                            | no       | `false`   | The /rule-git --force flag: enable history-normalization proposals |
+| `confirm`    | boolean                            | no       | `false`   | Required to run a rewrite; the confirmation gate                  |
+| `baseBranch` | string                             | no       | -         | Override the detected base branch                                 |
+| `rewrites`   | array of object                    | no       | -         | For reword: the message proposed for each commit sha              |
 
 ### rule_tool_init
 

@@ -42,6 +42,20 @@ export const HANDON_BODY = [
   "6. Responses are compressed automatically by the server: keep it factual and free of filler.",
 ].join("\n");
 
+/** /rule-git → rule_tool_git (audit, reword, linearize). */
+export const GIT_BODY = [
+  "Audit the feature history and normalize it: $ARGUMENTS",
+  "",
+  "1. Run `rule_tool_git` action=audit, passing `force: true` when the arguments contain `--force`. Read the base branch, merge base, commit range, commit count, Conventional Commit violations and merge commits.",
+  "2. The commit selection is deterministic: take the violations from the audit; never re-derive the range. For each one, read the commit (`git show <sha>`) and propose a `type(scope): subject` message that describes it.",
+  "3. Show every proposal as `OLD -> NEW` and ask the user to confirm. Rewrite nothing before that confirmation.",
+  "4. After confirmation, call `rule_tool_git` action=reword confirm=true with `rewrites=[{sha, message}, ...]`, and pass `force: true` when the arguments say `--force`. The tool refuses a message that is not `type(scope): subject`, a sha outside the feature range, and any call without confirmation.",
+  "5. When merge commits are present and `--force` was passed, call `rule_tool_git` action=linearize force=true confirm=true only after the user confirms. `--force` enables the proposal; it never bypasses the confirmation gate.",
+  "6. After any rewrite, report the verification: commit count, merge commits, and whether the final tree is unchanged. A rewrite that changed the tree is rolled back by the tool.",
+  "7. NEVER push. NEVER resolve a conflict automatically: if a rewrite stops or is rolled back, report the conflicted files and stop.",
+  "8. Write in English, American spelling (color, behavior, organize).",
+].join("\n");
+
 /** /rule-compress → rule_tool_compress (ADR 115 sole engine). */
 export const COMPRESS_BODY = [
   "Compress text with rule_tool_compress: $ARGUMENTS",

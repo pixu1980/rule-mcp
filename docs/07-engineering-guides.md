@@ -201,19 +201,19 @@ Measured on 2026-09-15, `develop`:
 
 <!-- census:begin:command-surface -->
 
-### The command surface today (40)
+### The command surface today (41)
 
 | Kind       | Count | Example             | Reach for it when                                               |
 | ---------- | ----- | ------------------- | --------------------------------------------------------------- |
 | `router`   | 1     | `/rule`              | Routes a free-text request to the skill that answers it         |
 | `area`     | 11    | `/rule-area-ai`      | Area hub: free text routes to leaf skills/tools (ADR 117)       |
-| `workflow` | 2     | `/rule-check`        | Runs a named workflow (e.g. /rule-check auto-detects guardrails) |
+| `workflow` | 3     | `/rule-check`        | Runs a named workflow (e.g. /rule-check auto-detects guardrails) |
 | `session`  | 7     | `/rule-compress`     | Carries a session across a context boundary                     |
 | `persona`  | 19    | `/rule-persona-a11y` | Runs one review role at one operation, and writes its documents |
 
 **Areas**: `/rule-area-ai`, `/rule-area-backend`, `/rule-area-data`, `/rule-area-devops`, `/rule-area-frontend`, `/rule-area-meta`, `/rule-area-platform`, `/rule-area-process`, `/rule-area-styleguide`, `/rule-area-toolchain`, `/rule-area-ui`
 
-**Workflows**: `/rule-check`, `/rule-fix`
+**Workflows**: `/rule-check`, `/rule-fix`, `/rule-git`
 
 **Sessions**: `/rule-compress`, `/rule-handoff`, `/rule-handon`, `/rule-init`, `/rule-stats`, `/rule-update`, `/rule-usage`
 

@@ -5,7 +5,7 @@
 import { listPrompts } from "@src/prompts/index.js";
 import { listAreaPrompts } from "@src/prompts/_areas.js";
 import { areaBody, ROUTER, generalCheckBody, generalFixBody } from "./_bodies.js";
-import { COMPRESS_BODY, HANDOFF_BODY, HANDON_BODY, INIT_BODY, STATS_BODY, USAGE_BODY } from "./_bodies-session.js";
+import { COMPRESS_BODY, GIT_BODY, HANDOFF_BODY, HANDON_BODY, INIT_BODY, STATS_BODY, USAGE_BODY } from "./_bodies-session.js";
 import { commandNames, ROUTER_COMMAND, CHECK_COMMAND, FIX_COMMAND } from "./_names.js";
 import { personaBody, personaTarget } from "./_personas.js";
 
@@ -54,15 +54,13 @@ export function commandDefinition(name) {
     "rule-stats": STATS_BODY,
     "rule-usage": USAGE_BODY,
     "rule-init": INIT_BODY,
+    "rule-git": GIT_BODY,
   };
   const area = name.startsWith("rule-area-") ? listAreaPrompts().find((p) => p.name === name) : null;
-  const body = persona
-    ? personaBody(persona)
-    : sessionBodies[name] ?? areaBody(prompt.description, { skill: area?.skill, members: area?.members ?? [] });
+  const body = persona ? personaBody(persona) : (sessionBodies[name] ?? areaBody(prompt.description, { skill: area?.skill, members: area?.members ?? [] }));
 
   return { name, description: prompt.description, argumentHint, body };
 }
-
 
 /**
  * Every command definition, in canonical order.

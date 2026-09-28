@@ -34,6 +34,18 @@ export const PROMPT_DEFS = [
     ],
   },
   {
+    name: "rule-git",
+    description:
+      "Audit the feature history and normalize it: Conventional Commit violations, merge commits, and (with --force) merge-commit removal - every rewrite behind a confirmation gate",
+    arguments: [
+      {
+        name: "options",
+        description: "Space-separated: --force (enable history-normalization proposals). Default: read-only audit.",
+        required: false,
+      },
+    ],
+  },
+  {
     name: "rule-init",
     description: "Prepare a project for rule-mcp: the central recorder directory and tokensave",
     arguments: [{ name: "options", description: "Space-separated: no-tokensave. Default: the full init.", required: false }],
@@ -89,4 +101,5 @@ export const PROMPT_EXAMPLES = {
   "rule-area-toolchain": ["/rule-area-toolchain help", "/rule-area-toolchain set up vite + biome"],
   "rule-area-ui": ["/rule-area-ui help", "/rule-area-ui design-system button component"],
   "rule-handoff": ["/rule-handoff help", "/rule-handoff close-session"],
+  "rule-git": ["/rule-git", "/rule-git --force"],
 };

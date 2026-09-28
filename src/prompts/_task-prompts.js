@@ -1,6 +1,14 @@
 
 
-/** The one-shot task prompts: handon, init, update, compress, stats, usage. Flight is not a prompt (ADR 114). */
+/**
+ * @module prompts/task-prompts
+ *
+ * The one-shot task prompts: handon, init, update - plus the session prompts
+ * (compress, git, stats, usage) delegated to `_task-prompts-session`. Flight is
+ * not a prompt (ADR 114).
+ */
+
+import { sessionTaskPrompt } from "./_task-prompts-session.js";
 
 /**
  * The task prompt for a name, or null when the name is not a task prompt.
@@ -11,6 +19,12 @@
  * @returns {object|null}
  */
 export function taskPrompt(name, args, user) {
+  const session = sessionTaskPrompt(name, args, user);
+
+  if (session) {
+    return session;
+  }
+
   switch (name) {
     case "rule-handon": {
       return {
@@ -76,56 +90,6 @@ export function taskPrompt(name, args, user) {
             "   refused it and ask the user before working around it.",
             "",
             "Finish by proposing a conventional commit with a mandatory scope if anything in the repo changed.",
-          ].join("\n"),
-        ),
-      };
-    }
-
-    case "rule-compress": {
-      return {
-        name,
-        description: "Compress prose / preprocess prompt text via rule_tool_compress",
-        messages: user(
-          [
-            `Compress with rule_tool_compress. Options: ${args.options ?? "both"}.`,
-            "",
-            "1. Call `rule_tool_compress` with the text to transform and mode both | compression | fingerprint.",
-            "2. This is the sole compression engine (ADR 115): use it for inbound prompt/context preprocessing",
-            "   and for outbound prose postprocessing. Do not invent a parallel compression path.",
-            "3. Report tokens before/after when the tool returns them. Keep code fences, URLs and JSON intact.",
-            "4. If no text is in the chat, ask the user what to compress before calling the tool.",
-            "",
-            "Finish by proposing a conventional commit with a mandatory scope only if a tracked file changed.",
-          ].join("\n"),
-        ),
-      };
-    }
-
-    case "rule-stats": {
-      return {
-        name,
-        description: "Read local telemetry via rule_tool_stats",
-        messages: user(
-          [
-            "Call `rule_tool_stats` and report the KPI block: calls, cache hits, tokens, latency, reminder overhead.",
-            "Propose only changes the numbers support; ask before acting on an ambiguous reading.",
-            "",
-            "Finish by proposing a conventional commit with a mandatory scope, e.g. `docs(telemetry): ...`, only if docs change.",
-          ].join("\n"),
-        ),
-      };
-    }
-
-    case "rule-usage": {
-      return {
-        name,
-        description: "Declare usage via rule_tool_usage",
-        messages: user(
-          [
-            "Call `rule_tool_usage` with the token/cost sidecar the host did not provide as a transcript.",
-            "Do not invent numbers; ask the user when evidence is missing.",
-            "",
-            "Finish by proposing a conventional commit with a mandatory scope only if a tracked file changed.",
           ].join("\n"),
         ),
       };

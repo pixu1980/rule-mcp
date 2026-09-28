@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md)                            | Normalize history on the merge base and hold every rewrite to a tree invariant                            | 2026-09-28 | accepted   | git, workflow, history                                                              |
 | [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md)                                                | Make the tool-call host a list so invocation hosts coexist                                                | 2026-09-28 | accepted   | architecture, mcp, git, workflow                                                    |
 | [123](123-start-the-six-case-study-apps-with-one-port-allocating-command.md)                                            | Start the six case-study apps with one port-allocating command                                            | 2026-09-23 | accepted   | tooling, case-studies, dev-server, pnpm, electron                                   |
 | [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md)                             | The fix tool and command apply the deterministic guardrails, not the file tree                            | 2026-09-23 | accepted   | tools, commands, guardrails                                                         |
@@ -140,6 +141,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md)                            | Linearization runs `git rebase <merge-base>`: replaying the feature commits onto the fork point drops the merges and leaves the final tree exactly as it was.                                                                   | A merge commit that carried no unique content disappears and the content is provably unchanged, because the tree hash matches.                                                                                                  |
 | [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md)                                                | `registerCallHost` appends to a list.                                                                                                                                                                                           | Two hosts coexist: self-update's throttled check and the branch-sync guard's staleness notice.                                                                                                                                  |
 | [123](123-start-the-six-case-study-apps-with-one-port-allocating-command.md)                                            | Add `pnpm case-studies` (scripts/case-studies/index.mjs) as the single entry point.                                                                                                                                             | Positive: one command starts all six without port collisions; one Ctrl-C stops everything; the apps stay runnable standalone with their original defaults; missing node_modules install automatically with...                   |
 | [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md)                             | 1. rule_tool_fix is registered again, through registerActionTools, with a new job: apply the deterministic guardrail fixes every skill owns - blank lines, braces, single-line bodies, ASCII typography, American spelling -...  | The surface is 107 tools and 40 commands.                                                                                                                                                                                       |
@@ -555,6 +557,13 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
 
+### git
+
+- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
+- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
+- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
+- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
+
 ### infrastructure
 
 - [008](008-scaffold-skill-consolidation.md) scaffold skill consolidation
@@ -620,12 +629,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [102](102-reinstall-is-one-shell-script-behind-three-entry-points.md) Reinstall is one shell script behind three entry points
 - [072](072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
 - [070](070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
-
-### git
-
-- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
-- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
-- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
 
 ### install
 
@@ -704,6 +707,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [092](092-surface-selection-amends-the-install-stack-freeze-with-an-additive-loader-filter.md) Surface selection amends the install stack freeze with an additive loader filter
 - [091](091-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md) Install/uninstall rework keeps current stack, steps and contents only
 - [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
+
+### workflow
+
+- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
+- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
+- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
 
 ### no tags
 

@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Agent slash commands (40)
+## Agent slash commands (41)
 
 The router `/rule` is pinned first; the rest follow in
 locale-alphabetical order. The same set is written for every agent and IDE,
@@ -52,13 +52,13 @@ which agents are installed and where their homes are.
 | `emacs`       | mcp.el exposes prompts directly; there is no command-file convention to write to.                                                                                      |
 | `devin`       | Devin runs commands in its own workspace runtime, not from local slash-command files; MCP prompts remain the entry point.                                              |
 
-### The kinds (40 commands)
+### The kinds (41 commands)
 
 | Kind       | Count | What it is for                                                  |
 | ---------- | ----- | --------------------------------------------------------------- |
 | `router`   | 1     | Routes a free-text request to the skill that answers it         |
 | `area`     | 11    | Area hub: free text routes to leaf skills/tools (ADR 117)       |
-| `workflow` | 2     | Runs a named workflow (e.g. /rule-check auto-detects guardrails) |
+| `workflow` | 3     | Runs a named workflow (e.g. /rule-check auto-detects guardrails) |
 | `session`  | 7     | Carries a session across a context boundary                     |
 | `persona`  | 19    | Runs one review role at one operation, and writes its documents |
 
@@ -66,7 +66,7 @@ which agents are installed and where their homes are.
 
 **area**: `/rule-area-ai`, `/rule-area-backend`, `/rule-area-data`, `/rule-area-devops`, `/rule-area-frontend`, `/rule-area-meta`, `/rule-area-platform`, `/rule-area-process`, `/rule-area-styleguide`, `/rule-area-toolchain`, `/rule-area-ui`
 
-**workflow**: `/rule-check`, `/rule-fix`
+**workflow**: `/rule-check`, `/rule-fix`, `/rule-git`
 
 **session**: `/rule-compress`, `/rule-handoff`, `/rule-handon`, `/rule-init`, `/rule-stats`, `/rule-update`, `/rule-usage`
 
