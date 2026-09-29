@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md)                                            | Derive the next version and the changelog from the commit rule                                            | 2026-09-29 | accepted   | release, git, workflow                                                              |
 | [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md)                              | Close a feature with reset --soft onto the merge base and one validated commit                            | 2026-09-29 | accepted   | git, workflow, history                                                              |
 | [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md)                            | Normalize history on the merge base and hold every rewrite to a tree invariant                            | 2026-09-28 | accepted   | git, workflow, history                                                              |
 | [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md)                                                | Make the tool-call host a list so invocation hosts coexist                                                | 2026-09-28 | accepted   | architecture, mcp, git, workflow                                                    |
@@ -142,6 +143,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md)                                            | `scripts/build/version/index.mjs --next` derives the bump from the commits since the newest tag using the shared rule in `src/core/commit`: `fix` is PATCH, `feat` is MINOR, a `!` or a `BREAKING CHANGE:` footer is MAJOR,...  | The version is a function of the history, computed by the same rule that gated the commits, so a version that disagrees with its commits cannot be produced by accident.                                                        |
 | [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md)                              | The close runs `git reset --soft <merge-base>` (the same deterministic boundary every other consumer reads) and then one `git commit`. A soft reset leaves the index holding the tip tree, so the new commit's tree is the...   | A feature of any shape - linear or merged - becomes one commit whose tree is provably the same as before, and whose message is validated before it is written.                                                                  |
 | [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md)                            | Linearization runs `git rebase <merge-base>`: replaying the feature commits onto the fork point drops the merges and leaves the final tree exactly as it was.                                                                   | A merge commit that carried no unique content disappears and the content is provably unchanged, because the tree hash matches.                                                                                                  |
 | [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md)                                                | `registerCallHost` appends to a list.                                                                                                                                                                                           | Two hosts coexist: self-update's throttled check and the branch-sync guard's staleness notice.                                                                                                                                  |
@@ -455,6 +457,16 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
 - [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
 
+### release
+
+- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
+- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
+- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
+- [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md) Reset the project version to 0.1.0, first release will be v0.1.0
+- [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
+- [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
+- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+
 ### toolchain
 
 - [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md) No corepack activation and no engines field in a generated package.json
@@ -501,14 +513,14 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 - [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
 
-### release
+### git
 
-- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
-- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
-- [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md) Reset the project version to 0.1.0, first release will be v0.1.0
-- [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
-- [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
-- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
+- [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
+- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
+- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
+- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
+- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
 
 ### tool
 
@@ -526,14 +538,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [078](078-compress-agent-command-files-at-write-time.md) Compress agent command files at write time
 - [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
 - [073](073-compression-has-four-levels-and-no-llm-in-the-output-path.md) Compression has four levels and no LLM in the output path
-
-### git
-
-- [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
-- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
-- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
-- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
-- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
 
 ### governance
 
@@ -566,6 +570,14 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [026](026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
 - [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
+
+### workflow
+
+- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
+- [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
+- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
+- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
+- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
 
 ### infrastructure
 
@@ -608,13 +620,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
 - [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
 - [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
-
-### workflow
-
-- [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
-- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
-- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
-- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
 
 ### backend
 
