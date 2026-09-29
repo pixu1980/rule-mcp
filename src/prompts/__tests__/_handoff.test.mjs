@@ -29,6 +29,8 @@ test("rule-handoff takes a single free-form options argument", () => {
 test("parseHandoffOptions translates the compact vocabulary", () => {
   const DEFAULTS = {
     mode: "handoff",
+    closeFeature: false,
+    squash: false,
     compress: true,
     format: "full",
     includeGitDiff: true,
@@ -44,6 +46,8 @@ test("parseHandoffOptions translates the compact vocabulary", () => {
   assert.deepEqual(parseHandoffOptions(""), DEFAULTS, "empty options = all defaults");
   assert.equal(parseHandoffOptions("close-session").mode, "close-session");
   assert.equal(parseHandoffOptions("handoff").mode, "handoff");
+  assert.equal(parseHandoffOptions("close-feature").closeFeature, true, "close-feature turns the feature close on");
+  assert.equal(parseHandoffOptions("squash").squash, true, "squash turns the feature squash on");
 
   const c = parseHandoffOptions("compress minimal");
   assert.equal(c.compress, true, "compress token sets compress");

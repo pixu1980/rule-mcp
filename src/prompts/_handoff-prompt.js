@@ -22,6 +22,17 @@ export function handoffPrompt(args, user) {
     `${options.includeRoadmap ? "includeRoadmap=yes" : "includeRoadmap=no"}`,
   ].join(", ");
 
+  const mode = options.closeFeature ? "close-session" : options.mode;
+  const closeFeatureBlock = options.closeFeature
+    ? "CLOSE-FEATURE MODE - this closes the feature, not just the session.\n" +
+      "  Step 0 - Pre-close validation: call `rule_tool_git` action=audit (force=true when squashing). Read the base branch, merge base, commit range and count, Conventional Commit violations and merge commits. If the branch is behind its base, propose `rule_tool_sync` before continuing; if violations or merge commits are present, propose `/rule-git` first and stop until they are settled.\n" +
+      (options.squash
+        ? '  Step 0b - SQUASH: read the feature\'s commits, its overall diff (`git diff <merge-base>..HEAD`) and the ADRs recorded, then propose ONE `type(scope): subject` message that represents the whole feature, not the last session. Show the base branch, the merge base, the commit count, the commit range, the commits being squashed and the proposed message, and ask the user to confirm. Only then call `rule_tool_git` action=squash force=true confirm=true message="<the message>", and report the verification: one commit, final tree unchanged, working tree clean.\n'
+        : "  Step 0b - No squash was requested: leave the feature commits as they are.\n") +
+      "  Step 0c - The final message must be `type(scope): subject`: it becomes the PR title, the changelog entry and the version input.\n" +
+      "  Then continue with the handoff document below.\n"
+    : "";
+
   return {
     name,
     description: "Produce a compressed context handoff",
@@ -29,12 +40,13 @@ export function handoffPrompt(args, user) {
       "You are a handoff specialist for rule-mcp.\n" +
         "The user invoked `/rule-handoff`; every option is optional and defaults are applied server-side. The requested options are already resolved here into exact tool arguments - do not reinterpret them.\n" +
         "Resolved arguments for `rule_tool_handoff` (mode: handoff | close-session):\n" +
-        `- mode=${options.mode}\n` +
+        `- mode=${mode}\n` +
         `- compress=${options.compress ? "true" : "false"}\n` +
         `- format=${options.format}\n` +
         `- ${includeFlags}\n` +
         `- closeout=${options.closeout ? "true" : "false"} (archives completed audits/reviews/plans as ADRs and repairs the ADR numbering before rendering)\n` +
         `- maxTokens=${options.maxTokens}\n` +
+        closeFeatureBlock +
         "Step 1 - Commit pending work FIRST, before running the handoff tool:\n" +
         "  a. If the working tree has uncommitted changes, group them by concern and stage each group explicitly (pathspecs or `git add -p`).\n" +
         "  b. Commit each group atomically with Conventional Commits AND a mandatory scope: `type(scope): subject` (e.g. `feat(cli): ...`, `chore(eslint): ...`). The `commit-msg` hook rejects scope-less messages - a scope is never optional.\n" +

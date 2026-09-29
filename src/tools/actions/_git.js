@@ -3,26 +3,39 @@
 /**
  * @module tools/actions/git
  *
- * `rule_tool_git`: the `/rule-git` backend. Audit the feature history, and
- * normalize it behind a confirmation gate.
+ * `rule_tool_git`: the `/rule-git` backend, and the squash behind
+ * `/rule-handoff --close-feature --squash`.
  *
- * Three actions:
+ * Actions:
  *   - `audit` (default): read-only report - base, range, violations, merges.
- *   - `reword`: apply proposed Conventional Commit messages. The model proposes
- *     the text; the tool validates it and rewrites with `filter-branch`.
- *   - `linearize`: remove the merge commits. Requires `force: true` (the
- *     `/rule-git --force` flag) to be proposed at all, and `confirm: true` to run.
+ *   - `reword`: apply proposed Conventional Commit messages.
+ *   - `linearize`: remove the merge commits.
+ *   - `squash`: close the feature as one commit whose message the caller
+ *     proposes.
  *
- * `force` enables a destructive *proposal*. It never bypasses the confirmation
- * gate: `linearize` without `confirm` returns the plan and stops.
+ * Every destructive action needs `force: true` to be proposed at all - the
+ * `/rule-git --force` flag, or the explicit `--close-feature --squash` intent -
+ * and `confirm: true` to run. `force` never substitutes for the confirmation.
  *
  * @see module:core/history
  */
 
 import { z } from "zod/v4";
-import { applyLinearize, applyReword, auditFeatureHistory, proposeLinearize } from "../../core/history/index.js";
+import { applyLinearize, applyReword, applySquash, auditFeatureHistory, proposeLinearize, proposeSquash } from "../../core/history/index.js";
 import { registerTool } from "../router/index.js";
-import { renderAudit, renderLinearize, renderReword } from "./_git-render.js";
+import { renderAudit, renderReword } from "./_git-render.js";
+import { renderLinearize, renderSquash } from "./_git-render-rewrite.js";
+
+/**
+ * The refusal when a destructive action was not enabled.
+ *
+ * @param {string} action
+ * @param {number} count
+ * @returns {string}
+ */
+function refused(action, count) {
+  return `# rule_tool_git - ${action}\n\nRefused: pass force: true to enable this history-normalization proposal.\n\nAffected commits: ${count}`;
+}
 
 /** Register the rule_tool_git tool. */
 export function registerGitTool() {
@@ -31,14 +44,15 @@ export function registerGitTool() {
     entry: "action",
     description:
       "Audit the feature history and normalize it: base branch, merge base, commit range, Conventional Commit violations and merge commits. " +
-      "`reword` applies proposed messages; `linearize` removes merge commits and needs force:true to be proposed and confirm:true to run. " +
-      "Every rewrite verifies the final tree is unchanged and rolls back when it is not. Never resolves a conflict.",
+      "`reword` applies proposed messages; `linearize` removes merge commits; `squash` closes the feature as one commit. " +
+      "The destructive actions need force:true to be proposed and confirm:true to run. Every rewrite verifies the final tree is unchanged and rolls back when it is not.",
     zodSchema: z.object({
       projectDir: z.string().optional().default(".").describe("Project root (default: cwd)"),
-      action: z.enum(["audit", "reword", "linearize"]).optional().default("audit").describe("audit (read-only), reword, or linearize"),
-      force: z.boolean().optional().default(false).describe("The /rule-git --force flag: enable history-normalization proposals"),
+      action: z.enum(["audit", "reword", "linearize", "squash"]).optional().default("audit").describe("audit, reword, linearize, or squash"),
+      force: z.boolean().optional().default(false).describe("Enable a history-normalization proposal (--force)"),
       confirm: z.boolean().optional().default(false).describe("Required to run a rewrite; the confirmation gate"),
       baseBranch: z.string().optional().describe("Override the detected base branch"),
+      message: z.string().optional().describe("For squash: the final type(scope): summary"),
       rewrites: z
         .array(z.object({ sha: z.string(), message: z.string() }))
         .optional()
@@ -56,21 +70,22 @@ export function registerGitTool() {
 
       if (arguments_.action === "linearize") {
         if (!arguments_.force) {
-          const proposal = proposeLinearize(projectDir, options);
-
-          return {
-            content: [
-              {
-                type: "text",
-                text: `# rule_tool_git - linearize\n\nRefused: pass force: true (the /rule-git --force flag) to enable a history-normalization proposal.\n\nMerge commits: ${proposal.merges.length}`,
-              },
-            ],
-          };
+          return { content: [{ type: "text", text: refused("linearize", proposeLinearize(projectDir, options).merges.length) }] };
         }
 
         const result = applyLinearize(projectDir, { ...options, confirm: arguments_.confirm });
 
         return { content: [{ type: "text", text: renderLinearize(result) }] };
+      }
+
+      if (arguments_.action === "squash") {
+        if (!arguments_.force) {
+          return { content: [{ type: "text", text: refused("squash", proposeSquash(projectDir, options).range.count) }] };
+        }
+
+        const result = applySquash(projectDir, { ...options, message: arguments_.message ?? "", confirm: arguments_.confirm });
+
+        return { content: [{ type: "text", text: renderSquash(result) }] };
       }
 
       return { content: [{ type: "text", text: renderAudit(auditFeatureHistory(projectDir, options), arguments_.force) }] };

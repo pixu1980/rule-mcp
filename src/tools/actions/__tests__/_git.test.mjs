@@ -86,3 +86,21 @@ test("an unconfirmed reword leaves the branch where it was", async () => {
   assert.equal(headSha(root), before, "the branch did not move");
   remove(root);
 });
+
+test("squash without force is refused as a proposal", async () => {
+  const { root } = feature();
+  const output = await text({ projectDir: root, action: "squash", message: "feat(x): the feature" });
+
+  assert.match(output, /Refused/u, "the tool refuses to propose without force");
+  assert.match(output, /force: true/u, "and names the flag");
+  remove(root);
+});
+
+test("--force enables the squash plan but not the gate", async () => {
+  const { root } = feature();
+  const output = await text({ projectDir: root, action: "squash", force: true, message: "feat(x): the feature" });
+
+  assert.match(output, /Not applied: confirmation required/u, "force does not bypass the gate");
+  assert.match(output, /Commits being squashed/u, "the commits are listed for review");
+  remove(root);
+});

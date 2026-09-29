@@ -33,6 +33,28 @@ export function workingTreeLines(gitDiff, { isMinimal, compress, projectDir }) {
   return lines;
 }
 
+/**
+ * The feature commit range, the boundary every handoff-adjacent command shares.
+ *
+ * @param {{ baseRef: string, mergeBase: string, count: number, violations: number, merges: number }|null} feature
+ * @param {{ isMinimal: boolean }} shape
+ * @returns {string[]}
+ */
+export function featureRangeLines(feature, { isMinimal }) {
+  if (!feature || isMinimal || !feature.baseRef || feature.count === 0) {
+    return [];
+  }
+
+  return [
+    "### Feature Range",
+    "",
+    `- Base: \`${feature.baseRef}\` (merge base \`${feature.mergeBase}\`)`,
+    `- Range: \`${feature.mergeBase}..HEAD\` (${feature.count} commit(s))`,
+    `- Conventional Commit violations: ${feature.violations}${feature.merges > 0 ? ` | merge commits: ${feature.merges}` : ""}`,
+    "",
+  ];
+}
+
 /** The recent commit log, full format only. */
 export function gitLogLines(gitLog, { isMinimal, isBrief }) {
   if (!gitLog || gitLog.length === 0 || isMinimal || isBrief) {

@@ -1,6 +1,6 @@
 
 
-/** @module tools/actions/git-render - the rule_tool_git report and proposal text. */
+/** @module tools/actions/git-render - the rule_tool_git audit and reword text. */
 
 /**
  * The read-only audit.
@@ -83,42 +83,6 @@ export function renderReword(result) {
       lines.push(`    old: ${entry.from}`);
       lines.push(`    new: ${entry.to}${entry.valid ? "" : `  (invalid: ${entry.reason})`}`);
     }
-  }
-
-  if (result.output) {
-    lines.push("", "git said:", result.output);
-  }
-
-  return lines.join("\n");
-}
-
-/**
- * The linearize verdict, or the refusal when `--force` was not passed.
- *
- * @param {object} result
- * @returns {string}
- */
-export function renderLinearize(result) {
-  const lines = ["# rule_tool_git - linearize", ""];
-
-  if (result.applied) {
-    const v = result.verification;
-
-    lines.push("Merge commits removed.", `Feature commits: ${v.commits}`, `Merge commits:   ${v.merges}`, `Final tree:      ${v.treeUnchanged ? "unchanged" : "CHANGED"}`);
-
-    return lines.join("\n");
-  }
-
-  lines.push(`Not applied: ${result.reason}`);
-
-  if (result.conflicted) {
-    lines.push(
-      "",
-      "Conflicts (the branch was rolled back and left untouched):",
-      ...(result.conflicts?.length > 0 ? result.conflicts.map((file) => `  ${file}`) : ["  (git listed none)"]),
-      "",
-      "Resolve them by hand and re-run, or run the rebase yourself.",
-    );
   }
 
   if (result.output) {

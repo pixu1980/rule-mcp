@@ -15,6 +15,7 @@
 export const HANDOFF_BODY = [
   "Generate a session handoff and commit pending work: $ARGUMENTS",
   "",
+  '0. Feature close (`--close-feature`, optionally `--squash`): run `rule_tool_git` action=audit first (force=true when squashing). Report the base branch, merge base, range, Conventional Commit violations and merge commits; propose `rule_tool_sync` when the branch is behind its base, and `/rule-git` when violations or merges remain. With `--squash`, propose ONE `type(scope): subject` message for the WHOLE feature (not the last session) from its commits, diff and ADRs; show the base branch, merge base, commit count, commit range, the commits being squashed and the proposed message; ask the user to confirm; only then call `rule_tool_git` action=squash force=true confirm=true message="<the message>", and report one commit, final tree unchanged, working tree clean. The squash is never run without that confirmation, and `force` never replaces it.',
   "1. Run `rule_tool_handoff` (default mode `handoff`, all includes on). Pass any tokens from the arguments through unchanged (e.g. `close-session`, `compress`, `brief`, `no-diff`, `no-archive`, `max=<n>`). The run archives completed audits/reviews/plans as ADRs by default and repairs the ADR numbering, so it writes to the tree; `no-archive` keeps it a read-only diagnosis.",
   "2. If the working tree has pending changes, commit them BEFORE emitting the handoff as a sequence of ATOMIC commits:",
   "   a. Group changed files by concern (one coherent change per group).",

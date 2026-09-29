@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md)                              | Close a feature with reset --soft onto the merge base and one validated commit                            | 2026-09-29 | accepted   | git, workflow, history                                                              |
 | [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md)                            | Normalize history on the merge base and hold every rewrite to a tree invariant                            | 2026-09-28 | accepted   | git, workflow, history                                                              |
 | [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md)                                                | Make the tool-call host a list so invocation hosts coexist                                                | 2026-09-28 | accepted   | architecture, mcp, git, workflow                                                    |
 | [123](123-start-the-six-case-study-apps-with-one-port-allocating-command.md)                                            | Start the six case-study apps with one port-allocating command                                            | 2026-09-23 | accepted   | tooling, case-studies, dev-server, pnpm, electron                                   |
@@ -141,6 +142,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md)                              | The close runs `git reset --soft <merge-base>` (the same deterministic boundary every other consumer reads) and then one `git commit`. A soft reset leaves the index holding the tip tree, so the new commit's tree is the...   | A feature of any shape - linear or merged - becomes one commit whose tree is provably the same as before, and whose message is validated before it is written.                                                                  |
 | [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md)                            | Linearization runs `git rebase <merge-base>`: replaying the feature commits onto the fork point drops the merges and leaves the final tree exactly as it was.                                                                   | A merge commit that carried no unique content disappears and the content is provably unchanged, because the tree hash matches.                                                                                                  |
 | [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md)                                                | `registerCallHost` appends to a list.                                                                                                                                                                                           | Two hosts coexist: self-update's throttled check and the branch-sync guard's staleness notice.                                                                                                                                  |
 | [123](123-start-the-six-case-study-apps-with-one-port-allocating-command.md)                                            | Add `pnpm case-studies` (scripts/case-studies/index.mjs) as the single entry point.                                                                                                                                             | Positive: one command starts all six without port collisions; one Ctrl-C stops everything; the apps stay runnable standalone with their original defaults; missing node_modules install automatically with...                   |
@@ -525,6 +527,14 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
 - [073](073-compression-has-four-levels-and-no-llm-in-the-output-path.md) Compression has four levels and no LLM in the output path
 
+### git
+
+- [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
+- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
+- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
+- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
+- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
+
 ### governance
 
 - [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
@@ -556,13 +566,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [026](026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
 - [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
-
-### git
-
-- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
-- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
-- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
-- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
 
 ### infrastructure
 
@@ -605,6 +608,13 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
 - [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
 - [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
+
+### workflow
+
+- [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
+- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
+- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
+- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
 
 ### backend
 
@@ -707,12 +717,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [092](092-surface-selection-amends-the-install-stack-freeze-with-an-additive-loader-filter.md) Surface selection amends the install stack freeze with an additive loader filter
 - [091](091-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md) Install/uninstall rework keeps current stack, steps and contents only
 - [090](090-the-setup-wizard-is-the-installer-and-it-asks-which-commands-to-write.md) The setup wizard is the installer, and it asks which commands to write
-
-### workflow
-
-- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
-- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
-- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
 
 ### no tags
 

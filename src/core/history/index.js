@@ -17,4 +17,5 @@
 export * from "./_audit.js";
 export * from "./_linearize.js";
 export * from "./_reword.js";
+export * from "./_squash.js";
 export * from "./_verify.js";

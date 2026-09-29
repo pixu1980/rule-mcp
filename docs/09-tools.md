@@ -104,16 +104,17 @@ Apply deterministic guardrail fixes of every skill (blank lines, braces, ASCII t
 
 ### rule_tool_git
 
-Audit the feature history and normalize it: base branch, merge base, commit range, Conventional Commit violations and merge commits. `reword` applies proposed messages; `linearize` removes merge commits and needs force:true to be proposed and confirm:true to run. Every rewrite verifies the final tree is unchanged and rolls back when it is not. Never resolves a conflict.
+Audit the feature history and normalize it: base branch, merge base, commit range, Conventional Commit violations and merge commits. `reword` applies proposed messages; `linearize` removes merge commits; `squash` closes the feature as one commit. The destructive actions need force:true to be proposed and confirm:true to run. Every rewrite verifies the final tree is unchanged and rolls back when it is not.
 
-| Parameter    | Type                               | Required | Default   | Description                                                       |
-| ------------ | ---------------------------------- | -------- | --------- | ----------------------------------------------------------------- |
-| `projectDir` | string                             | no       | `"."`     | Project root (default: cwd)                                       |
-| `action`     | `audit` \| `reword` \| `linearize` | no       | `"audit"` | audit (read-only), reword, or linearize                           |
-| `force`      | boolean                            | no       | `false`   | The /rule-git --force flag: enable history-normalization proposals |
-| `confirm`    | boolean                            | no       | `false`   | Required to run a rewrite; the confirmation gate                  |
-| `baseBranch` | string                             | no       | -         | Override the detected base branch                                 |
-| `rewrites`   | array of object                    | no       | -         | For reword: the message proposed for each commit sha              |
+| Parameter    | Type                                           | Required | Default   | Description                                          |
+| ------------ | ---------------------------------------------- | -------- | --------- | ---------------------------------------------------- |
+| `projectDir` | string                                         | no       | `"."`     | Project root (default: cwd)                          |
+| `action`     | `audit` \| `reword` \| `linearize` \| `squash` | no       | `"audit"` | audit, reword, linearize, or squash                  |
+| `force`      | boolean                                        | no       | `false`   | Enable a history-normalization proposal (--force)    |
+| `confirm`    | boolean                                        | no       | `false`   | Required to run a rewrite; the confirmation gate     |
+| `baseBranch` | string                                         | no       | -         | Override the detected base branch                    |
+| `message`    | string                                         | no       | -         | For squash: the final type(scope): summary           |
+| `rewrites`   | array of object                                | no       | -         | For reword: the message proposed for each commit sha |
 
 ### rule_tool_init
 
