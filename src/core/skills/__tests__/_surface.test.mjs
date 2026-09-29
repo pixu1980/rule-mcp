@@ -12,16 +12,7 @@ import { test } from "node:test";
 
 import { areasOfSkills, filterSurfaceSkills, isRootSkill, parseSurface } from "../_surface.js";
 
-const SKILLS = [
-  "rule-ai",
-  "rule-ai-prompting",
-  "rule-data",
-  "rule-data-sql",
-  "rule-frontend",
-  "rule-frontend-react",
-  "rule-process",
-  "rule-process-tdd",
-];
+const SKILLS = ["rule-ai", "rule-ai-prompting", "rule-data", "rule-data-sql", "rule-frontend", "rule-frontend-react", "rule-process", "rule-process-tdd"];
 
 test("parseSurface reads presets", () => {
   assert.deepEqual(parseSurface("minimal"), { preset: "minimal" });

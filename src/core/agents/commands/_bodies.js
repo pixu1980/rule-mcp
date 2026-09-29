@@ -65,9 +65,7 @@ export const ROUTER = {
  * @returns {string}
  */
 export function areaBody(description, { skill, members = [] } = {}) {
-  const skillClause = skill
-    ? `the routed leaf skill(s), defaulting to hub \`${skill}\` when the request names none`
-    : "the routed leaf skill(s) for this area";
+  const skillClause = skill ? `the routed leaf skill(s), defaulting to hub \`${skill}\` when the request names none` : "the routed leaf skill(s) for this area";
 
   const leafLines =
     members.length > 0

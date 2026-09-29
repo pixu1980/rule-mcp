@@ -22,13 +22,13 @@ Surface unchanged this session: 107 tools, 40 commands, 37 prompts, 89 skills.
 
 ### ADR Log
 
-| #   | Status   | Title                                                              | Tags                              | Decision                                                                                                                    |
-| --- | -------- | ------------------------------------------------------------------ | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| 123 | accepted | Start the six case-study apps with one port-allocating command      | tooling, case-studies, dev-server | `pnpm case-studies` allocates ports per app, exports them as env vars, starts six in parallel, kills all on Ctrl-C.        |
-| 122 | accepted | The fix tool and command apply the deterministic guardrails...      | tools, commands, guardrails       | `rule_tool_fix` applies the deterministic guardrail fixes; `/rule-fix` mirrors it.                                            |
-| 121 | accepted | The install reconciles the bundled skills when the step is not...   | installer, skills, commands       | Declining the skills step removes what an earlier install copied; `skills uninstall` is a real action.                      |
-| 120 | accepted | Fold the per-operation persona commands into one per role...        | commands, personas, prompts       | One `/rule-persona-<role>`; the depth is read from the request; old names deleted.                                          |
-| 117 | accepted | Area slash commands are collectors only...                          | commands, prompts, areas          | Slash and MCP area prompts emit only hub collectors; leaves route from free text.                                           |
+| #   | Status   | Title                                                             | Tags                              | Decision                                                                                                            |
+| --- | -------- | ----------------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| 123 | accepted | Start the six case-study apps with one port-allocating command    | tooling, case-studies, dev-server | `pnpm case-studies` allocates ports per app, exports them as env vars, starts six in parallel, kills all on Ctrl-C. |
+| 122 | accepted | The fix tool and command apply the deterministic guardrails...    | tools, commands, guardrails       | `rule_tool_fix` applies the deterministic guardrail fixes; `/rule-fix` mirrors it.                                    |
+| 121 | accepted | The install reconciles the bundled skills when the step is not... | installer, skills, commands       | Declining the skills step removes what an earlier install copied; `skills uninstall` is a real action.              |
+| 120 | accepted | Fold the per-operation persona commands into one per role...      | commands, personas, prompts       | One `/rule-persona-<role>`; the depth is read from the request; old names deleted.                                   |
+| 117 | accepted | Area slash commands are collectors only...                        | commands, prompts, areas          | Slash and MCP area prompts emit only hub collectors; leaves route from free text.                                   |
 
 Full log: `docs/adr/ADR.md` (123 entries).
 

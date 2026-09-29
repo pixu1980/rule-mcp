@@ -93,9 +93,7 @@ export function globalSkillsDirs(home = homedir()) {
  * @returns {Array<{ dir: string, removed: string[] }>} only the directories that held something
  */
 export function removeInstalledSkillsFrom(dirs, { dryRun = false } = {}) {
-  return dirs
-    .map((dir) => ({ dir, removed: removeInstalledSkills(dir, { dryRun }) }))
-    .filter((entry) => entry.removed.length > 0);
+  return dirs.map((dir) => ({ dir, removed: removeInstalledSkills(dir, { dryRun }) })).filter((entry) => entry.removed.length > 0);
 }
 
 /**

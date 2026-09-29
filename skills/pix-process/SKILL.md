@@ -34,8 +34,8 @@ frameworks: [all]
 | [rule-process-bmad](../rule-process-bmad/SKILL.md)               | BMAD Method Framework                               | Full-project AI-driven delivery lifecycle                                         |
 | [rule-process-code-review](../rule-process-code-review/SKILL.md) | Code Review Workflow                                | Preparing and conducting risk-based PR/MR review                                  |
 | [rule-process-changelog](../rule-process-changelog/SKILL.md)     | Changelog generated from the commits                | Adding a changelog, or fixing one that drifted from the history                   |
-| `rule_tool_compress` / `/rule-compress` | Say it in fewer tokens                              | Writing answers, commits, reviews, docs without filler                            |
-| `rule_tool_handoff` / `/rule-handoff`         | LLM Session Handoff                                 | Closing a session, resuming in new chat                                           |
+| `rule_tool_compress` / `/rule-compress`                          | Say it in fewer tokens                              | Writing answers, commits, reviews, docs without filler                            |
+| `rule_tool_handoff` / `/rule-handoff`                            | LLM Session Handoff                                 | Closing a session, resuming in new chat                                           |
 | [rule-process-npm-release](../rule-process-npm-release/SKILL.md) | Secure npm Release                                  | Publishing a package: Trusted Publishing, staged releases, supply-chain hardening |
 | [rule-process-simplicity](../rule-process-simplicity/SKILL.md)   | Build Only What Was Asked                           | Before and during implementation, to keep the change minimal                      |
 

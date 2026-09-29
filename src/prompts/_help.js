@@ -29,12 +29,7 @@ export function promptExamples(name) {
     return [];
   }
 
-  return [
-    `/${name} help`,
-    `/${name} the /rule-handoff commit flow`,
-    `/${name} review the new checkout page`,
-    `/${name} plan the SSE daemon auth fix`,
-  ];
+  return [`/${name} help`, `/${name} the /rule-handoff commit flow`, `/${name} review the new checkout page`, `/${name} plan the SSE daemon auth fix`];
 }
 
 /**

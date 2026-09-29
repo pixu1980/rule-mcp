@@ -24,14 +24,14 @@ Gate: `pnpm test:all` exits 0 (`all: ok`), `rule_tool_check` passes on every cha
 
 ### ADR Log
 
-| #   | Status   | Title                                                              | Tags                              | Decision                                                                                                                    |
-| --- | -------- | ------------------------------------------------------------------ | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| 122 | accepted | The fix tool and command apply the deterministic guardrails...     | tools, commands, guardrails       | `rule_tool_fix` applies the deterministic guardrail fixes, not the file tree; `/rule-fix` mirrors it.                         |
-| 121 | accepted | The install reconciles the bundled skills when the step is not...  | installer, skills, commands       | Declining the skills step removes what an earlier install copied; `skills uninstall` is a real action.                      |
-| 120 | accepted | Fold the per-operation persona commands into one per role...       | commands, personas, prompts, breaking | One `/rule-persona-<role>`; the depth is read from the request; operations stay cumulative; old names deleted.             |
-| 117 | accepted | Area slash commands are collectors only...                         | commands, prompts, areas          | Slash and MCP area prompts emit only hub collectors; leaves route from free text.                                           |
-| 116 | accepted | Fold check slash siblings into the parent via keyword intent       | commands, guardrails, breaking    | Delete every `/rule-area-*-check` sibling; keep `/rule-check`; fold check intent into the parent.                            |
-| 115 | accepted | Map tools, slash commands, and skills into one surface             | tools, commands, skills           | One generated Command/Tool/Skill map; removed `rule_tool_component`, `rule_tool_scaffold`, `rule_tool_a11y_report`.            |
+| #   | Status   | Title                                                             | Tags                                  | Decision                                                                                                         |
+| --- | -------- | ----------------------------------------------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| 122 | accepted | The fix tool and command apply the deterministic guardrails...    | tools, commands, guardrails           | `rule_tool_fix` applies the deterministic guardrail fixes, not the file tree; `/rule-fix` mirrors it.              |
+| 121 | accepted | The install reconciles the bundled skills when the step is not... | installer, skills, commands           | Declining the skills step removes what an earlier install copied; `skills uninstall` is a real action.           |
+| 120 | accepted | Fold the per-operation persona commands into one per role...      | commands, personas, prompts, breaking | One `/rule-persona-<role>`; the depth is read from the request; operations stay cumulative; old names deleted.    |
+| 117 | accepted | Area slash commands are collectors only...                        | commands, prompts, areas              | Slash and MCP area prompts emit only hub collectors; leaves route from free text.                                |
+| 116 | accepted | Fold check slash siblings into the parent via keyword intent      | commands, guardrails, breaking        | Delete every `/rule-area-*-check` sibling; keep `/rule-check`; fold check intent into the parent.                  |
+| 115 | accepted | Map tools, slash commands, and skills into one surface            | tools, commands, skills               | One generated Command/Tool/Skill map; removed `rule_tool_component`, `rule_tool_scaffold`, `rule_tool_a11y_report`. |
 
 Full log: `docs/adr/ADR.md` (122 entries).
 

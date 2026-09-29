@@ -11,7 +11,7 @@ While completing the persona split (ADR 045), the user asked for a second, large
 
 ## Decision
 
-Restructure the command surface: router rule-mcp -> rule; area prompts become rule-area-*; delete rule-a11y-audit, rule-code-review, the standalone rule-compression command, rule-new-feature, rule-pull-request, rule-setup-project, rule-write-tests and rule-tdd; create a rule-process-tdd skill that absorbs tdd + write-tests; make compression implicit in every command body (the compression *skill* later moves under process as `rule-process-compression` in ADR 113). The command set is registry-driven end to end: scripts/install-agent-commands.sh renders from the registry, agent-commands --remove and scripts/uninstall.sh sweep the rule-* namespace, so renamed/deleted commands cannot survive in any agent.
+Restructure the command surface: router rule-mcp -> rule; area prompts become rule-area-_; delete rule-a11y-audit, rule-code-review, the standalone rule-compression command, rule-new-feature, rule-pull-request, rule-setup-project, rule-write-tests and rule-tdd; create a rule-process-tdd skill that absorbs tdd + write-tests; make compression implicit in every command body (the compression *skill* later moves under process as `rule-process-compression` in ADR 113). The command set is registry-driven end to end: scripts/install-agent-commands.sh renders from the registry, agent-commands --remove and scripts/uninstall.sh sweep the rule-_ namespace, so renamed/deleted commands cannot survive in any agent.
 
 ## Consequences
 

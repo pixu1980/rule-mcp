@@ -120,7 +120,10 @@ test("skillsUninstallCommand dry-run reports nothing and removes nothing", () =>
 
     const results = skillsUninstallCommand({ dryRun: true });
 
-    assert.ok(results.some((entry) => entry.removed.includes(catalog)), "the report names the skill");
+    assert.ok(
+      results.some((entry) => entry.removed.includes(catalog)),
+      "the report names the skill",
+    );
     assert.ok(existsSync(join(skills, catalog)), "a dry run removes nothing");
   } finally {
     process.env.HOME = previous;

@@ -57,18 +57,18 @@ Prompt
 
 ## MCP tools
 
-| Tool                  | Role       | Use when                                                                                                                                 |
-| --------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `rule`                 | Router     | Route a prompt to the correct rule skill. Returns structured routing with relevant sections.                                              |
-| `rule_tool_search`          | Search     | Semantic search across ALL rule skills using BM25 ranking. Returns scored, relevant sections.                                             |
-| `rule_tool_check`           | Guardrails | Run blocking guardrail checks against any rule skill. Pass `previousPassed` while iterating; finalize only when all checks pass.          |
-| `rule_tool_styleguide` | Scaffold   | `mode=scaffold` generates project scaffolding files: one with `file=<name>`, or all of them.                                             |
-| `rule_tool_detect`          | Detection  | Detect project framework, TypeScript usage, and build tool from package.json.                                                            |
-| `rule_tool_process_adr`     | ADR        | Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.                            |
-| `/rule-area-styleguide` (request: file-tree) | Check + fix | Report the file tree with `rule_tool_check` and apply the mechanical guardrail fixes with `rule_tool_fix` (ADR 117: hub slash only). |
-| `rule_tool_handoff` | Handoff    | Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly. |
-| `rule://templates`     | Templates  | Component and test templates, served as resources.                                                                                       |
-| `rule_tool_fix`        | Fix        | Apply the deterministic guardrail fixes of every skill (blank lines, braces, ASCII typography, American spelling).                       |
+| Tool                                        | Role        | Use when                                                                                                                                 |
+| ------------------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `rule`                                       | Router      | Route a prompt to the correct rule skill. Returns structured routing with relevant sections.                                              |
+| `rule_tool_search`                           | Search      | Semantic search across ALL rule skills using BM25 ranking. Returns scored, relevant sections.                                             |
+| `rule_tool_check`                            | Guardrails  | Run blocking guardrail checks against any rule skill. Pass `previousPassed` while iterating; finalize only when all checks pass.          |
+| `rule_tool_styleguide`                       | Scaffold    | `mode=scaffold` generates project scaffolding files: one with `file=<name>`, or all of them.                                             |
+| `rule_tool_detect`                           | Detection   | Detect project framework, TypeScript usage, and build tool from package.json.                                                            |
+| `rule_tool_process_adr`                      | ADR         | Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.                            |
+| `/rule-area-styleguide` (request: file-tree) | Check + fix | Report the file tree with `rule_tool_check` and apply the mechanical guardrail fixes with `rule_tool_fix` (ADR 117: hub slash only).       |
+| `rule_tool_handoff`                          | Handoff     | Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly. |
+| `rule://templates`                           | Templates   | Component and test templates, served as resources.                                                                                       |
+| `rule_tool_fix`                              | Fix         | Apply the deterministic guardrail fixes of every skill (blank lines, braces, ASCII typography, American spelling).                       |
 
 ### Skill tool naming
 
@@ -176,10 +176,10 @@ Write ADRs/docs, follow BMAD, feature workflow, and handoff.
 | Skill                                                          | Tool                      | Frameworks | Use when                                                                                                                 |
 | -------------------------------------------------------------- | ------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
 | [rule-process](../rule-process/SKILL.md)                         | `pix_process`             | all        | Index of process skills: ADR, BMAD, code review, documentation, feature workflow, and LLM handoff.                       |
-| [rule-process-adr](../rule-process-adr/SKILL.md)                 | `rule_tool_process_adr`         | all        | Architecture Decision Records (ADR) for rule projects. Capture, store, and manage architectural decisions in docs/...     |
+| [rule-process-adr](../rule-process-adr/SKILL.md)                 | `rule_tool_process_adr`    | all        | Architecture Decision Records (ADR) for rule projects. Capture, store, and manage architectural decisions in docs/...     |
 | [rule-process-bmad](../rule-process-bmad/SKILL.md)               | `pix_process_bmad`        | all        | BMAD Method (Build More Architect Dreams) - AI-driven development framework for structured software delivery through...  |
 | [rule-process-code-review](../rule-process-code-review/SKILL.md) | `pix_process_code_review` | all        | Prepare and conduct risk-based PR/MR reviews with explicit quality, safety, and follow-up gates.                         |
-| `rule_tool_handoff` / `/rule-handoff`         | `rule_tool_handoff`     | all        | Generate a compressed LLM handoff summary from ADR logs and project context. Enables cross-chat recovery, model-switc... |
+| `rule_tool_handoff` / `/rule-handoff`                            | `rule_tool_handoff`        | all        | Generate a compressed LLM handoff summary from ADR logs and project context. Enables cross-chat recovery, model-switc... |
 
 ### Styleguide
 
@@ -187,7 +187,7 @@ Apply HTML/CSS/JS/JSON/Markdown/a11y/naming/validation standards.
 
 | Skill                                                              | Tool                        | Frameworks | Use when                                                                                                                            |
 | ------------------------------------------------------------------ | --------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [rule-styleguide](../rule-styleguide/SKILL.md)                       | `rule_tool_styleguide`            | all        | Central index of all rule coding style guides. Delegates to specialized sub-skills: HTML semantics, CSS architectu...                |
+| [rule-styleguide](../rule-styleguide/SKILL.md)                       | `rule_tool_styleguide`       | all        | Central index of all rule coding style guides. Delegates to specialized sub-skills: HTML semantics, CSS architectu...                |
 | [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md)             | `pix_styleguide_a11y`       | all        | WCAG 2.2 AA accessibility: semantic HTML, ARIA, keyboard navigation, color contrast, forms, media, automated testing...             |
 | [rule-styleguide-css](../rule-styleguide-css/SKILL.md)               | `pix_styleguide_css`        | all        | CSS architecture, selector strategy (data-part, element), naming conventions, property ordering, custom properties, c...            |
 | [rule-styleguide-html](../rule-styleguide-html/SKILL.md)             | `pix_styleguide_html`       | all        | Semantic HTML, document structure, template engine syntax, accessibility essentials, and element conventions for fron...            |
@@ -228,21 +228,21 @@ Design and route visible interface work while preserving rule implementation con
 
 ## Recommended dispatch bundles
 
-| Task                     | Primary                                             | Secondary                                         | Deterministic tools                      |
-| ------------------------ | --------------------------------------------------- | ------------------------------------------------- | ---------------------------------------- |
-| Unknown project          | `rule`                                               | `rule-process-adr`                                 | `rule_tool_detect`, `rule_tool_search`               |
-| AI agent app             | `rule-ai` + `rule-platform-agent`                     | `rule-ai-agent-architecture`, `rule-devops-testing` | `rule_tool_check`, `rule_tool_process_adr`           |
-| New web UI               | `rule-ui` + `rule-ui-design-system` + framework skill | `rule-styleguide`, `rule-platform-web`              | `rule://templates`, `rule_tool_check`             |
-| React/Vite app           | `rule-frontend-react`                                | `rule-toolchain-vite`, `rule-styleguide`            | `rule_tool_styleguide` (scaffold), `rule_tool_check`              |
-| Backend API              | `rule-backend-node`                                  | `rule-backend-security`                            | `rule_tool_check`, `rule_tool_process_adr`           |
-| Database work            | database skill                                      | `rule-data`                                        | `rule_tool_search`, `rule_tool_check`                |
-| Docker/CI/tests          | `rule-devops` focused skill                          | platform skill                                    | `rule_tool_detect`, `/rule-area-styleguide` (file-tree)           |
-| GraphQL API              | `rule-backend-graphql`                               | runtime skill, `rule-backend-security`             | `rule_tool_search`, `rule_tool_check`                |
-| Production observability | `rule-devops-observability`                          | runtime and platform skill                        | `rule_tool_check`, `rule_tool_process_adr`           |
-| Code review              | `rule-process-code-review`                           | feature workflow, relevant domain skill           | `rule_tool_check`                              |
-| Commit/push              | `rule-toolchain-commits`                             | `rule-toolchain-husky`                             | `rule_tool_check`                              |
-| Docs/ADR                 | `rule-styleguide-markdown`                           | `rule-process-adr`                                 | `rule_tool_process_adr`, `rule_tool_handoff` |
-| File-tree cleanup        | `rule-styleguide-naming`                             | `rule-toolchain-project`                           | `/rule-area-styleguide` (file-tree), `rule_tool_check`                |
+| Task                     | Primary                                             | Secondary                                         | Deterministic tools                                   |
+| ------------------------ | --------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------- |
+| Unknown project          | `rule`                                               | `rule-process-adr`                                 | `rule_tool_detect`, `rule_tool_search`                  |
+| AI agent app             | `rule-ai` + `rule-platform-agent`                     | `rule-ai-agent-architecture`, `rule-devops-testing` | `rule_tool_check`, `rule_tool_process_adr`              |
+| New web UI               | `rule-ui` + `rule-ui-design-system` + framework skill | `rule-styleguide`, `rule-platform-web`              | `rule://templates`, `rule_tool_check`                   |
+| React/Vite app           | `rule-frontend-react`                                | `rule-toolchain-vite`, `rule-styleguide`            | `rule_tool_styleguide` (scaffold), `rule_tool_check`    |
+| Backend API              | `rule-backend-node`                                  | `rule-backend-security`                            | `rule_tool_check`, `rule_tool_process_adr`              |
+| Database work            | database skill                                      | `rule-data`                                        | `rule_tool_search`, `rule_tool_check`                   |
+| Docker/CI/tests          | `rule-devops` focused skill                          | platform skill                                    | `rule_tool_detect`, `/rule-area-styleguide` (file-tree) |
+| GraphQL API              | `rule-backend-graphql`                               | runtime skill, `rule-backend-security`             | `rule_tool_search`, `rule_tool_check`                   |
+| Production observability | `rule-devops-observability`                          | runtime and platform skill                        | `rule_tool_check`, `rule_tool_process_adr`              |
+| Code review              | `rule-process-code-review`                           | feature workflow, relevant domain skill           | `rule_tool_check`                                      |
+| Commit/push              | `rule-toolchain-commits`                             | `rule-toolchain-husky`                             | `rule_tool_check`                                      |
+| Docs/ADR                 | `rule-styleguide-markdown`                           | `rule-process-adr`                                 | `rule_tool_process_adr`, `rule_tool_handoff`            |
+| File-tree cleanup        | `rule-styleguide-naming`                             | `rule-toolchain-project`                           | `/rule-area-styleguide` (file-tree), `rule_tool_check`  |
 
 ## Operational sequence
 

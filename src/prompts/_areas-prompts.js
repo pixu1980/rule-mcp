@@ -21,10 +21,7 @@ function memberRoutingList(members) {
 
 /** The lines every area hub prompt shares: route leaves from free text, check, commit. */
 function hubPromptLines(area, hub, members) {
-  const evidence =
-    members.length > 0
-      ? `the hub \`${hub}\` and whichever leaf skills the request names: ${memberRoutingList(members)}`
-      : `the \`${hub}\` skill`;
+  const evidence = members.length > 0 ? `the hub \`${hub}\` and whichever leaf skills the request names: ${memberRoutingList(members)}` : `the \`${hub}\` skill`;
 
   return [
     `You are the ${area} area specialist for rule-mcp (collector slash only; ADR 117).`,

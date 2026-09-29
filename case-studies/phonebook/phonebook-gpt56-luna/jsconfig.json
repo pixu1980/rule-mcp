@@ -1,4 +1,10 @@
 {
-  "compilerOptions": { "checkJs": true, "jsx": "react-jsx", "module": "ESNext", "moduleResolution": "Bundler", "strict": true },
+  "compilerOptions": {
+    "checkJs": true,
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true
+  },
   "exclude": ["node_modules", "dist"]
 }

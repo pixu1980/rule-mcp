@@ -78,10 +78,7 @@ test("picking skills still keeps the hub of that area (leaves are tools, not sla
 
 test("personas and tasks are their own families", () => {
   const personas = resolveSelection({ families: ["personas"] }).commands;
-  assert.ok(
-    personas.includes("rule-persona-security") && personas.includes("rule-persona-a11y"),
-    "one command per role",
-  );
+  assert.ok(personas.includes("rule-persona-security") && personas.includes("rule-persona-a11y"), "one command per role");
   assert.ok(
     personas.every((name) => !/-(audit|review|plan)$/.test(name)),
     "the per-operation persona commands are gone (ADR 120)",

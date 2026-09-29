@@ -120,7 +120,12 @@ test("an unrouteable core renders no evidence and a fallback check title", () =>
 
 test("next tools dedupe and cap at five, with an empty tool list tolerated", () => {
   const core = (next, overrides = {}) => ({ ...fullCore(), routeNextTools: next, ...overrides });
-  const { response: withList } = renderGatewayReply(core(["rule_tool_gateway", "rule_tool_gateway", "rule_tool_apply", "rule_tool_search", "rule_tool_check", "rule_tool_render"]), {}, null, []);
+  const { response: withList } = renderGatewayReply(
+    core(["rule_tool_gateway", "rule_tool_gateway", "rule_tool_apply", "rule_tool_search", "rule_tool_check", "rule_tool_render"]),
+    {},
+    null,
+    [],
+  );
   const { response: withoutList } = renderGatewayReply(core(), {}, null, []);
 
   assert.equal(withList.next_tools.length, 5, "the list is capped");

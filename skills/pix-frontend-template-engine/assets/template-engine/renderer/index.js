@@ -24,12 +24,4 @@ export class TemplateRenderer {
   }
 }
 
-Object.assign(
-  TemplateRenderer.prototype,
-  preprocessMethods,
-  renderMethods,
-  walkMethods,
-  textMethods,
-  directiveMethods,
-  includeMethods,
-);
+Object.assign(TemplateRenderer.prototype, preprocessMethods, renderMethods, walkMethods, textMethods, directiveMethods, includeMethods);

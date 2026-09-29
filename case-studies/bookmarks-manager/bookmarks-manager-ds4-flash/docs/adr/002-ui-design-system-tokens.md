@@ -1,15 +1,18 @@
 # ADR 002: UI Design System Tokens
 
 ## Status
+
 Accepted
 
 ## Context
+
 The bookmarks manager needs a consistent design system: proportional typography,
 spacing, radii, elevations, and color tokens. Apple-grade UI with microinteractions.
 Must follow rule-mcp rules: zero CSS classes, zero inline styles, semantic HTML,
 external CSS via CSSStyleSheet/adoptedStyleSheets.
 
 ## Decision
+
 - **CSS custom properties** scoped via `:root` in design system CSS file
 - **Typography**: `chivo` (display) + `inter` (body) — self-hosted via Google Fonts
   - Scale: 0.75 / 0.875 / 1 / 1.125 / 1.25 / 1.5 / 2 / 2.5 / 3 (rem)
@@ -26,6 +29,7 @@ external CSS via CSSStyleSheet/adoptedStyleSheets.
 - **No CSS classes, no inline styles, no Tailwind** — element + `[data-part]` selectors only
 
 ## Consequences
+
 - Consistent visual language across all components
 - Easy to theme by overriding custom properties
 - Self-documenting design tokens
