@@ -15,6 +15,10 @@
  */
 
 export * from "./_audit.js";
+export * from "./_documents.js";
+export * from "./_documents-apply.js";
+export * from "./_documents-plan.js";
+export * from "./_documents-refs.js";
 export * from "./_linearize.js";
 export * from "./_reword.js";
 export * from "./_squash.js";

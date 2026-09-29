@@ -3,31 +3,35 @@
 /**
  * @module core/history/squash
  *
- * Closing a feature: one commit that represents the whole thing.
+ * Closing a feature: one commit that represents the whole thing, plus the
+ * feature's own ADRs and handoffs consolidated into one document each.
  *
- * The boundary is the same one every other consumer reads - `merge-base(base,
- * HEAD)..HEAD` - so where the feature starts is never guessed. The squash is
- * `git reset --soft <merge-base>` followed by one commit: the index already
- * holds the tip tree, so the new commit's tree is the tip tree, and the tree
- * invariant holds by construction. It still gets verified, and a mismatch rolls
- * the branch back.
+ * The boundary is `merge-base(base, HEAD)..HEAD`, the same one every other
+ * consumer reads. The order is: consolidate the documents and stage them,
+ * `git reset --soft <merge-base>`, one commit. The soft reset leaves the index
+ * untouched, so the commit's tree is the tip tree plus exactly the planned
+ * document changes - and the verification fails if any other path differs.
  *
- * The final message is the caller's (the model proposes it from the feature's
- * commits, diff and ADRs); it is validated against the one rule and must be
- * `type(scope): subject`, because this commit becomes the PR title, the
- * changelog entry and the version input.
+ * The merged documents are deterministic concatenations (ADR 128); the final
+ * message is the caller's, validated against the one rule because this commit
+ * becomes the PR title, the changelog entry and the version input.
  */
 
+import { rmSync } from "node:fs";
+import { join } from "node:path";
+
 import { lintCommits, lintMessage } from "../commit/index.js";
-import { currentBranch, getFeatureCommitRange, git, gitResult, mergeCommits, rewriteSafety, workingTreeState } from "../git/index.js";
-import { rollback, verifyNormalization } from "./_verify.js";
+import { currentBranch, getFeatureCommitRange, git, gitLines, gitResult, mergeCommits, rewriteSafety, workingTreeState } from "../git/index.js";
+import { applyConsolidation } from "./_documents-apply.js";
+import { planConsolidation } from "./_documents-plan.js";
+import { rollback } from "./_verify.js";
 
 /**
- * The pre-close report: the boundary, the commits, and everything that must be
- * settled before a squash.
+ * The pre-close report: the boundary, the commits, the document consolidation
+ * plan and everything that must be settled before a squash.
  *
  * @param {string} projectDir
- * @param {{ baseBranch?: string }} [options]
+ * @param {{ baseBranch?: string, consolidate?: boolean }} [options]
  * @returns {object}
  */
 export function proposeSquash(projectDir, options = {}) {
@@ -35,12 +39,14 @@ export function proposeSquash(projectDir, options = {}) {
   const commits = range.commits ?? [];
   const { violations } = lintCommits(commits);
   const safety = rewriteSafety(projectDir);
+  const documents = options.consolidate === false ? null : planConsolidation(projectDir, { baseBranch: options.baseBranch, slug: options.slug });
 
   return {
     range,
     commits,
     violations,
     merges: range.range ? mergeCommits(projectDir, range.range).length : 0,
+    documents,
     safe: safety.safe,
     reasons: safety.reasons,
     untracked: safety.untracked,
@@ -48,11 +54,41 @@ export function proposeSquash(projectDir, options = {}) {
   };
 }
 
+/** What the rewrite produced, and whether it is exactly what was planned. */
+function verifySquash(projectDir, { original, consolidation }) {
+  const range = getFeatureCommitRange(projectDir);
+  const changed = gitLines(projectDir, ["diff", "--name-only", `${original}..HEAD`]);
+  const allowed = new Set(consolidation?.paths);
+  const unexpected = changed.filter((file) => !allowed.has(file));
+
+  return {
+    commits: range.count,
+    violations: lintCommits(range.commits ?? []).violations.length,
+    merges: range.range ? mergeCommits(projectDir, range.range).length : 0,
+    treeUnchanged: changed.length === 0,
+    documentsConsolidated: Boolean(consolidation),
+    changed,
+    unexpected,
+    valid: range.count === 1 && unexpected.length === 0,
+  };
+}
+
+/** Undo a failed rewrite: drop the merged files, then restore the branch. */
+function fail(projectDir, original, consolidation, reason, proposal, verdict, output) {
+  for (const file of consolidation?.written ?? []) {
+    rmSync(join(projectDir, file), { force: true });
+  }
+
+  rollback(projectDir, original);
+
+  return { applied: false, reason, output, proposal, verdict };
+}
+
 /**
- * Squash the feature into one commit, after confirmation and a safety check.
+ * Squash the feature - code and its consolidated documents - into one commit.
  *
  * @param {string} projectDir
- * @param {{ baseBranch?: string, message?: string, confirm?: boolean }} [options]
+ * @param {{ baseBranch?: string, slug?: string, message?: string, confirm?: boolean, consolidate?: boolean }} [options]
  * @returns {object}
  */
 export function applySquash(projectDir, options = {}) {
@@ -85,32 +121,31 @@ export function applySquash(projectDir, options = {}) {
   }
 
   const original = git(projectDir, ["rev-parse", "HEAD"]);
-  const beforeTree = git(projectDir, ["rev-parse", "HEAD^{tree}"]);
-  const soft = gitResult(projectDir, ["reset", "--soft", proposal.range.mergeBase], { timeout: 30_000 });
+  const consolidation = proposal.documents?.actionable ? applyConsolidation(projectDir, proposal.documents) : null;
 
-  if (!soft.ok) {
-    rollback(projectDir, original);
-
-    return { applied: false, reason: "the reset failed; the branch was rolled back", proposal, verdict };
+  if (consolidation) {
+    gitResult(projectDir, ["add", "--", ...consolidation.paths]);
   }
 
-  // The tool validated the message; `--no-verify` keeps a project hook from
-  // rejecting the very commit this contract just proved conforming.
+  if (!gitResult(projectDir, ["reset", "--soft", proposal.range.mergeBase], { timeout: 30_000 }).ok) {
+    return fail(projectDir, original, consolidation, "the reset failed; the branch was rolled back", proposal, verdict);
+  }
+
   const commit = gitResult(projectDir, ["commit", "-q", "--no-verify", "-m", message], { timeout: 30_000 });
-  const verification = verifyNormalization(projectDir, { beforeTree, baseBranch: options.baseBranch });
+  const verification = verifySquash(projectDir, { original, consolidation });
   const tree = workingTreeState(projectDir);
-  const clean = commit.ok && verification.treeUnchanged && verification.commits === 1;
+  const clean = commit.ok && verification.valid && tree.clean;
 
   if (!clean) {
-    rollback(projectDir, original);
-
-    return {
-      applied: false,
-      reason: commit.ok ? "the squash did not produce exactly one commit with an unchanged tree; it was rolled back" : "the commit failed; the branch was rolled back",
-      output: commit.stdout,
+    return fail(
+      projectDir,
+      original,
+      consolidation,
+      commit.ok ? "the squash left an unexpected change; it was rolled back" : "the commit failed; the branch was rolled back",
       proposal,
       verdict,
-    };
+      commit.stdout,
+    );
   }
 
   return { applied: true, message, verification: { ...verification, workingTree: tree.clean ? "clean" : "dirty" } };
