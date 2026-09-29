@@ -22,6 +22,7 @@ export const HANDOFF_BODY = [
   "   b. Stage each group explicitly (pathspecs or `git add -p`) and commit with Conventional Commits AND a mandatory scope: `type(scope): subject` (e.g. `feat(cli): ...`, `chore(eslint): ...`). The `commit-msg` hook rejects scope-less messages.",
   "   c. After the code/config commits, make ONE SEPARATE final commit for decision documents already pending in the tree (ADR, CHANGELOG, docs/): `docs(adr): ...` or `docs(handoff): ...`.",
   "   d. NEVER push. Leave every commit local for review.",
+  '   e. MANDATORY dependency policy: before committing, every dependency is an exact `"name": "x.y.z"` pin - never `^`, `~`, `*` or a range, because a range lets a sub-dependency arrive without a decision. Pin each ranged specifier with the project\'s package manager and `--save-exact` (e.g. `pnpm add <name>@latest --save-exact`), refresh the lockfile, and fold the manifest change into the commit group it belongs to.',
   "3. Persist the handoff: write it to `docs/handoff/<NN>-<slug>.md` where NN is the next free two-digit number in that directory and <slug> is a kebab-case topic (e.g. `13-security-audit-remediation.md`). Open with the branch, the commit range it covers, and the date. The document ENDS with its `### Resume Prompt` section: complete the block the renderer emitted, in place, with the path of this file and the first step of the next session, and leave nothing after the closing fence. Then commit that file ALONE - no other paths - as `chore(handoff): add session handoff <NN>-<slug>`. A handoff that exists only in the chat is lost when the session ends.",
   "4. Present the handoff as a paste-ready block for the next session: quote the finished `### Resume Prompt` block verbatim, then list the commits just created. The document is the source; the chat is a copy of it.",
   "5. If the grouping into atomic commits is ambiguous, ask the user how to split before committing.",
@@ -93,6 +94,7 @@ export const INIT_BODY = [
   "1. Call `rule_tool_init` (or `rule-mcp init`). Pass `no-tokensave` / noTokensave when requested.",
   "2. For a brand-new project, bootstrap via `/rule-area-styleguide` / `/rule-area-toolchain` (name leaves in the request) and `rule_tool_detect` before finishing.",
   "3. Report the git governance it installs or integrates: a `commit-msg` gate and a `pre-push` gate that enforce `type(scope): subject`. Husky is installed only when a Node project has no hook mechanism; an existing `.husky/`, `.githooks/` or `core.hooksPath` is integrated, never replaced. Re-running is safe.",
-  "4. Check the project's test setup exists; if there is no test surface, ask the user what to cover.",
-  "5. Finish by proposing a conventional commit with a mandatory scope, e.g. `chore(init): ...`.",
+  "4. MANDATORY dependency policy: every dependency is an exact `x.y.z` pin - never `^`, `~`, `*` or a range, because a range lets a sub-dependency arrive without a decision. `rule_tool_init` reports the ranged specifiers; pin each one with the project's package manager and `--save-exact` (e.g. `pnpm add <name>@latest --save-exact`), refresh the lockfile, and report the manifests that changed. `workspace:`, `file:`, `link:` and `npm:` aliases are not ranges and are left alone.",
+  "5. Check the project's test setup exists; if there is no test surface, ask the user what to cover.",
+  "6. Finish by proposing a conventional commit with a mandatory scope, e.g. `chore(init): ...`.",
 ].join("\n");

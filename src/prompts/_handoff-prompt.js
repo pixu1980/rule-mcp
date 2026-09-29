@@ -52,7 +52,8 @@ export function handoffPrompt(args, user) {
         "  b. Commit each group atomically with Conventional Commits AND a mandatory scope: `type(scope): subject` (e.g. `feat(cli): ...`, `chore(eslint): ...`). The `commit-msg` hook rejects scope-less messages - a scope is never optional.\n" +
         "  c. Make ONE SEPARATE final commit for decision documents already pending in the tree (ADR, CHANGELOG, docs/): `docs(adr): ...` or `docs(handoff): ...`.\n" +
         "  d. NEVER push. Leave every commit local for review.\n" +
-        "  e. If the grouping into atomic commits is ambiguous, ask the user how to split before committing.\n" +
+        '  e. MANDATORY dependency policy: before committing, every dependency is an exact `"name": "x.y.z"` pin - never `^`, `~`, `*` or a range. Pin each ranged specifier with the project\'s package manager and `--save-exact` (e.g. `pnpm add <name>@latest --save-exact`), refresh the lockfile, and fold the manifest change into the commit group it belongs to.\n' +
+        "  f. If the grouping into atomic commits is ambiguous, ask the user how to split before committing.\n" +
         "Step 2 - Run `rule_tool_handoff` with EXACTLY the resolved arguments above; do not change them.\n" +
         "Include the ADR summary (docs/adr) and git context in the output.\n" +
         "Step 3 - With closeout=true the run writes to the tree: one ADR per completed working paper, the deleted sources, and any ADR renumbering. Stage exactly those paths and commit them as ONE `docs(adr): ...` commit before going on.\n" +

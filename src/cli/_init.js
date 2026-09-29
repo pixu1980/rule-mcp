@@ -28,7 +28,7 @@
 import { execFileSync } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import { installGitGovernance } from "../core/commit/index.js";
-import { detectReleaseTooling, releaseToolingLabels } from "../core/release/index.js";
+import { detectReleaseTooling, renderInitExtras, unpinnedDependencies } from "../core/release/index.js";
 import { findProjectRoot, getProjectPaths } from "./paths/index.js";
 
 /**
@@ -100,7 +100,9 @@ export function initProject(options = {}) {
     }
   }
 
-  return { projectDir, dir, created, tokensave, governance, release: detectReleaseTooling(projectDir) };
+  const unpinned = unpinnedDependencies(projectDir);
+
+  return { projectDir, dir, created, tokensave, governance, release: detectReleaseTooling(projectDir), dependencies: { unpinned } };
 }
 
 /**
@@ -129,10 +131,8 @@ export function renderInit(result) {
     }
   }
 
-  if (result.release) {
-    const labels = releaseToolingLabels(result.release);
-
-    lines.push(`Release:      ${labels.length > 0 ? labels.join(", ") : "no changelog/version tooling detected (the project's choice)"}`);
+  if (result.release || result.dependencies) {
+    lines.push(...renderInitExtras(result));
   }
 
   return lines.join("\n");
