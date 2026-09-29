@@ -29,7 +29,7 @@ export { HANDOFF_COMPLETIONS, HANDOFF_FORMATS, HANDOFF_MODES, HANDOFF_USAGE } fr
  * Unknown tokens are ignored (the tool's zod schema validates the rest).
  *
  * @param {string} [raw] - space-separated token list (may be undefined/empty)
- * @returns {{ mode: string, compress: boolean, format: string,
+ * @returns {{ mode: string, closeFeature: boolean, squash: boolean, compress: boolean, format: string,
  *             includeGitDiff: boolean, includeGitLog: boolean,
  *             includeContext: boolean, includeAdrs: boolean,
  *             includeRoadmap: boolean, closeout: boolean, maxTokens: number, help: boolean }}
@@ -50,6 +50,14 @@ export function parseHandoffOptions(raw) {
       case "handoff":
       case "close-session": {
         result.mode = token;
+        break;
+      }
+      case "close-feature": {
+        result.closeFeature = true;
+        break;
+      }
+      case "squash": {
+        result.squash = true;
         break;
       }
       case "compress": {

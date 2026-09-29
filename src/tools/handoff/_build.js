@@ -3,13 +3,14 @@
 /** Assemble the handoff document from its sections, degrading format to fit the token budget. */
 import { readAdrs, readContextValues, readProjectIdentity } from "./_sources.js";
 import { getGitDiff, getGitLog } from "./_git.js";
+import { featureSummary } from "./_feature.js";
 import { graphChanges } from "../../core/tokensave/_changes.js";
 import { scanProjectDocs } from "./_docs-scan.js";
 import { archiveCompletedDocs, closeoutLines } from "./_closeout.js";
 import { autoRenumber, renumberLines } from "./_renumber.js";
 import { estimateTokens } from "./_format.js";
 import { headerLines, identityLines, adrLines, contextLines } from "./_sections-core.js";
-import { workingTreeLines, gitLogLines, docsLines, footerLines } from "./_sections-repo.js";
+import { featureRangeLines, workingTreeLines, gitLogLines, docsLines, footerLines } from "./_sections-repo.js";
 import { semanticLines } from "./_sections-semantic.js";
 
 /** Build one handoff, re-running itself one format tighter when it exceeds maxTokens. */
@@ -42,6 +43,7 @@ export function buildHandoff({
   const changes = includeGitDiff === false ? null : graphChanges(projectDir, { files: gitDiff?.files ?? [] });
   const gitLog = includeGitLog === false ? null : getGitLog(projectDir);
   const docsScan = includeRoadmap === false ? null : scanProjectDocs(projectDir);
+  const feature = featureSummary(projectDir);
 
   const projectName = identity.name || (projectDir === "." ? process.cwd().split("/").pop() : projectDir.split("/").pop());
   const shape = {
@@ -59,6 +61,7 @@ export function buildHandoff({
   const lines = [
     ...headerLines(shape),
     ...identityLines(identity, shape),
+    ...featureRangeLines(feature, shape),
     ...adrLines(adrs, shape),
     ...contextLines(contextValues, shape),
     ...workingTreeLines(gitDiff, shape),

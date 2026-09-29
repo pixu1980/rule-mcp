@@ -12,6 +12,8 @@ export const HANDOFF_FORMATS = ["full", "brief", "minimal"];
 export const HANDOFF_COMPLETIONS = [
   "handoff",
   "close-session",
+  "close-feature",
+  "squash",
   "compress",
   "no-compress",
   "full",
@@ -31,6 +33,8 @@ export const HANDOFF_COMPLETIONS = [
 export const HANDOFF_USAGE = `Usage: /pix-handoff [options]
 Options (space-separated, all optional):
   handoff | close-session   mode (default: handoff)
+  close-feature             close the feature: one final Conventional Commit, not a session summary
+  squash                    with close-feature: squash the feature into that one commit
   compress | no-compress    aggressively compress / keep output verbose (default: compress)
   full | brief | minimal    output format (default: full)
   no-diff                   omit the working-tree diff
@@ -49,11 +53,14 @@ Examples:
   /pix-handoff no-compress brief       # verbose brief format
   /pix-handoff no-diff                 # handoff without the diff
   /pix-handoff close-session no-diff no-log  # close without diff/log
-  /pix-handoff no-compress max=2000    # verbose, token-capped`;
+  /pix-handoff no-compress max=2000    # verbose, token-capped
+  /pix-handoff close-feature --squash  # close the feature as one commit, then hand off`;
 
 /** Default parsed values - identical to the tool's own defaults. */
 export const DEFAULTS = Object.freeze({
   mode: "handoff",
+  closeFeature: false,
+  squash: false,
   compress: true,
   format: "full",
   includeGitDiff: true,
