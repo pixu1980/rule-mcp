@@ -11,3 +11,5 @@
  */
 
 export * from "./_detect.js";
+export * from "./_pins.js";
+export * from "./_render.js";
