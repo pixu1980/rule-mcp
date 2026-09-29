@@ -9,6 +9,8 @@
  * @returns {string}
  */
 export function renderSquash(result) {
+  const documents = result.proposal?.documents;
+
   if (result.applied) {
     const v = result.verification;
 
@@ -18,7 +20,8 @@ export function renderSquash(result) {
       "Feature squashed into one commit.",
       `Message:         ${result.message}`,
       `Feature commits: ${v.commits}`,
-      `Final tree:      ${v.treeUnchanged ? "unchanged" : "CHANGED"}`,
+      `Documents:       ${v.documentsConsolidated ? `consolidated (${v.changed.length} path(s))` : "unchanged"}`,
+      `Final tree:      ${v.treeUnchanged ? "unchanged" : "code unchanged, documents consolidated"}`,
       `Working tree:    ${v.workingTree}`,
     ].join("\n");
   }
@@ -39,6 +42,24 @@ export function renderSquash(result) {
 
   if ((proposal.commits ?? []).length > 0) {
     lines.push("", "Commits being squashed:", ...proposal.commits.map((commit) => `  ${commit.short} ${commit.subject}`));
+  }
+
+  if (documents?.actionable) {
+    lines.push("", "Documents folded into the commit:");
+
+    if (documents.consolidates.adrs) {
+      lines.push(`  ADR:     ${documents.adrs.join(", ")} -> ${documents.adrTarget}`);
+    }
+
+    if (documents.consolidates.handoffs) {
+      lines.push(`  Handoff: ${documents.handoffs.join(", ")} -> ${documents.handoffTarget}`);
+    }
+
+    lines.push("  Indexes: docs/adr/ADR.md, docs/handoff/HANDOFF.md");
+  }
+
+  if ((documents?.outside ?? []).length > 0) {
+    lines.push("", "Cited but outside the range (left untouched):", ...documents.outside.map((file) => `  ${file}`));
   }
 
   if (proposal.safe === false) {

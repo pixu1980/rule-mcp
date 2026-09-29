@@ -11,7 +11,7 @@
       "file": "02-architecture.md",
       "kind": "block",
       "marker": "surface-counts",
-      "sha256": "912f858fff1cb9191c8aaa91153255154e4cceb7f664831b100cadc9313c59bb"
+      "sha256": "8c7f3f75f5a9637bfef06019cefe3437d151294f7c7c8ba49a1e0252470bda66"
     },
     {
       "file": "05-env-variables.md",
@@ -33,7 +33,7 @@
     {
       "file": "09-tools.md",
       "kind": "document",
-      "sha256": "b5c8bdb173d44a6c03c2f83c7ba08b60fe917a40559494fac46a9bbdf5d5fac7"
+      "sha256": "84fa0257acac782fb6fc725a0ca069187c75479793326d51603a99be890716f9"
     },
     {
       "file": "10-prompts.md",

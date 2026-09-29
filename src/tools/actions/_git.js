@@ -44,8 +44,8 @@ export function registerGitTool() {
     entry: "action",
     description:
       "Audit the feature history and normalize it: base branch, merge base, commit range, Conventional Commit violations and merge commits. " +
-      "`reword` applies proposed messages; `linearize` removes merge commits; `squash` closes the feature as one commit. " +
-      "The destructive actions need force:true to be proposed and confirm:true to run. Every rewrite verifies the final tree is unchanged and rolls back when it is not.",
+      "`reword` applies proposed messages; `linearize` removes merge commits; `squash` closes the feature as one commit and folds the feature's own ADRs and handoffs into one document each (deterministic concatenation, originals deleted, indexes rebuilt). " +
+      "The destructive actions need force:true to be proposed and confirm:true to run. Every rewrite verifies what changed and rolls back on an unexpected path.",
     zodSchema: z.object({
       projectDir: z.string().optional().default(".").describe("Project root (default: cwd)"),
       action: z.enum(["audit", "reword", "linearize", "squash"]).optional().default("audit").describe("audit, reword, linearize, or squash"),

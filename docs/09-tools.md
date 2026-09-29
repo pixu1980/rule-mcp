@@ -104,7 +104,7 @@ Apply deterministic guardrail fixes of every skill (blank lines, braces, ASCII t
 
 ### rule_tool_git
 
-Audit the feature history and normalize it: base branch, merge base, commit range, Conventional Commit violations and merge commits. `reword` applies proposed messages; `linearize` removes merge commits; `squash` closes the feature as one commit. The destructive actions need force:true to be proposed and confirm:true to run. Every rewrite verifies the final tree is unchanged and rolls back when it is not.
+Audit the feature history and normalize it: base branch, merge base, commit range, Conventional Commit violations and merge commits. `reword` applies proposed messages; `linearize` removes merge commits; `squash` closes the feature as one commit and folds the feature's own ADRs and handoffs into one document each (deterministic concatenation, originals deleted, indexes rebuilt). The destructive actions need force:true to be proposed and confirm:true to run. Every rewrite verifies what changed and rolls back on an unexpected path.
 
 | Parameter    | Type                                           | Required | Default   | Description                                          |
 | ------------ | ---------------------------------------------- | -------- | --------- | ---------------------------------------------------- |

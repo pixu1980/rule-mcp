@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [128](128-consolidate-the-feature-adrs-and-handoffs-into-one-commit-at-the-close-squash.md)                             | Consolidate the feature ADRs and handoffs into one commit at the close squash                             | 2026-09-29 | accepted   | git, workflow, docs, history                                                        |
 | [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md)                                            | Derive the next version and the changelog from the commit rule                                            | 2026-09-29 | accepted   | release, git, workflow                                                              |
 | [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md)                              | Close a feature with reset --soft onto the merge base and one validated commit                            | 2026-09-29 | accepted   | git, workflow, history                                                              |
 | [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md)                            | Normalize history on the merge base and hold every rewrite to a tree invariant                            | 2026-09-28 | accepted   | git, workflow, history                                                              |
@@ -143,6 +144,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [128](128-consolidate-the-feature-adrs-and-handoffs-into-one-commit-at-the-close-squash.md)                             | `rule_tool_git action=squash` consolidates the feature's documents before the squash, behind the same single confirmation.                                                                                                       | The closed feature is one commit holding the code and the consolidated ADR and handoff, and the two indexes.                                                                                                                    |
 | [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md)                                            | `scripts/build/version/index.mjs --next` derives the bump from the commits since the newest tag using the shared rule in `src/core/commit`: `fix` is PATCH, `feat` is MINOR, a `!` or a `BREAKING CHANGE:` footer is MAJOR,...  | The version is a function of the history, computed by the same rule that gated the commits, so a version that disagrees with its commits cannot be produced by accident.                                                        |
 | [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md)                              | The close runs `git reset --soft <merge-base>` (the same deterministic boundary every other consumer reads) and then one `git commit`. A soft reset leaves the index holding the tip tree, so the new commit's tree is the...   | A feature of any shape - linear or merged - becomes one commit whose tree is provably the same as before, and whose message is validated before it is written.                                                                  |
 | [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md)                            | Linearization runs `git rebase <merge-base>`: replaying the feature commits onto the fork point drops the merges and leaves the final tree exactly as it was.                                                                   | A merge commit that carried no unique content disappears and the content is provably unchanged, because the tree hash matches.                                                                                                  |
@@ -337,6 +339,23 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [005](005-backend-framework-skills.md) Backend Framework Skills
 - [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
 
+### docs
+
+- [128](128-consolidate-the-feature-adrs-and-handoffs-into-one-commit-at-the-close-squash.md) Consolidate the feature ADRs and handoffs into one commit at the close squash
+- [119](119-close-out-audit-ui.md) Close out audit ui
+- [118](118-close-out-review-ui.md) Close out review ui
+- [111](111-close-out-audit-security.md) Close out audit security
+- [110](110-close-out-review-security.md) Close out review security
+- [108](108-the-handoff-family-gets-a-generated-index-and-the-root-handoff-summary-retires.md) The handoff family gets a generated index, and the root HANDOFF summary retires
+- [104](104-the-handoff-document-closes-with-the-resume-prompt.md) The handoff document closes with the resume prompt
+- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
+- [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
+- [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
+- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
+- [086](086-documentation-site-is-hand-written-static-html-from-docs.md) Documentation site is hand-written static HTML from docs
+- [071](071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) The census generates eight numbered documents and three fenced blocks inside the chapters a person writes
+- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+
 ### commands
 
 - [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md) The fix tool and command apply the deterministic guardrails, not the file tree
@@ -352,22 +371,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
 - [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 - [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
-
-### docs
-
-- [119](119-close-out-audit-ui.md) Close out audit ui
-- [118](118-close-out-review-ui.md) Close out review ui
-- [111](111-close-out-audit-security.md) Close out audit security
-- [110](110-close-out-review-security.md) Close out review security
-- [108](108-the-handoff-family-gets-a-generated-index-and-the-root-handoff-summary-retires.md) The handoff family gets a generated index, and the root HANDOFF summary retires
-- [104](104-the-handoff-document-closes-with-the-resume-prompt.md) The handoff document closes with the resume prompt
-- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
-- [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
-- [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
-- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
-- [086](086-documentation-site-is-hand-written-static-html-from-docs.md) Documentation site is hand-written static HTML from docs
-- [071](071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) The census generates eight numbered documents and three fenced blocks inside the chapters a person writes
-- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
 ### prompts
 
@@ -457,6 +460,16 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
 - [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
 
+### git
+
+- [128](128-consolidate-the-feature-adrs-and-handoffs-into-one-commit-at-the-close-squash.md) Consolidate the feature ADRs and handoffs into one commit at the close squash
+- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
+- [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
+- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
+- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
+- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
+- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
+
 ### release
 
 - [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
@@ -513,15 +526,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 - [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
 
-### git
-
-- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
-- [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
-- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
-- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
-- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
-- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
-
 ### tool
 
 - [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
@@ -530,6 +534,15 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
 - [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
 - [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
+
+### workflow
+
+- [128](128-consolidate-the-feature-adrs-and-handoffs-into-one-commit-at-the-close-squash.md) Consolidate the feature ADRs and handoffs into one commit at the close squash
+- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
+- [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
+- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
+- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
+- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
 
 ### compression
 
@@ -570,14 +583,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [026](026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
 - [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
-
-### workflow
-
-- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
-- [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
-- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
-- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
-- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
 
 ### infrastructure
 
@@ -644,6 +649,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [102](102-reinstall-is-one-shell-script-behind-three-entry-points.md) Reinstall is one shell script behind three entry points
 - [072](072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
 - [070](070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
+
+### history
+
+- [128](128-consolidate-the-feature-adrs-and-handoffs-into-one-commit-at-the-close-squash.md) Consolidate the feature ADRs and handoffs into one commit at the close squash
+- [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
+- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
 
 ### install
 
