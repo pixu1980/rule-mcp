@@ -1,0 +1,15 @@
+# architect review
+
+- **Role**: architect v2
+- **Date**: 2026-09-27
+
+Findings distilled from [the audit](../audits/architect.md). A finding this run no longer reports is
+flipped to resolved and kept one run for visibility, then removed.
+
+| Finding  | Severity | Status | Evidence                                                                                                                                                                       | Summary                                                                                                                                                                                    |
+| -------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| ARCH-001 | critical | open   | cd backend && npx tsc -p tsconfig.json --noEmit -> src/modules/bookmarks/bookmarks.schema.ts(13,15): error TS2769: 'required_error' does not exist in type '$ZodStringParams'  | Backend TypeScript build broken: zod v4 removed the 'required_error' option overload used in bookmarks.schema.ts, so tsc fails and `pnpm build` cannot produce dist/                       |
+| ARCH-002 | high     | open   | `pnpm lint` -> "ESLint: 10.11.0 ... all of the files matching the glob pattern are ignored"; ls backend/eslint.config.* frontend/eslint.config.* -> No such file               | Lint gate dead in both packages: ESLint 10 removed eslintrc support, backend/.eslintrc.json and frontend/.eslintrc.json are ignored, `pnpm lint` exits 2                                   |
+| ARCH-003 | high     | open   | backend/src/common/utils/ssrfGuard.ts validates pre-fetch only; backend/src/scraping/scrape.service.ts:109 `redirect: "follow"` with no per-hop validation                     | SSRF guard bypassed by redirects: assertSafeUrl validates only the initial hostname, then scrapeUrl fetches with redirect: 'follow', so a public URL can 302 to a private/loopback address |
+| ARCH-004 | medium   | open   | frontend/src/services/api.ts fetchBookmarks() -> request<Bookmark[]>("/bookmarks?limit=100"); backend repository returns { items, total } and controller exposes x-total-count | Bookmark list silently truncates at 100: frontend fetchBookmarks hardcodes limit=100 and ignores the pagination envelope (x-total-count header) the backend already returns                |
+| ARCH-005 | low      | open   | backend/src/modules/bookmarks/bookmarks.types.ts and frontend/src/types/api.ts both declare Bookmark and the error envelope independently                                      | API contract types duplicated by hand between backend bookmarks.types.ts and frontend/src/types/api.ts, with no shared source; a field renames breaks the client silently at runtime       |

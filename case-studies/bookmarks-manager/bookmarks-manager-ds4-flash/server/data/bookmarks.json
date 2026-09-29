@@ -1,5 +1,15 @@
 [
   {
+    "id": "2710395e-5422-4037-887a-c700c90bf453",
+    "url": "https://css-tricks.com/animating-css-border-image/",
+    "title": "Animating CSS border-image | CSS-Tricks",
+    "description": "Border images are an overlooked feature. One neat fact is that border image slices can run across entire borders on an element, and animating it creates beautiful effects.",
+    "ogImage": "https://i0.wp.com/css-tricks.com/wp-content/uploads/2026/05/css-border-image-animations.jpg",
+    "domain": "css-tricks.com",
+    "createdAt": "2026-09-27T14:12:40.191Z",
+    "updatedAt": "2026-09-27T14:12:40.191Z"
+  },
+  {
     "id": "0a0d516a-2bb0-48c4-9d2b-431a35c8010d",
     "url": "https://css-tricks.com/css-random-function-polyfill/",
     "title": "Let’s Use the Emergent CSS random() Function in all the Browsers | CSS-Tricks",
