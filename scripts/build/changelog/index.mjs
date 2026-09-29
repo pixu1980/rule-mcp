@@ -103,7 +103,36 @@ export function writeChangelog({ projectDir = process.cwd() } = {}) {
   return true;
 }
 
+/**
+ * Whether CHANGELOG.md already matches a fresh generation from the same commits.
+ *
+ * @param {{ projectDir?: string }} [options]
+ * @returns {boolean}
+ */
+export function checkChangelog({ projectDir = process.cwd() } = {}) {
+  const file = join(projectDir, "CHANGELOG.md");
+  let current = "";
+
+  try {
+    current = readFileSync(file, "utf8");
+  } catch {
+    // A missing file is drift: anything the generator produces is a change.
+  }
+
+  return current === buildChangelog({ projectDir });
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const changed = writeChangelog();
-  console.log(changed ? "CHANGELOG.md updated" : "CHANGELOG.md already current");
+  if (process.argv.includes("--check")) {
+    if (checkChangelog()) {
+      console.log("CHANGELOG.md is current");
+    } else {
+      process.stderr.write("CHANGELOG.md is stale - run `pnpm changelog`.\n");
+      process.exitCode = 1;
+    }
+  } else {
+    const changed = writeChangelog();
+
+    console.log(changed ? "CHANGELOG.md updated" : "CHANGELOG.md already current");
+  }
 }

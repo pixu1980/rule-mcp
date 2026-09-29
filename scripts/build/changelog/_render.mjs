@@ -3,16 +3,18 @@
 /** @module scripts/build/changelog/render - one commit to one entry, one release to one block */
 
 import { stripFingerprint } from "../../../src/core/text/index.js";
-import { SECTION_FOR_TYPE, SECTION_ORDER, SUBJECT } from "./_sections.mjs";
+import { parseCommitMessage } from "../../../src/core/commit/_rule.js";
+import { SECTION_FOR_TYPE, SECTION_ORDER } from "./_sections.mjs";
 
 export function toEntry(commit) {
-  const match = SUBJECT.exec(commit.subject);
-  if (!match) {
+  const parsed = parseCommitMessage(commit.subject);
+
+  if (!parsed.valid) {
     return null;
   }
 
-  const { type, scope, subject, breaking } = match.groups;
-  const isBreaking = Boolean(breaking) || /^BREAKING CHANGE:/m.test(commit.body);
+  const { type, scope, description } = parsed;
+  const isBreaking = parsed.breaking || /^BREAKING[ -]CHANGE:/m.test(commit.body);
   // A breaking feature is still an addition, so the type keeps its section and
   // the entry carries the mark. A breaking change to a type that is normally
   // noise is the exception: it surfaces under Changed rather than disappearing.
@@ -24,7 +26,7 @@ export function toEntry(commit) {
   // Older subjects carry typographic characters and British spellings that the
   // house style rejects. The commit is immutable; the rendered entry is not, so
   // it is cleaned here with the same pass every tool result goes through.
-  return { section, scope, subject: stripFingerprint(subject), hash: commit.hash, breaking: isBreaking };
+  return { section, scope, subject: stripFingerprint(description), hash: commit.hash, breaking: isBreaking };
 }
 
 /** Render one release's entries, grouped by section. */

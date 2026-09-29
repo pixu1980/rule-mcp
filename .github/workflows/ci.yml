@@ -143,6 +143,30 @@ jobs:
       - name: Every commit follows type(scope)
         run: node scripts/build/commit-types/index.mjs --lint-range "${{ github.event.pull_request.base.sha || github.event.before }}" HEAD
 
+  release-preview:
+    name: Release preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      # The next version is a function of the commits since the newest tag, so
+      # it is derived rather than chosen. This job only reports it: the tag and
+      # the release stay on the tag-triggered path in release.yml.
+      - name: Next semantic version from the commits
+        run: node --import ./scripts/alias-hook.mjs scripts/build/version/index.mjs --next
+      # The changelog is generated from the commits, and the release headings
+      # come from the tags. A clone without tags cannot define the boundary, so
+      # the gate runs only when the tags are there - and then it is a gate.
+      - name: Changelog is current when tags define the boundary
+        run: |
+          if git tag | grep -q .; then
+            node --import ./scripts/alias-hook.mjs scripts/build/changelog/index.mjs --check
+          else
+            echo "no tags in this clone; the changelog boundary is undefined, skipping"
+          fi
+
   audit:
     name: Security audit
     runs-on: ubuntu-latest

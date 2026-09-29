@@ -25,5 +25,3 @@ export const SECTION_FOR_TYPE = {
 
 /** The order sections appear in, when present. */
 export const SECTION_ORDER = ["Added", "Changed", "Fixed", "Removed", "Documentation"];
-
-export const SUBJECT = /^(?<type>[a-z]+)\((?<scope>[a-z0-9._-]+)\)(?<breaking>!)?: (?<subject>.+)$/;
