@@ -22,12 +22,12 @@ Gate: `pnpm test:all` exits 0 (`all: ok`), and `pix_tool_check` passes on all 27
 
 ### ADR Log
 
-| #    | Status   | Title                                                                 | Tags                              | Decision                                                                                                                       |
-| ---- | -------- | --------------------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| 120  | accepted | Fold the per-operation persona commands into one per role...          | commands, personas, prompts, breaking | One prompt, command and skill per role; the depth is read from the request; operations stay cumulative; old names deleted.     |
-| 117  | accepted | Area slash commands are collectors only; leaves route from the prompt | commands, prompts, areas          | Slash and MCP area prompts emit only hub collectors; leaves route from free text.                                              |
-| 116  | accepted | Fold check slash siblings into the parent via keyword intent          | commands, guardrails, breaking    | Delete every `/pix-area-*-check` sibling; keep `/pix-check`; fold check intent into the parent.                                |
-| 115  | accepted | Map tools, slash commands, and skills into one surface                | tools, commands, skills           | One generated Command/Tool/Skill map; removed `pix_tool_component`, `pix_tool_scaffold`, `pix_tool_a11y_report`.               |
+| #   | Status   | Title                                                                 | Tags                                  | Decision                                                                                                                   |
+| --- | -------- | --------------------------------------------------------------------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| 120 | accepted | Fold the per-operation persona commands into one per role...          | commands, personas, prompts, breaking | One prompt, command and skill per role; the depth is read from the request; operations stay cumulative; old names deleted. |
+| 117 | accepted | Area slash commands are collectors only; leaves route from the prompt | commands, prompts, areas              | Slash and MCP area prompts emit only hub collectors; leaves route from free text.                                          |
+| 116 | accepted | Fold check slash siblings into the parent via keyword intent          | commands, guardrails, breaking        | Delete every `/pix-area-*-check` sibling; keep `/pix-check`; fold check intent into the parent.                            |
+| 115 | accepted | Map tools, slash commands, and skills into one surface                | tools, commands, skills               | One generated Command/Tool/Skill map; removed `pix_tool_component`, `pix_tool_scaffold`, `pix_tool_a11y_report`.           |
 
 Full log: `docs/adr/ADR.md` (120 entries).
 

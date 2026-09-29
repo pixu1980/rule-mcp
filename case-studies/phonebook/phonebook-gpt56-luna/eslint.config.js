@@ -8,9 +8,18 @@ export default [
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
-      globals: { window: "readonly", document: "readonly", console: "readonly", process: "readonly", __dirname: "readonly", module: "readonly", require: "readonly", JSX: "readonly" },
+      globals: {
+        window: "readonly",
+        document: "readonly",
+        console: "readonly",
+        process: "readonly",
+        __dirname: "readonly",
+        module: "readonly",
+        require: "readonly",
+        JSX: "readonly",
+      },
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
-    rules: { "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }] },
+    rules: { "no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }] },
   },
 ];

@@ -4,13 +4,13 @@
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Frontend | React 19, Vite 6, TypeScript |
-| Backend | Express 5, TypeScript, Zod |
-| Design | CSS custom properties, Chivo/Inter |
-| Tools | pnpm workspaces, Biome |
-| A11y | WCAG 2.2 AA, semantic HTML |
+| Layer    | Technology                         |
+| -------- | ---------------------------------- |
+| Frontend | React 19, Vite 6, TypeScript       |
+| Backend  | Express 5, TypeScript, Zod         |
+| Design   | CSS custom properties, Chivo/Inter |
+| Tools    | pnpm workspaces, Biome             |
+| A11y     | WCAG 2.2 AA, semantic HTML         |
 
 ## Quick Start
 
@@ -65,12 +65,12 @@ pnpm dev
 
 ## API Endpoints
 
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/api/v1/health` | Health check |
-| GET | `/api/v1/bookmarks` | List bookmarks (paginated) |
-| POST | `/api/v1/bookmarks` | Create bookmark (triggers scrape) |
-| DELETE | `/api/v1/bookmarks/:id` | Delete bookmark |
+| Method | Path                    | Description                       |
+| ------ | ----------------------- | --------------------------------- |
+| GET    | `/api/v1/health`        | Health check                      |
+| GET    | `/api/v1/bookmarks`     | List bookmarks (paginated)        |
+| POST   | `/api/v1/bookmarks`     | Create bookmark (triggers scrape) |
+| DELETE | `/api/v1/bookmarks/:id` | Delete bookmark                   |
 
 ## Design System
 

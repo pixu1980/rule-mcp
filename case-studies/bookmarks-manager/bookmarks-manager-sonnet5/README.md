@@ -51,12 +51,12 @@ standalone: `cd frontend && pnpm exec playwright install chromium && pnpm test:a
 See [`backend/api/openapi.yaml`](backend/api/openapi.yaml) for the full
 OpenAPI 3.1 contract. Summary:
 
-| Method | Path                    | Purpose                                  |
-|--------|-------------------------|-------------------------------------------|
-| POST   | `/api/v1/bookmarks`     | Scrape a URL and save it as a bookmark    |
+| Method | Path                    | Purpose                                                                 |
+| ------ | ----------------------- | ----------------------------------------------------------------------- |
+| POST   | `/api/v1/bookmarks`     | Scrape a URL and save it as a bookmark                                  |
 | GET    | `/api/v1/bookmarks`     | Paginated list (`offset`/`limit`), newest first, `X-Total-Count` header |
-| GET    | `/api/v1/bookmarks/:id` | Fetch a single bookmark                  |
-| DELETE | `/api/v1/bookmarks/:id` | Delete a bookmark                        |
+| GET    | `/api/v1/bookmarks/:id` | Fetch a single bookmark                                                 |
+| DELETE | `/api/v1/bookmarks/:id` | Delete a bookmark                                                       |
 
 Errors always have the shape:
 

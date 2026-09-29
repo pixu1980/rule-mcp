@@ -11,7 +11,7 @@ While completing the persona split (ADR 045), the user asked for a second, large
 
 ## Decision
 
-Restructure the command surface: router pix-galaxy-mcp -> pix; area prompts become pix-area-*; delete pix-a11y-audit, pix-code-review, the standalone pix-compression command, pix-new-feature, pix-pull-request, pix-setup-project, pix-write-tests and pix-tdd; create a pix-process-tdd skill that absorbs tdd + write-tests; make compression implicit in every command body (the compression *skill* later moves under process as `pix-process-compression` in ADR 113). The command set is registry-driven end to end: scripts/install-agent-commands.sh renders from the registry, agent-commands --remove and scripts/uninstall.sh sweep the pix-* namespace, so renamed/deleted commands cannot survive in any agent.
+Restructure the command surface: router pix-galaxy-mcp -> pix; area prompts become pix-area-_; delete pix-a11y-audit, pix-code-review, the standalone pix-compression command, pix-new-feature, pix-pull-request, pix-setup-project, pix-write-tests and pix-tdd; create a pix-process-tdd skill that absorbs tdd + write-tests; make compression implicit in every command body (the compression *skill* later moves under process as `pix-process-compression` in ADR 113). The command set is registry-driven end to end: scripts/install-agent-commands.sh renders from the registry, agent-commands --remove and scripts/uninstall.sh sweep the pix-_ namespace, so renamed/deleted commands cannot survive in any agent.
 
 ## Consequences
 

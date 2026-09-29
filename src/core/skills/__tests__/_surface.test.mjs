@@ -12,16 +12,7 @@ import { test } from "node:test";
 
 import { areasOfSkills, filterSurfaceSkills, isRootSkill, parseSurface } from "../_surface.js";
 
-const SKILLS = [
-  "pix-ai",
-  "pix-ai-prompting",
-  "pix-data",
-  "pix-data-sql",
-  "pix-frontend",
-  "pix-frontend-react",
-  "pix-process",
-  "pix-process-tdd",
-];
+const SKILLS = ["pix-ai", "pix-ai-prompting", "pix-data", "pix-data-sql", "pix-frontend", "pix-frontend-react", "pix-process", "pix-process-tdd"];
 
 test("parseSurface reads presets", () => {
   assert.deepEqual(parseSurface("minimal"), { preset: "minimal" });

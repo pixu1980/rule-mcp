@@ -24,7 +24,7 @@ finding stays open. This file is deleted by the run that finds nothing open.
   - [ ] **3.1**: Change scrapeUrl to `redirect: "manual"` and loop over up to 5 redirects, calling assertSafeUrl on each Location target before following it
   - [ ] **3.2**: Extract the redirect-following logic into a small helper (e.g. followSafeRedirects) so scrapeUrl stays readable
   - [ ] **3.3**: Guard the per-hop byte and timeout budget across the whole redirect chain, not per request
-  - [ ] **3.4**: Add a vitest case in backend/src/scraping/__tests__/scrape.service.test.ts: mocked initial URL returns 302 to http://127.0.0.1/ and scrapeUrl must throw URL_NOT_ALLOWED
+  - [ ] **3.4**: Add a vitest case in backend/src/scraping/**tests**/scrape.service.test.ts: mocked initial URL returns 302 to http://127.0.0.1/ and scrapeUrl must throw URL_NOT_ALLOWED
   - [ ] **3.5**: Gate: new test passes plus existing 8/8 backend tests pass
 - [ ] **Step 4 - ARCH-004 (medium)**: Bookmark list silently truncates at 100: frontend fetchBookmarks hardcodes limit=100 and ignores the pagination envelope (x-total-count header) the backend already returns
   - [ ] **4.1**: Decide intended behavior with the user: unbounded list for a case study, or real pagination UI (load more / infinite scroll)

@@ -34,8 +34,8 @@ frameworks: [all]
 | [pix-process-bmad](../pix-process-bmad/SKILL.md)               | BMAD Method Framework                               | Full-project AI-driven delivery lifecycle                                         |
 | [pix-process-code-review](../pix-process-code-review/SKILL.md) | Code Review Workflow                                | Preparing and conducting risk-based PR/MR review                                  |
 | [pix-process-changelog](../pix-process-changelog/SKILL.md)     | Changelog generated from the commits                | Adding a changelog, or fixing one that drifted from the history                   |
-| `pix_tool_compress` / `/pix-compress` | Say it in fewer tokens                              | Writing answers, commits, reviews, docs without filler                            |
-| `pix_tool_handoff` / `/pix-handoff`         | LLM Session Handoff                                 | Closing a session, resuming in new chat                                           |
+| `pix_tool_compress` / `/pix-compress`                          | Say it in fewer tokens                              | Writing answers, commits, reviews, docs without filler                            |
+| `pix_tool_handoff` / `/pix-handoff`                            | LLM Session Handoff                                 | Closing a session, resuming in new chat                                           |
 | [pix-process-npm-release](../pix-process-npm-release/SKILL.md) | Secure npm Release                                  | Publishing a package: Trusted Publishing, staged releases, supply-chain hardening |
 | [pix-process-simplicity](../pix-process-simplicity/SKILL.md)   | Build Only What Was Asked                           | Before and during implementation, to keep the change minimal                      |
 

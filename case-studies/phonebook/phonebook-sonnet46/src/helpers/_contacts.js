@@ -6,10 +6,18 @@
 
 /** @type {string[]} Ordered avatar palette — 12 tokens. */
 const AVATAR_PALETTE = [
-  "var(--avatar-0)", "var(--avatar-1)", "var(--avatar-2)",
-  "var(--avatar-3)", "var(--avatar-4)", "var(--avatar-5)",
-  "var(--avatar-6)", "var(--avatar-7)", "var(--avatar-8)",
-  "var(--avatar-9)", "var(--avatar-10)", "var(--avatar-11)",
+  "var(--avatar-0)",
+  "var(--avatar-1)",
+  "var(--avatar-2)",
+  "var(--avatar-3)",
+  "var(--avatar-4)",
+  "var(--avatar-5)",
+  "var(--avatar-6)",
+  "var(--avatar-7)",
+  "var(--avatar-8)",
+  "var(--avatar-9)",
+  "var(--avatar-10)",
+  "var(--avatar-11)",
 ];
 
 /**
@@ -112,8 +120,7 @@ export function filterContacts(contacts, query, group) {
 export function groupByLetter(sortedContacts) {
   const map = new Map();
   sortedContacts.forEach((c) => {
-    const letter =
-      (c.lastName?.[0] ?? c.firstName?.[0] ?? "#").toUpperCase();
+    const letter = (c.lastName?.[0] ?? c.firstName?.[0] ?? "#").toUpperCase();
     if (!map.has(letter)) map.set(letter, []);
     map.get(letter).push(c);
   });

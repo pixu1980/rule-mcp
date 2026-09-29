@@ -11,7 +11,13 @@ export function normalizeContact(contact) {
   const firstName = String(contact.firstName ?? "").trim();
   const lastName = String(contact.lastName ?? "").trim();
   const displayName = [firstName, lastName].filter(Boolean).join(" ") || "Unnamed contact";
-  return { ...contact, firstName, lastName, displayName, searchable: [displayName, contact.company, contact.email, contact.tags].filter(Boolean).join(" ").toLowerCase() };
+  return {
+    ...contact,
+    firstName,
+    lastName,
+    displayName,
+    searchable: [displayName, contact.company, contact.email, contact.tags].filter(Boolean).join(" ").toLowerCase(),
+  };
 }
 
 /**
@@ -26,9 +32,11 @@ export function getVisibleContacts(contacts, { query = "", view = "all" } = {}) 
     .map(normalizeContact)
     .filter((contact) => (view === "favorites" ? contact.favorite : true))
     .filter((contact) => (normalizedQuery ? contact.searchable.includes(normalizedQuery) : true));
-  return visibleContacts.sort((first, second) => view === "recent"
-    ? new Date(String(second.updatedAt)).getTime() - new Date(String(first.updatedAt)).getTime()
-    : String(first.displayName).localeCompare(String(second.displayName)));
+  return visibleContacts.sort((first, second) =>
+    view === "recent"
+      ? new Date(String(second.updatedAt)).getTime() - new Date(String(first.updatedAt)).getTime()
+      : String(first.displayName).localeCompare(String(second.displayName)),
+  );
 }
 
 /**
@@ -37,8 +45,12 @@ export function getVisibleContacts(contacts, { query = "", view = "all" } = {}) 
  * @returns {string} Two uppercase initials or question marks.
  */
 export function getInitials(contact) {
-  const first = String(contact.firstName ?? "").trim().charAt(0);
-  const last = String(contact.lastName ?? "").trim().charAt(0);
+  const first = String(contact.firstName ?? "")
+    .trim()
+    .charAt(0);
+  const last = String(contact.lastName ?? "")
+    .trim()
+    .charAt(0);
   return `${first}${last}`.toUpperCase() || "??";
 }
 

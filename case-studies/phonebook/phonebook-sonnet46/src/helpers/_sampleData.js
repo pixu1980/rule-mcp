@@ -451,9 +451,7 @@ export const SAMPLE_CONTACTS = [
     },
     birthday: "1985-05-09",
     notes: "Reserve a table two months in advance. His sourdough is otherworldly.",
-    social: [
-      { id: "s1", platform: "instagram", handle: "@chefharperwhite" },
-    ],
+    social: [{ id: "s1", platform: "instagram", handle: "@chefharperwhite" }],
     groups: ["friends"],
     favorite: false,
   },
@@ -521,9 +519,7 @@ export const SAMPLE_CONTACTS = [
       { id: "p1", label: "mobile", value: "+1 (415) 555-0741" },
       { id: "p2", label: "work", value: "+1 (415) 555-0800 x12" },
     ],
-    emails: [
-      { id: "e1", label: "work", value: "aiden.clark@wealthadvisory.com" },
-    ],
+    emails: [{ id: "e1", label: "work", value: "aiden.clark@wealthadvisory.com" }],
     address: {
       street: "One Market Plaza",
       city: "San Francisco",

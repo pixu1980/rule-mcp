@@ -96,7 +96,11 @@ export const PLAN_INTENT_KEYWORDS_LIST = PLAN_INTENT_KEYWORDS.join(", ");
 const TOKEN = /[a-z0-9]+(?:'[a-z]+)?/g;
 
 /** Accents out, lowercase: "criticita" matches "criticità", "analyze" matches "Analyze". */
-const normalize = (text) => text.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+const normalize = (text) =>
+  text
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase();
 
 /** Whole-token membership, so "plane" never matches "plan" and "checkbox" never matches "check". */
 function hasKeyword(text, wanted) {
