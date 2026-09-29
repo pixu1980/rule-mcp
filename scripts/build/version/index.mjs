@@ -28,15 +28,25 @@ import { apply, applyNext, check, reportNext } from "./_commands.mjs";
 
 const [flag, value] = process.argv.slice(2);
 
-if (flag === "--check") {
-  check();
-} else if (flag === "--apply") {
-  apply(value);
-} else if (flag === "--next") {
-  reportNext();
-} else if (flag === "--apply-next") {
-  applyNext();
-} else {
-  process.stderr.write("usage: version/index.mjs (--check|--next|--apply <x.y.z>|--apply-next)\n");
-  process.exitCode = 1;
+switch (flag) {
+  case "--check": {
+    check();
+    break;
+  }
+  case "--apply": {
+    apply(value);
+    break;
+  }
+  case "--next": {
+    reportNext();
+    break;
+  }
+  case "--apply-next": {
+    applyNext();
+    break;
+  }
+  default: {
+    process.stderr.write("usage: version/index.mjs (--check|--next|--apply <x.y.z>|--apply-next)\n");
+    process.exitCode = 1;
+  }
 }

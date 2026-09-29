@@ -54,7 +54,7 @@ test("the strongest bump wins and the deciding commits are named", () => {
 
   assert.equal(bump, "major", "a breaking change outranks a feature");
   assert.deepEqual(
-    reasons.map((reason) => reason.split(" ")[0]),
+    reasons.map((reason) => reason.split(" ", 1)[0]),
     ["aaa1111", "bbb2222", "ccc3333"],
     "the bumping commits are named, the silent one is dropped",
   );
