@@ -33,7 +33,7 @@ export function personaTarget(name) {
  * intent the prompt resolver uses (ADR 120): a plan ask runs the audit, the
  * review and the plan; a review ask runs the audit and the review; anything
  * else runs the audit alone. `rule_tool_plan` hands back the operation contract;
- * `rule_tool_plan_docs` does the trio bookkeeping.
+ * `rule_tool_impersonation` does the trio bookkeeping.
  *
  * @param {{ role: string, roleName: string }} target
  * @returns {string}
@@ -55,7 +55,7 @@ export function personaBody(target) {
     "   APIs, files, dependencies, commands, or requirements not in the evidence.",
     "3. Perform the operation the contract describes and gather what it needs - measure rather",
     "   than assume, and quote commands and their output for every number.",
-    `4. Call \`rule_tool_plan_docs\` with \`role=${target.role}\`, the findings and, when a request was given,`,
+    `4. Call \`rule_tool_impersonation\` with \`role=${target.role}\`, the findings and, when a request was given,`,
     "   the same text as `scope` - it writes/refreshes the trio bookkeeping (headers, tables, statuses)",
     "   and leaves findings outside the scope untouched. Fill in the evidence, the finding wording and the steps.",
     "5. If a decision belongs to the user, stop and ask instead of guessing.",

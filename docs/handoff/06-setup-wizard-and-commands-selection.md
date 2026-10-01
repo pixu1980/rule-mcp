@@ -7,7 +7,7 @@
 
 ## What happened
 
-The full-screen installer from `webidoo-ai-mcp` was adopted here as the
+The full-screen installer from the `source` twin was adopted here as the
 technology, carrying this repository's own install content. `src/cli/setup/`
 holds the whole flow; `scripts/install.{sh,ps1}` and `scripts/uninstall.{sh,ps1}`
 are bootstraps that check node, resolve the binary and forward every argument

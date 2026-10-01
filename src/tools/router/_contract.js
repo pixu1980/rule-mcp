@@ -14,7 +14,7 @@
  */
 
 /** The tool surface's version. Bumped whenever a tool is renamed or removed. */
-export const TOOL_CONTRACT_VERSION = "1.0.0";
+export const TOOL_CONTRACT_VERSION = "1.1.0";
 
 /**
  * Renames the surface still answers to.
@@ -26,7 +26,9 @@ export const TOOL_CONTRACT_VERSION = "1.0.0";
  *
  * @type {Array<{ from: string, to: string, removeAfter: string }>}
  */
-export const DEPRECATIONS = [];
+export const DEPRECATIONS = [
+  { from: "rule_tool_plan_docs", to: "rule_tool_impersonation", removeAfter: "0.3.0" },
+];
 
 /** Aliases already warned about, so a client that calls in a loop is told once. */
 const warned = new Set();

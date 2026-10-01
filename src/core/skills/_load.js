@@ -76,7 +76,7 @@ export async function registerCoreTools() {
   registerCheckTool();
   registerDetectTool();
   // Action tools: the collection-helpers of the rule surface. All read-only
-  // except the plan/plan-docs writers, which are operationally useful in every
+  // except the plan/impersonation writers, which are operationally useful in every
   // mode.
   registerActionTools();
   registerHandonTool();

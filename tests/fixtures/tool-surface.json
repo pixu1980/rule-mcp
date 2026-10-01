@@ -1,5 +1,5 @@
 {
-  "count": 109,
+  "count": 110,
   "tools": [
     "pix_tool",
     "rule_tool_ai",
@@ -35,6 +35,7 @@
     "rule_tool_devops_observability",
     "rule_tool_devops_testing",
     "rule_tool_fix",
+    "rule_tool_structural",
     "rule_tool_frontend",
     "rule_tool_frontend_angular",
     "rule_tool_frontend_custom_element",
@@ -56,7 +57,7 @@
     "rule_tool_meta_nuxt",
     "rule_tool_meta_remix",
     "rule_tool_plan",
-    "rule_tool_plan_docs",
+    "rule_tool_impersonation",
     "rule_tool_platform",
     "rule_tool_platform_agent",
     "rule_tool_platform_auth",

@@ -11,7 +11,7 @@ const MUTATING_TOOLS = new Set([
   "rule_tool_apply",
   "rule_tool_fix",
   "rule_tool_process_adr",
-  "rule_tool_plan_docs",
+  "rule_tool_impersonation",
   "rule_tool_handoff",
   "rule_tool_update",
   "rule_tool_handon",

@@ -117,7 +117,7 @@ export function registerAiTool() {
             role: persona.id,
             title: persona.role,
             tool: "rule_tool_plan",
-            how: `Call rule_tool_plan with role "${persona.id}", then rule_tool_plan_docs with the findings.`,
+            how: `Call rule_tool_plan with role "${persona.id}", then rule_tool_impersonation with the findings.`,
           },
         }),
         scope_contract: SCOPE_CONTRACT,

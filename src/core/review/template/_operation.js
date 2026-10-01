@@ -11,7 +11,7 @@ function scopedLines(scope) {
     ? [
         "",
         `The scope of this run is binding: ${scope}. The document header states it, and every finding`,
-        "cites evidence inside it. Pass `scope` to `rule_tool_plan_docs` so findings outside the scope",
+        "cites evidence inside it. Pass `scope` to `rule_tool_impersonation` so findings outside the scope",
         "stay untouched rather than flipped to resolved.",
       ]
     : [];
@@ -28,7 +28,7 @@ function commonLines(role, scope) {
     "Run `rule_tool_check` with rule-styleguide-english (or rule-styleguide-markdown) over each written",
     "document and iterate until `allPass: true` before closing the run.",
     "",
-    "Call `rule_tool_plan_docs` with this role and the findings of this run rather than writing that",
+    "Call `rule_tool_impersonation` with this role and the findings of this run rather than writing that",
     "bookkeeping by hand: it writes the headers, tables and plan checklist, merges the findings against the",
     "flips the ones you no longer report to resolved, prunes what was already resolved and deletes the",
     "plan when nothing is open. The evidence, the wording of each finding and what each step takes are",

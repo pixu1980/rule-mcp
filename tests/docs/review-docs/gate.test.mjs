@@ -11,7 +11,7 @@ import { FINDINGS, project, syncRoleDocs, validateTrio } from "./_trio.fixture.m
 // (ADR 089); a spawned process registers it as every entry point does.
 const ALIAS_HOOK = fileURLToPath(new URL("../../../scripts/alias-hook.mjs", import.meta.url));
 
-// The rule_tool_plan_docs tool-call tests land with the MCP surface phase
+// The rule_tool_impersonation tool-call tests land with the MCP surface phase
 // (item 9); the module behavior is pinned above and below this gap.
 // ── C.3: the gate over the trio ──
 

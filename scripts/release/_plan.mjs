@@ -21,6 +21,9 @@ export const RELEASE_BRANCH = "main";
 /** The remote a release is pushed to. */
 export const RELEASE_REMOTE = "origin";
 
+/** A bare `x.y.z`, optionally with a prerelease suffix. */
+export const VERSION_SHAPE = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/u;
+
 /**
  * Run git in a directory and return its trimmed output; a failure throws.
  *
@@ -52,12 +55,43 @@ function manifestVersion(cwd) {
 }
 
 /**
+ * Resolve the next version: an explicit force wins; otherwise the commits decide.
+ *
+ * @param {{ bump: string, version: string, commits: number }} answer
+ * @param {string | null | undefined} forced
+ * @returns {{ next: string, bump: string, commits: number, refusal?: string }}
+ */
+export function resolveReleaseVersion(answer, forced) {
+  if (forced == null || forced === "") {
+    const next = answer.bump === "none" ? "" : answer.version;
+
+    return {
+      next,
+      bump: answer.bump,
+      commits: answer.commits,
+      ...(next ? {} : { refusal: "nothing to release since the newest tag: no feat, fix or breaking change" }),
+    };
+  }
+
+  if (!VERSION_SHAPE.test(forced)) {
+    return {
+      next: "",
+      bump: "forced",
+      commits: answer.commits,
+      refusal: `--version ${forced} is not a SemVer x.y.z[-prerelease]`,
+    };
+  }
+
+  return { next: forced, bump: "forced", commits: answer.commits };
+}
+
+/**
  * Read the release this repository would cut now.
  *
- * @param {{ cwd?: string, fetch?: boolean }} [options]
+ * @param {{ cwd?: string, fetch?: boolean, version?: string | null }} [options]
  * @returns {Promise<{ refusals: string[], branch: string, current: string, next: string, bump: string, tag: string, ahead: number, behind: number, commits: number }>}
  */
-export async function planRelease({ cwd = process.cwd(), fetch = true } = {}) {
+export async function planRelease({ cwd = process.cwd(), fetch = true, version = null } = {}) {
   const refusals = [];
 
   if (fetch) {
@@ -92,12 +126,16 @@ export async function planRelease({ cwd = process.cwd(), fetch = true } = {}) {
 
   const current = manifestVersion(cwd);
   const answer = deriveNextVersion(cwd, current);
-  const next = answer.bump === "none" ? "" : answer.version;
+  const resolved = resolveReleaseVersion(answer, version);
+
+  if (resolved.refusal) {
+    refusals.push(resolved.refusal);
+  }
+
+  const next = resolved.next;
   const tag = next ? `v${next}` : "";
 
-  if (!next) {
-    refusals.push(`nothing to release since the newest tag: no feat, fix or breaking change`);
-  } else if (exists(cwd, `refs/tags/${tag}`)) {
+  if (next && exists(cwd, `refs/tags/${tag}`)) {
     refusals.push(`the tag ${tag} already exists`);
   }
 
@@ -106,10 +144,10 @@ export async function planRelease({ cwd = process.cwd(), fetch = true } = {}) {
     branch,
     current,
     next,
-    bump: answer.bump,
+    bump: resolved.bump,
     tag,
     ahead,
     behind,
-    commits: answer.commits,
+    commits: resolved.commits,
   };
 }

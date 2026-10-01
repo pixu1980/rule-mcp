@@ -71,7 +71,7 @@ test("persona command bodies route through the tools and carry the depth intent"
     }
 
     assert.match(command.body, /rule_tool_plan/, `${command.name}: body must get the contract from rule_tool_plan`);
-    assert.match(command.body, /rule_tool_plan_docs/, `${command.name}: body must hand the trio to rule_tool_plan_docs`);
+    assert.match(command.body, /rule_tool_impersonation/, `${command.name}: body must hand the trio to rule_tool_impersonation`);
     assert.match(command.body, /commit/, `${command.name}: body must close with a scoped commit`);
     assert.match(command.body, /Depth intent/, `${command.name}: body must state the depth rule`);
     assert.match(command.body, /operation=plan/, `${command.name}: a plan ask runs the deepest operation`);

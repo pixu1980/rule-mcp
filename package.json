@@ -1,6 +1,6 @@
 {
   "name": "rule-mcp",
-  "version": "0.2.0-rc",
+  "version": "0.1.0-beta",
   "description": "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "type": "module",
   "license": "MIT",

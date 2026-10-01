@@ -85,7 +85,7 @@
 export const TOOL_SURFACE_BUDGET_TOKENS = 26_000;
 
 // The first raise on the rule surface happened when the 6 item-9 action tools
-// landed (plan, plan-docs, stats, usage, a11y_report, process_handon at 97
+// landed (plan, impersonation, stats, usage, a11y_report, process_handon at 97
 // tools): their schemas are naturally wide (usage carries the agent's token
 // fields one by one), a 400-token trim of descriptions was taken first, and
 // the remaining ~870 tokens are the schemas' real weight rather than

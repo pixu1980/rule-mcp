@@ -47,7 +47,7 @@ const skillContent = (role) => {
     '- otherwise: `operation: "audit"`.',
     "",
     "Then follow the returned contract: load the evidence skills it names, measure rather than assume,",
-    "call `rule_tool_plan_docs` with the findings, and finish with a conventional commit.",
+    "call `rule_tool_impersonation` with the findings, and finish with a conventional commit.",
     "",
   ].join("\n");
 };

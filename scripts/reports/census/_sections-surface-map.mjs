@@ -20,6 +20,7 @@ const COMMAND_TO_TOOL = {
   "rule-check": "rule_tool_check",
   "rule-fix": "rule_tool_fix",
   "rule-compress": "rule_tool_compress",
+  "rule-git": "rule_tool_git",
   "rule-handoff": "rule_tool_handoff",
   "rule-handon": "rule_tool_handon",
   "rule-init": "rule_tool_init",

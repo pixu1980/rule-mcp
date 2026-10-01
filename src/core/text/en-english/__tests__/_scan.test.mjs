@@ -59,6 +59,6 @@ test("scanDocumentForForeign ignores fenced code, inline code and urls", () => {
 test("scanDocumentForForeign ignores e-mail addresses", () => {
   // The domain suffix is a Portuguese function word, so an unsplit author
   // address failed every ADR rule_tool_process_adr generated.
-  assert.deepEqual(scanDocumentForForeign("- **Author**: Emiliano Pisu <emiliano.pisu@webidoo.com>"), [], "an address is an identifier, not prose");
+  assert.deepEqual(scanDocumentForForeign("- **Author**: Emiliano Pisu <emiliano.pisu@example.com>"), [], "an address is an identifier, not prose");
   assert.deepEqual(scanDocumentForForeign("Contact first.last@example.co.uk today"), [], "a long address is stripped whole");
 });
