@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Command / Tool / Skill map (129)
+## Command / Tool / Skill map (130)
 
 One row per slash command, then every catalog skill that has no slash of its
 own (ADR 117: leaf skills are reached through area hubs or the router), then
@@ -138,6 +138,7 @@ Regenerate with `pnpm census`.
 | -                          | `pix_tool_ui_design_system`          | `pix-ui-design-system`          | Use when creating production-grade UI components and design systems.                                                                                                                                                                                             |
 | -                          | `pix_tool_search`                    | -                               | Semantic search across ALL pix skills using BM25 ranking.                                                                                                                                                                                                        |
 | -                          | `pix_tool_detect`                    | -                               | Detect project framework, TypeScript usage, and build tool from package.json.                                                                                                                                                                                    |
+| -                          | `pix_tool_structural`                | -                               | Declare current task structural or architectural.                                                                                                                                                                                                                |
 | -                          | `pix_tool_git`                       | -                               | Audit the feature history and normalize it: base branch, merge base, commit range, Conventional Commit violations and merge commits.                                                                                                                             |
 | -                          | `pix_tool_plan`                      | -                               | Ask expert review persona to audit, review or plan this project; returns operation contract.                                                                                                                                                                     |
 | -                          | `pix_tool_audit`                     | -                               | Run audit as expert review persona; returns audit operation contract.                                                                                                                                                                                            |
