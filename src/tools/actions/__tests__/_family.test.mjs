@@ -15,7 +15,7 @@ test("registerActionTools mints the action-family tools", () => {
 
   const names = new Set(listTools().map((tool) => tool.name));
 
-  for (const name of ["pix_tool_compress", "pix_tool_git", "pix_tool_plan", "pix_tool_plan_docs", "pix_tool_stats", "pix_tool_sync", "pix_tool_usage", "pix_tool_update"]) {
+  for (const name of ["pix_tool_compress", "pix_tool_git", "pix_tool_plan", "pix_tool_impersonation", "pix_tool_stats", "pix_tool_sync", "pix_tool_usage", "pix_tool_update"]) {
     assert.ok(names.has(name), `${name} is registered by the family`);
   }
 });

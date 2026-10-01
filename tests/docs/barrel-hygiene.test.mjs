@@ -76,11 +76,11 @@ test("the six core helpers live in owning folders, not as src/core siblings", ()
 });
 
 test("the six action tools live behind src/tools/actions, not as src/tools siblings", () => {
-  const leftovers = ["_compress.js", "_plan.js", "_plan-docs.js", "_stats.js", "_update.js", "_usage.js"].filter((name) => existsSync(join(src, "tools", name)));
+  const leftovers = ["_compress.js", "_plan.js", "_impersonation.js", "_stats.js", "_update.js", "_usage.js"].filter((name) => existsSync(join(src, "tools", name)));
 
   assert.deepEqual(leftovers, [], "fold each action tool behind the actions barrel");
 
-  for (const name of leftovers.length === 0 ? ["_compress.js", "_plan.js", "_plan-docs.js", "_stats.js", "_update.js", "_usage.js"] : []) {
+  for (const name of leftovers.length === 0 ? ["_compress.js", "_plan.js", "_impersonation.js", "_stats.js", "_update.js", "_usage.js"] : []) {
     assert.ok(existsSync(join(src, "tools/actions", name)), `${name} belongs under actions`);
   }
 
@@ -89,7 +89,7 @@ test("the six action tools live behind src/tools/actions, not as src/tools sibli
   assert.match(loader, /registerActionTools/, "the catalog calls one family registrar");
   assert.doesNotMatch(
     loader,
-    /registerCompressTool|registerPlanTool|registerPlanDocsTool|registerStatsTool|registerUsageTool|registerUpdateTool/,
+    /registerCompressTool|registerPlanTool|registerImpersonationTool|registerStatsTool|registerUsageTool|registerUpdateTool/,
     "and does not name the six siblings",
   );
 });

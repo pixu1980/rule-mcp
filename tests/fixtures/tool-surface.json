@@ -1,5 +1,5 @@
 {
-  "count": 109,
+  "count": 110,
   "tools": [
     "pix_tool",
     "pix_tool_ai",
@@ -35,6 +35,7 @@
     "pix_tool_devops_observability",
     "pix_tool_devops_testing",
     "pix_tool_fix",
+    "pix_tool_structural",
     "pix_tool_frontend",
     "pix_tool_frontend_angular",
     "pix_tool_frontend_custom_element",
@@ -56,7 +57,7 @@
     "pix_tool_meta_nuxt",
     "pix_tool_meta_remix",
     "pix_tool_plan",
-    "pix_tool_plan_docs",
+    "pix_tool_impersonation",
     "pix_tool_platform",
     "pix_tool_platform_agent",
     "pix_tool_platform_auth",

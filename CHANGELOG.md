@@ -13,8 +13,6 @@ dependency bump is one nobody reads. All of them are in `git log`.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and the versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.0-rc]
-
 ## [0.1.0-beta]
 
 ### Added

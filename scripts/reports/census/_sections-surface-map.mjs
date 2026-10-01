@@ -20,6 +20,7 @@ const COMMAND_TO_TOOL = {
   "pix-check": "pix_tool_check",
   "pix-fix": "pix_tool_fix",
   "pix-compress": "pix_tool_compress",
+  "pix-git": "pix_tool_git",
   "pix-handoff": "pix_tool_handoff",
   "pix-handon": "pix_tool_handon",
   "pix-init": "pix_tool_init",

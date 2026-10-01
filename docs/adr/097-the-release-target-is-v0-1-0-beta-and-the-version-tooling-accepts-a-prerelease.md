@@ -1,9 +1,13 @@
 # 097: The release target is v0.1.0-beta, and the version tooling accepts a prerelease
 
 - **Date**: 2026-09-15
-- **Status**: accepted
+- **Status**: superseded
 - **Tags**: release, versioning, changelog, workflow
 - **Author**: Emiliano Pisu <pisuemiliano.1980@gmail.com>
+
+> Superseded by [ADR 133](133-first-release-is-v0-1-0-then-semver-from-commits.md) on the
+> release target: the first published tag is `v0.1.0`, not `v0.1.0-beta`. The
+> tooling still accepts a prerelease suffix when one is forced.
 
 ## Context
 

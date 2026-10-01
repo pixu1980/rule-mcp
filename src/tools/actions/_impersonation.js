@@ -1,15 +1,15 @@
 // SPDX-FileCopyrightText: 2025-2026 pixu1980
 // SPDX-License-Identifier: MIT
 /**
- * @module tools/plan-docs
+ * @module tools/impersonation
  *
- * `pix_tool_plan_docs` - keep a review persona's audit/review/plan trio in sync
- * (personas C.2).
+ * `pix_tool_impersonation` - keep a review persona's audit/review/plan trio in
+ * sync (personas C.2). Formerly `pix_tool_plan_docs`.
  *
  * `pix_tool_plan` hands the agent the operation; this tool does the part of it
  * that is bookkeeping rather than judgment. The agent reports what it found and
- * gets back three documents whose headers, tables, checklist and statuses are already
- * correct, so the only thing left to write is the content.
+ * gets back three documents whose headers, tables, checklist and statuses are
+ * already correct, so the only thing left to write is the content.
  *
  * @see module:core/review/docs - the merge rules and the file formats
  */
@@ -29,20 +29,21 @@ const FindingSchema = z.object({
   steps: z.array(z.string()).optional().describe("Sub-steps for the plan checklist, one action each"),
 });
 
-const PlanDocsSchema = z.object({
+const ImpersonationSchema = z.object({
   role: z.string().describe("Role id"),
   findings: z.array(FindingSchema).optional().describe("What this run found. Anything omitted counts as closed - unless a scope is set."),
   scope: z.string().optional().describe("The binding scope of a scoped run: findings outside it stay untouched instead of resolving."),
   projectDir: z.string().optional(),
 });
 
-/** Register the pix_tool_plan_docs tool. */
-export function registerPlanDocsTool() {
+/** Register the pix_tool_impersonation tool. */
+export function registerImpersonationTool() {
   registerTool({
-    name: "pix_tool_plan_docs",
+    name: "pix_tool_impersonation",
     entry: "action",
-    description: "Create or refresh the audit/review/plan documents for a review persona run: the bookkeeping half.",
-    zodSchema: PlanDocsSchema,
+    description:
+      "Create or refresh the audit/review/plan documents for a review persona run (impersonation bookkeeping).",
+    zodSchema: ImpersonationSchema,
     advertise: ["role", "findings"],
     handler: async (arguments_) => {
       const { roles: overlays } = loadRoleOverlays({ projectDir: arguments_.projectDir });
