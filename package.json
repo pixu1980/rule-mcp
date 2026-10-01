@@ -67,7 +67,8 @@
     "surface:report": "node --import ./scripts/alias-hook.mjs scripts/reports/tool-surface/index.mjs",
     "wcag:update": "node --import ./scripts/alias-hook.mjs scripts/data/wcag/index.mjs --apply",
     "census": "node --import ./scripts/alias-hook.mjs scripts/reports/census/index.mjs",
-    "census:check": "node --import ./scripts/alias-hook.mjs scripts/reports/census/index.mjs --check"
+    "census:check": "node --import ./scripts/alias-hook.mjs scripts/reports/census/index.mjs --check",
+    "release": "node scripts/release/index.mjs"
   },
   "files": [
     "bin/",

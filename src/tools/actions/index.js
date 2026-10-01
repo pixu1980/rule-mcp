@@ -9,6 +9,7 @@
  */
 import { registerCompressTool } from "./_compress.js";
 import { registerFixTool } from "../fix/index.js";
+import { registerStructuralTool } from "../structural/index.js";
 import { registerGitTool } from "./_git.js";
 import { registerInitTool } from "./_init.js";
 import { registerPlanDocsTool } from "./_plan-docs.js";
@@ -27,6 +28,7 @@ export * from "./_stats.js";
 export * from "./_sync.js";
 export * from "./_update.js";
 export * from "./_usage.js";
+export { registerStructuralTool } from "../structural/index.js";
 
 /**
  * Register every action-family tool. Idempotent at the registry level.
@@ -34,6 +36,7 @@ export * from "./_usage.js";
 export function registerActionTools() {
   registerCompressTool();
   registerFixTool();
+  registerStructuralTool();
   registerGitTool();
   registerInitTool();
   registerPlanTool();

@@ -41,7 +41,7 @@ the package version from anywhere. An error exits 1 and prints to stderr;
 | [`cache`](#pix-galaxy-mcp-cache)                   | 1       | Inspect the on-disk tool cache                                                |
 | [`roles`](#pix-galaxy-mcp-roles)                   | 7       | Manage review persona roles                                                   |
 | [`guard`](#pix-galaxy-mcp-guard)                   | 0       | Permission-guard payload processor (invoked by PreToolUse hooks, reads stdin) |
-| [`update`](#pix-galaxy-mcp-update)                 | 0       | Self-update from the upstream git repo (fast-forward only)                    |
+| [`update`](#pix-galaxy-mcp-update)                 | 0       | Self-update to the newest release tag (or fast-forward when none exist)       |
 | [`agent-commands`](#pix-galaxy-mcp-agent-commands) | 13      | Registry-driven agent slash-command management                                |
 | [`reinstall`](#pix-galaxy-mcp-reinstall)           | 0       | Purge node_modules and pnpm-lock.yaml, install again, refresh the global bin  |
 | [`commit-lint`](#pix-galaxy-mcp-commit-lint)       | 6       | Validate commits against type(scope): subject (the git hooks call this)       |
@@ -466,7 +466,7 @@ Takes no options beyond the global `-h, --help`.
 
 ## pix-galaxy-mcp update
 
-Self-update from the upstream git repo (fast-forward only)
+Self-update to the newest release tag (or fast-forward when none exist)
 
 ```sh
 pix-galaxy-mcp update

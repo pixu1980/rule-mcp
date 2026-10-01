@@ -15,6 +15,10 @@ export function buildBanner(r) {
   }
 
   if (r.updated) {
+    if (r.release) {
+      return `🔄 Updating MCP server - pix-galaxy-mcp upgraded ${r.from || "?"}→${r.to} (${r.release}).`;
+    }
+
     const what = r.changedSkills && r.changedCode ? "skills + code" : r.changedCode ? "code" : r.changedSkills ? "skills" : "";
     const scope = what ? `${what} file(s)` : "file(s)";
     let message = `🔄 Updating MCP server - pix-galaxy-mcp updated ${r.from}→${r.to} (${r.count} ${scope}).`;
@@ -25,6 +29,15 @@ export function buildBanner(r) {
 
     return message;
   }
+
+  if (r.available && r.release) {
+    return `ℹ️ pix-galaxy-mcp ${r.to} (${r.release}) is available. On main it applies itself; elsewhere run \`pix-galaxy-mcp update\`, or set PIX_GALAXY_MCP_AUTO_UPDATE=notify to only hear about it.`;
+  }
+
+  if (r.reason === "not-on-main") {
+    return `ℹ️ pix-galaxy-mcp ${r.to} (${r.release}) is available, but this checkout is on ${r.branch}. Switch to main or run \`pix-galaxy-mcp update\` to move.`;
+  }
+
   // A refused remote is never silent: it means this install's upstream is not
   // the one it ships with, which is either a fork that needs configuring or
   // someone repointing the remote at code of their own.
