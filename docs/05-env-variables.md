@@ -147,6 +147,7 @@ knob documented above can be traced to the code that answers it.
 | Variable                                      | Read in                                                                                                                                                                                                                                                         |
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `RULE_MCP_AUTO_ADR`                     | `src/cli/commands/_configure.js`, `src/tools/adr/_auto-log.js`                                                                                                                                                                                                  |
+| `RULE_MCP_AUTO_UPDATE`                  | `src/core/self-update/_banner.js`, `src/core/self-update/_config.js`                                                                                                                                                                                            |
 | `RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS` | `src/core/self-update/_config.js`                                                                                                                                                                                                                               |
 | `RULE_MCP_CACHE_EXACT_ONLY`             | `src/cli/cache/_stats.js`, `src/core/cache/tool-cache/_config.js`                                                                                                                                                                                               |
 | `RULE_MCP_CHECK_TIMEOUT_MS`             | `src/core/guardrails/guarded/_policy.js`                                                                                                                                                                                                                        |
@@ -189,11 +190,11 @@ knob documented above can be traced to the code that answers it.
 | `RULE_MCP_UPDATE_REMOTE`                | `src/core/self-update/_banner.js`, `src/core/self-update/_config.js`, `src/tools/actions/_update.js`                                                                                                                                                            |
 | `RULE_MCP_UPDATE_REQUIRE_SIGNATURE`     | `src/core/self-update/_banner.js`, `src/core/self-update/_run.js`, `src/tools/actions/_update.js`                                                                                                                                                               |
 
-42 read by the code, 42 documented in the table above.
+43 read by the code, 42 documented in the table above.
 
 Read but undocumented: `RULE_MCP_SKIP_GLOBAL_LINK`, `RULE_MCP_SURFACE`.
 
-Documented but read nowhere in `src/` or `bin/`: `RULE_MCP_TOKENSAVE_AUTOTRACK`, `RULE_MCP_AUTO_UPDATE`.
+Documented but read nowhere in `src/` or `bin/`: `RULE_MCP_TOKENSAVE_AUTOTRACK`.
 
 Regenerate with `pnpm census`.
 

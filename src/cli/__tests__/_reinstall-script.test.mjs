@@ -34,8 +34,8 @@ function scratch() {
   return { dir, bin, log };
 }
 
-const run = (dir, bin) =>
-  spawnSync("bash", [join(dir, "scripts", "reinstall.sh")], {
+const run = (dir, bin, args = []) =>
+  spawnSync("bash", [join(dir, "scripts", "reinstall.sh"), ...args], {
     env: { ...process.env, PATH: `${bin}:${process.env.PATH ?? ""}` },
     encoding: "utf8",
   });
@@ -47,6 +47,16 @@ test("reinstall.sh purges node_modules and the lockfile", () => {
   assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
   assert.equal(existsSync(join(dir, "node_modules")), false, "node_modules is purged");
   assert.equal(existsSync(join(dir, "pnpm-lock.yaml")), false, "the lockfile is purged");
+  rmSync(dir, { recursive: true, force: true });
+});
+
+test("reinstall.sh --keep-lock keeps the lockfile", () => {
+  const { dir, bin } = scratch();
+  const result = run(dir, bin, ["--keep-lock"]);
+
+  assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+  assert.equal(existsSync(join(dir, "node_modules")), false, "node_modules is purged");
+  assert.equal(existsSync(join(dir, "pnpm-lock.yaml")), true, "the lockfile survives");
   rmSync(dir, { recursive: true, force: true });
 });
 

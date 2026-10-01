@@ -52,7 +52,16 @@ export const CHANGELOG_PREAMBLE = [
   "",
 ].join("\n");
 
-export function buildChangelog({ projectDir = process.cwd() } = {}) {
+/**
+ * Build the whole file.
+ *
+ * `unreleased` names the commits no tag has reached yet: a release writes the
+ * version it is about to tag, so the file it commits already says what shipped.
+ *
+ * @param {{ projectDir?: string, unreleased?: string }} [options]
+ * @returns {string}
+ */
+export function buildChangelog({ projectDir = process.cwd(), unreleased = "Unreleased" } = {}) {
   const commits = readHistory(projectDir);
 
   const releases = new Map();
@@ -70,7 +79,7 @@ export function buildChangelog({ projectDir = process.cwd() } = {}) {
 
   const sections = [];
   for (const [release, entries] of releases) {
-    const heading = release === "" ? "[Unreleased]" : `[${release}]`;
+    const heading = release === "" ? `[${unreleased}]` : `[${release}]`;
     const rendered = renderRelease(heading, entries);
     if (rendered !== "") {
       sections.push(rendered);
@@ -83,12 +92,12 @@ export function buildChangelog({ projectDir = process.cwd() } = {}) {
 /**
  * Write the file when it would change.
  *
- * @param {{ projectDir?: string }} [options]
+ * @param {{ projectDir?: string, unreleased?: string }} [options]
  * @returns {boolean} whether anything was written
  */
-export function writeChangelog({ projectDir = process.cwd() } = {}) {
+export function writeChangelog({ projectDir = process.cwd(), unreleased } = {}) {
   const file = join(projectDir, "CHANGELOG.md");
-  const next = buildChangelog({ projectDir });
+  const next = buildChangelog({ projectDir, unreleased });
   let current = "";
   try {
     current = readFileSync(file, "utf8");

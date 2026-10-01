@@ -66,8 +66,8 @@ Live counts and the Command · Tool · Skill table: [Surface map](./16-surface-m
 
 | Surface                   | Count | Defined in                                    |
 | ------------------------- | ----- | --------------------------------------------- |
-| MCP tools                 | 109   | `src/tools/*` via `src/tools/router/index.js` |
-| - action tools            | 20    | one per module, registered explicitly         |
+| MCP tools                 | 110   | `src/tools/*` via `src/tools/router/index.js` |
+| - action tools            | 21    | one per module, registered explicitly         |
 | - skill tools             | 89    | one per catalog skill, generated              |
 | MCP resources             | 186   | `src/resources/index.js`                      |
 | MCP prompts               | 38    | `src/prompts/index.js`                        |
@@ -79,8 +79,8 @@ Live counts and the Command · Tool · Skill table: [Surface map](./16-surface-m
 | Agent slash commands      | 41    | `src/core/agents/commands/index.js`           |
 | Agent/IDE command targets | 13    | `src/core/agents/command-targets/index.js`    |
 | CLI commands              | 24    | `src/cli/_program.js`                         |
-| Hook events               | 3     | `src/core/agents/_hooks.js`                   |
-| Architecture decisions    | 128   | [`docs/adr/ADR.md`](adr/ADR.md)               |
+| Hook events               | 4     | `src/core/agents/_hooks.js`                   |
+| Architecture decisions    | 131   | [`docs/adr/ADR.md`](adr/ADR.md)               |
 
 Regenerate with `pnpm census`. The inventories themselves are
 [`08-skills.md`](08-skills.md) through [`15-resources.md`](15-resources.md).

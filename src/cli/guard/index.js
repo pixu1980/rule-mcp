@@ -3,16 +3,17 @@
 /**
  * @module cli/guard
  *
- * The answering side of the harness hooks. Two jobs, one entry point:
+ * The answering side of the harness hooks. One entry point, four jobs:
  *
- * - PreToolUse (`bash`): reads the tool payload on stdin and answers with a
- *   permission decision - ask before a migration, ask before a commit whose
+ * - PreToolUse (`bash`): ask before a migration, ask before a commit whose
  *   staged files fail guardrails.
- * - SessionStart / UserPromptSubmit (`session-start`, `prompt-submit`): decides
- *   nothing and injects the session directive as additional context.
+ * - PreToolUse (`structure`): ask once per task about a structural write.
+ * - PostToolUse (`write`): report language and guardrails; never decide.
+ * - SessionStart / UserPromptSubmit: inject the session directive, and start
+ *   the task the structural gate counts in.
  *
- * Kept as pure functions plus a thin IO wrapper so the whole contract is
- * testable without spawning a shell, and so the hook command needs no `jq`.
+ * Every branch but the structural one loads its own modules. That branch runs
+ * before every Write/Edit/MultiEdit, so the barrel stays cheap.
  *
  * @see module:core/agents/hooks - the hook entries that invoke this
  * @see module:core/directive - the injected text
@@ -22,3 +23,6 @@ export * from "./_decide.js";
 export * from "./_inject.js";
 export * from "./_staged.js";
 export * from "./_run.js";
+export { decideStructure, structuralSignal } from "./_structure.js";
+export { declareStructural, startTask, clearTask } from "./_task.js";
+export { neverBlocks, advise, SILENT } from "./_verdict.js";

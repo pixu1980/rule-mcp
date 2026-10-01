@@ -41,7 +41,7 @@ the package version from anywhere. An error exits 1 and prints to stderr;
 | [`cache`](#rule-mcp-cache)                   | 1       | Inspect the on-disk tool cache                                                |
 | [`roles`](#rule-mcp-roles)                   | 7       | Manage review persona roles                                                   |
 | [`guard`](#rule-mcp-guard)                   | 0       | Permission-guard payload processor (invoked by PreToolUse hooks, reads stdin) |
-| [`update`](#rule-mcp-update)                 | 0       | Self-update from the upstream git repo (fast-forward only)                    |
+| [`update`](#rule-mcp-update)                 | 0       | Self-update to the newest release tag (or fast-forward when none exist)       |
 | [`agent-commands`](#rule-mcp-agent-commands) | 13      | Registry-driven agent slash-command management                                |
 | [`reinstall`](#rule-mcp-reinstall)           | 0       | Purge node_modules and pnpm-lock.yaml, install again, refresh the global bin  |
 | [`commit-lint`](#rule-mcp-commit-lint)       | 6       | Validate commits against type(scope): subject (the git hooks call this)       |
@@ -466,7 +466,7 @@ Takes no options beyond the global `-h, --help`.
 
 ## rule-mcp update
 
-Self-update from the upstream git repo (fast-forward only)
+Self-update to the newest release tag (or fast-forward when none exist)
 
 ```sh
 rule-mcp update

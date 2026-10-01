@@ -13,17 +13,18 @@
  * return, so that is where the confirmation belongs - in the harness, before the
  * command runs, not in a paragraph the model reads.
  *
- * Two PreToolUse checks, both answering with `permissionDecision: "ask"`:
+ * Three PreToolUse checks:
  *
  * - migration: any migrate/push/upgrade command from the common ORMs
  * - commit: `git commit`, with the guardrail failures on the staged files
+ * - structure: one confirmation per task for a structural write (ADR 129)
  *
  * "ask" and not "deny" on purpose. These are judgment calls with a human in the
  * room; a hard block on a false positive costs more than the prompt it saves.
  *
- * Two more hooks carry the session rules a prompt cannot enforce either, this
- * time by injecting context rather than by deciding: SessionStart states the
- * full directive once, UserPromptSubmit re-anchors it in one line per prompt.
+ * PostToolUse (`write`) reports language and guardrails without deciding.
+ * SessionStart / UserPromptSubmit inject the session directive, and
+ * UserPromptSubmit starts the structural task boundary.
  *
  * SessionStart carries one more thing no prompt can know - whether the session
  * was resumed. When it was, and only then, the verified handoff goes in behind
@@ -39,7 +40,7 @@ import { HOOK_MARKER } from "./_hook-commands.js";
 export { HOOK_MARKER, isCommitCommand, isMigrationCommand, MIGRATION_PATTERNS } from "./_hook-commands.js";
 
 /** The hook events we install into, in the order they fire. */
-export const HOOK_EVENTS = ["PreToolUse", "SessionStart", "UserPromptSubmit"];
+export const HOOK_EVENTS = ["PreToolUse", "PostToolUse", "SessionStart", "UserPromptSubmit"];
 
 /**
  * Our hook entries, keyed by event, ready to merge into a settings file.
@@ -66,7 +67,20 @@ export function hookEntries(launcher) {
     // pays one process spawn instead of two. No `if` filter either - it would be
     // a glob per ORM for migrations, and `Bash(git commit*)` misses
     // `git -C path commit`.
-    PreToolUse: [entry("bash", "rule guard: migration and commit checks", { matcher: "Bash" })],
+    //
+    // The structural gate asks once per task about a boundary change, never
+    // once per file (ADR 129). Write/Edit/MultiEdit land through PostToolUse.
+    PreToolUse: [
+      entry("bash", "rule guard: migration and commit checks", { matcher: "Bash" }),
+      entry("structure", "rule guard: structural change, once per task", { matcher: "Write|Edit|MultiEdit" }),
+    ],
+    // PostToolUse carries `additionalContext` and no permission decision, so a
+    // language or guardrail report reaches the model and nobody else (ADR 129).
+    PostToolUse: [
+      entry("write", "rule guard: language and guardrails on the written file", {
+        matcher: "Write|Edit|MultiEdit",
+      }),
+    ],
     // Full directive once per session, one line per prompt after that. Same
     // full-once-then-terse shape as the workflow reminder, for the same reason:
     // the rules have to survive turn 50 without being paid for 50 times.

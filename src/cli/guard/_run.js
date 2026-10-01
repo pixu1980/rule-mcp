@@ -5,6 +5,8 @@
 import { ALLOW, decide } from "./_decide.js";
 import { inject } from "./_inject.js";
 import { stagedFailures } from "./_staged.js";
+import { decideStructure } from "./_structure.js";
+import { startTask } from "./_task.js";
 
 /** @param {NodeJS.ReadStream} stream @returns {Promise<string>} */
 export function readStdin(stream) {
@@ -46,7 +48,7 @@ async function readPayload(stream) {
  * Hook entry point. Always exits 0 and answers with JSON: a guard that crashes
  * must not become a guard that blocks every command.
  *
- * @param {"bash"|"migration"|"commit"|"session-start"|"prompt-submit"} kind
+ * @param {"bash"|"structure"|"write"|"migration"|"commit"|"session-start"|"prompt-submit"} kind
  * @param {{ stdin?: NodeJS.ReadStream, write?: (text: string) => void }} [io]
  */
 export async function runGuard(kind = "bash", io = {}) {
@@ -59,7 +61,12 @@ export async function runGuard(kind = "bash", io = {}) {
   }
 
   if (kind === "prompt-submit") {
-    write(JSON.stringify(inject(kind)));
+    const payload = await readPayload(stdin);
+
+    write(JSON.stringify(inject(kind, payload)));
+    // A prompt is where one task ends and the next begins, so the structural
+    // confirmation the last one gave stops covering this one (ADR 129).
+    startTask(payload?.cwd);
 
     return;
   }
@@ -69,6 +76,28 @@ export async function runGuard(kind = "bash", io = {}) {
     payload = JSON.parse(await readStdin(stdin));
   } catch {
     write(JSON.stringify(ALLOW));
+
+    return;
+  }
+
+  if (kind === "structure") {
+    let answer;
+
+    try {
+      answer = decideStructure(payload?.tool_input ?? {}, payload?.cwd);
+    } catch {
+      answer = ALLOW;
+    }
+
+    write(JSON.stringify(answer));
+
+    return;
+  }
+
+  if (kind === "write") {
+    const { runWriteHook } = await import("./_write-hook.js");
+
+    await runWriteHook(payload, write);
 
     return;
   }

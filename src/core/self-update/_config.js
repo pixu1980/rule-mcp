@@ -12,6 +12,17 @@ export function autoUpdateEnabled() {
 }
 
 /**
+ * How an available update is applied. The default applies it (ADR 131): a
+ * newer release tag is checked out, pulled and reinstalled without asking.
+ * `RULE_MCP_AUTO_UPDATE=notify` returns to announcing only.
+ *
+ * @returns {"notify"|"upgrade"}
+ */
+export function updateMode() {
+  return process.env.RULE_MCP_AUTO_UPDATE === "notify" ? "notify" : "upgrade";
+}
+
+/**
  * Parse the throttle interval from the environment.
  * - unset / empty / NaN / negative → 60s (default)
  * - "0" → check on every invocation (no throttle)

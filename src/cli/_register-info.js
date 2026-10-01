@@ -125,7 +125,7 @@ export function registerGuardCommand(program) {
 export function registerUpdateCommand(program) {
   program
     .command("update")
-    .description("Self-update from the upstream git repo (fast-forward only)")
+    .description("Self-update to the newest release tag (or fast-forward when none exist)")
     .allowExcessArguments(false)
     .action(async () => (await import("./commands/_health.js")).updateCommand());
 }

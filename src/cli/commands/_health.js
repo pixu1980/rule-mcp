@@ -42,12 +42,12 @@ async function skillsReloadCommand() {
 }
 
 /**
- * Force a self-update from the upstream git repo (fast-forward only).
- * Prints a human-readable report.
+ * Force a self-update from the upstream git repo (release tag when one
+ * exists, otherwise fast-forward). Prints a human-readable report.
  */
 async function updateCommand() {
   const { runSelfUpdate, buildBanner, scheduleRestartIfNeeded } = await import("../../core/self-update/index.js");
-  const result = await runSelfUpdate({ reloadSkills: false });
+  const result = await runSelfUpdate({ reloadSkills: false, explicit: true });
   const banner = buildBanner(result);
 
   if (banner) {

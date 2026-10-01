@@ -36,7 +36,7 @@ import { MANTRA, NO_SUBAGENTS, directiveEnabled, promptDirective, sessionDirecti
 import { HOOK_MARKER, hasHooks, hookEntries, withHooks, withoutHooks } from "../agents/_hooks.js";
 
 const LAUNCHER = { command: "/usr/local/bin/rule-mcp", args: [] };
-const EVENTS = ["PreToolUse", "SessionStart", "UserPromptSubmit"];
+const EVENTS = ["PreToolUse", "PostToolUse", "SessionStart", "UserPromptSubmit"];
 
 // ── T1: one canonical wording, reused verbatim everywhere ──
 check("T1 the no-subagent rule names the cost", /subagent/i.test(NO_SUBAGENTS) && /token/i.test(NO_SUBAGENTS));
@@ -85,16 +85,22 @@ if (previousFlight === undefined) {
 }
 check("T4b.3 flight is on by default", flightEnabled() === true && sessionFlight().includes(FLIGHT_CONCEPT));
 
-// ── T5: three hook events, one spawn each ──
+// ── T5: four hook events; PreToolUse carries bash + structure ──
 const entries = hookEntries(LAUNCHER);
-for (const event of EVENTS) {
+check("T5 PreToolUse has bash and structure", entries.PreToolUse.length === 2);
+check("T5 PostToolUse reports writes", entries.PostToolUse.length === 1);
+for (const event of ["SessionStart", "UserPromptSubmit"]) {
   check(`T5 ${event} entry exists`, Array.isArray(entries[event]) && entries[event].length === 1);
   check(`T5.1 ${event} is marked as ours`, entries[event][0].hooks[0].command.includes(HOOK_MARKER));
 }
-check("T5.2 PreToolUse still matches Bash only", entries.PreToolUse[0].matcher === "Bash");
+check("T5.2 PreToolUse still matches Bash first", entries.PreToolUse[0].matcher === "Bash");
+check("T5.2b structural gate matches Write|Edit|MultiEdit", entries.PreToolUse[1].matcher === "Write|Edit|MultiEdit");
 check(
   "T5.3 each event calls its own guard subcommand",
-  entries.SessionStart[0].hooks[0].command.includes("guard session-start") && entries.UserPromptSubmit[0].hooks[0].command.includes("guard prompt-submit"),
+  entries.SessionStart[0].hooks[0].command.includes("guard session-start") &&
+    entries.UserPromptSubmit[0].hooks[0].command.includes("guard prompt-submit") &&
+    entries.PostToolUse[0].hooks[0].command.includes("guard write") &&
+    entries.PreToolUse[1].hooks[0].command.includes("guard structure"),
 );
 
 // ── T6: the merge stays additive, idempotent and reversible across all events ──

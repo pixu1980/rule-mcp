@@ -1,16 +1,16 @@
 
 
-/** One self-update pass: gates, fetch, merge, the structured result. */
+/** One self-update pass: gates, fetch, release-or-merge, the structured result. */
 import { git } from "./_git.js";
 import { reloadSkills as reloadSkillCatalog } from "@src/core/skills/_reload-port.js";
 import { getRepoRoot, detectInstallType } from "../../cli/paths/index.js";
-import { autoUpdateEnabled, normalizeRemoteUrl, resolveAllowedRemotes, manualHint } from "./_config.js";
+import { autoUpdateEnabled, normalizeRemoteUrl, resolveAllowedRemotes, manualHint, updateMode } from "./_config.js";
 
 /**
- * Perform the actual fetch / fast-forward / classify. Pure of process-lifecycle
- * concerns (restart is decided by the caller). Never throws.
+ * Perform the actual fetch / upgrade-or-fast-forward / classify. Pure of
+ * process-lifecycle concerns (restart is decided by the caller). Never throws.
  *
- * @param {{ reloadSkills?: boolean }} [opts]
+ * @param {{ reloadSkills?: boolean, mode?: "notify"|"upgrade", explicit?: boolean, reinstall?: Function }} [opts]
  * @returns {Promise<{
  *   checked: boolean, updated: boolean, skipped?: boolean, reason?: string,
  *   from?: string, to?: string, count?: number,
@@ -44,9 +44,6 @@ export async function runSelfUpdate(opts = {}) {
     return { checked: true, updated: false, skipped: true, reason: "no-upstream" };
   }
 
-  // ── Where the code comes from, verified BEFORE any fetch or merge ──
-  // A fetch + ff-merge + restart is remote code execution. One line rewritten in
-  // .git/config would otherwise be enough to own the server at the next tool call.
   const remoteName = upstream.includes("/") ? upstream.slice(0, upstream.indexOf("/")) : "origin";
   const remoteUrl = await git(["remote", "get-url", remoteName], root);
   const allowed = resolveAllowedRemotes();
@@ -60,8 +57,6 @@ export async function runSelfUpdate(opts = {}) {
     return { checked: true, updated: false, skipped: true, reason: "remote-not-allowed", remote: remoteUrl ?? null };
   }
 
-  // Only TRACKED modifications block a fast-forward; untracked artifacts
-  // (.tokensave/, build output, caches) are irrelevant to ff safety.
   const dirty = await git(["status", "--porcelain", "--untracked-files=no"], root);
 
   if (dirty === null) {
@@ -72,13 +67,75 @@ export async function runSelfUpdate(opts = {}) {
     return { checked: true, updated: false, skipped: true, reason: "dirty-tree" };
   }
 
-  // Fetch (network); fail-open on offline/timeout.
-  const fetched = await git(["fetch", "--quiet"], root);
+  // -p -P: branches and tags the remote dropped are dropped here too, so a
+  // withdrawn release is never read as the newest one (ADR 131).
+  const fetched = await git(["fetch", "--quiet", "-p", "-P"], root);
 
   if (fetched === null) {
     return { checked: true, updated: false, skipped: true, reason: "fetch-failed" };
   }
 
+  const { releaseState } = await import("./_release.js");
+  const release = await releaseState(root);
+
+  if (release.latest) {
+    return releaseUpdate({ root, release, opts, branch });
+  }
+
+  return branchFastForward({ root, remoteUrl, reloadSkills, opts });
+}
+
+/**
+ * The update once the remote publishes release tags: move to the newest one.
+ *
+ * @param {{ root: string, release: { latest: { tag: string, version: string }, current: string, newer: boolean }, opts: object, branch: string }} input
+ * @returns {Promise<object>}
+ */
+async function releaseUpdate({ root, release, opts, branch }) {
+  if (!release.newer) {
+    return { checked: true, updated: false };
+  }
+
+  const available = {
+    checked: true,
+    updated: false,
+    available: true,
+    release: release.latest.tag,
+    from: release.current,
+    to: release.latest.version,
+  };
+
+  if ((opts.mode ?? updateMode()) === "notify") {
+    return available;
+  }
+
+  if (
+    process.env.RULE_MCP_UPDATE_REQUIRE_SIGNATURE === "1" &&
+    (await git(["verify-tag", release.latest.tag], root)) === null
+  ) {
+    return { ...available, skipped: true, reason: "unsigned-upstream" };
+  }
+
+  const { RELEASE_BRANCH } = await import("./_release.js");
+
+  // Another branch is somebody's work in progress: the automatic check says
+  // so, and only the explicit command switches it away.
+  if (branch !== RELEASE_BRANCH && !opts.explicit) {
+    return { ...available, skipped: true, reason: "not-on-main", branch };
+  }
+
+  const { applyUpgrade } = await import("./_upgrade.js");
+
+  return applyUpgrade({ root, current: release.current, latest: release.latest, reinstall: opts.reinstall });
+}
+
+/**
+ * Fallback when no release tag exists yet: fast-forward the upstream branch.
+ *
+ * @param {{ root: string, remoteUrl: string|null, reloadSkills: boolean, opts: object }} input
+ * @returns {Promise<object>}
+ */
+async function branchFastForward({ root, remoteUrl, reloadSkills, opts }) {
   const before = await git(["rev-parse", "HEAD"], root);
   const remote = await git(["rev-parse", "@{u}"], root);
 
@@ -90,9 +147,23 @@ export async function runSelfUpdate(opts = {}) {
     return { checked: true, updated: false };
   }
 
-  // Optional second gate: the upstream commit must carry a valid signature.
-  // Off by default - most repositories do not sign, and failing closed would
-  // silently stop every update instead of protecting anything.
+  if ((opts.mode ?? updateMode()) === "notify") {
+    const behind = Number(await git(["rev-list", "--count", "HEAD..@{u}"], root));
+
+    if (!Number.isFinite(behind) || behind === 0) {
+      return { checked: true, updated: false };
+    }
+
+    return {
+      checked: true,
+      updated: false,
+      available: true,
+      from: before.slice(0, 7),
+      to: remote.slice(0, 7),
+      behind,
+    };
+  }
+
   if (process.env.RULE_MCP_UPDATE_REQUIRE_SIGNATURE === "1") {
     const verified = await git(["verify-commit", "--raw", remote], root);
 
@@ -101,7 +172,6 @@ export async function runSelfUpdate(opts = {}) {
     }
   }
 
-  // Fast-forward only - never clobber local commits.
   const merged = await git(["merge", "--ff-only", "@{u}"], root);
 
   if (merged === null) {
@@ -110,17 +180,10 @@ export async function runSelfUpdate(opts = {}) {
 
   const after = await git(["rev-parse", "HEAD"], root);
 
-  // `git merge --ff-only <ancestor>` exits 0 with "Already up to date" without
-  // moving HEAD, which happens on every check while the local branch is AHEAD of
-  // its upstream - the normal state during feature work. Treating that as an
-  // update produced a banner claiming the server had just updated itself
-  // (`updated 1cb8547→1cb8547 (0 files)`) on every tool call.
   if (!after || after === before) {
     return { checked: true, updated: false };
   }
 
-  // Auditable trail, written only when HEAD actually moved: what was pulled,
-  // and from where.
   process.stderr.write(`[rule-mcp] self-update ${before.slice(0, 7)}→${after.slice(0, 7)} from ${remoteUrl}\n`);
 
   const diff = (await git(["diff", "--name-only", before, after], root)) ?? "";

@@ -93,8 +93,16 @@ check(
   installed.hooks.PreToolUse.some((e) => e.matcher === "Write"),
 );
 check("T5.2 unrelated settings survive", installed.model === "opus");
-check("T5.3 one entry, one spawn per Bash call", hookEntries(LAUNCHER).PreToolUse.length === 1);
-check("T5.4 the entry is marked as ours", installed.hooks.PreToolUse.at(-1).hooks[0].command.includes(HOOK_MARKER));
+check(
+  "T5.3 one entry, one spawn per Bash call",
+  hookEntries(LAUNCHER).PreToolUse.filter((e) => e.matcher === "Bash").length === 1,
+);
+check(
+  "T5.3b the structural gate is its own entry on the file-writing tools",
+  hookEntries(LAUNCHER).PreToolUse.filter((e) => e.matcher === "Write|Edit|MultiEdit").length === 1,
+);
+check("T5.3c PostToolUse reports on the same tools", hookEntries(LAUNCHER).PostToolUse.filter((e) => e.matcher === "Write|Edit|MultiEdit").length === 1);
+check("T5.4 the bash entry is marked as ours", installed.hooks.PreToolUse.find((e) => e.matcher === "Bash").hooks[0].command.includes(HOOK_MARKER));
 // The directive hooks are covered by test/prompt-directive.test.mjs; here we only
 // assert the guard entry keeps its own event to itself.
 check("T5.5 reinstall does not duplicate", withHooks(installed, LAUNCHER).hooks.PreToolUse.length === installed.hooks.PreToolUse.length);
