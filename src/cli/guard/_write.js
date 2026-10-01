@@ -11,11 +11,7 @@
  * file, in every project on the machine.
  */
 
-import {
-  findFingerprints,
-  fingerprintEnabled,
-  stripFingerprint,
-} from "../../core/text/fingerprint/index.js";
+import { findFingerprints, fingerprintEnabled, stripFingerprint } from "../../core/text/fingerprint/index.js";
 
 import { writeGuardrailReport } from "./_write-check.js";
 import { writtenText } from "./_written.js";
@@ -59,12 +55,7 @@ function languageReport(input) {
     return "";
   }
 
-  return [
-    `${ENGLISH_ONLY}`,
-    "",
-    `What just landed does not${path ? ` (${path})` : ""}. Fix these:`,
-    ...[...new Set(problems)].slice(0, 20),
-  ].join("\n");
+  return [`${ENGLISH_ONLY}`, "", `What just landed does not${path ? ` (${path})` : ""}. Fix these:`, ...[...new Set(problems)].slice(0, 20)].join("\n");
 }
 
 /** Locale and message files are non-English by design, so the gate skips them. */

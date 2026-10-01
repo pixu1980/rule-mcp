@@ -31,8 +31,7 @@ export const VERSION_SHAPE = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/u;
  * @param {string[]} arguments_
  * @returns {string}
  */
-export const git = (cwd, arguments_) =>
-  execFileSync("git", arguments_, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
+export const git = (cwd, arguments_) => execFileSync("git", arguments_, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }).trim();
 
 /** Whether a ref resolves, without throwing when it does not. */
 const exists = (cwd, reference) => {
