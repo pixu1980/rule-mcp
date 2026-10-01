@@ -11,13 +11,13 @@
       "file": "02-architecture.md",
       "kind": "block",
       "marker": "surface-counts",
-      "sha256": "8c7f3f75f5a9637bfef06019cefe3437d151294f7c7c8ba49a1e0252470bda66"
+      "sha256": "357ba1033cf1acf6f1ea5c5be1835f480df24d32f0f811c012177b95f5699aa9"
     },
     {
       "file": "05-env-variables.md",
       "kind": "block",
       "marker": "env-registry",
-      "sha256": "ea309181fe4369955a8c13db3072bd38937fd1bf2220846196d2fe262184e252"
+      "sha256": "da2b4ecb6a48fe084770c6b2a1c8fb09e58e991b7d717b12938ecb2114e99b61"
     },
     {
       "file": "07-engineering-guides.md",
@@ -33,7 +33,7 @@
     {
       "file": "09-tools.md",
       "kind": "document",
-      "sha256": "84fa0257acac782fb6fc725a0ca069187c75479793326d51603a99be890716f9"
+      "sha256": "d27c77d2444d38dc555e228b8795c41a4538d56013eb4396ef452492278d104f"
     },
     {
       "file": "10-prompts.md",
@@ -43,12 +43,12 @@
     {
       "file": "11-instructions.md",
       "kind": "document",
-      "sha256": "f7c4efd91802316f818254a531d0b0f000443f163ac33055b919e5204d66ebcb"
+      "sha256": "b2417a82309895de0b5f75e58af7cfe5be06dc7df785fb1aa47a04392ce1cc24"
     },
     {
       "file": "12-cli.md",
       "kind": "document",
-      "sha256": "d786f1b078ee188a9fd84eace801a0f92c7235b6253294005177d5e24e7493db"
+      "sha256": "34f694ba86ab92f99263f57672fb03c7daaaa66ecb013cb21c5e8a13846b55b8"
     },
     {
       "file": "13-personas.md",
@@ -68,7 +68,7 @@
     {
       "file": "16-surface-map.md",
       "kind": "document",
-      "sha256": "729e2ba8ffddf31a94fd9f80c0fcc605b4ac4b42df1b522404dc9c1d48753c5d"
+      "sha256": "d1dfe1fbd219ae83c9e7f33dffc742ae96d708f07cefcb84efd05f060c34e958"
     }
   ]
 }

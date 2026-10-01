@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Command / Tool / Skill map (129)
+## Command / Tool / Skill map (130)
 
 One row per slash command, then every catalog skill that has no slash of its
 own (ADR 117: leaf skills are reached through area hubs or the router), then
@@ -138,6 +138,7 @@ Regenerate with `pnpm census`.
 | -                          | `rule_tool_ui_design_system`          | `rule-ui-design-system`          | Use when creating production-grade UI components and design systems.                                                                                                                                                                                             |
 | -                          | `rule_tool_search`                    | -                               | Semantic search across ALL rule skills using BM25 ranking.                                                                                                                                                                                                        |
 | -                          | `rule_tool_detect`                    | -                               | Detect project framework, TypeScript usage, and build tool from package.json.                                                                                                                                                                                    |
+| -                          | `rule_tool_structural`                | -                               | Declare current task structural or architectural.                                                                                                                                                                                                                |
 | -                          | `rule_tool_git`                       | -                               | Audit the feature history and normalize it: base branch, merge base, commit range, Conventional Commit violations and merge commits.                                                                                                                             |
 | -                          | `rule_tool_plan`                      | -                               | Ask expert review persona to audit, review or plan this project; returns operation contract.                                                                                                                                                                     |
 | -                          | `rule_tool_audit`                     | -                               | Run audit as expert review persona; returns audit operation contract.                                                                                                                                                                                            |
