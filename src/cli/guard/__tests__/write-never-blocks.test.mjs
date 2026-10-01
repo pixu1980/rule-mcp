@@ -70,10 +70,7 @@ const CASES = [
 for (const [label, files, path] of CASES) {
   test(`guard write cannot stop a tool call: ${label}`, () => {
     const cwd = project(files);
-    const answer = guardWrite(
-      { session_id: "s1", cwd, hook_event_name: "PostToolUse", tool_input: { file_path: join(cwd, path) } },
-      cwd,
-    );
+    const answer = guardWrite({ session_id: "s1", cwd, hook_event_name: "PostToolUse", tool_input: { file_path: join(cwd, path) } }, cwd);
 
     assert.equal(stops(answer), false, `${label} produced ${JSON.stringify(answer)}`);
   });

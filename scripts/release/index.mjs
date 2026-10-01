@@ -95,9 +95,7 @@ async function main(argv) {
   };
   const result = await applyRelease(plan, options);
 
-  console.log(
-    `\nReleased ${result.tag} at ${result.commit.slice(0, 7)}${result.pushed ? ", pushed" : ", not pushed"}.`,
-  );
+  console.log(`\nReleased ${result.tag} at ${result.commit.slice(0, 7)}${result.pushed ? ", pushed" : ", not pushed"}.`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

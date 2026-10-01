@@ -26,9 +26,7 @@ export const TOOL_CONTRACT_VERSION = "1.1.0";
  *
  * @type {Array<{ from: string, to: string, removeAfter: string }>}
  */
-export const DEPRECATIONS = [
-  { from: "rule_tool_plan_docs", to: "rule_tool_impersonation", removeAfter: "0.3.0" },
-];
+export const DEPRECATIONS = [{ from: "rule_tool_plan_docs", to: "rule_tool_impersonation", removeAfter: "0.3.0" }];
 
 /** Aliases already warned about, so a client that calls in a loop is told once. */
 const warned = new Set();

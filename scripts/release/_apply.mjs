@@ -25,8 +25,7 @@ function run(cwd, command, arguments_) {
 }
 
 /** The census regenerates every document the registries own. */
-const regenerateDocs = async (cwd) =>
-  run(cwd, process.execPath, ["--import", "./scripts/alias-hook.mjs", "scripts/reports/census/index.mjs"]);
+const regenerateDocs = async (cwd) => run(cwd, process.execPath, ["--import", "./scripts/alias-hook.mjs", "scripts/reports/census/index.mjs"]);
 
 /** The same gate CI applies. */
 const runChecks = async (cwd) => run(cwd, process.platform === "win32" ? "pnpm.cmd" : "pnpm", ["run", "ci"]);
@@ -54,7 +53,7 @@ export async function applyRelease(plan, options = {}) {
 
   git(cwd, ["add", "--update"]);
   git(cwd, ["add", "CHANGELOG.md"]);
-  git(cwd, ["commit", "--quiet", "-m", `chore(release): ${plan.tag}`]);
+  git(cwd, ["commit", "--quiet", "-s", "-m", `chore(release): ${plan.tag}`]);
   git(cwd, ["tag", "--annotate", plan.tag, "-m", plan.tag]);
 
   if (push) {

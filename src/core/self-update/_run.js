@@ -109,10 +109,7 @@ async function releaseUpdate({ root, release, opts, branch }) {
     return available;
   }
 
-  if (
-    process.env.RULE_MCP_UPDATE_REQUIRE_SIGNATURE === "1" &&
-    (await git(["verify-tag", release.latest.tag], root)) === null
-  ) {
+  if (process.env.RULE_MCP_UPDATE_REQUIRE_SIGNATURE === "1" && (await git(["verify-tag", release.latest.tag], root)) === null) {
     return { ...available, skipped: true, reason: "unsigned-upstream" };
   }
 

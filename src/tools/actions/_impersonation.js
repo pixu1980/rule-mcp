@@ -41,8 +41,7 @@ export function registerImpersonationTool() {
   registerTool({
     name: "rule_tool_impersonation",
     entry: "action",
-    description:
-      "Create or refresh the audit/review/plan documents for a review persona run (impersonation bookkeeping).",
+    description: "Create or refresh the audit/review/plan documents for a review persona run (impersonation bookkeeping).",
     zodSchema: ImpersonationSchema,
     advertise: ["role", "findings"],
     handler: async (arguments_) => {

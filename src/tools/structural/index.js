@@ -21,10 +21,7 @@ import { registerTool } from "../router/index.js";
 /** Register rule_tool_structural. */
 export function registerStructuralTool() {
   const StructuralSchema = z.object({
-    summary: z
-      .string()
-      .min(1)
-      .describe("What is changing and why it is structural, in one sentence the person confirming can judge"),
+    summary: z.string().min(1).describe("What is changing and why it is structural, in one sentence the person confirming can judge"),
     projectDir: z.string().optional().describe("Project root directory"),
   });
 
