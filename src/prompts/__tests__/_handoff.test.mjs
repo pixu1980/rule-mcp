@@ -47,6 +47,8 @@ test("parseHandoffOptions translates the compact vocabulary", () => {
   assert.equal(parseHandoffOptions("close-session").mode, "close-session");
   assert.equal(parseHandoffOptions("handoff").mode, "handoff");
   assert.equal(parseHandoffOptions("close-feature").closeFeature, true, "close-feature turns the feature close on");
+  assert.equal(parseHandoffOptions("close-feature").squash, true, "close-feature implies squash");
+  assert.equal(parseHandoffOptions("close-feature --squash").squash, true, "the legacy spelling still works");
   assert.equal(parseHandoffOptions("squash").squash, true, "squash turns the feature squash on");
 
   const c = parseHandoffOptions("compress minimal");
@@ -87,12 +89,28 @@ test("rule-handoff getPrompt interpolates the parsed options into the message", 
   assert.match(text, /rule_tool_handoff/, "message must still route to the tool");
 });
 
+test("close-feature plans one confirmed squash after persisting all feature documents", () => {
+  const text = getPrompt("rule-handoff", { options: "close-feature" })
+    .messages.map((message) => message.content?.text ?? "")
+    .join("\n");
+
+  assert.match(text, /action=squash force=true confirm=true/u, "the squash is implicit");
+  assert.match(text, /ADRs and handoffs into one document each/u, "both document kinds are consolidated");
+  assert.match(text, /ask the user to confirm/u, "history is not rewritten without consent");
+  assert.doesNotMatch(text, /No squash was requested/u, "the close cannot leave feature commits untouched");
+  assert.doesNotMatch(text, /if violations or merge commits are present.*stop until they are settled/iu, "the squash itself removes old violations and merges");
+  assert.match(text, /breaking/u, "the final message must account for breaking changes across the range");
+  assert.ok(text.indexOf("Step 4 - Persist the handoff") < text.indexOf("action=squash force=true confirm=true"), "the handoff must exist before the squash");
+  assert.doesNotMatch(text.slice(text.indexOf("action=squash force=true confirm=true")), /Then commit that file ALONE/u, "nothing is committed after the close");
+});
+
 test("rule-handoff help returns the usage list as an instant assistant message", () => {
   const full = getPrompt("rule-handoff", { options: "help" });
   assert.equal(full.messages[0].role, "assistant", "handoff help must be an assistant message (no model call)");
   const text = full.messages[0].content.text;
   assert.match(text, /^Usage: \/rule-handoff/, "help message must start with the usage line");
   assert.match(text, /close-session/, "usage block must list close-session");
+  assert.match(text, /close-feature.*squash/i, "usage must explain the implicit squash");
   assert.match(text, /no-compress/, "usage block must show a no-compress example");
   assert.match(text, /max=/i, "usage block must list the max token option");
   assert.ok(!/Do NOT call/i.test(text), "help must be pure content, no meta-instruction");

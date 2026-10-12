@@ -92,6 +92,25 @@ test("a confirmed squash folds the documents into the one commit", () => {
   remove(root);
 });
 
+test("a merged document preserves an original already named after the feature", () => {
+  const root = makeRepo();
+
+  run(root, "checkout", "-q", "-b", "feat/git-workflow");
+  writeCommit(root, "docs/adr/124-git-workflow.md", "# 124: Original decision\n\n## Decision\n\nPreserve the original.\n", "docs(adr): record first");
+  writeCommit(root, "docs/adr/125-next.md", "# 125: Next decision\n\n## Decision\n\nPreserve the next.\n", "docs(adr): record next");
+  writeCommit(root, "docs/handoff/20-git-workflow.md", "# Session handoff 20\n\nOriginal handoff text.\n", "chore(handoff): record first");
+  writeCommit(root, "docs/handoff/21-next.md", "# Session handoff 21\n\nNext handoff text.\n", "chore(handoff): record next");
+
+  const result = applySquash(root, { message: "feat(git-workflow): finish feature", confirm: true });
+
+  assert.equal(result.applied, true);
+  assert.match(readFileSync(join(root, "docs/adr/124-git-workflow.md"), "utf8"), /Preserve the original\./u);
+  assert.match(readFileSync(join(root, "docs/adr/124-git-workflow.md"), "utf8"), /Preserve the next\./u);
+  assert.match(readFileSync(join(root, "docs/handoff/20-git-workflow.md"), "utf8"), /Original handoff text\./u);
+  assert.match(readFileSync(join(root, "docs/handoff/20-git-workflow.md"), "utf8"), /Next handoff text\./u);
+  remove(root);
+});
+
 test("a document cited but committed outside the range is left untouched", () => {
   const root = makeRepo();
   const shared = 200;
