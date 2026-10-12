@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [134](134-close-features-only-after-persisting-the-final-handoff-and-consolidate-the-featu.md)                          | Close features only after persisting the final handoff and consolidate the feature by default             | 2026-10-12 | accepted   | git, handoff, adr                                                                   |
 | [133](133-first-release-is-v0-1-0-then-semver-from-commits.md)                                                          | First release is v0.1.0, then SemVer from commits                                                         | 2026-10-01 | accepted   | release, versioning, semver                                                         |
 | [132](132-rename-rule-tool-plan-docs-to-rule-tool-impersonation.md)                                                       | Rename rule_tool_plan_docs to rule_tool_impersonation                                                       | 2026-10-01 | accepted   | tools, personas, naming, breaking                                                   |
 | [131](131-an-update-moves-a-git-clone-install-to-the-newest-release-tag-unasked.md)                                     | An update moves a git-clone install to the newest release tag, unasked                                    | 2026-10-01 | accepted   | update, release, install                                                            |
@@ -149,6 +150,12 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [134](134-close-features-only-after-persisting-the-final-handoff-and-consolidate-the-featu.md)                          | Treat close-feature as implicit squash intent.                                                                                                                                                                                  | The resulting feature commit includes the final handoff and consolidated ADR/handoff documents, with no post-squash commits.                                                                                                    |
+| [133](133-first-release-is-v0-1-0-then-semver-from-commits.md)                                                          | 1. The first cut is forced: `pnpm release --version 0.1.0` (and the matching.                                                                                                                                                   | `rule_tool_update` follows release tags; the first tag clients can land on is.                                                                                                                                                   |
+| [132](132-rename-rule-tool-plan-docs-to-rule-tool-impersonation.md)                                                       | Rename the tool to `rule_tool_impersonation`. The module moves to.                                                                                                                                                               | `DEPRECATIONS` keeps `rule_tool_plan_docs` answering as `rule_tool_impersonation`.                                                                                                                                                |
+| [131](131-an-update-moves-a-git-clone-install-to-the-newest-release-tag-unasked.md)                                     | After the fetch (now `-p -P`, so a withdrawn tag is never read as newest),.                                                                                                                                                     | A git-clone install follows release tags.                                                                                                                                                                                       |
+| [130](130-this-server-releases-itself-with-pnpm-release-and-the-push-is-the-release.md)                                 | `scripts/release` plans then applies.                                                                                                                                                                                           | Tags become the release record `rule_tool_update` reads.                                                                                                                                                                         |
+| [129](129-a-file-is-reported-on-a-task-is-confirmed.md)                                                                 | A file is reported on.                                                                                                                                                                                                          | No file written on this machine is ever confirmed by a person again for an em.                                                                                                                                                  |
 | [128](128-consolidate-the-feature-adrs-and-handoffs-into-one-commit-at-the-close-squash.md)                             | `rule_tool_git action=squash` consolidates the feature's documents before the squash, behind the same single confirmation.                                                                                                       | The closed feature is one commit holding the code and the consolidated ADR and handoff, and the two indexes.                                                                                                                    |
 | [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md)                                            | `scripts/build/version/index.mjs --next` derives the bump from the commits since the newest tag using the shared rule in `src/core/commit`: `fix` is PATCH, `feat` is MINOR, a `!` or a `BREAKING CHANGE:` footer is MAJOR,...  | The version is a function of the history, computed by the same rule that gated the commits, so a version that disagrees with its commits cannot be produced by accident.                                                        |
 | [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md)                              | The close runs `git reset --soft <merge-base>` (the same deterministic boundary every other consumer reads) and then one `git commit`. A soft reset leaves the index holding the tip tree, so the new commit's tree is the...   | A feature of any shape - linear or merged - becomes one commit whose tree is provably the same as before, and whose message is validated before it is written.                                                                  |
@@ -222,7 +229,7 @@ file. Where a line stops short the rest is in the ADR.
 | [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md)                                       | Split rule catalogs one file per rule under family folders (framework/js, framework/vanilla, quality/typescript-prose-manifest-simplicity-comments) with kebab-case underscore-prefixed names and index.js barrels...           | Positive: file names say what they contain, duplicate rules are impossible by construction, one canonical import path per module, and the language and size rules are regression-tested.                                        |
 | [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md)                                                 | Reorganize scripts/, src/ and test/ (renamed to tests/) into thematic subfolders by feature; apply code splitting with a 150-line threshold (100 + 50 tolerance) to JS/MJS files, exempting the shell installers; adopt the...  | Positive: navigability, isolation, measurable coverage and a CI gate.                                                                                                                                                           |
 | [056](056-drop-the-vs-code-extension-and-its-installers.md)                                                             | Delete extensions/ (vscode-rule source + rule-vanilla-reactive.vsix).                                                                                                                                                             | Positive: installers shrink (no vsce build, no six-editor probing), no committed binary .vsix, surface and supply chain simpler, aligns with upstream ADR 088 and the lean-web direction.                                       |
-| [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md)                      | Restructure the command surface: router rule-mcp -> rule; area prompts become rule-area-*; delete rule-a11y-audit, rule-code-review, the standalone rule-compression command, rule-new-feature, rule-pull-request,...            | Positive: one namespace per concern (rule-area-* for areas, rule-process-* for the process family incl. rule-process-tdd); compression is implicit in every command body instead of a standalone slash command; the router is a... |
+| [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md)                      | Restructure the command surface: router rule-mcp -> rule; area prompts become rule-area-_; delete rule-a11y-audit, rule-code-review, the standalone rule-compression command, rule-new-feature, rule-pull-request,...            | Positive: one namespace per concern (rule-area-* for areas, rule-process-* for the process family incl. rule-process-tdd); compression is implicit in every command body instead of a standalone slash command; the router is a... |
 | [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md)                                       | Give each active role three slash commands - `rule-persona-<role>-plan`, `rule-persona-<role>-audit`, `rule-persona-<role>-review` (naming finalized in ADR 113; originally shipped as `rule-plan-<role>` / `rule-audit-<role>` /... | Positive: the user can run just the step they need; every command body names the exact tools to call, so agent behavior no longer depends on which surface the host exposes; proposed roles still stay out of the surfaces...   |
 | [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md)                          | Gateway is the single server-side orchestrating entrypoint for every implementation flow; it issues a bound receipt the write path must present; backend/database/devops/security guardrails are first-class families mapped... | Positive: unvalidated code cannot be delivered (fail-closed at a single server-side entrypoint), server-side receipts bind writes to what was checked, and backend/database/devops/security guardrail families run on every...  |
 | [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md)                            | Adopt the 26-prompt pre-packaged registry in src/prompts/index.js with strict argument schemas, tool-invoked styleguides, TDD/a11y baseline, and a mandatory commit-scope closer; keep prompt names distinct from the...        | Positive: one prompt per area with strict zod-validated arguments, styleguides invoked via tools, TDD/a11y baseline or explicit opt-out, every one-shot ends by proposing a commit message with mandatory scope.                |
@@ -377,6 +384,20 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 - [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
 
+### guardrails
+
+- [129](129-a-file-is-reported-on-a-task-is-confirmed.md) A file is reported on, a task is confirmed
+- [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md) The fix tool and command apply the deterministic guardrails, not the file tree
+- [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
+- [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md) No corepack activation and no engines field in a generated package.json
+- [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
+- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
+- [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
+- [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
+- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
+- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
+- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+
 ### prompts
 
 - [120](120-fold-the-per-operation-persona-commands-into-one-per-role-with-the-depth-read-fr.md) Fold the per-operation persona commands into one per role, with the depth read from the request
@@ -404,18 +425,31 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
 - [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
 
-### guardrails
+### personas
 
-- [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md) The fix tool and command apply the deterministic guardrails, not the file tree
-- [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
-- [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md) No corepack activation and no engines field in a generated package.json
-- [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
+- [132](132-rename-rule-tool-plan-docs-to-rule-tool-impersonation.md) Rename rule_tool_plan_docs to rule_tool_impersonation
+- [120](120-fold-the-per-operation-persona-commands-into-one-per-role-with-the-depth-read-fr.md) Fold the per-operation persona commands into one per role, with the depth read from the request
+- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
+- [107](107-the-design-system-persona-becomes-the-ui-ux-lead.md) The design-system persona becomes the UI/UX lead
+- [093](093-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md) Add an Open Source Steward persona for governance, contributors and donors
 - [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
-- [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
-- [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
-- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
-- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
-- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
+- [060](060-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
+- [059](059-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
+- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+
+### release
+
+- [133](133-first-release-is-v0-1-0-then-semver-from-commits.md) First release is v0.1.0, then SemVer from commits
+- [131](131-an-update-moves-a-git-clone-install-to-the-newest-release-tag-unasked.md) An update moves a git-clone install to the newest release tag, unasked
+- [130](130-this-server-releases-itself-with-pnpm-release-and-the-push-is-the-release.md) This server releases itself with pnpm release, and the push is the release
+- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
+- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
+- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
+- [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md) Reset the project version to 0.1.0, first release will be v0.1.0
+- [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
+- [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
+- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
 ### testing
 
@@ -430,17 +464,17 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
 - [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
-### personas
+### git
 
-- [120](120-fold-the-per-operation-persona-commands-into-one-per-role-with-the-depth-read-fr.md) Fold the per-operation persona commands into one per role, with the depth read from the request
-- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
-- [107](107-the-design-system-persona-becomes-the-ui-ux-lead.md) The design-system persona becomes the UI/UX lead
-- [093](093-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md) Add an Open Source Steward persona for governance, contributors and donors
-- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
-- [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
-- [060](060-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
-- [059](059-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
-- [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
+- [134](134-close-features-only-after-persisting-the-final-handoff-and-consolidate-the-featu.md) Close features only after persisting the final handoff and consolidate the feature by default
+- [130](130-this-server-releases-itself-with-pnpm-release-and-the-push-is-the-release.md) This server releases itself with pnpm release, and the push is the release
+- [128](128-consolidate-the-feature-adrs-and-handoffs-into-one-commit-at-the-close-squash.md) Consolidate the feature ADRs and handoffs into one commit at the close squash
+- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
+- [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
+- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
+- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
+- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
+- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
 
 ### routing
 
@@ -465,25 +499,15 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
 - [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
 
-### git
+### breaking
 
-- [128](128-consolidate-the-feature-adrs-and-handoffs-into-one-commit-at-the-close-squash.md) Consolidate the feature ADRs and handoffs into one commit at the close squash
-- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
-- [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
-- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
-- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
-- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
-- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
-
-### release
-
-- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
+- [132](132-rename-rule-tool-plan-docs-to-rule-tool-impersonation.md) Rename rule_tool_plan_docs to rule_tool_impersonation
+- [120](120-fold-the-per-operation-persona-commands-into-one-per-role-with-the-depth-read-fr.md) Fold the per-operation persona commands into one per role, with the depth read from the request
+- [117](117-area-slash-commands-are-collectors-only-leaves-route-from-the-prompt.md) Area slash commands are collectors only; leaves route from the prompt
+- [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
+- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
+- [114](114-flight-is-process-area-guidance-injected-on-every-prompt-not-a-slash-command.md) Flight is process-area guidance injected on every prompt, not a slash command
 - [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
-- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
-- [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md) Reset the project version to 0.1.0, first release will be v0.1.0
-- [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
-- [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
-- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
 ### toolchain
 
@@ -504,15 +528,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
 - [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
 
-### breaking
-
-- [120](120-fold-the-per-operation-persona-commands-into-one-per-role-with-the-depth-read-fr.md) Fold the per-operation persona commands into one per role, with the depth read from the request
-- [117](117-area-slash-commands-are-collectors-only-leaves-route-from-the-prompt.md) Area slash commands are collectors only; leaves route from the prompt
-- [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
-- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
-- [114](114-flight-is-process-area-guidance-injected-on-every-prompt-not-a-slash-command.md) Flight is process-area guidance injected on every prompt, not a slash command
-- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
-
 ### ci
 
 - [076](076-coverage-wave-five-raises-the-branch-floor-to-91.md) Coverage wave five raises the branch floor to 91
@@ -530,6 +545,15 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [064](064-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
 - [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
 - [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
+
+### handoff
+
+- [134](134-close-features-only-after-persisting-the-final-handoff-and-consolidate-the-featu.md) Close features only after persisting the final handoff and consolidate the feature by default
+- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
+- [108](108-the-handoff-family-gets-a-generated-index-and-the-root-handoff-summary-retires.md) The handoff family gets a generated index, and the root HANDOFF summary retires
+- [104](104-the-handoff-document-closes-with-the-resume-prompt.md) The handoff document closes with the resume prompt
+- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
+- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
 
 ### tool
 
@@ -565,14 +589,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [079](079-add-the-oss-architect-review-persona.md) Add the OSS Architect review persona
 - [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
 
-### handoff
-
-- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
-- [108](108-the-handoff-family-gets-a-generated-index-and-the-root-handoff-summary-retires.md) The handoff family gets a generated index, and the root HANDOFF summary retires
-- [104](104-the-handoff-document-closes-with-the-resume-prompt.md) The handoff document closes with the resume prompt
-- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
-- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
-
 ### mcp
 
 - [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
@@ -589,11 +605,33 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
 
+### tools
+
+- [132](132-rename-rule-tool-plan-docs-to-rule-tool-impersonation.md) Rename rule_tool_plan_docs to rule_tool_impersonation
+- [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md) The fix tool and command apply the deterministic guardrails, not the file tree
+- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
+- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
+- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
+
 ### infrastructure
 
 - [008](008-scaffold-skill-consolidation.md) scaffold skill consolidation
 - [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
+- [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
+
+### install
+
+- [131](131-an-update-moves-a-git-clone-install-to-the-newest-release-tag-unasked.md) An update moves a git-clone install to the newest release tag, unasked
+- [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
+- [092](092-surface-selection-amends-the-install-stack-freeze-with-an-additive-loader-filter.md) Surface selection amends the install stack freeze with an additive loader filter
+- [091](091-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md) Install/uninstall rework keeps current stack, steps and contents only
+
+### naming
+
+- [132](132-rename-rule-tool-plan-docs-to-rule-tool-impersonation.md) Rename rule_tool_plan_docs to rule_tool_impersonation
+- [084](084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.md) Keep the name with a written posture, no npm placeholder yet
+- [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
 - [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
 
 ### ratchet
@@ -624,12 +662,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [088](088-a-persona-topic-is-the-binding-scope-of-the-run.md) A persona topic is the binding scope of the run
 - [051](051-token-efficiency-pipeline.md) Token-efficiency pipeline (caveman aggressive + tokensave-aware decoration)
 
-### tools
+### versioning
 
-- [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md) The fix tool and command apply the deterministic guardrails, not the file tree
-- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
-- [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
-- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
+- [133](133-first-release-is-v0-1-0-then-semver-from-commits.md) First release is v0.1.0, then SemVer from commits
+- [130](130-this-server-releases-itself-with-pnpm-release-and-the-push-is-the-release.md) This server releases itself with pnpm release, and the push is the release
+- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
+- [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md) Reset the project version to 0.1.0, first release will be v0.1.0
 
 ### backend
 
@@ -661,23 +699,11 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
 - [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
 
-### install
-
-- [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
-- [092](092-surface-selection-amends-the-install-stack-freeze-with-an-additive-loader-filter.md) Surface selection amends the install stack freeze with an additive loader filter
-- [091](091-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md) Install/uninstall rework keeps current stack, steps and contents only
-
 ### merge
 
 - [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
 - [008](008-scaffold-skill-consolidation.md) scaffold skill consolidation
 - [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
-
-### naming
-
-- [084](084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.md) Keep the name with a written posture, no npm placeholder yet
-- [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
-- [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
 
 ### new
 
