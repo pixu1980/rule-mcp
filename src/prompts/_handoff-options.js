@@ -12,6 +12,7 @@
  *
  * Vocabulary:
  *   handoff | close-session     → mode
+ *   close-feature               → closeFeature and implicit squash
  *   compress | no-compress      → compress = true | false (default: compress)
  *   full | brief | minimal      → format
  *   no-diff | no-log | no-context | no-adrs | no-roadmap → include* = false
@@ -54,6 +55,7 @@ export function parseHandoffOptions(raw) {
       }
       case "close-feature": {
         result.closeFeature = true;
+        result.squash = true;
         break;
       }
       case "squash": {
