@@ -2,6 +2,8 @@ allowBuilds:
   "@modelcontextprotocol/inspector": false
 minimumReleaseAgeExclude:
   - eslint-plugin-unicorn@75.0.0 || 76.0.0
+  - '@modelcontextprotocol/inspector@2.9.0'
+  - globals@17.13.0
 overrides:
   # Transitive advisories that `@modelcontextprotocol/sdk` has not caught up
   # to. Overrides, not ranges: the pin is the remediation, and the audit gate
