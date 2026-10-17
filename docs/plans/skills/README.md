@@ -74,7 +74,7 @@ Total: 88 skills.
 | 63 | `pix-devops-docker` | devops | `docs/plans/skills/devops/pix-devops-docker.md` | pending |
 | 64 | `pix-devops-deploy-preview` | devops | `docs/plans/skills/devops/pix-devops-deploy-preview.md` | pending |
 | 65 | `pix-devops` | devops | `docs/plans/skills/devops/pix-devops.md` | pending |
-| 66 | `pix-data-validation` | data | `docs/plans/skills/data/pix-data-validation.md` | pending |
+| 66 | `pix-data-validation` | data | `docs/plans/skills/data/pix-data-validation.md` | planned |
 | 67 | `pix-data-sqlite` | data | `docs/plans/skills/data/pix-data-sqlite.md` | pending |
 | 68 | `pix-data-sql` | data | `docs/plans/skills/data/pix-data-sql.md` | pending |
 | 69 | `pix-data-postgresql` | data | `docs/plans/skills/data/pix-data-postgresql.md` | pending |
