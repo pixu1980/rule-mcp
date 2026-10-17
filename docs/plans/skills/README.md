@@ -13,7 +13,7 @@ Total: 88 skills.
 | 2 | `rule-ui` | ui | `docs/plans/skills/ui/rule-ui.md` | planned |
 | 3 | `rule-toolchain-vite` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-vite.md` | planned |
 | 4 | `rule-toolchain-turborepo` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-turborepo.md` | planned |
-| 5 | `rule-toolchain-rspack` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-rspack.md` | pending |
+| 5 | `rule-toolchain-rspack` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-rspack.md` | planned |
 | 6 | `rule-toolchain-project` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-project.md` | pending |
 | 7 | `rule-toolchain-pnpm` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-pnpm.md` | pending |
 | 8 | `rule-toolchain-parcel` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-parcel.md` | pending |
