@@ -20,7 +20,7 @@ Total: 88 skills.
 | 9 | `rule-toolchain-eslint` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-eslint.md` | planned |
 | 10 | `rule-toolchain-biome` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-biome.md` | planned |
 | 11 | `rule-toolchain` | toolchain | `docs/plans/skills/toolchain/rule-toolchain.md` | planned |
-| 12 | `rule-styleguide-typescript` | styleguide | `docs/plans/skills/styleguide/rule-styleguide-typescript.md` | pending |
+| 12 | `rule-styleguide-typescript` | styleguide | `docs/plans/skills/styleguide/rule-styleguide-typescript.md` | planned |
 | 13 | `rule-styleguide-readme` | styleguide | `docs/plans/skills/styleguide/rule-styleguide-readme.md` | pending |
 | 14 | `rule-styleguide-patterns` | styleguide | `docs/plans/skills/styleguide/rule-styleguide-patterns.md` | pending |
 | 15 | `rule-styleguide-naming` | styleguide | `docs/plans/skills/styleguide/rule-styleguide-naming.md` | pending |
