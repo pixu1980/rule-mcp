@@ -19,7 +19,7 @@ Total: 88 skills.
 | 8 | `rule-toolchain-husky` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-husky.md` | planned |
 | 9 | `rule-toolchain-eslint` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-eslint.md` | planned |
 | 10 | `rule-toolchain-biome` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-biome.md` | planned |
-| 11 | `rule-toolchain` | toolchain | `docs/plans/skills/toolchain/rule-toolchain.md` | pending |
+| 11 | `rule-toolchain` | toolchain | `docs/plans/skills/toolchain/rule-toolchain.md` | planned |
 | 12 | `rule-styleguide-validation` | styleguide | `docs/plans/skills/styleguide/rule-styleguide-validation.md` | pending |
 | 13 | `rule-styleguide-typescript` | styleguide | `docs/plans/skills/styleguide/rule-styleguide-typescript.md` | pending |
 | 14 | `rule-styleguide-readme` | styleguide | `docs/plans/skills/styleguide/rule-styleguide-readme.md` | pending |
