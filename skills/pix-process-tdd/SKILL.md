@@ -109,4 +109,4 @@ Use `coverage-gates` skill for CI coverage enforcement details.
 - [rule-process-code-review](../rule-process-code-review/SKILL.md) - Risk-based PR/MR review and a11y bridge
 - [rule-process-simplicity](../rule-process-simplicity/SKILL.md) - YAGNI guardrails that pair with test-first work
 - [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md) - Code style that tests keep honest
-- [rule-toolchain-commits](../rule-toolchain-commits/SKILL.md) - Conventional-commit scaffolding the workflow closes with
+- [rule-styleguide-git](../rule-styleguide-git/SKILL.md) - Conventional-commit scaffolding the workflow closes with

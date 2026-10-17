@@ -150,7 +150,7 @@ any byte-for-byte test around it fails on a file nobody edited.
 
 ## See also
 
-- [rule-toolchain-commits](../rule-toolchain-commits/SKILL.md) - The commit
+- [rule-styleguide-git](../rule-styleguide-git/SKILL.md) - The commit
   convention this depends on, and the hook that enforces it
 - [rule-process-npm-release](../rule-process-npm-release/SKILL.md) - The
   release the changelog is generated for

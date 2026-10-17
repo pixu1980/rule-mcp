@@ -166,4 +166,4 @@ Run `rule_tool_compress` to apply the passes to arbitrary prose before writing i
 - `rule_tool_compress` / `/rule-compress` - compression pass (ADR 115)
 - [rule-styleguide-markdown](../rule-styleguide-markdown/SKILL.md) - the document structure this writes into
 - [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md) - naming, where code wins over prose style
-- [rule-toolchain-commits](../rule-toolchain-commits/SKILL.md) - commit messages follow these rules too
+- [rule-styleguide-git](../rule-styleguide-git/SKILL.md) - commit messages follow these rules too

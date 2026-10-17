@@ -51,7 +51,7 @@ Prompt
   ├─ web / desktop / library / mobile   → rule-platform + platform skill
   ├─ docs / ADR / review / handoff / workflow → rule-process + process tool
   ├─ lint/build/package config          → rule-toolchain + focused toolchain skill
-  ├─ commit / push / git discipline     → rule-toolchain-commits
+  ├─ commit / push / git discipline     → rule-styleguide-git
   └─ concrete component/test template   → the rule://templates resource
 ```
 
@@ -191,6 +191,7 @@ Apply HTML/CSS/JS/JSON/Markdown/a11y/naming/validation standards.
 | [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md)             | `pix_styleguide_a11y`       | all        | WCAG 2.2 AA accessibility: semantic HTML, ARIA, keyboard navigation, color contrast, forms, media, automated testing...             |
 | [rule-styleguide-css](../rule-styleguide-css/SKILL.md)               | `pix_styleguide_css`        | all        | CSS architecture, selector strategy (data-part, element), naming conventions, property ordering, custom properties, c...            |
 | [rule-styleguide-configuration](../rule-styleguide-configuration/SKILL.md) | `pix_styleguide_configuration` | all | Base project configuration files: .gitignore, .editorconfig, .nvmrc, .env.example, README, LICENSE, CONTRIBUTING, and the toolchain config baselines. |
+| [rule-styleguide-git](../rule-styleguide-git/SKILL.md) | `pix_styleguide_git` | all | Atomic Conventional Commits with a mandatory scope, branch naming, and the commit-msg and pre-push discipline. |
 | [rule-styleguide-html](../rule-styleguide-html/SKILL.md)             | `pix_styleguide_html`       | all        | Semantic HTML, document structure, template engine syntax, accessibility essentials, and element conventions for fron...            |
 | [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md) | `pix_styleguide_javascript` | all        | JavaScript conventions: naming, functions, classes, async patterns, DOM manipulation, custom elements, static initial...            |
 | [rule-styleguide-json](../rule-styleguide-json/SKILL.md)             | `pix_styleguide_json`       | all        | JSON structure conventions: validity, property naming, date formats, numeric precision, schema mindset, and API respo...            |
@@ -208,7 +209,6 @@ Configure pnpm, TypeScript, ESLint, Biome, Vite, Parcel, Turborepo, Husky.
 | ---------------------------------------------------------------- | -------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [rule-toolchain](../rule-toolchain/SKILL.md)                       | `pix_toolchain`            | all        | Index of all toolchain skills: build tools (Vite, Parcel), linters (Biome, ESLint), package management (pnpm), monore...                         |
 | [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md)           | `pix_toolchain_biome`      | all        | Biome linter and formatter configuration and best practices. Zero-config by default, but covers migration from ESLint...                         |
-| [rule-toolchain-commits](../rule-toolchain-commits/SKILL.md)       | `pix_toolchain_commits`    | all        | Enforce atomic Conventional Commits with a mandatory scope on every commit and push. Use when writing, validating, or preparing commit messages. |
 | [rule-toolchain-eslint](../rule-toolchain-eslint/SKILL.md)         | `pix_toolchain_eslint`     | all        | ESLint 9+ flat config: rule sets for TypeScript, React, and Node.js, plugin integration, custom rules, and CI integra...                         |
 | [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md)           | `pix_toolchain_husky`      | all        | Git hooks management with Husky: commit hooks, pre-push validation, lint-staged integration, commitlint, and CI-frien...                         |
 | [rule-toolchain-parcel](../rule-toolchain-parcel/SKILL.md)         | `pix_toolchain_parcel`     | all        | Parcel 2+ zero-configuration bundler: entry points, transpilation, code splitting, image optimization, environment va...                         |
@@ -239,7 +239,7 @@ Design and route visible interface work while preserving rule implementation con
 | GraphQL API              | `rule-backend-graphql`                               | runtime skill, `rule-backend-security`             | `rule_tool_search`, `rule_tool_check`                   |
 | Production observability | `rule-devops-observability`                          | runtime and platform skill                        | `rule_tool_check`, `rule_tool_process_adr`              |
 | Code review              | `rule-process-code-review`                           | feature workflow, relevant domain skill           | `rule_tool_check`                                      |
-| Commit/push              | `rule-toolchain-commits`                             | `rule-toolchain-husky`                             | `rule_tool_check`                                      |
+| Commit/push              | `rule-styleguide-git`                                | `rule-toolchain-husky`                             | `rule_tool_check`                                      |
 | Docs/ADR                 | `rule-styleguide-markdown`                           | `rule-process-adr`                                 | `rule_tool_process_adr`, `rule_tool_handoff`            |
 | File-tree cleanup        | `rule-styleguide-naming`                             | `rule-styleguide-configuration`                    | `/rule-area-styleguide` (file-tree), `rule_tool_check`  |
 
@@ -276,7 +276,7 @@ touches that domain:
 
 | Skill                      | When to load                                                      |
 | -------------------------- | ----------------------------------------------------------------- |
-| `rule-toolchain-commits`    | **Immediately** - before any branch, commit, or push              |
+| `rule-styleguide-git`       | **Immediately** - before any branch, commit, or push              |
 | `rule-styleguide-markdown`  | **Immediately** - when writing or updating README and prose files |
 | `rule-styleguide-typescript` | **Immediately** - when writing TypeScript types and interfaces    |
 | `rule-devops-testing`       | When creating tests or configuring coverage                       |
@@ -286,7 +286,7 @@ touches that domain:
 
 ### What each one covers
 
-- **`rule-toolchain-commits`** - Branch naming prefixes (`feat/`, `fix/`, `refactor/`), Conventional
+- **`rule-styleguide-git`** - Branch naming prefixes (`feat/`, `fix/`, `refactor/`), Conventional
   Commits with mandatory scope, merge-request conventions
 - **`rule-styleguide-markdown`** - One `#` title, an intro naming the audience, ordered headings,
   descriptive relative links, no repetition

@@ -46,7 +46,6 @@ frameworks: [all]
 | Skill                                                            | Tool              | Best For                                                                    |
 | ---------------------------------------------------------------- | ----------------- | --------------------------------------------------------------------------- |
 | [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md)           | Husky             | Git hooks, lint-staged, commitlint                                          |
-| [rule-toolchain-commits](../rule-toolchain-commits/SKILL.md)       | Commit Discipline | Atomic Conventional Commits with mandatory scope, commit-msg/pre-push hooks |
 
 ## Quick Selection Guide
 
@@ -56,7 +55,6 @@ Need linting + formatting?              → rule-toolchain-biome (fast, unified)
 Need a package manager?                 → rule-toolchain-pnpm
 Need monorepo orchestration?            → rule-toolchain-turborepo
 Need Git hooks?                         → rule-toolchain-husky
-Need commit/push discipline (atomic, scope)? → rule-toolchain-commits
 ```
 
 ## Choosing a formatter and a linter: Prettier, Biome, ESLint, dprint, oxfmt
