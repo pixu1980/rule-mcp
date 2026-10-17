@@ -25,6 +25,7 @@ guardrails: [connection-pool, migration-safety, parameterized-queries, transacti
 | [pix-data-sqlite](../pix-data-sqlite/SKILL.md)         | SQLite 3.45+           | Relational (embedded) | Single-file storage, desktop and edge apps, tests    |
 | [pix-data-duckdb](../pix-data-duckdb/SKILL.md)         | DuckDB 1+              | Analytical (columnar) | Local OLAP, Parquet/CSV analysis, embedded analytics |
 | [pix-data-indexed-db](../pix-data-indexed-db/SKILL.md) | IndexedDB              | Browser (key-value)   | Offline-first web apps, client-side persistence      |
+| [pix-data-validation](../pix-data-validation/SKILL.md) | Business data          | Validation            | Email, phone, VAT, tax IDs, postal codes, IBAN, and the schemas that enforce them |
 
 ## Data architecture patterns, and the question each one answers
 

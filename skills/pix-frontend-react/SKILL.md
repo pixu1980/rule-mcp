@@ -697,5 +697,5 @@ function OrderForm() {
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher
 - [pix-frontend](../pix-frontend/SKILL.md) - Frontend skill index
 - [pix-styleguide](../pix-styleguide/SKILL.md) - Shared frontend standards
-- [pix-styleguide-validation](../pix-styleguide-validation/SKILL.md) - Business validation rules
+- [pix-data-validation](../pix-data-validation/SKILL.md) - Business validation rules
 - [pix-toolchain-vite](../pix-toolchain-vite/SKILL.md) - Vite configuration

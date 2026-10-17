@@ -1,8 +1,9 @@
 ---
-name: pix-styleguide-validation
+name: pix-data-validation
 description: >-
   Use when validating international business data. Covers email, phone, VAT, tax IDs, postal codes, and national identification numbers for EU, UK, and US.
 tags:
+  - "data"
   - "validation"
   - "business-rules"
   - "international"
@@ -15,7 +16,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-styleguide-validation - Business Validation Patterns
+# pix-data-validation - Business Data Validation Patterns
 
 ## Table of Contents
 
