@@ -74,7 +74,7 @@ Total: 88 skills.
 | 63 | `rule-devops-docker` | devops | `docs/plans/skills/devops/rule-devops-docker.md` | pending |
 | 64 | `rule-devops-deploy-preview` | devops | `docs/plans/skills/devops/rule-devops-deploy-preview.md` | pending |
 | 65 | `rule-devops` | devops | `docs/plans/skills/devops/rule-devops.md` | pending |
-| 66 | `rule-data-validation` | data | `docs/plans/skills/data/rule-data-validation.md` | pending |
+| 66 | `rule-data-validation` | data | `docs/plans/skills/data/rule-data-validation.md` | planned |
 | 67 | `rule-data-sqlite` | data | `docs/plans/skills/data/rule-data-sqlite.md` | pending |
 | 68 | `rule-data-sql` | data | `docs/plans/skills/data/rule-data-sql.md` | pending |
 | 69 | `rule-data-postgresql` | data | `docs/plans/skills/data/rule-data-postgresql.md` | pending |
