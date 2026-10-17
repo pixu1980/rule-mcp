@@ -16,7 +16,7 @@ Total: 88 skills.
 | 5 | `rule-toolchain-rspack` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-rspack.md` | planned |
 | 6 | `rule-toolchain-pnpm` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-pnpm.md` | planned |
 | 7 | `rule-toolchain-parcel` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-parcel.md` | planned |
-| 8 | `rule-toolchain-husky` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-husky.md` | pending |
+| 8 | `rule-toolchain-husky` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-husky.md` | planned |
 | 9 | `rule-toolchain-eslint` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-eslint.md` | pending |
 | 10 | `rule-toolchain-biome` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-biome.md` | pending |
 | 11 | `rule-toolchain` | toolchain | `docs/plans/skills/toolchain/rule-toolchain.md` | pending |
