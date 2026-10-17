@@ -11,7 +11,7 @@ skills:
   - "input hardening"
 evidenceSkills:
   - "rule-backend-security"
-  - "rule-styleguide-validation"
+  - "rule-data-validation"
 aliases:
   - "security engineer"
   - "ingegnere della sicurezza"

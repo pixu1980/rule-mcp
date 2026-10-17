@@ -25,6 +25,7 @@ guardrails: [connection-pool, migration-safety, parameterized-queries, transacti
 | [rule-data-sqlite](../rule-data-sqlite/SKILL.md)         | SQLite 3.45+           | Relational (embedded) | Single-file storage, desktop and edge apps, tests    |
 | [rule-data-duckdb](../rule-data-duckdb/SKILL.md)         | DuckDB 1+              | Analytical (columnar) | Local OLAP, Parquet/CSV analysis, embedded analytics |
 | [rule-data-indexed-db](../rule-data-indexed-db/SKILL.md) | IndexedDB              | Browser (key-value)   | Offline-first web apps, client-side persistence      |
+| [rule-data-validation](../rule-data-validation/SKILL.md) | Business data          | Validation            | Email, phone, VAT, tax IDs, postal codes, IBAN, and the schemas that enforce them |
 
 ## Data architecture patterns, and the question each one answers
 

@@ -11,7 +11,7 @@ skills:
   - "the test pyramid"
 evidenceSkills:
   - "rule-devops-testing"
-  - "rule-styleguide-validation"
+  - "rule-data-validation"
 aliases:
   - "qa-testing"
   - "qa engineer"

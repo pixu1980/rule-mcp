@@ -16,19 +16,19 @@ against are in [`14-guardrails.md`](14-guardrails.md).
 The router's own directory, `skills/rule/`, mints no skill tool, which is why
 the catalog is 88 and the directory count is 89.
 
-| Area                      | Skills | Covers                                                            |
-| ------------------------- | ------ | ----------------------------------------------------------------- |
-| [ai](#ai)                 | 5      | Building agents: prompting, context, evals, agent architecture    |
-| [backend](#backend)       | 9      | Services and APIs: Node frameworks, API design, backend security  |
-| [data](#data)             | 8      | Databases and storage, from SQL dialects to IndexedDB             |
-| [devops](#devops)         | 5      | Pipelines, containers, observability, testing, versioning         |
-| [frontend](#frontend)     | 10     | Frameworks and the code that runs in a browser                    |
-| [meta](#meta)             | 5      |                                                                   |
-| [platform](#platform)     | 6      | Where the code ships: web, desktop, mobile, library, agent        |
-| [process](#process)       | 9      | How work is done: reviews, ADRs, changelogs, handoffs, simplicity |
-| [styleguide](#styleguide) | 20     | The rules code is written to, per language and concern            |
-| [toolchain](#toolchain)   | 9      | Build tools, linters, package manager, commit hooks               |
-| [ui](#ui)                 | 2      | The design system and its components                              |
+| Area                      | Skills | Covers                                                                            |
+| ------------------------- | ------ | --------------------------------------------------------------------------------- |
+| [ai](#ai)                 | 5      | Building agents: prompting, context, evals, agent architecture                    |
+| [backend](#backend)       | 9      | Services and APIs: Node frameworks, API design, backend security                  |
+| [data](#data)             | 9      | Databases and storage, and the shape and validation of the data that reaches them |
+| [devops](#devops)         | 5      | Pipelines, containers, observability, testing, versioning                         |
+| [frontend](#frontend)     | 10     | Frameworks and the code that runs in a browser                                    |
+| [meta](#meta)             | 5      |                                                                                   |
+| [platform](#platform)     | 6      | Where the code ships: web, desktop, mobile, library, agent                        |
+| [process](#process)       | 9      | How work is done: reviews, ADRs, changelogs, handoffs, simplicity                 |
+| [styleguide](#styleguide) | 19     | The rules code is written to, per language and concern                            |
+| [toolchain](#toolchain)   | 9      | Build tools, linters, package manager, commit hooks                               |
+| [ui](#ui)                 | 2      | The design system and its components                                              |
 
 ### ai
 
@@ -66,6 +66,7 @@ the catalog is 88 and the directory count is 89.
 | `rule-data-postgresql` | `rule_tool_data_postgresql` | all        | Use when working with PostgreSQL 16+. Covers DDL scripts, indexing, performance tuning, replication, partitioning, connection pooling, JSONB, and full-text search.    |
 | `rule-data-sql`        | `rule_tool_data_sql`        | all        | Use when writing SQL queries or designing relational database schemas. Covers table design, indexing, DDL scripts, transactions, and database-agnostic best practices. |
 | `rule-data-sqlite`     | `rule_tool_data_sqlite`     | all        | Use when working with SQLite for embedded databases. Covers DDL scripts, query optimization, JSON functions, WAL mode, and production usage patterns.                  |
+| `rule-data-validation` | `rule_tool_data_validation` | all        | Use when validating international business data. Covers email, phone, VAT, tax IDs, postal codes, and national identification numbers for EU, UK, and US.              |
 
 ### devops
 
@@ -150,7 +151,6 @@ the catalog is 88 and the directory count is 89.
 | `rule-styleguide-patterns`      | `rule_tool_styleguide_patterns`      | all              | Use as a quick reference for rule naming and property conventions. Covers condensed cheat sheet for naming, property ordering, and file tree structure.                                                                                                                                                                                                                                                                                                                                                  |
 | `rule-styleguide-readme`        | `rule_tool_styleguide_readme`        | markdown, readme | 'Write or improve a README.md for an open source project. Use this for any request to create, rewrite, review, or polish a README, project description, or "getting started" docs for a library, framework, or tool, or to make an open source project more popular or attractive to users. Do NOT use for internal/private repo docs, API reference generation, or CHANGELOG/CONTRIBUTING files.'                                                                                                      |
 | `rule-styleguide-typescript`    | `rule_tool_styleguide_typescript`    | all              | Use when writing or reviewing TypeScript code, or configuring its compiler. Covers the anti-patterns that flag in review (any, as, enum, optional-chaining sprawl), the practices that hold up at scale (generics, never, readonly, self-documenting APIs), where types live, and the tsconfig, strict mode and path aliases.                                                                                                                                                                           |
-| `rule-styleguide-validation`    | `rule_tool_styleguide_validation`    | all              | Use when validating international business data. Covers email, phone, VAT, tax IDs, postal codes, and national identification numbers for EU, UK, and US.                                                                                                                                                                                                                                                                                                                                               |
 
 ### toolchain
 

@@ -1,8 +1,9 @@
 ---
-name: rule-styleguide-validation
+name: rule-data-validation
 description: >-
   Use when validating international business data. Covers email, phone, VAT, tax IDs, postal codes, and national identification numbers for EU, UK, and US.
 tags:
+  - "data"
   - "validation"
   - "business-rules"
   - "international"
@@ -15,7 +16,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-styleguide-validation - Business Validation Patterns
+# rule-data-validation - Business Data Validation Patterns
 
 ## Table of Contents
 

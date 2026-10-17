@@ -118,6 +118,7 @@ Model persistence, SQL, PostgreSQL, MySQL, and MongoDB.
 | [rule-data-mysql](../rule-data-mysql/SKILL.md)           | `pix_data_mysql`      | all        | MySQL 8+ / MariaDB 11+ complete reference: DDL scripts, InnoDB tuning, indexing strategies, replication (async/semi-s... |
 | [rule-data-postgresql](../rule-data-postgresql/SKILL.md) | `pix_data_postgresql` | all        | PostgreSQL 16+ complete reference: DDL scripts, indexing strategies, performance tuning, replication, partitioning, c... |
 | [rule-data-sql](../rule-data-sql/SKILL.md)               | `pix_data_sql`        | all        | Complete SQL reference: table design patterns, index optimization, DDL scripts (CREATE/ALTER/DROP), query writing sta... |
+| [rule-data-validation](../rule-data-validation/SKILL.md) | `pix_data_validation` | all        | Cross-border business data validation: email, phone, VAT, tax IDs, postal codes, national identification numbers, and the library schemas that enforce them. |
 
 ### DevOps
 
@@ -199,7 +200,6 @@ Apply HTML/CSS/JS/JSON/Markdown/a11y/naming/validation standards.
 | [rule-styleguide-english](../rule-styleguide-english/SKILL.md)       | `pix_styleguide_english`    | all        | English-only prose and American spelling: comments, identifiers and documents in English, US spellings (color, behavior, organiz... |
 | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md)         | `pix_styleguide_naming`     | all        | Naming conventions and file tree structure: PascalCase, camelCase, UPPER_SNAKE_CASE, underscore prefix rule, barrel p...            |
 | [rule-styleguide-patterns](../rule-styleguide-patterns/SKILL.md)     | `pix_styleguide_patterns`   | all        | Quick reference cheat sheet for naming conventions, property ordering, file tree structure, and common patterns. Cond...            |
-| [rule-styleguide-validation](../rule-styleguide-validation/SKILL.md) | `pix_styleguide_validation` | all        | Cross-border business validation patterns: email, phone, VAT, tax IDs, postal codes, national identification numbers,...            |
 
 ### Toolchain
 

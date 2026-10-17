@@ -12,7 +12,7 @@ skills:
   - "rate limiting and pagination"
 evidenceSkills:
     - "rule-backend-graphql"
-  - "rule-styleguide-validation"
+  - "rule-data-validation"
 aliases:
   - "api-design"
   - "api design engineer"

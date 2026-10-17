@@ -18,7 +18,7 @@ export const AREA_SUBJECT = {
   ai: "Building agents: prompting, context, evals, agent architecture",
   backend: "Services and APIs: Node frameworks, API design, backend security",
   compression: "Output compression: the rules that shorten prose without losing facts",
-  data: "Databases and storage, from SQL dialects to IndexedDB",
+  data: "Databases and storage, and the shape and validation of the data that reaches them",
   devops: "Pipelines, containers, observability, testing, versioning",
   frontend: "Frameworks and the code that runs in a browser",
   platform: "Where the code ships: web, desktop, mobile, library, agent",

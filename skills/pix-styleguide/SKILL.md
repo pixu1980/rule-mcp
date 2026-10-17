@@ -54,7 +54,6 @@ Once routed here, consult the table below and load the specific sub-skill's SKIL
 | [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md)           | PascalCase, camelCase, UPPER_SNAKE_CASE, barrel pattern, `_` prefix, directory layout                        | Creating new files, folders, or exports            |
 | [rule-styleguide-patterns](../rule-styleguide-patterns/SKILL.md)       | Quick reference cheat sheet: naming, file tree, HTML elements, CSS property order, JS patterns               | Daily reference during development                 |
 | [rule-styleguide-typescript](../rule-styleguide-typescript/SKILL.md)   | any vs unknown, type guards, unions over enum, generics, never, readonly                                     | Writing or reviewing TypeScript                    |
-| [rule-styleguide-validation](../rule-styleguide-validation/SKILL.md)   | International business validation: email, phone, VAT, tax IDs, postal codes                                  | Form/API validation rules                          |
 
 ---
 

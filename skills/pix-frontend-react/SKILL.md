@@ -697,5 +697,5 @@ function OrderForm() {
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
 - [rule-frontend](../rule-frontend/SKILL.md) - Frontend skill index
 - [rule-styleguide](../rule-styleguide/SKILL.md) - Shared frontend standards
-- [rule-styleguide-validation](../rule-styleguide-validation/SKILL.md) - Business validation rules
+- [rule-data-validation](../rule-data-validation/SKILL.md) - Business validation rules
 - [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md) - Vite configuration

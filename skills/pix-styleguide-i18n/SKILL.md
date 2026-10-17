@@ -303,6 +303,6 @@ Before shipping any frontend feature, verify:
 
 - [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md) - `lang` and `dir` are accessibility attributes before they are i18n ones
 - [rule-styleguide-css](../rule-styleguide-css/SKILL.md) - logical properties and the cascade that makes RTL free
-- [rule-styleguide-validation](../rule-styleguide-validation/SKILL.md) - addresses, phone numbers and tax IDs vary by country the same way text varies by language
+- [rule-data-validation](../rule-data-validation/SKILL.md) - addresses, phone numbers and tax IDs vary by country the same way text varies by language
 - [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md) - where the formatting calls live
 - [rule-frontend](../rule-frontend/SKILL.md) - framework-level wiring for the locale provider
