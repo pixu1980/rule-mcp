@@ -1,7 +1,7 @@
 ---
 name: rule-styleguide-typescript
 description: >-
-  Use when writing or reviewing TypeScript code. Covers the anti-patterns that flag in review (any, as, enum, optional-chaining sprawl), the practices that hold up at scale (generics, never, readonly, self-documenting APIs), and where types live.
+  Use when writing or reviewing TypeScript code, or configuring its compiler. Covers the anti-patterns that flag in review (any, as, enum, optional-chaining sprawl), the practices that hold up at scale (generics, never, readonly, self-documenting APIs), where types live, and the tsconfig, strict mode and path aliases.
 tags:
   - typescript
   - types
@@ -14,6 +14,8 @@ tags:
   - narrowing
   - code-review
   - styleguide
+  - tsconfig
+  - compiler
 frameworks: [all]
 guardrails: [ts-catch-unknown, ts-no-double-assertion, ts-no-explicit-any, ts-union-over-enum]
 ---
@@ -22,7 +24,7 @@ guardrails: [ts-catch-unknown, ts-no-double-assertion, ts-no-explicit-any, ts-un
 
 ## Purpose
 
-Compiler configuration is a different skill ([rule-toolchain-typescript](../rule-toolchain-typescript/SKILL.md)).
+Compiler configuration is in [COMPILER.md](./COMPILER.md): strict mode, the base tsconfigs, path aliases, composite projects, and the runtime validation boundary.
 This one is about the code: the patterns that compile, ship, work, and then make
 whoever inherits them wish they had not.
 
@@ -305,7 +307,7 @@ prose never trips a rule.
 
 ## See also
 
-- [rule-toolchain-typescript](../rule-toolchain-typescript/SKILL.md) - tsconfig, strict mode, path aliases, build strategy
+- [COMPILER.md](./COMPILER.md) - tsconfig, strict mode, path aliases, build strategy
 - [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md) - the runtime rules underneath the types
 - [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md) - naming for types, files and exports
 - [rule-process-code-review](../rule-process-code-review/SKILL.md) - where these get flagged

@@ -123,7 +123,7 @@ app.get("/health", (_req: Request, res: Response) => {
 ### 5 · Apply the surrounding standards
 
 - Testing and coverage: align with `rule-devops-testing`.
-- Types: follow `rule-toolchain-typescript` (strict, no loose casts).
+- Types: follow `rule-styleguide-typescript` (strict, no loose casts).
 - Containers: follow `rule-devops-docker` for images and base-image policy.
 - Prose and records: `rule-styleguide-markdown` for documentation,
   `rule-process-adr` for decisions.

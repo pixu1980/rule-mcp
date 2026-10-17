@@ -214,7 +214,6 @@ Configure pnpm, TypeScript, ESLint, Biome, Vite, Parcel, Turborepo, Husky.
 | [rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md)             | `pix_toolchain_pnpm`       | all        | pnpm package manager: workspace management, dependency resolution, caching strategies, CI optimization, and monorepo...                          |
 | [rule-toolchain-project](../rule-toolchain-project/SKILL.md)       | `pix_toolchain_project`    | all        | Base project configuration files and conventions. Covers .gitignore, .editorconfig, .nvmrc, .env.example, and reposit...                         |
 | [rule-toolchain-turborepo](../rule-toolchain-turborepo/SKILL.md)   | `pix_toolchain_turborepo`  | all        | Turborepo monorepo orchestration: pipeline configuration, caching, remote caching, task dependency graphs, and worksp...                         |
-| [rule-toolchain-typescript](../rule-toolchain-typescript/SKILL.md) | `pix_toolchain_typescript` | all        | TypeScript compiler configuration, tsconfig management, strict mode setups, path aliases, declaration files, and buil...                         |
 | [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md)             | `pix_toolchain_vite`       | all        | Vite build tool configuration and best practices. Covers vite.config.ts, vitest.config.ts, environment variables, bui...                         |
 
 ### UI
@@ -279,7 +278,7 @@ touches that domain:
 | -------------------------- | ----------------------------------------------------------------- |
 | `rule-toolchain-commits`    | **Immediately** - before any branch, commit, or push              |
 | `rule-styleguide-markdown`  | **Immediately** - when writing or updating README and prose files |
-| `rule-toolchain-typescript` | **Immediately** - when writing TypeScript types and interfaces    |
+| `rule-styleguide-typescript` | **Immediately** - when writing TypeScript types and interfaces    |
 | `rule-devops-testing`       | When creating tests or configuring coverage                       |
 | `rule-styleguide-a11y`      | **Frontend only** - when accessibility is part of the requirement |
 | `rule-styleguide-i18n`      | **Frontend only** - when internationalization is needed           |
@@ -291,8 +290,8 @@ touches that domain:
   Commits with mandatory scope, merge-request conventions
 - **`rule-styleguide-markdown`** - One `#` title, an intro naming the audience, ordered headings,
   descriptive relative links, no repetition
-- **`rule-toolchain-typescript`** - Enum patterns (`as const` over enums), no `any`, `readonly`,
-  `satisfies`, discriminated unions
+- **`rule-styleguide-typescript`** - Enum patterns (`as const` over enums), no `any`, `readonly`,
+  `satisfies`, discriminated unions, and the compiler configuration in `COMPILER.md`
 - **`rule-devops-testing`** - Test structure, Vitest configuration, and the coverage floor
 - **`rule-styleguide-a11y`** - WCAG 2.1 AA, semantic HTML, ARIA, the European Accessibility Act
 - **`rule-styleguide-i18n`** - Translation keys, pluralization, RTL, `Intl.*` APIs

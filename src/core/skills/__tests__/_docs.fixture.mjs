@@ -20,6 +20,9 @@ export const skillsRoot = join(root, "skills");
 /** Read one skill's SKILL.md. */
 export const skillDoc = (name) => readFileSync(join(skillsRoot, name, "SKILL.md"), "utf8");
 
+/** Read one additional document inside a skill directory. */
+export const skillFile = (name, file) => readFileSync(join(skillsRoot, name, file), "utf8");
+
 export function skillDirectories() {
   return readdirSync(skillsRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())

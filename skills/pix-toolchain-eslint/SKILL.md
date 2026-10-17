@@ -192,6 +192,6 @@ pnpm biome migrate eslint --include-prettier
 ## See also
 
 - [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md) - Alternative: Biome linter (faster, unified)
-- [rule-toolchain-typescript](../rule-toolchain-typescript/SKILL.md) - tsconfig, strict mode, type discipline
+- [rule-styleguide-typescript](../rule-styleguide-typescript/SKILL.md) - tsconfig, strict mode, type discipline
 - [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md) - Modern JS/TS idioms these rules enforce
 - [rule](../rule/SKILL.md) - Central skill index
