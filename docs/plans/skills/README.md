@@ -13,7 +13,7 @@ Total: 88 skills.
 | 2 | `pix-ui` | ui | `docs/plans/skills/ui/pix-ui.md` | planned |
 | 3 | `pix-toolchain-vite` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-vite.md` | planned |
 | 4 | `pix-toolchain-turborepo` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-turborepo.md` | planned |
-| 5 | `pix-toolchain-rspack` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-rspack.md` | pending |
+| 5 | `pix-toolchain-rspack` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-rspack.md` | planned |
 | 6 | `pix-toolchain-project` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-project.md` | pending |
 | 7 | `pix-toolchain-pnpm` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-pnpm.md` | pending |
 | 8 | `pix-toolchain-parcel` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-parcel.md` | pending |
