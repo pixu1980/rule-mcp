@@ -20,7 +20,7 @@ Total: 88 skills.
 | 9 | `pix-toolchain-eslint` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-eslint.md` | planned |
 | 10 | `pix-toolchain-biome` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-biome.md` | planned |
 | 11 | `pix-toolchain` | toolchain | `docs/plans/skills/toolchain/pix-toolchain.md` | planned |
-| 12 | `pix-styleguide-typescript` | styleguide | `docs/plans/skills/styleguide/pix-styleguide-typescript.md` | pending |
+| 12 | `pix-styleguide-typescript` | styleguide | `docs/plans/skills/styleguide/pix-styleguide-typescript.md` | planned |
 | 13 | `pix-styleguide-readme` | styleguide | `docs/plans/skills/styleguide/pix-styleguide-readme.md` | pending |
 | 14 | `pix-styleguide-patterns` | styleguide | `docs/plans/skills/styleguide/pix-styleguide-patterns.md` | pending |
 | 15 | `pix-styleguide-naming` | styleguide | `docs/plans/skills/styleguide/pix-styleguide-naming.md` | pending |
