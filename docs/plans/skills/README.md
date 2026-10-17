@@ -14,8 +14,8 @@ Total: 88 skills.
 | 3 | `rule-toolchain-vite` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-vite.md` | planned |
 | 4 | `rule-toolchain-turborepo` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-turborepo.md` | planned |
 | 5 | `rule-toolchain-rspack` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-rspack.md` | planned |
-| 6 | `rule-toolchain-pnpm` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-pnpm.md` | pending |
-| 7 | `rule-toolchain-parcel` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-parcel.md` | pending |
+| 6 | `rule-toolchain-pnpm` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-pnpm.md` | planned |
+| 7 | `rule-toolchain-parcel` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-parcel.md` | planned |
 | 8 | `rule-toolchain-husky` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-husky.md` | pending |
 | 9 | `rule-toolchain-eslint` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-eslint.md` | pending |
 | 10 | `rule-toolchain-commits` | toolchain | `docs/plans/skills/toolchain/rule-toolchain-commits.md` | pending |
