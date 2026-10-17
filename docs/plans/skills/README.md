@@ -19,7 +19,7 @@ Total: 88 skills.
 | 8 | `pix-toolchain-husky` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-husky.md` | planned |
 | 9 | `pix-toolchain-eslint` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-eslint.md` | planned |
 | 10 | `pix-toolchain-biome` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-biome.md` | planned |
-| 11 | `pix-toolchain` | toolchain | `docs/plans/skills/toolchain/pix-toolchain.md` | pending |
+| 11 | `pix-toolchain` | toolchain | `docs/plans/skills/toolchain/pix-toolchain.md` | planned |
 | 12 | `pix-styleguide-validation` | styleguide | `docs/plans/skills/styleguide/pix-styleguide-validation.md` | pending |
 | 13 | `pix-styleguide-typescript` | styleguide | `docs/plans/skills/styleguide/pix-styleguide-typescript.md` | pending |
 | 14 | `pix-styleguide-readme` | styleguide | `docs/plans/skills/styleguide/pix-styleguide-readme.md` | pending |
