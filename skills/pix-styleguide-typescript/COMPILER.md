@@ -193,6 +193,6 @@ named domain abstraction.
 ## See also
 
 - [SKILL.md](./SKILL.md) - the code-style half: any, as, enum, generics, narrowing
-- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) - base project config
+- [rule-styleguide-configuration](../rule-styleguide-configuration/SKILL.md) - base project config
 - [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md) - linting and formatting
 - [rule](../rule/SKILL.md) - central skill index

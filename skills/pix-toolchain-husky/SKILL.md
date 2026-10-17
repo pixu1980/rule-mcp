@@ -107,5 +107,5 @@ revert: rollback to v1.2.0
 ## See also
 
 - [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md) - Linting & formatting
-- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) - Repo conventions
+- [rule-styleguide-configuration](../rule-styleguide-configuration/SKILL.md) - Repo conventions
 - [rule](../rule/SKILL.md) - Central skill index

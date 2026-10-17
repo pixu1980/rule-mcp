@@ -12,7 +12,7 @@ skills:
 evidenceSkills:
   - "rule-toolchain-pnpm"
   - "rule-toolchain-eslint"
-  - "rule-toolchain-project"
+  - "rule-styleguide-configuration"
 aliases:
   - "dx-toolchain"
   - "developer experience engineer"

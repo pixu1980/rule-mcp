@@ -41,6 +41,7 @@ Once routed here, consult the table below and load the specific sub-skill's SKIL
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------- |
 | [rule-styleguide-html](../rule-styleguide-html/SKILL.md)               | The mandatory document boilerplate, semantic HTML, document structure, template engine syntax, valid nesting | Any page, and every HTML template or component     |
 | [rule-styleguide-css](../rule-styleguide-css/SKILL.md)                 | Data-part selectors, element selectors, cascade layers, custom properties, CSS comments                      | Styling any component                              |
+| [rule-styleguide-configuration](../rule-styleguide-configuration/SKILL.md) | Base project config files: .gitignore, .editorconfig, .nvmrc, .env.example, README, LICENSE, CONTRIBUTING | Setting up or auditing a repository                |
 | [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md)   | Naming, functions, classes, async, JSDoc, Playwright + axe-core testing                                      | Writing JS/TS modules                              |
 | [rule-styleguide-json](../rule-styleguide-json/SKILL.md)               | Structure, property naming, date formats, numeric precision                                                  | API contracts or config files                      |
 | [rule-styleguide-fingerprint](../rule-styleguide-fingerprint/SKILL.md) | ASCII punctuation, American English, phrasing tells                                                          | Writing any prose a reader will see                |
@@ -89,7 +90,7 @@ Key guardrails enforced across all styleguides:
 
 ## See also
 
-- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) - Project config files (.gitignore, .editorconfig, etc.)
+- [rule-styleguide-configuration](../rule-styleguide-configuration/SKILL.md) - Project config files (.gitignore, .editorconfig, etc.)
 - [rule-ui-design-system](../rule-ui-design-system/SKILL.md) - Design system component patterns
 - [rule](../rule/SKILL.md) - Central skill index
 

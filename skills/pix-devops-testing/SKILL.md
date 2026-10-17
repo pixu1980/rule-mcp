@@ -363,4 +363,4 @@ After setting up coverage, verify by temporarily raising a threshold and confirm
 
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
 - [rule-devops](../rule-devops/SKILL.md) - DevOps skill index
-- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) - Project configuration baseline
+- [rule-styleguide-configuration](../rule-styleguide-configuration/SKILL.md) - Project configuration baseline

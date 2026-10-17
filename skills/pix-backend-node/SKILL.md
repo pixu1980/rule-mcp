@@ -391,5 +391,5 @@ a dependency ([rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md)).
 
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
 - [rule-backend](../rule-backend/SKILL.md) - Backend skill index
-- [rule-toolchain-project](../rule-toolchain-project/SKILL.md) - Project configuration baseline
+- [rule-styleguide-configuration](../rule-styleguide-configuration/SKILL.md) - Project configuration baseline
 - [rule-devops-testing](../rule-devops-testing/SKILL.md) - Testing and coverage
