@@ -109,4 +109,4 @@ Use `coverage-gates` skill for CI coverage enforcement details.
 - [pix-process-code-review](../pix-process-code-review/SKILL.md) - Risk-based PR/MR review and a11y bridge
 - [pix-process-simplicity](../pix-process-simplicity/SKILL.md) - YAGNI guardrails that pair with test-first work
 - [pix-styleguide-javascript](../pix-styleguide-javascript/SKILL.md) - Code style that tests keep honest
-- [pix-toolchain-commits](../pix-toolchain-commits/SKILL.md) - Conventional-commit scaffolding the workflow closes with
+- [pix-styleguide-git](../pix-styleguide-git/SKILL.md) - Conventional-commit scaffolding the workflow closes with

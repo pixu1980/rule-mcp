@@ -33,7 +33,7 @@ export function rankSkills({ skills, promptWords, promptDomain, isReduction, ran
     let finalScore = rawScore;
 
     // Commit/push prompts deterministically route to the commits discipline skill.
-    if (promptDomain === "git" && skillName === "pix-toolchain-commits") {
+    if (promptDomain === "git" && skillName === "pix-styleguide-git") {
       finalScore = Math.max(rawScore * 2, 25);
     }
 

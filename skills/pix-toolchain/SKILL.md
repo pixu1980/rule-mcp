@@ -46,7 +46,6 @@ frameworks: [all]
 | Skill                                                            | Tool              | Best For                                                                    |
 | ---------------------------------------------------------------- | ----------------- | --------------------------------------------------------------------------- |
 | [pix-toolchain-husky](../pix-toolchain-husky/SKILL.md)           | Husky             | Git hooks, lint-staged, commitlint                                          |
-| [pix-toolchain-commits](../pix-toolchain-commits/SKILL.md)       | Commit Discipline | Atomic Conventional Commits with mandatory scope, commit-msg/pre-push hooks |
 
 ## Quick Selection Guide
 
@@ -56,7 +55,6 @@ Need linting + formatting?              → pix-toolchain-biome (fast, unified) 
 Need a package manager?                 → pix-toolchain-pnpm
 Need monorepo orchestration?            → pix-toolchain-turborepo
 Need Git hooks?                         → pix-toolchain-husky
-Need commit/push discipline (atomic, scope)? → pix-toolchain-commits
 ```
 
 ## Choosing a formatter and a linter: Prettier, Biome, ESLint, dprint, oxfmt
