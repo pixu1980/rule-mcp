@@ -16,7 +16,7 @@ Total: 88 skills.
 | 5 | `pix-toolchain-rspack` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-rspack.md` | planned |
 | 6 | `pix-toolchain-pnpm` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-pnpm.md` | planned |
 | 7 | `pix-toolchain-parcel` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-parcel.md` | planned |
-| 8 | `pix-toolchain-husky` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-husky.md` | pending |
+| 8 | `pix-toolchain-husky` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-husky.md` | planned |
 | 9 | `pix-toolchain-eslint` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-eslint.md` | pending |
 | 10 | `pix-toolchain-biome` | toolchain | `docs/plans/skills/toolchain/pix-toolchain-biome.md` | pending |
 | 11 | `pix-toolchain` | toolchain | `docs/plans/skills/toolchain/pix-toolchain.md` | pending |
