@@ -5,7 +5,7 @@ import { strict as assert } from "node:assert";
 
 import { loadAllSkills } from "../index.js";
 import { listTools } from "../../../tools/router/index.js";
-import { skillDoc } from "./_docs.fixture.mjs";
+import { skillDoc, skillFile } from "./_docs.fixture.mjs";
 
 console.log("pix skill documentation test: required content");
 
@@ -37,20 +37,22 @@ for (const required of ["referencing side of a foreign key", "timestamptz", "Pos
 const mysqlSkill = skillDoc("pix-data-mysql");
 assert.ok(mysqlSkill.includes("InnoDB automatically indexes foreign-key columns"), "pix-data-mysql must document InnoDB foreign-key indexing");
 
-const typescriptSkill = skillDoc("pix-toolchain-typescript");
+const typescriptSkill = skillDoc("pix-styleguide-typescript");
+for (const required of ["unknown` forces a check", "catch clauses take unknown", "discriminated union", "branded types"]) {
+  assert.ok(typescriptSkill.includes(required), `pix-styleguide-typescript must cover ${required}`);
+}
+
+const typescriptCompiler = skillFile("pix-styleguide-typescript", "COMPILER.md");
 for (const required of [
   'exactOptionalPropertyTypes": true',
   "verbatimModuleSyntax",
   "noFallthroughCasesInSwitch",
-  "unknown over any",
-  "discriminated union",
-  "branded types",
   "runtime validation",
   "generated types",
   "type-coverage",
   "tsc --noEmit",
 ]) {
-  assert.ok(typescriptSkill.includes(required), `pix-toolchain-typescript must cover ${required}`);
+  assert.ok(typescriptCompiler.includes(required), `pix-styleguide-typescript/COMPILER.md must cover ${required}`);
 }
 
 const eslintSkill = skillDoc("pix-toolchain-eslint");

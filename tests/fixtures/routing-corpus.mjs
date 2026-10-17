@@ -28,7 +28,7 @@ export const CORPUS = [
   // ── TypeScript: the split added in P3 ──
   { prompt: "should I use enum or a union type", expect: "styleguide-typescript", area: "styleguide" },
   { prompt: "typescript any vs unknown in a catch block", expect: "styleguide-typescript", area: "styleguide" },
-  { prompt: "tsconfig strict mode settings", expect: "toolchain-typescript", area: "toolchain" },
+  { prompt: "tsconfig strict mode settings", expect: "styleguide-typescript", area: "styleguide" },
 
   // ── The mandatory document boilerplate ──
   { prompt: "html boilerplate for a new page", expect: "styleguide-html", area: "styleguide" },

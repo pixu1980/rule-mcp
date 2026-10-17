@@ -283,7 +283,7 @@ Write files to disk after pix_tool_gateway validation. Needs valid receipt from 
 | `path`    | string          | no       | `"."`   | Project root directory                                             |
 | `dryRun`  | boolean         | no       | `true`  | Preview without writing (default: true)                            |
 
-## Skill tools (89)
+## Skill tools (88)
 
 One per catalog skill, generated from the directory. Each serves its
 `SKILL.md` and the sections a route selected, and every one takes the same
@@ -302,10 +302,10 @@ The catalog itself, with what each skill covers, is
 | platform   | `pix_tool_platform`, `pix_tool_platform_agent`, `pix_tool_platform_auth`, `pix_tool_platform_desktop`, `pix_tool_platform_library`, `pix_tool_platform_web`                                                                                                                                                                                                                                                                                                                                                                                                           |
 | process    | `pix_tool_process`, `pix_tool_process_adr`, `pix_tool_process_ai_sdlc`, `pix_tool_process_bmad`, `pix_tool_process_changelog`, `pix_tool_process_code_review`, `pix_tool_process_npm_release`, `pix_tool_process_simplicity`, `pix_tool_process_tdd`                                                                                                                                                                                                                                                                                                                  |
 | styleguide | `pix_tool_styleguide`, `pix_tool_styleguide_a11y`, `pix_tool_styleguide_baseline`, `pix_tool_styleguide_comments`, `pix_tool_styleguide_css`, `pix_tool_styleguide_english`, `pix_tool_styleguide_file_tree`, `pix_tool_styleguide_fingerprint`, `pix_tool_styleguide_html`, `pix_tool_styleguide_i18n`, `pix_tool_styleguide_javascript`, `pix_tool_styleguide_json`, `pix_tool_styleguide_markdown`, `pix_tool_styleguide_naming`, `pix_tool_styleguide_patterns`, `pix_tool_styleguide_readme`, `pix_tool_styleguide_typescript`, `pix_tool_styleguide_validation` |
-| toolchain  | `pix_tool_toolchain`, `pix_tool_toolchain_biome`, `pix_tool_toolchain_commits`, `pix_tool_toolchain_eslint`, `pix_tool_toolchain_husky`, `pix_tool_toolchain_parcel`, `pix_tool_toolchain_pnpm`, `pix_tool_toolchain_project`, `pix_tool_toolchain_rspack`, `pix_tool_toolchain_turborepo`, `pix_tool_toolchain_typescript`, `pix_tool_toolchain_vite`                                                                                                                                                                                                                |
+| toolchain  | `pix_tool_toolchain`, `pix_tool_toolchain_biome`, `pix_tool_toolchain_commits`, `pix_tool_toolchain_eslint`, `pix_tool_toolchain_husky`, `pix_tool_toolchain_parcel`, `pix_tool_toolchain_pnpm`, `pix_tool_toolchain_project`, `pix_tool_toolchain_rspack`, `pix_tool_toolchain_turborepo`, `pix_tool_toolchain_vite`                                                                                                                                                                                                                                                 |
 | ui         | `pix_tool_ui`, `pix_tool_ui_design_system`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
-### Arguments, the same for all 89
+### Arguments, the same for all 88
 
 | Parameter   | Type   | Required | Default | Description                                                                               |
 | ----------- | ------ | -------- | ------- | ----------------------------------------------------------------------------------------- |

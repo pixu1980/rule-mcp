@@ -1,5 +1,5 @@
 {
-  "count": 110,
+  "count": 109,
   "tools": [
     "pix_tool",
     "pix_tool_ai",
@@ -105,7 +105,6 @@
     "pix_tool_toolchain_project",
     "pix_tool_toolchain_rspack",
     "pix_tool_toolchain_turborepo",
-    "pix_tool_toolchain_typescript",
     "pix_tool_toolchain_vite",
     "pix_tool_ui",
     "pix_tool_ui_design_system",

@@ -192,6 +192,6 @@ pnpm biome migrate eslint --include-prettier
 ## See also
 
 - [pix-toolchain-biome](../pix-toolchain-biome/SKILL.md) - Alternative: Biome linter (faster, unified)
-- [pix-toolchain-typescript](../pix-toolchain-typescript/SKILL.md) - tsconfig, strict mode, type discipline
+- [pix-styleguide-typescript](../pix-styleguide-typescript/SKILL.md) - tsconfig, strict mode, type discipline
 - [pix-styleguide-javascript](../pix-styleguide-javascript/SKILL.md) - Modern JS/TS idioms these rules enforce
 - [pix](../pix/SKILL.md) - Central skill index

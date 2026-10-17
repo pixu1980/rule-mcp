@@ -123,7 +123,7 @@ app.get("/health", (_req: Request, res: Response) => {
 ### 5 · Apply the surrounding standards
 
 - Testing and coverage: align with `pix-devops-testing`.
-- Types: follow `pix-toolchain-typescript` (strict, no loose casts).
+- Types: follow `pix-styleguide-typescript` (strict, no loose casts).
 - Containers: follow `pix-devops-docker` for images and base-image policy.
 - Prose and records: `pix-styleguide-markdown` for documentation,
   `pix-process-adr` for decisions.
