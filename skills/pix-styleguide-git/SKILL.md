@@ -1,8 +1,9 @@
 ---
-name: rule-toolchain-commits
+name: rule-styleguide-git
 description: >-
   Use whenever writing, preparing, or validating git commits and pushes. Enforces atomic Conventional Commits with a MANDATORY scope on every commit - no bare `fix:` allowed.
 tags:
+  - "styleguide"
   - "git"
   - "commit"
   - "push"
@@ -13,7 +14,7 @@ tags:
 frameworks: [all]
 ---
 
-# rule-toolchain-commits - Atomic Conventional Commits (scope mandatory)
+# rule-styleguide-git - Atomic Conventional Commits (scope mandatory)
 
 ## Commit rule (non-negotiable)
 
