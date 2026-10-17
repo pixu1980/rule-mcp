@@ -190,6 +190,7 @@ Apply HTML/CSS/JS/JSON/Markdown/a11y/naming/validation standards.
 | [pix-styleguide](../pix-styleguide/SKILL.md)                       | `pix_tool_styleguide`       | all        | Central index of all pix coding style guides. Delegates to specialized sub-skills: HTML semantics, CSS architectu...                |
 | [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md)             | `pix_styleguide_a11y`       | all        | WCAG 2.2 AA accessibility: semantic HTML, ARIA, keyboard navigation, color contrast, forms, media, automated testing...             |
 | [pix-styleguide-css](../pix-styleguide-css/SKILL.md)               | `pix_styleguide_css`        | all        | CSS architecture, selector strategy (data-part, element), naming conventions, property ordering, custom properties, c...            |
+| [pix-styleguide-configuration](../pix-styleguide-configuration/SKILL.md) | `pix_styleguide_configuration` | all | Base project configuration files: .gitignore, .editorconfig, .nvmrc, .env.example, README, LICENSE, CONTRIBUTING, and the toolchain config baselines. |
 | [pix-styleguide-html](../pix-styleguide-html/SKILL.md)             | `pix_styleguide_html`       | all        | Semantic HTML, document structure, template engine syntax, accessibility essentials, and element conventions for fron...            |
 | [pix-styleguide-javascript](../pix-styleguide-javascript/SKILL.md) | `pix_styleguide_javascript` | all        | JavaScript conventions: naming, functions, classes, async patterns, DOM manipulation, custom elements, static initial...            |
 | [pix-styleguide-json](../pix-styleguide-json/SKILL.md)             | `pix_styleguide_json`       | all        | JSON structure conventions: validity, property naming, date formats, numeric precision, schema mindset, and API respo...            |
@@ -212,7 +213,6 @@ Configure pnpm, TypeScript, ESLint, Biome, Vite, Parcel, Turborepo, Husky.
 | [pix-toolchain-husky](../pix-toolchain-husky/SKILL.md)           | `pix_toolchain_husky`      | all        | Git hooks management with Husky: commit hooks, pre-push validation, lint-staged integration, commitlint, and CI-frien...                         |
 | [pix-toolchain-parcel](../pix-toolchain-parcel/SKILL.md)         | `pix_toolchain_parcel`     | all        | Parcel 2+ zero-configuration bundler: entry points, transpilation, code splitting, image optimization, environment va...                         |
 | [pix-toolchain-pnpm](../pix-toolchain-pnpm/SKILL.md)             | `pix_toolchain_pnpm`       | all        | pnpm package manager: workspace management, dependency resolution, caching strategies, CI optimization, and monorepo...                          |
-| [pix-toolchain-project](../pix-toolchain-project/SKILL.md)       | `pix_toolchain_project`    | all        | Base project configuration files and conventions. Covers .gitignore, .editorconfig, .nvmrc, .env.example, and reposit...                         |
 | [pix-toolchain-turborepo](../pix-toolchain-turborepo/SKILL.md)   | `pix_toolchain_turborepo`  | all        | Turborepo monorepo orchestration: pipeline configuration, caching, remote caching, task dependency graphs, and worksp...                         |
 | [pix-toolchain-vite](../pix-toolchain-vite/SKILL.md)             | `pix_toolchain_vite`       | all        | Vite build tool configuration and best practices. Covers vite.config.ts, vitest.config.ts, environment variables, bui...                         |
 
@@ -241,7 +241,7 @@ Design and route visible interface work while preserving pix implementation cons
 | Code review              | `pix-process-code-review`                           | feature workflow, relevant domain skill           | `pix_tool_check`                                      |
 | Commit/push              | `pix-toolchain-commits`                             | `pix-toolchain-husky`                             | `pix_tool_check`                                      |
 | Docs/ADR                 | `pix-styleguide-markdown`                           | `pix-process-adr`                                 | `pix_tool_process_adr`, `pix_tool_handoff`            |
-| File-tree cleanup        | `pix-styleguide-naming`                             | `pix-toolchain-project`                           | `/pix-area-styleguide` (file-tree), `pix_tool_check`  |
+| File-tree cleanup        | `pix-styleguide-naming`                             | `pix-styleguide-configuration`                    | `/pix-area-styleguide` (file-tree), `pix_tool_check`  |
 
 ## Operational sequence
 

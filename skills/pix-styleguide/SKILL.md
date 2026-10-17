@@ -41,6 +41,7 @@ Once routed here, consult the table below and load the specific sub-skill's SKIL
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------- |
 | [pix-styleguide-html](../pix-styleguide-html/SKILL.md)               | The mandatory document boilerplate, semantic HTML, document structure, template engine syntax, valid nesting | Any page, and every HTML template or component     |
 | [pix-styleguide-css](../pix-styleguide-css/SKILL.md)                 | Data-part selectors, element selectors, cascade layers, custom properties, CSS comments                      | Styling any component                              |
+| [pix-styleguide-configuration](../pix-styleguide-configuration/SKILL.md) | Base project config files: .gitignore, .editorconfig, .nvmrc, .env.example, README, LICENSE, CONTRIBUTING | Setting up or auditing a repository                |
 | [pix-styleguide-javascript](../pix-styleguide-javascript/SKILL.md)   | Naming, functions, classes, async, JSDoc, Playwright + axe-core testing                                      | Writing JS/TS modules                              |
 | [pix-styleguide-json](../pix-styleguide-json/SKILL.md)               | Structure, property naming, date formats, numeric precision                                                  | API contracts or config files                      |
 | [pix-styleguide-fingerprint](../pix-styleguide-fingerprint/SKILL.md) | ASCII punctuation, American English, phrasing tells                                                          | Writing any prose a reader will see                |
@@ -89,7 +90,7 @@ Key guardrails enforced across all styleguides:
 
 ## See also
 
-- [pix-toolchain-project](../pix-toolchain-project/SKILL.md) - Project config files (.gitignore, .editorconfig, etc.)
+- [pix-styleguide-configuration](../pix-styleguide-configuration/SKILL.md) - Project config files (.gitignore, .editorconfig, etc.)
 - [pix-ui-design-system](../pix-ui-design-system/SKILL.md) - Design system component patterns
 - [pix](../pix/SKILL.md) - Central skill index
 

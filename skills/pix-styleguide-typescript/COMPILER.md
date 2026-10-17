@@ -193,6 +193,6 @@ named domain abstraction.
 ## See also
 
 - [SKILL.md](./SKILL.md) - the code-style half: any, as, enum, generics, narrowing
-- [pix-toolchain-project](../pix-toolchain-project/SKILL.md) - base project config
+- [pix-styleguide-configuration](../pix-styleguide-configuration/SKILL.md) - base project config
 - [pix-toolchain-biome](../pix-toolchain-biome/SKILL.md) - linting and formatting
 - [pix](../pix/SKILL.md) - central skill index

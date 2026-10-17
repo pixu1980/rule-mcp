@@ -391,5 +391,5 @@ a dependency ([pix-toolchain-pnpm](../pix-toolchain-pnpm/SKILL.md)).
 
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher
 - [pix-backend](../pix-backend/SKILL.md) - Backend skill index
-- [pix-toolchain-project](../pix-toolchain-project/SKILL.md) - Project configuration baseline
+- [pix-styleguide-configuration](../pix-styleguide-configuration/SKILL.md) - Project configuration baseline
 - [pix-devops-testing](../pix-devops-testing/SKILL.md) - Testing and coverage

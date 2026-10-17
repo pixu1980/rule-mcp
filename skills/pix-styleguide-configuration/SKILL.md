@@ -1,8 +1,9 @@
 ---
-name: pix-toolchain-project
+name: pix-styleguide-configuration
 description: >-
   Use when setting up base project configuration files. Covers .gitignore, .editorconfig, .nvmrc, .env.example, README, LICENSE, and CONTRIBUTING.
 tags:
+  - "styleguide"
   - "project"
   - "config"
   - "gitignore"
@@ -13,7 +14,7 @@ tags:
 frameworks: [all]
 ---
 
-# pix-toolchain-project - Base Project Configuration
+# pix-styleguide-configuration - Base Project Configuration
 
 ## .gitignore
 
@@ -224,7 +225,7 @@ with the lockfile. Guardrails: `pkg-no-corepack`, `pkg-no-engines` (owned by
 
 ## How to scaffold
 
-1. Run `pix_tool_toolchain_project mode=scaffold` to see all config file templates.
+1. Run `pix_tool_styleguide_configuration mode=scaffold` to see all config file templates.
 2. Or call `pix_tool_styleguide mode=scaffold file=.prettierrc` for a single file.
 3. Create/paste each file at the project root.
 4. Run `pix_tool_check` to validate the files are present.
@@ -234,6 +235,7 @@ with the lockfile. Guardrails: `pkg-no-corepack`, `pkg-no-engines` (owned by
 ## See also
 
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher
+- [pix-styleguide](../pix-styleguide/SKILL.md) - Style guides index
 - [pix-toolchain](../pix-toolchain/SKILL.md) - Toolchain skill index
 - [pix-devops-docker](../pix-devops-docker/SKILL.md) - Docker configuration
 - [pix-devops-testing](../pix-devops-testing/SKILL.md) - Testing setup

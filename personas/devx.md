@@ -12,7 +12,7 @@ skills:
 evidenceSkills:
   - "pix-toolchain-pnpm"
   - "pix-toolchain-eslint"
-  - "pix-toolchain-project"
+  - "pix-styleguide-configuration"
 aliases:
   - "dx-toolchain"
   - "developer experience engineer"
