@@ -38,7 +38,7 @@ Facts that make the current text wrong or out of date:
 | "Parcel 2+"                                | the current line is 2.16.x                                                                                               |
 
 Local articles: no dedicated Parcel piece exists in
-`~/Downloads/articles to check/`; the single mention found is incidental. The
+the local article corpus; the single mention found is incidental. The
 plan anchors only to the official documentation.
 
 ## Decisions

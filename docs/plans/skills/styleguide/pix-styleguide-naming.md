@@ -41,7 +41,7 @@ Problems found:
 | missing conventions                      | hooks, boolean prefixes, acronyms, plurals, abbreviations, type names                                                   |
 
 Local articles: no dedicated naming piece exists in
-`~/Downloads/articles to check/`. The plan anchors to the external style
+the local article corpus. The plan anchors to the external style
 guides above.
 
 ## Decisions

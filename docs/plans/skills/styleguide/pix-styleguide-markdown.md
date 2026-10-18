@@ -39,7 +39,7 @@ Problems found:
 | boundaries are implicit       | punctuation, English spelling, README and ADR templates belong to other skills |
 
 Local articles: no dedicated Markdown piece exists in
-`~/Downloads/articles to check/`; the matches found are incidental. The plan
+the local article corpus; the matches found are incidental. The plan
 anchors to the specifications and the tool documentation.
 
 ## Decisions

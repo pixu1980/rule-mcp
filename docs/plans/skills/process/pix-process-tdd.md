@@ -66,7 +66,7 @@ Public sources verified in this session:
 - Kent Beck, Test Desiderata: twelve properties, of which some support each
   other and some interfere. Prediction costs speed; composability can buy both.
 
-Local articles: nothing in `~/Downloads/articles to check/` is about testing.
+Local articles: nothing in the corpus is about testing.
 The tree holds 13 area folders and a single `_indice/README.md`, and there is no
 match for TDD, Vitest, Playwright or test strategy, so nothing is cited from
 there.

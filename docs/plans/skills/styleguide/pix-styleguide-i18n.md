@@ -28,7 +28,7 @@ Public sources verified in this session:
 - MDN `Intl`, https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl
 
 Local articles: no dedicated i18n piece exists in
-`~/Downloads/articles to check/`; the "locale" matches are incidental.
+the local article corpus; the "locale" matches are incidental.
 
 Problems found:
 
