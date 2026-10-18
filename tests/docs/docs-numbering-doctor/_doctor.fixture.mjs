@@ -18,6 +18,10 @@ import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
+// The private global config: without it an ambient `core.hooksPath`, which
+// rejects the fixture's `git commit -m first`, decides the outcome.
+import "../../fixtures/git-hermetic.mjs";
+
 export const git = (args, cwd) => execFileSync("git", args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
 
 /** A repo whose branches produced two 069s and two 02 handoffs. */

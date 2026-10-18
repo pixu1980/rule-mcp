@@ -7,6 +7,7 @@ import { mkdtempSync, mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { git, handon, write } from "./_handon.fixture.mjs";
+import "../../../../tests/fixtures/git-hermetic.mjs";
 
 test("no handoff directory is a clear message, not an invented summary", () => {
   const empty = mkdtempSync(join(tmpdir(), "rule-handon-empty-"));

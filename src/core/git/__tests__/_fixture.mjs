@@ -5,11 +5,12 @@
  *
  * Hermetic git fixtures for the shared git foundation.
  *
- * Every fixture repository is created under a temp directory with a private
- * global config file, so an ambient `core.hooksPath`, `commit.gpgsign` or
- * `init.defaultBranch` on the machine cannot reach it. The repository hooks
- * this project installs (`commit-msg` rejects a scope-less subject) would
- * otherwise fail the fixture commits themselves.
+ * Every fixture repository is created under a temp directory with the private
+ * global config `tests/fixtures/git-hermetic.mjs` installs, so an ambient
+ * `core.hooksPath`, `commit.gpgsign` or `init.defaultBranch` on the machine
+ * cannot reach it. The repository hooks this project installs (`commit-msg`
+ * rejects a scope-less subject) would otherwise fail the fixture commits
+ * themselves.
  */
 
 import { execFileSync } from "node:child_process";
@@ -17,14 +18,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-// One empty config file stands in for the user's global config, so the
-// fixtures are independent of the machine they run on.
-const HOME = mkdtempSync(join(tmpdir(), "rule-git-home-"));
-const EMPTY_CONFIG = join(HOME, "gitconfig");
-writeFileSync(EMPTY_CONFIG, "");
-process.env.GIT_CONFIG_GLOBAL = EMPTY_CONFIG;
-process.env.GIT_CONFIG_NOSYSTEM = "1";
-process.env.GIT_TERMINAL_PROMPT = "0";
+import "../../../../tests/fixtures/git-hermetic.mjs";
 
 /**
  * Run git in a fixture repository and return trimmed stdout.

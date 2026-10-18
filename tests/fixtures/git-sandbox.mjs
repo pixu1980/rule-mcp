@@ -19,6 +19,7 @@ import { execFileSync } from "node:child_process";
 import { cpSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { homedir, tmpdir, userInfo } from "node:os";
 import { join } from "node:path";
+import "./git-hermetic.mjs";
 
 /** Run git, quietly, and hand back stdout. */
 const git = (arguments_, cwd) => execFileSync("git", arguments_, { cwd, stdio: ["ignore", "pipe", "ignore"], encoding: "utf8" });

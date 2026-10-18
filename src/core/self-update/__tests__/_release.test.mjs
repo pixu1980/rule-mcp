@@ -9,6 +9,7 @@ import { join } from "node:path";
 import { test } from "node:test";
 
 import { compareVersions, formatVersion, highestVersionTag, parseVersion } from "../_semver.js";
+import "../../../../tests/fixtures/git-hermetic.mjs";
 
 test("parseVersion reads plain and v-prefixed triples, and refuses a prerelease", () => {
   assert.deepEqual(parseVersion("1.2.3"), { major: 1, minor: 2, patch: 3 });

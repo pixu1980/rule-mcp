@@ -7,6 +7,7 @@ import { mkdtempSync, mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { git, handon, write } from "./_handon.fixture.mjs";
+import "../../../../tests/fixtures/git-hermetic.mjs";
 
 test("a range with a fixed end counts only what landed after it", () => {
   const root = mkdtempSync(join(tmpdir(), "rule-handon-fixed-"));

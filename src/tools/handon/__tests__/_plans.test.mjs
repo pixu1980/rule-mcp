@@ -9,6 +9,7 @@ import { join } from "node:path";
 
 import { git, handon, write } from "./_handon.fixture.mjs";
 import { nextPlanSteps } from "../_plans.js";
+import "../../../../tests/fixtures/git-hermetic.mjs";
 
 const HANDOFF = "docs/handoff/01-a-session.md";
 

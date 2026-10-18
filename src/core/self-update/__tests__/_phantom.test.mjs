@@ -7,6 +7,7 @@ import { rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { git, makeClonePair, runUpdateIn } from "./_pin.fixture.mjs";
+import "../../../../tests/fixtures/git-hermetic.mjs";
 
 // ── Phantom update ─────────────────────────────────────────────────────────
 

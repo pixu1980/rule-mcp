@@ -15,6 +15,7 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readdirSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
+import "../../../../tests/fixtures/git-hermetic.mjs";
 
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";

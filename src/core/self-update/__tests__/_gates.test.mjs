@@ -10,6 +10,7 @@ import { rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { g, makeClonePair, pushUpstreamChange, runUpdateIn } from "./_update.fixture.mjs";
+import "../../../../tests/fixtures/git-hermetic.mjs";
 
 // ── T7: detached HEAD never updates ──
 {

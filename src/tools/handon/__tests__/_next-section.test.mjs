@@ -7,6 +7,7 @@ import { mkdtempSync, mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { git, handon, write } from "./_handon.fixture.mjs";
+import "../../../../tests/fixtures/git-hermetic.mjs";
 
 test("a numbered Next section is read as the open items", () => {
   // Every handoff this repository has written puts its open work under a

@@ -6,8 +6,13 @@
  * What a project already has: its package manager and its hook mechanism.
  *
  * Detection never replaces what it finds. A project running Husky keeps Husky,
- * one with a tracked `.githooks/` or a configured `core.hooksPath` keeps that
- * directory, and only a project with none of them is offered a new mechanism.
+ * one with a tracked `.githooks/` or a `core.hooksPath` it configures itself
+ * keeps that directory, and only a project with none of them is offered a new
+ * mechanism.
+ *
+ * The hooks path is read with `--local` on purpose. A machine-wide
+ * `core.hooksPath` is the user's directory, shared by every repository they
+ * own, so adopting it would write this project's gate into all of them.
  */
 
 import { existsSync, readFileSync } from "node:fs";
@@ -100,7 +105,10 @@ export function detectGovernance(projectDir) {
     return { mechanism: "githooks", hooksDir: join(projectDir, ".githooks"), packageManager, husky: false };
   }
 
-  const configured = git(projectDir, ["config", "--get", "core.hooksPath"]);
+  // `--local` and not `--get`: a global or system `core.hooksPath` belongs to
+  // the person, not to this project, and installing into it would reach every
+  // repository on the machine.
+  const configured = git(projectDir, ["config", "--local", "--get", "core.hooksPath"]);
 
   if (configured) {
     return {
