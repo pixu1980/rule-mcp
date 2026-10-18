@@ -81,5 +81,5 @@ test("the command matchers catch migrations, commits and miss the rest", () => {
   assert.equal(isCommitCommand("git commit -m fix"), true, "git commit matches");
   assert.equal(isCommitCommand("git -C /x commit -m fix"), true, "git -C commit matches");
   assert.equal(isCommitCommand("git status"), false, "git status does not");
-  assert.equal(HOOK_EVENTS.length, 3, "the three hook events install");
+  assert.equal(HOOK_EVENTS.length, 4, "the four hook events install: pre-tool, post-tool, session start and prompt submit");
 });
