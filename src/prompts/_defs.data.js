@@ -47,8 +47,16 @@ export const PROMPT_DEFS = [
   },
   {
     name: "rule-init",
-    description: "Prepare a project for rule-mcp: the central recorder directory and tokensave",
-    arguments: [{ name: "options", description: "Space-separated: no-tokensave. Default: the full init.", required: false }],
+    description:
+      "Prepare a project end to end: git hooks, recorder directory, tokensave, dependency pins, then scaffold the missing config and toolchain",
+    arguments: [
+      {
+        name: "options",
+        description:
+          "Space-separated: no-tokensave, no-scaffold. Default: the full init, plus scaffold for a project with no config yet.",
+        required: false,
+      },
+    ],
   },
   {
     name: "rule-compress",

@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## The commands (24)
+## The commands (25)
 
 Every command is listed with the arguments and options it reads, taken from
 the commander definitions that parse them. The same definitions answer
@@ -19,32 +19,33 @@ agent spawns it. `-h, --help` works on every command; `-v, --version` prints
 the package version from anywhere. An error exits 1 and prints to stderr;
 `--help` exits 0.
 
-| Command                                            | Options | What it does                                                                  |
-| -------------------------------------------------- | ------- | ----------------------------------------------------------------------------- |
-| [`help`](#rule-mcp-help)                     | 0       | Show the full usage guide                                                     |
-| [`serve`](#rule-mcp-serve)                   | 4       | Start the MCP server (STDIO by default)                                       |
-| [`up`](#rule-mcp-up)                         | 1       | Same as "serve --transport sse" (on-demand HTTP daemon)                       |
-| [`daemon`](#rule-mcp-daemon)                 | 1       | Manage the MCP daemon (process and native platform services)                  |
-| [`install`](#rule-mcp-install)               | 26      | Install rule-mcp into an agent/IDE (edits mcp.json)                     |
-| [`uninstall`](#rule-mcp-uninstall)           | 7       | Remove rule-mcp from an agent/IDE                                       |
-| [`setup`](#rule-mcp-setup)                   | 29      | Full-screen install/uninstall wizard (falls back to flags when piped)         |
-| [`tools`](#rule-mcp-tools)                   | 1       | List or call MCP tools directly                                               |
-| [`config`](#rule-mcp-config)                 | 5       | Print the mcp.json snippet, or manage RULE_MCP_* env vars with `config env`        |
-| [`doctor`](#rule-mcp-doctor)                 | 4       | Run system health check                                                       |
-| [`adr`](#rule-mcp-adr)                       | 5       | Create a new Architecture Decision Record (ADR)                               |
-| [`handoff`](#rule-mcp-handoff)               | 7       | Generate a compressed LLM context handoff summary                             |
-| [`skills`](#rule-mcp-skills)                 | 4       | Manage the rule AI skill system                                                |
-| [`fix`](#rule-mcp-fix)                       | 3       | Apply the deterministic guardrail fixes of every skill                        |
-| [`completions`](#rule-mcp-completions)       | 1       | Generate shell auto-completion script                                         |
-| [`handon`](#rule-mcp-handon)                 | 4       | Verify the last handoff against the repo now                                  |
-| [`stats`](#rule-mcp-stats)                   | 0       | Show telemetry statistics from the local log                                  |
-| [`cache`](#rule-mcp-cache)                   | 1       | Inspect the on-disk tool cache                                                |
-| [`roles`](#rule-mcp-roles)                   | 7       | Manage review persona roles                                                   |
-| [`guard`](#rule-mcp-guard)                   | 0       | Permission-guard payload processor (invoked by PreToolUse hooks, reads stdin) |
-| [`update`](#rule-mcp-update)                 | 0       | Self-update to the newest release tag (or fast-forward when none exist)       |
-| [`agent-commands`](#rule-mcp-agent-commands) | 13      | Registry-driven agent slash-command management                                |
-| [`reinstall`](#rule-mcp-reinstall)           | 0       | Purge node_modules and pnpm-lock.yaml, install again, refresh the global bin  |
-| [`commit-lint`](#rule-mcp-commit-lint)       | 6       | Validate commits against type(scope): subject (the git hooks call this)       |
+| Command                                            | Options | What it does                                                                              |
+| -------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------- |
+| [`help`](#rule-mcp-help)                     | 0       | Show the full usage guide                                                                 |
+| [`serve`](#rule-mcp-serve)                   | 4       | Start the MCP server (STDIO by default)                                                   |
+| [`up`](#rule-mcp-up)                         | 1       | Same as "serve --transport sse" (on-demand HTTP daemon)                                   |
+| [`daemon`](#rule-mcp-daemon)                 | 1       | Manage the MCP daemon (process and native platform services)                              |
+| [`install`](#rule-mcp-install)               | 26      | Install rule-mcp into an agent/IDE (edits mcp.json)                                 |
+| [`uninstall`](#rule-mcp-uninstall)           | 7       | Remove rule-mcp from an agent/IDE                                                   |
+| [`setup`](#rule-mcp-setup)                   | 29      | Full-screen install/uninstall wizard (falls back to flags when piped)                     |
+| [`tools`](#rule-mcp-tools)                   | 1       | List or call MCP tools directly                                                           |
+| [`config`](#rule-mcp-config)                 | 5       | Print the mcp.json snippet, or manage RULE_MCP_* env vars with `config env`                    |
+| [`doctor`](#rule-mcp-doctor)                 | 4       | Run system health check                                                                   |
+| [`adr`](#rule-mcp-adr)                       | 5       | Create a new Architecture Decision Record (ADR)                                           |
+| [`handoff`](#rule-mcp-handoff)               | 7       | Generate a compressed LLM context handoff summary                                         |
+| [`skills`](#rule-mcp-skills)                 | 4       | Manage the rule AI skill system                                                            |
+| [`fix`](#rule-mcp-fix)                       | 3       | Apply the deterministic guardrail fixes of every skill                                    |
+| [`completions`](#rule-mcp-completions)       | 1       | Generate shell auto-completion script                                                     |
+| [`handon`](#rule-mcp-handon)                 | 4       | Verify the last handoff against the repo now                                              |
+| [`stats`](#rule-mcp-stats)                   | 0       | Show telemetry statistics from the local log                                              |
+| [`cache`](#rule-mcp-cache)                   | 1       | Inspect the on-disk tool cache                                                            |
+| [`roles`](#rule-mcp-roles)                   | 7       | Manage review persona roles                                                               |
+| [`guard`](#rule-mcp-guard)                   | 0       | Permission-guard payload processor (invoked by PreToolUse hooks, reads stdin)             |
+| [`update`](#rule-mcp-update)                 | 0       | Self-update to the newest release tag (or fast-forward when none exist)                   |
+| [`agent-commands`](#rule-mcp-agent-commands) | 13      | Registry-driven agent slash-command management                                            |
+| [`reinstall`](#rule-mcp-reinstall)           | 0       | Purge node_modules and pnpm-lock.yaml, install again, refresh the global bin              |
+| [`commit-lint`](#rule-mcp-commit-lint)       | 6       | Validate commits against type(scope): subject (the git hooks call this)                   |
+| [`init`](#rule-mcp-init)                     | 2       | Prepare a project: recorder directory, git hooks, tokensave and the dependency pin report |
 
 ## rule-mcp help
 
@@ -528,6 +529,21 @@ rule-mcp commit-lint
 | `--head <ref>`      | -       | -       | head ref for the range (default: HEAD)                                  |
 | `--stdin-push`      | -       | -       | validate the refs git is about to push, read from stdin (pre-push hook) |
 | `--dir <path>`      | -       | -       | project directory (default: cwd)                                        |
+
+## rule-mcp init
+
+Prepare a project: recorder directory, git hooks, tokensave and the dependency pin report
+
+```sh
+rule-mcp init
+```
+
+**Options**
+
+| Flag               | Default | Choices | Description                                   |
+| ------------------ | ------- | ------- | --------------------------------------------- |
+| `-d, --dir <path>` | -       | -       | project root (default: the current directory) |
+| `--no-tokensave`   | -       | -       | skip tokensave init                           |
 
 ## The rest of the census
 
