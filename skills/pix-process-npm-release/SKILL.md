@@ -317,4 +317,4 @@ Show the user which dependency branches pull in the most nested packages, and of
 - [rule-platform-library](../rule-platform-library/SKILL.md) - Package structure and public API design for the thing being published
 - [rule-styleguide-git](../rule-styleguide-git/SKILL.md) - Conventional commits behind the changelog
 - [rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md) - pnpm settings referenced by the cooldown step
-- [rule-styleguide-readme](../rule-styleguide-readme/SKILL.md) - The README users land on after install
+- [rule-process-readme](../rule-process-readme/SKILL.md) - The README users land on after install

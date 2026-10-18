@@ -1,7 +1,8 @@
 ---
-name: rule-styleguide-readme
+name: rule-process-readme
 description: 'Write or improve a README.md for an open source project. Use this for any request to create, rewrite, review, or polish a README, project description, or "getting started" docs for a library, framework, or tool, or to make an open source project more popular or attractive to users. Do NOT use for internal/private repo docs, API reference generation, or CHANGELOG/CONTRIBUTING files.'
 tags:
+  - "process"
   - "styleguide"
   - "documentation"
   - "open-source"

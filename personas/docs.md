@@ -13,7 +13,7 @@ skills:
   - "plain-language editing"
 evidenceSkills:
     - "rule-styleguide-markdown"
-  - "rule-styleguide-readme"
+  - "rule-process-readme"
   - "rule-process-adr"
   - "rule-styleguide-javascript"
 aliases:

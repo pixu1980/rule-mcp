@@ -180,6 +180,7 @@ Write ADRs/docs, follow BMAD, feature workflow, and handoff.
 | [rule-process-adr](../rule-process-adr/SKILL.md)                 | `rule_tool_process_adr`    | all        | Architecture Decision Records (ADR) for rule projects. Capture, store, and manage architectural decisions in docs/...     |
 | [rule-process-bmad](../rule-process-bmad/SKILL.md)               | `pix_process_bmad`        | all        | BMAD Method (Build More Architect Dreams) - AI-driven development framework for structured software delivery through...  |
 | [rule-process-code-review](../rule-process-code-review/SKILL.md) | `pix_process_code_review` | all        | Prepare and conduct risk-based PR/MR reviews with explicit quality, safety, and follow-up gates.                         |
+| [rule-process-readme](../rule-process-readme/SKILL.md)           | `pix_process_readme`      | all        | Write or rewrite a project README: the opening block, the facts, the example, getting started, and the license and contribution sections. |
 | `rule_tool_handoff` / `/rule-handoff`                            | `rule_tool_handoff`        | all        | Generate a compressed LLM handoff summary from ADR logs and project context. Enables cross-chat recovery, model-switc... |
 
 ### Styleguide

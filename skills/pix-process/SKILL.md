@@ -37,6 +37,7 @@ frameworks: [all]
 | `rule_tool_compress` / `/rule-compress`                          | Say it in fewer tokens                              | Writing answers, commits, reviews, docs without filler                            |
 | `rule_tool_handoff` / `/rule-handoff`                            | LLM Session Handoff                                 | Closing a session, resuming in new chat                                           |
 | [rule-process-npm-release](../rule-process-npm-release/SKILL.md) | Secure npm Release                                  | Publishing a package: Trusted Publishing, staged releases, supply-chain hardening |
+| [rule-process-readme](../rule-process-readme/SKILL.md)           | README structure for open source and internal repos | Writing or rewriting a project README                                             |
 | [rule-process-simplicity](../rule-process-simplicity/SKILL.md)   | Build Only What Was Asked                           | Before and during implementation, to keep the change minimal                      |
 
 ## Quick Selection Guide

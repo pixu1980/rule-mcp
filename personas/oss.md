@@ -14,6 +14,7 @@ evidenceSkills:
   - "rule-process-adr"
   - "rule-process-changelog"
   - "rule-process-npm-release"
+  - "rule-process-readme"
 aliases:
   - "oss"
   - "open source steward"
@@ -37,4 +38,5 @@ What this role looks at. One line each, written for a person to read.
 - funding that is transparent to donors and independent of one payer
 - a release cadence contributors can plan around
 - a community whose decisions are documented, not remembered
+- a README that wins the reader before they have a reason to stay, and a getting-started guide that works from a clean machine
 - boundaries between maintainers and donors, and who decides when they conflict
