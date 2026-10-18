@@ -162,8 +162,8 @@ Deploy:  Netlify / Vercel / Cloudflare Pages / GitHub Pages
 
 ## Browser APIs that replace a dependency: Intersection Observer, Resize Observer, dialog modal, Web Crypto, Web Locks, lazy loading, file upload
 
-Check the platform before adding a package. Each of these is baseline and
-replaces something that used to be a dependency.
+Check the platform before adding a package. Each of these is available in every
+Baseline browser and replaces something that used to be a dependency.
 
 | Instead of                              | Use                                    | Note                                                              |
 | --------------------------------------- | -------------------------------------- | ----------------------------------------------------------------- |

@@ -349,7 +349,8 @@ self.addEventListener("message", ({ data }) => {
 });
 ```
 
-Baseline widely available since March 2023. Notes: one context per canvas;
+Widely available: every Baseline browser has shipped `OffscreenCanvas` for more
+than 2.5 years. Notes: one context per canvas;
 resizing must be messaged in, because the worker has no `ResizeObserver` on the
 element; pointer and keyboard events still arrive on the main thread and must be
 forwarded; `transferToImageBitmap()` + a `bitmaprenderer` context is the
