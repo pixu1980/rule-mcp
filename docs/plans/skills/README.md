@@ -26,7 +26,7 @@ Total: 87 skills.
 | 15  | `pix-styleguide-json`           | styleguide | `docs/plans/skills/styleguide/pix-styleguide-json.md`          | planned |
 | 16  | `pix-styleguide-javascript`     | styleguide | `docs/plans/skills/styleguide/pix-styleguide-javascript.md`    | planned |
 | 17  | `pix-styleguide-i18n`           | styleguide | `docs/plans/skills/styleguide/pix-styleguide-i18n.md`          | planned |
-| 18  | `pix-styleguide-html`           | styleguide | `docs/plans/skills/styleguide/pix-styleguide-html.md`          | pending |
+| 18  | `pix-styleguide-html`           | styleguide | `docs/plans/skills/styleguide/pix-styleguide-html.md`          | planned |
 | 19  | `pix-styleguide-git`            | styleguide | `docs/plans/skills/styleguide/pix-styleguide-git.md`           | pending |
 | 20  | `pix-styleguide-fingerprint`    | styleguide | `docs/plans/skills/styleguide/pix-styleguide-fingerprint.md`   | pending |
 | 21  | `pix-styleguide-file-tree`      | styleguide | `docs/plans/skills/styleguide/pix-styleguide-file-tree.md`     | pending |
