@@ -37,7 +37,7 @@ Total: 87 skills.
 | 26  | `pix-styleguide-baseline`       | styleguide | `docs/plans/skills/styleguide/pix-styleguide-baseline.md`      | planned |
 | 27  | `pix-styleguide-a11y`           | styleguide | `docs/plans/skills/styleguide/pix-styleguide-a11y.md`          | planned |
 | 28  | `pix-styleguide`                | styleguide | `docs/plans/skills/styleguide/pix-styleguide.md`               | planned |
-| 29  | `pix-process-tdd`               | process    | `docs/plans/skills/process/pix-process-tdd.md`                 | pending |
+| 29  | `pix-process-tdd`               | process    | `docs/plans/skills/process/pix-process-tdd.md`                 | planned |
 | 30  | `pix-process-simplicity`        | process    | `docs/plans/skills/process/pix-process-simplicity.md`          | pending |
 | 31  | `pix-process-readme`            | process    | `docs/plans/skills/process/pix-process-readme.md`              | planned |
 | 32  | `pix-process-npm-release`       | process    | `docs/plans/skills/process/pix-process-npm-release.md`         | pending |
