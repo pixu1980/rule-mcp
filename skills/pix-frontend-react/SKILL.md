@@ -229,7 +229,7 @@ Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 **external-css** (CSS Modules or adoptedStyleSheets), **barrel-file**, **data-part**,
 **react-no-classname** (no `className`, use `data-part`), **react-hooks-rules**
 (hooks at top level),
-**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see rule-styleguide -> javascript.md),
+**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see rule-styleguide -> comments.md),
 **css-comments-required** (every CSS file MUST have file-level + section comments - see rule-styleguide -> css.md),
 **a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` - see rule-styleguide -> a11y.md -> Automated Testing).
 

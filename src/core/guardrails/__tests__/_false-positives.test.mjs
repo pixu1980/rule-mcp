@@ -17,6 +17,7 @@ import { checkCode } from "../../../../src/core/guardrails/index.js";
 import "./_install.fixture.mjs";
 
 const rule = (id, code, fileName = "sample.js") => checkCode("rule-styleguide-javascript", code, { fileName }).failed.find((f) => f.id === id);
+const commentsRule = (id, code, fileName = "sample.js") => checkCode("rule-styleguide-comments", code, { fileName }).failed.find((f) => f.id === id);
 
 test("jsdoc-required sees a JSDoc block longer than 200 characters", () => {
   const documented = `/**
@@ -32,8 +33,8 @@ export async function serveCommand(opts = {}) {
   return opts;
 }
 `;
-  assert.equal(rule("jsdoc-required", documented), undefined, "a documented export must pass");
-  assert.ok(rule("jsdoc-required", "export function bare() {\n  return 1;\n}\n"), "an undocumented export must fail");
+  assert.equal(commentsRule("jsdoc-required", documented), undefined, "a documented export must pass");
+  assert.ok(commentsRule("jsdoc-required", "export function bare() {\n  return 1;\n}\n"), "an undocumented export must fail");
 });
 
 test("js-blank-lines-blocks accepts block scaffolding as a separator", () => {

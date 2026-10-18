@@ -178,7 +178,7 @@ export { default as TodoItem } from "./_TodoItem.svelte";
 - [ ] **guardrail-data-part**: Child elements use data-part="role" instead of class names.
 - [ ] **guardrail-no-framework-css**: No CSS-in-JS, no CSS Modules, no Tailwind. Pure external CSS only.
 - [ ] **guardrail-svelte-specific**: Follows Svelte 5 rule-frontend-svelte conventions. Use `<style>` tag, runes API, `$props()`, `$state()`, `$derived()`, `$effect()`.
-- [ ] **guardrail-jsdoc-required**: Every JS/TS file MUST have complete JSDoc on all exported symbols (see rule-styleguide -> javascript.md).
+- [ ] **guardrail-jsdoc-required**: Every JS/TS file MUST have complete JSDoc on all exported symbols (see rule-styleguide -> comments.md).
 - [ ] **guardrail-css-comments-required**: Every CSS file MUST have file-level + section comments (see rule-styleguide -> css.md).
 - [ ] **guardrail-a11y-test-required**: Every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` (see rule-styleguide -> a11y.md -> Automated Testing).
 

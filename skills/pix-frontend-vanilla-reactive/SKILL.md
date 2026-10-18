@@ -459,7 +459,7 @@ Key assertions enforced by guardrails engine:
 - **tickstate-bridge**: Computed signals read `tickState.get()`
 - **data-part**: Child elements use `data-part="role"` attributes
 - **template-syntax**: `{{ expr }}` for data, `${value}` for JS values
-- **jsdoc-required**: Every JS/TS file MUST have complete JSDoc on all exported symbols (see rule-styleguide → javascript.md)
+- **jsdoc-required**: Every JS/TS file MUST have complete JSDoc on all exported symbols (see rule-styleguide -> comments.md)
 - **css-comments-required**: Every CSS file MUST have file-level + section comments (see rule-styleguide → css.md)
 - **a11y-test-required**: Every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` (see rule-styleguide → a11y.md → Automated Testing)
 
