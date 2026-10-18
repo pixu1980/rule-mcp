@@ -30,14 +30,14 @@ Public sources verified in this session:
 
 Facts that make the current text out of date:
 
-| Current text                       | Rspack 2.x reality                                            |
-| ---------------------------------- | ------------------------------------------------------------ |
-| `builtins: { html: [...] }`        | replaced by `new rspack.HtmlRspackPlugin({...})`              |
-| `experiments: { css: true }`       | `experiments.css` is removed; CSS works by default and `module.rules` selects `type: "css"` or `"css/module"` |
-| `target` default `es2022`          | default is `browserslist` when configured, otherwise `web`    |
-| `sourcemap: true` for production   | the option is `devtool`; production maps are a policy choice  |
-| `--analyze` and the built-in analyzer | removed from `@rspack/cli` in 2.x; use an external analyzer  |
-| CommonJS package output            | 2.x packages are pure ESM                                     |
+| Current text                          | Rspack 2.x reality                                                                                            |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `builtins: { html: [...] }`           | replaced by `new rspack.HtmlRspackPlugin({...})`                                                              |
+| `experiments: { css: true }`          | `experiments.css` is removed; CSS works by default and `module.rules` selects `type: "css"` or `"css/module"` |
+| `target` default `es2022`             | default is `browserslist` when configured, otherwise `web`                                                    |
+| `sourcemap: true` for production      | the option is `devtool`; production maps are a policy choice                                                  |
+| `--analyze` and the built-in analyzer | removed from `@rspack/cli` in 2.x; use an external analyzer                                                   |
+| CommonJS package output               | 2.x packages are pure ESM                                                                                     |
 
 Local articles: no dedicated Rspack piece exists in
 `~/Downloads/articles to check/`; the mentions found are incidental (NestJS
@@ -45,19 +45,19 @@ ESM, TypeScript versus JavaScript). Context only, no citation.
 
 ## Decisions
 
-| Question      | Decision                                                                 |
-| ------------- | ------------------------------------------------------------------------ |
+| Question      | Decision                                                                                 |
+| ------------- | ---------------------------------------------------------------------------------------- |
 | Scope         | Baseline config, CSS, split, type checking and assets, profiling, migration, source maps |
-| Version       | Rspack 2.x, with a 1.x compatibility note                                |
-| Boundaries    | Rspack-specific config only; the family, TypeScript, pnpm and Docker rules are linked |
-| CSS           | CSS Modules, lightningcss, Sass/Less, CssExtractRspackPlugin             |
-| Split         | Keep the current rules and add route and vendor examples                 |
-| Dev server    | Link the family rule and show only the Rspack `allowedHosts` syntax      |
-| Type checking | `ts-checker-rspack-plugin` plus `tsc --noEmit` in CI, with a decision rule |
-| Assets        | Asset modules; import from `src`, `public` only for absolute URLs        |
-| Profiling     | Keep, verified and reduced to what still exists in 2.x                   |
-| Delivery      | Plan only now                                                            |
-| ADR           | Only when a decision is structural                                       |
+| Version       | Rspack 2.x, with a 1.x compatibility note                                                |
+| Boundaries    | Rspack-specific config only; the family, TypeScript, pnpm and Docker rules are linked    |
+| CSS           | CSS Modules, lightningcss, Sass/Less, CssExtractRspackPlugin                             |
+| Split         | Keep the current rules and add route and vendor examples                                 |
+| Dev server    | Link the family rule and show only the Rspack `allowedHosts` syntax                      |
+| Type checking | `ts-checker-rspack-plugin` plus `tsc --noEmit` in CI, with a decision rule               |
+| Assets        | Asset modules; import from `src`, `public` only for absolute URLs                        |
+| Profiling     | Keep, verified and reduced to what still exists in 2.x                                   |
+| Delivery      | Plan only now                                                                            |
+| ADR           | Only when a decision is structural                                                       |
 
 The CSS baseline is the documented default: Rspack processes CSS with no
 `experiments` flag, and the selected variants (CSS Modules, lightningcss,
@@ -139,12 +139,12 @@ out of the family because webpack is removed.
 
 Advisory first, then blocking after 100% precision and recall.
 
-| Rule id                       | Rejects                                             | Tier | Source            |
-| ----------------------------- | --------------------------------------------------- | ---- | ----------------- |
-| `rspack-no-experiments-css`   | `experiments: { css: ... }`                         | A    | Migration 1.x to 2.x |
-| `rspack-html-plugin`          | `builtins.html`                                     | A    | HtmlRspackPlugin  |
-| `rspack-devtool-not-sourcemap`| a `sourcemap` key in the Rspack config              | A    | Configuration reference |
-| `rspack-no-bundler-analyzer`  | `--analyze` or `webpack-bundler-analyzer`           | B    | Migration 1.x to 2.x |
+| Rule id                        | Rejects                                   | Tier | Source                  |
+| ------------------------------ | ----------------------------------------- | ---- | ----------------------- |
+| `rspack-no-experiments-css`    | `experiments: { css: ... }`               | A    | Migration 1.x to 2.x    |
+| `rspack-html-plugin`           | `builtins.html`                           | A    | HtmlRspackPlugin        |
+| `rspack-devtool-not-sourcemap` | a `sourcemap` key in the Rspack config    | A    | Configuration reference |
+| `rspack-no-bundler-analyzer`   | `--analyze` or `webpack-bundler-analyzer` | B    | Migration 1.x to 2.x    |
 
 The family guardrails own env secrets, dev-server exposure, target, IO,
 source maps and pinned dependencies; this skill indexes them instead of adding

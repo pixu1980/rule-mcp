@@ -16,15 +16,15 @@ guardrails: [connection-pool, migration-safety, parameterized-queries, transacti
 
 ## Available Skills
 
-| Skill                                                  | Database               | Type                  | Best For                                             |
-| ------------------------------------------------------ | ---------------------- | --------------------- | ---------------------------------------------------- |
-| [pix-data-sql](../pix-data-sql/SKILL.md)               | SQL General            | Relational            | Query patterns, DDL, indexing theory, transactions   |
-| [pix-data-postgresql](../pix-data-postgresql/SKILL.md) | PostgreSQL 16+         | Relational (ACID)     | Complex queries, JSONB, partitioning, replication    |
-| [pix-data-mysql](../pix-data-mysql/SKILL.md)           | MySQL 8+ / MariaDB 11+ | Relational (InnoDB)   | Web apps, LAMP stack, high read throughput           |
-| [pix-data-mongodb](../pix-data-mongodb/SKILL.md)       | MongoDB 7+             | Document (NoSQL)      | Flexible schemas, rapid prototyping, time-series     |
-| [pix-data-sqlite](../pix-data-sqlite/SKILL.md)         | SQLite 3.45+           | Relational (embedded) | Single-file storage, desktop and edge apps, tests    |
-| [pix-data-duckdb](../pix-data-duckdb/SKILL.md)         | DuckDB 1+              | Analytical (columnar) | Local OLAP, Parquet/CSV analysis, embedded analytics |
-| [pix-data-indexed-db](../pix-data-indexed-db/SKILL.md) | IndexedDB              | Browser (key-value)   | Offline-first web apps, client-side persistence      |
+| Skill                                                  | Database               | Type                  | Best For                                                                          |
+| ------------------------------------------------------ | ---------------------- | --------------------- | --------------------------------------------------------------------------------- |
+| [pix-data-sql](../pix-data-sql/SKILL.md)               | SQL General            | Relational            | Query patterns, DDL, indexing theory, transactions                                |
+| [pix-data-postgresql](../pix-data-postgresql/SKILL.md) | PostgreSQL 16+         | Relational (ACID)     | Complex queries, JSONB, partitioning, replication                                 |
+| [pix-data-mysql](../pix-data-mysql/SKILL.md)           | MySQL 8+ / MariaDB 11+ | Relational (InnoDB)   | Web apps, LAMP stack, high read throughput                                        |
+| [pix-data-mongodb](../pix-data-mongodb/SKILL.md)       | MongoDB 7+             | Document (NoSQL)      | Flexible schemas, rapid prototyping, time-series                                  |
+| [pix-data-sqlite](../pix-data-sqlite/SKILL.md)         | SQLite 3.45+           | Relational (embedded) | Single-file storage, desktop and edge apps, tests                                 |
+| [pix-data-duckdb](../pix-data-duckdb/SKILL.md)         | DuckDB 1+              | Analytical (columnar) | Local OLAP, Parquet/CSV analysis, embedded analytics                              |
+| [pix-data-indexed-db](../pix-data-indexed-db/SKILL.md) | IndexedDB              | Browser (key-value)   | Offline-first web apps, client-side persistence                                   |
 | [pix-data-validation](../pix-data-validation/SKILL.md) | Business data          | Validation            | Email, phone, VAT, tax IDs, postal codes, IBAN, and the schemas that enforce them |
 
 ## Data architecture patterns, and the question each one answers

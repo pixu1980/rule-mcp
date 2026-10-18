@@ -32,13 +32,13 @@ Public sources verified in this session:
 
 Problems found:
 
-| Problem                                   | Detail                                                        |
-| ----------------------------------------- | ------------------------------------------------------------- |
-| enum contradiction                        | the guardrail fails on `enum` and `const enum`, while the final section says "if an enum is unavoidable, use `const enum`" |
-| merge artifact                            | the final section carries a nested `# TypeScript Rules` heading and repeats the enum and type-safety rules |
-| version claim                             | `COMPILER.md` calls 7.x a release candidate; 7.0.2 is released and 6.0.3 is the last JavaScript line |
-| overlap with ESLint                       | `@typescript-eslint/no-explicit-any` and the `ts-no-explicit-any` guardrail claim the same rule |
-| missing patterns                          | no `Result`, template literal types, domain versus transport types, utility types, or `@ts-expect-error` discipline |
+| Problem             | Detail                                                                                                                     |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| enum contradiction  | the guardrail fails on `enum` and `const enum`, while the final section says "if an enum is unavoidable, use `const enum`" |
+| merge artifact      | the final section carries a nested `# TypeScript Rules` heading and repeats the enum and type-safety rules                 |
+| version claim       | `COMPILER.md` calls 7.x a release candidate; 7.0.2 is released and 6.0.3 is the last JavaScript line                       |
+| overlap with ESLint | `@typescript-eslint/no-explicit-any` and the `ts-no-explicit-any` guardrail claim the same rule                            |
+| missing patterns    | no `Result`, template literal types, domain versus transport types, utility types, or `@ts-expect-error` discipline        |
 
 Local articles: `03-typescript/` has thirteen pieces, most on these exact
 topics (`stop-using-any`, the anti-pattern review, interface versus type,
@@ -47,19 +47,19 @@ TypeScript documentation.
 
 ## Decisions
 
-| Question        | Decision                                                                |
-| --------------- | ----------------------------------------------------------------------- |
-| Scope           | Enum contradiction, merge artifact, TS 7, missing patterns, ESLint boundary, type placement |
-| Enum rule       | No `enum`; `const enum` only with a written waiver marker               |
-| Merge artifact  | Keep it as a coherent final summary, no nested heading, no duplicated rules |
-| Version         | 7.0 as the current line, with the dual install and the 6.0 breaking changes |
+| Question        | Decision                                                                                                                              |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope           | Enum contradiction, merge artifact, TS 7, missing patterns, ESLint boundary, type placement                                           |
+| Enum rule       | No `enum`; `const enum` only with a written waiver marker                                                                             |
+| Merge artifact  | Keep it as a coherent final summary, no nested heading, no duplicated rules                                                           |
+| Version         | 7.0 as the current line, with the dual install and the 6.0 breaking changes                                                           |
 | New patterns    | `Result`, template literal types, domain versus transport types, utility types, non-null assertion ban, `@ts-expect-error` discipline |
-| Generics        | Confirmed                                                               |
-| Adoption        | A migration section from JavaScript and from pervasive `any`            |
-| New guardrails  | Non-null assertion, unchecked suppression, `Record<string, unknown>`, type gymnastics |
-| ESLint boundary | Guardrails are deterministic per file; ESLint owns the type-aware rules |
-| Severity        | Advisory first, then blocking after the corpus gate                     |
-| Delivery        | Plan only now                                                           |
+| Generics        | Confirmed                                                                                                                             |
+| Adoption        | A migration section from JavaScript and from pervasive `any`                                                                          |
+| New guardrails  | Non-null assertion, unchecked suppression, `Record<string, unknown>`, type gymnastics                                                 |
+| ESLint boundary | Guardrails are deterministic per file; ESLint owns the type-aware rules                                                               |
+| Severity        | Advisory first, then blocking after the corpus gate                                                                                   |
+| Delivery        | Plan only now                                                                                                                         |
 
 ## Workstream A - The enum rule, made single
 
@@ -111,12 +111,12 @@ first step.
 Existing, unchanged: `ts-no-explicit-any`, `ts-catch-unknown`,
 `ts-no-double-assertion`, `ts-union-over-enum` (with the waiver marker).
 
-| Rule id                       | Rejects                                                    | Tier | Source            |
-| ----------------------------- | ---------------------------------------------------------- | ---- | ----------------- |
-| `ts-no-non-null-assertion`    | a `!` non-null assertion                                   | A    | TypeScript docs   |
-| `ts-no-unchecked-suppression` | the unchecked suppression comment where the checked form is available | A    | TypeScript docs   |
-| `ts-no-record-string-unknown` | `Record<string, unknown>` as a default shape               | B    | This plan         |
-| `ts-no-inline-type-gymnastics`| deeply nested conditional or mapped types in application code | B | This plan        |
+| Rule id                        | Rejects                                                               | Tier | Source          |
+| ------------------------------ | --------------------------------------------------------------------- | ---- | --------------- |
+| `ts-no-non-null-assertion`     | a `!` non-null assertion                                              | A    | TypeScript docs |
+| `ts-no-unchecked-suppression`  | the unchecked suppression comment where the checked form is available | A    | TypeScript docs |
+| `ts-no-record-string-unknown`  | `Record<string, unknown>` as a default shape                          | B    | This plan       |
+| `ts-no-inline-type-gymnastics` | deeply nested conditional or mapped types in application code         | B    | This plan       |
 
 ## Workstream G - The ESLint boundary
 
