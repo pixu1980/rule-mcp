@@ -40,7 +40,7 @@ Total: 88 skills.
 | 29 | `rule-styleguide` | styleguide | `docs/plans/skills/styleguide/rule-styleguide.md` | pending |
 | 30 | `rule-process-tdd` | process | `docs/plans/skills/process/rule-process-tdd.md` | pending |
 | 31 | `rule-process-simplicity` | process | `docs/plans/skills/process/rule-process-simplicity.md` | pending |
-| 32 | `rule-process-readme` | process | `docs/plans/skills/process/rule-process-readme.md` | pending |
+| 32 | `rule-process-readme` | process | `docs/plans/skills/process/rule-process-readme.md` | planned |
 | 33 | `rule-process-npm-release` | process | `docs/plans/skills/process/rule-process-npm-release.md` | pending |
 | 34 | `rule-process-code-review` | process | `docs/plans/skills/process/rule-process-code-review.md` | pending |
 | 35 | `rule-process-changelog` | process | `docs/plans/skills/process/rule-process-changelog.md` | pending |
