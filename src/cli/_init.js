@@ -29,6 +29,7 @@ import { execFileSync } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import { installGitGovernance } from "../core/commit/index.js";
 import { detectReleaseTooling, renderInitExtras, unpinnedDependencies } from "../core/release/index.js";
+import { probeFilesystem } from "../core/tokensave/_probe.js";
 import { findProjectRoot, getProjectPaths } from "./paths/index.js";
 
 /**
@@ -79,11 +80,23 @@ export function initProject(options = {}) {
 
     if (binary) {
       const run = options.run ?? ((command, args, runOptions) => execFileSync(command, args, { ...runOptions, stdio: "ignore" }));
-      try {
-        run(binary, ["init"], { cwd: projectDir });
-        tokensave = "initialized";
-      } catch (error) {
-        tokensave = `failed: ${error.message}`;
+      // A graph that already exists is the correct state, and `init` says so on
+      // stderr - which `stdio: "ignore"` does not capture. The probe answers the
+      // same question from the filesystem, and the report says `existing`
+      // instead of dressing a healthy project as a failure.
+      const probe = options.probe ?? probeFilesystem;
+
+      if (probe(projectDir).available) {
+        tokensave = "existing";
+      } else {
+        try {
+          run(binary, ["init"], { cwd: projectDir });
+          tokensave = "initialized";
+        } catch (error) {
+          const reason = String(error?.stderr || error?.message || error).trim();
+
+          tokensave = /already initiali[sz]ed/i.test(reason) ? "existing" : `failed: ${reason.split("\n", 1)[0]}`;
+        }
       }
     } else {
       tokensave = "not installed";
