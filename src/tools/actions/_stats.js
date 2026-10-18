@@ -22,6 +22,7 @@
 import { readFileSync } from "node:fs";
 import { z } from "zod/v4";
 import { aggregate, renderFlight, renderStats } from "../../core/telemetry/stats/index.js";
+import { formatBytes, graphAgeSeconds, graphStatus, runtimeSnapshot } from "../../core/tokensave/_insights.js";
 import { tokensaveGain } from "../../core/tokensave/_ledger.js";
 import { readEvents, readRollups } from "../../core/telemetry/store/index.js";
 import { telemetryEnabled } from "../../core/telemetry/recorder/index.js";
@@ -116,7 +117,29 @@ export function registerStatsTool() {
         ].join("\n");
       }
 
-      return { content: [{ type: "text", text }], _meta: { pixStats: stats } };
+      // The graph's own numbers, not an estimate: how much this project is
+      // indexed for, how old the index is, and what the server holding it costs.
+      const status = graphStatus(process.cwd());
+
+      if (status) {
+        const age = graphAgeSeconds(status);
+        const runtime = runtimeSnapshot(process.cwd());
+        const lines = [
+          "",
+          "## TokenSave graph",
+          "",
+          `${status.files} file(s), ${status.nodes} node(s), ${status.edges} edge(s); index ${formatBytes(status.dbBytes)} for ${formatBytes(status.sourceBytes)} of source.`,
+          `Index last updated ${age === null ? "at an unknown time" : `${age}s ago`}.`,
+        ];
+
+        if (runtime) {
+          lines.push(`Server pid ${runtime.pid ?? "?"} on TokenSave ${runtime.version}: ${formatBytes(runtime.rssBytes)} resident, ${runtime.cpuPercent}% cpu.`);
+        }
+
+        text += [...lines, ""].join("\n");
+      }
+
+      return { content: [{ type: "text", text }], _meta: { pixStats: stats, pixGraph: status ?? undefined } };
     },
   });
 }

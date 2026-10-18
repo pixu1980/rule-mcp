@@ -26,7 +26,8 @@ export const TOKENSAVE_SURFACE = {
   "core/tokensave/_changes.js": ["commit_context", "diff_context", "log"],
   "core/tokensave/_edit.js": ["str_replace"],
   "core/tokensave/_memory.js": ["record_decision", "session_recall"],
-  "core/guardrails/project/_checks.js": ["circular", "health", "dead_code", "unsafe_patterns", "diagnostics"],
+  "core/tokensave/_insights.js": ["status", "affected", "runtime"],
+  "core/guardrails/project/_checks.js": ["circular", "health", "dead_code", "unsafe_patterns", "unused_imports", "redundancy", "diagnostics"],
 };
 
 /** The TokenSave CLI subcommands, by the module that runs them. */

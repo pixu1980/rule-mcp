@@ -19,7 +19,9 @@ const ROOT = new URL("../../../", import.meta.url).pathname;
 function callsIn(file) {
   const source = readFileSync(`${ROOT}${file}`, "utf8");
 
-  return [...source.matchAll(/(?:client|callToolSync|callTool)\(\s*"([a-z_]+)"|\btool:\s*"([a-z_]+)"/g)].map((match) => match[1] ?? match[2]);
+  return [...source.matchAll(/(?:client|callToolSync|callTool|read)\(\s*(?:projectDir?,?\s*)?"([a-z_]+)"|\btool:\s*"([a-z_]+)"/g)].map(
+    (match) => match[1] ?? match[2],
+  );
 }
 
 test("every call the adapter makes is declared in the surface map", () => {
