@@ -171,7 +171,7 @@ Run `pix_tool_meta_astro` mode=check or `pix_tool_check` to validate code agains
 Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 **external-css** (Astro `<style>` scoped blocks or external CSS imports),
 **barrel-file**, **data-part**,
-**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see pix-styleguide -> javascript.md),
+**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see pix-styleguide -> comments.md),
 **css-comments-required** (every CSS file MUST have file-level + section comments - see pix-styleguide -> css.md),
 **a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` - see pix-styleguide -> a11y.md -> Automated Testing).
 

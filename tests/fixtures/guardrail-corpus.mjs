@@ -18,6 +18,7 @@
  */
 
 const JS = "pix-styleguide-javascript";
+const COMMENTS = "pix-styleguide-comments";
 const TS = "pix-styleguide-typescript";
 const REACT = "pix-frontend-react";
 const CSS = "pix-styleguide-css";
@@ -133,14 +134,14 @@ export const CORPUS = [
   },
   {
     rule: "jsdoc-required",
-    skill: JS,
+    skill: COMMENTS,
     label: "bad",
     why: "an exported function with nothing said about it",
     code: `export function serve(options) {\n  return options;\n}\n`,
   },
   {
     rule: "jsdoc-required",
-    skill: JS,
+    skill: COMMENTS,
     label: "good",
     why: "a JSDoc block long enough that the detector has to look at adjacency",
     code: `/**\n * Start the server.\n *\n * Loads the skills and then starts the transport, and this sentence exists to\n * push the block past the two hundred characters the detector uses as its\n * window so adjacency is what decides.\n *\n * @param {object} [options] - transport and port\n * @returns {object}\n */\nexport function serve(options = {}) {\n  return options;\n}\n`,
