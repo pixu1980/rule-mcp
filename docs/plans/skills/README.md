@@ -29,7 +29,7 @@ Total: 87 skills.
 | 18  | `rule-styleguide-html`           | styleguide | `docs/plans/skills/styleguide/rule-styleguide-html.md`          | planned |
 | 19  | `rule-styleguide-git`            | styleguide | `docs/plans/skills/styleguide/rule-styleguide-git.md`           | planned |
 | 20  | `rule-styleguide-fingerprint`    | styleguide | `docs/plans/skills/styleguide/rule-styleguide-fingerprint.md`   | planned |
-| 21  | `rule-styleguide-file-tree`      | styleguide | `docs/plans/skills/styleguide/rule-styleguide-file-tree.md`     | pending |
+| 21  | `rule-styleguide-file-tree`      | styleguide | `docs/plans/skills/styleguide/rule-styleguide-file-tree.md`     | planned |
 | 22  | `rule-styleguide-english`        | styleguide | `docs/plans/skills/styleguide/rule-styleguide-english.md`       | pending |
 | 23  | `rule-styleguide-css`            | styleguide | `docs/plans/skills/styleguide/rule-styleguide-css.md`           | pending |
 | 24  | `rule-styleguide-configuration`  | styleguide | `docs/plans/skills/styleguide/rule-styleguide-configuration.md` | pending |
