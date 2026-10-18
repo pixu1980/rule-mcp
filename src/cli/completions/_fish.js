@@ -10,6 +10,7 @@ export function generateFish() {
 complete -c rule-mcp -f
 
 # Commands
+complete -c rule-mcp -n "__fish_use_subcommand" -a init      -d "Prepare a project: recorder directory, git hooks, tokensave and the dependency pin report"
 complete -c rule-mcp -n "__fish_use_subcommand" -a serve     -d "Start MCP server"
 complete -c rule-mcp -n "__fish_use_subcommand" -a up        -d "Serve over SSE (HTTP daemon)"
 complete -c rule-mcp -n "__fish_use_subcommand" -a daemon    -d "Manage background daemon"

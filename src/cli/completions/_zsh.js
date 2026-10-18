@@ -30,6 +30,7 @@ _pix_galaxy_mcp_commands() {
     'guard:Permission-guard payload processor'
     'update:Self-update from the upstream repo'
     'agent-commands:Manage agent slash commands'
+    'init:Prepare a project: recorder directory, git hooks, tokensave and the dependency pin report'
     'reinstall:Purge node_modules and the lockfile, install again, refresh the global bin'
     'commit-lint:Validate commits against type(scope): subject'
     'completions:Generate shell completion script'
