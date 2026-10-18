@@ -52,7 +52,7 @@ Problems found:
 | boundary with the neighbors is implicit | markdown syntax and file presence are not named                                                                        |
 
 Local articles: no README-specific piece exists in
-`~/Downloads/articles to check/`. The Evil Martians article the skill already
+the local article corpus. The Evil Martians article the skill already
 cites is external, and the plan keeps it as the origin of the structure.
 
 ## Decisions

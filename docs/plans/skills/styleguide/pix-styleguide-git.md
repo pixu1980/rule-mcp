@@ -29,7 +29,7 @@ Public sources verified in this session:
 - Pro Git, https://git-scm.com/book/en/v2
 
 Local articles: no dedicated git piece exists in
-`~/Downloads/articles to check/`; the matches are incidental.
+the local article corpus; the matches are incidental.
 
 Problems found:
 

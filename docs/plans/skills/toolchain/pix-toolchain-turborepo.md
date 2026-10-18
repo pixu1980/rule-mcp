@@ -36,7 +36,7 @@ Facts that make the current text out of date:
 | no filter guidance                                             | `--filter`, `--affected`, `--dry=json` and `--continue` are the CI surface                                |
 
 Local articles: no dedicated Turborepo or monorepo piece exists in
-`~/Downloads/articles to check/`. The mentions found are incidental (NestJS ESM,
+the local article corpus. The mentions found are incidental (NestJS ESM,
 a Node package roundup, TypeScript 7). They stay context only and are not cited.
 
 ## Decisions

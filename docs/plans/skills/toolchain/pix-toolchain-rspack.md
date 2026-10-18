@@ -40,7 +40,7 @@ Facts that make the current text out of date:
 | CommonJS package output               | 2.x packages are pure ESM                                                                                     |
 
 Local articles: no dedicated Rspack piece exists in
-`~/Downloads/articles to check/`; the mentions found are incidental (NestJS
+the local article corpus; the mentions found are incidental (NestJS
 ESM, TypeScript versus JavaScript). Context only, no citation.
 
 ## Decisions

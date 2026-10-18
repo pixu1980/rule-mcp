@@ -36,7 +36,7 @@ Problems found, reproduced by execution:
 | box pass is narrow             | inner separators, corner styles, an unclosed box and inconsistent padding are invisible to it                                                |
 | no phrasing or structure check | the tells are prose in the skill and nothing measures them                                                                                   |
 
-Articles: two pieces in `~/Downloads/articles to check/` mention the em dash as
+Articles: two pieces in the local article corpus mention the em dash as
 an AI tell, as opinion rather than evidence. Nothing is cited; the source is the
 module's own behavior.
 

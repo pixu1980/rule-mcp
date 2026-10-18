@@ -40,7 +40,7 @@ Facts that make the current text out of date:
 | full `vitest.config.ts`   | duplicated from `rule-devops-testing`                                                                                |
 
 Local articles: no dedicated Vite article exists in
-`~/Downloads/articles to check/`. The tangential mentions are formatting tools
+the local article corpus. The tangential mentions are formatting tools
 (Oxfmt, VoidZero) and a TypeScript-versus-JavaScript piece. The claim that
 "oxlint is the default linter in Vite 8" does not appear in the official
 release announcement and is not used.

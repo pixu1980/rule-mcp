@@ -29,7 +29,7 @@ Public sources verified in this session:
   the guides annotate.
 
 Local articles: no dedicated accessibility piece exists in
-`~/Downloads/articles to check/`; the matches are incidental. Confirmed with the
+the local article corpus; the matches are incidental. Confirmed with the
 owner; nothing is cited from there.
 
 Problems found:

@@ -30,7 +30,7 @@ Public sources verified in this session:
   three, which the skill treats as "do not use" rather than a support question.
 
 Local articles: no dedicated piece on Baseline or browser support exists in
-`~/Downloads/articles to check/`; the matches used the word in the performance
+the local article corpus; the matches used the word in the performance
 sense. Confirmed with the owner; nothing is cited from there.
 
 Problems found:

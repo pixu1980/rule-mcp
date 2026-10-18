@@ -26,7 +26,7 @@ Public sources verified in this session:
 - REUSE, https://reuse.software/
 
 Local articles: no dedicated piece on comments exists in
-`~/Downloads/articles to check/`; the matches are incidental.
+the local article corpus; the matches are incidental.
 
 Problems found:
 

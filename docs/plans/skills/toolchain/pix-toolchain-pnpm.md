@@ -39,7 +39,7 @@ Facts that make the current text out of date:
 | `auto-install-peers=true` in `.npmrc` | the default since pnpm 8                                                                                                                                           |
 
 Local articles: no dedicated pnpm piece exists in
-`~/Downloads/articles to check/`. The NestJS 12 article mentions pnpm commands
+the local article corpus. The NestJS 12 article mentions pnpm commands
 and unified Node runtimes; it stays context only and is not cited.
 
 ## Decisions

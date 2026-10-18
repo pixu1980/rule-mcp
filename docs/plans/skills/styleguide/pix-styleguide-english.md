@@ -40,7 +40,7 @@ Problems found, reproduced by execution:
 | no standards are cited           | plain language and the style guides are never named                                                                        |
 
 Local articles: no dedicated piece on technical writing or style guides exists
-in `~/Downloads/articles to check/`; the writing-adjacent matches are
+in the local article corpus; the writing-adjacent matches are
 incidental.
 
 ## Decisions
