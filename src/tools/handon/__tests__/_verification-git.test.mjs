@@ -11,6 +11,7 @@ import { test } from "node:test";
 import { verify } from "../_verify.js";
 import { getGitDiff, getGitLog } from "../../handoff/_git.js";
 import { git as gitRun } from "./_handon.fixture.mjs";
+import "../../../../tests/fixtures/git-hermetic.mjs";
 
 const git = (cwd, ...args) => gitRun(cwd, ...args);
 

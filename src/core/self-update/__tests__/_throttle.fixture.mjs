@@ -20,6 +20,7 @@ import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileS
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import "../../../../tests/fixtures/git-hermetic.mjs";
 
 // Server code resolves `@src/*` through a hook (ADR 089); a spawned
 // process loads it too, so it registers the hook as every entry point does.

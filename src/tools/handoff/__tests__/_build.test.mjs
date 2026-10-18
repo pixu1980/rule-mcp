@@ -10,6 +10,7 @@ import { test } from "node:test";
 
 import { readAdrs, readContextValues, readProjectIdentity } from "../_sources.js";
 import { buildHandoff } from "../_build.js";
+import "../../../../tests/fixtures/git-hermetic.mjs";
 import "../_sections-core.js";
 import "../_sections-repo.js";
 
