@@ -31,6 +31,7 @@ import { registerConfigCommand, registerDoctorCommand, registerCompletionsComman
 import { registerAgentCommandsCommand } from "./_register-agent-commands.js";
 import { registerReinstallCommand } from "./_register-reinstall.js";
 import { registerCommitLintCommand } from "./_register-commit.js";
+import { registerInitCommand } from "./_register-init.js";
 import { registerHandoffCommand } from "./_register-handoff.js";
 import { registerAdrCommand, registerSkillsCommand, registerFixCommand, registerHandonCommand } from "./_register-session.js";
 import {
@@ -102,6 +103,7 @@ export function buildProgram() {
   registerAgentCommandsCommand(program);
   registerReinstallCommand(program);
   registerCommitLintCommand(program);
+  registerInitCommand(program);
 
   return program;
 }
