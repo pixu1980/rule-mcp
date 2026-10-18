@@ -51,7 +51,6 @@ Once routed here, consult the table below and load the specific sub-skill's SKIL
 | [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md)               | WCAG 2.2 AA, ARIA, AI Behavioral Contract, Compliance Profiles, platform-native mapping                      | Every PR - accessibility is mandatory              |
 | [pix-styleguide-i18n](../pix-styleguide-i18n/SKILL.md)               | Translation keys, plurals, `Intl` dates/numbers/currencies, RTL layout, pseudo-localization                  | Shipping in more than one language or region       |
 | [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md)           | PascalCase, camelCase, UPPER_SNAKE_CASE, barrel pattern, `_` prefix, directory layout                        | Creating new files, folders, or exports            |
-| [pix-styleguide-patterns](../pix-styleguide-patterns/SKILL.md)       | Quick reference cheat sheet: naming, file tree, HTML elements, CSS property order, JS patterns               | Daily reference during development                 |
 | [pix-styleguide-typescript](../pix-styleguide-typescript/SKILL.md)   | any vs unknown, type guards, unions over enum, generics, never, readonly                                     | Writing or reviewing TypeScript                    |
 
 ---

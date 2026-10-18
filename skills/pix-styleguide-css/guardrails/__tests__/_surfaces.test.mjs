@@ -30,7 +30,7 @@ test("the CSS skill states the rule where routing can find it", () => {
 });
 
 test("the frontend skills that list the principles list this one", () => {
-  const carriers = ["pix-styleguide-css", "pix-frontend", "pix-ui-design-system", "pix-styleguide-patterns"];
+  const carriers = ["pix-styleguide-css", "pix-frontend", "pix-ui-design-system"];
   for (const skill of carriers) {
     const body = readFileSync(join(root, "skills", skill, "SKILL.md"), "utf8");
     assert.match(body, /flex first|flex before grid|flex, not grid/i, `${skill} must carry the flex-first rule`);

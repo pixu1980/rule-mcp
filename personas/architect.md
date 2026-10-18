@@ -10,7 +10,12 @@ skills:
   - "coupling and cohesion"
   - "evolutionary design"
 evidenceSkills:
-  - "pix-styleguide-patterns"
+  - "pix-styleguide-naming"
+  - "pix-styleguide-file-tree"
+  - "pix-styleguide-html"
+  - "pix-styleguide-css"
+  - "pix-styleguide-javascript"
+  - "pix-styleguide-a11y"
   - "pix-process-adr"
   - "pix-backend-node"
 aliases:

@@ -1,5 +1,5 @@
 {
-  "count": 109,
+  "count": 108,
   "tools": [
     "pix_tool",
     "pix_tool_ai",
@@ -95,7 +95,6 @@
     "pix_tool_styleguide_json",
     "pix_tool_styleguide_markdown",
     "pix_tool_styleguide_naming",
-    "pix_tool_styleguide_patterns",
     "pix_tool_styleguide_typescript",
     "pix_tool_toolchain",
     "pix_tool_toolchain_biome",

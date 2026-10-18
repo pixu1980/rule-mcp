@@ -87,7 +87,6 @@ export const SKILL_FRAMEWORK_MAP = {
   "pix-styleguide-markdown": "vanilla",
   "pix-styleguide-a11y": "vanilla",
   "pix-styleguide-naming": "vanilla",
-  "pix-styleguide-patterns": "vanilla",
   "pix-data-validation": "vanilla",
   "pix-frontend-vanilla-reactive": "vanilla-reactive",
   pix: "vanilla",

@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Command / Tool / Skill map (128)
+## Command / Tool / Skill map (127)
 
 One row per slash command, then every catalog skill that has no slash of its
 own (ADR 117: leaf skills are reached through area hubs or the router), then
@@ -124,7 +124,6 @@ Regenerate with `pnpm census`.
 | -                          | `pix_tool_styleguide_json`           | `pix-styleguide-json`           | Use when structuring JSON data or API responses.                                                                                                                                                                                                                 |
 | -                          | `pix_tool_styleguide_markdown`       | `pix-styleguide-markdown`       | Use when writing Markdown documentation following pix style.                                                                                                                                                                                                     |
 | -                          | `pix_tool_styleguide_naming`         | `pix-styleguide-naming`         | Use when following pix naming conventions for files, folders, and exports.                                                                                                                                                                                       |
-| -                          | `pix_tool_styleguide_patterns`       | `pix-styleguide-patterns`       | Use as a quick reference for pix naming and property conventions.                                                                                                                                                                                                |
 | -                          | `pix_tool_styleguide_typescript`     | `pix-styleguide-typescript`     | Use when writing or reviewing TypeScript code, or configuring its compiler.                                                                                                                                                                                      |
 | -                          | `pix_tool_toolchain_biome`           | `pix-toolchain-biome`           | Use when configuring Biome linter and formatter.                                                                                                                                                                                                                 |
 | -                          | `pix_tool_toolchain_eslint`          | `pix-toolchain-eslint`          | Use when configuring ESLint for JavaScript/TypeScript projects.                                                                                                                                                                                                  |

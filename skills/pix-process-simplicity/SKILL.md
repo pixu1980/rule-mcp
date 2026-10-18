@@ -240,7 +240,8 @@ sitting stays honest; a file that cannot be read whole hides its coupling.
   (`js-1.js`, `parts-2.js`, `utils-3.js`) is a split that happened without a
   design decision; the name is the test. If you cannot name the piece, you have
   not found the seam yet.
-- **Folders follow the barrel convention** (see pix-styleguide-patterns): the
+- **Folders follow the barrel convention** (see pix-styleguide-file-tree and
+  pix-styleguide-naming): the
   folder's `index.js` is the only public entry and carries no underscore;
   every implementation file inside is prefixed with `_`. Nesting to a third,
   fourth or fifth level is fine as long as every level is a theme, not a bucket.
@@ -269,4 +270,5 @@ sitting stays honest; a file that cannot be read whole hides its coupling.
 
 - [pix-process-adr](../pix-process-adr/SKILL.md) - record the decision instead of building for it
 - [pix-process-code-review](../pix-process-code-review/SKILL.md) - reviewing someone else's scope creep
-- [pix-styleguide-patterns](../pix-styleguide-patterns/SKILL.md) - when a pattern is actually warranted
+- [pix-styleguide-file-tree](../pix-styleguide-file-tree/SKILL.md) - where a piece belongs before it becomes a pattern
+- [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md) - the names the pieces carry

@@ -200,7 +200,6 @@ Apply HTML/CSS/JS/JSON/Markdown/a11y/naming/validation standards.
 | [pix-styleguide-markdown](../pix-styleguide-markdown/SKILL.md)     | `pix_styleguide_markdown`   | all        | Markdown documentation style: document structure, headings, lists, code blocks, formatting, tables, links, and tone f...            |
 | [pix-styleguide-english](../pix-styleguide-english/SKILL.md)       | `pix_styleguide_english`    | all        | English-only prose and American spelling: comments, identifiers and documents in English, US spellings (color, behavior, organiz... |
 | [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md)         | `pix_styleguide_naming`     | all        | Naming conventions and file tree structure: PascalCase, camelCase, UPPER_SNAKE_CASE, underscore prefix rule, barrel p...            |
-| [pix-styleguide-patterns](../pix-styleguide-patterns/SKILL.md)     | `pix_styleguide_patterns`   | all        | Quick reference cheat sheet for naming conventions, property ordering, file tree structure, and common patterns. Cond...            |
 
 ### Toolchain
 
