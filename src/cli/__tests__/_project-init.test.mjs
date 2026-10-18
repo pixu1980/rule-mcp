@@ -91,3 +91,28 @@ test("removal is silent when there is nothing of ours to remove", () => {
   assert.deepEqual(removed, [], "a hook that was never ours is left alone");
   assert.equal(readFileSync(join(dir, "post-merge"), "utf8"), "#!/bin/sh\ntokensave sync\n");
 });
+
+test("an already initialized tokensave is reported as existing, not as a failure", () => {
+  const project = workspace();
+  const run = () => {
+    throw Object.assign(new Error("Command failed: tokensave init"), {
+      stderr: "error: TokenSave is already initialized at '/tmp/x'.\nUse tokensave sync to update the index.",
+    });
+  };
+
+  const result = initProject({ projectDir: project, tokensaveBinary: () => "tokensave", run });
+
+  assert.equal(result.tokensave, "existing", "the correct state must not read as a failure in the report");
+});
+
+test("a real tokensave failure still says failed, with the reason", () => {
+  const project = workspace();
+  const run = () => {
+    throw Object.assign(new Error("Command failed: tokensave init"), { stderr: "error: disk full" });
+  };
+
+  const result = initProject({ projectDir: project, tokensaveBinary: () => "tokensave", run });
+
+  assert.match(result.tokensave, /^failed: /, "an actual failure is not softened");
+  assert.match(result.tokensave, /disk full/);
+});

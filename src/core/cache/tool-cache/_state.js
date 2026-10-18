@@ -31,6 +31,10 @@ export const NON_CACHEABLE = new Set([
   // plan reads the filesystem (.tokensave/ presence in projectDir): a replayed
   // answer states stale availability, and the fill itself is cheap string work.
   "rule_tool_plan",
+  // init reads the graph, the git hooks and the manifest, and it writes the
+  // recorder directory: a replayed answer describes a project that has moved
+  // and hides the work the second run actually did.
+  "rule_tool_init",
 ]);
 
 /**

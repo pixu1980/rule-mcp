@@ -42,6 +42,7 @@ const { registerTool, callTool } = await import("../../../../tools/router/index.
 check("T1 read-only tool gets a key", typeof cacheKey("rule", { prompt: "x" }) === "string");
 check("T1.1 mutation tool rule_tool_apply has no key", cacheKey("rule_tool_apply", {}) === null);
 check("T1.2 rule_tool_fix has no key", cacheKey("rule_tool_fix", {}) === null);
+check("T1.2.1 rule_tool_init has no key: it reads the graph, the hooks and the manifest", cacheKey("rule_tool_init", {}) === null);
 check("T1.3 key stable regardless of arg order", cacheKey("rule", { a: 1, b: 2 }) === cacheKey("rule", { b: 2, a: 1 }));
 
 // ── T2: roundtrip + deep-copy isolation ──
