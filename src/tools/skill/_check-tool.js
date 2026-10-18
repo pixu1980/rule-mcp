@@ -43,6 +43,20 @@ export function registerCheckTool() {
           projectLines.push("- Fix: " + entry.suggestion, "");
         }
 
+        if (project.advisoryCount > 0) {
+          projectLines.push("### Advisory (reported, not failing)", "");
+
+          for (const entry of project.advisory) {
+            projectLines.push("- ⚠️ " + entry.id + ": " + entry.label + " - " + entry.failCount + " finding(s)");
+
+            for (const detail of entry.detail ?? []) {
+              projectLines.push("  - " + detail);
+            }
+          }
+
+          projectLines.push("");
+        }
+
         if (project.skippedCount > 0) {
           projectLines.push("### Skipped", "");
 
