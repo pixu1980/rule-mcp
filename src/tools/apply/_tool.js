@@ -6,6 +6,7 @@ import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import { postProcessFiles } from "../../core/index.js";
 import { applyEdit } from "../../core/tokensave/_edit.js";
+import { syncIndex } from "../../core/tokensave/_sync.js";
 import { validateApply } from "../gateway/index.js";
 import { renderApplyResult } from "./_render.js";
 import { resolveProjectRoot } from "./_roots.js";
@@ -129,6 +130,12 @@ export async function registerApplyTool() {
           postProcessFiles(results);
         } catch {
           // Post-processing is best-effort - don't block the response
+        }
+
+        // The graph is the read path every later call trusts; a write it did
+        // not see is a stale answer waiting to happen.
+        if (results.some((entry) => entry.status === "written")) {
+          syncIndex(rootDir);
         }
       }
 
