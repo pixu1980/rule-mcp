@@ -7,14 +7,14 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Skills (88)
+## Skills (87)
 
 The catalog. A skill is the source of truth for its topic; the tool that
 serves it carries no rules of its own, and the guardrails it is checked
 against are in [`14-guardrails.md`](14-guardrails.md).
 
 The router's own directory, `skills/rule/`, mints no skill tool, which is why
-the catalog is 88 and the directory count is 89.
+the catalog is 87 and the directory count is 88.
 
 | Area                      | Skills | Covers                                                                            |
 | ------------------------- | ------ | --------------------------------------------------------------------------------- |
@@ -26,7 +26,7 @@ the catalog is 88 and the directory count is 89.
 | [meta](#meta)             | 5      |                                                                                   |
 | [platform](#platform)     | 6      | Where the code ships: web, desktop, mobile, library, agent                        |
 | [process](#process)       | 10     | How work is done: reviews, ADRs, changelogs, handoffs, simplicity                 |
-| [styleguide](#styleguide) | 18     | The rules code is written to, per language and concern                            |
+| [styleguide](#styleguide) | 17     | The rules code is written to, per language and concern                            |
 | [toolchain](#toolchain)   | 9      | Build tools, linters, package manager, commit hooks                               |
 | [ui](#ui)                 | 2      | The design system and its components                                              |
 
@@ -149,7 +149,6 @@ the catalog is 88 and the directory count is 89.
 | `rule-styleguide-json`          | `rule_tool_styleguide_json`          | all        | Use when structuring JSON data or API responses. Covers property naming, date formats, numeric precision, schema patterns, and consistency.                                                                                                                                                                                                                                                                                                                                                             |
 | `rule-styleguide-markdown`      | `rule_tool_styleguide_markdown`      | all        | Use when writing Markdown documentation following rule style. Covers headings, lists, code blocks, tables, links, and tone for technical docs.                                                                                                                                                                                                                                                                                                                                                           |
 | `rule-styleguide-naming`        | `rule_tool_styleguide_naming`        | all        | Use when following rule naming conventions for files, folders, and exports. Covers PascalCase, camelCase, UPPER_SNAKE_CASE, barrel patterns, and directory layout.                                                                                                                                                                                                                                                                                                                                       |
-| `rule-styleguide-patterns`      | `rule_tool_styleguide_patterns`      | all        | Use as a quick reference for rule naming and property conventions. Covers condensed cheat sheet for naming, property ordering, and file tree structure.                                                                                                                                                                                                                                                                                                                                                  |
 | `rule-styleguide-typescript`    | `rule_tool_styleguide_typescript`    | all        | Use when writing or reviewing TypeScript code, or configuring its compiler. Covers the anti-patterns that flag in review (any, as, enum, optional-chaining sprawl), the practices that hold up at scale (generics, never, readonly, self-documenting APIs), where types live, and the tsconfig, strict mode and path aliases.                                                                                                                                                                           |
 
 ### toolchain

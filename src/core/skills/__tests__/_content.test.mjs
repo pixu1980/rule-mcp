@@ -82,11 +82,6 @@ for (const required of ["new Set(", "Set.has", "for...of", "node:fs", "throw new
   assert.ok(jsStyleguide.includes(required), `rule-styleguide-javascript must cover ${required}`);
 }
 
-const patternsSkill = skillDoc("rule-styleguide-patterns");
-for (const required of ["node:fs", "flatMap", "replaceAll", "new Set(", "for (const item of", "new Map("]) {
-  assert.ok(patternsSkill.includes(required), `rule-styleguide-patterns must cover ${required}`);
-}
-
 await loadAllSkills(true);
 const tools = listTools();
 assert.ok(

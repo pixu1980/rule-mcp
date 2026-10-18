@@ -10,7 +10,12 @@ skills:
   - "coupling and cohesion"
   - "evolutionary design"
 evidenceSkills:
-  - "rule-styleguide-patterns"
+  - "rule-styleguide-naming"
+  - "rule-styleguide-file-tree"
+  - "rule-styleguide-html"
+  - "rule-styleguide-css"
+  - "rule-styleguide-javascript"
+  - "rule-styleguide-a11y"
   - "rule-process-adr"
   - "rule-backend-node"
 aliases:

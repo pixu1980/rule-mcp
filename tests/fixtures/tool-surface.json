@@ -1,5 +1,5 @@
 {
-  "count": 109,
+  "count": 108,
   "tools": [
     "pix_tool",
     "rule_tool_ai",
@@ -95,7 +95,6 @@
     "rule_tool_styleguide_json",
     "rule_tool_styleguide_markdown",
     "rule_tool_styleguide_naming",
-    "rule_tool_styleguide_patterns",
     "rule_tool_styleguide_typescript",
     "rule_tool_toolchain",
     "rule_tool_toolchain_biome",

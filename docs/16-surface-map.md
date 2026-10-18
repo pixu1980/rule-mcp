@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Command / Tool / Skill map (128)
+## Command / Tool / Skill map (127)
 
 One row per slash command, then every catalog skill that has no slash of its
 own (ADR 117: leaf skills are reached through area hubs or the router), then
@@ -124,7 +124,6 @@ Regenerate with `pnpm census`.
 | -                          | `rule_tool_styleguide_json`           | `rule-styleguide-json`           | Use when structuring JSON data or API responses.                                                                                                                                                                                                                 |
 | -                          | `rule_tool_styleguide_markdown`       | `rule-styleguide-markdown`       | Use when writing Markdown documentation following rule style.                                                                                                                                                                                                     |
 | -                          | `rule_tool_styleguide_naming`         | `rule-styleguide-naming`         | Use when following rule naming conventions for files, folders, and exports.                                                                                                                                                                                       |
-| -                          | `rule_tool_styleguide_patterns`       | `rule-styleguide-patterns`       | Use as a quick reference for rule naming and property conventions.                                                                                                                                                                                                |
 | -                          | `rule_tool_styleguide_typescript`     | `rule-styleguide-typescript`     | Use when writing or reviewing TypeScript code, or configuring its compiler.                                                                                                                                                                                      |
 | -                          | `rule_tool_toolchain_biome`           | `rule-toolchain-biome`           | Use when configuring Biome linter and formatter.                                                                                                                                                                                                                 |
 | -                          | `rule_tool_toolchain_eslint`          | `rule-toolchain-eslint`          | Use when configuring ESLint for JavaScript/TypeScript projects.                                                                                                                                                                                                  |

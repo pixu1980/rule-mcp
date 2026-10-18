@@ -87,7 +87,6 @@ export const SKILL_FRAMEWORK_MAP = {
   "rule-styleguide-markdown": "vanilla",
   "rule-styleguide-a11y": "vanilla",
   "rule-styleguide-naming": "vanilla",
-  "rule-styleguide-patterns": "vanilla",
   "rule-data-validation": "vanilla",
   "rule-frontend-vanilla-reactive": "vanilla-reactive",
   rule: "vanilla",

@@ -11,7 +11,12 @@ skills:
   - "complexity budgets"
 evidenceSkills:
   - "rule-process-simplicity"
-  - "rule-styleguide-patterns"
+  - "rule-styleguide-naming"
+  - "rule-styleguide-file-tree"
+  - "rule-styleguide-html"
+  - "rule-styleguide-css"
+  - "rule-styleguide-javascript"
+  - "rule-styleguide-a11y"
 aliases:
   - "simplicity-staff-eng"
   - "staff engineer for simplicity"

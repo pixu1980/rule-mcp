@@ -7,7 +7,7 @@
 
 ## Context
 
-The 150-line auto-splits produced meaningless file names (js-1..4, parts-1..4, vanilla-1..2, stopwords-a/b), duplicated two quality rules across parts-3 and parts-4, and left four 2-line legacy shims that doubled every module path. The rule-styleguide-patterns file-tree convention (index.js barrel, underscore-prefixed implementation files) was not applied to this server own source, and nothing stopped an ADR from being written in Italian.
+The 150-line auto-splits produced meaningless file names (js-1..4, parts-1..4, vanilla-1..2, stopwords-a/b), duplicated two quality rules across parts-3 and parts-4, and left four 2-line legacy shims that doubled every module path. The rule-styleguide-file-tree convention (index.js barrel, underscore-prefixed implementation files) was not applied to this server own source, and nothing stopped an ADR from being written in Italian.
 
 ## Decision
 
