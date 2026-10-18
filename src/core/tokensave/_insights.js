@@ -8,7 +8,7 @@
  *
  * Every function returns `null` when there is no graph or the tool refuses, so a
  * caller branches once instead of catching, and a server running without
- * TokenSave keeps its previous behaviour with no extra prose in the output.
+ * TokenSave keeps its previous behavior with no extra prose in the output.
  *
  * @see module:core/tokensave/probe - the availability check
  * @see module:core/tokensave/client-sync - the synchronous CLI call
