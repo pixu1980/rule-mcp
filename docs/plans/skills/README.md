@@ -22,7 +22,7 @@ Total: 87 skills.
 | 11  | `rule-toolchain`                 | toolchain  | `docs/plans/skills/toolchain/rule-toolchain.md`                 | planned |
 | 12  | `rule-styleguide-typescript`     | styleguide | `docs/plans/skills/styleguide/rule-styleguide-typescript.md`    | planned |
 | 13  | `rule-styleguide-naming`         | styleguide | `docs/plans/skills/styleguide/rule-styleguide-naming.md`        | planned |
-| 14  | `rule-styleguide-markdown`       | styleguide | `docs/plans/skills/styleguide/rule-styleguide-markdown.md`      | pending |
+| 14  | `rule-styleguide-markdown`       | styleguide | `docs/plans/skills/styleguide/rule-styleguide-markdown.md`      | planned |
 | 15  | `rule-styleguide-json`           | styleguide | `docs/plans/skills/styleguide/rule-styleguide-json.md`          | pending |
 | 16  | `rule-styleguide-javascript`     | styleguide | `docs/plans/skills/styleguide/rule-styleguide-javascript.md`    | pending |
 | 17  | `rule-styleguide-i18n`           | styleguide | `docs/plans/skills/styleguide/rule-styleguide-i18n.md`          | pending |
