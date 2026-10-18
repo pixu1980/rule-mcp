@@ -128,49 +128,6 @@ VITE_API_BASE_URL=http://localhost:3000/api
 }
 ```
 
-### .eslintrc.json (Legacy - prefer Biome for new projects)
-
-```json
-{
-  "env": { "browser": true, "es2024": true, "node": true },
-  "extends": ["eslint:recommended"],
-  "parserOptions": { "ecmaVersion": "latest", "sourceType": "module" },
-  "rules": {
-    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
-    "no-console": ["warn", { "allow": ["warn", "error"] }],
-    "eqeqeq": ["error", "always"],
-    "curly": ["error", "all"]
-  }
-}
-```
-
-### tsconfig.json (Frontend)
-
-```json
-{
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    "resolveJsonModule": true,
-    "forceConsistentCasingInFileNames": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
-}
-```
-
 ### jsconfig.json (JavaScript)
 
 ```json
@@ -194,41 +151,21 @@ VITE_API_BASE_URL=http://localhost:3000/api
 }
 ```
 
-### .nvmrc
+## package.json: the manifest policy lives with pnpm
 
-```
-lts/*
-```
-
-## package.json: never a corepack activation field
-
-Three fields must never appear in a `package.json`:
-
-```json
-{
-  "packageManager": "pnpm@11.25.0",
-  "engines": {
-    "node": ">=22"
-  },
-  "devEngines": {
-    "packageManager": { "name": "pnpm", "version": "11.8.0", "onFail": "download" }
-  }
-}
-```
-
-`packageManager` and `devEngines.packageManager` hand the install to corepack;
-`engines` gives npm, pnpm or yarn a range to warn or refuse on. rule-mcp
-does not support either: the install must not be something a tool can decline on
-a machine the project cannot see. Pin Node with `.nvmrc` and the dependency tree
-with the lockfile. Guardrails: `pkg-no-corepack`, `pkg-no-engines` (owned by
-[rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md), applied to every check).
+The fields that must never appear in a `package.json` - `packageManager`,
+`devEngines.packageManager` and `engines` - are documented, with the reason,
+in [rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md), which owns the
+`pkg-no-corepack` and `pkg-no-engines` rules. This skill does not repeat them.
 
 ## How to scaffold
 
-1. Run `rule_tool_styleguide_configuration mode=scaffold` to see all config file templates.
-2. Or call `rule_tool_styleguide mode=scaffold file=.prettierrc` for a single file.
-3. Create/paste each file at the project root.
-4. Run `rule_tool_check` to validate the files are present.
+1. Run `rule_tool_styleguide mode=scaffold` to see all config file templates, or
+   `rule_tool_styleguide mode=scaffold file=.prettierrc` for a single file. The
+   scaffold mode is exposed by `rule-styleguide`, which also holds the verbatim
+   templates; moving it to this skill is planned.
+2. Create/paste each file at the project root.
+3. Run `rule_tool_check` to validate the files are present.
 
 ---
 
@@ -237,5 +174,6 @@ with the lockfile. Guardrails: `pkg-no-corepack`, `pkg-no-engines` (owned by
 - [rule](../rule/SKILL.md) - Central skill index and dispatcher
 - [rule-styleguide](../rule-styleguide/SKILL.md) - Style guides index
 - [rule-toolchain](../rule-toolchain/SKILL.md) - Toolchain skill index
+- [COMPILER.md](../rule-styleguide-typescript/COMPILER.md) - the tsconfig this skill no longer duplicates
 - [rule-devops-docker](../rule-devops-docker/SKILL.md) - Docker configuration
 - [rule-devops-testing](../rule-devops-testing/SKILL.md) - Testing setup
