@@ -41,6 +41,7 @@ export function checkProjectGuarded(projectDir = process.cwd(), { skill = "rule-
   const passed = [];
   const failed = [];
   const skipped = [];
+  const advisory = [];
 
   for (const check of PROJECT_CHECKS) {
     if (check.optional && !diagnostics) {
@@ -63,7 +64,15 @@ export function checkProjectGuarded(projectDir = process.cwd(), { skill = "rule-
     const outcome = check.evaluate(result.value);
 
     if (outcome) {
-      failed.push({ id: check.id, wcag: "", label: check.label, failCount: outcome.failCount, detail: outcome.detail, suggestion: outcome.suggestion });
+      const entry = { id: check.id, wcag: "", label: check.label, failCount: outcome.failCount, detail: outcome.detail, suggestion: outcome.suggestion };
+
+      // An advisory check reports, it never fails: the graph sees a shape, a
+      // person decides whether the shape is the defect.
+      if (check.advisory === true) {
+        advisory.push(entry);
+      } else {
+        failed.push(entry);
+      }
     } else {
       passed.push({ id: check.id, label: check.label });
     }
@@ -77,5 +86,18 @@ export function checkProjectGuarded(projectDir = process.cwd(), { skill = "rule-
         ? `✅ ${passed.length}/${total} project checks pass (${skipped.length} skipped: graph unavailable).`
         : `✅ All ${total} project checks pass.`;
 
-  return { skill, total, passCount: passed.length, failCount: failed.length, skippedCount: skipped.length, passed, failed, skipped, allPass: failed.length === 0, summary };
+  return {
+    skill,
+    total,
+    passCount: passed.length,
+    failCount: failed.length,
+    skippedCount: skipped.length,
+    advisoryCount: advisory.length,
+    passed,
+    failed,
+    skipped,
+    advisory,
+    allPass: failed.length === 0,
+    summary: advisory.length > 0 ? `${summary} ${advisory.length} advisory finding(s) - reported, not failing.` : summary,
+  };
 }

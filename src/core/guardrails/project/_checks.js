@@ -20,6 +20,7 @@ export const HEALTH_FLOOR = 7000;
  * @property {string} label - Human-readable rule name
  * @property {string} tool - TokenSave tool to call
  * @property {object} [args] - Tool parameters
+ * @property {boolean} [advisory] - Reported, never counted as a failure
  * @property {(value: unknown) => null | { failCount: number, detail: string[], suggestion: string }} evaluate
  */
 
@@ -105,6 +106,55 @@ export const PROJECT_CHECKS = [
         failCount: count,
         detail: [`${count} unsafe pattern site(s) outside tests`, ...(kinds ? [kinds] : [])],
         suggestion: "Replace with a checked error path (see rule-backend-security).",
+      };
+    },
+  },
+  {
+    id: "project-unused-imports",
+    label: "No import brought in and never used, in src",
+    tool: "unused_imports",
+    args: { path: "src" },
+    // Advisory: the graph sees the import edge, a person decides whether the
+    // side effect it triggers is the reason it is there.
+    advisory: true,
+    evaluate: (value) => {
+      const imports = Array.isArray(value?.imports) ? value.imports : [];
+
+      if (imports.length === 0) {
+        return null;
+      }
+
+      const sites = imports.slice(0, 5).map((entry) => `${entry.file}:${entry.line} ${entry.unused ?? entry.name}`);
+
+      return {
+        failCount: imports.length,
+        detail: [`${imports.length} unused import(s)`, ...sites],
+        suggestion: "Remove the import, or use it; the graph does not see a reference.",
+      };
+    },
+  },
+  {
+    id: "project-duplicate-bodies",
+    label: "No AST-identical function bodies in src",
+    tool: "redundancy",
+    args: { path: "src", min_lines: 8 },
+    // Advisory: `definite` pairs are AST-identical, but two helpers that agree
+    // today are not always one helper.
+    advisory: true,
+    evaluate: (value) => {
+      const pairs = Array.isArray(value?.pairs) ? value.pairs.filter((pair) => pair.severity === "definite") : [];
+
+      if (pairs.length === 0) {
+        return null;
+      }
+
+      const first = pairs[0];
+      const where = first?.a && first.b ? `${first.a.file}:${first.a.line} and ${first.b.file}:${first.b.line}` : "see the tool output";
+
+      return {
+        failCount: pairs.length,
+        detail: [`${pairs.length} pair(s) with identical bodies`, `first: ${where} (similarity ${first?.similarity ?? "?"})`],
+        suggestion: "Keep one and call it, or make the difference explicit; see rule-process-simplicity.",
       };
     },
   },
