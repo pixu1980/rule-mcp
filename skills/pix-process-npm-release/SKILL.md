@@ -317,4 +317,4 @@ Show the user which dependency branches pull in the most nested packages, and of
 - [pix-platform-library](../pix-platform-library/SKILL.md) - Package structure and public API design for the thing being published
 - [pix-styleguide-git](../pix-styleguide-git/SKILL.md) - Conventional commits behind the changelog
 - [pix-toolchain-pnpm](../pix-toolchain-pnpm/SKILL.md) - pnpm settings referenced by the cooldown step
-- [pix-styleguide-readme](../pix-styleguide-readme/SKILL.md) - The README users land on after install
+- [pix-process-readme](../pix-process-readme/SKILL.md) - The README users land on after install

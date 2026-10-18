@@ -180,6 +180,7 @@ Write ADRs/docs, follow BMAD, feature workflow, and handoff.
 | [pix-process-adr](../pix-process-adr/SKILL.md)                 | `pix_tool_process_adr`    | all        | Architecture Decision Records (ADR) for pix projects. Capture, store, and manage architectural decisions in docs/...     |
 | [pix-process-bmad](../pix-process-bmad/SKILL.md)               | `pix_process_bmad`        | all        | BMAD Method (Build More Architect Dreams) - AI-driven development framework for structured software delivery through...  |
 | [pix-process-code-review](../pix-process-code-review/SKILL.md) | `pix_process_code_review` | all        | Prepare and conduct risk-based PR/MR reviews with explicit quality, safety, and follow-up gates.                         |
+| [pix-process-readme](../pix-process-readme/SKILL.md)           | `pix_process_readme`      | all        | Write or rewrite a project README: the opening block, the facts, the example, getting started, and the license and contribution sections. |
 | `pix_tool_handoff` / `/pix-handoff`                            | `pix_tool_handoff`        | all        | Generate a compressed LLM handoff summary from ADR logs and project context. Enables cross-chat recovery, model-switc... |
 
 ### Styleguide

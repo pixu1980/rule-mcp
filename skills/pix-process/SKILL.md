@@ -37,6 +37,7 @@ frameworks: [all]
 | `pix_tool_compress` / `/pix-compress`                          | Say it in fewer tokens                              | Writing answers, commits, reviews, docs without filler                            |
 | `pix_tool_handoff` / `/pix-handoff`                            | LLM Session Handoff                                 | Closing a session, resuming in new chat                                           |
 | [pix-process-npm-release](../pix-process-npm-release/SKILL.md) | Secure npm Release                                  | Publishing a package: Trusted Publishing, staged releases, supply-chain hardening |
+| [pix-process-readme](../pix-process-readme/SKILL.md)           | README structure for open source and internal repos | Writing or rewriting a project README                                             |
 | [pix-process-simplicity](../pix-process-simplicity/SKILL.md)   | Build Only What Was Asked                           | Before and during implementation, to keep the change minimal                      |
 
 ## Quick Selection Guide
