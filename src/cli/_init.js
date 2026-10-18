@@ -29,6 +29,7 @@ import { execFileSync } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import { installGitGovernance } from "../core/commit/index.js";
 import { detectReleaseTooling, renderInitExtras, unpinnedDependencies } from "../core/release/index.js";
+import { reasonOf } from "../core/tokensave/_client.js";
 import { probeFilesystem } from "../core/tokensave/_probe.js";
 import { findProjectRoot, getProjectPaths } from "./paths/index.js";
 
@@ -93,7 +94,7 @@ export function initProject(options = {}) {
           run(binary, ["init"], { cwd: projectDir });
           tokensave = "initialized";
         } catch (error) {
-          const reason = String(error?.stderr || error?.message || error).trim();
+          const reason = reasonOf(error);
 
           tokensave = /already initiali[sz]ed/i.test(reason) ? "existing" : `failed: ${reason.split("\n", 1)[0]}`;
         }

@@ -13,18 +13,13 @@
 
 import { execFileSync } from "node:child_process";
 
-import { parseToolEnvelope } from "./_client.js";
+import { parseToolEnvelope, reasonOf } from "./_client.js";
 
 /** Default wall clock for one synchronous TokenSave call. */
 export const DEFAULT_SYNC_TIMEOUT_MS = 30_000;
 
 /** Largest stdout the client will buffer. */
 const MAX_BUFFER = 10 * 1024 * 1024;
-
-/** A one-line reason from a child-process failure. */
-function reasonOf(error) {
-  return String(error?.stderr || error?.message || error).trim();
-}
 
 /**
  * Call one TokenSave tool through the CLI, synchronously.

@@ -5,6 +5,8 @@ import { readAdrs, readContextValues, readProjectIdentity } from "./_sources.js"
 import { getGitDiff, getGitLog } from "./_git.js";
 import { featureSummary } from "./_feature.js";
 import { graphChanges } from "../../core/tokensave/_changes.js";
+import { affectedTests } from "../../core/tokensave/_insights.js";
+import { sessionRecall } from "../../core/tokensave/_memory.js";
 import { scanProjectDocs } from "./_docs-scan.js";
 import { archiveCompletedDocs, closeoutLines } from "./_closeout.js";
 import { autoRenumber, renumberLines } from "./_renumber.js";
@@ -12,6 +14,7 @@ import { estimateTokens } from "./_format.js";
 import { headerLines, identityLines, adrLines, contextLines } from "./_sections-core.js";
 import { featureRangeLines, workingTreeLines, gitLogLines, docsLines, footerLines } from "./_sections-repo.js";
 import { semanticLines } from "./_sections-semantic.js";
+import { affectedTestLines, recallLines } from "./_sections-tokensave.js";
 
 /** Build one handoff, re-running itself one format tighter when it exceeds maxTokens. */
 export function buildHandoff({
@@ -41,6 +44,8 @@ export function buildHandoff({
   const contextValues = includeContext ? readContextValues(projectDir) : {};
   const gitDiff = includeGitDiff === false ? null : getGitDiff(projectDir);
   const changes = includeGitDiff === false ? null : graphChanges(projectDir, { files: gitDiff?.files ?? [] });
+  const decisions = includeGitDiff === false ? null : sessionRecall(projectDir, { limit: 8 });
+  const affected = includeGitDiff === false ? null : affectedTests(projectDir, gitDiff?.files ?? []);
   const gitLog = includeGitLog === false ? null : getGitLog(projectDir);
   const docsScan = includeRoadmap === false ? null : scanProjectDocs(projectDir);
   const feature = featureSummary(projectDir);
@@ -66,6 +71,8 @@ export function buildHandoff({
     ...contextLines(contextValues, shape),
     ...workingTreeLines(gitDiff, shape),
     ...semanticLines(changes, shape),
+    ...recallLines(decisions, shape),
+    ...affectedTestLines(affected, shape),
     ...gitLogLines(gitLog, shape),
     ...docsLines(docsScan, shape),
     ...renumberLines(renumber, shape),

@@ -17,15 +17,11 @@
 
 import { execFileSync } from "node:child_process";
 
+import { reasonOf } from "./_client.js";
 import { probeFilesystem } from "./_probe.js";
 
 /** Default wall clock for one incremental sync. */
 export const DEFAULT_SYNC_TIMEOUT_MS = 120_000;
-
-/** A one-line reason from a child-process failure. */
-function reasonOf(error) {
-  return String(error?.stderr || error?.message || error).trim().split("\n", 1)[0];
-}
 
 /**
  * Sync the graph after a write, when there is a graph to sync.
@@ -44,6 +40,6 @@ export function syncIndex(projectDir = process.cwd(), { probe = probeFilesystem,
 
     return { synced: true };
   } catch (error) {
-    return { synced: false, reason: reasonOf(error) };
+    return { synced: false, reason: reasonOf(error).split("\n", 1)[0] };
   }
 }
