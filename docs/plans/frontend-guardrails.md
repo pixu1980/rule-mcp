@@ -42,15 +42,15 @@ Sources fetched and used:
 
 ## Decisions from the interview
 
-| Question      | Decision                                                              |
-| ------------- | --------------------------------------------------------------------- |
-| Target skills | `rule-frontend` shared, react, vue, svelte, solid, angular, workers     |
-| Candidates    | All seven selected                                                     |
-| Trigger       | Devops default: target file or framework import                        |
-| Severity      | Devops default: advisory, then blocking after corpus proof             |
-| Corpus/tests  | Devops default: fixtures, unit tests, inheritance test                 |
-| Artifacts     | Devops default: frontmatter, census, ADR, changelog, per-rule source    |
-| Phasing       | Plan only now; implementation in a dedicated session                   |
+| Question      | Decision                                                             |
+| ------------- | -------------------------------------------------------------------- |
+| Target skills | `rule-frontend` shared, react, vue, svelte, solid, angular, workers   |
+| Candidates    | All seven selected                                                   |
+| Trigger       | Devops default: target file or framework import                      |
+| Severity      | Devops default: advisory, then blocking after corpus proof           |
+| Corpus/tests  | Devops default: fixtures, unit tests, inheritance test               |
+| Artifacts     | Devops default: frontmatter, census, ADR, changelog, per-rule source |
+| Phasing       | Plan only now; implementation in a dedicated session                 |
 
 ### Open item 1: the shared rules need an inherits graph
 
@@ -75,15 +75,15 @@ Tier B: `worker-transferable`.
 
 ## Accepted rules
 
-| Rule id               | Rejects                                                       | Tier | Source                        |
-| --------------------- | ------------------------------------------------------------- | ---- | ----------------------------- |
-| `xss-sink-sanitized`  | `dangerouslySetInnerHTML`, `v-html`, `{@html}`, `innerHTML` without a sanitizer or Trusted Types | A | OWASP XSS; MDN Trusted Types |
-| `fe-list-key`         | list rendering with no stable key, or the array index as key   | A    | React; Vue; Svelte; Angular   |
-| `fe-effect-cleanup`   | effect, `onMount` or `watch` that registers a listener or timer with no cleanup | A | Framework docs          |
-| `ce-valid`            | custom element name without a hyphen, no `adoptedStyleSheets`  | A    | MDN; existing vanilla rules   |
-| `template-escape`     | unescaped interpolation or raw HTML in a template              | A    | OWASP XSS; MDN Trusted Types  |
-| `worker-no-dom`       | `document` or `window` access inside a worker file              | A    | MDN Web Workers               |
-| `worker-transferable` | large `ArrayBuffer` or `ImageBitmap` posted with no transfer list | B | MDN Transferable objects      |
+| Rule id               | Rejects                                                                                          | Tier | Source                       |
+| --------------------- | ------------------------------------------------------------------------------------------------ | ---- | ---------------------------- |
+| `xss-sink-sanitized`  | `dangerouslySetInnerHTML`, `v-html`, `{@html}`, `innerHTML` without a sanitizer or Trusted Types | A    | OWASP XSS; MDN Trusted Types |
+| `fe-list-key`         | list rendering with no stable key, or the array index as key                                     | A    | React; Vue; Svelte; Angular  |
+| `fe-effect-cleanup`   | effect, `onMount` or `watch` that registers a listener or timer with no cleanup                  | A    | Framework docs               |
+| `ce-valid`            | custom element name without a hyphen, no `adoptedStyleSheets`                                    | A    | MDN; existing vanilla rules  |
+| `template-escape`     | unescaped interpolation or raw HTML in a template                                                | A    | OWASP XSS; MDN Trusted Types |
+| `worker-no-dom`       | `document` or `window` access inside a worker file                                               | A    | MDN Web Workers              |
+| `worker-transferable` | large `ArrayBuffer` or `ImageBitmap` posted with no transfer list                                | B    | MDN Transferable objects     |
 
 `xss-sink-sanitized` and `template-escape` overlap by design: the first is the
 sink in JavaScript, the second is the template syntax that produces it. The

@@ -34,40 +34,40 @@ Verified in this session:
 
 ## Decisions
 
-| Question       | Decision                                                                 |
-| -------------- | ------------------------------------------------------------------------ |
-| Family owner   | `rule-toolchain`; the bundler skills index the shared rules               |
-| Shared rules   | Public-variable secrets, dev-server exposure, pinned verified deps, declared target, declared entry/output, sourcemap policy |
-| Webpack        | Removed entirely                                                         |
-| Plan shape     | This family document plus one specific plan per bundler                  |
-| Delivery       | Plan only now                                                            |
+| Question     | Decision                                                                                                                     |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| Family owner | `rule-toolchain`; the bundler skills index the shared rules                                                                   |
+| Shared rules | Public-variable secrets, dev-server exposure, pinned verified deps, declared target, declared entry/output, sourcemap policy |
+| Webpack      | Removed entirely                                                                                                             |
+| Plan shape   | This family document plus one specific plan per bundler                                                                      |
+| Delivery     | Plan only now                                                                                                                |
 
 ## Shared contract
 
 Each row is one family rule, with the mechanism in each bundler. The rule is
 written once here; the bundler skills point at it.
 
-| Rule                    | Vite                                                        | Rspack                                                  | Parcel                                                    |
-| ----------------------- | ----------------------------------------------------------- | ------------------------------------------------------- | --------------------------------------------------------- |
-| No secret in a public variable | only `VITE_` reaches the client; never prefix a secret | `EnvironmentPlugin` whitelists the names that reach the bundle | any statically read `process.env.X` is inlined, so the name is a decision |
-| Dev server not exposed by default | `server.host` localhost; `host: true` needs `server.allowedHosts` | `devServer.host` with `devServer.allowedHosts`; never `'all'` | the server binds all interfaces and allows CORS by default: restrict with `--host` and `--no-cors` |
-| Browser target declared | `build.target` defaults to `baseline-widely-available` | `target` defaults to `browserslist` when configured, else `web` | `browserslist` and `package.json#engines`                  |
-| Entry and output declared | `build.rolldownOptions.input`, `build.outDir`, `base` | `entry`, `output.path`, `output.publicPath`             | `package.json#targets.*.source` and `distDir`              |
-| Sourcemap policy        | `build.sourcemap` defaults to false; enable where the project can store them | `devtool` per mode, chosen deliberately      | `--no-source-maps` / target source maps                   |
-| Pinned, verified deps   | indexed from `rule-toolchain-pnpm` (`pkg-exact-versions`, `verified-dependencies-only`) | same | same                                        |
+| Rule                              | Vite                                                                                   | Rspack                                                          | Parcel                                                                                             |
+| --------------------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| No secret in a public variable    | only `VITE_` reaches the client; never prefix a secret                                 | `EnvironmentPlugin` whitelists the names that reach the bundle  | any statically read `process.env.X` is inlined, so the name is a decision                          |
+| Dev server not exposed by default | `server.host` localhost; `host: true` needs `server.allowedHosts`                      | `devServer.host` with `devServer.allowedHosts`; never `'all'`   | the server binds all interfaces and allows CORS by default: restrict with `--host` and `--no-cors` |
+| Browser target declared           | `build.target` defaults to `baseline-widely-available`                                 | `target` defaults to `browserslist` when configured, else `web` | `browserslist` and `package.json#engines`                                                          |
+| Entry and output declared         | `build.rolldownOptions.input`, `build.outDir`, `base`                                  | `entry`, `output.path`, `output.publicPath`                     | `package.json#targets.*.source` and `distDir`                                                      |
+| Sourcemap policy                  | `build.sourcemap` defaults to false; enable where the project can store them           | `devtool` per mode, chosen deliberately                         | `--no-source-maps` / target source maps                                                            |
+| Pinned, verified deps             | indexed from `rule-toolchain-pnpm` (`pkg-exact-versions`, `verified-dependencies-only`) | same                                                            | same                                                                                               |
 
 ## Proposed family guardrails
 
 Owned by `rule-toolchain`, inherited by the bundler skills. Advisory first, then
 blocking after 100% precision and recall.
 
-| Rule id                       | Rejects                                                     | Tier | Source                |
-| ----------------------------- | ----------------------------------------------------------- | ---- | --------------------- |
-| `bundler-no-public-secret`    | a public prefix on a secret-looking name (`VITE_*_SECRET`, `RSPACK_*_TOKEN`, `PARCEL_*_PASSWORD`) | A | Vite env docs; Parcel env docs |
-| `bundler-dev-not-exposed`     | a dev server on all interfaces with no allowlist             | A    | Vite server options; Rspack dev-server; Parcel dev server |
-| `bundler-target-declared`     | a build with no declared browser target                      | B    | Vite target; Rspack target; Parcel targets |
-| `bundler-io-declared`         | a build with no explicit entry or output                     | B    | Bundler docs          |
-| `bundler-sourcemap-policy`    | source maps on in production without an explicit decision    | B    | Vite build options    |
+| Rule id                    | Rejects                                                                                           | Tier | Source                                                    |
+| -------------------------- | ------------------------------------------------------------------------------------------------- | ---- | --------------------------------------------------------- |
+| `bundler-no-public-secret` | a public prefix on a secret-looking name (`VITE_*_SECRET`, `RSPACK_*_TOKEN`, `PARCEL_*_PASSWORD`) | A    | Vite env docs; Parcel env docs                            |
+| `bundler-dev-not-exposed`  | a dev server on all interfaces with no allowlist                                                  | A    | Vite server options; Rspack dev-server; Parcel dev server |
+| `bundler-target-declared`  | a build with no declared browser target                                                           | B    | Vite target; Rspack target; Parcel targets                |
+| `bundler-io-declared`      | a build with no explicit entry or output                                                          | B    | Bundler docs                                              |
+| `bundler-sourcemap-policy` | source maps on in production without an explicit decision                                         | B    | Vite build options                                        |
 
 ## Phases
 

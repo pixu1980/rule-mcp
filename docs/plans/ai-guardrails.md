@@ -35,16 +35,16 @@ Sources fetched and used:
 
 ## Decisions from the interview
 
-| Question      | Decision                                                              |
-| ------------- | --------------------------------------------------------------------- |
-| Target skills | `rule-ai` owns the shared rules; the area stays otherwise narrative     |
-| Scope         | High-signal selection (4-6)                                            |
-| Candidates    | All eight selected                                                     |
-| Trigger       | Devops default: target file or content heuristic, no universal sweep   |
-| Severity      | Devops default: advisory, then blocking after corpus proof             |
-| Corpus/tests  | Devops default: fixtures, unit tests, inheritance test                 |
-| Artifacts     | Devops default: frontmatter, census, ADR, changelog, per-rule source    |
-| Phasing       | Plan only now; implementation in a dedicated session                   |
+| Question      | Decision                                                             |
+| ------------- | -------------------------------------------------------------------- |
+| Target skills | `rule-ai` owns the shared rules; the area stays otherwise narrative   |
+| Scope         | High-signal selection (4-6)                                          |
+| Candidates    | All eight selected                                                   |
+| Trigger       | Devops default: target file or content heuristic, no universal sweep |
+| Severity      | Devops default: advisory, then blocking after corpus proof           |
+| Corpus/tests  | Devops default: fixtures, unit tests, inheritance test               |
+| Artifacts     | Devops default: frontmatter, census, ADR, changelog, per-rule source |
+| Phasing       | Plan only now; implementation in a dedicated session                 |
 
 ### Open item: how the shared rules reach the four children
 
@@ -70,16 +70,16 @@ carries the prompt and model version. Only one of the two owns each claim.
 
 ## Accepted rules
 
-| Rule id                    | Rejects                                                       | Tier | Source                        |
-| -------------------------- | ------------------------------------------------------------- | ---- | ----------------------------- |
-| `ai-tool-schema`           | tool definition with no parameter schema                      | A    | MCP spec; agent architecture  |
-| `ai-call-timeout`          | model or tool call without a timeout or abort signal          | A    | Node.js docs; OpenAI errors   |
-| `ai-max-tokens`            | model call with no explicit output cap                        | A    | OpenAI errors; Anthropic      |
-| `ai-output-validated`      | parsed model output without schema validation                 | A    | OWASP LLM05                   |
-| `ai-no-secrets-in-prompt`  | credentials or personal data interpolated into a prompt       | A    | OWASP LLM02 and LLM01         |
-| `ai-trace-span`            | model call with no generation span                            | A    | OpenTelemetry GenAI semconv   |
-| `ai-eval-presence`         | agent project with no eval dataset or CI eval gate            | B    | rule-ai-evals; NIST AI RMF     |
-| `ai-mcp-token-validation`  | MCP server accepting a token without audience and scope check  | B    | MCP Security Best Practices   |
+| Rule id                   | Rejects                                                       | Tier | Source                       |
+| ------------------------- | ------------------------------------------------------------- | ---- | ---------------------------- |
+| `ai-tool-schema`          | tool definition with no parameter schema                      | A    | MCP spec; agent architecture |
+| `ai-call-timeout`         | model or tool call without a timeout or abort signal          | A    | Node.js docs; OpenAI errors  |
+| `ai-max-tokens`           | model call with no explicit output cap                        | A    | OpenAI errors; Anthropic     |
+| `ai-output-validated`     | parsed model output without schema validation                 | A    | OWASP LLM05                  |
+| `ai-no-secrets-in-prompt` | credentials or personal data interpolated into a prompt       | A    | OWASP LLM02 and LLM01        |
+| `ai-trace-span`           | model call with no generation span                            | A    | OpenTelemetry GenAI semconv  |
+| `ai-eval-presence`        | agent project with no eval dataset or CI eval gate            | B    | rule-ai-evals; NIST AI RMF    |
+| `ai-mcp-token-validation` | MCP server accepting a token without audience and scope check | B    | MCP Security Best Practices  |
 
 ## Enforcement model
 

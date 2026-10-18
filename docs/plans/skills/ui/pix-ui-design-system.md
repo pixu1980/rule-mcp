@@ -49,24 +49,24 @@ They do not enter the skill; the underlying practice does.
 
 ## Decisions
 
-| Question            | Decision                                                                 |
-| ------------------- | ------------------------------------------------------------------------ |
-| Scope               | Tokens, component contract, states, critique, docs artifact, versioning, a11y conformance |
-| Output path         | `docs/plans/skills/ui/rule-ui-design-system.md`                            |
-| Depth               | Guidance plus guardrails plus assets and templates                        |
-| Sources             | Every recommendation cites a public standard                              |
-| Standards           | DTCG, ARIA APG, WCAG 2.2 Quickref, Open UI, Custom Elements Everywhere, MDN CSSStyleSheet and `@layer`, SemVer |
-| Token references    | Conceptually aligned with the widespread systems, vendor-agnostic: no Material 3 or Carbon dependency |
-| Token format        | DTCG JSON as the source with an optional build, plus the decision rule for when the build is required |
-| Token levels        | Two categories: foundations (primitive plus semantic) and components      |
-| Component docs      | Decided per project: static page by default, Storybook when the project already uses it, a custom internal site for larger systems |
-| Component API       | Compound components, Rule of Three, no prop explosion, reuse before creating |
-| Token ownership     | This skill decides the tokens; `rule-styleguide-css` owns the CSS syntax   |
-| A11y ownership      | `rule-styleguide-a11y` owns the checks; this skill invokes the criteria report |
-| Framework truth     | Confirmed; the plan adds per-framework examples and a CSS mechanism matrix |
-| Hardcoded rule      | Applies to `src/`, with a documented escape hatch                          |
-| Delivery            | Plan only now                                                             |
-| ADR                 | Only when a decision is structural; no automatic per-skill ADR            |
+| Question         | Decision                                                                                                                           |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Scope            | Tokens, component contract, states, critique, docs artifact, versioning, a11y conformance                                          |
+| Output path      | `docs/plans/skills/ui/rule-ui-design-system.md`                                                                                     |
+| Depth            | Guidance plus guardrails plus assets and templates                                                                                 |
+| Sources          | Every recommendation cites a public standard                                                                                       |
+| Standards        | DTCG, ARIA APG, WCAG 2.2 Quickref, Open UI, Custom Elements Everywhere, MDN CSSStyleSheet and `@layer`, SemVer                     |
+| Token references | Conceptually aligned with the widespread systems, vendor-agnostic: no Material 3 or Carbon dependency                              |
+| Token format     | DTCG JSON as the source with an optional build, plus the decision rule for when the build is required                              |
+| Token levels     | Two categories: foundations (primitive plus semantic) and components                                                               |
+| Component docs   | Decided per project: static page by default, Storybook when the project already uses it, a custom internal site for larger systems |
+| Component API    | Compound components, Rule of Three, no prop explosion, reuse before creating                                                       |
+| Token ownership  | This skill decides the tokens; `rule-styleguide-css` owns the CSS syntax                                                            |
+| A11y ownership   | `rule-styleguide-a11y` owns the checks; this skill invokes the criteria report                                                      |
+| Framework truth  | Confirmed; the plan adds per-framework examples and a CSS mechanism matrix                                                         |
+| Hardcoded rule   | Applies to `src/`, with a documented escape hatch                                                                                  |
+| Delivery         | Plan only now                                                                                                                      |
+| ADR              | Only when a decision is structural; no automatic per-skill ADR                                                                     |
 
 ## Workstream A - Tokens
 
@@ -113,11 +113,11 @@ The four passes stay, with three additions:
 
 A decision rule, not a mandate:
 
-| Project shape                          | Artifact                                   |
-| -------------------------------------- | ------------------------------------------ |
-| Solo or small, no build pipeline       | One static `design-system.html`            |
-| Project already uses Storybook         | Stories, one per component state           |
-| Larger system with multiple consumers  | A custom internal site generated from tokens |
+| Project shape                         | Artifact                                     |
+| ------------------------------------- | -------------------------------------------- |
+| Solo or small, no build pipeline      | One static `design-system.html`              |
+| Project already uses Storybook        | Stories, one per component state             |
+| Larger system with multiple consumers | A custom internal site generated from tokens |
 
 The artifact must render every token and every component state, which is the
 part that actually gets used.
@@ -136,14 +136,14 @@ Advisory first, then blocking after 100% precision and recall, as in the area
 plans. Trigger: CSS files, component files and templates that match the content
 heuristic.
 
-| Rule id                    | Rejects                                                   | Tier | Source                |
-| -------------------------- | --------------------------------------------------------- | ---- | --------------------- |
-| `ui-token-no-hardcoded`    | raw hex or spacing where a token exists, across `src/`, with a documented escape hatch | A | DTCG; MDN custom properties |
-| `ui-token-two-level`       | a component token that skips the semantic layer           | A    | DTCG; local article   |
-| `ui-states-required`       | interactive control with no disabled, loading or error state | A  | ARIA APG; WCAG 2.2    |
-| `ui-reduced-motion`        | animation or transition with no `prefers-reduced-motion`  | A    | ARIA APG; WCAG 2.2    |
-| `ui-no-remote-font`        | unapproved remote font dependency                         | B    | Project constraint    |
-| `ui-reuse-system-component`| a system component reimplemented locally                  | B    | Local article         |
+| Rule id                     | Rejects                                                                                | Tier | Source                      |
+| --------------------------- | -------------------------------------------------------------------------------------- | ---- | --------------------------- |
+| `ui-token-no-hardcoded`     | raw hex or spacing where a token exists, across `src/`, with a documented escape hatch | A    | DTCG; MDN custom properties |
+| `ui-token-two-level`        | a component token that skips the semantic layer                                        | A    | DTCG; local article         |
+| `ui-states-required`        | interactive control with no disabled, loading or error state                           | A    | ARIA APG; WCAG 2.2          |
+| `ui-reduced-motion`         | animation or transition with no `prefers-reduced-motion`                               | A    | ARIA APG; WCAG 2.2          |
+| `ui-no-remote-font`         | unapproved remote font dependency                                                      | B    | Project constraint          |
+| `ui-reuse-system-component` | a system component reimplemented locally                                               | B    | Local article               |
 
 Boundary: `a11y-focus-visible` in the a11y skill owns focus; `ui-states-required`
 owns the rest of the state matrix. The two never check the same property.

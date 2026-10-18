@@ -20,12 +20,12 @@ Audited in this session (read-only):
 
 Current state: 4 rules only.
 
-| Rule                | Skill             | Trigger                 |
-| ------------------- | ----------------- | ----------------------- |
-| `env-gitignore`     | rule-devops        | file name `.gitignore`  |
-| `secret-detection`  | rule-devops        | any code                |
-| `docker-healthcheck`| rule-devops-docker | Dockerfile or compose   |
-| `docker-non-root`   | rule-devops-docker | Dockerfile or compose   |
+| Rule                 | Skill             | Trigger                |
+| -------------------- | ----------------- | ---------------------- |
+| `env-gitignore`      | rule-devops        | file name `.gitignore` |
+| `secret-detection`   | rule-devops        | any code               |
+| `docker-healthcheck` | rule-devops-docker | Dockerfile or compose  |
+| `docker-non-root`    | rule-devops-docker | Dockerfile or compose  |
 
 Sources fetched and used (each accepted rule cites one or more):
 
@@ -51,22 +51,22 @@ Sources fetched and used (each accepted rule cites one or more):
 
 ## Decisions from the interview
 
-| Question              | Decision                                                                |
-| --------------------- | ----------------------------------------------------------------------- |
-| Target skills         | Only topics with de facto public documentation. All five qualify.        |
-| Scope                 | High-signal selection (6-10) plus reorganization.                        |
-| Runtime vs static     | Mix: static checks on target files plus human checklist, plus CI scripts.|
-| Docker rules          | `.dockerignore`, no secrets in build args/copies, compose hardening.     |
-| CI/CD rules           | All five candidates.                                                     |
-| Testing rules         | All four candidates.                                                     |
-| Observability rules   | All four candidates.                                                     |
-| Preview rules         | All four candidates.                                                     |
-| Trigger policy        | Target file name only.                                                   |
-| Severity              | Advisory until corpus precision is proven, then blocking.                |
-| Corpus and tests      | Fixtures, unit tests, inheritance test, self-guardrails.                 |
-| Artifacts             | Frontmatter, census, ADR, changelog, per-rule source note.               |
-| Phasing               | Plan only now; implementation in a dedicated session.                    |
-| Sources               | Every new rule cites its source.                                         |
+| Question            | Decision                                                                  |
+| ------------------- | ------------------------------------------------------------------------- |
+| Target skills       | Only topics with de facto public documentation. All five qualify.         |
+| Scope               | High-signal selection (6-10) plus reorganization.                         |
+| Runtime vs static   | Mix: static checks on target files plus human checklist, plus CI scripts. |
+| Docker rules        | `.dockerignore`, no secrets in build args/copies, compose hardening.      |
+| CI/CD rules         | All five candidates.                                                      |
+| Testing rules       | All four candidates.                                                      |
+| Observability rules | All four candidates.                                                      |
+| Preview rules       | All four candidates.                                                      |
+| Trigger policy      | Target file name only.                                                    |
+| Severity            | Advisory until corpus precision is proven, then blocking.                 |
+| Corpus and tests    | Fixtures, unit tests, inheritance test, self-guardrails.                  |
+| Artifacts           | Frontmatter, census, ADR, changelog, per-rule source note.                |
+| Phasing             | Plan only now; implementation in a dedicated session.                     |
+| Sources             | Every new rule cites its source.                                          |
 
 ### Open item: 20 rules against a 6-10 budget
 
@@ -84,13 +84,13 @@ demote any Tier A rule to Tier B.
 
 ## Where each rule lives
 
-| Rule family   | Owning skill                | Why                                                             |
-| ------------- | --------------------------- | --------------------------------------------------------------- |
-| CI/CD         | rule-devops                  | No `rule-devops-ci` skill exists, and all devops children inherit |
-| Docker        | rule-devops-docker           | Topic owner                                                     |
-| Testing       | rule-devops-testing          | Topic owner, gains its first `guardrails/` directory            |
-| Observability | rule-devops-observability    | Topic owner, gains its first `guardrails/` directory            |
-| Preview       | rule-devops-deploy-preview   | Topic owner, gains its first `guardrails/` directory            |
+| Rule family   | Owning skill              | Why                                                              |
+| ------------- | ------------------------- | ---------------------------------------------------------------- |
+| CI/CD         | rule-devops                | No `rule-devops-ci` skill exists, and all devops children inherit |
+| Docker        | rule-devops-docker         | Topic owner                                                      |
+| Testing       | rule-devops-testing        | Topic owner, gains its first `guardrails/` directory             |
+| Observability | rule-devops-observability  | Topic owner, gains its first `guardrails/` directory             |
+| Preview       | rule-devops-deploy-preview | Topic owner, gains its first `guardrails/` directory             |
 
 Reorganization: `env-gitignore` and `secret-detection` stay in `rule-devops`;
 they are already shared. `docker-healthcheck` and `docker-non-root` stay in
@@ -101,11 +101,11 @@ list is kept in sync with the registry after the change.
 
 ### Docker (skill: rule-devops-docker, Tier A)
 
-| Rule id                   | Rejects                                                                  | Target file           | Source                                |
-| ------------------------- | ------------------------------------------------------------------------ | --------------------- | ------------------------------------- |
-| `dockerignore-hardening`  | `.dockerignore` missing `.env*`, `node_modules/`, `dist/`                | `.dockerignore`       | Docker build best practices           |
-| `docker-no-build-secrets` | `COPY .env*`, `ARG`/`ENV` with credential-looking names, secret in layer | `Dockerfile`          | OWASP Docker RULE 12; Dockerfile ref  |
-| `compose-hardening`       | `privileged: true`, `/var/run/docker.sock`, missing `read_only`/`user`   | autodeploy compose    | OWASP Docker RULE 3 and 8             |
+| Rule id                   | Rejects                                                                  | Target file        | Source                               |
+| ------------------------- | ------------------------------------------------------------------------ | ------------------ | ------------------------------------ |
+| `dockerignore-hardening`  | `.dockerignore` missing `.env*`, `node_modules/`, `dist/`                | `.dockerignore`    | Docker build best practices          |
+| `docker-no-build-secrets` | `COPY .env*`, `ARG`/`ENV` with credential-looking names, secret in layer | `Dockerfile`       | OWASP Docker RULE 12; Dockerfile ref |
+| `compose-hardening`       | `privileged: true`, `/var/run/docker.sock`, missing `read_only`/`user`   | autodeploy compose | OWASP Docker RULE 3 and 8            |
 
 Notes: `compose-hardening` targets `docker-compose.autodeploy.yml`, not the
 development compose file, because the dev stack mounts source by design.
@@ -114,25 +114,25 @@ above runs only when the file is checked.
 
 ### CI/CD (skill: rule-devops, shared, Tier A except as noted)
 
-| Rule id                   | Rejects                                                          | Target file      | Tier | Source                          |
-| ------------------------- | ---------------------------------------------------------------- | ---------------- | ---- | ------------------------------- |
-| `ci-image-digest-pinned`  | `image:`/`services:` without `@sha256:`                          | `.gitlab-ci.yml` | A    | GitLab CI/CD YAML; SLSA levels  |
-| `ci-no-secret-echo`       | `echo`/`printf` of `CI_*` or credential-looking variables        | `.gitlab-ci.yml` | A    | GitLab CI/CD YAML; OWASP logging|
-| `ci-no-allow-failure`     | `allow_failure: true` on test and deploy jobs                    | `.gitlab-ci.yml` | A    | GitLab CI/CD YAML; DORA         |
-| `ci-protected-deploy`     | deploy job without a protected-branch rule or environment        | `.gitlab-ci.yml` | B    | GitLab protected environments   |
-| `ci-provenance`           | build job without provenance or SBOM artifact                    | `.gitlab-ci.yml` | B    | SLSA levels                     |
+| Rule id                  | Rejects                                                   | Target file      | Tier | Source                           |
+| ------------------------ | --------------------------------------------------------- | ---------------- | ---- | -------------------------------- |
+| `ci-image-digest-pinned` | `image:`/`services:` without `@sha256:`                   | `.gitlab-ci.yml` | A    | GitLab CI/CD YAML; SLSA levels   |
+| `ci-no-secret-echo`      | `echo`/`printf` of `CI_*` or credential-looking variables | `.gitlab-ci.yml` | A    | GitLab CI/CD YAML; OWASP logging |
+| `ci-no-allow-failure`    | `allow_failure: true` on test and deploy jobs             | `.gitlab-ci.yml` | A    | GitLab CI/CD YAML; DORA          |
+| `ci-protected-deploy`    | deploy job without a protected-branch rule or environment | `.gitlab-ci.yml` | B    | GitLab protected environments    |
+| `ci-provenance`          | build job without provenance or SBOM artifact             | `.gitlab-ci.yml` | B    | SLSA levels                      |
 
 `ci-no-allow-failure` accepts one escape hatch: an inline comment
 `# allow-failure-ok: <reason>` on the same or previous line.
 
 ### Testing (skill: rule-devops-testing, Tier A)
 
-| Rule id                    | Rejects                                                       | Target file       | Source                          |
-| -------------------------- | ------------------------------------------------------------- | ----------------- | ------------------------------- |
-| `test-coverage-thresholds` | `coverage.thresholds` missing or incomplete in vitest config  | `vitest.config.*` | Vitest config reference         |
-| `test-no-focused`          | `.only(` and `.skip(` committed, plus the pending modifier   | `*.test.*`        | eslint-plugin-vitest            |
-| `test-no-fixed-sleep`      | `setTimeout` with a positive literal delay, or `sleep(` in tests | `*.test.*`     | Testing Library; DORA           |
-| `test-setup-required`      | frontend config with `jsdom` and no `setupFiles`              | `vitest.config.*` | Vitest config reference         |
+| Rule id                    | Rejects                                                          | Target file       | Source                  |
+| -------------------------- | ---------------------------------------------------------------- | ----------------- | ----------------------- |
+| `test-coverage-thresholds` | `coverage.thresholds` missing or incomplete in vitest config     | `vitest.config.*` | Vitest config reference |
+| `test-no-focused`          | `.only(` and `.skip(` committed, plus the pending modifier       | `*.test.*`        | eslint-plugin-vitest    |
+| `test-no-fixed-sleep`      | `setTimeout` with a positive literal delay, or `sleep(` in tests | `*.test.*`        | Testing Library; DORA   |
+| `test-setup-required`      | frontend config with `jsdom` and no `setupFiles`                 | `vitest.config.*` | Vitest config reference |
 
 `test-no-focused` also rejects `fdescribe`, `xdescribe`, `fit` and `xit`.
 The pending modifier is named in the corpus fixture only: writing the literal
@@ -142,21 +142,21 @@ target rule alone, so the fixture is the right place for the literal.
 
 ### Observability (skill: rule-devops-observability)
 
-| Rule id                 | Rejects                                                          | Target file                  | Tier | Source                        |
-| ----------------------- | ---------------------------------------------------------------- | ---------------------------- | ---- | ----------------------------- |
-| `obs-health-endpoint`   | server entry with no `/health`, `/healthz` or `/ready` route     | server entry files           | A    | Kubernetes probes             |
-| `obs-structured-logs`   | `console.log(` in `src/` where a logger exists or is expected    | `src/**`                     | B    | Twelve-Factor logs            |
-| `obs-no-pii-in-logs`    | log call carrying `password`, `token`, `authorization`, `req.body`| `src/**`                    | B    | OWASP logging                 |
-| `obs-span-versioning`   | generation span without a prompt or model version attribute      | files creating GenAI spans   | B    | OpenTelemetry GenAI semconv   |
+| Rule id               | Rejects                                                            | Target file                | Tier | Source                      |
+| --------------------- | ------------------------------------------------------------------ | -------------------------- | ---- | --------------------------- |
+| `obs-health-endpoint` | server entry with no `/health`, `/healthz` or `/ready` route       | server entry files         | A    | Kubernetes probes           |
+| `obs-structured-logs` | `console.log(` in `src/` where a logger exists or is expected      | `src/**`                   | B    | Twelve-Factor logs          |
+| `obs-no-pii-in-logs`  | log call carrying `password`, `token`, `authorization`, `req.body` | `src/**`                   | B    | OWASP logging               |
+| `obs-span-versioning` | generation span without a prompt or model version attribute        | files creating GenAI spans | B    | OpenTelemetry GenAI semconv |
 
 ### Preview (skill: rule-devops-deploy-preview, Tier A)
 
-| Rule id                      | Rejects                                                        | Target file       | Source                        |
-| ---------------------------- | -------------------------------------------------------------- | ----------------- | ----------------------------- |
-| `preview-on-stop`            | deploy job with no `environment.on_stop` and no stop job       | `.gitlab-ci.yml`  | GitLab review apps            |
-| `preview-auto-stop`          | review environment with no `auto_stop_in`                      | `.gitlab-ci.yml`  | GitLab review apps            |
-| `preview-no-secrets-spec`    | literal credential values in the App Spec                      | `.do/review-app.yaml` | DigitalOcean App Platform |
-| `preview-envsubst-whitelist` | `${VAR}` in App Spec absent from the envsubst whitelist        | both files        | DigitalOcean App Platform     |
+| Rule id                      | Rejects                                                  | Target file           | Source                    |
+| ---------------------------- | -------------------------------------------------------- | --------------------- | ------------------------- |
+| `preview-on-stop`            | deploy job with no `environment.on_stop` and no stop job | `.gitlab-ci.yml`      | GitLab review apps        |
+| `preview-auto-stop`          | review environment with no `auto_stop_in`                | `.gitlab-ci.yml`      | GitLab review apps        |
+| `preview-no-secrets-spec`    | literal credential values in the App Spec                | `.do/review-app.yaml` | DigitalOcean App Platform |
+| `preview-envsubst-whitelist` | `${VAR}` in App Spec absent from the envsubst whitelist  | both files            | DigitalOcean App Platform |
 
 ## Enforcement model
 

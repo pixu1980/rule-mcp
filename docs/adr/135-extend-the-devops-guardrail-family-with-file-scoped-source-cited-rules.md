@@ -11,7 +11,7 @@ The five rule-devops skills cover pipelines, containers, testing, observability 
 
 ## Decision
 
-Add twenty guardrails across the five devops skills, each scoped to its target file name (Dockerfile, .dockerignore, docker-compose.autodeploy.yml, .gitlab-ci.yml, vitest.config.*, *.test.*, server entry, .do/review-app.yaml) and each citing the public source it derives from. Split them into Tier A (promotion path to blocking) and Tier B (advisory, no promotion yet). CI/CD rules live in rule-devops and reach the children through the existing inherits edges. Rules ship advisory and are promoted to blocking only after tests/core/guardrails-precision-recall.test.mjs reports 100% precision and recall for that rule id. Observability and preview behavior that no static check can prove is verified by CI scripts outside rule_tool_check.
+Add twenty guardrails across the five devops skills, each scoped to its target file name (Dockerfile, .dockerignore, docker-compose.autodeploy.yml, .gitlab-ci.yml, vitest.config.*, _.test._, server entry, .do/review-app.yaml) and each citing the public source it derives from. Split them into Tier A (promotion path to blocking) and Tier B (advisory, no promotion yet). CI/CD rules live in rule-devops and reach the children through the existing inherits edges. Rules ship advisory and are promoted to blocking only after tests/core/guardrails-precision-recall.test.mjs reports 100% precision and recall for that rule id. Observability and preview behavior that no static check can prove is verified by CI scripts outside rule_tool_check.
 
 ## Consequences
 

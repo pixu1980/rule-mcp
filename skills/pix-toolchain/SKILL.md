@@ -43,9 +43,9 @@ frameworks: [all]
 
 ## Configuration & Hooks
 
-| Skill                                                            | Tool              | Best For                                                                    |
-| ---------------------------------------------------------------- | ----------------- | --------------------------------------------------------------------------- |
-| [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md)           | Husky             | Git hooks, lint-staged, commitlint                                          |
+| Skill                                                  | Tool  | Best For                           |
+| ------------------------------------------------------ | ----- | ---------------------------------- |
+| [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md) | Husky | Git hooks, lint-staged, commitlint |
 
 ## Quick Selection Guide
 

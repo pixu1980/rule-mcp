@@ -27,13 +27,13 @@ Public sources verified in this session:
 
 Facts that make the current text out of date:
 
-| Current text                       | Turborepo 2.x reality                                      |
-| ---------------------------------- | ---------------------------------------------------------- |
-| `"pipeline"` in `turbo.json`       | replaced by `"tasks"`                                      |
-| no `env`/`globalEnv`               | environment variables that change the build must enter the hash |
-| `globalDependencies: ["**/.env.*local"]` | the lockfile and root configs are the useful entries  |
+| Current text                                                   | Turborepo 2.x reality                                                                                     |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `"pipeline"` in `turbo.json`                                   | replaced by `"tasks"`                                                                                     |
+| no `env`/`globalEnv`                                           | environment variables that change the build must enter the hash                                           |
+| `globalDependencies: ["**/.env.*local"]`                       | the lockfile and root configs are the useful entries                                                      |
 | remote cache shown only through `turbo login` and `turbo link` | the cache is provider-agnostic: any HTTP server that meets the spec, with artifact integrity verification |
-| no filter guidance                 | `--filter`, `--affected`, `--dry=json` and `--continue` are the CI surface |
+| no filter guidance                                             | `--filter`, `--affected`, `--dry=json` and `--continue` are the CI surface                                |
 
 Local articles: no dedicated Turborepo or monorepo piece exists in
 `~/Downloads/articles to check/`. The mentions found are incidental (NestJS ESM,
@@ -41,19 +41,19 @@ a Node package roundup, TypeScript 7). They stay context only and are not cited.
 
 ## Decisions
 
-| Question      | Decision                                                                 |
-| ------------- | ------------------------------------------------------------------------ |
-| Scope         | Baseline config, cache integrity, filters and CI, remote cache, prune/Docker, migration |
-| Version       | Turborepo 2.x, with a 1.x migration note (`pipeline` to `tasks`)          |
-| Boundaries    | Turborepo owns the task graph and the cache only; the rest is indexed    |
-| Cache         | `outputs` for cacheable tasks, `globalDependencies`, `env`/`globalEnv`, `$TURBO_DEFAULT$`, `cache: false` where needed |
-| Dev tasks     | `persistent: true` implies `cache: false`, always                         |
-| Remote cache  | Provider-agnostic, artifact integrity verified, token as a CI secret      |
-| CI            | `--affected` with full Git history, `--dry=json`, `--continue`, explicit `concurrency` |
-| Prune         | Short section, the Dockerfile stays with `rule-devops-docker`              |
-| Migration     | Keep the Lerna/Nx section, verified and reduced                           |
-| Delivery      | Plan only now                                                            |
-| ADR           | Only when a decision is structural                                       |
+| Question     | Decision                                                                                                               |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| Scope        | Baseline config, cache integrity, filters and CI, remote cache, prune/Docker, migration                                |
+| Version      | Turborepo 2.x, with a 1.x migration note (`pipeline` to `tasks`)                                                       |
+| Boundaries   | Turborepo owns the task graph and the cache only; the rest is indexed                                                  |
+| Cache        | `outputs` for cacheable tasks, `globalDependencies`, `env`/`globalEnv`, `$TURBO_DEFAULT$`, `cache: false` where needed |
+| Dev tasks    | `persistent: true` implies `cache: false`, always                                                                      |
+| Remote cache | Provider-agnostic, artifact integrity verified, token as a CI secret                                                   |
+| CI           | `--affected` with full Git history, `--dry=json`, `--continue`, explicit `concurrency`                                 |
+| Prune        | Short section, the Dockerfile stays with `rule-devops-docker`                                                           |
+| Migration    | Keep the Lerna/Nx section, verified and reduced                                                                        |
+| Delivery     | Plan only now                                                                                                          |
+| ADR          | Only when a decision is structural                                                                                     |
 
 ## Workstream A - Baseline configuration
 
@@ -116,12 +116,12 @@ still uses `pipeline` is not read.
 
 Advisory first, then blocking after 100% precision and recall.
 
-| Rule id                    | Rejects                                                       | Tier | Source                        |
-| -------------------------- | ------------------------------------------------------------- | ---- | ----------------------------- |
-| `turbo-tasks-key`          | a `turbo.json` that uses `pipeline`                           | A    | Configuration reference       |
-| `turbo-outputs-declared`   | a cacheable task with no `outputs`                            | A    | Caching docs                  |
-| `turbo-dev-not-cached`     | `persistent: true` without `cache: false`                     | A    | Task configuration            |
-| `turbo-env-no-secrets`     | a secret-looking name inside `env`/`globalEnv`                | B    | Environment variables         |
+| Rule id                  | Rejects                                        | Tier | Source                  |
+| ------------------------ | ---------------------------------------------- | ---- | ----------------------- |
+| `turbo-tasks-key`        | a `turbo.json` that uses `pipeline`            | A    | Configuration reference |
+| `turbo-outputs-declared` | a cacheable task with no `outputs`             | A    | Caching docs            |
+| `turbo-dev-not-cached`   | `persistent: true` without `cache: false`      | A    | Task configuration      |
+| `turbo-env-no-secrets`   | a secret-looking name inside `env`/`globalEnv` | B    | Environment variables   |
 
 `turbo-env-no-secrets` is Tier B because the name alone is weak evidence; a
 project can legitimately hash a public identifier that ends in `_KEY`.

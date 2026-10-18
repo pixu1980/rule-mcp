@@ -31,13 +31,13 @@ Public sources verified in this session:
 
 Facts that make the current text out of date or unverified:
 
-| Current text                        | Reality                                                      |
-| ----------------------------------- | ------------------------------------------------------------ |
-| "ESLint >= 10.4"                    | the current line is 10.13; `eslint-plugin-unicorn` 78 peers on `eslint@^10.11.0` |
-| "unicorn v69+ requires ESLint >= 10.4" | the current plugin is 78                                    |
-| three Unicorn presets               | unicorn 78 also ships language presets: `recommended-css`, `-html`, `-json`, `-markdown`, `-toml`, `-yaml` |
-| `FlatCompat` as the migration path  | the documented path is `@eslint/migrate-config`; `@eslint/eslintrc` 3.3.7 peers on ESLint 9 |
-| no CI flags                         | `--max-warnings`, `--cache` and `--report-unused-disable-directives` are the run surface |
+| Current text                           | Reality                                                                                                    |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| "ESLint >= 10.4"                       | the current line is 10.13; `eslint-plugin-unicorn` 78 peers on `eslint@^10.11.0`                           |
+| "unicorn v69+ requires ESLint >= 10.4" | the current plugin is 78                                                                                   |
+| three Unicorn presets                  | unicorn 78 also ships language presets: `recommended-css`, `-html`, `-json`, `-markdown`, `-toml`, `-yaml` |
+| `FlatCompat` as the migration path     | the documented path is `@eslint/migrate-config`; `@eslint/eslintrc` 3.3.7 peers on ESLint 9                |
+| no CI flags                            | `--max-warnings`, `--cache` and `--report-unused-disable-directives` are the run surface                   |
 
 Local articles: the formatting-tools piece has a real ESLint section ("ESLint
 is not a formatter any more", flat config, the Biome comparison). It stays
@@ -45,19 +45,19 @@ context only; the plan anchors to the official documentation.
 
 ## Decisions
 
-| Question      | Decision                                                                 |
-| ------------- | ------------------------------------------------------------------------ |
-| Scope         | Version, presets, flat config, type-aware, incremental adoption, legacy migration, Biome, CI |
-| Version       | Pinned: ESLint 10.13, eslint-plugin-unicorn 78, typescript-eslint 8       |
-| Boundaries    | Linter configuration only; the TypeScript config, the JS idioms and the formatter are linked |
-| Presets       | `recommended` default, `unopinionated` for existing code, language presets named, `all` verified before it is kept |
-| Flat config   | `defineConfig`, `files` scoping, documented global `ignores`, ESM `.mjs` |
-| Type-aware    | `recommendedTypeChecked` as the default                                   |
-| Adoption      | The six steps stay, plus the warning count as a migration metric         |
-| Migration     | `@eslint/migrate-config` primary; `FlatCompat` only for plugins that ship no flat config, with the compatibility note |
-| CI            | `--max-warnings`, `--cache`, `--report-unused-disable-directives`        |
-| Delivery      | Plan only now                                                            |
-| ADR           | Only when a decision is structural                                       |
+| Question    | Decision                                                                                                              |
+| ----------- | --------------------------------------------------------------------------------------------------------------------- |
+| Scope       | Version, presets, flat config, type-aware, incremental adoption, legacy migration, Biome, CI                          |
+| Version     | Pinned: ESLint 10.13, eslint-plugin-unicorn 78, typescript-eslint 8                                                   |
+| Boundaries  | Linter configuration only; the TypeScript config, the JS idioms and the formatter are linked                          |
+| Presets     | `recommended` default, `unopinionated` for existing code, language presets named, `all` verified before it is kept    |
+| Flat config | `defineConfig`, `files` scoping, documented global `ignores`, ESM `.mjs`                                              |
+| Type-aware  | `recommendedTypeChecked` as the default                                                                               |
+| Adoption    | The six steps stay, plus the warning count as a migration metric                                                      |
+| Migration   | `@eslint/migrate-config` primary; `FlatCompat` only for plugins that ship no flat config, with the compatibility note |
+| CI          | `--max-warnings`, `--cache`, `--report-unused-disable-directives`                                                     |
+| Delivery    | Plan only now                                                                                                         |
+| ADR         | Only when a decision is structural                                                                                    |
 
 ## Workstream A - Version and requirements
 
@@ -121,12 +121,12 @@ linter, not a second one running at the same time.
 
 Advisory first, then blocking after 100% precision and recall.
 
-| Rule id                       | Rejects                                                    | Tier | Source            |
-| ----------------------------- | ---------------------------------------------------------- | ---- | ----------------- |
-| `eslint-no-eslintrc`          | an `.eslintrc*` file in a project on ESLint 10             | A    | Migration guide   |
-| `eslint-no-formatting-rules`  | formatting rules (`quotes`, `semi`, `indent`, `comma-dangle`) inside ESLint | A | The formatter moved out |
-| `eslint-preset-required`      | a config with hand-picked rules and no preset              | B    | The skill's own advice |
-| `eslint-suppression-reason`   | a lint suppression comment with no explanation             | B    | Maintenance       |
+| Rule id                      | Rejects                                                                     | Tier | Source                  |
+| ---------------------------- | --------------------------------------------------------------------------- | ---- | ----------------------- |
+| `eslint-no-eslintrc`         | an `.eslintrc*` file in a project on ESLint 10                              | A    | Migration guide         |
+| `eslint-no-formatting-rules` | formatting rules (`quotes`, `semi`, `indent`, `comma-dangle`) inside ESLint | A    | The formatter moved out |
+| `eslint-preset-required`     | a config with hand-picked rules and no preset                               | B    | The skill's own advice  |
+| `eslint-suppression-reason`  | a lint suppression comment with no explanation                              | B    | Maintenance             |
 
 ## Assets and templates to ship
 

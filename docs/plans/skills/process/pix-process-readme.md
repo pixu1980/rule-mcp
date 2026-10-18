@@ -44,12 +44,12 @@ Public sources verified in this session:
 
 Problems found:
 
-| Problem                    | Detail                                                     |
-| -------------------------- | ---------------------------------------------------------- |
-| description contradicts the body | the description says "do NOT use for internal/private repo docs" while the body has a full internal-repository section |
-| open source sections are partial | no security policy, support or funding section             |
-| badge policy is absolute   | "remove all badges" ignores a version, license or build badge that states a fact |
-| boundary with the neighbors is implicit | markdown syntax and file presence are not named       |
+| Problem                                 | Detail                                                                                                                 |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| description contradicts the body        | the description says "do NOT use for internal/private repo docs" while the body has a full internal-repository section |
+| open source sections are partial        | no security policy, support or funding section                                                                         |
+| badge policy is absolute                | "remove all badges" ignores a version, license or build badge that states a fact                                       |
+| boundary with the neighbors is implicit | markdown syntax and file presence are not named                                                                        |
 
 Local articles: no README-specific piece exists in
 `~/Downloads/articles to check/`. The Evil Martians article the skill already
@@ -57,17 +57,17 @@ cites is external, and the plan keeps it as the origin of the structure.
 
 ## Decisions
 
-| Question        | Decision                                                                |
-| --------------- | ----------------------------------------------------------------------- |
-| Area            | `process`; the rename is done (ADR 145)                                 |
-| OSS persona     | `rule-process-readme` added to evidence skills, plus a lens on the README as the first contact |
-| Scope           | The skill covers both the open source and the internal repository structure; the description is corrected |
-| Badges          | A minimal set is allowed when a badge states a fact that is not already in the text |
-| OSS sections    | License and copyright, contributing and code of conduct, security policy, support and funding, changelog delegated |
-| Standards       | One cited source per section, as in the table above                     |
-| Guardrails      | Opening block, getting started, fabricated numbers, directory tree, hand-maintained changelog |
-| Severity        | Advisory first, then blocking after the corpus gate                     |
-| Delivery        | Plan only now                                                           |
+| Question     | Decision                                                                                                           |
+| ------------ | ------------------------------------------------------------------------------------------------------------------ |
+| Area         | `process`; the rename is done (ADR 145)                                                                            |
+| OSS persona  | `rule-process-readme` added to evidence skills, plus a lens on the README as the first contact                      |
+| Scope        | The skill covers both the open source and the internal repository structure; the description is corrected          |
+| Badges       | A minimal set is allowed when a badge states a fact that is not already in the text                                |
+| OSS sections | License and copyright, contributing and code of conduct, security policy, support and funding, changelog delegated |
+| Standards    | One cited source per section, as in the table above                                                                |
+| Guardrails   | Opening block, getting started, fabricated numbers, directory tree, hand-maintained changelog                      |
+| Severity     | Advisory first, then blocking after the corpus gate                                                                |
+| Delivery     | Plan only now                                                                                                      |
 
 ## Workstream A - The description contradiction
 
@@ -116,13 +116,13 @@ needed" is not an instruction is what the guardrail checks.
 
 Advisory first, then blocking after 100% precision and recall.
 
-| Rule id                          | Rejects                                                  | Tier | Source            |
-| -------------------------------- | -------------------------------------------------------- | ---- | ----------------- |
-| `readme-opening-block`           | a first paragraph missing what, benefit or difference    | A    | This skill        |
-| `readme-getting-started`         | an instruction that defers to the reader, such as "configure as needed" | A | This skill |
-| `readme-no-fabricated-numbers`   | a claim with a number and no source                      | B    | This skill        |
-| `readme-no-directory-tree`       | a hand-maintained directory tree                         | B    | This skill        |
-| `readme-no-hand-maintained-changelog` | a changelog section maintained in the README        | B    | This skill        |
+| Rule id                               | Rejects                                                                 | Tier | Source     |
+| ------------------------------------- | ----------------------------------------------------------------------- | ---- | ---------- |
+| `readme-opening-block`                | a first paragraph missing what, benefit or difference                   | A    | This skill |
+| `readme-getting-started`              | an instruction that defers to the reader, such as "configure as needed" | A    | This skill |
+| `readme-no-fabricated-numbers`        | a claim with a number and no source                                     | B    | This skill |
+| `readme-no-directory-tree`            | a hand-maintained directory tree                                        | B    | This skill |
+| `readme-no-hand-maintained-changelog` | a changelog section maintained in the README                            | B    | This skill |
 
 ## Assets and templates to ship
 

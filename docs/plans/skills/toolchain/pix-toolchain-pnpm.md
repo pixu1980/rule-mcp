@@ -30,13 +30,13 @@ Public sources verified in this session:
 
 Facts that make the current text out of date:
 
-| Current text                        | pnpm 12 reality                                             |
-| ----------------------------------- | ----------------------------------------------------------- |
-| version examples 11.25.0 / 11.8.0   | the current line is v12                                      |
-| no build-script approval           | v11 removed `onlyBuiltDependencies`, `ignoredBuiltDependencies`, `neverBuiltDependencies` and `ignoreDepScripts`; `allowBuilds` and `strictDepBuilds` replace them |
-| no supply-chain settings           | `minimumReleaseAge`, `trustPolicy` and `verifyDepsBeforeRun` exist |
-| settings shown only in `.npmrc`    | `pnpm-workspace.yaml` carries settings from v10 on          |
-| `auto-install-peers=true` in `.npmrc` | the default since pnpm 8                                  |
+| Current text                          | pnpm 12 reality                                                                                                                                                    |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| version examples 11.25.0 / 11.8.0     | the current line is v12                                                                                                                                            |
+| no build-script approval              | v11 removed `onlyBuiltDependencies`, `ignoredBuiltDependencies`, `neverBuiltDependencies` and `ignoreDepScripts`; `allowBuilds` and `strictDepBuilds` replace them |
+| no supply-chain settings              | `minimumReleaseAge`, `trustPolicy` and `verifyDepsBeforeRun` exist                                                                                                 |
+| settings shown only in `.npmrc`       | `pnpm-workspace.yaml` carries settings from v10 on                                                                                                                 |
+| `auto-install-peers=true` in `.npmrc` | the default since pnpm 8                                                                                                                                           |
 
 Local articles: no dedicated pnpm piece exists in
 `~/Downloads/articles to check/`. The NestJS 12 article mentions pnpm commands
@@ -44,19 +44,19 @@ and unified Node runtimes; it stays context only and is not cited.
 
 ## Decisions
 
-| Question            | Decision                                                                 |
-| ------------------- | ------------------------------------------------------------------------ |
-| Scope               | Version, supply chain, settings home, catalogs, Docker, audit, CI        |
-| Version             | pnpm 12.x with an 11 to 12 migration note                                |
-| Corepack policy     | Confirmed unchanged: no `packageManager`, no `engines`, no corepack      |
-| Supply chain        | `strictDepBuilds` with explicit `allowBuilds`, `minimumReleaseAge`, `trustPolicy`, `verifyDepsBeforeRun`; `dangerouslyAllowAllBuilds` banned |
-| Settings home       | `pnpm-workspace.yaml` primary, `.npmrc` only for `save-exact`            |
-| Exact versions      | Extended to `overrides` and catalog entries                             |
-| Catalogs            | Optional, documented, not prescribed                                     |
-| Docker              | `pnpm fetch` with offline install, `pnpm deploy --prod`, explicit `node-linker` when a tool needs it; no Dockerfile here |
-| Install policy      | `--frozen-lockfile` always, locally and in CI                            |
-| Delivery            | Plan only now                                                            |
-| ADR                 | Only when a decision is structural                                       |
+| Question        | Decision                                                                                                                                     |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope           | Version, supply chain, settings home, catalogs, Docker, audit, CI                                                                            |
+| Version         | pnpm 12.x with an 11 to 12 migration note                                                                                                    |
+| Corepack policy | Confirmed unchanged: no `packageManager`, no `engines`, no corepack                                                                          |
+| Supply chain    | `strictDepBuilds` with explicit `allowBuilds`, `minimumReleaseAge`, `trustPolicy`, `verifyDepsBeforeRun`; `dangerouslyAllowAllBuilds` banned |
+| Settings home   | `pnpm-workspace.yaml` primary, `.npmrc` only for `save-exact`                                                                                |
+| Exact versions  | Extended to `overrides` and catalog entries                                                                                                  |
+| Catalogs        | Optional, documented, not prescribed                                                                                                         |
+| Docker          | `pnpm fetch` with offline install, `pnpm deploy --prod`, explicit `node-linker` when a tool needs it; no Dockerfile here                     |
+| Install policy  | `--frozen-lockfile` always, locally and in CI                                                                                                |
+| Delivery        | Plan only now                                                                                                                                |
+| ADR             | Only when a decision is structural                                                                                                           |
 
 ## Workstream A - Version and policy
 
@@ -104,7 +104,7 @@ and unified Node runtimes; it stays context only and is not cited.
 2. CI caches the pnpm store and runs the frozen install; `pnpm fetch` is the
    Docker path because it needs only the lockfile and the workspace file.
 3. `pnpm fetch --prod` followed by `pnpm install --offline --frozen-lockfile
-   --prod` gives a build layer that is reused until the lockfile changes.
+--prod` gives a build layer that is reused until the lockfile changes.
 4. `pnpm deploy --prod` produces the deployable tree without devDependencies.
 5. `node-linker` is set explicitly only when a tool needs a hoisted layout.
 6. The Dockerfile stays in `rule-devops-docker`; this skill owns only the pnpm
@@ -120,11 +120,11 @@ Publishing and provenance stay with `rule-process-npm-release`.
 
 Advisory first, then blocking after 100% precision and recall.
 
-| Rule id                       | Rejects                                                       | Tier | Source                |
-| ----------------------------- | ------------------------------------------------------------- | ---- | --------------------- |
-| `pkg-allow-builds`            | a workspace that disables `strictDepBuilds`, omits `allowBuilds` for a package with build scripts, or uses `dangerouslyAllowAllBuilds` | A | Build settings |
-| `pkg-minimum-release-age`     | a new workspace with no `minimumReleaseAge`                   | B    | Supply-chain security |
-| `pkg-catalog-range`           | a package that writes a range while the workspace has a catalog entry for it | B | Catalogs   |
+| Rule id                   | Rejects                                                                                                                                | Tier | Source                |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ---- | --------------------- |
+| `pkg-allow-builds`        | a workspace that disables `strictDepBuilds`, omits `allowBuilds` for a package with build scripts, or uses `dangerouslyAllowAllBuilds` | A    | Build settings        |
+| `pkg-minimum-release-age` | a new workspace with no `minimumReleaseAge`                                                                                            | B    | Supply-chain security |
+| `pkg-catalog-range`       | a package that writes a range while the workspace has a catalog entry for it                                                           | B    | Catalogs              |
 
 The four existing rules stay: `pkg-exact-versions`, `pkg-no-corepack`,
 `pkg-no-engines`, `verified-dependencies-only`.

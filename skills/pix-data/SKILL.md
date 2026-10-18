@@ -16,15 +16,15 @@ guardrails: [connection-pool, migration-safety, parameterized-queries, transacti
 
 ## Available Skills
 
-| Skill                                                  | Database               | Type                  | Best For                                             |
-| ------------------------------------------------------ | ---------------------- | --------------------- | ---------------------------------------------------- |
-| [rule-data-sql](../rule-data-sql/SKILL.md)               | SQL General            | Relational            | Query patterns, DDL, indexing theory, transactions   |
-| [rule-data-postgresql](../rule-data-postgresql/SKILL.md) | PostgreSQL 16+         | Relational (ACID)     | Complex queries, JSONB, partitioning, replication    |
-| [rule-data-mysql](../rule-data-mysql/SKILL.md)           | MySQL 8+ / MariaDB 11+ | Relational (InnoDB)   | Web apps, LAMP stack, high read throughput           |
-| [rule-data-mongodb](../rule-data-mongodb/SKILL.md)       | MongoDB 7+             | Document (NoSQL)      | Flexible schemas, rapid prototyping, time-series     |
-| [rule-data-sqlite](../rule-data-sqlite/SKILL.md)         | SQLite 3.45+           | Relational (embedded) | Single-file storage, desktop and edge apps, tests    |
-| [rule-data-duckdb](../rule-data-duckdb/SKILL.md)         | DuckDB 1+              | Analytical (columnar) | Local OLAP, Parquet/CSV analysis, embedded analytics |
-| [rule-data-indexed-db](../rule-data-indexed-db/SKILL.md) | IndexedDB              | Browser (key-value)   | Offline-first web apps, client-side persistence      |
+| Skill                                                  | Database               | Type                  | Best For                                                                          |
+| ------------------------------------------------------ | ---------------------- | --------------------- | --------------------------------------------------------------------------------- |
+| [rule-data-sql](../rule-data-sql/SKILL.md)               | SQL General            | Relational            | Query patterns, DDL, indexing theory, transactions                                |
+| [rule-data-postgresql](../rule-data-postgresql/SKILL.md) | PostgreSQL 16+         | Relational (ACID)     | Complex queries, JSONB, partitioning, replication                                 |
+| [rule-data-mysql](../rule-data-mysql/SKILL.md)           | MySQL 8+ / MariaDB 11+ | Relational (InnoDB)   | Web apps, LAMP stack, high read throughput                                        |
+| [rule-data-mongodb](../rule-data-mongodb/SKILL.md)       | MongoDB 7+             | Document (NoSQL)      | Flexible schemas, rapid prototyping, time-series                                  |
+| [rule-data-sqlite](../rule-data-sqlite/SKILL.md)         | SQLite 3.45+           | Relational (embedded) | Single-file storage, desktop and edge apps, tests                                 |
+| [rule-data-duckdb](../rule-data-duckdb/SKILL.md)         | DuckDB 1+              | Analytical (columnar) | Local OLAP, Parquet/CSV analysis, embedded analytics                              |
+| [rule-data-indexed-db](../rule-data-indexed-db/SKILL.md) | IndexedDB              | Browser (key-value)   | Offline-first web apps, client-side persistence                                   |
 | [rule-data-validation](../rule-data-validation/SKILL.md) | Business data          | Validation            | Email, phone, VAT, tax IDs, postal codes, IBAN, and the schemas that enforce them |
 
 ## Data architecture patterns, and the question each one answers

@@ -37,16 +37,16 @@ Sources fetched and used:
 
 ## Decisions from the interview
 
-| Question      | Decision                                                              |
-| ------------- | --------------------------------------------------------------------- |
-| Target skills | `rule-data` shared plus postgres, mongodb, mysql, sqlite, sql           |
-| Scope         | High-signal selection (5-7)                                            |
-| Candidates    | All nine selected                                                      |
-| Trigger       | Devops default: target file or content heuristic                       |
-| Severity      | Devops default: advisory, then blocking after corpus proof             |
-| Corpus/tests  | Devops default: fixtures, unit tests, inheritance test                 |
-| Artifacts     | Devops default: frontmatter, census, ADR, changelog, per-rule source    |
-| Phasing       | Plan only now; implementation in a dedicated session                   |
+| Question      | Decision                                                             |
+| ------------- | -------------------------------------------------------------------- |
+| Target skills | `rule-data` shared plus postgres, mongodb, mysql, sqlite, sql         |
+| Scope         | High-signal selection (5-7)                                          |
+| Candidates    | All nine selected                                                    |
+| Trigger       | Devops default: target file or content heuristic                     |
+| Severity      | Devops default: advisory, then blocking after corpus proof           |
+| Corpus/tests  | Devops default: fixtures, unit tests, inheritance test               |
+| Artifacts     | Devops default: frontmatter, census, ADR, changelog, per-rule source |
+| Phasing       | Plan only now; implementation in a dedicated session                 |
 
 ### Open item 1: MySQL has no verified source
 
@@ -58,17 +58,17 @@ shared ones on that skill.
 
 ### Open item 2: where each rule lives
 
-| Rule id              | Owner                 | Why                                                |
-| -------------------- | --------------------- | -------------------------------------------------- |
-| `index-on-fk`        | rule-data-postgresql   | PostgreSQL does not auto-index foreign keys        |
-| `no-select-star`     | rule-data              | Shared SQL hygiene                                 |
-| `query-limit`        | rule-data              | Shared, API4 resource consumption                  |
-| `query-timeout`      | rule-data              | Shared driver concern                              |
-| `mongo-projection`   | rule-data-mongodb      | MongoDB cursor concern                             |
-| `mongo-esr-index`    | rule-data-mongodb      | MongoDB ESR guideline                              |
-| `sqlite-wal`         | rule-data-sqlite       | SQLite connection pragmas                          |
-| `db-least-privilege` | rule-data              | Shared, applies to every engine                    |
-| `migration-down`     | rule-data              | Extends the existing `migration-safety`            |
+| Rule id              | Owner               | Why                                         |
+| -------------------- | ------------------- | ------------------------------------------- |
+| `index-on-fk`        | rule-data-postgresql | PostgreSQL does not auto-index foreign keys |
+| `no-select-star`     | rule-data            | Shared SQL hygiene                          |
+| `query-limit`        | rule-data            | Shared, API4 resource consumption           |
+| `query-timeout`      | rule-data            | Shared driver concern                       |
+| `mongo-projection`   | rule-data-mongodb    | MongoDB cursor concern                      |
+| `mongo-esr-index`    | rule-data-mongodb    | MongoDB ESR guideline                       |
+| `sqlite-wal`         | rule-data-sqlite     | SQLite connection pragmas                   |
+| `db-least-privilege` | rule-data            | Shared, applies to every engine             |
+| `migration-down`     | rule-data            | Extends the existing `migration-safety`     |
 
 `rule-data-sql` and `rule-data-mysql` inherit the shared rules and get no rule of
 their own in this pass; `rule-data-duckdb` and `rule-data-indexed-db` were not
@@ -83,17 +83,17 @@ Tier B: `mongo-esr-index`, `db-least-privilege`, `migration-down`.
 
 ## Accepted rules
 
-| Rule id              | Rejects                                                    | Tier | Source                          |
-| -------------------- | ---------------------------------------------------------- | ---- | ------------------------------- |
-| `index-on-fk`        | foreign key column with no index                           | A    | PostgreSQL indexes              |
-| `no-select-star`     | `SELECT *` in an application query                         | A    | Use The Index, Luke             |
-| `query-limit`        | application `SELECT` with no `LIMIT`                       | A    | API4 resource consumption       |
-| `query-timeout`      | connection or query with no statement timeout              | A    | PostgreSQL indexes; driver docs |
-| `mongo-projection`   | `find()` without a projection                              | A    | MongoDB indexing strategies     |
-| `sqlite-wal`         | SQLite connection without WAL and busy timeout             | A    | SQLite WAL                      |
-| `mongo-esr-index`    | compound index not ordered Equality, Sort, Range           | B    | MongoDB ESR guideline           |
-| `db-least-privilege` | application connecting as owner or superuser               | B    | OWASP SQL Injection Prevention  |
-| `migration-down`     | migration with no down path and no irreversible marker     | B    | Existing `migration-safety`     |
+| Rule id              | Rejects                                                | Tier | Source                          |
+| -------------------- | ------------------------------------------------------ | ---- | ------------------------------- |
+| `index-on-fk`        | foreign key column with no index                       | A    | PostgreSQL indexes              |
+| `no-select-star`     | `SELECT *` in an application query                     | A    | Use The Index, Luke             |
+| `query-limit`        | application `SELECT` with no `LIMIT`                   | A    | API4 resource consumption       |
+| `query-timeout`      | connection or query with no statement timeout          | A    | PostgreSQL indexes; driver docs |
+| `mongo-projection`   | `find()` without a projection                          | A    | MongoDB indexing strategies     |
+| `sqlite-wal`         | SQLite connection without WAL and busy timeout         | A    | SQLite WAL                      |
+| `mongo-esr-index`    | compound index not ordered Equality, Sort, Range       | B    | MongoDB ESR guideline           |
+| `db-least-privilege` | application connecting as owner or superuser           | B    | OWASP SQL Injection Prevention  |
+| `migration-down`     | migration with no down path and no irreversible marker | B    | Existing `migration-safety`     |
 
 ## Enforcement model
 

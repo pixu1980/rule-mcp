@@ -37,20 +37,20 @@ skill):
 
 ## Decisions
 
-| Question            | Decision                                                                 |
-| ------------------- | ------------------------------------------------------------------------ |
-| Role                | Router plus the shared guardrails of the UI area                         |
-| Routing table       | Generated from the skill registry, so it cannot drift                    |
-| Constraints         | The styleguides own them; `rule-ui` indexes them and stops restating them |
-| Standards           | WCAG 2.2, ARIA APG, DTCG, Open UI, Custom Elements Everywhere, MDN       |
-| Routing quality     | Explicit "use when" description and tags, a decision tree, `rule_tool_detect`, prompt examples |
-| Reach               | Broad, with a "See also" to the meta area without duplicating its tables |
-| Verification        | Links resolve, every UI-bearing child is reachable, no rule duplication  |
-| Guardrails          | The four router-integrity rules below                                     |
-| Guardrail trigger   | The SKILL.md and the generated index                                     |
-| Assets              | Decision tree template, registry-backed table generator, repository tests |
-| Delivery            | Plan only now                                                            |
-| ADR                 | Only when a decision is structural                                       |
+| Question          | Decision                                                                                      |
+| ----------------- | --------------------------------------------------------------------------------------------- |
+| Role              | Router plus the shared guardrails of the UI area                                              |
+| Routing table     | Generated from the skill registry, so it cannot drift                                         |
+| Constraints       | The styleguides own them; `rule-ui` indexes them and stops restating them                      |
+| Standards         | WCAG 2.2, ARIA APG, DTCG, Open UI, Custom Elements Everywhere, MDN                            |
+| Routing quality   | Explicit "use when" description and tags, a decision tree, `rule_tool_detect`, prompt examples |
+| Reach             | Broad, with a "See also" to the meta area without duplicating its tables                      |
+| Verification      | Links resolve, every UI-bearing child is reachable, no rule duplication                       |
+| Guardrails        | The four router-integrity rules below                                                         |
+| Guardrail trigger | The SKILL.md and the generated index                                                          |
+| Assets            | Decision tree template, registry-backed table generator, repository tests                     |
+| Delivery          | Plan only now                                                                                 |
+| ADR               | Only when a decision is structural                                                            |
 
 ## Workstream A - Route everything, own nothing
 
@@ -90,12 +90,12 @@ skill):
 
 The router cites the standard, it does not restate it:
 
-| Standard                        | Owner of the rule                                  |
-| ------------------------------- | -------------------------------------------------- |
-| WCAG 2.2 and ARIA APG           | `rule-styleguide-a11y`                              |
-| W3C DTCG Design Tokens          | `rule-ui-design-system`                             |
+| Standard                               | Owner of the rule                                              |
+| -------------------------------------- | -------------------------------------------------------------- |
+| WCAG 2.2 and ARIA APG                  | `rule-styleguide-a11y`                                          |
+| W3C DTCG Design Tokens                 | `rule-ui-design-system`                                         |
 | Open UI and Custom Elements Everywhere | `rule-frontend-custom-element`, `rule-frontend-vanilla-reactive` |
-| MDN, `<dialog>` and Popover     | `rule-styleguide-html`                              |
+| MDN, `<dialog>` and Popover            | `rule-styleguide-html`                                          |
 
 ## Proposed guardrails
 
@@ -103,12 +103,12 @@ Advisory first, then blocking after 100% precision and recall, as in the area
 plans. These read markdown, not code, which is a new shape for the engine and is
 called out in the phases.
 
-| Rule id                  | Rejects                                                     | Tier | Source                |
-| ------------------------ | ----------------------------------------------------------- | ---- | --------------------- |
-| `ui-router-link-resolves` | a relative `../<skill>/SKILL.md` link that does not exist  | A    | Repository contract   |
-| `ui-router-child-coverage` | a UI-bearing skill that the routing table does not reach  | A    | Skill registry        |
-| `ui-router-no-dup-rules` | a constraint restated from an owning skill                  | B    | Single source of truth |
-| `ui-router-use-when`     | a frontmatter description with no "use when" case           | B    | Search index quality  |
+| Rule id                    | Rejects                                                   | Tier | Source                 |
+| -------------------------- | --------------------------------------------------------- | ---- | ---------------------- |
+| `ui-router-link-resolves`  | a relative `../<skill>/SKILL.md` link that does not exist | A    | Repository contract    |
+| `ui-router-child-coverage` | a UI-bearing skill that the routing table does not reach  | A    | Skill registry         |
+| `ui-router-no-dup-rules`   | a constraint restated from an owning skill                | B    | Single source of truth |
+| `ui-router-use-when`       | a frontmatter description with no "use when" case         | B    | Search index quality   |
 
 Trigger: the SKILL.md plus the generated index block. `ui-router-child-coverage`
 reads the area map from the skill registry, so it needs the registry in the

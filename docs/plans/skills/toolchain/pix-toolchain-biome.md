@@ -25,15 +25,15 @@ Public sources verified in this session:
 
 Facts that make the current text out of date:
 
-| Current text                       | Biome 2.x reality                                            |
-| ---------------------------------- | ------------------------------------------------------------ |
-| `$schema` 1.9.4                    | the current line is 2.5.x; the schema URL should match the install |
-| top-level `organizeImports`        | replaced by `assist.actions.source.organizeImports`          |
-| `biome migrate` with no argument   | `biome migrate --write` upgrades the config; `biome migrate eslint --write` and `biome migrate prettier --write` convert the old tools |
-| no file selection guidance         | `files.includes` replaced the removed `include` and `ignore` |
-| no domains                         | `linter.domains` selects framework rule sets (`react`, `next`, `test`) |
-| `linter.rules.all` untouched        | the `all` option is removed in 2.x                           |
-| no `--changed` or `--staged`       | both exist, and `--changed` needs `vcs.defaultBranch`        |
+| Current text                     | Biome 2.x reality                                                                                                                      |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `$schema` 1.9.4                  | the current line is 2.5.x; the schema URL should match the install                                                                     |
+| top-level `organizeImports`      | replaced by `assist.actions.source.organizeImports`                                                                                    |
+| `biome migrate` with no argument | `biome migrate --write` upgrades the config; `biome migrate eslint --write` and `biome migrate prettier --write` convert the old tools |
+| no file selection guidance       | `files.includes` replaced the removed `include` and `ignore`                                                                           |
+| no domains                       | `linter.domains` selects framework rule sets (`react`, `next`, `test`)                                                                 |
+| `linter.rules.all` untouched     | the `all` option is removed in 2.x                                                                                                     |
+| no `--changed` or `--staged`     | both exist, and `--changed` needs `vcs.defaultBranch`                                                                                  |
 
 Local articles: the formatting-tools piece has a real Biome section (one tool
 instead of two, the 2.x line, the Prettier-compatibility caveat). It stays
@@ -41,20 +41,20 @@ context only; the plan anchors to the official documentation.
 
 ## Decisions
 
-| Question      | Decision                                                                 |
-| ------------- | ------------------------------------------------------------------------ |
-| Scope         | Config 2.x, CLI, migration, assist, CI, domains, the choice against ESLint plus Prettier |
-| Version       | Pinned to the 2.5.x line with the matching schema                        |
-| Boundaries    | Biome configuration plus a short "when to choose it" guide; the rest is linked |
-| Assist        | `assist.enabled` and `assist.actions.source.organizeImports`             |
-| File selection | `files.includes`, `vcs.useIgnoreFile`, `overrides` for specific folders |
-| Domains       | Enabled for React, Next and test where the project uses them             |
-| Rules         | `recommended` as the base, a few explicit group overrides, nursery rules only when evaluated |
-| Migration     | `biome migrate --write`, `migrate eslint --write`, `migrate prettier --write`, `--include-inspired` with review |
-| CI            | `biome ci`, `--changed` with `vcs.defaultBranch`, `--staged`, local `check --write` |
-| Editor        | The official LSP and format-on-save                                      |
-| Delivery      | Plan only now                                                            |
-| ADR           | Only when a decision is structural                                       |
+| Question       | Decision                                                                                                        |
+| -------------- | --------------------------------------------------------------------------------------------------------------- |
+| Scope          | Config 2.x, CLI, migration, assist, CI, domains, the choice against ESLint plus Prettier                        |
+| Version        | Pinned to the 2.5.x line with the matching schema                                                               |
+| Boundaries     | Biome configuration plus a short "when to choose it" guide; the rest is linked                                  |
+| Assist         | `assist.enabled` and `assist.actions.source.organizeImports`                                                    |
+| File selection | `files.includes`, `vcs.useIgnoreFile`, `overrides` for specific folders                                         |
+| Domains        | Enabled for React, Next and test where the project uses them                                                    |
+| Rules          | `recommended` as the base, a few explicit group overrides, nursery rules only when evaluated                    |
+| Migration      | `biome migrate --write`, `migrate eslint --write`, `migrate prettier --write`, `--include-inspired` with review |
+| CI             | `biome ci`, `--changed` with `vcs.defaultBranch`, `--staged`, local `check --write`                             |
+| Editor         | The official LSP and format-on-save                                                                             |
+| Delivery       | Plan only now                                                                                                   |
+| ADR            | Only when a decision is structural                                                                              |
 
 ## Workstream A - Version and schema
 
@@ -122,12 +122,12 @@ codebase pays that as a large first diff.
 
 Advisory first, then blocking after 100% precision and recall.
 
-| Rule id                        | Rejects                                              | Tier | Source            |
-| ------------------------------ | ---------------------------------------------------- | ---- | ----------------- |
-| `biome-no-organize-imports`    | a top-level `organizeImports` key                    | A    | Upgrade guide     |
-| `biome-files-includes`         | `files.include` or `files.ignore`                    | A    | Configuration     |
-| `biome-no-linter-all`          | `linter.rules.all`                                   | A    | Upgrade guide     |
-| `biome-schema-version`         | a `$schema` that does not match the installed version | B   | Configuration     |
+| Rule id                     | Rejects                                               | Tier | Source        |
+| --------------------------- | ----------------------------------------------------- | ---- | ------------- |
+| `biome-no-organize-imports` | a top-level `organizeImports` key                     | A    | Upgrade guide |
+| `biome-files-includes`      | `files.include` or `files.ignore`                     | A    | Configuration |
+| `biome-no-linter-all`       | `linter.rules.all`                                    | A    | Upgrade guide |
+| `biome-schema-version`      | a `$schema` that does not match the installed version | B    | Configuration |
 
 ## Assets and templates to ship
 

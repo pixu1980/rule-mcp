@@ -30,15 +30,15 @@ Public sources verified in this session:
 
 Facts and issues found:
 
-| Current text                              | Reality                                                     |
-| ----------------------------------------- | ----------------------------------------------------------- |
-| install section stops at `husky init`     | v9 also wants `prepare: "husky"` so hooks install on install |
-| hook file shape not stated                | verify it against the v9 docs rather than v8 examples       |
-| Conventional Commits reference duplicated | the rule lives in `rule-styleguide-git`                       |
+| Current text                              | Reality                                                                |
+| ----------------------------------------- | ---------------------------------------------------------------------- |
+| install section stops at `husky init`     | v9 also wants `prepare: "husky"` so hooks install on install           |
+| hook file shape not stated                | verify it against the v9 docs rather than v8 examples                  |
+| Conventional Commits reference duplicated | the rule lives in `rule-styleguide-git`                                 |
 | commitlint config has no scope rule       | the repository rule requires a scope, so `scope-empty` must be `never` |
-| type list omits `build`                   | the accepted types include `build`                           |
-| no local/CI statement                     | hooks are local; CI is the authority                         |
-| no `.githooks` option                      | the repository itself uses tracked hooks plus an installer   |
+| type list omits `build`                   | the accepted types include `build`                                     |
+| no local/CI statement                     | hooks are local; CI is the authority                                   |
+| no `.githooks` option                     | the repository itself uses tracked hooks plus an installer             |
 
 Local articles: the formatting-tools piece has a real Husky + lint-staged
 section ("only on the files you actually changed, which keeps it fast"). It
@@ -46,29 +46,29 @@ stays context only; the plan anchors to the official documentation.
 
 ## Decisions
 
-| Question          | Decision                                                                 |
-| ----------------- | ------------------------------------------------------------------------ |
-| Scope             | Hook wiring only, Husky v9, lint-staged, commitlint, tracked hooks, lefthook, CI parity |
-| Approach          | A decision rule per project type, not one mandatory tool                 |
-| Boundaries        | The commit rule is `rule-styleguide-git`; the lint commands belong to biome/eslint; the tests to devops-testing |
-| Husky v9          | `prepare: "husky"`, `husky init`, hook shape verified against v9, `HUSKY=0` documented |
-| commitlint        | `scope-empty` never, `type-enum` identical to the repository types, header and subject rules |
-| lint-staged       | Staged files only, commands aligned with the chosen linter, fix only where it applies |
-| Hooks             | pre-commit lint-staged, commit-msg commitlint, pre-push lint and tests   |
-| Performance       | Light pre-commit, full tests on pre-push                                 |
-| CI parity         | Hooks are convenience, CI is the authority                               |
-| Delivery          | Plan only now                                                            |
-| ADR               | Only when a decision is structural                                       |
+| Question    | Decision                                                                                                       |
+| ----------- | -------------------------------------------------------------------------------------------------------------- |
+| Scope       | Hook wiring only, Husky v9, lint-staged, commitlint, tracked hooks, lefthook, CI parity                        |
+| Approach    | A decision rule per project type, not one mandatory tool                                                       |
+| Boundaries  | The commit rule is `rule-styleguide-git`; the lint commands belong to biome/eslint; the tests to devops-testing |
+| Husky v9    | `prepare: "husky"`, `husky init`, hook shape verified against v9, `HUSKY=0` documented                         |
+| commitlint  | `scope-empty` never, `type-enum` identical to the repository types, header and subject rules                   |
+| lint-staged | Staged files only, commands aligned with the chosen linter, fix only where it applies                          |
+| Hooks       | pre-commit lint-staged, commit-msg commitlint, pre-push lint and tests                                         |
+| Performance | Light pre-commit, full tests on pre-push                                                                       |
+| CI parity   | Hooks are convenience, CI is the authority                                                                     |
+| Delivery    | Plan only now                                                                                                  |
+| ADR         | Only when a decision is structural                                                                             |
 
 ## Workstream A - Choosing the mechanism
 
 The decision rule, stated once:
 
-| Project shape                                        | Mechanism                                   |
-| ---------------------------------------------------- | ------------------------------------------- |
+| Project shape                                                           | Mechanism                                                                   |
+| ----------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | Repository that wants no hook dependency, hooks versioned with the code | Tracked `.githooks/` plus an installer that writes shims into `.git/hooks/` |
-| Project that already uses the Husky ecosystem        | Husky v9 plus lint-staged                   |
-| Hooks that must be fast across many languages        | lefthook, as an alternative with a config file |
+| Project that already uses the Husky ecosystem                           | Husky v9 plus lint-staged                                                   |
+| Hooks that must be fast across many languages                           | lefthook, as an alternative with a config file                              |
 
 `core.hooksPath` is named once as the option the repository rejects, with the
 reason: git honors one path, so setting it silences a global one.
@@ -115,11 +115,11 @@ authoritative gate, so `--no-verify` skips convenience and never the real gate.
 
 Advisory first, then blocking after 100% precision and recall.
 
-| Rule id                    | Rejects                                                    | Tier | Source            |
-| -------------------------- | ---------------------------------------------------------- | ---- | ----------------- |
-| `husky-commitlint-scope`   | a commitlint config with no `scope-empty: never` rule      | A    | commitlint rules; repository rule |
-| `husky-lint-staged-scope`  | a lint-staged entry that ignores the staged set            | B    | lint-staged       |
-| `husky-hooks-present`      | a hook config file with no matching hook installed         | B    | Git hooks         |
+| Rule id                   | Rejects                                               | Tier | Source                            |
+| ------------------------- | ----------------------------------------------------- | ---- | --------------------------------- |
+| `husky-commitlint-scope`  | a commitlint config with no `scope-empty: never` rule | A    | commitlint rules; repository rule |
+| `husky-lint-staged-scope` | a lint-staged entry that ignores the staged set       | B    | lint-staged                       |
+| `husky-hooks-present`     | a hook config file with no matching hook installed    | B    | Git hooks                         |
 
 ## Assets and templates to ship
 

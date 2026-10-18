@@ -38,15 +38,15 @@ is found.
 
 ## Decisions from the interview
 
-| Question      | Decision                                                              |
-| ------------- | --------------------------------------------------------------------- |
-| Target skills | All five: `rule-meta` shared plus next, astro, nuxt, remix              |
-| Candidates    | All seven selected                                                     |
-| Trigger       | Devops default: target file or framework import                        |
-| Severity      | Devops default: advisory, then blocking after corpus proof             |
-| Corpus/tests  | Devops default: fixtures, unit tests, inheritance test                 |
-| Artifacts     | Devops default: frontmatter, census, ADR, changelog, per-rule source    |
-| Phasing       | Plan only now; implementation in a dedicated session                   |
+| Question      | Decision                                                             |
+| ------------- | -------------------------------------------------------------------- |
+| Target skills | All five: `rule-meta` shared plus next, astro, nuxt, remix            |
+| Candidates    | All seven selected                                                   |
+| Trigger       | Devops default: target file or framework import                      |
+| Severity      | Devops default: advisory, then blocking after corpus proof           |
+| Corpus/tests  | Devops default: fixtures, unit tests, inheritance test               |
+| Artifacts     | Devops default: frontmatter, census, ADR, changelog, per-rule source |
+| Phasing       | Plan only now; implementation in a dedicated session                 |
 
 ### Open item: the shared rules need an inherits graph
 
@@ -65,15 +65,15 @@ Tier B: `meta-client-directive`, `astro-client-directive`,
 
 ## Accepted rules
 
-| Rule id                    | Rejects                                                    | Tier | Source                        |
-| -------------------------- | ---------------------------------------------------------- | ---- | ----------------------------- |
-| `meta-public-env-secret`   | `NEXT_PUBLIC_` or `PUBLIC_` variable whose name is a secret | A    | Next.js env vars; Vite        |
-| `meta-server-data-leak`    | loader or server handler serializing secret fields to the client | A | React Router data loading    |
-| `hydration-safe`           | `Date.now`, `Math.random`, `new Date` in render output      | A    | React hydration; Astro        |
-| `meta-route-validation`    | route handler or action with no input schema                | A    | React Router; Next.js         |
-| `meta-client-directive`    | `"use client"` on a fully static component, or a server-only import reaching the client | B | Next.js docs |
-| `astro-client-directive`   | `client:load` where `client:visible` or `client:idle` fits  | B    | Astro islands                 |
-| `meta-cache-explicit`      | `fetch` in Next with no cache or revalidate declared        | B    | Next.js docs                  |
+| Rule id                  | Rejects                                                                                 | Tier | Source                    |
+| ------------------------ | --------------------------------------------------------------------------------------- | ---- | ------------------------- |
+| `meta-public-env-secret` | `NEXT_PUBLIC_` or `PUBLIC_` variable whose name is a secret                             | A    | Next.js env vars; Vite    |
+| `meta-server-data-leak`  | loader or server handler serializing secret fields to the client                        | A    | React Router data loading |
+| `hydration-safe`         | `Date.now`, `Math.random`, `new Date` in render output                                  | A    | React hydration; Astro    |
+| `meta-route-validation`  | route handler or action with no input schema                                            | A    | React Router; Next.js     |
+| `meta-client-directive`  | `"use client"` on a fully static component, or a server-only import reaching the client | B    | Next.js docs              |
+| `astro-client-directive` | `client:load` where `client:visible` or `client:idle` fits                              | B    | Astro islands             |
+| `meta-cache-explicit`    | `fetch` in Next with no cache or revalidate declared                                    | B    | Next.js docs              |
 
 `meta-public-env-secret` reads the name, not the value: a public variable whose
 name ends in `_KEY`, `_SECRET`, `_TOKEN` or `_PASSWORD` is the signal.

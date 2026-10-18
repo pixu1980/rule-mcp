@@ -45,28 +45,28 @@ Local articles found (context only):
 
 Standards to anchor (each section cites its own):
 
-| Domain           | Standard                                            |
-| ---------------- | --------------------------------------------------- |
-| Phone            | ITU-T E.164                                         |
-| Country codes    | ISO 3166-1 alpha-2 and the locale it implies        |
-| VAT              | EU VIES and the national VAT formats                |
-| Email            | RFC 5322 and RFC 5321                               |
-| Bank accounts    | ISO 13616, the IBAN registry and the mod-97 checksum |
-| Cards            | ISO/IEC 7812 with the Luhn checksum                 |
-| Postal codes     | The national postal authority format                |
+| Domain        | Standard                                             |
+| ------------- | ---------------------------------------------------- |
+| Phone         | ITU-T E.164                                          |
+| Country codes | ISO 3166-1 alpha-2 and the locale it implies         |
+| VAT           | EU VIES and the national VAT formats                 |
+| Email         | RFC 5322 and RFC 5321                                |
+| Bank accounts | ISO 13616, the IBAN registry and the mod-97 checksum |
+| Cards         | ISO/IEC 7812 with the Luhn checksum                  |
+| Postal codes  | The national postal authority format                 |
 
 ## Decisions
 
-| Question      | Decision                                                                 |
-| ------------- | ------------------------------------------------------------------------ |
-| Area          | `data`; the rename is done (ADR 144)                                     |
-| Router        | `rule-data` lists the skill; no new area and no router                    |
-| Scope         | Rename plus a restructure into sections by domain                        |
-| Boundaries    | Country formats and checksums here; boundary validation, schema constraints, locale formatting and forms stay with their owners |
-| Additions     | IBAN/SEPA and payment card numbers with Luhn                             |
-| Standards     | One cited standard per domain, as in the table above                     |
-| Delivery      | Plan only now                                                            |
-| ADR           | The move is already recorded in ADR 144; a second ADR only if the restructure changes ownership |
+| Question   | Decision                                                                                                                        |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Area       | `data`; the rename is done (ADR 144)                                                                                            |
+| Router     | `rule-data` lists the skill; no new area and no router                                                                           |
+| Scope      | Rename plus a restructure into sections by domain                                                                               |
+| Boundaries | Country formats and checksums here; boundary validation, schema constraints, locale formatting and forms stay with their owners |
+| Additions  | IBAN/SEPA and payment card numbers with Luhn                                                                                    |
+| Standards  | One cited standard per domain, as in the table above                                                                            |
+| Delivery   | Plan only now                                                                                                                   |
+| ADR        | The move is already recorded in ADR 144; a second ADR only if the restructure changes ownership                                 |
 
 ## Workstream A - Restructure by domain
 
@@ -109,10 +109,10 @@ standard it comes from:
 Advisory first, and likely to stay advisory: a wrong regex is a correctness bug
 that a pattern cannot reliably detect. The real verification is the test vectors.
 
-| Rule id                        | Rejects                                                     | Tier | Source            |
-| ------------------------------ | ----------------------------------------------------------- | ---- | ----------------- |
-| `validation-checksum-required` | an IBAN, VAT or card pattern with no checksum step where one exists | B | ISO 13616, ISO/IEC 7812 |
-| `validation-unsourced-pattern` | a country format with no cited standard                      | B    | This plan         |
+| Rule id                        | Rejects                                                             | Tier | Source                  |
+| ------------------------------ | ------------------------------------------------------------------- | ---- | ----------------------- |
+| `validation-checksum-required` | an IBAN, VAT or card pattern with no checksum step where one exists | B    | ISO 13616, ISO/IEC 7812 |
+| `validation-unsourced-pattern` | a country format with no cited standard                             | B    | This plan               |
 
 ## Assets and templates to ship
 

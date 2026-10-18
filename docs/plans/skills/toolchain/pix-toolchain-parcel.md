@@ -28,14 +28,14 @@ Public sources verified in this session:
 
 Facts that make the current text wrong or out of date:
 
-| Current text                                   | Parcel reality                                              |
-| ---------------------------------------------- | ----------------------------------------------------------- |
-| "Only `NODE_ENV` is available by default"      | every statically read `process.env.X` is inlined; `@parcel/transformer-js.inlineEnvironment` can whitelist or disable it |
-| scripts use `npx serve dist`                   | the repository rule is pnpm, so `pnpm dlx serve dist`       |
-| migration table lists webpack                  | webpack is removed from the family                          |
-| no dev-server security note                    | the server binds all interfaces and allows CORS by default  |
-| `package.json#engines` implied for targets     | `browserslist` and `targets` are the fields to use          |
-| "Parcel 2+"                                    | the current line is 2.16.x                                  |
+| Current text                               | Parcel reality                                                                                                           |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| "Only `NODE_ENV` is available by default"  | every statically read `process.env.X` is inlined; `@parcel/transformer-js.inlineEnvironment` can whitelist or disable it |
+| scripts use `npx serve dist`               | the repository rule is pnpm, so `pnpm dlx serve dist`                                                                    |
+| migration table lists webpack              | webpack is removed from the family                                                                                       |
+| no dev-server security note                | the server binds all interfaces and allows CORS by default                                                               |
+| `package.json#engines` implied for targets | `browserslist` and `targets` are the fields to use                                                                       |
+| "Parcel 2+"                                | the current line is 2.16.x                                                                                               |
 
 Local articles: no dedicated Parcel piece exists in
 `~/Downloads/articles to check/`; the single mention found is incidental. The
@@ -43,19 +43,19 @@ plan anchors only to the official documentation.
 
 ## Decisions
 
-| Question          | Decision                                                                 |
-| ----------------- | ------------------------------------------------------------------------ |
-| Scope             | Zero-config and entry, env inlining, dev server, targets, production, CLI, migration |
-| Version           | Parcel 2.x with a short note on the differences that matter              |
-| Boundaries        | Parcel-specific only; the family, pnpm and Docker rules are linked       |
-| Dev server        | Restricted host and `--no-cors` in the default dev script; LAN and CORS are explicit opt-ins |
-| Env inlining      | No secret read in client code; `inlineEnvironment` as an allowlist; `.env` as build source once verified |
-| Engines conflict  | Targets through `browserslist` and `targets`, never `engines`            |
-| Production        | Real flags, scope hoisting, `.parcel-cache` in CI, bundle report         |
-| Assets            | Default transformations plus when to disable them                        |
-| Scripts           | `pnpm dlx serve dist`, no `npx`                                          |
-| Delivery          | Plan only now                                                            |
-| ADR               | Only when a decision is structural                                       |
+| Question         | Decision                                                                                                 |
+| ---------------- | -------------------------------------------------------------------------------------------------------- |
+| Scope            | Zero-config and entry, env inlining, dev server, targets, production, CLI, migration                     |
+| Version          | Parcel 2.x with a short note on the differences that matter                                              |
+| Boundaries       | Parcel-specific only; the family, pnpm and Docker rules are linked                                       |
+| Dev server       | Restricted host and `--no-cors` in the default dev script; LAN and CORS are explicit opt-ins             |
+| Env inlining     | No secret read in client code; `inlineEnvironment` as an allowlist; `.env` as build source once verified |
+| Engines conflict | Targets through `browserslist` and `targets`, never `engines`                                            |
+| Production       | Real flags, scope hoisting, `.parcel-cache` in CI, bundle report                                         |
+| Assets           | Default transformations plus when to disable them                                                        |
+| Scripts          | `pnpm dlx serve dist`, no `npx`                                                                          |
+| Delivery         | Plan only now                                                                                            |
+| ADR              | Only when a decision is structural                                                                       |
 
 ### The `engines` conflict, resolved
 
@@ -132,10 +132,10 @@ A short Vite comparison stays only if it answers a real routing question.
 
 Advisory first, then blocking after 100% precision and recall.
 
-| Rule id                        | Rejects                                                     | Tier | Source                |
-| ------------------------------ | ----------------------------------------------------------- | ---- | --------------------- |
-| `parcel-env-allowlist`         | client code reading `process.env` with no `inlineEnvironment` allowlist | A | Node emulation |
-| `parcel-no-client-secret-env`  | a secret-looking `process.env` name read in client code     | A    | Node emulation        |
+| Rule id                       | Rejects                                                                 | Tier | Source         |
+| ----------------------------- | ----------------------------------------------------------------------- | ---- | -------------- |
+| `parcel-env-allowlist`        | client code reading `process.env` with no `inlineEnvironment` allowlist | A    | Node emulation |
+| `parcel-no-client-secret-env` | a secret-looking `process.env` name read in client code                 | A    | Node emulation |
 
 Two selected candidates reuse existing rules instead of adding copies:
 "Parcel version not pinned" is `pkg-exact-versions` in `rule-toolchain-pnpm`, and

@@ -111,13 +111,13 @@ Design and implement APIs, runtime frameworks, security, and scaffolds.
 
 Model persistence, SQL, PostgreSQL, MySQL, and MongoDB.
 
-| Skill                                                  | Tool                  | Frameworks | Use when                                                                                                                 |
-| ------------------------------------------------------ | --------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [rule-data](../rule-data/SKILL.md)                       | `pix_data`            | all        | Index of all data/database skills: SQL fundamentals, PostgreSQL, MySQL, and MongoDB. Delegates to the specific databa... |
-| [rule-data-mongodb](../rule-data-mongodb/SKILL.md)       | `pix_data_mongodb`    | all        | MongoDB 7+ complete reference: schema design patterns, CRUD scripts, aggregation pipeline, indexing strategies, shard... |
-| [rule-data-mysql](../rule-data-mysql/SKILL.md)           | `pix_data_mysql`      | all        | MySQL 8+ / MariaDB 11+ complete reference: DDL scripts, InnoDB tuning, indexing strategies, replication (async/semi-s... |
-| [rule-data-postgresql](../rule-data-postgresql/SKILL.md) | `pix_data_postgresql` | all        | PostgreSQL 16+ complete reference: DDL scripts, indexing strategies, performance tuning, replication, partitioning, c... |
-| [rule-data-sql](../rule-data-sql/SKILL.md)               | `pix_data_sql`        | all        | Complete SQL reference: table design patterns, index optimization, DDL scripts (CREATE/ALTER/DROP), query writing sta... |
+| Skill                                                  | Tool                  | Frameworks | Use when                                                                                                                                                     |
+| ------------------------------------------------------ | --------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [rule-data](../rule-data/SKILL.md)                       | `pix_data`            | all        | Index of all data/database skills: SQL fundamentals, PostgreSQL, MySQL, and MongoDB. Delegates to the specific databa...                                     |
+| [rule-data-mongodb](../rule-data-mongodb/SKILL.md)       | `pix_data_mongodb`    | all        | MongoDB 7+ complete reference: schema design patterns, CRUD scripts, aggregation pipeline, indexing strategies, shard...                                     |
+| [rule-data-mysql](../rule-data-mysql/SKILL.md)           | `pix_data_mysql`      | all        | MySQL 8+ / MariaDB 11+ complete reference: DDL scripts, InnoDB tuning, indexing strategies, replication (async/semi-s...                                     |
+| [rule-data-postgresql](../rule-data-postgresql/SKILL.md) | `pix_data_postgresql` | all        | PostgreSQL 16+ complete reference: DDL scripts, indexing strategies, performance tuning, replication, partitioning, c...                                     |
+| [rule-data-sql](../rule-data-sql/SKILL.md)               | `pix_data_sql`        | all        | Complete SQL reference: table design patterns, index optimization, DDL scripts (CREATE/ALTER/DROP), query writing sta...                                     |
 | [rule-data-validation](../rule-data-validation/SKILL.md) | `pix_data_validation` | all        | Cross-border business data validation: email, phone, VAT, tax IDs, postal codes, national identification numbers, and the library schemas that enforce them. |
 
 ### DevOps
@@ -174,47 +174,47 @@ Select project platform: web, desktop, library, Expo/mobile.
 
 Write ADRs/docs, follow BMAD, feature workflow, and handoff.
 
-| Skill                                                          | Tool                      | Frameworks | Use when                                                                                                                 |
-| -------------------------------------------------------------- | ------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
-| [rule-process](../rule-process/SKILL.md)                         | `pix_process`             | all        | Index of process skills: ADR, BMAD, code review, documentation, feature workflow, and LLM handoff.                       |
-| [rule-process-adr](../rule-process-adr/SKILL.md)                 | `rule_tool_process_adr`    | all        | Architecture Decision Records (ADR) for rule projects. Capture, store, and manage architectural decisions in docs/...     |
-| [rule-process-bmad](../rule-process-bmad/SKILL.md)               | `pix_process_bmad`        | all        | BMAD Method (Build More Architect Dreams) - AI-driven development framework for structured software delivery through...  |
-| [rule-process-code-review](../rule-process-code-review/SKILL.md) | `pix_process_code_review` | all        | Prepare and conduct risk-based PR/MR reviews with explicit quality, safety, and follow-up gates.                         |
+| Skill                                                          | Tool                      | Frameworks | Use when                                                                                                                                  |
+| -------------------------------------------------------------- | ------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| [rule-process](../rule-process/SKILL.md)                         | `pix_process`             | all        | Index of process skills: ADR, BMAD, code review, documentation, feature workflow, and LLM handoff.                                        |
+| [rule-process-adr](../rule-process-adr/SKILL.md)                 | `rule_tool_process_adr`    | all        | Architecture Decision Records (ADR) for rule projects. Capture, store, and manage architectural decisions in docs/...                      |
+| [rule-process-bmad](../rule-process-bmad/SKILL.md)               | `pix_process_bmad`        | all        | BMAD Method (Build More Architect Dreams) - AI-driven development framework for structured software delivery through...                   |
+| [rule-process-code-review](../rule-process-code-review/SKILL.md) | `pix_process_code_review` | all        | Prepare and conduct risk-based PR/MR reviews with explicit quality, safety, and follow-up gates.                                          |
 | [rule-process-readme](../rule-process-readme/SKILL.md)           | `pix_process_readme`      | all        | Write or rewrite a project README: the opening block, the facts, the example, getting started, and the license and contribution sections. |
-| `rule_tool_handoff` / `/rule-handoff`                            | `rule_tool_handoff`        | all        | Generate a compressed LLM handoff summary from ADR logs and project context. Enables cross-chat recovery, model-switc... |
+| `rule_tool_handoff` / `/rule-handoff`                            | `rule_tool_handoff`        | all        | Generate a compressed LLM handoff summary from ADR logs and project context. Enables cross-chat recovery, model-switc...                  |
 
 ### Styleguide
 
 Apply HTML/CSS/JS/JSON/Markdown/a11y/naming/validation standards.
 
-| Skill                                                              | Tool                        | Frameworks | Use when                                                                                                                            |
-| ------------------------------------------------------------------ | --------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| [rule-styleguide](../rule-styleguide/SKILL.md)                       | `rule_tool_styleguide`       | all        | Central index of all rule coding style guides. Delegates to specialized sub-skills: HTML semantics, CSS architectu...                |
-| [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md)             | `pix_styleguide_a11y`       | all        | WCAG 2.2 AA accessibility: semantic HTML, ARIA, keyboard navigation, color contrast, forms, media, automated testing...             |
-| [rule-styleguide-css](../rule-styleguide-css/SKILL.md)               | `pix_styleguide_css`        | all        | CSS architecture, selector strategy (data-part, element), naming conventions, property ordering, custom properties, c...            |
-| [rule-styleguide-configuration](../rule-styleguide-configuration/SKILL.md) | `pix_styleguide_configuration` | all | Base project configuration files: .gitignore, .editorconfig, .nvmrc, .env.example, README, LICENSE, CONTRIBUTING, and the toolchain config baselines. |
-| [rule-styleguide-git](../rule-styleguide-git/SKILL.md) | `pix_styleguide_git` | all | Atomic Conventional Commits with a mandatory scope, branch naming, and the commit-msg and pre-push discipline. |
-| [rule-styleguide-html](../rule-styleguide-html/SKILL.md)             | `pix_styleguide_html`       | all        | Semantic HTML, document structure, template engine syntax, accessibility essentials, and element conventions for fron...            |
-| [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md) | `pix_styleguide_javascript` | all        | JavaScript conventions: naming, functions, classes, async patterns, DOM manipulation, custom elements, static initial...            |
-| [rule-styleguide-json](../rule-styleguide-json/SKILL.md)             | `pix_styleguide_json`       | all        | JSON structure conventions: validity, property naming, date formats, numeric precision, schema mindset, and API respo...            |
-| [rule-styleguide-markdown](../rule-styleguide-markdown/SKILL.md)     | `pix_styleguide_markdown`   | all        | Markdown documentation style: document structure, headings, lists, code blocks, formatting, tables, links, and tone f...            |
-| [rule-styleguide-english](../rule-styleguide-english/SKILL.md)       | `pix_styleguide_english`    | all        | English-only prose and American spelling: comments, identifiers and documents in English, US spellings (color, behavior, organiz... |
-| [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md)         | `pix_styleguide_naming`     | all        | Naming conventions and file tree structure: PascalCase, camelCase, UPPER_SNAKE_CASE, underscore prefix rule, barrel p...            |
+| Skill                                                                    | Tool                           | Frameworks | Use when                                                                                                                                              |
+| ------------------------------------------------------------------------ | ------------------------------ | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [rule-styleguide](../rule-styleguide/SKILL.md)                             | `rule_tool_styleguide`          | all        | Central index of all rule coding style guides. Delegates to specialized sub-skills: HTML semantics, CSS architectu...                                  |
+| [rule-styleguide-a11y](../rule-styleguide-a11y/SKILL.md)                   | `pix_styleguide_a11y`          | all        | WCAG 2.2 AA accessibility: semantic HTML, ARIA, keyboard navigation, color contrast, forms, media, automated testing...                               |
+| [rule-styleguide-css](../rule-styleguide-css/SKILL.md)                     | `pix_styleguide_css`           | all        | CSS architecture, selector strategy (data-part, element), naming conventions, property ordering, custom properties, c...                              |
+| [rule-styleguide-configuration](../rule-styleguide-configuration/SKILL.md) | `pix_styleguide_configuration` | all        | Base project configuration files: .gitignore, .editorconfig, .nvmrc, .env.example, README, LICENSE, CONTRIBUTING, and the toolchain config baselines. |
+| [rule-styleguide-git](../rule-styleguide-git/SKILL.md)                     | `pix_styleguide_git`           | all        | Atomic Conventional Commits with a mandatory scope, branch naming, and the commit-msg and pre-push discipline.                                        |
+| [rule-styleguide-html](../rule-styleguide-html/SKILL.md)                   | `pix_styleguide_html`          | all        | Semantic HTML, document structure, template engine syntax, accessibility essentials, and element conventions for fron...                              |
+| [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md)       | `pix_styleguide_javascript`    | all        | JavaScript conventions: naming, functions, classes, async patterns, DOM manipulation, custom elements, static initial...                              |
+| [rule-styleguide-json](../rule-styleguide-json/SKILL.md)                   | `pix_styleguide_json`          | all        | JSON structure conventions: validity, property naming, date formats, numeric precision, schema mindset, and API respo...                              |
+| [rule-styleguide-markdown](../rule-styleguide-markdown/SKILL.md)           | `pix_styleguide_markdown`      | all        | Markdown documentation style: document structure, headings, lists, code blocks, formatting, tables, links, and tone f...                              |
+| [rule-styleguide-english](../rule-styleguide-english/SKILL.md)             | `pix_styleguide_english`       | all        | English-only prose and American spelling: comments, identifiers and documents in English, US spellings (color, behavior, organiz...                   |
+| [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md)               | `pix_styleguide_naming`        | all        | Naming conventions and file tree structure: PascalCase, camelCase, UPPER_SNAKE_CASE, underscore prefix rule, barrel p...                              |
 
 ### Toolchain
 
 Configure pnpm, TypeScript, ESLint, Biome, Vite, Parcel, Turborepo, Husky.
 
-| Skill                                                            | Tool                       | Frameworks | Use when                                                                                                                                         |
-| ---------------------------------------------------------------- | -------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [rule-toolchain](../rule-toolchain/SKILL.md)                       | `pix_toolchain`            | all        | Index of all toolchain skills: build tools (Vite, Parcel), linters (Biome, ESLint), package management (pnpm), monore...                         |
-| [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md)           | `pix_toolchain_biome`      | all        | Biome linter and formatter configuration and best practices. Zero-config by default, but covers migration from ESLint...                         |
-| [rule-toolchain-eslint](../rule-toolchain-eslint/SKILL.md)         | `pix_toolchain_eslint`     | all        | ESLint 9+ flat config: rule sets for TypeScript, React, and Node.js, plugin integration, custom rules, and CI integra...                         |
-| [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md)           | `pix_toolchain_husky`      | all        | Git hooks management with Husky: commit hooks, pre-push validation, lint-staged integration, commitlint, and CI-frien...                         |
-| [rule-toolchain-parcel](../rule-toolchain-parcel/SKILL.md)         | `pix_toolchain_parcel`     | all        | Parcel 2+ zero-configuration bundler: entry points, transpilation, code splitting, image optimization, environment va...                         |
-| [rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md)             | `pix_toolchain_pnpm`       | all        | pnpm package manager: workspace management, dependency resolution, caching strategies, CI optimization, and monorepo...                          |
-| [rule-toolchain-turborepo](../rule-toolchain-turborepo/SKILL.md)   | `pix_toolchain_turborepo`  | all        | Turborepo monorepo orchestration: pipeline configuration, caching, remote caching, task dependency graphs, and worksp...                         |
-| [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md)             | `pix_toolchain_vite`       | all        | Vite build tool configuration and best practices. Covers vite.config.ts, vitest.config.ts, environment variables, bui...                         |
+| Skill                                                          | Tool                      | Frameworks | Use when                                                                                                                 |
+| -------------------------------------------------------------- | ------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
+| [rule-toolchain](../rule-toolchain/SKILL.md)                     | `pix_toolchain`           | all        | Index of all toolchain skills: build tools (Vite, Parcel), linters (Biome, ESLint), package management (pnpm), monore... |
+| [rule-toolchain-biome](../rule-toolchain-biome/SKILL.md)         | `pix_toolchain_biome`     | all        | Biome linter and formatter configuration and best practices. Zero-config by default, but covers migration from ESLint... |
+| [rule-toolchain-eslint](../rule-toolchain-eslint/SKILL.md)       | `pix_toolchain_eslint`    | all        | ESLint 9+ flat config: rule sets for TypeScript, React, and Node.js, plugin integration, custom rules, and CI integra... |
+| [rule-toolchain-husky](../rule-toolchain-husky/SKILL.md)         | `pix_toolchain_husky`     | all        | Git hooks management with Husky: commit hooks, pre-push validation, lint-staged integration, commitlint, and CI-frien... |
+| [rule-toolchain-parcel](../rule-toolchain-parcel/SKILL.md)       | `pix_toolchain_parcel`    | all        | Parcel 2+ zero-configuration bundler: entry points, transpilation, code splitting, image optimization, environment va... |
+| [rule-toolchain-pnpm](../rule-toolchain-pnpm/SKILL.md)           | `pix_toolchain_pnpm`      | all        | pnpm package manager: workspace management, dependency resolution, caching strategies, CI optimization, and monorepo...  |
+| [rule-toolchain-turborepo](../rule-toolchain-turborepo/SKILL.md) | `pix_toolchain_turborepo` | all        | Turborepo monorepo orchestration: pipeline configuration, caching, remote caching, task dependency graphs, and worksp... |
+| [rule-toolchain-vite](../rule-toolchain-vite/SKILL.md)           | `pix_toolchain_vite`      | all        | Vite build tool configuration and best practices. Covers vite.config.ts, vitest.config.ts, environment variables, bui... |
 
 ### UI
 
@@ -274,15 +274,15 @@ This rule system is also available as an MCP server (`rule-mcp-rules`). If you h
 Load `rule` first: it is the index. Pull in the domain skill only when the task
 touches that domain:
 
-| Skill                      | When to load                                                      |
-| -------------------------- | ----------------------------------------------------------------- |
-| `rule-styleguide-git`       | **Immediately** - before any branch, commit, or push              |
-| `rule-styleguide-markdown`  | **Immediately** - when writing or updating README and prose files |
+| Skill                       | When to load                                                      |
+| --------------------------- | ----------------------------------------------------------------- |
+| `rule-styleguide-git`        | **Immediately** - before any branch, commit, or push              |
+| `rule-styleguide-markdown`   | **Immediately** - when writing or updating README and prose files |
 | `rule-styleguide-typescript` | **Immediately** - when writing TypeScript types and interfaces    |
-| `rule-devops-testing`       | When creating tests or configuring coverage                       |
-| `rule-styleguide-a11y`      | **Frontend only** - when accessibility is part of the requirement |
-| `rule-styleguide-i18n`      | **Frontend only** - when internationalization is needed           |
-| `rule-backend-security`     | **Backend only** - when the service must be hardened              |
+| `rule-devops-testing`        | When creating tests or configuring coverage                       |
+| `rule-styleguide-a11y`       | **Frontend only** - when accessibility is part of the requirement |
+| `rule-styleguide-i18n`       | **Frontend only** - when internationalization is needed           |
+| `rule-backend-security`      | **Backend only** - when the service must be hardened              |
 
 ### What each one covers
 

@@ -23,22 +23,22 @@ Audited in this session (read-only):
 Current state: 6 rules, all owned by `rule-backend` and inherited by every child
 through `inherits: [rule-backend]`.
 
-| Rule              | Trigger heuristic                             |
-| ----------------- | --------------------------------------------- |
-| `cors-explicit`   | `cors(` / `@fastify/cors` / `app.enableCors`  |
-| `error-exposure`  | response chain containing `.stack`/`.message` |
-| `helmet-headers`  | server file without helmet                    |
-| `input-validation`| request input without a known validator       |
-| `rate-limiting`   | server file without rate limiting             |
-| `sql-injection`   | string-built query to `.query(`/`.execute(`   |
+| Rule               | Trigger heuristic                             |
+| ------------------ | --------------------------------------------- |
+| `cors-explicit`    | `cors(` / `@fastify/cors` / `app.enableCors`  |
+| `error-exposure`   | response chain containing `.stack`/`.message` |
+| `helmet-headers`   | server file without helmet                    |
+| `input-validation` | request input without a known validator       |
+| `rate-limiting`    | server file without rate limiting             |
+| `sql-injection`    | string-built query to `.query(`/`.execute(`   |
 
 Known false positives in the six, from the frameworks this repo serves:
 
-| Rule              | Misses                                                   |
-| ----------------- | -------------------------------------------------------- |
-| `helmet-headers`  | Hono `secureHeaders()`                                   |
-| `rate-limiting`   | Hono `hono-rate-limiter`                                 |
-| `input-validation`| Hono `@hono/zod-validator`, valibot, standard-validator  |
+| Rule               | Misses                                                  |
+| ------------------ | ------------------------------------------------------- |
+| `helmet-headers`   | Hono `secureHeaders()`                                  |
+| `rate-limiting`    | Hono `hono-rate-limiter`                                |
+| `input-validation` | Hono `@hono/zod-validator`, valibot, standard-validator |
 
 Sources fetched and used (each accepted rule cites one or more):
 
@@ -60,22 +60,22 @@ Sources fetched and used (each accepted rule cites one or more):
 
 ## Decisions from the interview
 
-| Question            | Decision                                                              |
-| ------------------- | --------------------------------------------------------------------- |
-| Target skills       | All nine. Shared rules in `rule-backend`, the rest in their topic skill |
-| Scope               | High-signal selection (6-10)                                          |
-| Fixes to the six    | Extend the patterns to the framework equivalents                      |
-| Auth rules          | All five candidates                                                   |
-| Input rules         | All six candidates                                                    |
-| Runtime rules       | All five candidates                                                   |
-| GraphQL rules       | All five candidates                                                   |
-| Framework rules     | All four candidates                                                   |
-| Trigger policy      | Content heuristic on server/API files plus framework-scoped patterns  |
-| Severity            | Advisory until corpus precision is proven, then blocking              |
-| Corpus and tests    | Fixtures, framework fixtures, unit tests, inheritance test            |
-| Artifacts           | Frontmatter, census, ADR, changelog, per-rule source                  |
-| Phasing             | Plan only now; implementation in a dedicated session                  |
-| Sources             | Every new rule cites its source                                       |
+| Question         | Decision                                                               |
+| ---------------- | ---------------------------------------------------------------------- |
+| Target skills    | All nine. Shared rules in `rule-backend`, the rest in their topic skill |
+| Scope            | High-signal selection (6-10)                                           |
+| Fixes to the six | Extend the patterns to the framework equivalents                       |
+| Auth rules       | All five candidates                                                    |
+| Input rules      | All six candidates                                                     |
+| Runtime rules    | All five candidates                                                    |
+| GraphQL rules    | All five candidates                                                    |
+| Framework rules  | All four candidates                                                    |
+| Trigger policy   | Content heuristic on server/API files plus framework-scoped patterns   |
+| Severity         | Advisory until corpus precision is proven, then blocking               |
+| Corpus and tests | Fixtures, framework fixtures, unit tests, inheritance test             |
+| Artifacts        | Frontmatter, census, ADR, changelog, per-rule source                   |
+| Phasing          | Plan only now; implementation in a dedicated session                   |
+| Sources          | Every new rule cites its source                                        |
 
 ### Open item 1: 25 rules against a 6-10 budget
 
@@ -135,23 +135,23 @@ the idiomatic form of every framework in the family.
 
 ### Shared, owned by rule-backend
 
-| Rule id                     | Rejects                                                        | Tier | Source                         |
-| --------------------------- | -------------------------------------------------------------- | ---- | ------------------------------ |
-| `jwt-verify-not-decode`     | `jwt.decode(` used for an auth decision                        | A    | RFC 8725; OWASP auth           |
-| `jwt-alg-none-banned`       | `algorithms: ['none']`, alg read from the token header         | A    | RFC 8725                       |
-| `cookie-security-flags`     | session cookie without `httpOnly`, `secure`, `sameSite`        | A    | OWASP auth; Express security   |
-| `csrf-state-change`         | state-changing route without token or origin check             | B    | OWASP CSRF                     |
-| `auth-log-redaction`        | log call carrying token, password, authorization, session cookie | B    | OWASP auth; API2 and API8      |
-| `no-dynamic-code-execution` | `eval(`, `new Function(`, `exec(` with interpolated input      | A    | OWASP Node.js                  |
-| `prototype-pollution-guard` | recursive merge of user input, `__proto__` access              | B    | OWASP prototype pollution      |
-| `ssrf-allowlist`            | `fetch(url)` on user input without an allowlist                | B    | OWASP SSRF; API7               |
-| `body-size-limit`           | body parser without a size limit                               | A    | API4 resource consumption      |
-| `pagination-max-limit`      | list endpoint without a capped `limit`/`pageSize`              | B    | API4 resource consumption      |
-| `env-validation-at-boot`    | `process.env.` spread across the code, no boot validation      | B    | OWASP Node.js; 12-factor       |
-| `outbound-timeout`          | outbound `fetch`/HTTP client without a timeout                 | A    | Node.js docs; API10            |
-| `bounded-concurrency`       | `Promise.all` over a user-sized array                          | B    | Node.js docs                   |
-| `no-sync-blocking`          | `readFileSync`, `execSync`, `pbkdf2Sync` inside a request path | B    | Do not block the event loop    |
-| `graceful-shutdown`         | server without a `SIGTERM` handler and connection drain        | B    | Node.js docs                   |
+| Rule id                     | Rejects                                                          | Tier | Source                       |
+| --------------------------- | ---------------------------------------------------------------- | ---- | ---------------------------- |
+| `jwt-verify-not-decode`     | `jwt.decode(` used for an auth decision                          | A    | RFC 8725; OWASP auth         |
+| `jwt-alg-none-banned`       | `algorithms: ['none']`, alg read from the token header           | A    | RFC 8725                     |
+| `cookie-security-flags`     | session cookie without `httpOnly`, `secure`, `sameSite`          | A    | OWASP auth; Express security |
+| `csrf-state-change`         | state-changing route without token or origin check               | B    | OWASP CSRF                   |
+| `auth-log-redaction`        | log call carrying token, password, authorization, session cookie | B    | OWASP auth; API2 and API8    |
+| `no-dynamic-code-execution` | `eval(`, `new Function(`, `exec(` with interpolated input        | A    | OWASP Node.js                |
+| `prototype-pollution-guard` | recursive merge of user input, `__proto__` access                | B    | OWASP prototype pollution    |
+| `ssrf-allowlist`            | `fetch(url)` on user input without an allowlist                  | B    | OWASP SSRF; API7             |
+| `body-size-limit`           | body parser without a size limit                                 | A    | API4 resource consumption    |
+| `pagination-max-limit`      | list endpoint without a capped `limit`/`pageSize`                | B    | API4 resource consumption    |
+| `env-validation-at-boot`    | `process.env.` spread across the code, no boot validation        | B    | OWASP Node.js; 12-factor     |
+| `outbound-timeout`          | outbound `fetch`/HTTP client without a timeout                   | A    | Node.js docs; API10          |
+| `bounded-concurrency`       | `Promise.all` over a user-sized array                            | B    | Node.js docs                 |
+| `no-sync-blocking`          | `readFileSync`, `execSync`, `pbkdf2Sync` inside a request path   | B    | Do not block the event loop  |
+| `graceful-shutdown`         | server without a `SIGTERM` handler and connection drain          | B    | Node.js docs                 |
 
 `auth-log-redaction` and `ssrf-allowlist` overlap with the observability area of
 the devops plan; the backend copy is the authoritative one for request handling,
@@ -159,28 +159,28 @@ and the devops plan stays about telemetry stores.
 
 ### GraphQL, owned by rule-backend-graphql
 
-| Rule id                 | Rejects                                              | Tier | Source               |
-| ----------------------- | ---------------------------------------------------- | ---- | -------------------- |
-| `gql-depth-limit`       | server with no depth or complexity limit             | A    | OWASP GraphQL        |
-| `gql-introspection-prod`| introspection or GraphiQL on in production           | B    | OWASP GraphQL        |
-| `gql-batching-limit`    | unlimited operation batching or aliases              | B    | OWASP GraphQL        |
-| `gql-pagination`        | list field without `first`/`last`/cursor             | B    | OWASP GraphQL        |
-| `gql-authz-edges-nodes` | resolver without an authorization check on the node  | B    | OWASP GraphQL        |
+| Rule id                  | Rejects                                             | Tier | Source        |
+| ------------------------ | --------------------------------------------------- | ---- | ------------- |
+| `gql-depth-limit`        | server with no depth or complexity limit            | A    | OWASP GraphQL |
+| `gql-introspection-prod` | introspection or GraphiQL on in production          | B    | OWASP GraphQL |
+| `gql-batching-limit`     | unlimited operation batching or aliases             | B    | OWASP GraphQL |
+| `gql-pagination`         | list field without `first`/`last`/cursor            | B    | OWASP GraphQL |
+| `gql-authz-edges-nodes`  | resolver without an authorization check on the node | B    | OWASP GraphQL |
 
 ### Runtime, owned by rule-backend-node (see open item 2)
 
-| Rule id                 | Rejects                                          | Tier | Source                    |
-| ----------------------- | ------------------------------------------------ | ---- | ------------------------- |
-| `worker-pool-per-request`| `new Worker(` created inside a request handler   | B    | rule-backend-workers       |
+| Rule id                   | Rejects                                        | Tier | Source              |
+| ------------------------- | ---------------------------------------------- | ---- | ------------------- |
+| `worker-pool-per-request` | `new Worker(` created inside a request handler | B    | rule-backend-workers |
 
 ### Framework skills
 
-| Rule id                  | Skill              | Rejects                                     | Tier | Source                    |
-| ------------------------ | ------------------ | ------------------------------------------- | ---- | ------------------------- |
-| `express-error-handler`  | rule-backend-express| app with no four-argument error middleware  | A    | Express security          |
-| `fastify-route-schema`   | rule-backend-fastify| route without a validation/serialization schema | B | Fastify recommendations   |
-| `hono-secure-headers`    | rule-backend-hono   | app with no `secureHeaders()`               | A    | Hono secure headers       |
-| `nestjs-validation-pipe` | rule-backend-nestjs | global pipe without `whitelist`/`forbidNonWhitelisted` | A | NestJS security      |
+| Rule id                  | Skill               | Rejects                                                | Tier | Source                  |
+| ------------------------ | ------------------- | ------------------------------------------------------ | ---- | ----------------------- |
+| `express-error-handler`  | rule-backend-express | app with no four-argument error middleware             | A    | Express security        |
+| `fastify-route-schema`   | rule-backend-fastify | route without a validation/serialization schema        | B    | Fastify recommendations |
+| `hono-secure-headers`    | rule-backend-hono    | app with no `secureHeaders()`                          | A    | Hono secure headers     |
+| `nestjs-validation-pipe` | rule-backend-nestjs  | global pipe without `whitelist`/`forbidNonWhitelisted` | A    | NestJS security         |
 
 ## Enforcement model
 

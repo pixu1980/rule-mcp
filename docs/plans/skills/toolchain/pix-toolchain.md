@@ -20,31 +20,31 @@ Read in this session:
 
 Problems found:
 
-| Problem                                      | Detail                                                     |
-| -------------------------------------------- | ---------------------------------------------------------- |
-| the prescribed default is stale              | it says Prettier plus ESLint while `rule-toolchain-biome` recommends Biome |
-| the comparison duplicates the tool skills    | a ten-row table restates what the Biome and ESLint skills own |
-| webpack still appears                        | the bundler family removed it                               |
-| the tables are hand-maintained               | nine children, and `rule-styleguide-configuration` and `rule-styleguide-git` recently left the area |
-| the bundler family has no implementation home | the contract exists only as a plan document                |
+| Problem                                       | Detail                                                                                            |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| the prescribed default is stale               | it says Prettier plus ESLint while `rule-toolchain-biome` recommends Biome                         |
+| the comparison duplicates the tool skills     | a ten-row table restates what the Biome and ESLint skills own                                     |
+| webpack still appears                         | the bundler family removed it                                                                     |
+| the tables are hand-maintained                | nine children, and `rule-styleguide-configuration` and `rule-styleguide-git` recently left the area |
+| the bundler family has no implementation home | the contract exists only as a plan document                                                       |
 
 Local articles: the formatting-tools piece covers Biome, ESLint and husky. It
 stays context only; the plan anchors to the tool documentation.
 
 ## Decisions
 
-| Question            | Decision                                                                 |
-| ------------------- | ------------------------------------------------------------------------ |
-| Role                | Router plus short comparison guidance, not a rule owner for tool content |
-| Comparison section  | Brief summary with links to the owning skills                            |
-| Default             | None prescribed; a decision rule instead                                 |
-| Bundler family      | `rule-toolchain` owns the contract; the bundler skills inherit it          |
-| Family guardrails   | Public-variable secrets, dev-server exposure, declared target, declared IO, sourcemap policy |
-| Routing table       | Generated from the registry                                              |
-| Routing quality     | Verified quick guide, a decision tree, cross-references to the styleguides |
-| Router-integrity rules | Owned by the central `rule` router, inherited by every area router     |
-| Delivery            | Plan only now                                                            |
-| ADR                 | Only when a decision is structural                                       |
+| Question               | Decision                                                                                     |
+| ---------------------- | -------------------------------------------------------------------------------------------- |
+| Role                   | Router plus short comparison guidance, not a rule owner for tool content                     |
+| Comparison section     | Brief summary with links to the owning skills                                                |
+| Default                | None prescribed; a decision rule instead                                                     |
+| Bundler family         | `rule-toolchain` owns the contract; the bundler skills inherit it                             |
+| Family guardrails      | Public-variable secrets, dev-server exposure, declared target, declared IO, sourcemap policy |
+| Routing table          | Generated from the registry                                                                  |
+| Routing quality        | Verified quick guide, a decision tree, cross-references to the styleguides                   |
+| Router-integrity rules | Owned by the central `rule` router, inherited by every area router                            |
+| Delivery               | Plan only now                                                                                |
+| ADR                    | Only when a decision is structural                                                           |
 
 ## Workstream A - Role and comparison
 
@@ -92,15 +92,15 @@ the description states a use case.
 
 Advisory first, then blocking after 100% precision and recall.
 
-| Rule id                       | Rejects                                                    | Tier | Source              |
-| ----------------------------- | ---------------------------------------------------------- | ---- | ------------------- |
-| `bundler-no-public-secret`    | a public prefix on a secret-looking build variable         | A    | Vite, Rspack, Parcel docs |
-| `bundler-dev-not-exposed`     | a dev server on all interfaces with no allowlist            | A    | Bundler dev-server docs |
-| `bundler-target-declared`     | a build with no declared browser target                    | B    | Bundler target docs |
-| `bundler-io-declared`         | a build with no explicit entry or output                    | B    | Bundler docs        |
-| `bundler-sourcemap-policy`    | source maps on in production with no explicit decision      | B    | Bundler docs        |
-| `toolchain-no-webpack`         | a webpack reference in the toolchain area                  | A    | Family decision     |
-| `toolchain-no-prescribed-default` | a formatter or linter named as the global default      | B    | This plan           |
+| Rule id                           | Rejects                                                | Tier | Source                    |
+| --------------------------------- | ------------------------------------------------------ | ---- | ------------------------- |
+| `bundler-no-public-secret`        | a public prefix on a secret-looking build variable     | A    | Vite, Rspack, Parcel docs |
+| `bundler-dev-not-exposed`         | a dev server on all interfaces with no allowlist       | A    | Bundler dev-server docs   |
+| `bundler-target-declared`         | a build with no declared browser target                | B    | Bundler target docs       |
+| `bundler-io-declared`             | a build with no explicit entry or output               | B    | Bundler docs              |
+| `bundler-sourcemap-policy`        | source maps on in production with no explicit decision | B    | Bundler docs              |
+| `toolchain-no-webpack`            | a webpack reference in the toolchain area              | A    | Family decision           |
+| `toolchain-no-prescribed-default` | a formatter or linter named as the global default      | B    | This plan                 |
 
 The router-integrity rules (`router-link-resolves`, `router-child-coverage`,
 `router-no-dup-rules`, `router-use-when`) are owned by `rule`; this skill

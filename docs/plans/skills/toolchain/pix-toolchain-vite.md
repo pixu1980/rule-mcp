@@ -31,13 +31,13 @@ Public sources verified in this session:
 
 Facts that make the current text out of date:
 
-| Current text             | Vite 8 reality                                             |
-| ------------------------ | ---------------------------------------------------------- |
-| `build.target: "es2022"` | default is `baseline-widely-available` (chrome111, edge111, firefox114, safari16.4, ios16.4 for this major) |
-| `build.minify: "esbuild"` | the build runs on Rolldown and Oxc; CSS minification is lightningcss by default |
-| `manualChunks`           | Rolldown deprecates it in favor of `advancedChunks`        |
-| `server.host: true`      | `server.host` defaults to `localhost`; exposure needs `server.allowedHosts` after the dev-server host vulnerability |
-| full `vitest.config.ts`  | duplicated from `rule-devops-testing`                       |
+| Current text              | Vite 8 reality                                                                                                      |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `build.target: "es2022"`  | default is `baseline-widely-available` (chrome111, edge111, firefox114, safari16.4, ios16.4 for this major)         |
+| `build.minify: "esbuild"` | the build runs on Rolldown and Oxc; CSS minification is lightningcss by default                                     |
+| `manualChunks`            | Rolldown deprecates it in favor of `advancedChunks`                                                                 |
+| `server.host: true`       | `server.host` defaults to `localhost`; exposure needs `server.allowedHosts` after the dev-server host vulnerability |
+| full `vitest.config.ts`   | duplicated from `rule-devops-testing`                                                                                |
 
 Local articles: no dedicated Vite article exists in
 `~/Downloads/articles to check/`. The tangential mentions are formatting tools
@@ -47,21 +47,21 @@ release announcement and is not used.
 
 ## Decisions
 
-| Question          | Decision                                                                 |
-| ----------------- | ------------------------------------------------------------------------ |
-| Scope             | Config baseline, env and secrets, build performance, dev security, library and SSR, plugin policy |
-| Boundaries        | Vite keeps build and env only; the test config moves to `rule-devops-testing` |
-| Version           | Pinned to Vite 8 plus Rolldown, with an upgrade section                  |
-| `server.host`     | `localhost` by default; `host: true` only with an explicit `server.allowedHosts` |
+| Question          | Decision                                                                                           |
+| ----------------- | -------------------------------------------------------------------------------------------------- |
+| Scope             | Config baseline, env and secrets, build performance, dev security, library and SSR, plugin policy  |
+| Boundaries        | Vite keeps build and env only; the test config moves to `rule-devops-testing`                       |
+| Version           | Pinned to Vite 8 plus Rolldown, with an upgrade section                                            |
+| `server.host`     | `localhost` by default; `host: true` only with an explicit `server.allowedHosts`                   |
 | Env               | No secret with the `VITE_` prefix, `envPrefix` documented, `vite-env.d.ts` typing, mode precedence |
-| `build.target`    | Keep the Baseline default; overrides documented                      |
-| Chunking          | `advancedChunks` with a `manualChunks` compatibility note                |
-| Dev security      | `server.allowedHosts`, restricted `server.fs.allow`, proxy instead of CORS |
-| Plugins           | Official or verified and pinned; prefer native/Oxc plugins; check Rollup compatibility |
-| Test config       | Removed, links to `rule-devops-testing`                                   |
-| Pinned build deps | Reuses the pnpm rules, no new id                                         |
-| Delivery          | Plan only now                                                            |
-| ADR               | Only when a decision is structural                                       |
+| `build.target`    | Keep the Baseline default; overrides documented                                                    |
+| Chunking          | `advancedChunks` with a `manualChunks` compatibility note                                          |
+| Dev security      | `server.allowedHosts`, restricted `server.fs.allow`, proxy instead of CORS                         |
+| Plugins           | Official or verified and pinned; prefer native/Oxc plugins; check Rollup compatibility             |
+| Test config       | Removed, links to `rule-devops-testing`                                                             |
+| Pinned build deps | Reuses the pnpm rules, no new id                                                                   |
+| Delivery          | Plan only now                                                                                      |
+| ADR               | Only when a decision is structural                                                                 |
 
 ## Workstream A - Config baseline
 
@@ -145,10 +145,10 @@ dependencies.
 
 Advisory first, then blocking after 100% precision and recall.
 
-| Rule id                 | Rejects                                                        | Tier | Source                       |
-| ----------------------- | -------------------------------------------------------------- | ---- | ---------------------------- |
-| `vite-no-public-secret` | a `VITE_*` name that is a secret (`_SECRET`, `_TOKEN`, `_PASSWORD`, `_KEY`) | A | Vite env docs          |
-| `vite-host-local`       | `server.host: true` or `0.0.0.0` with no `server.allowedHosts`  | A    | Vite server options          |
+| Rule id                 | Rejects                                                                     | Tier | Source              |
+| ----------------------- | --------------------------------------------------------------------------- | ---- | ------------------- |
+| `vite-no-public-secret` | a `VITE_*` name that is a secret (`_SECRET`, `_TOKEN`, `_PASSWORD`, `_KEY`) | A    | Vite env docs       |
+| `vite-host-local`       | `server.host: true` or `0.0.0.0` with no `server.allowedHosts`              | A    | Vite server options |
 
 Pinned build dependencies are covered by the existing
 `pkg-exact-versions` and `verified-dependencies-only` rules in
