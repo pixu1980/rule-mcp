@@ -411,7 +411,7 @@ my-component {
 ## One-liners that replace the workaround: clamp fluid type, aspect ratio, flex centering, auto-fit grid, color-scheme dark mode, line-clamp, sticky
 
 Each of these replaces a pattern that used to need a wrapper, a media query
-stack, or JavaScript. They are all baseline in current browsers.
+stack, or JavaScript. They are available in every Baseline browser.
 
 ```css
 /* Centering, without the translate(-50%, -50%) dance */
