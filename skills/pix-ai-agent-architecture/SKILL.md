@@ -203,5 +203,5 @@ not features:
 - [rule-platform-agent](../rule-platform-agent/SKILL.md) - scaffold structure for an agent repository
 - [rule-ai-context-engineering](../rule-ai-context-engineering/SKILL.md) - the window the loop fills
 - [rule-ai-evals](../rule-ai-evals/SKILL.md) - deciding whether a harness change helped
-- [rule-process-ai-sdlc](../rule-process-ai-sdlc/SKILL.md) - where an agent sits in the delivery process
+- [rule-process-ai](../rule-process-ai/SKILL.md) - where an agent sits in the delivery process
 - [rule-backend-security](../rule-backend-security/SKILL.md) - authorizing the operation rather than the claim

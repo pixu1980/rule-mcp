@@ -21,7 +21,7 @@
  * stretched to match.
  *
  * @see src/tools/router - where it runs on every tool result
- * @see src/core/guardrail-defs - fp-box-rectangular, the guard
+ * @see src/core/guardrail-defs - ai-box-rectangular, the guard
  * @see scripts/clean-prose - the same pass over this repository's own files
  */
 

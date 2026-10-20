@@ -33,7 +33,7 @@ test("check passes clean code and fails violations", async () => {
   const dirty = await callTool("rule_tool_check", { skill: "rule-styleguide-javascript", code: "const a = 1; // \u2013 em dash" });
   assert.equal(dirty.isError, true, "a violating check errors");
   assert.match(dirty.content[0].text, /FAIL/, "the failing count renders");
-  assert.match(dirty.content[0].text, /fp-no-emdash|em-dash|em dash/i, "the failing rule is named");
+  assert.match(dirty.content[0].text, /ai-no-emdash|em-dash|em dash/i, "the failing rule is named");
   assert.ok(dirty._meta?.pixGuardrails, "the machine-readable report travels");
 });
 

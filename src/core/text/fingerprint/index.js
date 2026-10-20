@@ -25,7 +25,7 @@
  * output, so a transformer that drifted on a second pass would replay a
  * different string every time.
  *
- * This module necessarily fails `fp-american-english` on itself: it is the
+ * This module necessarily fails `ai-american-english` on itself: it is the
  * dictionary, so it contains every word it maps. Nothing to fix there.
  *
  * @see module:core/text/compression - the other half of the output layer (filler removal)

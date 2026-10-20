@@ -39,7 +39,7 @@ export function rankSkills({ skills, promptWords, promptDomain, isReduction, ran
 
     // A scope challenge routes to the simplicity skill; on a plain build
     // request it stays an alternative (finalScore halved).
-    if (skillName === "rule-process-simplicity") {
+    if (skillName === "rule-process-ai") {
       finalScore = isReduction ? Math.max(rawScore * 2, 30) : rawScore * 0.5;
     }
 

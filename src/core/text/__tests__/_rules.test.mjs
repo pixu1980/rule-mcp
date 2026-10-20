@@ -10,10 +10,10 @@ import { check, finish } from "./_simplicity.fixture.mjs";
 console.log("=== Simplicity: guardrails ===\n");
 
 // The simplicity rules live in the skills that own them (ADR 089):
-// rule-process-simplicity keeps two, rule-styleguide-comments the third.
+// rule-process-ai keeps two, rule-styleguide-comments the third.
 await loadAllSkills();
-const SIMPLICITY_GUARDRAILS = [...ownedGuardrails("rule-process-simplicity"), ...ownedGuardrails("rule-styleguide-comments")].filter((rule) =>
-  ["no-speculative-audit-table", "no-future-use-code", "no-commented-out-code"].includes(rule.id),
+const SIMPLICITY_GUARDRAILS = [...ownedGuardrails("rule-process-ai"), ...ownedGuardrails("rule-styleguide-comments")].filter((rule) =>
+  ["ai-no-speculative-audit-table", "no-future-use-code", "no-commented-out-code"].includes(rule.id),
 );
 
 // ── T4: guardrails ship everywhere ──
@@ -37,11 +37,11 @@ const byId = Object.fromEntries(SIMPLICITY_GUARDRAILS.map((g) => [g.id, g]));
 const SPECULATIVE_SQL = `CREATE TABLE orders (id uuid primary key, total numeric);
 CREATE TABLE orders_audit (id uuid primary key, order_id uuid, changed_at timestamptz);
 INSERT INTO orders (id, total) VALUES ($1, $2);`;
-check("T5 no-speculative-audit-table fires on a write-only audit table", byId["no-speculative-audit-table"].check(SPECULATIVE_SQL, {}).pass === false);
+check("T5 ai-no-speculative-audit-table fires on a write-only audit table", byId["ai-no-speculative-audit-table"].check(SPECULATIVE_SQL, {}).pass === false);
 
 const USED_SQL = `${SPECULATIVE_SQL}
 SELECT changed_at FROM orders_audit WHERE order_id = $1;`;
-check("T5.1 it stays silent when the table is actually read", byId["no-speculative-audit-table"].check(USED_SQL, {}).pass === true);
+check("T5.1 it stays silent when the table is actually read", byId["ai-no-speculative-audit-table"].check(USED_SQL, {}).pass === true);
 
 const FUTURE_CODE = `// kept for future use, we might need it later
 export const retryBudget = 3;`;
@@ -68,7 +68,7 @@ check("T5.4 prose comments are not commented-out code", byId["no-commented-out-c
 //    `PaymentWebhookEvent` model plus its migration, and nothing read either.
 //    PascalCase without an underscore, so the first version of the guardrail
 //    passed it. Both the schema and the migration must fail. ──
-const auditTable = byId["no-speculative-audit-table"];
+const auditTable = byId["ai-no-speculative-audit-table"];
 for (const fixture of ["over-engineered-migration.sql", "over-engineered-schema.prisma"]) {
   const result = auditTable.check(readFileSync(join("tests/fixtures", fixture), "utf8"), { fileName: fixture });
   check(`T7 ${fixture} is flagged`, result.pass === false && result.detail.some((d) => /PaymentWebhookEvent/.test(d)));

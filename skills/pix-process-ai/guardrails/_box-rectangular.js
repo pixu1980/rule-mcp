@@ -1,7 +1,7 @@
 /** Guardrail `fp-box-rectangular`: A drawn box is a rectangle */
 
 export const fpBoxRectangular = {
-  id: "fp-box-rectangular",
+  id: "ai-box-rectangular",
   label: "A drawn box is a rectangle",
   description: "Every line of a box ends in the same column. A right edge that steps in and out is the one tell a spell-check cannot see.",
   check: (code, { helpers: { findRaggedBoxes } }) => {

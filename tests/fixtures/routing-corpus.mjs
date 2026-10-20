@@ -88,29 +88,29 @@ export const CORPUS = [
   { prompt: "accessibility guidelines a11y WCAG standards", expect: "styleguide-a11y", area: "styleguide" },
 
   // ── Process and AI: added in P2 and P4 ──
-  { prompt: "should I extract this into a helper function", expect: "process-simplicity", area: "process" },
+  { prompt: "should I extract this into a helper function", expect: "process-ai", area: "process" },
   // Compression is tool-only after ADR 115 (rule_tool_compress / /rule-compress), not a skill route.
 
   {
     prompt: "remove em dashes and use american english spelling",
-    expect: "styleguide-english",
+    expect: "process-ai",
     area: "styleguide",
   },
   {
     prompt: "americanize the comments: color -> color, behavior -> behavior",
-    expect: "styleguide-english",
+    expect: "process-ai",
     area: "styleguide",
   },
   {
     prompt: "my writing looks AI generated, fix the punctuation",
-    expect: "styleguide-fingerprint",
+    expect: "process-ai",
     area: "styleguide",
   },
   { prompt: "how do I evaluate my llm feature", expect: "ai-evals", area: "ai" },
   { prompt: "llm as a judge prompt design", expect: "ai-evals", area: "ai" },
   { prompt: "error analysis on agent traces", expect: "ai-evals", area: "ai" },
-  { prompt: "how should AI fit our development lifecycle", expect: "process-ai-sdlc", area: "process" },
-  { prompt: "plan before code and approval gates", expect: "process-ai-sdlc", area: "process" },
+  { prompt: "how should AI fit our development lifecycle", expect: "process-ai", area: "process" },
+  { prompt: "plan before code and approval gates", expect: "process-ai", area: "process" },
   { prompt: "how do I write a better prompt for the agent", expect: "ai-prompting", area: "ai" },
   { prompt: "teaching a junior to use AI without losing skills", expect: "ai-prompting", area: "ai" },
 
@@ -123,7 +123,7 @@ export const CORPUS = [
   { prompt: "how should I review code I did not write", expect: "process-code-review", area: "process" },
   { prompt: "reviewing a generated pull request", expect: "process-code-review", area: "process" },
   { prompt: "the assistant keeps adding dependencies", expect: "process-code-review", area: "process" },
-  { prompt: "why is writing code faster but delivering not", expect: "process-simplicity", area: "process" },
+  { prompt: "why is writing code faster but delivering not", expect: "process-ai", area: "process" },
   { prompt: "ask for a design critique that is actually actionable", expect: "ui-design-system", area: "ui" },
   { prompt: "the generated screen has no empty or error state", expect: "ui-design-system", area: "ui" },
   { prompt: "how do I critique a generated interface", expect: "ui-design-system", area: "ui" },

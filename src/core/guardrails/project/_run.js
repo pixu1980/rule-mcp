@@ -36,7 +36,7 @@ import { PROJECT_CHECKS } from "./_checks.js";
  * @param {{ skill?: string, diagnostics?: boolean, probe?: Function, client?: Function }} [options]
  * @returns {ProjectCheckResult}
  */
-export function checkProjectGuarded(projectDir = process.cwd(), { skill = "rule-process-simplicity", diagnostics = false, probe = probeFilesystem, client = callToolSync } = {}) {
+export function checkProjectGuarded(projectDir = process.cwd(), { skill = "rule-process-ai", diagnostics = false, probe = probeFilesystem, client = callToolSync } = {}) {
   const available = probe(projectDir).available;
   const passed = [];
   const failed = [];

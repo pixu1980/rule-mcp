@@ -2,7 +2,7 @@
 
 /** Guardrail `no-placeholder-implementation`: No placeholder or unfinished implementation */
 export const noPlaceholderImplementation = {
-  id: "no-placeholder-implementation",
+  id: "ai-no-placeholder-implementation",
   label: "No placeholder or unfinished implementation",
   description: "Generated code must not contain TODO/FIXME markers, placeholder comments, or not-implemented throws.",
   check: (code) => {

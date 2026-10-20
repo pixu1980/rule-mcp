@@ -84,13 +84,13 @@ assert.equal(emptyPrompt.isError, true, "blank routing prompt must fail closed b
 
 const placeholderReport = checkCode("rule-frontend-react", "export function Demo() { /* TODO */ }");
 assert.ok(
-  placeholderReport.failed.some((item) => item.id === "no-placeholder-implementation"),
+  placeholderReport.failed.some((item) => item.id === "ai-no-placeholder-implementation"),
   "TODO code must fail guardrails",
 );
 
 const suppressedReport = checkCode("rule-frontend-react", "// @ts-ignore\ntry { work(); } catch {}\n");
 assert.ok(
-  suppressedReport.failed.some((item) => item.id === "no-suppressed-errors"),
+  suppressedReport.failed.some((item) => item.id === "ai-no-suppressed-errors"),
   "suppressed errors must fail guardrails",
 );
 

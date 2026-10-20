@@ -1,18 +1,6 @@
----
-name: rule-process-simplicity
-description: >-
-  Use before and during implementation to keep the change minimal. Covers the scope contract, the over-engineering catalog, the removal pass, and when a structural decision earns an ADR instead of code.
-tags:
-  - simplicity
-  - scope
-  - yagni
-  - over-engineering
-  - planning
-frameworks: [all]
-guardrails: [no-placeholder-implementation, no-speculative-audit-table, no-suppressed-errors]
----
+# Simplicity
 
-# rule-process-simplicity - Build only what was asked
+> Absorbed from `rule-process-simplicity` into `rule-process-ai`. The rules it documents are the `ai-*` guardrails this skill owns.
 
 ## Purpose
 
@@ -99,13 +87,15 @@ migration, the rollback, and everything written on top of it.
    request, you have already added scope.
 2. List `files_to_change` and `out_of_scope`. Show both before coding.
 3. Implement. Write failing tests first (see
-   [rule-devops-testing](../rule-devops-testing/SKILL.md)).
+   [rule-devops-testing](../../rule-devops-testing/SKILL.md)).
 4. Run the removal pass (below) on your own diff.
-5. Run `rule_tool_check`. The simplicity guardrails
-   (`no-speculative-audit-table`, `no-future-use-code`, `no-commented-out-code`)
-   block completion.
+5. Run `rule_tool_check`. Five rules can block completion, and three of them are
+   this skill's own; the other two belong to
+   [rule-styleguide-comments](../../rule-styleguide-comments/SKILL.md) and are named
+   here because a smaller diff is what they protect. The table in
+   "Enforcement in this server" lists all five with their owner.
 6. If the change is structural, record it with
-   [rule-process-adr](../rule-process-adr/SKILL.md) without waiting to be
+   [rule-process-adr](../../rule-process-adr/SKILL.md) without waiting to be
    asked. Documentation of a decision is not scope creep; a table nobody
    requested is.
 
@@ -190,42 +180,9 @@ Less about advanced technique than about deciding in a different order.
 7. **Optimize for the next change, not the current demonstration.** The version
    that demos best is often the version that is hardest to modify.
 
-## Writing code got faster, delivering software did not: the parts of the job that do not compress
-
-Writing code got dramatically easier. Software engineering did not, and the two
-were always different problems. Keeping them apart is what stops a team from
-concluding that because generation is fast, delivery should be.
-
-Below a handful of people in one room, none of this applies: no coordination
-overhead, no review circles, compliance is a spreadsheet, and an agent is a
-genuine multiplier. Run. Somewhere past a few dozen people the physics change.
-Coordination cost arrives and never leaves, and it cannot be opted out of,
-because growing is how the work reaches more people in the first place.
-
-What generation did not repeal:
-
-- **Maintainable code**, because somebody carries the pager for it.
-- **A real rollout process**, because a bad deploy in a regulated environment is
-  not a rollback, it is an incident report.
-- **Tests that someone reads**, because customers ask to see the results.
-
-And what got scarcer rather than cheaper: **deciding what to implement, and
-defending that decision through an organization that has opinions.** Knowing the
-right answer is a small fraction of the work. The rest is agreeing that the
-artifact satisfies the actual requirement, getting the team that will own a piece
-of it to agree, finding the budget and the people, and getting a decision from a
-room where two of the parties are arguing about something from last year. No
-generator does that, and the plan that skips it does not ship.
-
-Two consequences worth acting on:
-
-- **Stay hands-on, deliberately.** The moment you stop touching the code, your
-  architecture opinions drift into fantasy, and you become the person who says
-  "just add a flag" to a system where a flag costs three days. Shipping something
-  small on purpose is what keeps a review honest.
-- **Speed of writing is the wrong metric to optimize.** It measures the part that
-  was already the easiest to explain. Optimize the decision that precedes it and
-  the ownership that follows it.
+The section on why delivery did not speed up with generation lives in
+`../SKILL.md`, because it is about the lifecycle rather than about the scope of
+one change.
 
 ## Code splitting and file size
 
@@ -234,7 +191,8 @@ sitting stays honest; a file that cannot be read whole hides its coupling.
 
 - **100 lines of code per file, with a +50 tolerance.** At 150 lines the file
   must be split - not negotiated. The tolerance absorbs a legitimate long
-  function; it is not a second budget.
+  function; it is not a second budget. `tests/docs/file-size-budget.test.mjs`
+  enforces it and the ratchet that goes with it (ADR 061).
 - **Split by meaning, never by count.** Each new file holds one nameable
   concern - one rule, one function, one command. A file named for its position
   (`js-1.js`, `parts-2.js`, `utils-3.js`) is a split that happened without a
@@ -258,8 +216,18 @@ sitting stays honest; a file that cannot be read whole hides its coupling.
 - The **workflow reminder** on every tool result states the minimal-change rule.
 - The **router** returns a `scope_contract` with the forbidden-without-request
   list and asks you to declare `out_of_scope` first.
-- **rule_tool_check** fails on speculative audit tables, future-use markers, and
-  commented-out implementations.
+- **rule_tool_check** fails on the five rules below. Three are owned here; the
+  other two live in [rule-styleguide-comments](../../rule-styleguide-comments/SKILL.md)
+  and are listed so a reader of this skill knows what a smaller diff trips.
+
+| Rule                            | Owner                     | Rejects                                                   |
+| ------------------------------- | ------------------------- | --------------------------------------------------------- |
+| `no-speculative-audit-table`    | this skill                | an audit or history table nothing reads or writes         |
+| `no-placeholder-implementation` | this skill                | a stub or an unfinished body, returned as if it were done |
+| `no-suppressed-errors`          | this skill                | a type, lint or runtime error silenced in place           |
+| `no-future-use-code`            | `rule-styleguide-comments` | code kept for an imagined future                          |
+| `no-commented-out-code`         | `rule-styleguide-comments` | an implementation parked in a comment                     |
+
 - The **file-size budget test** (`tests/docs/file-size-budget.test.mjs`) holds
   this repository to the 150-line cap and the junk-name ban above; its ratchet
   of grandfathered files only ever shrinks.
@@ -268,7 +236,7 @@ sitting stays honest; a file that cannot be read whole hides its coupling.
 
 ## See also
 
-- [rule-process-adr](../rule-process-adr/SKILL.md) - record the decision instead of building for it
-- [rule-process-code-review](../rule-process-code-review/SKILL.md) - reviewing someone else's scope creep
-- [rule-styleguide-file-tree](../rule-styleguide-file-tree/SKILL.md) - where a piece belongs before it becomes a pattern
-- [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md) - the names the pieces carry
+- [rule-process-adr](../../rule-process-adr/SKILL.md) - record the decision instead of building for it
+- [rule-process-code-review](../../rule-process-code-review/SKILL.md) - reviewing someone else's scope creep
+- [rule-styleguide-file-tree](../../rule-styleguide-file-tree/SKILL.md) - where a piece belongs before it becomes a pattern
+- [rule-styleguide-naming](../../rule-styleguide-naming/SKILL.md) - the names the pieces carry

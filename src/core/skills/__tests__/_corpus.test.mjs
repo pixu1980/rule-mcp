@@ -8,7 +8,18 @@ import { join, resolve } from "node:path";
 import { parseSkillFrontmatter } from "../index.js";
 import { markdownLinks, skillDirectories, skillsRoot } from "./_docs.fixture.mjs";
 
-const removedSkillNames = ["rule-scaffolding", "rule-coverage-gates", "rule-devops-docker-standards", "rule-frontend-forms", "rule-frontend-forms-validation"];
+const removedSkillNames = [
+  "rule-scaffolding",
+  "rule-coverage-gates",
+  "rule-devops-docker-standards",
+  "rule-frontend-forms",
+  "rule-frontend-forms-validation",
+  // Merged into rule-process-ai, which owns their guardrails and references.
+  "rule-process-simplicity",
+  "rule-styleguide-english",
+  "rule-styleguide-fingerprint",
+  "rule-process-ai-sdlc",
+];
 
 console.log("rule skill documentation test: corpus");
 

@@ -1,7 +1,7 @@
 /** Guardrail `en-english-only-prose`: English-only prose */
 
 export const enEnglishOnlyProse = {
-  id: "en-english-only-prose",
+  id: "ai-english-only-prose",
   label: "English-only prose",
   description:
     "Every generated comment, identifier and document is English. A non-ASCII letter in a comment, two distinct foreign function words in a comment, a foreign function word in an identifier, or non-ASCII/foreign prose in a .md document fail this rule (see rule-styleguide-english).",

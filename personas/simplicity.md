@@ -10,7 +10,7 @@ skills:
   - "deletion as a feature"
   - "complexity budgets"
 evidenceSkills:
-  - "rule-process-simplicity"
+  - "rule-process-ai"
   - "rule-styleguide-naming"
   - "rule-styleguide-file-tree"
   - "rule-styleguide-html"

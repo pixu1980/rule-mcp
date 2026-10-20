@@ -1,7 +1,10 @@
 ---
-name: rule-process-ai-sdlc
+name: rule-process-ai
 description: >-
-  Use when planning how AI fits the delivery lifecycle rather than a single task. Covers the artifact chain from intent to incident, plan before code, feedback loops that verify their own work, hooks as approval gates, bidirectional review, and control-band maintenance.
+  Use when planning how AI fits the delivery lifecycle rather than a single task, or when
+  writing anything a reader will see. Covers the artifact chain from intent to incident, plan
+  before code, the scope contract and the over-engineering catalog, English with American
+  spelling and ASCII punctuation, and the phrasing that reads as machine-written.
 tags:
   - sdlc
   - lifecycle
@@ -13,10 +16,29 @@ tags:
   - gates
   - governance
   - ai
+  - simplicity
+  - scope
+  - yagni
+  - english
+  - american-english
+  - prose
+  - punctuation
 frameworks: [all]
+guardrails:
+  [
+    ai-english-only-filenames,
+    ai-english-only-prose,
+    ai-american-english,
+    ai-no-emdash,
+    ai-no-typographic-chars,
+    ai-box-rectangular,
+    ai-no-placeholder-implementation,
+    ai-no-speculative-audit-table,
+    ai-no-suppressed-errors,
+  ]
 ---
 
-# rule-process-ai-sdlc - When code stops being the bottleneck
+# rule-process-ai - When code stops being the bottleneck
 
 ## Purpose
 
@@ -27,6 +49,60 @@ for a deploy window. Speeding up implementation alone just moves the queue.
 
 This skill is about the other five stages. It assumes the constraint everywhere:
 **humans make every judgment call, and the agent never approves its own work.**
+
+## What this skill owns
+
+Four disciplines, one document each. The body below is the lifecycle; the three
+references are the parts that apply to every change, not only to an AI one.
+
+| Document                                               | Read it when                                                                                                    | Guardrails behind it                                                                           |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| [references/simplicity.md](references/simplicity.md)   | before and during implementation: the scope contract, the over-engineering catalog, the removal pass, file size | `ai-no-speculative-audit-table`, `ai-no-placeholder-implementation`, `ai-no-suppressed-errors` |
+| [references/english.md](references/english.md)         | writing any comment, identifier, commit, prompt or document: English, American spelling, ASCII punctuation      | `ai-english-only-filenames`, `ai-english-only-prose`, `ai-american-english`                    |
+| [references/fingerprint.md](references/fingerprint.md) | writing prose a reader will see: banned characters, drawn boxes, the phrasing that reads as machine-written     | `ai-no-emdash`, `ai-no-typographic-chars`, `ai-box-rectangular`                                |
+| this file                                              | planning how AI fits the lifecycle: artifacts, plan before code, gates, review, incidents                       | none, deliberately: a gate is a script, and a model in the gate is a suggestion                |
+
+The three references were separate skills until they were merged here. The
+spelling map existed twice, in the English skill and in the fingerprint one, and
+two documents citing the same rule is the drift the guardrail already inherits.
+
+## Scope comes first
+
+Before the lifecycle, the change itself. A model asked for one thing will produce
+that thing plus a generalized version, an audit table nobody reads and a flag
+nothing reads. The contract that stops it, in six lines:
+
+1. Implement exactly what the request states: not the generalized version, not
+   the version that anticipates next quarter.
+2. Extra scope is proposed in prose, never written. A proposal costs a line; an
+   unrequested schema change costs a migration, a review and a rollback.
+3. Declare `files_to_change` and `out_of_scope` before coding.
+4. One implementation means no abstraction: interfaces, base classes and strategy
+   objects arrive with the second caller, not the first.
+5. No code for an imagined future: no parked implementations, no configuration
+   flags nothing reads, no speculative index.
+6. When in doubt, ship the smaller version and list what you left out.
+
+The full over-engineering catalog (extra columns, audit and history tables,
+retry and cache added preemptively, layers that only forward) and the removal
+pass that walks your own diff live in
+[references/simplicity.md](references/simplicity.md). Schema changes get their
+own checklist there: who writes the column, who reads it, which existing column
+already holds the value, and whether it is derivable.
+
+## The house language
+
+Every artifact this server writes is English, in American spelling, in plain
+ASCII. To americanize a comment, a name or a document is to apply exactly that: no em dash, no curly quotes, no ellipsis glyph, no British spelling
+(colour, behaviour, organise, centre, licence). The request may arrive in any
+language; the file that lands is English. A translated user-facing string is data
+and belongs in a message table, never in a comment or an identifier.
+
+Three guardrails hold that line, and the prose rules that make text read as
+typed by a person rather than generated sit beside them. The spelling map, the
+exceptions (a third-party API keeps its own spelling) and the phrasing tells live
+in [references/english.md](references/english.md) and
+[references/fingerprint.md](references/fingerprint.md).
 
 ## The artifact chain: how AI fits the software development lifecycle
 
@@ -152,6 +228,43 @@ itself:
   record.
 - **Owning the call.** Accountability does not delegate.
 
+## Writing code got faster, delivering software did not: the parts of the job that do not compress
+
+Writing code got dramatically easier. Software engineering did not, and the two
+were always different problems. Keeping them apart is what stops a team from
+concluding that because generation is fast, delivery should be.
+
+Below a handful of people in one room, none of this applies: no coordination
+overhead, no review circles, compliance is a spreadsheet, and an agent is a
+genuine multiplier. Run. Somewhere past a few dozen people the physics change.
+Coordination cost arrives and never leaves, and it cannot be opted out of,
+because growing is how the work reaches more people in the first place.
+
+What generation did not repeal:
+
+- **Maintainable code**, because somebody carries the pager for it.
+- **A real rollout process**, because a bad deploy in a regulated environment is
+  not a rollback, it is an incident report.
+- **Tests that someone reads**, because customers ask to see the results.
+
+And what got scarcer rather than cheaper: **deciding what to implement, and
+defending that decision through an organization that has opinions.** Knowing the
+right answer is a small fraction of the work. The rest is agreeing that the
+artifact satisfies the actual requirement, getting the team that will own a piece
+of it to agree, finding the budget and the people, and getting a decision from a
+room where two of the parties are arguing about something from last year. No
+generator does that, and the plan that skips it does not ship.
+
+Two consequences worth acting on:
+
+- **Stay hands-on, deliberately.** The moment you stop touching the code, your
+  architecture opinions drift into fantasy, and you become the person who says
+  "just add a flag" to a system where a flag costs three days. Shipping something
+  small on purpose is what keeps a review honest.
+- **Speed of writing is the wrong metric to optimize.** It measures the part that
+  was already the easiest to explain. Optimize the decision that precedes it and
+  the ownership that follows it.
+
 ## Metrics worth tracking
 
 | Stage    | Leading                          | Lagging                                      |
@@ -171,6 +284,9 @@ gates before automating anything that writes.
 
 ## See also
 
+- [references/simplicity.md](references/simplicity.md) - build only what was asked
+- [references/english.md](references/english.md) - the house language
+- [references/fingerprint.md](references/fingerprint.md) - prose that reads as typed by a person
 - [rule-ai-evals](../rule-ai-evals/SKILL.md) - the test stage in detail
 - [rule-process-adr](../rule-process-adr/SKILL.md) - decisions that outlive the plan that produced them
 - [rule-process-code-review](../rule-process-code-review/SKILL.md) - what the review passes look for

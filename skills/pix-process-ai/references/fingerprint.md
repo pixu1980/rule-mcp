@@ -1,23 +1,6 @@
----
-name: rule-styleguide-fingerprint
-description: >-
-  Use when writing any prose a reader will see: answers, docs, commits, comments, UI copy. Covers the banned typographic characters, the British to American spelling map, and the phrasing tells that mark a text as machine-written.
-tags:
-  - fingerprint
-  - ai-generated
-  - em-dash
-  - punctuation
-  - spelling
-  - american-english
-  - ascii
-  - prose
-  - writing
-  - style
-frameworks: [all]
-guardrails: [fp-american-english, fp-box-rectangular, fp-no-emdash, fp-no-typographic-chars]
----
+# Fingerprint
 
-# rule-styleguide-fingerprint - Write like a person typed it
+> Absorbed from `rule-styleguide-fingerprint` into `rule-process-ai`. The rules it documents are the `ai-*` guardrails this skill owns.
 
 ## Purpose
 
@@ -164,6 +147,6 @@ Run `rule_tool_compress` to apply the passes to arbitrary prose before writing i
 ## See also
 
 - `rule_tool_compress` / `/rule-compress` - compression pass (ADR 115)
-- [rule-styleguide-markdown](../rule-styleguide-markdown/SKILL.md) - the document structure this writes into
-- [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md) - naming, where code wins over prose style
-- [rule-styleguide-git](../rule-styleguide-git/SKILL.md) - commit messages follow these rules too
+- [rule-styleguide-markdown](../../rule-styleguide-markdown/SKILL.md) - the document structure this writes into
+- [rule-styleguide-naming](../../rule-styleguide-naming/SKILL.md) - naming, where code wins over prose style
+- [rule-styleguide-git](../../rule-styleguide-git/SKILL.md) - commit messages follow these rules too

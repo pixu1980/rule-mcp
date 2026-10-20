@@ -2,7 +2,7 @@
 
 /** Guardrail `no-speculative-audit-table`: No audit/history table without a consumer */
 export const noSpeculativeAuditTable = {
-  id: "no-speculative-audit-table",
+  id: "ai-no-speculative-audit-table",
   label: "No audit/history table without a consumer",
   description:
     "A new audit/history/log/event/archive table that nothing else in the change reads or writes is speculative structure. Covers SQL `CREATE TABLE` and Prisma `model` blocks, in snake_case or PascalCase. Add it when a consumer exists.",

@@ -1,18 +1,6 @@
----
-name: rule-styleguide-english
-description: >-
-  Use when writing, reviewing or americanizing any code comment, identifier, documentation, prompt, commit message, or generated file produced by or with this server. Every output is English, American spelling (color, behavior, organize, internationalized). Companion guards: fp-american-english and en-english-only-prose run on every rule_tool_check.
-tags:
-  - "english"
-  - "american-english"
-  - "copywriting"
-  - "spelling"
-  - "i18n"
-frameworks: [all]
-guardrails: [en-english-only-filenames, en-english-only-prose]
----
+# English
 
-# English Style Guide: always English, always American spelling
+> Absorbed from `rule-styleguide-english` into `rule-process-ai`. The rules it documents are the `ai-*` guardrails this skill owns.
 
 The house language of every file, comment, identifier, prompt and document this
 server helps generate is **English**, written in **American spelling** — even
@@ -78,6 +66,6 @@ When `rule_tool_check` reports `en-english-only-prose` or
 
 ## See also
 
-- [rule-styleguide-markdown](../rule-styleguide-markdown/SKILL.md) - Markdown style and tone
-- [rule-styleguide-i18n](../rule-styleguide-i18n/SKILL.md) - where translated strings belong
+- [rule-styleguide-markdown](../../rule-styleguide-markdown/SKILL.md) - Markdown style and tone
+- [rule-styleguide-i18n](../../rule-styleguide-i18n/SKILL.md) - where translated strings belong
 - [rule](../rule/SKILL.md) - Central skill index

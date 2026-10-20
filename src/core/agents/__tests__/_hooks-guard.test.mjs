@@ -68,12 +68,12 @@ check(
 );
 check("T3.2 an unrelated command passes silently", decide("ls -la").hookSpecificOutput.permissionDecision === "allow");
 check("T3.3 a clean commit passes silently", decide("git commit -m x", "bash", () => []).hookSpecificOutput.permissionDecision === "allow");
-const dirty = decide("git commit -m x", "bash", () => [{ file: "prisma/x.sql", failures: ["no-speculative-audit-table"] }]);
+const dirty = decide("git commit -m x", "bash", () => [{ file: "prisma/x.sql", failures: ["ai-no-speculative-audit-table"] }]);
 check(
   "T3.4 a failing commit asks, and names the file and the rule",
   dirty.hookSpecificOutput.permissionDecision === "ask" &&
     dirty.hookSpecificOutput.permissionDecisionReason.includes("prisma/x.sql") &&
-    dirty.hookSpecificOutput.permissionDecisionReason.includes("no-speculative-audit-table"),
+    dirty.hookSpecificOutput.permissionDecisionReason.includes("ai-no-speculative-audit-table"),
 );
 check("T3.5 an empty command is never blocked", decide("").hookSpecificOutput.permissionDecision === "allow");
 

@@ -62,11 +62,9 @@ export const BASELINE_SKILLS = [
   "rule-styleguide-naming",
   "rule-styleguide-file-tree",
   "rule-styleguide-a11y",
-  "rule-styleguide-fingerprint",
-  "rule-styleguide-english",
+  "rule-process-ai",
   "rule-styleguide-comments",
   "rule-styleguide-typescript",
-  "rule-process-simplicity",
   "rule-toolchain-pnpm",
 ];
 

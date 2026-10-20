@@ -311,4 +311,4 @@ prose never trips a rule.
 - [rule-styleguide-javascript](../rule-styleguide-javascript/SKILL.md) - the runtime rules underneath the types
 - [rule-styleguide-naming](../rule-styleguide-naming/SKILL.md) - naming for types, files and exports
 - [rule-process-code-review](../rule-process-code-review/SKILL.md) - where these get flagged
-- [rule-process-simplicity](../rule-process-simplicity/SKILL.md) - the same argument against unrequested abstraction
+- [rule-process-ai](../rule-process-ai/SKILL.md) - the same argument against unrequested abstraction
