@@ -1,7 +1,7 @@
 /** Guardrail `fp-no-emdash`: No em or en dashes */
 
 export const fpNoEmdash = {
-  id: "fp-no-emdash",
+  id: "ai-no-emdash",
   label: "No em or en dashes",
   description: "Prose uses ASCII punctuation. An em dash becomes a comma; an en dash becomes a hyphen.",
   check: (code, { helpers: { findFingerprints } }) => {

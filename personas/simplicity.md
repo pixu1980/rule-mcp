@@ -10,7 +10,7 @@ skills:
   - "deletion as a feature"
   - "complexity budgets"
 evidenceSkills:
-  - "pix-process-simplicity"
+  - "pix-process-ai"
   - "pix-styleguide-naming"
   - "pix-styleguide-file-tree"
   - "pix-styleguide-html"

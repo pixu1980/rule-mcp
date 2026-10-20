@@ -311,4 +311,4 @@ prose never trips a rule.
 - [pix-styleguide-javascript](../pix-styleguide-javascript/SKILL.md) - the runtime rules underneath the types
 - [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md) - naming for types, files and exports
 - [pix-process-code-review](../pix-process-code-review/SKILL.md) - where these get flagged
-- [pix-process-simplicity](../pix-process-simplicity/SKILL.md) - the same argument against unrequested abstraction
+- [pix-process-ai](../pix-process-ai/SKILL.md) - the same argument against unrequested abstraction

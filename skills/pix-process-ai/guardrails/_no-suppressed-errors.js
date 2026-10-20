@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 /** Guardrail `no-suppressed-errors`: No suppressed type, lint, or runtime errors */
 export const noSuppressedErrors = {
-  id: "no-suppressed-errors",
+  id: "ai-no-suppressed-errors",
   label: "No suppressed type, lint, or runtime errors",
   description: "Generated code must not silence errors with ignore directives or empty catch blocks.",
   check: (code) => {

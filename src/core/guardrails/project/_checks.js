@@ -154,7 +154,7 @@ export const PROJECT_CHECKS = [
       return {
         failCount: pairs.length,
         detail: [`${pairs.length} pair(s) with identical bodies`, `first: ${where} (similarity ${first?.similarity ?? "?"})`],
-        suggestion: "Keep one and call it, or make the difference explicit; see pix-process-simplicity.",
+        suggestion: "Keep one and call it, or make the difference explicit; see pix-process-ai.",
       };
     },
   },

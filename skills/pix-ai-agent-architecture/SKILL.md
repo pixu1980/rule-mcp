@@ -203,5 +203,5 @@ not features:
 - [pix-platform-agent](../pix-platform-agent/SKILL.md) - scaffold structure for an agent repository
 - [pix-ai-context-engineering](../pix-ai-context-engineering/SKILL.md) - the window the loop fills
 - [pix-ai-evals](../pix-ai-evals/SKILL.md) - deciding whether a harness change helped
-- [pix-process-ai-sdlc](../pix-process-ai-sdlc/SKILL.md) - where an agent sits in the delivery process
+- [pix-process-ai](../pix-process-ai/SKILL.md) - where an agent sits in the delivery process
 - [pix-backend-security](../pix-backend-security/SKILL.md) - authorizing the operation rather than the claim

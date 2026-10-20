@@ -8,7 +8,18 @@ import { join, resolve } from "node:path";
 import { parseSkillFrontmatter } from "../index.js";
 import { markdownLinks, skillDirectories, skillsRoot } from "./_docs.fixture.mjs";
 
-const removedSkillNames = ["pix-scaffolding", "pix-coverage-gates", "pix-devops-docker-standards", "pix-frontend-forms", "pix-frontend-forms-validation"];
+const removedSkillNames = [
+  "pix-scaffolding",
+  "pix-coverage-gates",
+  "pix-devops-docker-standards",
+  "pix-frontend-forms",
+  "pix-frontend-forms-validation",
+  // Merged into pix-process-ai, which owns their guardrails and references.
+  "pix-process-simplicity",
+  "pix-styleguide-english",
+  "pix-styleguide-fingerprint",
+  "pix-process-ai-sdlc",
+];
 
 console.log("pix skill documentation test: corpus");
 

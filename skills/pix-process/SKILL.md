@@ -27,18 +27,17 @@ frameworks: [all]
 
 ## Available Skills
 
-| Skill                                                          | Purpose                                             | When to Use                                                                       |
-| -------------------------------------------------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------- |
-| [pix-process-ai-sdlc](../pix-process-ai-sdlc/SKILL.md)         | Intent to incident, plan before code, gates, review | Planning how AI fits the lifecycle, not one task                                  |
-| [pix-process-adr](../pix-process-adr/SKILL.md)                 | Architecture Decision Records                       | After every scaffold/detect/detect call                                           |
-| [pix-process-bmad](../pix-process-bmad/SKILL.md)               | BMAD Method Framework                               | Full-project AI-driven delivery lifecycle                                         |
-| [pix-process-code-review](../pix-process-code-review/SKILL.md) | Code Review Workflow                                | Preparing and conducting risk-based PR/MR review                                  |
-| [pix-process-changelog](../pix-process-changelog/SKILL.md)     | Changelog generated from the commits                | Adding a changelog, or fixing one that drifted from the history                   |
-| `pix_tool_compress` / `/pix-compress`                          | Say it in fewer tokens                              | Writing answers, commits, reviews, docs without filler                            |
-| `pix_tool_handoff` / `/pix-handoff`                            | LLM Session Handoff                                 | Closing a session, resuming in new chat                                           |
-| [pix-process-npm-release](../pix-process-npm-release/SKILL.md) | Secure npm Release                                  | Publishing a package: Trusted Publishing, staged releases, supply-chain hardening |
-| [pix-process-readme](../pix-process-readme/SKILL.md)           | README structure for open source and internal repos | Writing or rewriting a project README                                             |
-| [pix-process-simplicity](../pix-process-simplicity/SKILL.md)   | Build Only What Was Asked                           | Before and during implementation, to keep the change minimal                      |
+| Skill                                                          | Purpose                                                                         | When to Use                                                                       |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| [pix-process-ai](../pix-process-ai/SKILL.md)                   | Intent to incident, plan before code, gates, review, scope and prose discipline | Planning how AI fits the lifecycle, or writing anything a reader will see         |
+| [pix-process-adr](../pix-process-adr/SKILL.md)                 | Architecture Decision Records                                                   | After every scaffold/detect/detect call                                           |
+| [pix-process-bmad](../pix-process-bmad/SKILL.md)               | BMAD Method Framework                                                           | Full-project AI-driven delivery lifecycle                                         |
+| [pix-process-code-review](../pix-process-code-review/SKILL.md) | Code Review Workflow                                                            | Preparing and conducting risk-based PR/MR review                                  |
+| [pix-process-changelog](../pix-process-changelog/SKILL.md)     | Changelog generated from the commits                                            | Adding a changelog, or fixing one that drifted from the history                   |
+| `pix_tool_compress` / `/pix-compress`                          | Say it in fewer tokens                                                          | Writing answers, commits, reviews, docs without filler                            |
+| `pix_tool_handoff` / `/pix-handoff`                            | LLM Session Handoff                                                             | Closing a session, resuming in new chat                                           |
+| [pix-process-npm-release](../pix-process-npm-release/SKILL.md) | Secure npm Release                                                              | Publishing a package: Trusted Publishing, staged releases, supply-chain hardening |
+| [pix-process-readme](../pix-process-readme/SKILL.md)           | README structure for open source and internal repos                             | Writing or rewriting a project README                                             |
 
 ## Quick Selection Guide
 
@@ -49,7 +48,7 @@ Need PR/MR review guidance?             → pix-process-code-review
 Need shorter answers without losing facts? → pix_tool_compress
 Need to close/resume a session?         → pix_tool_handoff
 Need to publish an npm package safely?  → pix-process-npm-release
-Need to keep a change minimal?          → pix-process-simplicity
+Need to keep a change minimal, or write English prose? → pix-process-ai
 ```
 
 ## See also

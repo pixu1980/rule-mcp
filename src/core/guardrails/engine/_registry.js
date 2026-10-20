@@ -62,11 +62,9 @@ export const BASELINE_SKILLS = [
   "pix-styleguide-naming",
   "pix-styleguide-file-tree",
   "pix-styleguide-a11y",
-  "pix-styleguide-fingerprint",
-  "pix-styleguide-english",
+  "pix-process-ai",
   "pix-styleguide-comments",
   "pix-styleguide-typescript",
-  "pix-process-simplicity",
   "pix-toolchain-pnpm",
 ];
 

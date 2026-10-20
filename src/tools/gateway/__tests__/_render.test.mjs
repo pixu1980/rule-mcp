@@ -87,7 +87,7 @@ test("a failing verdict renders every failure with and without file labels", () 
       passCount: 0,
       total: 2,
       failed: [
-        { id: "fp-no-emdash", label: "no em dashes", suggestion: "replace with a hyphen", file: "src/x.js" },
+        { id: "ai-no-emdash", label: "no em dashes", suggestion: "replace with a hyphen", file: "src/x.js" },
         { id: "js-if-braces", label: "braces on if", suggestion: "add braces" },
       ],
     },

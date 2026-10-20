@@ -1,7 +1,7 @@
 /** Guardrail `fp-american-english`: American English spelling */
 
 export const fpAmericanEnglish = {
-  id: "fp-american-english",
+  id: "ai-american-english",
   label: "American English spelling",
   description: "The house style is American English: -or over -our, -ize over -ise, -er over -re, -og over -ogue.",
   check: (code, { helpers: { findFingerprints } }) => {

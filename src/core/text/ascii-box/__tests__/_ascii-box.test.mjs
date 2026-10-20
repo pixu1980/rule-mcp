@@ -11,7 +11,7 @@
  * its own guard.
  *
  * @see src/core/text/ascii-box/index.js - the transformer
- * @see src/core/guardrail-defs.js - fp-box-rectangular
+ * @see src/core/guardrail-defs.js - ai-box-rectangular
  */
 
 import test from "node:test";
