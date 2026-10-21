@@ -48,7 +48,7 @@ Total: 84 skills.
 | 36  | `rule-platform-web`              | platform   | `docs/plans/skills/platform/rule-platform-web.md`               | planned |
 | 37  | `rule-platform-library`          | platform   | `docs/plans/skills/platform/rule-platform-library.md`           | planned |
 | 38  | `rule-platform-desktop`          | platform   | `docs/plans/skills/platform/rule-platform-desktop.md`           | planned |
-| 39  | `rule-platform-auth`             | platform   | `docs/plans/skills/platform/rule-platform-auth.md`              | pending |
+| 39  | `rule-platform-auth`             | platform   | `docs/plans/skills/platform/rule-platform-auth.md`              | planned |
 | 40  | `rule-platform-agent`            | platform   | `docs/plans/skills/platform/rule-platform-agent.md`             | pending |
 | 41  | `rule-platform`                  | platform   | `docs/plans/skills/platform/rule-platform.md`                   | pending |
 | 42  | `rule-meta-remix`                | meta       | `docs/plans/skills/meta/rule-meta-remix.md`                     | pending |
