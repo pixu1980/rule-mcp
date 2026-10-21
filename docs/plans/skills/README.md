@@ -5,6 +5,8 @@ One plan per skill at `docs/plans/skills/<area>/<skill>.md`.
 The router `rule` is not a skill and has no plan.
 Status: `pending`, `planned`, `implemented`.
 Run order and the four real dependencies: [`DEPENDENCIES.md`](DEPENDENCIES.md).
+Live ordering authority, stages, gates and per-plan progress:
+[`skills-plan.md`](skills-plan.md).
 
 Total: 81 skills in the catalog, each with a plan, plus one planned skill that
 does not exist yet (`rule-platform-mobile`, number 85). Numbers 40, 49 and 54 are
