@@ -43,7 +43,7 @@ Total: 84 skills.
 | 31  | `rule-process-changelog`         | process    | `docs/plans/skills/process/rule-process-changelog.md`           | planned |
 | 32  | `rule-process-bmad`              | process    | `docs/plans/skills/process/rule-process-bmad.md`                | planned |
 | 33  | `rule-process-ai`                | process    | `docs/plans/skills/process/rule-process-ai.md`                  | planned |
-| 34  | `rule-process-adr`               | process    | `docs/plans/skills/process/rule-process-adr.md`                 | pending |
+| 34  | `rule-process-adr`               | process    | `docs/plans/skills/process/rule-process-adr.md`                 | planned |
 | 35  | `rule-process`                   | process    | `docs/plans/skills/process/rule-process.md`                     | pending |
 | 36  | `rule-platform-web`              | platform   | `docs/plans/skills/platform/rule-platform-web.md`               | pending |
 | 37  | `rule-platform-library`          | platform   | `docs/plans/skills/platform/rule-platform-library.md`           | pending |
