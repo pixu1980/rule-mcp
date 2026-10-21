@@ -8,6 +8,7 @@ them by `handoff doctor`, so editing it by hand is work the next run throws away
 
 | #                                                                  | Title                                                                     | Date       | Branch            |
 | ------------------------------------------------------------------ | ------------------------------------------------------------------------- | ---------- | ----------------- |
+| [23](23-git-workflow-evolution-and-close-squash.md)                | Git workflow evolution, WS0-WS9, and the close-squash consolidation       | 2026-09-29 | main              |
 | [22](22-case-studies-launcher-and-registry-idempotency.md)         | case studies launcher and registry idempotency                            | 2026-09-23 | main              |
 | [21](21-fix-tool-and-nomenclature-alignment.md)                    | fix tool and nomenclature alignment                                       | 2026-09-23 | main              |
 | [20](20-persona-command-fold-and-red-suite-cleanup.md)             | persona command fold and red suite cleanup                                | 2026-09-23 | main              |
