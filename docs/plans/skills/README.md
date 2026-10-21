@@ -6,9 +6,9 @@ The router `pix` is not a skill and has no plan.
 Status: `pending`, `planned`, `implemented`.
 Run order and the four real dependencies: [`DEPENDENCIES.md`](DEPENDENCIES.md).
 
-Total: 83 skills in the catalog, and 84 plan rows: number 85 is the planned
-`pix-platform-mobile` skill, which does not exist yet. Number 40 is retired: the
-platform agent-runtime skill was removed from the catalog and its plan is gone.
+Total: 81 skills in the catalog, and 83 plan rows: number 85 is the planned
+`pix-platform-mobile` skill, which does not exist yet. Numbers 40, 49 and 54 are
+retired: those skills were removed from the catalog and their plans are gone.
 New rows append and existing numbers stay put, so the `#NN` references in the
 plans keep pointing at the same skill.
 
@@ -61,12 +61,10 @@ plans keep pointing at the same skill.
 | 46  | `pix-meta`                      | meta       | `docs/plans/skills/meta/pix-meta.md`                           | planned |
 | 47  | `pix-frontend-workers`          | frontend   | `docs/plans/skills/frontend/pix-frontend-workers.md`           | planned |
 | 48  | `pix-frontend-vue`              | frontend   | `docs/plans/skills/frontend/pix-frontend-vue.md`               | planned |
-| 49  | `pix-frontend-vanilla-reactive` | frontend   | `docs/plans/skills/frontend/pix-frontend-vanilla-reactive.md`  | pending |
 | 50  | `pix-frontend-template-engine`  | frontend   | `docs/plans/skills/frontend/pix-frontend-template-engine.md`   | pending |
 | 51  | `pix-frontend-svelte`           | frontend   | `docs/plans/skills/frontend/pix-frontend-svelte.md`            | pending |
 | 52  | `pix-frontend-solidjs`          | frontend   | `docs/plans/skills/frontend/pix-frontend-solidjs.md`           | pending |
 | 53  | `pix-frontend-react`            | frontend   | `docs/plans/skills/frontend/pix-frontend-react.md`             | pending |
-| 54  | `pix-frontend-custom-element`   | frontend   | `docs/plans/skills/frontend/pix-frontend-custom-element.md`    | pending |
 | 55  | `pix-frontend-angular`          | frontend   | `docs/plans/skills/frontend/pix-frontend-angular.md`           | pending |
 | 56  | `pix-frontend`                  | frontend   | `docs/plans/skills/frontend/pix-frontend.md`                   | pending |
 | 57  | `pix-devops-testing`            | devops     | `docs/plans/skills/devops/pix-devops-testing.md`               | pending |

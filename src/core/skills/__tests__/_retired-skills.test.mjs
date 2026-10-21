@@ -23,7 +23,7 @@ import test from "node:test";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "..");
 
 /** Skills the catalog retired. Adding one is a decision; removing one is not. */
-export const RETIRED = ["pix-platform-agent"];
+export const RETIRED = ["pix-platform-agent", "pix-frontend-vanilla-reactive", "pix-frontend-custom-element"];
 
 /** Every SKILL.md in the catalog. */
 function skillFiles() {

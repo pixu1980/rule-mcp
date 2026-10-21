@@ -24,7 +24,6 @@ evidenceSkills:
   - "pix-frontend-svelte"
   - "pix-frontend-angular"
   - "pix-frontend-solidjs"
-  - "pix-frontend-vanilla-reactive"
 aliases:
   - "ui-lead"
   - "ui/ux lead"

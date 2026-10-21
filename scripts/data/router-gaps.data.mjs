@@ -20,7 +20,7 @@
 /** `pix-<area>` -> the children its table does not link yet. */
 export const ROUTER_GAPS = {
   "pix-devops": ["pix-devops-deploy-preview"],
-  "pix-frontend": ["pix-frontend-custom-element", "pix-frontend-template-engine", "pix-frontend-vanilla-reactive"],
+  "pix-frontend": ["pix-frontend-template-engine"],
   "pix-platform": ["pix-platform-auth"],
   "pix-process": ["pix-process-tdd"],
   "pix-styleguide": ["pix-styleguide-comments", "pix-styleguide-file-tree"],

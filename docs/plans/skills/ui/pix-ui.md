@@ -94,7 +94,7 @@ The router cites the standard, it does not restate it:
 | -------------------------------------- | -------------------------------------------------------------- |
 | WCAG 2.2 and ARIA APG                  | `pix-styleguide-a11y`                                          |
 | W3C DTCG Design Tokens                 | `pix-ui-design-system`                                         |
-| Open UI and Custom Elements Everywhere | `pix-frontend-custom-element`, `pix-frontend-vanilla-reactive` |
+| Open UI and Custom Elements Everywhere | removed with ADR 152: neither skill exists any more |
 | MDN, `<dialog>` and Popover            | `pix-styleguide-html`                                          |
 
 ## Proposed guardrails

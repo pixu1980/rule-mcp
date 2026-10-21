@@ -46,6 +46,5 @@ export const FRAMEWORK_SKILL_MAP = {
   react: "pix-frontend-react",
   solid: "pix-frontend-solidjs",
   svelte: "pix-frontend-svelte",
-  vanilla: "pix-frontend-vanilla-reactive",
   vue: "pix-frontend-vue",
 };

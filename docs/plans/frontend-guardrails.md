@@ -19,8 +19,11 @@ Audited in this session (read-only):
 - `skills/pix-frontend-vue/` (1 rule: vue-no-class-binding)
 - `skills/pix-frontend-svelte/` (1 rule: svelte-no-class-directive)
 - `skills/pix-frontend-angular/` (1 rule: angular-no-ngclass)
-- `skills/pix-frontend-vanilla-reactive/` (9 rules)
-- `skills/pix-frontend-{custom-element,template-engine,workers,solidjs}/` (none)
+- `skills/pix-frontend-{template-engine,workers,solidjs}/` (none)
+
+Two skills audited here, `pix-frontend-vanilla-reactive` (9 rules) and
+`pix-frontend-custom-element`, were removed from the catalog afterwards (ADR 152),
+so the rule count in this plan is historical.
 
 Current state: 10 skills, 14 rules, and no `inherits` line anywhere, so a rule
 owned by one skill never reaches another.
@@ -61,7 +64,7 @@ or each framework skill keeps its own copy of the shared ids.
 
 ### Open item 2: two selected candidates have unselected owners
 
-`ce-valid` belongs to `pix-frontend-custom-element` and `template-escape` to
+`template-escape` belongs to
 `pix-frontend-template-engine`, but only the candidates were selected in the
 interview, not those two skills. Either the two skills join the target list, or
 the two rules ship on `pix-frontend` and run whenever the file matches.

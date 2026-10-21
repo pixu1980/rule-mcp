@@ -56,7 +56,6 @@ returns between 231 and 466 lines for each:
 | `pix-frontend-angular` | 327 |
 | `pix-frontend-svelte` | 325 |
 | `pix-frontend-solidjs` | 335 |
-| `pix-frontend-vanilla-reactive` | 231 |
 | `pix-meta-astro` | 347 |
 
 This is one parser-contract bug with seven victims, not seven mistakes. The
@@ -144,7 +143,7 @@ playbook, and the four folders moved as-is.
       and contains no See-also link.
 - [ ] This is one commit touching seven skills, and it is the item this plan
       shares with the astro, react, angular, svelte, solidjs and
-      vanilla-reactive plans.
+      solidjs plans.
 
 ## Phase 4 - Split and serve
 

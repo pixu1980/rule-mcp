@@ -18,7 +18,7 @@ Read in this session:
   about spacing, braces, const placement and JSDoc presence.
 - `skills/pix-styleguide-a11y/SKILL.md` (Playwright and axe-core, with the
   `a11y-test-required` guardrail), `skills/pix-toolchain-eslint/SKILL.md`
-  (the unicorn rules), `skills/pix-frontend-custom-element/SKILL.md`,
+  (the unicorn rules),
   `skills/pix-styleguide-comments/SKILL.md` and `skills/pix-devops-testing/SKILL.md`.
 
 Public sources verified in this session:
@@ -38,7 +38,7 @@ Problems found:
 | ----------------------------- | --------------------------------------------------------------------------------------------------- |
 | testing duplicated            | the Playwright and axe-core section restates `pix-styleguide-a11y`, which owns `a11y-test-required` |
 | idioms duplicated             | the unicorn idiom table restates `pix-toolchain-eslint`                                             |
-| DOM duplicated                | the custom element section restates `pix-frontend-custom-element`                                   |
+| DOM duplicated                | the custom element section restated a skill removed in ADR 152                     |
 | JSDoc has no clear owner      | it sits here while `pix-styleguide-comments` owns comment hygiene                                   |
 | 17 guardrails, all formatting | nothing checks the semantic rules a reader would expect                                             |
 | missing runtime topics        | modules, error handling, iterators, `structuredClone`, `AbortController`, memory                    |
@@ -51,7 +51,7 @@ Problems found:
 | Boundaries              | The skill owns runtime JS and language rules only                                     |
 | Testing                 | Removed; linked to `pix-styleguide-a11y`                                              |
 | Idioms table            | Reduced to a link to `pix-toolchain-eslint`                                           |
-| DOM and custom elements | Removed; linked to `pix-frontend-custom-element`                                      |
+| DOM and custom elements | Removed; the skill it linked was itself removed in ADR 152                           |
 | JSDoc                   | Moves to `pix-styleguide-comments` as part of the runtime-only boundary               |
 | Missing topics          | Modules, errors, iterators, `structuredClone`, `AbortController`, memory              |
 | Async                   | Expanded, and its claims verified against MDN and TC39                                |
@@ -80,7 +80,7 @@ Two answers crossed again, and the more specific one wins:
 2. The unicorn idiom table becomes one sentence and a link to
    `pix-toolchain-eslint`, which owns the rules and their tuning.
 3. The DOM and custom element section becomes a link to
-   `pix-frontend-custom-element` and `pix-frontend-vanilla-reactive`.
+   the custom element and reactive-vanilla skills, both removed in ADR 152.
 4. JSDoc moves to `pix-styleguide-comments`, which already owns comment
    hygiene; this skill keeps only the one-line rule that exported symbols are
    documented.
