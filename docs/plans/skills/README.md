@@ -6,9 +6,11 @@ The router `pix` is not a skill and has no plan.
 Status: `pending`, `planned`, `implemented`.
 Run order and the four real dependencies: [`DEPENDENCIES.md`](DEPENDENCIES.md).
 
-Total: 83 skills. Number 40 is retired: the platform agent-runtime skill was
-removed from the catalog and its plan is gone. The other numbers stay as they
-are, so the `#NN` references in the plans keep pointing at the same skill.
+Total: 83 skills in the catalog, and 84 plan rows: number 85 is the planned
+`pix-platform-mobile` skill, which does not exist yet. Number 40 is retired: the
+platform agent-runtime skill was removed from the catalog and its plan is gone.
+New rows append and existing numbers stay put, so the `#NN` references in the
+plans keep pointing at the same skill.
 
 | #   | Skill                           | Area       | Plan path                                                      | Status  |
 | --- | ------------------------------- | ---------- | -------------------------------------------------------------- | ------- |
@@ -51,7 +53,7 @@ are, so the `#NN` references in the plans keep pointing at the same skill.
 | 37  | `pix-platform-library`          | platform   | `docs/plans/skills/platform/pix-platform-library.md`           | planned |
 | 38  | `pix-platform-desktop`          | platform   | `docs/plans/skills/platform/pix-platform-desktop.md`           | planned |
 | 39  | `pix-platform-auth`             | platform   | `docs/plans/skills/platform/pix-platform-auth.md`              | planned |
-| 41  | `pix-platform`                  | platform   | `docs/plans/skills/platform/pix-platform.md`                   | pending |
+| 41  | `pix-platform`                  | platform   | `docs/plans/skills/platform/pix-platform.md`                   | planned |
 | 42  | `pix-meta-remix`                | meta       | `docs/plans/skills/meta/pix-meta-remix.md`                     | pending |
 | 43  | `pix-meta-nuxt`                 | meta       | `docs/plans/skills/meta/pix-meta-nuxt.md`                      | pending |
 | 44  | `pix-meta-next`                 | meta       | `docs/plans/skills/meta/pix-meta-next.md`                      | pending |
@@ -95,3 +97,4 @@ are, so the `#NN` references in the plans keep pointing at the same skill.
 | 82  | `pix-ai-context-engineering`    | ai         | `docs/plans/skills/ai/pix-ai-context-engineering.md`           | pending |
 | 83  | `pix-ai-agent-architecture`     | ai         | `docs/plans/skills/ai/pix-ai-agent-architecture.md`            | pending |
 | 84  | `pix-ai`                        | ai         | `docs/plans/skills/ai/pix-ai.md`                               | pending |
+| 85  | `pix-platform-mobile`           | platform   | `docs/plans/skills/platform/pix-platform-mobile.md`            | planned |
