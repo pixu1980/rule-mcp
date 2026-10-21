@@ -4,9 +4,9 @@
 <p><strong>Deterministic skills for every AI coding agent, without calling an LLM.</strong></p>
 <p>An MCP server that routes free-text requests to the right skill, serves styleguides and templates as tools and resources, and validates generated code with guardrails. Same behavior behind Claude, GPT, Gemini, Llama, or Qwen. Local-first. Model-agnostic.</p>
 <ul data-part="stats">
-<li><strong>84 skills</strong></li>
-<li><strong>105 tools</strong></li>
-<li><strong>176 resources</strong></li>
+<li><strong>83 skills</strong></li>
+<li><strong>104 tools</strong></li>
+<li><strong>174 resources</strong></li>
 <li><strong>38 prompts</strong></li>
 <li><strong>41 slash commands</strong></li>
 </ul>

@@ -23,7 +23,6 @@ frameworks: [all]
 | [pix-platform-desktop](../pix-platform-desktop/SKILL.md) | Desktop (Electron) | Cross-platform desktop apps, IPC, native APIs               |
 | [pix-platform-library](../pix-platform-library/SKILL.md) | npm package        | Library authoring, dual CJS/ESM, public API                 |
 | [pix-platform-web](../pix-platform-web/SKILL.md)         | Web platform       | PWA, service workers, offline, performance budgets          |
-| [pix-platform-agent](../pix-platform-agent/SKILL.md)     | Agent runtime      | Agent-facing projects: skills, MCP surfaces, tool contracts |
 
 ## Quick Selection Guide
 
@@ -31,7 +30,6 @@ frameworks: [all]
 Need desktop app (Electron)?            → pix-platform-desktop
 Need to publish an npm package?         → pix-platform-library
 Need PWA / offline web app?             → pix-platform-web
-Need to build for an AI agent host?     → pix-platform-agent
 ```
 
 ## See also

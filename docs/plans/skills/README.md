@@ -6,7 +6,9 @@ The router `pix` is not a skill and has no plan.
 Status: `pending`, `planned`, `implemented`.
 Run order and the four real dependencies: [`DEPENDENCIES.md`](DEPENDENCIES.md).
 
-Total: 84 skills.
+Total: 83 skills. Number 40 is retired: the platform agent-runtime skill was
+removed from the catalog and its plan is gone. The other numbers stay as they
+are, so the `#NN` references in the plans keep pointing at the same skill.
 
 | #   | Skill                           | Area       | Plan path                                                      | Status  |
 | --- | ------------------------------- | ---------- | -------------------------------------------------------------- | ------- |
@@ -49,7 +51,6 @@ Total: 84 skills.
 | 37  | `pix-platform-library`          | platform   | `docs/plans/skills/platform/pix-platform-library.md`           | planned |
 | 38  | `pix-platform-desktop`          | platform   | `docs/plans/skills/platform/pix-platform-desktop.md`           | planned |
 | 39  | `pix-platform-auth`             | platform   | `docs/plans/skills/platform/pix-platform-auth.md`              | planned |
-| 40  | `pix-platform-agent`            | platform   | `docs/plans/skills/platform/pix-platform-agent.md`             | pending |
 | 41  | `pix-platform`                  | platform   | `docs/plans/skills/platform/pix-platform.md`                   | pending |
 | 42  | `pix-meta-remix`                | meta       | `docs/plans/skills/meta/pix-meta-remix.md`                     | pending |
 | 43  | `pix-meta-nuxt`                 | meta       | `docs/plans/skills/meta/pix-meta-nuxt.md`                      | pending |

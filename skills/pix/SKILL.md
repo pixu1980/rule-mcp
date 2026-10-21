@@ -83,7 +83,6 @@ Build AI agent repositories, providers, tools, registries, and tests.
 | Skill                                                | Tool                 | Frameworks   | Use when                                                                                                                                                   |
 | ---------------------------------------------------- | -------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [pix-ai](../pix-ai/SKILL.md)                         | `pix_ai`             | all          | Index of all AI/agent skills: agent scaffolding on `@pix/pix-galaxy-core` and framework-agnostic agent guidance.                                           |
-| [pix-platform-agent](../pix-platform-agent/SKILL.md) | `pix_platform_agent` | node, agents | Scaffold and maintain AI Agent projects. Covers structure, tools, env config, testing, and containerization without prescribing any specific core library. |
 
 ### Architecture
 
@@ -230,7 +229,7 @@ Design and route visible interface work while preserving pix implementation cons
 | Task                     | Primary                                             | Secondary                                         | Deterministic tools                                   |
 | ------------------------ | --------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------- |
 | Unknown project          | `pix`                                               | `pix-process-adr`                                 | `pix_tool_detect`, `pix_tool_search`                  |
-| AI agent app             | `pix-ai` + `pix-platform-agent`                     | `pix-ai-agent-architecture`, `pix-devops-testing` | `pix_tool_check`, `pix_tool_process_adr`              |
+| AI agent app             | `pix-ai`                                            | `pix-ai-agent-architecture`, `pix-devops-testing` | `pix_tool_check`, `pix_tool_process_adr`              |
 | New web UI               | `pix-ui` + `pix-ui-design-system` + framework skill | `pix-styleguide`, `pix-platform-web`              | `pix://templates`, `pix_tool_check`                   |
 | React/Vite app           | `pix-frontend-react`                                | `pix-toolchain-vite`, `pix-styleguide`            | `pix_tool_styleguide` (scaffold), `pix_tool_check`    |
 | Backend API              | `pix-backend-node`                                  | `pix-backend-security`                            | `pix_tool_check`, `pix_tool_process_adr`              |
@@ -303,7 +302,7 @@ Start from the matching scaffold and follow it end to end:
 
 - Backend API or service: `pix-backend-node`
 - Frontend: the framework skill (`pix-frontend-*`) plus `pix-styleguide`
-- AI agent project: `pix-ai` with `pix-platform-agent`
+- AI agent project: `pix-ai` with `pix-ai-agent-architecture`
 - Testing configuration lands with `pix-devops-testing`
 
 ## See also

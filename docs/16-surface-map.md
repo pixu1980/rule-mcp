@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Command / Tool / Skill map (124)
+## Command / Tool / Skill map (123)
 
 One row per slash command, then every catalog skill that has no slash of its
 own (ADR 117: leaf skills are reached through area hubs or the router), then
@@ -95,7 +95,6 @@ Regenerate with `pnpm census`.
 | -                          | `pix_tool_meta_next`                 | `pix-meta-next`                 | Use when building Next.js applications.                                                                                                                                                                                                                          |
 | -                          | `pix_tool_meta_nuxt`                 | `pix-meta-nuxt`                 | Use when building Nuxt.js applications.                                                                                                                                                                                                                          |
 | -                          | `pix_tool_meta_remix`                | `pix-meta-remix`                | Use when building Remix or React Router applications.                                                                                                                                                                                                            |
-| -                          | `pix_tool_platform_agent`            | `pix-platform-agent`            | Use when scaffolding or maintaining AI Agent projects.                                                                                                                                                                                                           |
 | -                          | `pix_tool_platform_auth`             | `pix-platform-auth`             | Choose the right authentication strategy for a web app in 2026.                                                                                                                                                                                                  |
 | -                          | `pix_tool_platform_desktop`          | `pix-platform-desktop`          | Use when building desktop applications with Electron.                                                                                                                                                                                                            |
 | -                          | `pix_tool_platform_library`          | `pix-platform-library`          | Use when developing reusable npm packages.                                                                                                                                                                                                                       |
