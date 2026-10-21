@@ -6,9 +6,11 @@ The router `rule` is not a skill and has no plan.
 Status: `pending`, `planned`, `implemented`.
 Run order and the four real dependencies: [`DEPENDENCIES.md`](DEPENDENCIES.md).
 
-Total: 83 skills. Number 40 is retired: the platform agent-runtime skill was
-removed from the catalog and its plan is gone. The other numbers stay as they
-are, so the `#NN` references in the plans keep pointing at the same skill.
+Total: 83 skills in the catalog, and 84 plan rows: number 85 is the planned
+`rule-platform-mobile` skill, which does not exist yet. Number 40 is retired: the
+platform agent-runtime skill was removed from the catalog and its plan is gone.
+New rows append and existing numbers stay put, so the `#NN` references in the
+plans keep pointing at the same skill.
 
 | #   | Skill                           | Area       | Plan path                                                      | Status  |
 | --- | ------------------------------- | ---------- | -------------------------------------------------------------- | ------- |
@@ -51,7 +53,7 @@ are, so the `#NN` references in the plans keep pointing at the same skill.
 | 37  | `rule-platform-library`          | platform   | `docs/plans/skills/platform/rule-platform-library.md`           | planned |
 | 38  | `rule-platform-desktop`          | platform   | `docs/plans/skills/platform/rule-platform-desktop.md`           | planned |
 | 39  | `rule-platform-auth`             | platform   | `docs/plans/skills/platform/rule-platform-auth.md`              | planned |
-| 41  | `rule-platform`                  | platform   | `docs/plans/skills/platform/rule-platform.md`                   | pending |
+| 41  | `rule-platform`                  | platform   | `docs/plans/skills/platform/rule-platform.md`                   | planned |
 | 42  | `rule-meta-remix`                | meta       | `docs/plans/skills/meta/rule-meta-remix.md`                     | pending |
 | 43  | `rule-meta-nuxt`                 | meta       | `docs/plans/skills/meta/rule-meta-nuxt.md`                      | pending |
 | 44  | `rule-meta-next`                 | meta       | `docs/plans/skills/meta/rule-meta-next.md`                      | pending |
@@ -95,3 +97,4 @@ are, so the `#NN` references in the plans keep pointing at the same skill.
 | 82  | `rule-ai-context-engineering`    | ai         | `docs/plans/skills/ai/rule-ai-context-engineering.md`           | pending |
 | 83  | `rule-ai-agent-architecture`     | ai         | `docs/plans/skills/ai/rule-ai-agent-architecture.md`            | pending |
 | 84  | `rule-ai`                        | ai         | `docs/plans/skills/ai/rule-ai.md`                               | pending |
+| 85  | `rule-platform-mobile`           | platform   | `docs/plans/skills/platform/rule-platform-mobile.md`            | planned |
