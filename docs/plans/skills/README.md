@@ -41,7 +41,7 @@ Total: 84 skills.
 | 29  | `rule-process-npm-release`       | process    | `docs/plans/skills/process/rule-process-npm-release.md`         | planned |
 | 30  | `rule-process-code-review`       | process    | `docs/plans/skills/process/rule-process-code-review.md`         | planned |
 | 31  | `rule-process-changelog`         | process    | `docs/plans/skills/process/rule-process-changelog.md`           | planned |
-| 32  | `rule-process-bmad`              | process    | `docs/plans/skills/process/rule-process-bmad.md`                | pending |
+| 32  | `rule-process-bmad`              | process    | `docs/plans/skills/process/rule-process-bmad.md`                | planned |
 | 33  | `rule-process-ai`                | process    | `docs/plans/skills/process/rule-process-ai.md`                  | planned |
 | 34  | `rule-process-adr`               | process    | `docs/plans/skills/process/rule-process-adr.md`                 | pending |
 | 35  | `rule-process`                   | process    | `docs/plans/skills/process/rule-process.md`                     | pending |
