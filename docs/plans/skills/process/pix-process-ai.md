@@ -94,7 +94,7 @@ The six-line contract is now in `SKILL.md` and the catalog is in the reference. 
 
 ## Workstream F - The reduction signal
 
-28 phrases, English only, undocumented until this plan. The section naming them, and the corpus test that keeps them honest, are still open; the Italian half is `decision-models` territory and is not duplicated here.
+28 phrases, English only, undocumented until this plan. The section naming them, and the corpus test that keeps them honest, are still open; the Italian half lives on `feat/decision-models` and is not duplicated here.
 
 ## Phases
 
