@@ -6,8 +6,8 @@ The router `rule` is not a skill and has no plan.
 Status: `pending`, `planned`, `implemented`.
 Run order and the four real dependencies: [`DEPENDENCIES.md`](DEPENDENCIES.md).
 
-Total: 81 skills in the catalog, and 83 plan rows: number 85 is the planned
-`rule-platform-mobile` skill, which does not exist yet. Numbers 40, 49 and 54 are
+Total: 81 skills in the catalog, each with a plan, plus one planned skill that
+does not exist yet (`rule-platform-mobile`, number 85). Numbers 40, 49 and 54 are
 retired: those skills were removed from the catalog and their plans are gone.
 New rows append and existing numbers stay put, so the `#NN` references in the
 plans keep pointing at the same skill.
@@ -90,9 +90,9 @@ plans keep pointing at the same skill.
 | 77  | `rule-backend-fastify`           | backend    | `docs/plans/skills/backend/rule-backend-fastify.md`             | planned |
 | 78  | `rule-backend-express`           | backend    | `docs/plans/skills/backend/rule-backend-express.md`             | planned |
 | 79  | `rule-backend`                   | backend    | `docs/plans/skills/backend/rule-backend.md`                     | planned |
-| 80  | `rule-ai-prompting`              | ai         | `docs/plans/skills/ai/rule-ai-prompting.md`                     | pending |
-| 81  | `rule-ai-evals`                  | ai         | `docs/plans/skills/ai/rule-ai-evals.md`                         | pending |
-| 82  | `rule-ai-context-engineering`    | ai         | `docs/plans/skills/ai/rule-ai-context-engineering.md`           | pending |
-| 83  | `rule-ai-agent-architecture`     | ai         | `docs/plans/skills/ai/rule-ai-agent-architecture.md`            | pending |
-| 84  | `rule-ai`                        | ai         | `docs/plans/skills/ai/rule-ai.md`                               | pending |
+| 80  | `rule-ai-prompting`              | ai         | `docs/plans/skills/ai/rule-ai-prompting.md`                     | planned |
+| 81  | `rule-ai-evals`                  | ai         | `docs/plans/skills/ai/rule-ai-evals.md`                         | planned |
+| 82  | `rule-ai-context-engineering`    | ai         | `docs/plans/skills/ai/rule-ai-context-engineering.md`           | planned |
+| 83  | `rule-ai-agent-architecture`     | ai         | `docs/plans/skills/ai/rule-ai-agent-architecture.md`            | planned |
+| 84  | `rule-ai`                        | ai         | `docs/plans/skills/ai/rule-ai.md`                               | planned |
 | 85  | `rule-platform-mobile`           | platform   | `docs/plans/skills/platform/rule-platform-mobile.md`            | planned |
