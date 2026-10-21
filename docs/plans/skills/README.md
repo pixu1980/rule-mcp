@@ -46,7 +46,7 @@ Total: 84 skills.
 | 34  | `rule-process-adr`               | process    | `docs/plans/skills/process/rule-process-adr.md`                 | planned |
 | 35  | `rule-process`                   | process    | `docs/plans/skills/process/rule-process.md`                     | planned |
 | 36  | `rule-platform-web`              | platform   | `docs/plans/skills/platform/rule-platform-web.md`               | planned |
-| 37  | `rule-platform-library`          | platform   | `docs/plans/skills/platform/rule-platform-library.md`           | pending |
+| 37  | `rule-platform-library`          | platform   | `docs/plans/skills/platform/rule-platform-library.md`           | planned |
 | 38  | `rule-platform-desktop`          | platform   | `docs/plans/skills/platform/rule-platform-desktop.md`           | pending |
 | 39  | `rule-platform-auth`             | platform   | `docs/plans/skills/platform/rule-platform-auth.md`              | pending |
 | 40  | `rule-platform-agent`            | platform   | `docs/plans/skills/platform/rule-platform-agent.md`             | pending |
