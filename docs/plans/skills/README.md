@@ -44,7 +44,7 @@ Total: 84 skills.
 | 32  | `pix-process-bmad`              | process    | `docs/plans/skills/process/pix-process-bmad.md`                | planned |
 | 33  | `pix-process-ai`                | process    | `docs/plans/skills/process/pix-process-ai.md`                  | planned |
 | 34  | `pix-process-adr`               | process    | `docs/plans/skills/process/pix-process-adr.md`                 | planned |
-| 35  | `pix-process`                   | process    | `docs/plans/skills/process/pix-process.md`                     | pending |
+| 35  | `pix-process`                   | process    | `docs/plans/skills/process/pix-process.md`                     | planned |
 | 36  | `pix-platform-web`              | platform   | `docs/plans/skills/platform/pix-platform-web.md`               | pending |
 | 37  | `pix-platform-library`          | platform   | `docs/plans/skills/platform/pix-platform-library.md`           | pending |
 | 38  | `pix-platform-desktop`          | platform   | `docs/plans/skills/platform/pix-platform-desktop.md`           | pending |
