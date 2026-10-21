@@ -80,7 +80,7 @@ test("detectProjectGraph falls back to the direct read when the client fails", (
 
 test("getFrameworkSuggestion falls back for unknown frameworks", () => {
   assert.equal(getFrameworkSuggestion("react").skillName, "rule-frontend-react", "known frameworks map");
-  assert.equal(getFrameworkSuggestion("mystery").skillName, "rule-frontend-vanilla-reactive", "unknown frameworks fall back");
+  assert.equal(getFrameworkSuggestion("mystery").skillName, "rule-frontend", "unknown frameworks fall back to the frontend area");
 });
 
 test("hasTokensave answers from the graph directory", () => {

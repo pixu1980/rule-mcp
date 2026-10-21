@@ -6,9 +6,9 @@ The router `rule` is not a skill and has no plan.
 Status: `pending`, `planned`, `implemented`.
 Run order and the four real dependencies: [`DEPENDENCIES.md`](DEPENDENCIES.md).
 
-Total: 83 skills in the catalog, and 84 plan rows: number 85 is the planned
-`rule-platform-mobile` skill, which does not exist yet. Number 40 is retired: the
-platform agent-runtime skill was removed from the catalog and its plan is gone.
+Total: 81 skills in the catalog, and 83 plan rows: number 85 is the planned
+`rule-platform-mobile` skill, which does not exist yet. Numbers 40, 49 and 54 are
+retired: those skills were removed from the catalog and their plans are gone.
 New rows append and existing numbers stay put, so the `#NN` references in the
 plans keep pointing at the same skill.
 
@@ -61,12 +61,10 @@ plans keep pointing at the same skill.
 | 46  | `rule-meta`                      | meta       | `docs/plans/skills/meta/rule-meta.md`                           | planned |
 | 47  | `rule-frontend-workers`          | frontend   | `docs/plans/skills/frontend/rule-frontend-workers.md`           | planned |
 | 48  | `rule-frontend-vue`              | frontend   | `docs/plans/skills/frontend/rule-frontend-vue.md`               | planned |
-| 49  | `rule-frontend-vanilla-reactive` | frontend   | `docs/plans/skills/frontend/rule-frontend-vanilla-reactive.md`  | pending |
 | 50  | `rule-frontend-template-engine`  | frontend   | `docs/plans/skills/frontend/rule-frontend-template-engine.md`   | pending |
 | 51  | `rule-frontend-svelte`           | frontend   | `docs/plans/skills/frontend/rule-frontend-svelte.md`            | pending |
 | 52  | `rule-frontend-solidjs`          | frontend   | `docs/plans/skills/frontend/rule-frontend-solidjs.md`           | pending |
 | 53  | `rule-frontend-react`            | frontend   | `docs/plans/skills/frontend/rule-frontend-react.md`             | pending |
-| 54  | `rule-frontend-custom-element`   | frontend   | `docs/plans/skills/frontend/rule-frontend-custom-element.md`    | pending |
 | 55  | `rule-frontend-angular`          | frontend   | `docs/plans/skills/frontend/rule-frontend-angular.md`           | pending |
 | 56  | `rule-frontend`                  | frontend   | `docs/plans/skills/frontend/rule-frontend.md`                   | pending |
 | 57  | `rule-devops-testing`            | devops     | `docs/plans/skills/devops/rule-devops-testing.md`               | pending |

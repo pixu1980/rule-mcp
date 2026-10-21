@@ -45,14 +45,14 @@ function getSkillMetadata(skillName) {
 }
 
 /**
- * The four skills the target retains that the source does not ship. They are a
+ * The two skills the target retains that the source does not ship. They are a
  * real part of the rule union and route normally; the routing-corpus thresholds
  * were measured on the source's skill set, so the corpus tests opt into the
  * source-commensurate universe (RULE_MCP_SKILL_UNIVERSE=base) to keep the
  * measurement comparable - their extra bodies would otherwise dilute the
  * term-document frequencies (idf) the scorer's numbers are pinned to.
  */
-const TARGET_ONLY_SKILLS = new Set(["rule-frontend-custom-element", "rule-frontend-template-engine", "rule-frontend-vanilla-reactive", "rule-platform-auth"]);
+const TARGET_ONLY_SKILLS = new Set(["rule-frontend-template-engine", "rule-platform-auth"]);
 
 /**
  * Every skill name that resolves, sorted.

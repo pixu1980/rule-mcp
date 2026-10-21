@@ -26,7 +26,7 @@ export const SUITES = {
     // out: demo.test.js is a Playwright spec, and _parse-csv.test.js is a vitest
     // example that runs in the user's project.
     globs: ["skills/**/tests/*.test.js", "skills/**/scripts/*.test.mjs"],
-    exclude: ["skills/rule-frontend-vanilla-reactive/tests/demo.test.js", "skills/rule-frontend-workers/examples/src/tasks/_parse-csv.test.js"],
+    exclude: ["skills/rule-frontend-workers/examples/src/tasks/_parse-csv.test.js"],
   },
   foundations: {
     globs: ["tests/docs/**/*.test.mjs", "src/**/__tests__/*.test.mjs", "scripts/**/__tests__/*.test.mjs", "skills/**/__tests__/*.test.mjs"],

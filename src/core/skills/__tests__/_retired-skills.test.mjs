@@ -23,7 +23,7 @@ import test from "node:test";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "..");
 
 /** Skills the catalog retired. Adding one is a decision; removing one is not. */
-export const RETIRED = ["rule-platform-agent"];
+export const RETIRED = ["rule-platform-agent", "rule-frontend-vanilla-reactive", "rule-frontend-custom-element"];
 
 /** Every SKILL.md in the catalog. */
 function skillFiles() {

@@ -24,7 +24,6 @@ evidenceSkills:
   - "rule-frontend-svelte"
   - "rule-frontend-angular"
   - "rule-frontend-solidjs"
-  - "rule-frontend-vanilla-reactive"
 aliases:
   - "ui-lead"
   - "ui/ux lead"

@@ -46,6 +46,5 @@ export const FRAMEWORK_SKILL_MAP = {
   react: "rule-frontend-react",
   solid: "rule-frontend-solidjs",
   svelte: "rule-frontend-svelte",
-  vanilla: "rule-frontend-vanilla-reactive",
   vue: "rule-frontend-vue",
 };

@@ -43,7 +43,6 @@ export const FAMILY_SCOPE = {
   "framework:astro": "A check whose framework is Astro",
   "framework:solid": "A check whose framework is Solid",
   "framework:vanilla": "A check with no framework named",
-  "framework:vanilla-reactive": "A check on a reactive vanilla component",
   js: "Any JavaScript or TypeScript source",
   quality: "Every check: types, manifests, prose, comments, simplicity",
   react: "A check against a `rule-frontend-react` skill",

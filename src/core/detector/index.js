@@ -24,7 +24,7 @@ import { BUILD_TOOL_RULES, FRAMEWORK_RULES, FRAMEWORK_SKILL_MAP } from "./_rules
  * @returns {{ skillName: string, toolName: string }}
  */
 export function getFrameworkSuggestion(framework) {
-  const skillName = FRAMEWORK_SKILL_MAP[framework] || "rule-frontend-vanilla-reactive";
+  const skillName = FRAMEWORK_SKILL_MAP[framework] || "rule-frontend";
   const displayName = skillName.replace(/^rule-/, "").replaceAll("-", "_");
 
   return { skillName, toolName: `rule_tool_${displayName}` };

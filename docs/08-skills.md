@@ -7,14 +7,14 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Skills (83)
+## Skills (81)
 
 The catalog. A skill is the source of truth for its topic; the tool that
 serves it carries no rules of its own, and the guardrails it is checked
 against are in [`14-guardrails.md`](14-guardrails.md).
 
 The router's own directory, `skills/rule/`, mints no skill tool, which is why
-the catalog is 83 and the directory count is 84.
+the catalog is 81 and the directory count is 82.
 
 | Area                      | Skills | Covers                                                                            |
 | ------------------------- | ------ | --------------------------------------------------------------------------------- |
@@ -22,7 +22,7 @@ the catalog is 83 and the directory count is 84.
 | [backend](#backend)       | 9      | Services and APIs: Node frameworks, API design, backend security                  |
 | [data](#data)             | 9      | Databases and storage, and the shape and validation of the data that reaches them |
 | [devops](#devops)         | 5      | Pipelines, containers, observability, testing, versioning                         |
-| [frontend](#frontend)     | 10     | Frameworks and the code that runs in a browser                                    |
+| [frontend](#frontend)     | 8      | Frameworks and the code that runs in a browser                                    |
 | [meta](#meta)             | 5      |                                                                                   |
 | [platform](#platform)     | 5      | Where the code ships: web, desktop, mobile, library, agent                        |
 | [process](#process)       | 9      | How work is done: reviews, ADRs, changelogs, handoffs, simplicity                 |
@@ -80,18 +80,16 @@ the catalog is 83 and the directory count is 84.
 
 ### frontend
 
-| Skill                           | Tool                                 | Frameworks | Description                                                                                                                                                                                                                                                      |
-| ------------------------------- | ------------------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `rule-frontend`                  | `rule_tool_frontend`                  | all        | Use when building frontend UIs to route to the correct framework skill. Covers React, Vue, Angular, Svelte, SolidJS, Astro, and meta-frameworks.                                                                                                                 |
-| `rule-frontend-angular`          | `rule_tool_frontend_angular`          | angular    | Use when building Angular standalone components. Follows rule principles: zero CSS classes, semantic HTML, barrel file tree, data-part selectors.                                                                                                                 |
-| `rule-frontend-custom-element`   | `rule_tool_frontend_custom_element`   | vanilla    | Build Custom Elements v1 (autonomous and customized built-ins) in light DOM with zero dependencies: metadata-driven componentDecorator in a static {} block, adoptedStyleSheets, code-splitting (consts/utils/attributes/events/template), and a CLI scaffolder. |
-| `rule-frontend-react`            | `rule_tool_frontend_react`            | react      | Use when building React 18+ functional components. Follows rule principles: zero CSS classes, semantic HTML, barrel file tree, data-part selectors.                                                                                                               |
-| `rule-frontend-solidjs`          | `rule_tool_frontend_solidjs`          | solidjs    | Use when building SolidJS applications with fine-grained reactivity. Follows rule principles: zero CSS classes, semantic HTML, Signals, barrel file tree.                                                                                                         |
-| `rule-frontend-svelte`           | `rule_tool_frontend_svelte`           | svelte     | Use when building Svelte 5 applications with runes API. Follows rule principles: zero CSS classes, semantic HTML, $state/$derived, barrel file tree.                                                                                                              |
-| `rule-frontend-template-engine`  | `rule_tool_frontend_template_engine`  | vanilla    | File-based HTML template engine for static HTML generation, SSG, and SSR: extends/include/block layout inheritance, if/for/switch directives, {{ }} interpolation with filter pipelines, tagged template literals, and a browser-safe tagged runtime.            |
-| `rule-frontend-vanilla-reactive` | `rule_tool_frontend_vanilla_reactive` | vanilla    | Use when building reactive web UIs without frameworks. Covers Proxy-based Store, Signals, html`` tagged templates, custom elements, and adoptedStyleSheets.                                                                                                      |
-| `rule-frontend-vue`              | `rule_tool_frontend_vue`              | vue        | Use when building Vue 3 Composition API components. Follows rule principles: zero CSS classes, semantic HTML, barrel file tree, data-part selectors.                                                                                                              |
-| `rule-frontend-workers`          | `rule_tool_frontend_workers`          | all        | Use when browser JavaScript blocks the main thread. Covers Web Workers, worker pools, transferables, SharedArrayBuffer, OffscreenCanvas, scheduler.yield, and INP/LoAF measurement.                                                                              |
+| Skill                          | Tool                                | Frameworks | Description                                                                                                                                                                                                                                           |
+| ------------------------------ | ----------------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `rule-frontend`                 | `rule_tool_frontend`                 | all        | Use when building frontend UIs to route to the correct framework skill. Covers React, Vue, Angular, Svelte, SolidJS, Astro, and meta-frameworks.                                                                                                      |
+| `rule-frontend-angular`         | `rule_tool_frontend_angular`         | angular    | Use when building Angular standalone components. Follows rule principles: zero CSS classes, semantic HTML, barrel file tree, data-part selectors.                                                                                                      |
+| `rule-frontend-react`           | `rule_tool_frontend_react`           | react      | Use when building React 18+ functional components. Follows rule principles: zero CSS classes, semantic HTML, barrel file tree, data-part selectors.                                                                                                    |
+| `rule-frontend-solidjs`         | `rule_tool_frontend_solidjs`         | solidjs    | Use when building SolidJS applications with fine-grained reactivity. Follows rule principles: zero CSS classes, semantic HTML, Signals, barrel file tree.                                                                                              |
+| `rule-frontend-svelte`          | `rule_tool_frontend_svelte`          | svelte     | Use when building Svelte 5 applications with runes API. Follows rule principles: zero CSS classes, semantic HTML, $state/$derived, barrel file tree.                                                                                                   |
+| `rule-frontend-template-engine` | `rule_tool_frontend_template_engine` | vanilla    | File-based HTML template engine for static HTML generation, SSG, and SSR: extends/include/block layout inheritance, if/for/switch directives, {{ }} interpolation with filter pipelines, tagged template literals, and a browser-safe tagged runtime. |
+| `rule-frontend-vue`             | `rule_tool_frontend_vue`             | vue        | Use when building Vue 3 Composition API components. Follows rule principles: zero CSS classes, semantic HTML, barrel file tree, data-part selectors.                                                                                                   |
+| `rule-frontend-workers`         | `rule_tool_frontend_workers`         | all        | Use when browser JavaScript blocks the main thread. Covers Web Workers, worker pools, transferables, SharedArrayBuffer, OffscreenCanvas, scheduler.yield, and INP/LoAF measurement.                                                                   |
 
 ### meta
 

@@ -1,9 +1,0 @@
-[is="rule-details"] {
-  &[open] {
-    gap: var(--rule-details--gap);
-
-    summary i {
-      rotate: 180deg;
-    }
-  }
-}
