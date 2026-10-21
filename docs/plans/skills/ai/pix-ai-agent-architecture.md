@@ -15,11 +15,23 @@ Sections: the model does not call your tool, the harness decides quality, a loop
 until a graph earns it, MCP - what the protocol gives and leaves, tool surface
 design, agents in the browser, judging an agent framework.
 
-This leaf is where ADR 137's rules belong conceptually even though the ADR puts
-them in the router: every one of its eight is a statement about agent code - the
-tool schema, the call timeout, the token cap, output validation, secrets in a
-prompt, the generation span, eval presence, MCP token validation. This plan
-therefore treats ADR 137 as the leaf's floor and adds the two the ADR leaves out.
+This leaf is where ADR 137's rules belong: every one of its eight is a statement
+about agent code - the tool schema, the call timeout, the token cap, output
+validation, secrets in a prompt, the generation span, eval presence, MCP token
+validation. The decision of 2026-10-21 (ADR 153, P10) put them here rather than in
+the router, so the leaf owns the floor and `rule-ai` stays a list. That is the same
+model `rule-data` and `rule-backend` use, with the rules one level lower because
+this is the leaf that describes the code they check.
+
+## ADR 137's eight rules, owned here
+
+| Tier | Rules |
+| ---- | ----- |
+| A | `ai-tool-schema`, `ai-call-timeout`, `ai-max-tokens`, `ai-output-validated`, `ai-no-secrets-in-prompt`, `ai-trace-span` |
+| B | `ai-eval-presence`, `ai-mcp-token-validation` |
+
+All eight ship advisory first and are promoted after the corpus gate reports full
+precision and recall - ADR 137's own rule, kept as written.
 
 ## What this leaf adds on top of ADR 137
 
@@ -32,10 +44,20 @@ Both are checks on the code the leaf describes, and both are the kind of claim a
 reviewer argues about: the leaf's answer is in the body and the rule makes it
 repeatable.
 
-## The three rules
+## The eleven rules
+
+Eight from ADR 137 plus three of its own:
 
 | id | Rejects | Tier | Today |
 | -- | ------- | ---- | ----- |
+| `ai-tool-schema` | A tool declared without a schema the model can be held to | A | n/a |
+| `ai-call-timeout` | A model call with no timeout | A | n/a |
+| `ai-max-tokens` | A generation with no output cap | A | n/a |
+| `ai-output-validated` | Model output used without validation against its schema | A | n/a |
+| `ai-no-secrets-in-prompt` | A credential or key interpolated into a prompt | A | n/a |
+| `ai-trace-span` | A generation with no span emitted | A | n/a |
+| `ai-eval-presence` | An AI feature with no eval | B | n/a |
+| `ai-mcp-token-validation` | An MCP server accepting a token it does not validate | B | n/a |
 | `agent-loop-has-exit` | A loop or recursion with no iteration cap and no termination predicate | B | n/a |
 | `agent-loop-before-graph` | A graph or multi-agent orchestration introduced with no measured failure of the simpler loop | B | n/a |
 | `agent-owner-named` | A section delegating context, evals, telemetry or the tool surface without naming the owner | B | partially red |
@@ -44,24 +66,27 @@ repeatable.
 
 ### Phase 0 - Decisions
 
-- [ ] Implement ADR 137: eight `ai-*` rules in `rule-ai/guardrails`, advisory
-      first. This leaf inherits them and owns three more.
-- [ ] Answer ADR 137's open question: children declare `inherits: [rule-ai]`.
-- [ ] ADR: the AI family shape, superseding 137's proposed status.
+- [ ] Implement ADR 137 here: eight `ai-*` rules in
+      `skills/rule-ai-agent-architecture/guardrails`, advisory first, each citing
+      OWASP / MCP / OpenTelemetry where the ADR says so.
+- [ ] ADR: the AI family shape, amending 137's placement (rules in the leaf, not
+      in the router) and superseding its proposed status.
 
 ### Phase 1 - Fixtures first (red)
 
-- [ ] `tests/fixtures/ai-agent-architecture/`: `clean/`, `unbounded-loop/`,
-      `graph-without-measurement/`, `unnamed-owner/`, each with a one-line
-      `README.md`.
-- [ ] Three `CORPUS` pairs bound to `rule-ai-agent-architecture`.
+- [ ] `tests/fixtures/ai-agent-architecture/`: `clean/`, `tool-without-schema/`,
+      `unbounded-generation/`, `unvalidated-output/`, `secret-in-prompt/`,
+      `unbounded-loop/`, `graph-without-measurement/`, `unnamed-owner/`, each with
+      a one-line `README.md`.
+- [ ] Eleven `CORPUS` pairs bound to `rule-ai-agent-architecture`, eight of them
+      for ADR 137's rules.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ### Phase 2 - The rules
 
-- [ ] `skills/rule-ai-agent-architecture/guardrails/`: three rule files plus
+- [ ] `skills/rule-ai-agent-architecture/guardrails/`: eleven rule files plus
       `index.js`.
-- [ ] `guardrails:` and `inherits: [rule-ai]` in the frontmatter.
+- [ ] `guardrails:` frontmatter lists them all, equal to the exports.
 - [ ] Green the Phase 1 suites.
 
 ### Phase 3 - Door and neighbours

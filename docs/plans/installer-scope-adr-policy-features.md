@@ -1,5 +1,10 @@
 # Port plan: ADR policy, project installs, features, host paths
 
+Status: `planned`.
+Outside the skills graph: this plan covers repository policy and the
+installer, not skills, so it is not a node in
+`docs/plans/skills/skills-plan.md` and is tracked on its own.
+
 A sibling project shipped this set of installer and documentation changes on 2026-10-18. This plan
 replays it here, adapted to this repository's names (`rule-mcp`, `RULE_MCP_*`,
 `pix_process_adr`, `/rule-handoff`, `~/.rule-mcp/`). A port is a merge, not a copy: diff each

@@ -11,21 +11,20 @@ Siblings: `rule-ai-prompting`, `rule-ai-evals`, `rule-ai-context-engineering`,
 
 ADR 137 (proposed, 2026-10-17) records it exactly: five rule-ai skills exist, none
 owns a guardrail, none declares `inherits`. Every other area has either rules of
-its own (`rule-process-ai`, `rule-styleguide-*`), inherited area rules
-(`rule-data`, `rule-backend`) or both. The AI area has neither, which means the one
-area that describes agent code - the most expensive code to get wrong - is the
-only one nothing checks.
+its own, inherited area rules (`rule-data`, `rule-backend`) or both. The AI area has
+neither, which means the one area that describes agent code - the most expensive
+code to get wrong - is the only one nothing checks.
 
-ADR 137 already specifies the fix, so this plan implements it instead of
-inventing a second family:
+**Where the eight rules land, decided on 2026-10-21 (ADR 153, P10):** in
+`rule-ai-agent-architecture`, the leaf that consumes them, not here. This router
+keeps only the six shared router rules. That is the same model `rule-data` and
+`rule-backend` use, moved one level down because AI has exactly one leaf that
+describes the code ADR 137's rules check.
 
-| Tier | Rules |
-| ---- | ----- |
-| A | `ai-tool-schema`, `ai-call-timeout`, `ai-max-tokens`, `ai-output-validated`, `ai-no-secrets-in-prompt`, `ai-trace-span` |
-| B | `ai-eval-presence`, `ai-mcp-token-validation` |
-
-All eight ship advisory first and are promoted after the corpus gate reports full
-precision and recall - ADR 137's own rule, kept as written.
+| Tier | Rules | Owner |
+| ---- | ----- | ----- |
+| A | `ai-tool-schema`, `ai-call-timeout`, `ai-max-tokens`, `ai-output-validated`, `ai-no-secrets-in-prompt`, `ai-trace-span` | `rule-ai-agent-architecture` |
+| B | `ai-eval-presence`, `ai-mcp-token-validation` | `rule-ai-agent-architecture` |
 
 ## Evidence base (measured 2026-10-21)
 
@@ -70,59 +69,51 @@ consequences, both measurable:
 `rule-frontend-workers`, `rule-backend-workers` and three data leaves have, and it
 is the reason the AI area plans carry dispatcher rows in their own phases too.
 
-## The fourteen rules
+## The seven rules
+
+Six shared router rules, plus the one this router motivated:
 
 | id | Rejects | Tier | Today |
 | -- | ------- | ---- | ----- |
-| `ai-tool-schema` | A tool declared without a schema the model can be held to | A | n/a |
-| `ai-call-timeout` | A model call with no timeout | A | n/a |
-| `ai-max-tokens` | A generation with no output cap | A | n/a |
-| `ai-output-validated` | Model output used without validation against its schema | A | n/a |
-| `ai-no-secrets-in-prompt` | A credential or key interpolated into a prompt | A | n/a |
-| `ai-trace-span` | A generation with no span emitted | A | n/a |
-| `ai-eval-presence` | An AI feature with no eval | B | n/a |
-| `ai-mcp-token-validation` | An MCP server accepting a token it does not validate | B | n/a |
 | `router-dead-link` | A relative link resolving to no `SKILL.md` | B | clean |
 | `router-tool-name` | A tool name the registry does not know | B | clean |
 | `router-child-listed` | A skill under the area with no row | B | clean |
 | `router-quick-selection` | A row the Quick Selection cannot reach | B | clean |
 | `router-no-stale-name` | A reference to a skill that no longer exists | B | clean |
 | `router-no-stale-package` | A dependency named in a description or a detector rule that the catalogue does not ship | B | **red**: `@rule/rule-mcp-core` |
+| `router-ai-floor-reachable` | A child of the AI area with no pointer to the rules it must follow | B | **red**: four children, no link |
 
-### Reaching the children
+## Reaching the children
 
 ADR 137 left one question open: whether the four children declare
-`inherits: [rule-ai]`. This plan answers **yes**, on the evidence of the two areas
-that already do it: `rule-data` (4 rules, 7 inheritors) and `rule-backend` (6
-rules, 8 inheritors). Without it the AI floor protects the router and nothing
-that the router routes to - the worst of both worlds, because the catalogue
-believes it is covered.
+`inherits: [rule-ai]`. This plan answers **no**, and P10 explains why: the eight
+rules live in `rule-ai-agent-architecture`, so there is nothing in the router to
+inherit. The children instead link the leaf that owns the floor, and
+`router-ai-floor-reachable` keeps that link alive.
 
 ## Phases
 
 ### Phase 0 - Decisions
 
-- [ ] ADR: the AI family shape. Accepts ADR 137's eight rules as written,
-      answers its open question with inheritance, and supersedes its proposed
-      status.
+- [ ] ADR: the AI family shape. Amends ADR 137's placement: the eight rules
+      live in `rule-ai-agent-architecture`, the router stays a list (P10), and 137
+      moves from proposed to superseded.
 - [ ] ADR: the rule design, tiers as ADR 137 set them, detection shared with the
       other areas.
 
 ### Phase 1 - Fixtures first (red)
 
-- [ ] `tests/fixtures/ai-router/`: `clean/`, `tool-without-schema/`,
-      `unbounded-generation/`, `unvalidated-output/`, `secret-in-prompt/`,
-      `stale-package/`, each with a one-line `README.md`.
-- [ ] Fourteen `CORPUS` pairs bound to `rule-ai`, eight of them for ADR 137's
-      rules.
+- [ ] `tests/fixtures/ai-router/`: `clean/`, `stale-package/`,
+      `unlinked-floor/`, `selection-without-row/`, each with a one-line
+      `README.md`.
+- [ ] Seven `CORPUS` pairs bound to `rule-ai`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ### Phase 2 - The rules
 
-- [ ] `skills/rule-ai/guardrails/`: eight `ai-*` files plus six router files.
-- [ ] `guardrails:` frontmatter lists all fourteen.
-- [ ] Every `ai-*` rule cites OWASP, MCP or OpenTelemetry in its description, as
-      ADR 137 requires.
+- [ ] `skills/rule-ai/guardrails/`: six router rule files plus
+      `_router-ai-floor-reachable.js`.
+- [ ] `guardrails:` frontmatter lists all seven.
 - [ ] Green the Phase 1 suites.
 
 ### Phase 3 - Fix the package name
@@ -137,7 +128,9 @@ believes it is covered.
 
 - [ ] Dispatcher rows for the four children, if the AI leaf plans have not landed
       them.
-- [ ] The four children declare `inherits: [rule-ai]`.
+- [ ] The four children link `rule-ai-agent-architecture` as the owner of the
+      shared floor; none of them declares `inherits: [rule-ai]`, because the
+      router owns no rule the leaves need (P10).
 - [ ] Table regenerated by the census generator once it exists.
 
 ### Phase 5 - Verification
@@ -153,6 +146,10 @@ believes it is covered.
 - ADR 137 has been proposed since 2026-10-17. This plan is the first thing in the
   series that turns a proposed ADR into a plan instead of writing a new one, and
   that is the right order: the decision exists, the execution did not.
+- ADR 137 put the eight rules in this router; the decision of 2026-10-21 moved
+  them to `rule-ai-agent-architecture` (P10, ADR 153). The router keeps the
+  routing and one rule of its own, which is the same shape `rule-data` and
+  `rule-backend` have, one level down.
 - `ai-trace-span` overlaps `observability-behavior-versions`, and ADR 137 itself
   flags it. The owner split: the span is emitted here, the versions it carries are
   defined there.

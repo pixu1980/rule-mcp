@@ -1,5 +1,9 @@
 # rule-ai guardrails execution plan
 
+Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153).
+Absorbed by: rule-ai-agent-architecture, one rule set per plan.
+Graph: not a node; see the absorbed table in `skills-plan.md`.
+
 Scope: give the AI area its first deterministic guardrails, keep the rest of the
 area narrative, and record every rule against a citable public source.
 Implementation happens in a dedicated session: this document is the plan only.

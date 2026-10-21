@@ -1,5 +1,9 @@
 # rule-meta guardrails execution plan
 
+Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153).
+Absorbed by: the four rule-meta leaves, one rule set per plan.
+Graph: not a node; see the absorbed table in `skills-plan.md`.
+
 Scope: give the meta-framework area its first deterministic guardrails, focused
 on the server/client boundary, and record every rule against a citable public
 source. Implementation happens in a dedicated session: this document is the

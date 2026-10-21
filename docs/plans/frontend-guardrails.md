@@ -1,5 +1,9 @@
 # rule-frontend guardrails execution plan
 
+Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153).
+Absorbed by: the seven rule-frontend leaves, one rule set per plan.
+Graph: not a node; see the absorbed table in `skills-plan.md`.
+
 Scope: add the framework-agnostic rules the frontend area is missing, extend
 the per-framework set, and record every rule against a citable public source.
 Implementation happens in a dedicated session: this document is the plan only.
