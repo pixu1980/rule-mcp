@@ -1,5 +1,9 @@
 # pix-devops guardrails execution plan
 
+Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153).
+Absorbed by: the four pix-devops leaves, one rule set per plan.
+Graph: not a node; see the absorbed table in `skills-plan.md`.
+
 Scope: extend the deterministic guardrails of the five `pix-devops*` skills,
 reorganize the four rules that already exist, and record every rule against a
 citable, de facto public source. Implementation happens in a dedicated session:
