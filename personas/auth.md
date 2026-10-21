@@ -12,7 +12,6 @@ skills:
   - "identity provider integration"
 evidenceSkills:
   - "rule-backend-security"
-  - "rule-platform-agent"
 aliases:
   - "auth-identity"
   - "authentication engineer"

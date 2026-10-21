@@ -83,7 +83,6 @@ Build AI agent repositories, providers, tools, registries, and tests.
 | Skill                                                | Tool                 | Frameworks   | Use when                                                                                                                                                   |
 | ---------------------------------------------------- | -------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [rule-ai](../rule-ai/SKILL.md)                         | `pix_ai`             | all          | Index of all AI/agent skills: agent scaffolding on `@rule/rule-mcp-core` and framework-agnostic agent guidance.                                           |
-| [rule-platform-agent](../rule-platform-agent/SKILL.md) | `pix_platform_agent` | node, agents | Scaffold and maintain AI Agent projects. Covers structure, tools, env config, testing, and containerization without prescribing any specific core library. |
 
 ### Architecture
 
@@ -230,7 +229,7 @@ Design and route visible interface work while preserving rule implementation con
 | Task                     | Primary                                             | Secondary                                         | Deterministic tools                                   |
 | ------------------------ | --------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------- |
 | Unknown project          | `rule`                                               | `rule-process-adr`                                 | `rule_tool_detect`, `rule_tool_search`                  |
-| AI agent app             | `rule-ai` + `rule-platform-agent`                     | `rule-ai-agent-architecture`, `rule-devops-testing` | `rule_tool_check`, `rule_tool_process_adr`              |
+| AI agent app             | `rule-ai`                                            | `rule-ai-agent-architecture`, `rule-devops-testing` | `rule_tool_check`, `rule_tool_process_adr`              |
 | New web UI               | `rule-ui` + `rule-ui-design-system` + framework skill | `rule-styleguide`, `rule-platform-web`              | `rule://templates`, `rule_tool_check`                   |
 | React/Vite app           | `rule-frontend-react`                                | `rule-toolchain-vite`, `rule-styleguide`            | `rule_tool_styleguide` (scaffold), `rule_tool_check`    |
 | Backend API              | `rule-backend-node`                                  | `rule-backend-security`                            | `rule_tool_check`, `rule_tool_process_adr`              |
@@ -303,7 +302,7 @@ Start from the matching scaffold and follow it end to end:
 
 - Backend API or service: `rule-backend-node`
 - Frontend: the framework skill (`rule-frontend-*`) plus `rule-styleguide`
-- AI agent project: `rule-ai` with `rule-platform-agent`
+- AI agent project: `rule-ai` with `rule-ai-agent-architecture`
 - Testing configuration lands with `rule-devops-testing`
 
 ## See also

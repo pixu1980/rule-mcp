@@ -7,7 +7,7 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Command / Tool / Skill map (124)
+## Command / Tool / Skill map (123)
 
 One row per slash command, then every catalog skill that has no slash of its
 own (ADR 117: leaf skills are reached through area hubs or the router), then
@@ -95,7 +95,6 @@ Regenerate with `pnpm census`.
 | -                          | `rule_tool_meta_next`                 | `rule-meta-next`                 | Use when building Next.js applications.                                                                                                                                                                                                                          |
 | -                          | `rule_tool_meta_nuxt`                 | `rule-meta-nuxt`                 | Use when building Nuxt.js applications.                                                                                                                                                                                                                          |
 | -                          | `rule_tool_meta_remix`                | `rule-meta-remix`                | Use when building Remix or React Router applications.                                                                                                                                                                                                            |
-| -                          | `rule_tool_platform_agent`            | `rule-platform-agent`            | Use when scaffolding or maintaining AI Agent projects.                                                                                                                                                                                                           |
 | -                          | `rule_tool_platform_auth`             | `rule-platform-auth`             | Choose the right authentication strategy for a web app in 2026.                                                                                                                                                                                                  |
 | -                          | `rule_tool_platform_desktop`          | `rule-platform-desktop`          | Use when building desktop applications with Electron.                                                                                                                                                                                                            |
 | -                          | `rule_tool_platform_library`          | `rule-platform-library`          | Use when developing reusable npm packages.                                                                                                                                                                                                                       |

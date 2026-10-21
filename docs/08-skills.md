@@ -7,14 +7,14 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Skills (84)
+## Skills (83)
 
 The catalog. A skill is the source of truth for its topic; the tool that
 serves it carries no rules of its own, and the guardrails it is checked
 against are in [`14-guardrails.md`](14-guardrails.md).
 
 The router's own directory, `skills/rule/`, mints no skill tool, which is why
-the catalog is 84 and the directory count is 85.
+the catalog is 83 and the directory count is 84.
 
 | Area                      | Skills | Covers                                                                            |
 | ------------------------- | ------ | --------------------------------------------------------------------------------- |
@@ -24,7 +24,7 @@ the catalog is 84 and the directory count is 85.
 | [devops](#devops)         | 5      | Pipelines, containers, observability, testing, versioning                         |
 | [frontend](#frontend)     | 10     | Frameworks and the code that runs in a browser                                    |
 | [meta](#meta)             | 5      |                                                                                   |
-| [platform](#platform)     | 6      | Where the code ships: web, desktop, mobile, library, agent                        |
+| [platform](#platform)     | 5      | Where the code ships: web, desktop, mobile, library, agent                        |
 | [process](#process)       | 9      | How work is done: reviews, ADRs, changelogs, handoffs, simplicity                 |
 | [styleguide](#styleguide) | 15     | The rules code is written to, per language and concern                            |
 | [toolchain](#toolchain)   | 9      | Build tools, linters, package manager, commit hooks                               |
@@ -108,7 +108,6 @@ the catalog is 84 and the directory count is 85.
 | Skill                  | Tool                        | Frameworks                           | Description                                                                                                                                                                                                                                             |
 | ---------------------- | --------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `rule-platform`         | `rule_tool_platform`         | all                                  | Use when building platform-specific projects to route to the correct platform skill. Covers desktop, mobile (Expo), library authoring, and web conventions.                                                                                             |
-| `rule-platform-agent`   | `rule_tool_platform_agent`   | node, agents                         | Use when scaffolding or maintaining AI Agent projects. Covers project structure, tool definitions, environment config, testing, and containerization.                                                                                                   |
 | `rule-platform-auth`    | `rule_tool_platform_auth`    | auth, sessions, jwt, oauth, passkeys | Choose the right authentication strategy for a web app in 2026. Covers server-side sessions vs JWTs, OAuth 2.0/2.1 + OIDC, passkeys/WebAuthn, managed providers, CSRF/XSS hardening, token storage, revocation, and a decision matrix by app archetype. |
 | `rule-platform-desktop` | `rule_tool_platform_desktop` | electron, desktop                    | Use when building desktop applications with Electron. Covers main/preload/IPC, native APIs, window management, packaging, and auto-update.                                                                                                              |
 | `rule-platform-library` | `rule_tool_platform_library` | all                                  | Use when developing reusable npm packages. Covers pnpm structure, public API design, TypeScript exports, dual CJS/ESM, and semantic versioning.                                                                                                         |
