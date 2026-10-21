@@ -6,8 +6,8 @@ The router `pix` is not a skill and has no plan.
 Status: `pending`, `planned`, `implemented`.
 Run order and the four real dependencies: [`DEPENDENCIES.md`](DEPENDENCIES.md).
 
-Total: 81 skills in the catalog, and 83 plan rows: number 85 is the planned
-`pix-platform-mobile` skill, which does not exist yet. Numbers 40, 49 and 54 are
+Total: 81 skills in the catalog, each with a plan, plus one planned skill that
+does not exist yet (`pix-platform-mobile`, number 85). Numbers 40, 49 and 54 are
 retired: those skills were removed from the catalog and their plans are gone.
 New rows append and existing numbers stay put, so the `#NN` references in the
 plans keep pointing at the same skill.
@@ -90,9 +90,9 @@ plans keep pointing at the same skill.
 | 77  | `pix-backend-fastify`           | backend    | `docs/plans/skills/backend/pix-backend-fastify.md`             | planned |
 | 78  | `pix-backend-express`           | backend    | `docs/plans/skills/backend/pix-backend-express.md`             | planned |
 | 79  | `pix-backend`                   | backend    | `docs/plans/skills/backend/pix-backend.md`                     | planned |
-| 80  | `pix-ai-prompting`              | ai         | `docs/plans/skills/ai/pix-ai-prompting.md`                     | pending |
-| 81  | `pix-ai-evals`                  | ai         | `docs/plans/skills/ai/pix-ai-evals.md`                         | pending |
-| 82  | `pix-ai-context-engineering`    | ai         | `docs/plans/skills/ai/pix-ai-context-engineering.md`           | pending |
-| 83  | `pix-ai-agent-architecture`     | ai         | `docs/plans/skills/ai/pix-ai-agent-architecture.md`            | pending |
-| 84  | `pix-ai`                        | ai         | `docs/plans/skills/ai/pix-ai.md`                               | pending |
+| 80  | `pix-ai-prompting`              | ai         | `docs/plans/skills/ai/pix-ai-prompting.md`                     | planned |
+| 81  | `pix-ai-evals`                  | ai         | `docs/plans/skills/ai/pix-ai-evals.md`                         | planned |
+| 82  | `pix-ai-context-engineering`    | ai         | `docs/plans/skills/ai/pix-ai-context-engineering.md`           | planned |
+| 83  | `pix-ai-agent-architecture`     | ai         | `docs/plans/skills/ai/pix-ai-agent-architecture.md`            | planned |
+| 84  | `pix-ai`                        | ai         | `docs/plans/skills/ai/pix-ai.md`                               | planned |
 | 85  | `pix-platform-mobile`           | platform   | `docs/plans/skills/platform/pix-platform-mobile.md`            | planned |
