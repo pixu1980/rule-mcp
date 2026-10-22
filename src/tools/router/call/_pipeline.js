@@ -10,7 +10,7 @@ import { resumeAnnouncement } from "@src/core/session/resume/index.js";
 import { touchActivity } from "@src/core/session/_activity.js";
 import { z } from "zod/v4";
 import { recordCrashed } from "./_telemetry.js";
-import { replayIfCached, storeAndFinalize } from "./_stages.js";
+import { replayIfCached, replayIfSemanticCached, storeAndFinalize } from "./_stages.js";
 
 /**
  * Run one tool call end to end: activity, self-update, resume banner, cache
@@ -70,6 +70,14 @@ export async function callTool(name, args) {
 
     if (replayed) {
       return withBanner(banner, replayed);
+    }
+
+    // L2 runs only after L1 missed: it costs an embedding, and it falls
+    // through to compute when Nyx is absent, disabled or uncertain.
+    const similar = await replayIfSemanticCached(name, validated, startedAt);
+
+    if (similar) {
+      return withBanner(banner, similar);
     }
 
     stage = "preprocessing";
