@@ -1,6 +1,6 @@
 # Review: can the plan graph be implemented linearly?
 
-Status: `done`. Scope: `docs/plans/plan-of-plans.md` on `main`, and the 93 plan
+Status: `done`. Scope: `docs/plans/plan-of-plans.md` on `feat/evolution`, and the 93 plan
 files on `feat/guardrails`, `feat/decision-models`, `feat/export`,
 `feat/nyx`. Method: measurement, not re-reading. Every number below comes from a
 command in section 8.
@@ -33,8 +33,8 @@ What is already correct and should not be touched:
 | F3 | **blocker** | Two skills are created in Stage 3 (`rule-toolchain-electron`, `rule-toolchain-tauri`, by `rule-platform-desktop#4`) but belong to the toolchain area, whose leaves run in Stage 1. A later stage creates nodes for an area that already closed | section 8, M6 | write their plans first and give them a stage after 3, or state that the toolchain area is not closed until Stage 3 | `ge` |
 | F4 | **major** | Node identity changes mid-flight: the node is `rule-process-bmad` and the resulting skill is `rule-method`. The graph uses both names, so a parser sees two nodes and a human sees one | section 8, M5 | one id per node (`rule-process-bmad`, with `Produces: rule-method`) | `ge` |
 | F5 | **major** | Two plan formats. ADR 154 requires `Status:` + `Depends on:` / `Feeds:` / `Shared files:`; `plan-of-plans.md` requires `Branch:` / `Path:` as well. A plan cannot satisfy both without a third amendment | section 8, M3 | add `Branch:` and `Path:` to ADR 154's line set (five lines, one contract), or derive them from the file path | `ge` |
-| F6 | **major** | The contended-file lists disagree: `skills-plan.md` names 5 files, `plan-of-plans.md` names 8 (it adds `HANDOFF.md`, `docs/*`, `docs/adr/*`, `skills/rule/SKILL.md`) | section 8, M7 | one list, in `plan-of-plans.md`, referenced by the level-1 file | `main` + `ge` |
-| F7 | minor | `plan-of-plans.md` says 98 unique plan paths; it is 99 since the file itself landed | section 8, M1 | update the count | `main` |
+| F6 | **major** | The contended-file lists disagree: `skills-plan.md` names 5 files, `plan-of-plans.md` names 8 (it adds `HANDOFF.md`, `docs/*`, `docs/adr/*`, `skills/rule/SKILL.md`) | section 8, M7 | one list, in `plan-of-plans.md`, referenced by the level-1 file | `feat/evolution` + `ge` |
+| F7 | minor | the plan said 98 unique plan paths; it is 102 across the five branches | section 8, M1 | update the count | `feat/evolution` |
 | F8 | minor | Status vocabulary compliance is 9 of 93. The other 84 say "plan only" or a sentence, which no test can read | section 8, M4 | normalise to the five values as each stage starts | `ge` |
 | F9 | minor | One plan file has no checkbox: `installer-scope-adr-policy-features.md`, which this plan declares outside the graph. A test that demands a checkbox in every plan file fails on it | section 8, M2 | exempt the three non-skill plans by path in the test, or give that file a single box | both |
 
@@ -94,11 +94,11 @@ its node ids, and the test sums them.
 
 | Check | Result |
 | ----- | ------ |
-| Branches behind `main` | 0 for all four: no pre-merge rebase needed |
+| Branches behind each other | 0 for all four: no pre-merge rebase needed |
 | Fold correctness | `dm` = `ge` minus one commit; 29 identical copies, 3 diverged by 1-4 lines, 1 unique plan (`decision-models.md`) |
 | Merge order vs edges | consistent: `ex`, `nyx` before `ge`; `dm` folded into `ge`, never merged |
 | Contended files | `ge∩dm` 233 (disappears with the fold), `ge∩ex` 3, `ge∩nyx` 1 |
-| Level-0 test feasibility | the test reads `git show <branch>:<path>`: feasible, and it is the only way to verify a node that does not live on `main` |
+| Level-0 test feasibility | the test reads `git show <branch>:<path>`: feasible, and it is the only way to verify a node that lives on another branch |
 | Missing | the `Branch:`/`Path:` pair exists in no plan file today, so the level-0 test would fail on all 99 paths (F5) |
 
 ## What to change before the first node is executed
@@ -126,7 +126,7 @@ Ordered, and none of it is optional except where marked:
 Every number in this review comes from one of these:
 
 ```
-M1  for b in main ge dm ex nyx; do git ls-tree -r --name-only $b -- docs/plans | grep -c '\.md$'; done
+M1  for b in evolution ge dm ex nyx; do git ls-tree -r --name-only $b -- docs/plans | grep -c '\.md$'; done
     and the union of the same, deduplicated: 99 unique paths
 M2  git archive ge docs/plans | untar; for each plan file: count '^Status:', '^## Dependency graph', '^- \[[ xX]\]'
     -> 93 files: status 93, graph 0, checkbox 92 (the missing one is installer-scope-...)
