@@ -1,5 +1,5 @@
 {
-  "count": 105,
+  "count": 102,
   "tools": [
     "pix_tool",
     "rule_tool_ai",
@@ -38,12 +38,10 @@
     "rule_tool_fix",
     "rule_tool_frontend",
     "rule_tool_frontend_angular",
-    "rule_tool_frontend_custom_element",
     "rule_tool_frontend_react",
     "rule_tool_frontend_solidjs",
     "rule_tool_frontend_svelte",
     "rule_tool_frontend_template_engine",
-    "rule_tool_frontend_vanilla_reactive",
     "rule_tool_frontend_vue",
     "rule_tool_frontend_workers",
     "rule_tool_gateway",
@@ -59,7 +57,6 @@
     "rule_tool_meta_remix",
     "rule_tool_plan",
     "rule_tool_platform",
-    "rule_tool_platform_agent",
     "rule_tool_platform_auth",
     "rule_tool_platform_desktop",
     "rule_tool_platform_library",
