@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md)                                             | Keep BM25 and gate a local decision model as a second opinion                                             | 2026-10-22 | proposed   | routing, decision-models, architecture, security, testing                           |
 | [155](155-extend-the-devops-guardrail-family-with-file-scoped-source-cited-rules.md)                                    | Extend the devops guardrail family with file-scoped, source-cited rules                                   | 2026-10-17 | proposed   | guardrails, devops, quality-gate                                                    |
 | [154](154-every-plan-carries-a-status-line-a-dependency-graph-and-checkbox-steps.md)                                    | Every plan carries a status line, a dependency graph and checkbox steps                                   | 2026-10-21 | accepted   | plans, convention, format, governance, testing                                      |
 | [153](153-orchestrate-the-plan-catalogue-with-a-staged-dependency-graph.md)                                             | Orchestrate the plan catalogue with a staged dependency graph                                             | 2026-10-21 | accepted   | plans, orchestration, dependency-graph, process, governance                         |
@@ -171,6 +172,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md)                                             | 1. BM25 remains the router.                                                                                                                                                                                                     | Positive: the baseline is a file and a command, not a memory; a model or router change is compared against the same 95 prompts; the model cannot send prompt text off the machine; the ranker cannot be silently replaced by... |
 | [155](155-extend-the-devops-guardrail-family-with-file-scoped-source-cited-rules.md)                                    | Add twenty guardrails across the five devops skills, each scoped to its target file name (Dockerfile, .dockerignore, docker-compose.autodeploy.yml, .gitlab-ci.yml, vitest.config.*, _.test._, server entry,...                 | Positive: the devops skills stop being narrative only; every rule is traceable to a public source; the engine stays predictable because triggers are file-scoped.                                                               |
 | [154](154-every-plan-carries-a-status-line-a-dependency-graph-and-checkbox-steps.md)                                    | A plan file carries, in this order: an H1; a status line with one of five values (planned, in-progress, done, blocked, superseded) plus a reason when it is blocked or superseded; a '## Dependency graph' section with free... | The verification test can assert the format, so a plan written next month fails instead of drifting.                                                                                                                            |
 | [153](153-orchestrate-the-plan-catalogue-with-a-staged-dependency-graph.md)                                             | One orchestrator at docs/plans/skills/skills-plan.md, inside the catalogue it orders.                                                                                                                                           | The catalogue gains one file that says what to do next, and every plan gains the three lines that make the answer checkable.                                                                                                    |
@@ -389,6 +391,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### architecture
 
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
 - [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
 - [112](112-extend-the-file-size-cap-to-the-shipped-skill-trees.md) Extend the file-size cap to the shipped skill trees
 - [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
@@ -480,6 +483,21 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 - [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
 
+### testing
+
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+- [154](154-every-plan-carries-a-status-line-a-dependency-graph-and-checkbox-steps.md) Every plan carries a status line, a dependency graph and checkbox steps
+- [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
+- [076](076-coverage-wave-five-raises-the-branch-floor-to-91.md) Coverage wave five raises the branch floor to 91
+- [069](069-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
+- [065](065-coverage-floor-raised-to-90.md) Coverage floor raised to 90
+- [064](064-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
+- [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
+- [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
+- [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
+- [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
+- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+
 ### git
 
 - [147](147-never-install-commit-hooks-into-a-machine-wide-core-hookspath.md) Never install commit hooks into a machine-wide core.hooksPath
@@ -522,20 +540,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
 - [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
-### testing
-
-- [154](154-every-plan-carries-a-status-line-a-dependency-graph-and-checkbox-steps.md) Every plan carries a status line, a dependency graph and checkbox steps
-- [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
-- [076](076-coverage-wave-five-raises-the-branch-floor-to-91.md) Coverage wave five raises the branch floor to 91
-- [069](069-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
-- [065](065-coverage-floor-raised-to-90.md) Coverage floor raised to 90
-- [064](064-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
-- [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
-- [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
-- [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
-- [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
-- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
-
 ### cli
 
 - [108](108-the-handoff-family-gets-a-generated-index-and-the-root-handoff-summary-retires.md) The handoff family gets a generated index, and the root HANDOFF summary retires
@@ -562,6 +566,19 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [059](059-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
 - [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 
+### routing
+
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
+- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
+- [026](026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
+- [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
+- [024](024-skill-routing-parcel-bundler-zero-config-build-tool.md) Skill routing: Parcel bundler zero config build tool
+- [023](023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.md) Skill routing: Husky git hooks pre-commit lint-staged commitlint
+- [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
+- [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
+- [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
+
 ### toolchain
 
 - [143](143-rename-rule-toolchain-commits-to-rule-styleguide-git.md) Rename rule-toolchain-commits to rule-styleguide-git
@@ -587,18 +604,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [079](079-add-the-oss-architect-review-persona.md) Add the OSS Architect review persona
 - [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
 
-### routing
-
-- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
-- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
-- [026](026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
-- [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
-- [024](024-skill-routing-parcel-bundler-zero-config-build-tool.md) Skill routing: Parcel bundler zero config build tool
-- [023](023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.md) Skill routing: Husky git hooks pre-commit lint-staged commitlint
-- [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
-- [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
-- [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
-
 ### closeout
 
 - [119](119-close-out-audit-ui.md) Close out audit ui
@@ -609,6 +614,17 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
 - [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
 - [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
+
+### security
+
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+- [147](147-never-install-commit-hooks-into-a-machine-wide-core-hookspath.md) Never install commit hooks into a machine-wide core.hooksPath
+- [139](139-add-a-shared-frontend-guardrail-family-for-xss-lists-and-workers.md) Add a shared frontend guardrail family for XSS, lists and workers
+- [136](136-add-a-source-cited-backend-guardrail-family-and-fix-the-six-existing-rules.md) Add a source-cited backend guardrail family and fix the six existing rules
+- [135](135-codify-stage-0-oss-governance-signing-support-and-licensing-policies.md) Codify Stage 0 OSS governance, signing, support, and licensing policies
+- [045](045-migrate-repo-tooling-to-eslint-10-flat-config-with-eslint-plugin-unicorn.md) Migrate repo tooling to ESLint 10 flat config with eslint-plugin-unicorn
+- [019](019-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
+- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
 ### process
 
@@ -629,16 +645,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [137](137-give-the-ai-area-its-first-source-cited-guardrail-family.md) Give the AI area its first source-cited guardrail family
 - [136](136-add-a-source-cited-backend-guardrail-family-and-fix-the-six-existing-rules.md) Add a source-cited backend guardrail family and fix the six existing rules
 - [112](112-extend-the-file-size-cap-to-the-shipped-skill-trees.md) Extend the file-size cap to the shipped skill trees
-
-### security
-
-- [147](147-never-install-commit-hooks-into-a-machine-wide-core-hookspath.md) Never install commit hooks into a machine-wide core.hooksPath
-- [139](139-add-a-shared-frontend-guardrail-family-for-xss-lists-and-workers.md) Add a shared frontend guardrail family for XSS, lists and workers
-- [136](136-add-a-source-cited-backend-guardrail-family-and-fix-the-six-existing-rules.md) Add a source-cited backend guardrail family and fix the six existing rules
-- [135](135-codify-stage-0-oss-governance-signing-support-and-licensing-policies.md) Codify Stage 0 OSS governance, signing, support, and licensing policies
-- [045](045-migrate-repo-tooling-to-eslint-10-flat-config-with-eslint-plugin-unicorn.md) Migrate repo tooling to ESLint 10 flat config with eslint-plugin-unicorn
-- [019](019-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
-- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
 ### styleguide
 
