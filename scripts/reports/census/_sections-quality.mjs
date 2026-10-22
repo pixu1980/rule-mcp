@@ -59,10 +59,11 @@ export function guardrailSection(data) {
   return [
     `## Guardrail rules (${data.guardrailIds.size} distinct)`,
     "",
-    "Deterministic checks, run by `rule_tool_check` and by the repository against",
-    "itself. A rule can belong to more than one family, so the family counts sum",
-    "to more than the distinct total, and a check names the skill it runs for:",
-    "the shared rules always, plus whatever that skill's area adds.",
+    "Deterministic and advisory checks, run by `rule_tool_check` and by the",
+    "repository against itself. An advisory rule reports and never fails. A rule",
+    "can belong to more than one family, so the family counts sum to more than the",
+    "distinct total, and a check names the skill it runs for: the shared rules",
+    "always, plus whatever that skill's area adds.",
     "",
     ...table(
       ["Family", "Rules", "Applies to"],

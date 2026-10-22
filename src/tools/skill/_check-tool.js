@@ -4,7 +4,9 @@
 
 import { z } from "zod/v4";
 import { registerTool, readSkill, getSkillNames } from "../router/index.js";
-import { checkCodeGuarded, checkProjectGuarded } from "../../core/guardrails/index.js";
+import { checkCodeGuarded, checkProjectGuarded, checkSemantic } from "../../core/guardrails/index.js";
+import { renderProject } from "./_project-report.js";
+import { renderSemantic } from "./_semantic-report.js";
 
 /**
  * Register the rule_tool_check tool for running guardrail checks on code.
@@ -16,7 +18,7 @@ export function registerCheckTool() {
     framework: z.string().optional().describe("Framework (react, vue, svelte, angular, solid, astro, vanilla)"),
     fileName: z.string().optional().describe("File name for naming convention checks"),
     isComponent: z.boolean().optional().describe("Whether this is a component file"),
-    mode: z.string().optional().describe("Check mode: 'scaffold' for project config files, 'project' for the graph guardrails"),
+    mode: z.string().optional().describe("Check mode: 'scaffold' for project config files, 'project' for the graph guardrails, 'semantic' for the advisory decision-model rule"),
     allowedDependencies: z.array(z.string()).optional().describe("Manifest-derived package names allowed in imports"),
     projectDir: z.string().optional().describe("Project root for mode=project (default: cwd)"),
     diagnostics: z.boolean().optional().describe("Run the optional type-checker check in mode=project"),
@@ -31,43 +33,18 @@ export function registerCheckTool() {
 
       if (mode === "project") {
         const project = checkProjectGuarded(projectDir ?? ".", { skill, diagnostics: arguments_.diagnostics === true });
-        const projectLines = ["# Project guardrails", "", project.summary, ""];
 
-        for (const entry of project.failed) {
-          projectLines.push("## ❌ " + entry.id + ": " + entry.label, "", "- Failures: " + entry.failCount);
+        return { isError: !project.allPass, content: [{ type: "text", text: renderProject(project) }], _meta: { pixProjectGuardrails: project } };
+      }
 
-          for (const detail of entry.detail ?? []) {
-            projectLines.push("- " + detail);
-          }
-
-          projectLines.push("- Fix: " + entry.suggestion, "");
+      if (mode === "semantic") {
+        if (typeof code !== "string") {
+          return { isError: true, content: [{ type: "text", text: "rule_tool_check mode=semantic needs `code`." }] };
         }
 
-        if (project.advisoryCount > 0) {
-          projectLines.push("### Advisory (reported, not failing)", "");
+        const semantic = await checkSemantic(code, { skill });
 
-          for (const entry of project.advisory) {
-            projectLines.push("- ⚠️ " + entry.id + ": " + entry.label + " - " + entry.failCount + " finding(s)");
-
-            for (const detail of entry.detail ?? []) {
-              projectLines.push("  - " + detail);
-            }
-          }
-
-          projectLines.push("");
-        }
-
-        if (project.skippedCount > 0) {
-          projectLines.push("### Skipped", "");
-
-          for (const entry of project.skipped) {
-            projectLines.push("- ⏩ " + entry.id + ": " + entry.reason);
-          }
-
-          projectLines.push("");
-        }
-
-        return { isError: !project.allPass, content: [{ type: "text", text: projectLines.join("\n") }], _meta: { pixProjectGuardrails: project } };
+        return { isError: false, content: [{ type: "text", text: renderSemantic(semantic) }], _meta: { pixSemanticGuardrails: semantic } };
       }
 
       if (typeof code !== "string") {

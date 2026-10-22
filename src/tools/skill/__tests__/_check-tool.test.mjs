@@ -10,6 +10,7 @@ import { before, test } from "node:test";
 process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-skilltool-"));
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
+process.env.RULE_MCP_NO_CACHE = "1";
 
 const { callTool } = await import("../../router/index.js");
 
@@ -55,5 +56,53 @@ test("check in project mode skips without a graph instead of failing", async () 
     assert.equal(result.isError, false, "a skipped check is not a failure");
   } finally {
     rmSync(box, { recursive: true, force: true });
+  }
+});
+
+test("semantic mode is skipped without an endpoint and advisory with one", async () => {
+  const { resetDecisionRuntime } = await import("../../../core/decision/_runtime.js");
+  const { startFakeServer } = await import("../../../core/decision/__tests__/fixtures/_fake-server.mjs");
+  const names = ["RULE_MCP_DECISION_MODEL", "RULE_MCP_DECISION_URL", "RULE_MCP_DECISION_TIMEOUT"];
+  const previous = Object.fromEntries(names.map((name) => [name, process.env[name]]));
+  const code = 'throw new Error("Failed");\n';
+
+  try {
+    delete process.env.RULE_MCP_DECISION_MODEL;
+    resetDecisionRuntime();
+
+    const off = await callTool("rule_tool_check", { skill: "rule-process-ai", mode: "semantic", code });
+
+    assert.equal(off.isError, false);
+    assert.match(off.content[0].text, /skipped/i);
+    assert.doesNotMatch(off.content[0].text, /semantic-error-message-actionable/);
+
+    const server = await startFakeServer(({ url }) =>
+      url === "/v1/systemone" ? { body: { answers: { message: { noul: 0.1 } }, usage: { input_tokens: 12 } } } : { body: { data: [] } },
+    );
+
+    try {
+      process.env.RULE_MCP_DECISION_MODEL = "laya";
+      process.env.RULE_MCP_DECISION_URL = server.url;
+      process.env.RULE_MCP_DECISION_TIMEOUT = "1000";
+      resetDecisionRuntime();
+
+      const on = await callTool("rule_tool_check", { skill: "rule-process-ai", mode: "semantic", code });
+
+      assert.equal(on.isError, false, "an advisory never fails the check");
+      assert.match(on.content[0].text, /semantic-error-message-actionable/);
+      assert.match(on.content[0].text, /0\.10/, "the model's probability reaches the report");
+    } finally {
+      await server.close();
+    }
+  } finally {
+    for (const [name, value] of Object.entries(previous)) {
+      if (value === undefined) {
+        delete process.env[name];
+      } else {
+        process.env[name] = value;
+      }
+    }
+
+    resetDecisionRuntime();
   }
 });

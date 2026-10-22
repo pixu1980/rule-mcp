@@ -7,16 +7,18 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Guardrail rules (8 distinct)
+## Guardrail rules (9 distinct)
 
-Deterministic checks, run by `rule_tool_check` and by the repository against
-itself. A rule can belong to more than one family, so the family counts sum
-to more than the distinct total, and a check names the skill it runs for:
-the shared rules always, plus whatever that skill's area adds.
+Deterministic and advisory checks, run by `rule_tool_check` and by the
+repository against itself. An advisory rule reports and never fails. A rule
+can belong to more than one family, so the family counts sum to more than the
+distinct total, and a check names the skill it runs for: the shared rules
+always, plus whatever that skill's area adds.
 
-| Family                  | Rules | Applies to                    |
-| ----------------------- | ----- | ----------------------------- |
-| [`scaffold`](#scaffold) | 8     | Generated project scaffolding |
+| Family                  | Rules | Applies to                                           |
+| ----------------------- | ----- | ---------------------------------------------------- |
+| [`scaffold`](#scaffold) | 8     | Generated project scaffolding                        |
+| [`semantic`](#semantic) | 1     | A semantic check with a decision endpoint configured |
 
 ### scaffold
 
@@ -30,6 +32,12 @@ the shared rules always, plus whatever that skill's area adds.
 | `scaffold-eslint.config.mjs` | eslint.config.mjs present | Project must have eslint.config.mjs file. | -       |
 | `scaffold-tsconfig.json`     | tsconfig.json present     | Project must have tsconfig.json file.     | -       |
 | `scaffold-jsconfig.json`     | jsconfig.json present     | Project must have jsconfig.json file.     | -       |
+
+### semantic
+
+| Rule                                | Label                                     | What it rejects                                                                                       | Also in |
+| ----------------------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------- |
+| `semantic-error-message-actionable` | Error messages tell the caller what to do | A thrown error names the next action, not only the failure (ADR 156; docs/audits/decision-models.md). | -       |
 
 ## The rest of the census
 

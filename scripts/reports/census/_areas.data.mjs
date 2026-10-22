@@ -47,6 +47,7 @@ export const FAMILY_SCOPE = {
   quality: "Every check: types, manifests, prose, comments, simplicity",
   react: "A check against a `rule-frontend-react` skill",
   scaffold: "Generated project scaffolding",
+  semantic: "A semantic check with a decision endpoint configured",
   shared: "Every check, whatever the skill",
   simplicity: "Every check: the rules that reject code nothing asked for",
   svelte: "A check against a `rule-frontend-svelte` skill",

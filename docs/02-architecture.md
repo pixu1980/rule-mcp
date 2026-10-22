@@ -75,7 +75,7 @@ Live counts and the Command · Tool · Skill table: [Surface map](./16-surface-m
 | - persona                 | 19    | 19 active roles, one command each             |
 | Skills                    | 81    | `skills/rule-*/SKILL.md`                       |
 | Review personas           | 19    | `src/core/review/roles/index.js`              |
-| Guardrail rules           | 8     | `src/core/guardrails/index.js`                |
+| Guardrail rules           | 9     | `src/core/guardrails/index.js`                |
 | Agent slash commands      | 41    | `src/core/agents/commands/index.js`           |
 | Agent/IDE command targets | 13    | `src/core/agents/command-targets/index.js`    |
 | CLI commands              | 25    | `src/cli/_program.js`                         |
