@@ -66,7 +66,7 @@ for (const entry of CORPUS) {
 
 test("every corpus expectation names a skill that exists", () => {
   const skillNames = getSkillNames();
-  const unknown = CORPUS.filter((entry) => !skillNames.some((name) => name.includes(entry.expect))).map(
+  const unknown = CORPUS.filter((entry) => skillNames.every((name) => !name.includes(entry.expect))).map(
     (entry) => `${entry.expect} (${entry.prompt})`,
   );
 
