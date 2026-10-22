@@ -19,7 +19,7 @@ The model is deterministic and loopback-only, but its `confidence` is a score, n
 ## Decision
 
 1. BM25 remains the router. No generative model is in the request path and no endpoint but loopback is reachable: `createDecisionClient` refuses every non-loopback host by construction.
-2. The model may only rerank the BM25 shortlist, capped at six options. Its pick replaces the BM25 pick only when the model's probability clears a per-model threshold recorded in the registry; otherwise BM25 wins. The reranker ships off until the Step 4 gate passes.
+2. The model may only rerank the BM25 shortlist, capped at six options. Its pick replaces the BM25 pick only when the model's probability clears a per-model threshold recorded in the registry; otherwise BM25 wins. Laya's floor is 0.05 in `src/core/decision/_registry.js`, below the audit's 0.067-0.332 correct picks, so the three fixes the prototype found are not filtered out. The reranker ships off until the Step 4 gate passes.
 3. The measurement command `scripts/audits/decision-models/corpus.mjs` runs the corpus with the model off and on, prints exact, top-or-alternative, per-model mean latency and input tokens, writes the run to `tests/fixtures/decision-models/corpus-baseline.json`, and `--check` compares a live model-off run with the committed numbers.
 4. Step 4 kill criterion: the corpus exact rate must exceed 77/95 and top-or-alternative must stay at or above 91/95. If either regresses, the feature ships off and Step 4 is reopened as rejected rather than tuned until it passes.
 5. The catalog experiment is measurement-only: 83 options are never a production option set.
