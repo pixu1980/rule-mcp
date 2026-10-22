@@ -29,20 +29,33 @@ Disagreements escalate in this order:
 2. A maintainer rules on the ADR.
 3. The BDFL rules last, and that ruling is final.
 
+## Conduct recusal and appeals
+
+Code of Conduct reports follow `CODE_OF_CONDUCT.md`. Any moderator who is the
+subject of a report or has a conflict of interest must recuse from intake,
+investigation, enforcement, and appeal handling. When a co-maintainer is listed
+in `MAINTAINERS.md`, reports or appeals involving the BDFL are handled
+confidentially by that co-maintainer without BDFL participation. While the bus
+factor is one and no independent internal moderator exists yet, reports or
+appeals involving the BDFL go directly to GitHub Trust & Safety at
+[https://github.com/contact/report-abuse](https://github.com/contact/report-abuse)
+so reporter identity stays private.
+
 ## Branch protection (target state)
 
 `main` requires the `ci` checks plus the CodeQL and audit checks, and one
-approving review for contributors outside the maintainer list. Enabling it is
-owner action 16.5, tracked as part of the policy decisions in
-`docs/plans/plan-of-plans.md` (Stage 0) on `feat/evolution`, and recorded in the
-OSS plan on `main`; this section states the exact setting so it is auditable once
-enabled.
+approving review for contributors outside the maintainer list. Enabling it in
+the repository host settings is owner action 16.5, tracked in
+`docs/plans/plan-of-plans.md` (Stage 0) and recorded in this section so the
+target setting stays auditable in-tree.
 
 ## Funding
 
 The project is unfunded today: no donations have been received and no
-expenses are covered by anyone but the maintainer. The GitHub Sponsors
-account, when created, is controlled by the BDFL, who reports what came
-in and what it covered. Sponsorship buys no roadmap priority.
+expenses are covered by anyone but the maintainer. GitHub Sponsors (`pixu1980`
+in `.github/FUNDING.yml`) is the only approved funding channel, controlled by
+the BDFL, who publishes an annual aggregate summary in this section (total
+received and expenses covered over the calendar year, never exposing individual
+donor identities without consent). Sponsorship buys no roadmap priority.
 Donations do not change the decision process above: an ADR still needs
 its reasons, and money is never one of them.

@@ -1,7 +1,7 @@
 /** The commit-msg hook requires a DCO Signed-off-by trailer (OSS-10). */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -37,4 +37,12 @@ test("a commit body with Signed-off-by is accepted", () => {
 test("merge and revert messages stay exempt", () => {
   assert.equal(runs("Merge branch 'feature/x' into main\n"), 0, "merges carry no scope and no trailer");
   assert.equal(runs('Revert "fix(cache): drop a stale entry"\n'), 0, "reverts carry no trailer");
+});
+
+test("CONTRIBUTING.md separates DCO provenance certification from inbound licensing (OSS-07)", () => {
+  const contributing = readFileSync(join(root, "CONTRIBUTING.md"), "utf8");
+
+  assert.ok(!contributing.includes("licensed under the DCO"), "CONTRIBUTING.md must not call the DCO a license");
+  assert.match(contributing, /inbound\s*=\s*outbound/iu, "CONTRIBUTING.md must state inbound equals outbound licensing");
+  assert.match(contributing, /provenance/iu, "CONTRIBUTING.md must state that the DCO certifies provenance");
 });
