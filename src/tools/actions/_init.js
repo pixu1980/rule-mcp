@@ -31,7 +31,7 @@ export function registerInitTool() {
     handler: async (arguments_) => {
       const result = initProject({
         projectDir: arguments_.projectDir,
-        tokensave: arguments_.noTokensave ? false : undefined,
+        tokensave: !arguments_.noTokensave && undefined,
       });
 
       return {

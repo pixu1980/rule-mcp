@@ -99,7 +99,7 @@ const TOKEN = /[a-z0-9]+(?:'[a-z]+)?/g;
 const normalize = (text) =>
   text
     .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
+    .replaceAll(/\p{Diacritic}/gu, "")
     .toLowerCase();
 
 /** Whole-token membership, so "plane" never matches "plan" and "checkbox" never matches "check". */

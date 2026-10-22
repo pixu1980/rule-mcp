@@ -8,8 +8,10 @@ export function apply(text) {
   // ── js-blank-line-before-return ──
   const lines = text.split("\n");
   const out = [];
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
+
+  for (const [i, rawLine] of lines.entries()) {
+    const line = rawLine.trim();
+
     if (
       (line.startsWith("return ") || line === "return;") &&
       i > 0 &&
@@ -22,8 +24,10 @@ export function apply(text) {
       out.push("");
       changed = true;
     }
-    out.push(lines[i]);
+
+    out.push(rawLine);
   }
+
   text = out.join("\n");
 
   return { text, changed };

@@ -20,7 +20,7 @@ export function replayIfCached(name, validated, startedAt) {
   const cached = cacheLookup(name, validated);
 
   if (!cached) {
-    return undefined;
+    return;
   }
 
   const replay = { ...cached.result, _meta: { ...cached.result._meta, pixCache: { tier: cached.tier } } };

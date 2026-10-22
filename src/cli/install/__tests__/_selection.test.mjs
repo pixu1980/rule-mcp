@@ -18,7 +18,10 @@ test("the families partition the command surface, with nothing left over", () =>
 
   assert.deepEqual(new Set(all), new Set(everything), "selecting every family is the same as asking for everything");
   assert.ok(all.length > 30, `hubs + personas + tasks: ${all.length}`);
-  assert.ok(!all.some((name) => /^rule-area-[a-z]+-/.test(name)), "no leaf area slash");
+  assert.ok(
+    all.every((name) => !/^rule-area-[a-z]+-/.test(name)),
+    "no leaf area slash",
+  );
 });
 
 test("each preset is a subset of the next", () => {
@@ -78,6 +81,7 @@ test("picking skills still keeps the hub of that area (leaves are tools, not sla
 
 test("personas and tasks are their own families", () => {
   const personas = resolveSelection({ families: ["personas"] }).commands;
+
   assert.ok(personas.includes("rule-persona-security") && personas.includes("rule-persona-a11y"), "one command per role");
   assert.ok(
     personas.every((name) => !/-(audit|review|plan)$/.test(name)),
@@ -89,6 +93,7 @@ test("personas and tasks are their own families", () => {
   );
 
   const tasks = resolveSelection({ families: ["tasks"] }).commands;
+
   assert.ok(tasks.includes("rule-handoff") && tasks.includes("rule-check"), "the one-shot tasks");
 });
 

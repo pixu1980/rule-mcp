@@ -33,15 +33,11 @@ const FIXABLE = /\.(?:js|mjs|cjs|jsx|ts|tsx|mts|cts|md|mdx|markdown|txt)$/i;
 
 /** One `git` call whose failure is an empty list, never a thrown tool. */
 function git(args) {
-  let output = "";
-
   try {
-    output = execFileSync("git", args, { encoding: "utf8" });
+    return execFileSync("git", args, { encoding: "utf8" }).split("\n").filter(Boolean);
   } catch {
     return [];
   }
-
-  return output.split("\n").filter(Boolean);
 }
 
 /** The changed files: the working tree diff plus everything untracked. */

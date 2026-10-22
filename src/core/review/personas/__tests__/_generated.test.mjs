@@ -11,6 +11,7 @@ test("every active role has one persona prompt", () => {
 
   for (const role of activeRoles()) {
     assert.ok(names.has(`rule-persona-${role.id}`), `missing prompt for ${role.id}`);
+
     for (const operation of ["audit", "review", "plan"]) {
       assert.equal(names.has(`rule-persona-${role.id}-${operation}`), false, `the old ${role.id}-${operation} prompt must be gone`);
     }
@@ -29,12 +30,14 @@ test("the request decides how deep the run goes", () => {
   };
 
   const audit = sectionOf("rule-persona-security", "the auth flow");
+
   assert.match(audit, /## The operation: audit$/m, "no stage keyword runs the audit alone");
   assert.match(audit, /docs\/audits\/security\.md/);
   assert.ok(!audit.includes("docs/plans/security.md"), "an audit run does not promise the plan");
   assert.ok(!audit.includes("docs/reviews/security.md"), "nor the review");
 
   const review = sectionOf("rule-persona-security", "review the auth flow");
+
   assert.match(review, /## The operation: audit, then review/);
   assert.match(review, /docs\/audits\/security\.md/);
   assert.match(review, /docs\/reviews\/security\.md/);
@@ -42,6 +45,7 @@ test("the request decides how deep the run goes", () => {
   assert.ok(!review.includes("docs/plans/security.md"), "a review does not promise the plan");
 
   const plan = sectionOf("rule-persona-security", "plan the auth fix");
+
   assert.match(plan, /## The operation: audit, review, plan/);
   assert.match(plan, /docs\/audits\/security\.md/);
   assert.match(plan, /docs\/reviews\/security\.md/);
@@ -66,7 +70,7 @@ test("every active role has one agent command", () => {
 
 test("persona command bodies route through the tools and carry the depth intent", () => {
   for (const command of listAgentCommands()) {
-    if (!/^rule-persona-/.test(command.name)) {
+    if (!command.name.startsWith("rule-persona-")) {
       continue;
     }
 
@@ -86,7 +90,7 @@ test("persona command bodies route through the tools and carry the depth intent"
 });
 
 test("persona prompts and commands accept a free-form request like every other prompt", () => {
-  const personaDefs = listPrompts().filter((p) => /^rule-persona-/.test(p.name));
+  const personaDefs = listPrompts().filter((p) => p.name.startsWith("rule-persona-"));
 
   for (const prompt of personaDefs) {
     assert.equal(prompt.arguments.length, 1, `${prompt.name}: exactly one argument, the free-form request`);
@@ -97,6 +101,7 @@ test("persona prompts and commands accept a free-form request like every other p
   // Help surfaces an invocation example, so the user sees how the request slots in.
   const help = getPrompt("rule-persona-security", { topic: "help" });
   const helpText = help.messages[0].content.text;
+
   assert.match(helpText, /^Usage: \/rule-persona-security/, "persona help must start with the usage line");
   assert.match(helpText, /Examples:/, "persona help must show a request example");
   assert.match(helpText, /plan the SSE daemon auth fix/, "the help shows how a plan ask deepens the run");
@@ -104,5 +109,6 @@ test("persona prompts and commands accept a free-form request like every other p
   // The request reaches the model: a persona prompt with a topic must say so.
   const withRequest = getPrompt("rule-persona-security", { topic: "the SSE daemon token handling" });
   const text = withRequest.messages.map((message) => message.content.text).join("\n");
+
   assert.match(text, /the SSE daemon token handling/, "the request must land in the filled template");
 });

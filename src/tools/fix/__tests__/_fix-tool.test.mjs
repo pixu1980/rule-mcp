@@ -39,7 +39,7 @@ test("fix applies the passes and leaves a compliant file alone", async () => {
     const fixed = await callTool("rule_tool_fix", { files: [file], mode: "fix" });
 
     assert.match(text(fixed), /Fixed 1\/1 file\(s\)/, "the file was fixed");
-    assert.match(readFileSync(file, "utf8"), /\n\n  return x;/, "the blank line before return landed");
+    assert.match(readFileSync(file, "utf8"), /\n\n {2}return x;/, "the blank line before return landed");
 
     const again = await callTool("rule_tool_fix", { files: [file], mode: "fix" });
 
