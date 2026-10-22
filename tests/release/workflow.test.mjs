@@ -1,5 +1,7 @@
 import { strict as assert } from "node:assert";
-import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
@@ -57,5 +59,52 @@ test("only the release job holds contents:write", () => {
 test("the pipeline never touches a registry", () => {
   for (const needle of ["npm publish", "registry.npmjs.org", "npmjs.com"]) {
     assert.ok(!release.includes(needle), `release.yml must not reference a registry (${needle})`);
+  }
+});
+
+test("the release job verifies the cryptographic tag signature against the committed key (OSS-01)", () => {
+  const at = release.search(/^ {2}release:$/mu);
+  const block = release.slice(at);
+  const keyFile = join(root, ".github", "release-signing-key.asc");
+
+  assert.ok(existsSync(keyFile), ".github/release-signing-key.asc must exist in the repository");
+  assert.ok(block.includes(".github/release-signing-key.asc"), "release.yml must import .github/release-signing-key.asc");
+  assert.ok(block.includes("git verify-tag"), "release.yml must run git verify-tag to verify the cryptographic signature");
+});
+
+test("a GPG-signed test tag passes verification and an unsigned annotated tag fails (OSS-01)", () => {
+  const keyFile = join(root, ".github", "release-signing-key.asc");
+
+  assert.ok(existsSync(keyFile), ".github/release-signing-key.asc must exist before testing tag verification");
+
+  const repoDir = mkdtempSync(join(tmpdir(), "rule-release-tag-repo-"));
+  const signHome = mkdtempSync(join(tmpdir(), "rule-release-gpg-sign-"));
+  const verifyHome = mkdtempSync(join(tmpdir(), "rule-release-gpg-verify-"));
+  const run = (cmd, args, home) => execFileSync(cmd, args, { cwd: repoDir, env: home ? { ...process.env, GNUPGHOME: home } : process.env, encoding: "utf8", stdio: "pipe" });
+
+  try {
+    run("gpg", ["--batch", "--import", keyFile], verifyHome);
+    assert.match(run("gpg", ["--list-keys", "--with-colons"], verifyHome), /pisuemiliano\.1980@gmail/u);
+
+    run("gpg", ["--batch", "--passphrase", "", "--quick-gen-key", "Release Test <release-test@example.org>", "ed25519", "default", "0"], signHome);
+    const pub = execFileSync("gpg", ["--armor", "--export", "release-test@example.org"], { cwd: repoDir, env: { ...process.env, GNUPGHOME: signHome } });
+
+    execFileSync("gpg", ["--batch", "--import"], { cwd: repoDir, env: { ...process.env, GNUPGHOME: verifyHome }, input: pub, stdio: "pipe" });
+
+    run("git", ["init", "-q"]);
+    run("git", ["config", "user.name", "Release Test"]);
+    run("git", ["config", "user.email", "release-test@example.org"]);
+    run("git", ["commit", "--allow-empty", "-q", "--no-verify", "-m", "chore(release): seed test commit"]);
+    run("git", ["tag", "-a", "v0.1.1-unsigned", "-m", "unsigned annotated tag"]);
+    run("git", ["tag", "-s", "v0.1.1-signed", "-m", "signed release tag"], signHome);
+
+    assert.equal(run("git", ["cat-file", "-t", "v0.1.1-unsigned"]).trim(), "tag");
+    assert.equal(run("git", ["cat-file", "-t", "v0.1.1-signed"]).trim(), "tag");
+    assert.throws(() => run("git", ["verify-tag", "v0.1.1-unsigned"], verifyHome));
+    run("git", ["verify-tag", "v0.1.1-signed"], verifyHome);
+  } finally {
+    rmSync(repoDir, { recursive: true, force: true });
+    rmSync(signHome, { recursive: true, force: true });
+    rmSync(verifyHome, { recursive: true, force: true });
   }
 });

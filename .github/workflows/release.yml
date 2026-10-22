@@ -90,10 +90,18 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      # Lightweight tags stop here: only a signed (annotated) tag object
-      # carries a verifiable author.
+      # Lightweight tags stop here: an annotated tag object is required before
+      # checking its cryptographic signature.
       - name: Refuse lightweight tags
         run: test "$(git cat-file -t "${GITHUB_REF_NAME}")" = tag
+      # Annotated tags without a valid GPG signature from the committed
+      # release signing key stop here before any release is created (OSS-01).
+      - name: Verify release tag signature
+        run: |
+          GNUPGHOME="$(mktemp -d)"
+          export GNUPGHOME
+          gpg --batch --import .github/release-signing-key.asc
+          git verify-tag "${GITHUB_REF_NAME}"
       - name: Version sync
         run: node scripts/build/version/index.mjs --check
       - name: Dependency audit gate
