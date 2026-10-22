@@ -467,7 +467,7 @@ a checkout whose base advanced. It needs a decision - change the banner position
 and its contract test, or give every affected test a shared reader - and it is
 not part of this graph.
 
-## 15 - Model assignment for this plan
+## 15 - Model assignment
 
 | Step in this plan | Class | Model | Why |
 | ----------------- | ----- | ----- | --- |
