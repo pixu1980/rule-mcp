@@ -7,6 +7,9 @@ import { test } from "node:test";
 import { consumeSyncNotice, freshnessNotice, maybeSyncCheck, resetSyncGuard, syncGuardEnabled } from "../index.js";
 import { commit, makeRepo, remove, run } from "../../git/__tests__/_fixture.mjs";
 
+// The suite runner disables the guard for determinism; this suite tests it.
+delete process.env.RULE_MCP_NO_SYNC_GUARD;
+
 /** Run with a mocked clock so the throttle can be stepped over without waiting. */
 async function withClock(ms, body) {
   const real = Date.now;
