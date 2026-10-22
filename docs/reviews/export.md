@@ -1,6 +1,7 @@
 # export review
 
-- **Role**: architect review of export design
+- **Role**: export v1
+- **Focus**: architect review of export design
 - **Date**: 2026-10-21
 - **Audit**: [export audit](../audits/export.md)
 
