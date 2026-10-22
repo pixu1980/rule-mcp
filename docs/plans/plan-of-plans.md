@@ -81,9 +81,9 @@ more than one plan gets its own level-1 orchestrator, or this file says why not.
 | Branch           | Level-1 orchestrator                                                     | State                                             |
 | ---------------- | ------------------------------------------------------------------------ | ------------------------------------------------- |
 | `ge`             | `docs/plans/skills/skills-plan.md`                                       | exists, 83 nodes                                  |
-| `dm`             | none, and it does not need one                                           | folded into `ge` in stage 2                       |
-| `ex`             | `docs/plans/export.md` gains a dependency section                        | retrofit                                          |
-| `nyx`            | `docs/plans/2026-10-01-scripts-mcp-layout.md` gains a dependency section | retrofit                                          |
+| `dm`             | none, and it does not need one                                           | folded into `ge` in stage 1                       |
+| `ex`             | `docs/plans/export.md` gains a dependency section                        | retrofitted (stage 2)                             |
+| `nyx`            | `docs/plans/2026-10-01-scripts-mcp-layout.md` gains a dependency section | retrofitted (stage 2)                             |
 | `feat/evolution` | this file                                                                | plus the per-branch orchestrators it delegates to |
 
 ## 3 - Nodes, two levels
@@ -139,15 +139,17 @@ feat/evolution                (the destination: every merge above lands here)
 
 Edges, spelled out:
 
-| From                         | To               | Kind         | Why                                                                                                                |
-| ---------------------------- | ---------------- | ------------ | ------------------------------------------------------------------------------------------------------------------ |
-| `dm`                         | `ge`             | `SUPERSEDES` | 44 of 44 shared plans superseded, 1 unique plan, 4 commits (3 rebased twins, 1 split mirror)                       |
-| `dm` -> `decision-models.md` | `ge`             | `MERGE`      | the one plan that survives the fold, and it moves with the commit                                                  |
-| `ex`                         | `feat/evolution` | `MERGE`      | independent content (7 files), 3 shared generated files                                                            |
-| `nyx`                        | `feat/evolution` | `MERGE`      | independent content (19 files), 1 shared generated file                                                            |
-| `ge`                         | `feat/evolution` | `MERGE`      | largest diff, carries ADR 151/152 removals                                                                         |
-| `ex`, `nyx`                  | `ge`             | `REBASE`     | both touch `docs/handoff/HANDOFF.md`; `ex` also touches `docs/02-architecture.md` and `tests/fixtures/census.json` |
-| `dm`'s 44 shared plan files  | `ge`'s versions  | `DIVERGENCE` | all 44 superseded: ADR 154 format and ADR 152 removals; no dm-only content                                         |
+| From                                         | To                          | Kind         | Why                                                                                                                |
+| -------------------------------------------- | --------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------ |
+| `dm`                                         | `ge`                        | `SUPERSEDES` | 44 of 44 shared plans superseded, 1 unique plan, 4 commits (3 rebased twins, 1 split mirror)                       |
+| `dm` -> `decision-models.md`                 | `ge`                        | `MERGE`      | the one plan that survives the fold, and it moves with the commit                                                  |
+| `ex`                                         | `feat/evolution`            | `MERGE`      | independent content (7 files), 3 shared generated files                                                            |
+| `nyx`                                        | `feat/evolution`            | `MERGE`      | independent content (19 files), 1 shared generated file                                                            |
+| `ge`                                         | `feat/evolution`            | `MERGE`      | largest diff, carries ADR 151/152 removals                                                                         |
+| `ex`, `nyx`                                  | `ge`                        | `REBASE`     | both touch `docs/handoff/HANDOFF.md`; `ex` also touches `docs/02-architecture.md` and `tests/fixtures/census.json` |
+| `dm`'s 44 shared plan files                  | `ge`'s versions             | `DIVERGENCE` | all 44 superseded: ADR 154 format and ADR 152 removals; no dm-only content                                         |
+| `ex`, `nyx`'s `docs/plans/execution-plan.md` | Stage 0 of `feat/evolution` | `SUPERSEDES` | retired: its three phases are section 7 of this file, which closed them                                            |
+| `ex`, `nyx`'s `docs/plans/oss.md`            | Stage 0 of `feat/evolution` | `SUPERSEDES` | retired: OSS-01 to OSS-08 are closed in section 7 of this file                                                     |
 
 The merge order is **derived, not chosen**: `ge` is last because it carries the
 most files and the two removals; `dm` is first because it is the cheapest fold;
@@ -334,17 +336,41 @@ Stage 1 gate record (2026-10-22):
   the session record `7afaf605` renamed, and resolving it would undo the split.
   The split is already recorded on both sides, so skipping it loses nothing.
 
-### Stage 2 - Retrofit `ex` and `nyx`
+### Stage 2 - Retrofit `ex` and `nyx` (2 plans, done 2026-10-22)
 
-- [ ] `export.md` gains `Branch:`, `Path:`, `Depends on:`, `Feeds:`,
+- [x] `export.md` gains `Branch:`, `Path:`, `Depends on:`, `Feeds:`,
       `Shared files:` and its own `## Dependency graph`.
-- [ ] `2026-10-01-scripts-mcp-layout.md` gains the same.
-- [ ] The two retired plans are recorded as superseded by Stage 0 here, and no
+- [x] `2026-10-01-scripts-mcp-layout.md` gains the same.
+- [x] The two retired plans are recorded as superseded by Stage 0 here, and no
       stage reads a file from another branch.
-- [ ] Every plan listed in section 2 exists on its declared branch, and the
+- [x] Every plan listed in section 2 exists on its declared branch, and the
       `Branch:`/`Path:` pair matches the tree.
 
 Gate: the test of section 10 goes green for these four plans.
+
+Stage 2 gate record (2026-10-22):
+
+- `ex` `c63636da` and `nyx` `9ecc49ab`: `docs(plans): give the branch plans the
+cross-branch node`.
+- `feat/evolution` `bfbbb59c`: `test(plans): assert the cross-branch node from
+the git tree`.
+- `node --import ./scripts/alias-hook.mjs --test tests/plans/plan-of-plans.test.mjs`:
+  `7/7` pass.
+- Section 9 suites: `src/tools/router/__tests__/*.test.mjs` `32/32`; the four
+  corpus suites `14/14` in a detached worktree at this commit. In this checkout
+  `_routing-corpus` parses the `⚠️ Base branch advanced` banner as its first
+  content item, the residual section 13 already records.
+- The four plans: `docs/plans/export.md` on `feat/export`,
+  `docs/plans/2026-10-01-scripts-mcp-layout.md` on `feat/nyx`, and the retired
+  `docs/plans/execution-plan.md` and `docs/plans/oss.md` on both.
+- Deviation: `2026-10-01-scripts-mcp-layout.md` had a numbered execution order
+  and no checkbox; ADR 154 requires a checkbox step, so its ten items became
+  `- [ ]` boxes.
+- `feat/guardrails` keeps its copies of `execution-plan.md` and `oss.md` as
+  `planned`: the retirement is effective through section 5, and Stage 5 resolves
+  those two paths there.
+- Section 2 also corrects `dm`'s fold from stage 2 to stage 1, which is where it
+  happened.
 
 ### Stage 3 - Merge `ex` into `feat/evolution`
 
@@ -430,15 +456,19 @@ Human, and only there:
 `tests/plans/plan-of-plans.test.mjs`, reading the branches with
 `git show <branch>:<path>`:
 
-- [ ] Every level-2 node's `Branch:` and `Path:` resolve on that branch.
-- [ ] Every plan path claimed by two branches has a `DIVERGENCE` or
+- [x] Every level-2 node's `Branch:` and `Path:` resolve on that branch.
+- [x] Every plan path claimed by two branches has a `DIVERGENCE` or
       `SUPERSEDES` entry in section 5.
-- [ ] Every plan file in scope has a status line, a `## Dependency graph` section
+- [x] Every plan file in scope has a status line, a `## Dependency graph` section
       and at least one checkbox.
-- [ ] The level-1 graph is acyclic.
-- [ ] The merge order in section 5 is consistent with the `MERGE` edges: a branch
+- [x] The level-1 graph is acyclic.
+- [x] The merge order in section 5 is consistent with the `MERGE` edges: a branch
       never appears before a branch it depends on.
-- [ ] A plan marked `done` has no open checkbox.
+- [x] A plan marked `done` has no open checkbox.
+
+Green on 2026-10-22 for `ex` and `nyx` (`7/7`). The `feat/guardrails` catalogue
+keeps `tests/plans/skills-plan.test.mjs` (`9/9`), which reads the four-line
+in-branch form; Stage 7 widens this file branch by branch.
 
 ## 11 - Dependency graph
 
