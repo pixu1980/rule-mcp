@@ -1,5 +1,7 @@
 # oss plan
 
+Status: `superseded` by Stage 0 of `docs/plans/plan-of-plans.md`: OSS-01 to OSS-08 are closed in section 7 of that file.
+
 - **Role**: oss v1
 - **Date**: 2026-10-12
 
@@ -42,6 +44,14 @@ Dependencies: confirm the owner's release-signing, supported-version, moderation
 - [ ] **Step 8 - OSS-08 (low)**: README entry page has no direct links to contribution, governance, conduct or security policies
   - [ ] **8.1**: Add concise links to CONTRIBUTING.md, GOVERNANCE.md, CODE_OF_CONDUCT.md, MAINTAINERS.md and SECURITY.md to the README landing page.
   - [ ] **8.2**: Check each link locally and keep the handbook reference links intact.
+
+## Dependency graph
+
+Depends on: -
+
+Feeds: -
+
+Shared files: `docs/plans/execution-plan.md`, which is retired with it
 
 ## Model assignment
 

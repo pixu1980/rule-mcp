@@ -1,5 +1,7 @@
 # Open Source Steward execution plan
 
+Status: `superseded` by Stage 0 of `docs/plans/plan-of-plans.md`: its three phases moved into section 7 of that file, which closed them.
+
 ## Phase 1 - Evidence and decisions
 
 - [x] Verify the current release-signature evidence and link it to the OSS audit (read-only): `git tag -v v0.1.0` exited 1 (`error: no signature found`); recorded in `docs/audits/oss.md`.
@@ -17,6 +19,14 @@
 - [ ] Refresh `docs/audits/oss.md`, `docs/reviews/oss.md` and `docs/plans/oss.md` with the evidence and statuses after remediation.
 
 No implementation or repository setting change is authorized by this plan. The full finding-specific steps, dependencies and verification gates are in `docs/plans/oss.md`.
+
+## Dependency graph
+
+Depends on: -
+
+Feeds: -
+
+Shared files: `docs/plans/oss.md`, which is retired with it
 
 ## Model assignment
 
