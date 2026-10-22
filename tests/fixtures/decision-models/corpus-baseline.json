@@ -1,0 +1,890 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-10-22",
+  "universe": "base",
+  "corpusSize": 95,
+  "off": {
+    "total": 95,
+    "exact": 77,
+    "top": 91,
+    "exactRate": 0.811,
+    "topRate": 0.958,
+    "rows": [
+      {
+        "prompt": "I need a React button component",
+        "expect": "frontend-react",
+        "area": "frontend",
+        "got": "rule-frontend-react",
+        "alternatives": ["rule-meta-next", "rule-meta-astro", "rule-styleguide-a11y", "rule-styleguide-i18n", "rule-devops-testing"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "How do I create a React button component?",
+        "expect": "frontend-react",
+        "area": "frontend",
+        "got": "rule-frontend-react",
+        "alternatives": ["rule-styleguide-a11y", "rule-devops-testing", "rule-platform-web", "rule-frontend", "rule-styleguide-i18n"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "Vue 3 component with Composition API",
+        "expect": "frontend-vue",
+        "area": "frontend",
+        "got": "rule-frontend-vue",
+        "alternatives": ["rule-meta-nuxt", "rule-frontend-react", "rule-platform-web", "rule-frontend", "rule-frontend-workers"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "svelte store for shared state",
+        "expect": "frontend-svelte",
+        "area": "frontend",
+        "got": "rule-frontend-svelte",
+        "alternatives": ["rule-frontend-workers", "rule-frontend-solidjs", "rule-frontend-vue", "rule-platform-web", "rule-frontend-react"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "angular standalone component with signals",
+        "expect": "frontend-angular",
+        "area": "frontend",
+        "got": "rule-frontend-angular",
+        "alternatives": ["rule-frontend", "rule-platform-web", "rule-frontend-workers", "rule-styleguide-naming", "rule-frontend-solidjs"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "astro island that hydrates on visible",
+        "expect": "meta-astro",
+        "area": "frontend",
+        "got": "rule-meta-astro",
+        "alternatives": ["rule-platform-web", "rule-frontend", "rule-frontend-workers", "rule-styleguide-a11y", "rule-ai-evals"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "should I use enum or a union type",
+        "expect": "styleguide-typescript",
+        "area": "styleguide",
+        "got": "rule-styleguide-typescript",
+        "alternatives": ["rule-data-duckdb", "rule-styleguide", "rule-data-sql", "rule-styleguide-i18n", "rule-styleguide-git"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "typescript any vs unknown in a catch block",
+        "expect": "styleguide-typescript",
+        "area": "styleguide",
+        "got": "rule-styleguide-typescript",
+        "alternatives": ["rule-toolchain-eslint", "rule-backend-express", "rule-styleguide", "rule-styleguide-a11y", "rule-backend-node"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "tsconfig strict mode settings",
+        "expect": "styleguide-typescript",
+        "area": "styleguide",
+        "got": "rule-styleguide-typescript",
+        "alternatives": ["rule-platform-web", "rule-frontend-react", "rule-backend-node", "rule-data-sqlite", "rule-toolchain-eslint"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "html boilerplate for a new page",
+        "expect": "styleguide-html",
+        "area": "styleguide",
+        "got": "rule-styleguide-html",
+        "alternatives": ["rule-platform-web", "rule-styleguide", "rule-styleguide-a11y", "rule-styleguide-css", "rule-meta-astro"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "what goes in the head of a document",
+        "expect": "styleguide-html",
+        "area": "styleguide",
+        "got": "rule-styleguide-html",
+        "alternatives": ["rule-styleguide-i18n", "rule-styleguide-baseline", "rule-backend", "rule-frontend-workers", "rule-toolchain-parcel"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "how do I test my code",
+        "expect": "devops-testing",
+        "area": "devops",
+        "got": "rule-devops-testing",
+        "alternatives": ["rule-ai-prompting", "rule-ai-evals", "rule-styleguide-git", "rule-platform-web", "rule-styleguide-javascript"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "my agent session keeps getting worse the longer it runs",
+        "expect": "ai-context-engineering",
+        "area": "ai",
+        "got": "rule-ai-context-engineering",
+        "alternatives": ["rule-ai-prompting", "rule-ai-agent-architecture", "rule-ai", "rule-backend-security", "rule-process-readme"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "should I compact or start a fresh context",
+        "expect": "ai-context-engineering",
+        "area": "ai",
+        "got": "rule-ai-context-engineering",
+        "alternatives": ["rule-ai-prompting", "rule-process-bmad", "rule-frontend-react", "rule-toolchain-pnpm", "rule-process-ai"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "what is actually consuming my usage limit",
+        "expect": "ai-context-engineering",
+        "area": "ai",
+        "got": "rule-ai-context-engineering",
+        "alternatives": ["rule-data-mysql", "rule-styleguide-css", "rule-styleguide-javascript", "rule-data-mongodb", "rule-data-sql"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "how does a tool call work at the api boundary",
+        "expect": "ai-agent-architecture",
+        "area": "ai",
+        "got": "rule-ai-agent-architecture",
+        "alternatives": ["rule-platform-web", "rule-backend", "rule-styleguide-typescript", "rule-frontend-react", "rule-backend-node"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "how granular should my mcp tools be",
+        "expect": "ai-agent-architecture",
+        "area": "ai",
+        "got": "rule-ai-agent-architecture",
+        "alternatives": ["rule-styleguide-css", "rule-styleguide-a11y", "rule-process-readme", "rule-ai", "rule-ai-evals"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "agent loop or a graph for orchestration",
+        "expect": "ai-agent-architecture",
+        "area": "ai",
+        "got": "rule-ai-agent-architecture",
+        "alternatives": ["rule-ai-context-engineering", "rule-ai", "rule-ai-prompting", "rule-process-bmad", "rule-backend-graphql"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "how do I format a date for a different locale",
+        "expect": "styleguide-i18n",
+        "area": "styleguide",
+        "got": "rule-styleguide-i18n",
+        "alternatives": ["rule-platform-web", "rule-styleguide-json", "rule-styleguide-baseline", "rule-process-readme", "rule-styleguide-git"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "pluralization rules for translated strings",
+        "expect": "styleguide-i18n",
+        "area": "styleguide",
+        "got": "rule-styleguide-i18n",
+        "alternatives": ["rule-platform-web", "rule-styleguide-css", "rule-styleguide-typescript", "rule-styleguide-json", "rule-styleguide-javascript"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "RTL layout for arabic",
+        "expect": "styleguide-i18n",
+        "area": "styleguide",
+        "got": "rule-styleguide-i18n",
+        "alternatives": ["rule-styleguide-css", "rule-styleguide-html", "rule-platform-web", "rule-styleguide", "rule-meta-remix"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "translation keys naming convention",
+        "expect": "styleguide-i18n",
+        "area": "styleguide",
+        "got": "rule-styleguide-i18n",
+        "alternatives": ["rule-styleguide-naming", "rule-styleguide", "rule-styleguide-javascript", "rule-styleguide-json", "rule-styleguide-css"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "why does my forEach with async not wait",
+        "expect": "styleguide-javascript",
+        "area": "styleguide",
+        "got": "rule-styleguide-javascript",
+        "alternatives": ["rule-frontend-workers", "rule-backend-workers", "rule-ai-evals", "rule-data-mysql", "rule-ai-prompting"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "what does await actually wait for",
+        "expect": "styleguide-javascript",
+        "area": "styleguide",
+        "got": "rule-styleguide-javascript",
+        "alternatives": ["rule-frontend-workers", "rule-backend-node", "rule-data-indexed-db", "rule-process-npm-release", "rule-styleguide-baseline"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "retry a failed request with backoff",
+        "expect": "styleguide-javascript",
+        "area": "styleguide",
+        "got": "rule-backend-node",
+        "alternatives": ["rule-styleguide-javascript", "rule-backend-security", "rule-data-indexed-db", "rule-devops-observability", "rule-ai-evals"],
+        "exact": false,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "my node api gets slow under load with promise.all",
+        "expect": "backend-node",
+        "area": "backend",
+        "got": "rule-backend-node",
+        "alternatives": ["rule-backend-workers", "rule-backend", "rule-platform-desktop", "rule-styleguide-javascript", "rule-platform-web"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "node process runs out of memory on file upload",
+        "expect": "backend-node",
+        "area": "backend",
+        "got": "rule-backend-node",
+        "alternatives": ["rule-backend-workers", "rule-process-npm-release", "rule-platform-desktop", "rule-process-readme", "rule-process-code-review"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "jwt verification best practices",
+        "expect": "backend-security",
+        "area": "backend",
+        "got": "rule-backend-security",
+        "alternatives": ["rule-data-indexed-db", "rule-platform-desktop", "rule-toolchain-pnpm", "rule-backend-workers", "rule-styleguide-a11y"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "should logout revoke all sessions",
+        "expect": "backend-security",
+        "area": "backend",
+        "got": "rule-backend-security",
+        "alternatives": ["rule-ai-context-engineering", "rule-meta-remix", "rule-frontend-workers", "rule-process", "rule-process-changelog"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "idempotency key for payments endpoint",
+        "expect": "backend-node",
+        "area": "backend",
+        "got": "rule-backend-security",
+        "alternatives": ["rule-data-sql", "rule-backend-node", "rule-data-postgresql", "rule-data-indexed-db", "rule-styleguide-typescript"],
+        "exact": false,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "api error response format",
+        "expect": "backend-security",
+        "area": "backend",
+        "got": "rule-backend-fastify",
+        "alternatives": ["rule-platform-web", "rule-backend-express", "rule-styleguide-typescript", "rule-platform-desktop", "rule-platform-library"],
+        "exact": false,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "express middleware for rate limiting",
+        "expect": "backend-express",
+        "area": "backend",
+        "got": "rule-backend-express",
+        "alternatives": ["rule-backend-security", "rule-backend-node", "rule-backend", "rule-backend-fastify", "rule-meta-nuxt"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "sql query with LIKE wildcard is slow",
+        "expect": "data-sql",
+        "area": "data",
+        "got": "rule-data-sql",
+        "alternatives": ["rule-data-mysql", "rule-data-sqlite", "rule-data-postgresql", "rule-data-mongodb", "rule-data-duckdb"],
+        "exact": true,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "count query is slow on every page load",
+        "expect": "data-sql",
+        "area": "data",
+        "got": "rule-data-sql",
+        "alternatives": ["rule-meta-astro", "rule-data-mysql", "rule-frontend-workers", "rule-styleguide-css", "rule-data-mongodb"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "postgres index for a slow query",
+        "expect": "data-postgresql",
+        "area": "data",
+        "got": "rule-data-postgresql",
+        "alternatives": ["rule-data-sql", "rule-data-mysql", "rule-data-indexed-db", "rule-data-mongodb", "rule-data-sqlite"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "mongodb aggregation pipeline",
+        "expect": "data-mongodb",
+        "area": "data",
+        "got": "rule-data-mongodb",
+        "alternatives": ["rule-data-sql", "rule-toolchain-turborepo", "rule-devops-deploy-preview", "rule-backend", "rule-styleguide-git"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "fluid typography without media queries",
+        "expect": "styleguide-css",
+        "area": "styleguide",
+        "got": "rule-styleguide-css",
+        "alternatives": ["rule-styleguide-html", "rule-styleguide-a11y", "rule-ui-design-system", "rule-platform-web", "rule-data-mysql"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "aspect ratio for video thumbnails",
+        "expect": "styleguide-css",
+        "area": "styleguide",
+        "got": "rule-styleguide-css",
+        "alternatives": ["rule-styleguide-a11y", "rule-data-postgresql", "rule-platform-web", "rule-data-mysql", "rule-data-mongodb"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "intersection observer for lazy loading",
+        "expect": "platform-web",
+        "area": "platform",
+        "got": "rule-platform-web",
+        "alternatives": ["rule-frontend-workers", "rule-meta-astro", "rule-styleguide-typescript", "rule-meta-next", "rule-styleguide-a11y"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "native dialog modal instead of a library",
+        "expect": "platform-web",
+        "area": "platform",
+        "got": "rule-styleguide-a11y",
+        "alternatives": ["rule-styleguide-html", "rule-platform-web", "rule-platform-library", "rule-styleguide-baseline", "rule-styleguide-javascript"],
+        "exact": false,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "semantic html landmarks for a page",
+        "expect": "styleguide-html",
+        "area": "styleguide",
+        "got": "rule-styleguide-html",
+        "alternatives": ["rule-styleguide-a11y", "rule-platform-web", "rule-styleguide-css", "rule-styleguide", "rule-meta-astro"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "accessibility guidelines a11y WCAG standards",
+        "expect": "styleguide-a11y",
+        "area": "styleguide",
+        "got": "rule-styleguide-a11y",
+        "alternatives": ["rule-styleguide", "rule-platform-web", "rule-ui-design-system", "rule-ui", "rule-process-tdd"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "should I extract this into a helper function",
+        "expect": "process-ai",
+        "area": "process",
+        "got": "rule-process-ai",
+        "alternatives": ["rule-process-tdd", "rule-styleguide-javascript", "rule-styleguide-naming", "rule-frontend-react", "rule-devops-testing"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "remove em dashes and use american english spelling",
+        "expect": "process-ai",
+        "area": "styleguide",
+        "got": "rule-process-ai",
+        "alternatives": ["rule-styleguide-i18n", "rule-styleguide-css", "rule-styleguide-html", "rule-styleguide-markdown", "rule-data-postgresql"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "americanize the comments: color -> color, behavior -> behavior",
+        "expect": "process-ai",
+        "area": "styleguide",
+        "got": "rule-styleguide-css",
+        "alternatives": ["rule-styleguide-comments", "rule-styleguide-a11y", "rule-ui-design-system", "rule-frontend-react", "rule-styleguide-baseline"],
+        "exact": false,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "my writing looks AI generated, fix the punctuation",
+        "expect": "process-ai",
+        "area": "styleguide",
+        "got": "rule-ai-evals",
+        "alternatives": ["rule-ai-prompting", "rule-process-ai", "rule-ai-context-engineering", "rule-ui-design-system", "rule-process-changelog"],
+        "exact": false,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "how do I evaluate my llm feature",
+        "expect": "ai-evals",
+        "area": "ai",
+        "got": "rule-ai-evals",
+        "alternatives": ["rule-ai-prompting", "rule-ai", "rule-styleguide-javascript", "rule-styleguide-baseline", "rule-styleguide-css"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "llm as a judge prompt design",
+        "expect": "ai-evals",
+        "area": "ai",
+        "got": "rule-ai-prompting",
+        "alternatives": ["rule-ai-evals", "rule-ai", "rule-ui-design-system", "rule-ai-agent-architecture", "rule-styleguide-css"],
+        "exact": false,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "error analysis on agent traces",
+        "expect": "ai-evals",
+        "area": "ai",
+        "got": "rule-ai-evals",
+        "alternatives": ["rule-ai-agent-architecture", "rule-devops-observability", "rule-process-bmad", "rule-ai", "rule-ai-prompting"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "how should AI fit our development lifecycle",
+        "expect": "process-ai",
+        "area": "process",
+        "got": "rule-process-ai",
+        "alternatives": ["rule-process", "rule-ai-evals", "rule-ai-prompting", "rule-styleguide-a11y", "rule-platform-desktop"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "plan before code and approval gates",
+        "expect": "process-ai",
+        "area": "process",
+        "got": "rule-process-ai",
+        "alternatives": ["rule-process-bmad", "rule-process-code-review", "rule-process-npm-release", "rule-frontend-react", "rule-process"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "how do I write a better prompt for the agent",
+        "expect": "ai-prompting",
+        "area": "ai",
+        "got": "rule-ai-prompting",
+        "alternatives": ["rule-ai-agent-architecture", "rule-ai-evals", "rule-process-bmad", "rule-ai-context-engineering", "rule-styleguide-baseline"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "teaching a junior to use AI without losing skills",
+        "expect": "ai-prompting",
+        "area": "ai",
+        "got": "rule-ai-prompting",
+        "alternatives": ["rule-ai-context-engineering", "rule-ai", "rule-process", "rule-styleguide-a11y", "rule-ai-evals"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "when is a vector database the wrong answer",
+        "expect": "ai-context-engineering",
+        "area": "ai",
+        "got": "rule-data-postgresql",
+        "alternatives": ["rule-data-sql", "rule-backend", "rule-data", "rule-data-mysql", "rule-styleguide-baseline"],
+        "exact": false,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "embeddings or a code graph for retrieval",
+        "expect": "ai-context-engineering",
+        "area": "ai",
+        "got": "rule-ai-context-engineering",
+        "alternatives": ["rule-ai-evals", "rule-backend-graphql", "rule-ai", "rule-ai-prompting", "rule-ai-agent-architecture"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "what should a generation span carry",
+        "expect": "devops-observability",
+        "area": "devops",
+        "got": "rule-devops-observability",
+        "alternatives": ["rule-styleguide-a11y", "rule-process-changelog", "rule-meta-astro", "rule-styleguide-html", "rule-platform-desktop"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "trace an agent and see where the tokens went",
+        "expect": "devops-observability",
+        "area": "devops",
+        "got": "rule-devops-observability",
+        "alternatives": ["rule-ai-agent-architecture", "rule-ai-evals", "rule-ai-context-engineering", "rule-ai-prompting", "rule-backend-security"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "should I let the model write our integration tests",
+        "expect": "ai-evals",
+        "area": "ai",
+        "got": "rule-devops-testing",
+        "alternatives": ["rule-ai-evals", "rule-process-tdd", "rule-platform-web", "rule-platform-desktop", "rule-frontend-vue"],
+        "exact": false,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "how should I review code I did not write",
+        "expect": "process-code-review",
+        "area": "process",
+        "got": "rule-process-code-review",
+        "alternatives": ["rule-ai-prompting", "rule-ai-evals", "rule-process-ai", "rule-process-readme", "rule-process-bmad"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "reviewing a generated pull request",
+        "expect": "process-code-review",
+        "area": "process",
+        "got": "rule-process-code-review",
+        "alternatives": ["rule-platform-desktop", "rule-devops-deploy-preview", "rule-ai-evals", "rule-backend-graphql", "rule-styleguide-git"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "the assistant keeps adding dependencies",
+        "expect": "process-code-review",
+        "area": "process",
+        "got": "rule-process-code-review",
+        "alternatives": ["rule-backend-node", "rule-toolchain-pnpm", "rule-styleguide-git", "rule-styleguide-markdown", "rule-platform-library"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "why is writing code faster but delivering not",
+        "expect": "process-ai",
+        "area": "process",
+        "got": "rule-process-ai",
+        "alternatives": ["rule-styleguide-baseline", "rule-ai-evals", "rule-ai-prompting", "rule-styleguide-markdown", "rule-ai-context-engineering"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "ask for a design critique that is actually actionable",
+        "expect": "ui-design-system",
+        "area": "ui",
+        "got": "rule-ui-design-system",
+        "alternatives": ["rule-ai-prompting", "rule-process-code-review", "rule-styleguide-baseline", "rule-styleguide-css", "rule-ai-agent-architecture"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "the generated screen has no empty or error state",
+        "expect": "ui-design-system",
+        "area": "ui",
+        "got": "rule-ui-design-system",
+        "alternatives": ["rule-frontend-react", "rule-styleguide-a11y", "rule-frontend-svelte", "rule-backend-node", "rule-platform-desktop"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "how do I critique a generated interface",
+        "expect": "ui-design-system",
+        "area": "ui",
+        "got": "rule-ai-prompting",
+        "alternatives": ["rule-ui-design-system", "rule-process-bmad", "rule-ai-evals", "rule-ai-agent-architecture", "rule-process-readme"],
+        "exact": false,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "a stale response overwrote the newer one",
+        "expect": "styleguide-javascript",
+        "area": "styleguide",
+        "got": "rule-styleguide-javascript",
+        "alternatives": ["rule-backend-security", "rule-frontend-workers", "rule-backend-fastify", "rule-backend", "rule-data-postgresql"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "do I still need lodash",
+        "expect": "styleguide-javascript",
+        "area": "styleguide",
+        "got": "rule-styleguide-javascript",
+        "alternatives": ["rule-styleguide-a11y", "rule-ai-context-engineering", "rule-frontend-workers", "rule-styleguide-markdown", "rule-styleguide-git"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "lazy iterator helpers instead of chaining array methods",
+        "expect": "styleguide-javascript",
+        "area": "styleguide",
+        "got": "rule-styleguide-javascript",
+        "alternatives": ["rule-frontend-workers", "rule-platform-web", "rule-styleguide-typescript", "rule-styleguide-css", "rule-frontend-angular"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "limit how many requests run at once",
+        "expect": "backend-node",
+        "area": "backend",
+        "got": "rule-backend-security",
+        "alternatives": ["rule-data-sql", "rule-backend-node", "rule-ai-evals", "rule-ai-agent-architecture", "rule-devops-deploy-preview"],
+        "exact": false,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "popover or dialog for a dropdown menu",
+        "expect": "styleguide-html",
+        "area": "styleguide",
+        "got": "rule-styleguide-html",
+        "alternatives": ["rule-styleguide-a11y", "rule-styleguide-baseline", "rule-platform-web", "rule-process-npm-release", "rule-ui-design-system"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "accordion where only one panel is open",
+        "expect": "styleguide-html",
+        "area": "styleguide",
+        "got": "rule-styleguide-baseline",
+        "alternatives": ["rule-styleguide-html", "rule-styleguide-a11y", "rule-frontend-react", "rule-styleguide-i18n", "rule-ui-design-system"],
+        "exact": false,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "datalist for suggestions",
+        "expect": "styleguide-html",
+        "area": "styleguide",
+        "got": "rule-styleguide-html",
+        "alternatives": ["rule-data", "rule-data-duckdb", "rule-data-indexed-db", "rule-data-mongodb", "rule-data-mysql"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "why is a random uuid primary key slow at scale",
+        "expect": "data-sql",
+        "area": "data",
+        "got": "rule-data-sql",
+        "alternatives": ["rule-data-postgresql", "rule-data-mysql", "rule-ai-evals", "rule-data-sqlite", "rule-frontend-svelte"],
+        "exact": true,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "what do flaky tests cost us",
+        "expect": "devops-testing",
+        "area": "devops",
+        "got": "rule-devops-testing",
+        "alternatives": ["rule-ai-prompting", "rule-ai-evals", "rule-ai-context-engineering", "rule-styleguide-baseline", "rule-process-tdd"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "three ways to ignore a file in git",
+        "expect": "styleguide-git",
+        "area": "styleguide",
+        "got": "rule-styleguide-git",
+        "alternatives": ["rule-process-npm-release", "rule-process-changelog", "rule-devops-docker", "rule-devops-deploy-preview", "rule-toolchain-eslint"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "block a merge request when a rule is violated",
+        "expect": "devops-testing",
+        "area": "devops",
+        "got": "rule-devops-deploy-preview",
+        "alternatives": ["rule-styleguide-git", "rule-styleguide-a11y", "rule-styleguide-typescript", "rule-frontend-workers", "rule-styleguide-html"],
+        "exact": false,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "do we need a framework for this page at all",
+        "expect": "frontend",
+        "area": "frontend",
+        "got": "rule-process-ai",
+        "alternatives": ["rule-styleguide-a11y", "rule-frontend", "rule-ai-agent-architecture", "rule-ui-design-system", "rule-frontend-workers"],
+        "exact": false,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "copy to clipboard without a helper library",
+        "expect": "platform-web",
+        "area": "platform",
+        "got": "rule-platform-library",
+        "alternatives": ["rule-platform-web", "rule-frontend-react", "rule-styleguide-i18n", "rule-styleguide-javascript", "rule-platform"],
+        "exact": false,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "do I need a fallback for this",
+        "expect": "styleguide-baseline",
+        "area": "styleguide",
+        "got": "rule-styleguide-baseline",
+        "alternatives": ["rule-styleguide-a11y", "rule-styleguide-javascript", "rule-frontend-workers", "rule-devops-testing", "rule-ui-design-system"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "how do I declare our browser support floor",
+        "expect": "styleguide-baseline",
+        "area": "styleguide",
+        "got": "rule-styleguide-baseline",
+        "alternatives": ["rule-frontend-workers", "rule-styleguide-html", "rule-platform-web", "rule-platform-desktop", "rule-styleguide-i18n"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "feature detection instead of browser sniffing",
+        "expect": "styleguide-baseline",
+        "area": "styleguide",
+        "got": "rule-styleguide-baseline",
+        "alternatives": ["rule-frontend-workers", "rule-platform-web", "rule-styleguide-css", "rule-styleguide-javascript", "rule-ai-agent-architecture"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "is this css feature safe to use yet",
+        "expect": "styleguide-baseline",
+        "area": "styleguide",
+        "got": "rule-styleguide-css",
+        "alternatives": ["rule-styleguide-baseline", "rule-styleguide-javascript", "rule-styleguide", "rule-process-npm-release", "rule-meta-astro"],
+        "exact": false,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "how should we generate the changelog",
+        "expect": "process-changelog",
+        "area": "process",
+        "got": "rule-process-changelog",
+        "alternatives": ["rule-process-readme", "rule-process-npm-release", "rule-process-bmad", "rule-platform-desktop", "rule-devops-deploy-preview"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "should the changelog be built in a git hook",
+        "expect": "process-changelog",
+        "area": "process",
+        "got": "rule-process-changelog",
+        "alternatives": ["rule-styleguide-git", "rule-process-npm-release", "rule-platform-library", "rule-devops-deploy-preview", "rule-platform-desktop"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "our changelog has drifted from the commits",
+        "expect": "process-changelog",
+        "area": "process",
+        "got": "rule-process-changelog",
+        "alternatives": ["rule-styleguide-git", "rule-process", "rule-process-npm-release", "rule-platform-library", "rule-toolchain-husky"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "which commit types belong in a changelog",
+        "expect": "process-changelog",
+        "area": "process",
+        "got": "rule-process-changelog",
+        "alternatives": ["rule-styleguide-git", "rule-process-npm-release", "rule-platform-library", "rule-process", "rule-ai-context-engineering"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "why does my layout overflow horizontally",
+        "expect": "styleguide-css",
+        "area": "styleguide",
+        "got": "rule-styleguide-css",
+        "alternatives": ["rule-ai-prompting", "rule-styleguide-html", "rule-ai-agent-architecture", "rule-frontend-react", "rule-ai-evals"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "breakpoints for mobile tablet desktop",
+        "expect": "styleguide-css",
+        "area": "styleguide",
+        "got": "rule-platform-desktop",
+        "alternatives": ["rule-platform", "rule-styleguide-baseline", "rule-styleguide-css", "rule-styleguide-a11y", "rule-backend-security"],
+        "exact": false,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "prettier or biome for formatting",
+        "expect": "toolchain",
+        "area": "toolchain",
+        "got": "rule-toolchain",
+        "alternatives": ["rule-toolchain-biome", "rule-platform-web", "rule-toolchain-eslint", "rule-styleguide-git", "rule-devops"],
+        "exact": true,
+        "inAlternatives": true
+      },
+      {
+        "prompt": "write failing tests first",
+        "expect": "devops-testing",
+        "area": "devops",
+        "got": "rule-devops-testing",
+        "alternatives": ["rule-process-tdd", "rule-ai-prompting", "rule-platform-web", "rule-process-ai", "rule-ai-evals"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "multi-stage docker build for node",
+        "expect": "devops-docker",
+        "area": "devops",
+        "got": "rule-devops-docker",
+        "alternatives": ["rule-devops", "rule-backend-node", "rule-process-npm-release", "rule-devops-deploy-preview", "rule-backend-security"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "conventional commit message with a scope",
+        "expect": "styleguide-git",
+        "area": "styleguide",
+        "got": "rule-styleguide-git",
+        "alternatives": ["rule-process-changelog", "rule-process-tdd", "rule-toolchain-husky", "rule-process-npm-release", "rule-frontend-workers"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "vite config for a library build",
+        "expect": "toolchain-vite",
+        "area": "toolchain",
+        "got": "rule-toolchain-vite",
+        "alternatives": ["rule-platform-library", "rule-toolchain", "rule-toolchain-parcel", "rule-styleguide-configuration", "rule-toolchain-rspack"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "should dependencies use a caret or an exact version",
+        "expect": "toolchain-pnpm",
+        "area": "toolchain",
+        "got": "rule-toolchain-pnpm",
+        "alternatives": ["rule-process-npm-release", "rule-backend-node", "rule-devops-observability", "rule-styleguide", "rule-ai"],
+        "exact": true,
+        "inAlternatives": false
+      },
+      {
+        "prompt": "do I need the packageManager field for corepack",
+        "expect": "toolchain-pnpm",
+        "area": "toolchain",
+        "got": "rule-styleguide-json",
+        "alternatives": ["rule-toolchain-pnpm", "rule-process-npm-release", "rule-styleguide-configuration", "rule-frontend-workers", "rule-backend-security"],
+        "exact": false,
+        "inAlternatives": true
+      }
+    ]
+  },
+  "on": {
+    "recorded": true,
+    "source": "docs/audits/decision-models.md",
+    "note": "Prototype measured outside this repository; rerun with --on when a loopback router is available.",
+    "model": "laya",
+    "shortlist": {
+      "size": 5,
+      "addressable": 13,
+      "fixed": 3,
+      "meanMs": 79,
+      "meanInputTokens": 200
+    },
+    "catalog": {
+      "size": 83,
+      "addressable": 13,
+      "fixed": 1,
+      "meanMs": 173,
+      "meanInputTokens": 355
+    }
+  }
+}

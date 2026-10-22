@@ -119,3 +119,22 @@ node scripts/audits/decision-models/index.mjs
 `RULE_MCP_DECISION_URL` moves the base URL and `RULE_MCP_DECISION_TIMEOUT` the per-request ceiling, in milliseconds. For each model the harness unloads, waits for `unloaded`, loads through `POST /models/load`, waits for `loaded`, asks six questions, then unloads and waits again, so a 6 GB model is resident only while it is measured.
 
 Files: `scripts/audits/decision-models/index.mjs` (orchestration), `_client.mjs` (HTTP and the decision request), `_models.mjs` (load, unload and waiting for the transition), `_probes.data.mjs` (states, questions, the one label), `_report.mjs` (tables).
+
+## Corpus measurement
+
+The routing ruler is the 95-prompt corpus, and its baseline is a file:
+
+```bash
+# model-off: BM25 over all 95 prompts
+node --import ./scripts/alias-hook.mjs scripts/audits/decision-models/corpus.mjs
+
+# compare the live model-off run with the committed baseline
+node --import ./scripts/alias-hook.mjs scripts/audits/decision-models/corpus.mjs --check
+
+# model-on: rerank the addressable misses, then the 83-option catalog
+node --import ./scripts/alias-hook.mjs scripts/audits/decision-models/corpus.mjs --on --model laya --catalog --fixture
+```
+
+The corrected baseline on this checkout is **77/95 exact (81.1%)** and **91/95 top-or-alternative (95.8%)**, stored in `tests/fixtures/decision-models/corpus-baseline.json`. The fixture's model-on block is the audit's recorded prototype: **3/13** fixed on a five-option shortlist (79 ms, 200 input tokens) and **1/13** on the 83-skill catalog (173 ms, 355 input tokens). Rerun `--on` when a loopback router is available; `RULE_MCP_DECISION_URL` and `RULE_MCP_DECISION_TIMEOUT` move the endpoint and the per-call ceiling.
+
+Files: `corpus.mjs` (command), `_corpus-measure.mjs` (counting and question shapes), `_corpus-run.mjs` (BM25 and model runs), `__tests__/_corpus-measure.test.mjs` (the ruler's arithmetic and the fixture shape).
