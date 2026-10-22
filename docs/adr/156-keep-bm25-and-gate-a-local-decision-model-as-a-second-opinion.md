@@ -1,7 +1,7 @@
 # 156: Keep BM25 and gate a local decision model as a second opinion
 
 - **Date**: 2026-10-22
-- **Status**: proposed
+- **Status**: accepted
 - **Tags**: routing, decision-models, architecture, security, testing
 - **Author**: Emiliano Pisu <pisuemiliano.1980@gmail.com>
 
