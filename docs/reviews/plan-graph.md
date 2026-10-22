@@ -146,3 +146,28 @@ M9  per-plan diff dm:plan vs ge:plan -> 29 identical, 3 diverged (1, 1, 4 lines)
 - `origin/develop`: out of scope by decision, and it carries a different track.
 - Whether the area order (`ui, toolchain, styleguide, ...`) is optimal. It is
   inherited from `DEPENDENCIES.md` and nothing measured contradicts it.
+
+## Resolution (2026-10-21)
+
+Every finding was closed on `feat/guardrails-evolution`, where the plans live:
+`3553780c` adds `tests/plans/skills-plan.test.mjs` (nine assertions, written
+first and seen red), `6cda42ea` applies the fixes. Verified on that branch: the
+nine assertions pass, `_corpus`, `_router-child-coverage`, `_retired-skills` and
+`docs-accuracy` are green, the census is current, and lint is clean.
+
+| Finding | Resolution |
+| ------- | ---------- |
+| F1 | 92 plans gained the graph section; the test fails without it |
+| F2 | stages split `0a/0b`, `3a/3b`, `7a/7b`; `CONTRACT` edges exempt |
+| F3 | two new toolchain plans, Stage 4, index #86 and #87 |
+| F4 | `rule-process-bmad` plus `Produces: rule-method` |
+| F5 | ADR 154 amended: four lines in-branch, six cross-branch |
+| F6 | one contended-file list, in `plan-of-plans.md` |
+| F7 | 99 unique paths |
+| F8 | five-value status on 95 files, wording kept on `Notes:` |
+| F9 | the missing checkbox added; non-skill plans stay in scope |
+| Stage lists | a table per stage, 85 nodes, counts summed |
+
+Not resolved, and deliberately out of scope: the sync banner shifts
+`content[0]`, and six tests read fixed indices. Measured: they pass in a detached
+worktree and fail in the checkout after the base advances by two commits.

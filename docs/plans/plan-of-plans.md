@@ -276,20 +276,32 @@ belong to the merged branches, not to this plan.
 
 ## 13 - Fixes the review requires before the first node
 
-From `docs/reviews/plan-graph.md`. F2, F3, F4, F8 and the Stage node lists live in
-`skills-plan.md` on `feat/guardrails-evolution`; F5 and F9 are format decisions
-that touch both documents.
+From `docs/reviews/plan-graph.md`. **All of them are resolved on
+`feat/guardrails-evolution`** (`3553780c` test, `6cda42ea` fix), where the plans
+live; this list is kept so a reader on `main` knows the state without switching
+branch. The files themselves arrive with the merge in stage 4.
 
-- [ ] F2 - resolve the Stage 3 same-stage edge: `rule-platform-auth` moves to
-      Stage 4, or the intra-stage order is declared and the test exempts it.
-- [ ] F3 - give `rule-toolchain-electron` and `rule-toolchain-tauri` their own plans
-      and a stage after 3, or state that the toolchain area closes in Stage 3.
-- [ ] F4 - one id per node: `rule-process-bmad`, with `Produces: rule-method`.
-- [ ] F5 - amend ADR 154 to the six-line set in section 3 of this file.
-- [ ] F8 - normalise the status line to the five values as each stage starts.
-- [ ] F9 - exempt the three non-skill plans from the checkbox assertion by path,
-      or give `installer-scope-adr-policy-features.md` one box.
-- [ ] Stage lists - each stage names its node ids, so the count can be summed
-      instead of asserted (the declared counts over-count by 8 today).
+- [x] F1 - every plan carries a `## Dependency graph` section: 92 files
+      retrofitted, checked by `tests/plans/skills-plan.test.mjs`.
+- [x] F2 - the same-stage edge is gone: stages split into `0a/0b`, `3a/3b`,
+      `7a/7b`, and a `CONTRACT` edge is exempt because a phase closes first.
+- [x] F3 - `rule-toolchain-electron` and `rule-toolchain-tauri` have their own
+      plans (index #86, #87) as Stage 4 nodes.
+- [x] F4 - one id per node: `rule-process-bmad`, with `Produces: rule-method`.
+- [x] F5 - ADR 154 amended in place: four lines inside a branch, six in a
+      cross-branch document.
+- [x] F8 - the five-value status line on all 95 plan files, original wording on
+      the `Notes:` line.
+- [x] F9 - `installer-scope-adr-policy-features.md` has its step; the three
+      non-skill plans stay in scope of the checkbox assertion.
+- [x] Stage lists - a table per stage, 85 nodes, counts summed by the test
+      instead of asserted.
 - [x] F6 - one contended-file list (section 8), referenced by `skills-plan.md`.
 - [x] F7 - the unique path count is 99, not 98.
+
+One finding came out of the fix work and is not resolved: the sync guard prepends
+a `⚠️ Base branch ... advanced` banner as the first content item, and six tests
+read `content[0]` or `content[1]`. They pass in a detached worktree and fail in
+a checkout whose base advanced. It needs a decision - change the banner position
+and its contract test, or give every affected test a shared reader - and it is
+not part of this graph.
