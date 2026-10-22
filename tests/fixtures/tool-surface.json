@@ -1,5 +1,5 @@
 {
-  "count": 105,
+  "count": 102,
   "tools": [
     "pix_tool",
     "pix_tool_ai",
@@ -38,12 +38,10 @@
     "pix_tool_fix",
     "pix_tool_frontend",
     "pix_tool_frontend_angular",
-    "pix_tool_frontend_custom_element",
     "pix_tool_frontend_react",
     "pix_tool_frontend_solidjs",
     "pix_tool_frontend_svelte",
     "pix_tool_frontend_template_engine",
-    "pix_tool_frontend_vanilla_reactive",
     "pix_tool_frontend_vue",
     "pix_tool_frontend_workers",
     "pix_tool_gateway",
@@ -59,7 +57,6 @@
     "pix_tool_meta_remix",
     "pix_tool_plan",
     "pix_tool_platform",
-    "pix_tool_platform_agent",
     "pix_tool_platform_auth",
     "pix_tool_platform_desktop",
     "pix_tool_platform_library",
