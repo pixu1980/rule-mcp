@@ -8,6 +8,7 @@ them by `handoff doctor`, so editing it by hand is work the next run throws away
 
 | #                                                                  | Title                                                                     | Date       | Branch                    |
 | ------------------------------------------------------------------ | ------------------------------------------------------------------------- | ---------- | ------------------------- |
+| [26](26-main-and-nyx-commit-split.md)                              | Main and Nyx commit split                                                 | 2026-10-12 | feat/nyx                  |
 | [25](25-merge-into-rule-process-ai.md)                              | Merge of three skills into rule-process-ai                                 | 2026-10-21 | feat/guardrails-evolution |
 | [24](24-export-session-distill-plan.md)                            | Export session distill plan                                               | 2026-10-21 | feat/export               |
 | [23](23-git-workflow-evolution-and-close-squash.md)                | Git workflow evolution, WS0-WS9, and the close-squash consolidation       | 2026-09-29 | main                      |

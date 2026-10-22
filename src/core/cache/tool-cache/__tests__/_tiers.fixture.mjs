@@ -28,7 +28,7 @@ delete process.env.RULE_MCP_NO_CACHE;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 
-export const { cacheKey, normalizedKey, cacheLookup, cacheStore, cacheClear } = await import("../index.js");
+export const { cacheKey, normalizedKey, cacheLookup, cacheLookupSemantic, cacheStore, cacheClear } = await import("../index.js");
 export const { registerTool, callTool, entryPathOf } = await import("../../../../tools/router/index.js");
 
 export const result = (text) => ({ content: [{ type: "text", text }] });
