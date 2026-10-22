@@ -161,6 +161,22 @@ security, anti-patterns, and pointers. Around 200 lines.
 - [ ] Example checks: lint and guardrails over `skills/**/examples/**`.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
 
+## Model assignment
+
+Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
+
+| Step | Class | Model | Why |
+| ---- | ----- | ----- | --- |
+| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
+| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
+| Phase 3 - Check the examples | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Phase 4 - Split and serve | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
+| Phase 5 - Open the door | `T7-author` | `qwen3.8-max` | skill bodies and references |
+| Phase 6 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+
+Plan default: `T8-verify` - `gemini-3.8-flash` (high). Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
+
 ## Verification gates
 
 ```bash
