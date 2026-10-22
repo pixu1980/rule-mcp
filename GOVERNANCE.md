@@ -32,9 +32,11 @@ Disagreements escalate in this order:
 ## Branch protection (target state)
 
 `main` requires the `ci` checks plus the CodeQL and audit checks, and one
-approving review for contributors outside the maintainer list. Enabling it
-is owner action 16.5 of docs/plans/oss.md; this section records the exact
-setting so it is auditable once enabled.
+approving review for contributors outside the maintainer list. Enabling it is
+owner action 16.5, tracked as part of the policy decisions in
+`docs/plans/plan-of-plans.md` (Stage 0) on `feat/evolution`, and recorded in the
+OSS plan on `main`; this section states the exact setting so it is auditable once
+enabled.
 
 ## Funding
 
