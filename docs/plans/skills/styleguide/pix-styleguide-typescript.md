@@ -182,7 +182,7 @@ Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 | Step | Class | Model | Why |
 | ---- | ----- | ----- | --- |
 | Phase 0 - Decisions and scaffolding | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fix the contradictions | `T6-review` | `muse-wonder-full` (max) | audit and contradiction hunting |
+| Phase 1 - Fix the contradictions | `T7-author` | `qwen3.8-max` | skill bodies and references |
 | Phase 2 - Content | `T7-author` | `qwen3.8-max` | skill bodies and references |
 | Phase 3 - Guardrails | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
 | Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |

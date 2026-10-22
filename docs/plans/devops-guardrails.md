@@ -254,10 +254,10 @@ Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 | Phase 0 - Decisions and scaffolding | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
 | Phase 1 - CI/CD rules in rule-devops | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
 | Phase 2 - Docker rules in rule-devops-docker | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Testing rules in rule-devops-testing | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
+| Phase 3 - Testing rules in rule-devops-testing | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
 | Phase 4 - Observability rules in rule-devops-observability | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
 | Phase 5 - Preview rules in rule-devops-deploy-preview | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 6 - Runtime scripts, promotion and documentation | `T7-author` | `qwen3.8-max` | skill bodies and references |
+| Phase 6 - Runtime scripts, promotion and documentation | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

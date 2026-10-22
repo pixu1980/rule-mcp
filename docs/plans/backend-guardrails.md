@@ -282,7 +282,7 @@ Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 | Phase 3 - Runtime rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
 | Phase 4 - GraphQL rules in rule-backend-graphql | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
 | Phase 5 - Framework rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 6 - Promotion and documentation | `T7-author` | `qwen3.8-max` | skill bodies and references |
+| Phase 6 - Promotion and documentation | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

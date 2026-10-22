@@ -163,9 +163,9 @@ Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 | Phase 1 - Shared rules in rule-data | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
 | Phase 2 - Postgres and SQLite | `T7-author` | `qwen3.8-max` | skill bodies and references |
 | Phase 3 - MongoDB | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Promotion and documentation | `T7-author` | `qwen3.8-max` | skill bodies and references |
+| Phase 4 - Promotion and documentation | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
 
-Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
+Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 
 ## Verification gates
 
