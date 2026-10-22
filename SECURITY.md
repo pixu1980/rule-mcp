@@ -21,8 +21,10 @@ its inputs. That is the security posture the whole design leans on.
   loopback exemption for local clients.
 - **Supply chain** - the lockfile is linted (every resolution carries an
   integrity hash), `save-exact=true`, `pkg-exact-versions` and
-  `pkg-no-corepack` are enforced, and the installers publish checksums
-  (`scripts/SHA256SUMS`) that CI verifies before release.
+  `pkg-no-corepack` are enforced, release tags are GPG-signed and verified in
+  CI against `.github/release-signing-key.asc` (fingerprint
+  `37D68446F3ADCF1C8C37C07A15571530D4B63084`), and the installers publish
+  checksums (`scripts/SHA256SUMS`) that CI verifies before release.
 - **Filesystem discipline** - daemon, installer and cache writes go through
   atomic-write helpers with backups; the server never writes outside its state
   dir without an explicit tool call.
@@ -72,8 +74,8 @@ regression shows up.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.0.x   | :white_check_mark: |
-| < 1.0   | :x:                |
+| 0.1.x   | :white_check_mark: |
+| < 0.1.0 | :x:                |
 
-Only the latest minor line receives security fixes. If you are pinned
-older, upgrade first and say which version you reproduced on.
+Only the latest minor `0.x` line receives security fixes until `1.0.0` ships.
+If you are pinned older, upgrade first and say which version you reproduced on.

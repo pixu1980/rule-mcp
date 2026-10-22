@@ -5,7 +5,7 @@ need no ceremony, structural change needs an ADR first.
 
 ## Prerequisites
 
-- Node.js ≥ 20 (`node --version`)
+- Node.js >= 20 (`node --version`)
 - pnpm 11+ (`pnpm --version`; the exact version CI uses is `PNPM_VERSION`
   in `.github/workflows/ci.yml`)
 - git
@@ -63,27 +63,32 @@ git config commit.gpgsign true
 git config user.signingkey <your-key-id>
 ```
 
-Then tag releases signed: `git tag -s v0.1.0`. The release workflow
-refuses lightweight tags, and Vigilant Mode marks unsigned commits
-visibly on GitHub.
+Then tag releases signed: `git tag -s v0.1.1`. The public release-signing GPG
+key (fingerprint `37D68446F3ADCF1C8C37C07A15571530D4B63084`) is committed at
+`.github/release-signing-key.asc`; `.github/workflows/release.yml` refuses both
+lightweight tags and unsigned annotated tags by running `git verify-tag`
+against that key before creating a release, and Vigilant Mode marks unsigned
+commits visibly on GitHub. Historical tag `v0.1.0` predates this gate and is
+not rewritten.
 
 Every commit also carries a DCO sign-off trailer:
 
-```
+```text
 Signed-off-by: Your Name <you@example.com>
 ```
 
-`git commit -s` adds it for you. The trailer asserts you wrote the
-change (or have the right to contribute it) under the [Developer
-Certificate of Origin](https://developercertificate.org/). There is no
-CLA; inbound contributions are licensed under the DCO. The hook rejects
-a commit without the trailer, and CI checks every commit in the pull
-request range.
+`git commit -s` adds it for you. The trailer is a provenance certification
+under the [Developer Certificate of Origin](https://developercertificate.org/)
+asserting you wrote the change (or have the right to submit it under the
+project's license). There is no CLA; inbound contributions are licensed under
+the MIT License (`inbound = outbound MIT`, matching `LICENSE` and
+`REUSE.toml`). The hook rejects a commit without the trailer, and CI checks
+every commit in the pull request range.
 
 ## Response times
 
-Issues are triaged within 7 days; pull requests are reviewed within
-14 days (see MAINTAINERS.md). If a week passes with silence, a polite
+Issues are triaged within 2 business days; pull requests are reviewed within
+7 business days (see MAINTAINERS.md). If a week passes with silence, a polite
 ping on the issue is welcome.
 
 ## Triage

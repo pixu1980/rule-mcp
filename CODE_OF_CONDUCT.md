@@ -43,20 +43,20 @@ We agree to restrict the following behaviors in our community. Instances, threat
 
 Tensions can occur between community members even when they are trying their best to collaborate. Not every conflict represents a code of conduct violation, and this Code of Conduct reinforces encouraged behaviors and norms that can help avoid conflicts and minimize harm.
 
-When an incident does occur, it is important to report it promptly. To report a possible violation, email pisuemiliano.1980@gmail.com (the maintainer's address until a project address exists). Reports are handled first by the maintainer, then escalated to the BDFL on dispute, as stated in GOVERNANCE.md.
+When an incident does occur, it is important to report it promptly. To report a possible violation, email pisuemiliano.1980@gmail.com (the maintainer's address until a project address exists). Reports are handled first by a maintainer and escalated to the BDFL on dispute, as stated in GOVERNANCE.md. When the BDFL is the subject of a report or has a conflict of interest, the BDFL must recuse from triage, investigation, and appeal decisions: a non-conflicted co-maintainer handles the report independently once one is listed in MAINTAINERS.md, and while the project has a single maintainer (bus factor one), reports or appeals involving the BDFL should be submitted directly to GitHub Trust & Safety via [https://github.com/contact/report-abuse](https://github.com/contact/report-abuse) so reporter identity is never exposed to the subject.
 
 Community Moderators take reports of violations seriously and will make every effort to respond in a timely manner. They will investigate all reports of code of conduct violations, reviewing messages, logs, and recordings, or interviewing witnesses and other participants. Community Moderators will keep investigation and enforcement actions as transparent as possible while prioritizing safety and confidentiality. In order to honor these values, enforcement actions are carried out in private with the involved parties, but communicating to the whole community may be part of a mutually agreed upon resolution.
 
 ## Addressing and Repairing Harm
 
-For rule-mcp, Community Moderators means the maintainer first, then the BDFL on escalation. The ladder below is adopted as written and applied that way.
+For rule-mcp, Community Moderators means a non-conflicted maintainer first, then the BDFL on escalation (with mandatory BDFL recusal and external escalation via [https://github.com/contact/report-abuse](https://github.com/contact/report-abuse) when the BDFL is involved; see GOVERNANCE.md). The ladder below is adopted as written and applied that way.
 
 If an investigation by the Community Moderators finds that this Code of Conduct has been violated, the following enforcement ladder may be used to determine how best to repair harm, based on the incident's impact on the individuals involved and the community as a whole. Depending on the severity of a violation, lower rungs on the ladder may be skipped.
 
 1.  Warning
     1.  Event: A violation involving a single incident or series of incidents.
     2.  Consequence: A private, written warning from the Community Moderators.
-    3.  Repair: Examples of repair include a private written apology, acknowledgement of responsibility, and seeking clarification on expectations.
+    3.  Repair: Examples of repair include a private written apology, acknowledgment of responsibility, and seeking clarification on expectations.
 2.  Temporarily Limited Activities
     1.  Event: A repeated incidence of a violation that previously resulted in a warning, or the first incidence of a more serious violation.
     2.  Consequence: A private, written warning with a time-limited cooldown period designed to underscore the seriousness of the situation and give the community members involved time to process the incident. The cooldown period may be limited to particular communication channels or interactions with particular community members.
