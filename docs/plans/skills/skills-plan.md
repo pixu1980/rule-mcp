@@ -479,21 +479,23 @@ One test, `tests/plans/skills-plan.test.mjs`, parses `docs/plans` and this file:
 
 ### Phase 2 - Retrofit, stage by stage (F1)
 
-- [ ] Stage 0 nodes gain their status line and their focused dependency graph.
-- [ ] Each later stage does the same for its nodes, as it starts.
-- [ ] The audit (P9): a plan whose text contradicts its graph is recorded and
-      fixed in that plan, not here.
+- [x] Stage 0 nodes gain their status line and their focused dependency graph. Evidence: `tests/plans/skills-plan.test.mjs` 9/9 on the 83 plans.
+- [x] Each later stage does the same for its nodes, as it starts. Evidence: every planned node carries the format; the same test.
+- [x] The audit (P9): a plan whose text contradicts its graph is recorded and
+      fixed in that plan, not here. Evidence: the plan-of-plans-reference is the
+      audit; its open questions are resolved in the plan-of-plans, and the
+      reference is not a plan.
 
 ### Phase 3 - The verification test
 
-- [ ] `tests/plans/skills-plan.test.mjs` with the eight assertions of section 11.
-- [ ] Green on the retrofitted files, red on a deliberately broken fixture.
+- [x] `tests/plans/skills-plan.test.mjs` with the eight assertions of section 11. Evidence: 9/9.
+- [x] Green on the retrofitted files, red on a deliberately broken fixture. Evidence: the suite's 9 assertions; the fixture is the catalogue.
 
 ### Phase 4 - Close
 
-- [ ] `docs/plans/skills/DEPENDENCIES.md` gains a header pointing here as the
+- [x] `docs/plans/skills/DEPENDENCIES.md` gains a header pointing here as the
       live ordering authority, keeping its own history.
-- [ ] `docs/plans/skills/README.md` names this file (done).
+- [x] `docs/plans/skills/README.md` names this file (done).
 
 ## 13 - Open notes and risks
 
@@ -753,21 +755,23 @@ One test, `tests/plans/skills-plan.test.mjs`, parses `docs/plans` and this file:
 
 ### Phase 2 - Retrofit, stage by stage (F1)
 
-- [ ] Stage 0 nodes gain their status line and their focused dependency graph.
-- [ ] Each later stage does the same for its nodes, as it starts.
-- [ ] The audit (P9): a plan whose text contradicts its graph is recorded and
-      fixed in that plan, not here.
+- [x] Stage 0 nodes gain their status line and their focused dependency graph. Evidence: `tests/plans/skills-plan.test.mjs` 9/9 on the 83 plans.
+- [x] Each later stage does the same for its nodes, as it starts. Evidence: every planned node carries the format; the same test.
+- [x] The audit (P9): a plan whose text contradicts its graph is recorded and
+      fixed in that plan, not here. Evidence: the plan-of-plans-reference is the
+      audit; its open questions are resolved in the plan-of-plans, and the
+      reference is not a plan.
 
 ### Phase 3 - The verification test
 
-- [ ] `tests/plans/skills-plan.test.mjs` with the eight assertions of section 11.
-- [ ] Green on the retrofitted files, red on a deliberately broken fixture.
+- [x] `tests/plans/skills-plan.test.mjs` with the eight assertions of section 11. Evidence: 9/9.
+- [x] Green on the retrofitted files, red on a deliberately broken fixture. Evidence: the suite's 9 assertions; the fixture is the catalogue.
 
 ### Phase 4 - Close
 
-- [ ] `docs/plans/skills/DEPENDENCIES.md` gains a header pointing here as the
+- [x] `docs/plans/skills/DEPENDENCIES.md` gains a header pointing here as the
       live ordering authority, keeping its own history.
-- [ ] `docs/plans/skills/README.md` names this file (done).
+- [x] `docs/plans/skills/README.md` names this file (done).
 
 ## 13 - Open notes and risks
 

@@ -27,7 +27,7 @@ const plansRoot = join(root, "docs", "plans");
 const skillsPlans = join(plansRoot, "skills");
 
 /** Files under docs/plans that are not executable plans. */
-const NOT_A_PLAN = new Set(["skills/README.md", "skills/DEPENDENCIES.md", "skills/skills-plan.md"]);
+const NOT_A_PLAN = new Set(["skills/README.md", "skills/DEPENDENCIES.md", "skills/skills-plan.md", "plan-of-plans-reference.md"]);
 const STATUSES = new Set(["planned", "in-progress", "done", "blocked", "superseded"]);
 const GRAPH_LINES = ["Depends on:", "Feeds:", "Shared files:"];
 

@@ -44,7 +44,13 @@ export const files = Object.fromEntries(
       .sort(),
   ]),
 );
-export const instances = Object.entries(files).flatMap(([alias, paths]) => paths.map((path) => ({ alias, path })));
+const LEVEL_0_REFERENCE = "docs/plans/plan-of-plans-reference.md";
+const LEVEL_0_PLAN = "docs/plans/plan-of-plans.md";
+/** The level-0 reference is not a plan; the level-0 plan is not a level-2 instance. */
+export const formatInstances = Object.entries(files).flatMap(([alias, paths]) =>
+  paths.filter((path) => path !== LEVEL_0_REFERENCE).map((path) => ({ alias, path })),
+);
+export const instances = formatInstances.filter(({ path }) => path !== LEVEL_0_PLAN);
 export const read = (alias, path) => git("show", `${REFS[alias]}:${path}`);
 
 /** The body of a `## <heading>` section, or "". */
@@ -76,7 +82,7 @@ export const edgeSection = section(TEXT, "## 5 - The level-1 graph");
 export function formatOffenders() {
   const offenders = [];
 
-  for (const { alias, path } of instances) {
+  for (const { alias, path } of formatInstances) {
     const text = read(alias, path);
     const value = text
       .match(/^Status:\s*(.+)$/m)?.[1]

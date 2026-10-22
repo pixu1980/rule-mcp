@@ -16,6 +16,8 @@ import test from "node:test";
 
 import { BRANCHES, REFS, TEXT, edgeSection, files, formatOffenders, git, graph, instances, levelEdges, line, mergeEdges, read, section, stageOf } from "./_cross-branch.mjs";
 
+const RETIRED = new Set(["docs/plans/execution-plan.md", "docs/plans/oss.md"]);
+
 test("every plan on the retrofitted branches carries the format", () => {
   const offenders = formatOffenders();
 
@@ -23,7 +25,7 @@ test("every plan on the retrofitted branches carries the format", () => {
 });
 
 test("a plan carried by one branch declares the branch and path to find it", () => {
-  const unique = instances.filter(({ path }) => Object.values(files).filter((paths) => paths.includes(path)).length === 1);
+  const unique = instances.filter(({ path }) => !RETIRED.has(path) && Object.values(files).filter((paths) => paths.includes(path)).length === 1);
 
   assert.deepEqual(
     unique.map(({ path }) => path).sort(),
@@ -56,9 +58,9 @@ test("section 2 names the two plans and the branch that carries them", () => {
 });
 
 test("a path claimed by two branches is reconciled in section 5", () => {
-  const shared = files.ex.filter((path) => files.nyx.includes(path));
+  const shared = instances.filter(({ path }) => files.ex.includes(path) && files.nyx.includes(path)).map(({ path }) => path);
 
-  assert.deepEqual(shared, ["docs/plans/execution-plan.md", "docs/plans/oss.md"], "the two branches share a different set of plan paths");
+  assert.deepEqual(shared, [], "the two branches share a different set of plan paths");
 
   for (const path of shared) {
     const row = edgeSection.split("\n").find((candidate) => candidate.includes(path) && /DIVERGENCE|SUPERSEDES/.test(candidate));

@@ -5,9 +5,8 @@ work in, which plan to implement next, and in what order the branches merge into
 `feat/evolution`. It does not plan a skill, and it never touches `main`.
 
 Format: the contract of ADR 154 (status line, `## Dependency graph`, checkboxes)
-applied to this file. ADR 153 and 154 live on `feat/guardrails` and are not on
-`feat/evolution` yet; this file follows them in advance, and the merge in stage 4
-brings them here.
+applied to this file. ADR 153 and 154 live on `feat/guardrails`; the Stage 4
+merge brought them here, and this file follows them.
 
 Topology (2026-10-21): **`feat/evolution` is the only destination.** Every feature
 branch merges into it, every commit of every stage lands there, and `main` is out
@@ -153,8 +152,8 @@ Edges, spelled out:
 | `nyx`                                        | `ge`                        | `REBASE`     | nyx rewrites the router pipeline and `05-env-variables.md` after the decision layer settles    |
 | `ge`'s `decision-models.md`                  | `nyx`                       | `ORDER`      | both rewrite `src/tools/router/call/_pipeline.js` and `_stages.js`; settle the shortlist first |
 | `dm`'s 44 shared plan files                  | `ge`'s versions             | `DIVERGENCE` | all 44 superseded: ADR 154 format and ADR 152 removals; no dm-only content                     |
-| `ex`, `nyx`'s `docs/plans/execution-plan.md` | Stage 0 of `feat/evolution` | `SUPERSEDES` | retired: its three phases are section 7 of this file, which closed them                        |
-| `ex`, `nyx`'s `docs/plans/oss.md`            | Stage 0 of `feat/evolution` | `SUPERSEDES` | retired: OSS-01 to OSS-08 are closed in section 7 of this file                                 |
+| `ex`'s `docs/plans/execution-plan.md`           | Stage 0 of `feat/evolution` | `SUPERSEDES` | retired: its three phases are section 7 of this file, which closed them                        |
+| `ex`'s `docs/plans/oss.md`                      | Stage 0 of `feat/evolution` | `SUPERSEDES` | retired: OSS-01 to OSS-08 are closed in section 7 of this file                                 |
 
 The merge order is **derived, not chosen**: `dm` is first because it is the
 cheapest fold; `ex` follows because its generated files are the smallest set;
@@ -421,47 +420,54 @@ Stage 3 gate record (2026-10-22):
 
 ### Stage 4 - Close `decision-models` on `ge`, then merge `ge`
 
-- [ ] Rebase `ge` onto `feat/evolution` after Stage 3.
-- [ ] Close `docs/plans/decision-models.md` on `ge`: nine steps, failing test
-      first, each step ships against its kill criterion or is deleted.
-- [ ] Re-derive the node's model table per step before the first commit: the
+- [x] Rebase `ge` onto `feat/evolution` after Stage 3. Evidence: the evolution fast-forwarded to `1ecb14ef`.
+- [x] Close `docs/plans/decision-models.md` on `ge`: nine steps, failing test
+      first, each step ships against its kill criterion or is deleted. Evidence:
+      Steps 1-7 implemented, Step 8 rejected, Step 9 closed; DM-04 and DM-10 stay
+      open, and Step 5.4 stays open for a live Julia-1 run.
+- [x] Re-derive the node's model table per step before the first commit: the
       table currently names one class for the whole plan, and section 14 assigns
-      the class of the work.
-- [ ] Keep `execution-plan.md` and `oss.md` deleted at the merge: the same
-      `SUPERSEDES` resolution Stage 3 applied to `ex`.
-- [ ] Regenerate the catalog's generated files once (`census`, `HANDOFF`,
-      `ADR`), then merge.
-- [ ] Human gate: ADR 151/152 are one-way in review terms, and the
+      the class of the work. Evidence: the plan's model table names every step.
+- [x] Keep `execution-plan.md` and `oss.md` deleted at the merge: the same
+      `SUPERSEDES` resolution Stage 3 applied to `ex`. Evidence: the merge removed both.
+- [x] Regenerate the catalog's generated files once (`census`, `HANDOFF`,
+      `ADR`), then merge. Evidence: `census` current, `HANDOFF` regenerated, ADR index rebuilt.
+- [x] Human gate: ADR 151/152 are one-way in review terms, and the
       decision-models outcome is recorded step by step (shipped against its
-      number, or killed and deleted).
-- [ ] After the merge, `feat/evolution` carries the plans, `skills-plan.md`,
+      number, or killed and deleted). Evidence: the owner confirmed; ADR 156 is accepted in `1ecb14ef`.
+- [x] After the merge, `feat/evolution` carries the plans, `skills-plan.md`,
       ADR 153/154, the 81-skill catalog and the decision layer as far as the
-      criteria allow.
+      criteria allow. Evidence: the merge and the plan tests below.
 
 ### Stage 5 - Merge `nyx` into `feat/evolution` (last)
 
-- [ ] Rebase onto `feat/evolution` after Stage 4; regenerate `HANDOFF.md`,
+- [x] Rebase/merge onto `feat/evolution` after Stage 4; regenerate `HANDOFF.md`,
       `tests/fixtures/census.json` and `docs/02-architecture.md`; reconcile
       `docs/05-env-variables.md` (both sides add variables) and the router
-      pipeline (the decision layer is the base).
-- [ ] Keep `execution-plan.md` and `oss.md` deleted at this merge too.
-- [ ] Human gate: `nyx` carries real code (`feat(nyx)` commits), and its
+      pipeline (the decision layer is the base). Evidence: merge `896d320d`; the
+      handoff 24 collision renumbered to 26; both variable sets kept; the nyx L2
+      tier and the decision layer coexist.
+- [x] Keep `execution-plan.md` and `oss.md` deleted at this merge too. Evidence: the merge removed both.
+- [x] Human gate: `nyx` carries real code (`feat(nyx)` commits), and its
       reranker consumes the settled shortlist instead of adding a second
-      arbiter.
+      arbiter. Evidence: the owner confirmed; `rerankSkillScores` runs before the
+      top, the decision layer arbitrates the six, and both ship off.
 
 ### Stage 6 - Hand over to the owner
 
-- [ ] Only after stages 0-5: the catalog is complete on `feat/evolution`.
+- [x] Only after stages 0-5: the catalog is complete on `feat/evolution`. Evidence: the 16/16 plan tests and the merged catalogue.
 - [ ] The owner opens the merge request. This plan does not touch `main`, does
       not rebase onto it, and does not merge into it: `feat/evolution` is the
-      destination, and the merge request is the owner's step.
+      destination, and the merge request is the owner's step. Nothing is pushed.
 
 ### Stage 7 - Bring the format to every plan
 
 - [x] The contract exists (ADR 154, on `ge`).
-- [ ] Every one of the 98 plan paths carries the status line, the graph section and
-      checkboxes, applied **branch by branch** as each branch is worked.
-- [ ] `dm`'s retired copies are gone, so they are not retrofitted at all.
+- [x] Every one of the 98 plan paths carries the status line, the graph section and
+      checkboxes, applied **branch by branch** as each branch is worked. Evidence:
+      `tests/plans/skills-plan.test.mjs` 9/9, `tests/plans/plan-of-plans.test.mjs`
+      7/7, the level-0 format on `feat/export`.
+- [x] `dm`'s retired copies are gone, so they are not retrofitted at all.
 
 ## 8 - Contended files across branches
 
@@ -526,13 +532,11 @@ Human, and only there:
       never appears before a branch it depends on.
 - [x] A plan marked `done` has no open checkbox.
 
-Green on 2026-10-22 for `ex` and `nyx` (`7/7`), before Stage 3 merged `ex`. The
-`feat/guardrails` catalogue keeps `tests/plans/skills-plan.test.mjs` (`9/9`),
-which reads the four-line in-branch form; Stage 7 widens this file branch by
-branch, and until then a merged `feat/export` reads as a branch whose level-0
-plans do not carry the level-2 format.
+Green 16/16 after Stage 7 on 2026-10-23: `tests/plans/plan-of-plans.test.mjs`
+7/7 for the `ex`/`nyx` level-0 and plans, `tests/plans/skills-plan.test.mjs`
+9/9 for the 83 skill plans, and the `dm` copies retired.
 
-## 11 - Dependency graph
+## Dependency graph
 
 Depends on: nothing. This is the level-0 node: it waits only on the decisions
 already recorded (ADR 153, ADR 154) and on the branch states measured above.
@@ -552,17 +556,18 @@ belong to the merged branches, not to this plan.
   45 files a reader would otherwise maintain twice.
 - **`ge` before `nyx` is deliberate.** The decision-models track lives on `ge`
   (Stage 1 moved the plan, the review and ADR 153/154 there), and `nyx` rewrites
-  the same shortlist pipeline. Merging `ge` first settles the contract before the
-  reranker rebases; `ex` is already in, and the catalog's generated files are
-  regenerated once, at the `ge` merge, not again at the end.
+  the same shortlist pipeline. Merging `ge` first settled the contract before the
+  reranker merged; the generated files were regenerated at each merge (the `ge`
+  and `nyx` merges), not merged by hand.
 - **The decision-models track is code, not a plan-file merge.** Nine steps with
-  kill criteria and a deletion rule: Stage 4 closes them on `ge` before the
-  merge, records which shipped and which were killed, and deletes the file only
-  when nothing is open. A step that misses its number is deleted, not tuned.
-- **The level-1 orchestrator exists for one branch out of four.** `ex` and `nyx`
-  get a dependency section because their plans are single documents; a full
-  `skills-plan.md` for a 3-file branch would be ceremony. The rule stays in
-  section 2 so a fifth branch cannot arrive silently without one.
+  kill criteria and a deletion rule: Steps 1-7 shipped, Step 8 was rejected,
+  Step 9 closed, and the plan stays because DM-04/DM-10 and Step 5.4 are still
+  open. The commit-lint closeout archived it once; it was restored, and the
+  premature ADR 157 removed.
+- **The level-1 orchestrator now lives on the merged branch.** `feat/guardrails`
+  carries `skills-plan.md`; the Stage 4 merge brought it to `feat/evolution`, and
+  the `ex`/`nyx` plans keep their single-document dependency sections. The rule
+  stays in section 2 so a fifth branch cannot arrive silently without one.
 - **`develop` is out of scope and stays that way** until the architect track is
   brought into this repository's plans.
 
