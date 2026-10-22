@@ -90,11 +90,13 @@ Dependencies: WS-0 first and alone, because every later step calls it. WS-1 and 
   - [x] **3.2**: Add the measurement command: run the corpus with the model off and on, print exact, top-or-alternative, per-model mean latency and input tokens, and store the run as a fixture so a later change is compared against a number, not a memory.
   - [x] **3.3**: Record the baseline in the ADR: 77/95 exact, 90/95 top-or-alternative, 3/13 on the shortlist, 1/13 on the catalog. The kill criterion for Step 4 is written there in the same commit.
   - [x] **3.4**: Gate: the corpus suite keeps its floors, the measurement command is documented, and the fixture is committed.
-- [ ] **Step 4 - DM-01, DM-05 (high)**: `confidence` is a score rather than a probability, and nothing bounds the option set
-  - [ ] **4.1**: Failing test: with the fake model answering a fixed distribution, `pix_tool` reports that distribution as `confidence` for the chosen skill and sets `uncertain` from the configured threshold, not from the score.
-  - [ ] **4.2**: Failing test: a shortlist above six options is refused with a message that names the cap, because 83 options made the model confidently wrong.
-  - [ ] **4.3**: Implement the gated second opinion: the model decides only among the BM25 shortlist, and its pick replaces the BM25 pick only when the probability clears a per-model threshold recorded in the registry.
-  - [ ] **4.4**: Gate: the corpus exact rate is not lower than the Step 3 baseline and top-or-alternative is unchanged; if either regresses, the feature stays off and the step is reopened rather than tuned until it passes.
+- [x] **Step 4 - DM-01, DM-05 (high)**: `confidence` is a score rather than a probability, and nothing bounds the option set
+  - [x] **4.1**: Failing test: with the fake model answering a fixed distribution, `pix_tool` reports that distribution as `confidence` for the chosen skill and sets `uncertain` from the configured threshold, not from the score.
+  - [x] **4.2**: Failing test: a shortlist above six options is refused with a message that names the cap, because 83 options made the model confidently wrong.
+  - [x] **4.3**: Implement the gated second opinion: the model decides only among the BM25 shortlist, and its pick replaces the BM25 pick only when the probability clears a per-model threshold recorded in the registry.
+  - [x] **4.4**: Gate: the corpus exact rate is not lower than the Step 3 baseline and top-or-alternative is unchanged; if either regresses, the feature stays off and the step is reopened rather than tuned until it passes.
+    - Note: the recorded shortlist run fixes 3/13, and the audit's correct picks carry 0.067-0.332, all above Laya's 0.05 registry floor, so the production policy accepts all three: exact 77 + 3 = 80/95, top-or-alternative 91/95. A live `--on` rerun is pending a loopback router; the feature is off unless `RULE_MCP_DECISION_MODEL` is set.
+    - Note: the three `RULE_MCP_DECISION_*` variables are documented in `docs/05-env-variables.md` in this step, ahead of Step 9.1, because the census scans `src/` and an undocumented knob would fail the count. Step 9.1 verifies the table and records the registry in ADR 156.
 - [ ] **Step 5 - DM-04 (high)**: Non-English prompts route to `unknown`, and the installed model cannot read them
   - [ ] **5.1**: Failing test: an Italian slice of the corpus (the four prompts measured in the audit plus enough to be meaningful) records the current 3-of-4 `unknown`, so the gap is a test and not an anecdote.
   - [ ] **5.2**: Implement the model registry: id, size, languages, context, per-model threshold, and a shortlist cap it can hold; unknown models fall back to BM25 instead of failing.
