@@ -172,10 +172,10 @@ Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 | Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
 | Phase 3 - Check the examples | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
 | Phase 4 - Split and serve | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 5 - Open the door | `T7-author` | `qwen3.8-max` | skill bodies and references |
+| Phase 5 - Open the door | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
 | Phase 6 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
 
-Plan default: `T8-verify` - `gemini-3.8-flash` (high). Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
+Plan default: `T5-bulk` - `minimax-m3.1-flash`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 
 ## Verification gates
 

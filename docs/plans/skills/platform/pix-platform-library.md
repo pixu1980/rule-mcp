@@ -167,7 +167,7 @@ Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 | Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
 | Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
 | Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Resolve the contradictions | `T6-review` | `muse-wonder-full` (max) | audit and contradiction hunting |
+| Phase 3 - Resolve the contradictions | `T7-author` | `qwen3.8-max` | skill bodies and references |
 | Phase 4 - Keep the library-specific core | `T7-author` | `qwen3.8-max` | skill bodies and references |
 | Phase 5 - Router and reach | `T7-author` | `qwen3.8-max` | skill bodies and references |
 | Phase 6 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
