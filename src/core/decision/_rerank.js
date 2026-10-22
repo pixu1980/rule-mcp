@@ -12,6 +12,7 @@
  * consider.
  */
 
+import { decisionCache } from "./_cache.js";
 import { DecisionSupervisorError } from "./_errors.js";
 
 /** The most options one decision request may carry. */
@@ -66,20 +67,32 @@ export function probabilityOf(answer, pick) {
  *   prompt: string,
  *   shortlist: Array<{ skill: string, description?: string }>,
  *   ask: (prompt: string, questions: object) => Promise<any>,
+ *   model?: string,
+ *   cache?: { key: Function, read: Function, write: Function },
  * }} options
  * @returns {Promise<{ pick: string | null, probability: number, answers: object, usage: object, ms: number }>}
  */
-export async function rerankShortlist({ prompt, shortlist, ask }) {
+export async function rerankShortlist({ prompt, shortlist, ask, model, cache = decisionCache }) {
   const questions = buildChoiceQuestion(shortlist);
+  const key = cache.key({ model, state: prompt, questions });
+  const hit = cache.read(key);
+
+  if (hit) {
+    return hit;
+  }
+
   const answer = await ask(prompt, questions);
   const value = answer?.answers?.pick;
   const pick = typeof value === "string" ? value : (value?.choice ?? null);
-
-  return {
+  const result = {
     pick,
     probability: probabilityOf(answer, pick),
     answers: answer?.answers ?? {},
     usage: answer?.usage ?? {},
     ms: answer?.ms ?? 0,
   };
+
+  cache.write(key, result);
+
+  return result;
 }

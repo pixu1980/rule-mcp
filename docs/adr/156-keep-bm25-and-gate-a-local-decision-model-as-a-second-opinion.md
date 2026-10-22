@@ -25,6 +25,7 @@ The model is deterministic and loopback-only, but its `confidence` is a score, n
 4. Step 4 kill criterion: the corpus exact rate must exceed 77/95 and top-or-alternative must stay at or above 91/95. If either regresses, the feature ships off and Step 4 is reopened as rejected rather than tuned until it passes.
 5. The catalog experiment is measurement-only: 83 options are never a production option set.
 6. The corpus names only current skills; the structural test is the guard against a retired name returning.
+7. Cache the model's answer under a SHA-256 digest of the model id, the prompt and the questions, with the shortlist folded into the questions. `RULE_MCP_NO_CACHE=1` bypasses it. The audit's determinism is what makes the cache safe; the digest is what makes a model or shortlist change miss it.
 
 ## Consequences
 
@@ -34,7 +35,7 @@ Negative: the model-on measurement needs a loopback router and a loaded model, s
 
 ## What would end this
 
-If Step 4 cannot raise exact above 77/95 while keeping top-or-alternative at or above 91/95, the model is not worth the request-path cost and the feature is removed. If a deployment needs a remote endpoint, the decision layer is dropped rather than weakened: loopback is a construction rule, not a configuration default. If the installed model is not a decision model, the client falls back to BM25 instead of guessing from a successful load. If the multilingual model is not installed, the language path stays off and the Italian claim is dropped rather than faked.
+If Step 4 cannot raise exact above 77/95 while keeping top-or-alternative at or above 91/95, the model is not worth the request-path cost and the feature is removed. If a deployment needs a remote endpoint, the decision layer is dropped rather than weakened: loopback is a construction rule, not a configuration default. If the installed model is not a decision model, the client falls back to BM25 instead of guessing from a successful load. If the multilingual model is not installed, the language path stays off and the Italian claim is dropped rather than faked. If the endpoint stops returning the same probabilities for the same state and questions, the cache is removed rather than trusted.
 
 ## Alternatives Considered
 
