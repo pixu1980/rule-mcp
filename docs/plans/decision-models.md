@@ -85,11 +85,11 @@ Dependencies: WS-0 first and alone, because every later step calls it. WS-1 and 
   - [x] **2.2**: Failing test: three consecutive failures open the breaker, the fourth call answers from BM25 without touching the socket, and the breaker closes on the next successful probe.
   - [x] **2.3**: Implement `src/core/decision/_supervisor.js`: wait-for-state, one retry on `model limit reached`, breaker counters, unload on shutdown, and a status line the doctor can print.
   - [x] **2.4**: Gate: the supervisor suite green with the router stopped, plus `pnpm doctor` unchanged with no endpoint configured.
-- [ ] **Step 3 - DM-02, DM-09 (high)**: A reranker would ship without a ruler, and the ruler is broken by three unaddressable corpus entries
-  - [ ] **3.1**: Failing test: every corpus `expect` names a skill that exists, so the three entries (`backend-api-design`, `ai-agents`, `devops-gitlab-ci`) fail until they are corrected or re-pointed at the skill that now owns the topic.
-  - [ ] **3.2**: Add the measurement command: run the corpus with the model off and on, print exact, top-or-alternative, per-model mean latency and input tokens, and store the run as a fixture so a later change is compared against a number, not a memory.
-  - [ ] **3.3**: Record the baseline in the ADR: 77/95 exact, 90/95 top-or-alternative, 3/13 on the shortlist, 1/13 on the catalog. The kill criterion for Step 4 is written there in the same commit.
-  - [ ] **3.4**: Gate: the corpus suite keeps its floors, the measurement command is documented, and the fixture is committed.
+- [x] **Step 3 - DM-02, DM-09 (high)**: A reranker would ship without a ruler, and the ruler is broken by three unaddressable corpus entries
+  - [x] **3.1**: Failing test: every corpus `expect` names a skill that exists, so the three entries (`backend-api-design`, `ai-agents`, `devops-gitlab-ci`) fail until they are corrected or re-pointed at the skill that now owns the topic.
+  - [x] **3.2**: Add the measurement command: run the corpus with the model off and on, print exact, top-or-alternative, per-model mean latency and input tokens, and store the run as a fixture so a later change is compared against a number, not a memory.
+  - [x] **3.3**: Record the baseline in the ADR: 77/95 exact, 90/95 top-or-alternative, 3/13 on the shortlist, 1/13 on the catalog. The kill criterion for Step 4 is written there in the same commit.
+  - [x] **3.4**: Gate: the corpus suite keeps its floors, the measurement command is documented, and the fixture is committed.
 - [ ] **Step 4 - DM-01, DM-05 (high)**: `confidence` is a score rather than a probability, and nothing bounds the option set
   - [ ] **4.1**: Failing test: with the fake model answering a fixed distribution, `pix_tool` reports that distribution as `confidence` for the chosen skill and sets `uncertain` from the configured threshold, not from the score.
   - [ ] **4.2**: Failing test: a shortlist above six options is refused with a message that names the cap, because 83 options made the model confidently wrong.
@@ -158,6 +158,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
 ```bash
 node --import ./scripts/alias-hook.mjs --test src/core/decision/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
+node --import ./scripts/alias-hook.mjs scripts/audits/decision-models/corpus.mjs --check
 node --import ./scripts/alias-hook.mjs scripts/audits/decision-models/index.mjs
 pnpm census && pnpm census:check
 pnpm lint
