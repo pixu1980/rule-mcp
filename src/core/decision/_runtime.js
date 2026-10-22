@@ -12,7 +12,8 @@
  */
 
 import { createDecisionClient, DEFAULT_TIMEOUT_MS } from "./_client.js";
-import { resolveDecisionModel } from "./_registry.js";
+import { detectLanguage } from "./_language.js";
+import { modelFits, modelForLanguage, resolveDecisionModel } from "./_registry.js";
 import { createSupervisor } from "./_supervisor.js";
 
 let cached = null;
@@ -20,18 +21,29 @@ let cached = null;
 /**
  * The runtime for the configured model, or null when the feature is off.
  *
+ * `auto` selects by the prompt's language; an explicit id or alias still wins.
+ * A model whose context cannot hold its shortlist is refused, and switching
+ * models unloads the previous one first so a single-slot router never carries
+ * two models.
+ *
+ * @param {string} prompt
  * @param {Record<string, string | undefined>} [env]
- * @returns {{ model: object, supervisor: ReturnType<typeof createSupervisor> } | null}
+ * @returns {Promise<{ model: object, supervisor: ReturnType<typeof createSupervisor> } | null>}
  */
-export function decisionRuntime(env = process.env) {
-  const model = resolveDecisionModel(env.RULE_MCP_DECISION_MODEL);
+export async function decisionRuntime(prompt, env = process.env) {
+  const requested = env.RULE_MCP_DECISION_MODEL;
+  const model = requested === "auto" ? modelForLanguage(detectLanguage(prompt)) : resolveDecisionModel(requested);
 
-  if (!model) {
+  if (!model || !modelFits(model, model.shortlist)) {
     return null;
   }
 
   if (cached?.model.id === model.id) {
     return cached;
+  }
+
+  if (cached) {
+    await cached.supervisor.shutdown();
   }
 
   const client = createDecisionClient({

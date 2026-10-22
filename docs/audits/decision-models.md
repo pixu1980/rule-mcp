@@ -137,4 +137,6 @@ node --import ./scripts/alias-hook.mjs scripts/audits/decision-models/corpus.mjs
 
 The corrected baseline on this checkout is **77/95 exact (81.1%)** and **91/95 top-or-alternative (95.8%)**, stored in `tests/fixtures/decision-models/corpus-baseline.json`. The fixture's model-on block is the audit's recorded prototype: **3/13** fixed on a five-option shortlist (79 ms, 200 input tokens) and **1/13** on the 83-skill catalog (173 ms, 355 input tokens). Rerun `--on` when a loopback router is available; `RULE_MCP_DECISION_URL` and `RULE_MCP_DECISION_TIMEOUT` move the endpoint and the per-call ceiling.
 
+The Italian slice is a separate fixture, `tests/fixtures/routing-corpus-it.mjs`, because the audit's four prompts were not recorded. Eight prompts measure **2/8 exact**, **3/8 top-or-alternative**, and **5/8 `unknown`** on this checkout. `auto` selects Julia-1 for Italian, but the router carries no Julia-1, so the live Italian gate is not met and the routing claim is dropped.
+
 Files: `corpus.mjs` (command), `_corpus-measure.mjs` (counting and question shapes), `_corpus-run.mjs` (BM25 and model runs), `__tests__/_corpus-measure.test.mjs` (the ruler's arithmetic and the fixture shape).

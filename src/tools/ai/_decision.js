@@ -36,7 +36,7 @@ export async function applyDecision({ prompt, top, primaryRoute }) {
   let runtime;
 
   try {
-    runtime = decisionRuntime();
+    runtime = await decisionRuntime(prompt);
   } catch {
     return bm25Decision(primaryRoute);
   }
