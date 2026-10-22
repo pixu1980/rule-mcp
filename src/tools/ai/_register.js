@@ -11,6 +11,7 @@ import { reductionSignal } from "./_reduction-signal.js";
 import { rankSkills } from "./_rank-skills.js";
 import { graphCandidates } from "../../core/tokensave/_routing.js";
 import { docsFollowup } from "./_docs-followup.js";
+import { applyDecision } from "./_decision.js";
 import { SCOPE_CONTRACT, STYLING_CONTRACT, STYLING_ROUTES } from "./_contracts.js";
 
 /**
@@ -89,9 +90,9 @@ export function registerAiTool() {
         next_tools: ["rule_tool_search"],
       };
 
-      // If absolute score is below threshold, mark as uncertain
-      const ABSOLUTE_THRESHOLD = 5;
-      const isUncertain = primaryRoute.absoluteScore < ABSOLUTE_THRESHOLD;
+      const decision = await applyDecision({ prompt, top, primaryRoute });
+      const chosen = top.find((entry) => entry.skill === decision.skill) ?? primaryRoute;
+      const alternatives = top.filter((entry) => entry.skill !== decision.skill).slice(0, 5);
 
       const followup = docsFollowup(promptLower);
       // Only advertise tools this process actually registered.
@@ -106,11 +107,11 @@ export function registerAiTool() {
       const persona = detectRole(prompt, loadRoleOverlays().roles);
 
       const result = {
-        route: isUncertain ? "unknown" : primaryRoute.skill,
-        confidence: Math.round(primaryRoute.relativeScore * 100) / 100,
+        route: decision.uncertain ? "unknown" : decision.skill,
+        confidence: Math.round(decision.confidence * 100) / 100,
         absoluteScore: Math.round(primaryRoute.absoluteScore * 100) / 100,
-        uncertain: isUncertain,
-        sections: primaryRoute.sections,
+        uncertain: decision.uncertain,
+        sections: chosen.sections,
         next_tools: persona ? ["rule_tool_plan", ...nextTools.filter((name) => name !== "rule_tool_plan")] : nextTools,
         ...(persona && {
           persona: {
@@ -121,18 +122,18 @@ export function registerAiTool() {
           },
         }),
         scope_contract: SCOPE_CONTRACT,
-        ...(!isUncertain && STYLING_ROUTES.test(primaryRoute.skill) && { styling_contract: STYLING_CONTRACT }),
+        ...(!decision.uncertain && STYLING_ROUTES.test(decision.skill) && { styling_contract: STYLING_CONTRACT }),
         ...(followup && { docs_followup: followup }),
-        alternatives: top.slice(1).map((t) => ({
+        alternatives: alternatives.map((t) => ({
           route: t.skill,
           confidence: Math.round(t.relativeScore * 100) / 100,
           sections: t.sections.slice(0, 3),
         })),
         skills_available: allSkills,
-        summary: isUncertain
+        summary: decision.uncertain
           ? `No strong match for "${prompt}". Try rephrasing or use rule_tool_search for full-text search.`
           : top.length > 0
-            ? `Top match: ${primaryRoute.skill} (${Math.round(primaryRoute.relativeScore * 100)}%). Relevant sections: ${primaryRoute.sections.join(", ")}. ` +
+            ? `Top match: ${decision.skill} (${Math.round(decision.confidence * 100)}%). Relevant sections: ${chosen.sections.join(", ")}. ` +
               `Try: ${nextTools.join(", ")}. Build only what was asked; propose anything extra instead of writing it.` +
               (followup ? ` Structural change: generate the ADR with ${followup.tool} without being asked.` : "")
             : `No matching skill for "${prompt}". Try rule_tool_search for full-text search.`,
