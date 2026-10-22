@@ -62,27 +62,41 @@ test("suppression threshold: small blocks pass through untouched", () => {
 });
 
 test("directive is emitted once per process (full), then never spammed", () => {
-  resetTokenPipeline();
-  const core = { content: [{ type: "text", text: "ok" }] };
-  const first = decorateWithTokensave("rule_tool_detect", core, {});
-  assert.match(first.content[0].text, /TOKENSAVE ACTIVE/);
-  const second = decorateWithTokensave("rule_tool_search", { content: [{ type: "text", text: "ok2" }] }, {});
-  assert.equal(second.content[0].text, "ok2", "no directive spam after the first emission");
-  // restore state for other suites running in-process
-  resetTokenPipeline();
+  const withTs = mkdtempSync(join(tmpdir(), "pipe-once-"));
+  mkdirSync(join(withTs, ".tokensave"), { recursive: true });
+
+  try {
+    resetTokenPipeline();
+    const core = { content: [{ type: "text", text: "ok" }] };
+    const first = decorateWithTokensave("rule_tool_detect", core, { projectDir: withTs });
+    assert.match(first.content[0].text, /TOKENSAVE ACTIVE/);
+    const second = decorateWithTokensave("rule_tool_search", { content: [{ type: "text", text: "ok2" }] }, { projectDir: withTs });
+    assert.equal(second.content[0].text, "ok2", "no directive spam after the first emission");
+  } finally {
+    // restore state for other suites running in-process
+    resetTokenPipeline();
+    rmSync(withTs, { recursive: true, force: true });
+  }
 });
 
 test("allowlisted heavy outputs are truncated with the terse marker", () => {
-  resetTokenPipeline();
-  const big = { content: [{ type: "text", text: Array.from({ length: 200 }, (_, i) => `row ${i}`).join("\n") }] };
-  const out = decorateWithTokensave("rule_tool_fix", big, {});
-  const text = out.content.map((c) => c.text).join("\n");
-  assert.match(text, /lines omitted - the \.tokensave graph has the detail/);
-  assert.match(text, /row 0\b/);
-  assert.match(text, /row 199\b/);
-  assert.ok(out.content.length >= 2, "directive + truncated body");
-  assert.ok(text.length < big.content[0].text.length + 200, "truncated output must be much shorter");
-  resetTokenPipeline();
+  const withTs = mkdtempSync(join(tmpdir(), "pipe-truncate-"));
+  mkdirSync(join(withTs, ".tokensave"), { recursive: true });
+
+  try {
+    resetTokenPipeline();
+    const big = { content: [{ type: "text", text: Array.from({ length: 200 }, (_, i) => `row ${i}`).join("\n") }] };
+    const out = decorateWithTokensave("rule_tool_fix", big, { projectDir: withTs });
+    const text = out.content.map((c) => c.text).join("\n");
+    assert.match(text, /lines omitted - the \.tokensave graph has the detail/);
+    assert.match(text, /row 0\b/);
+    assert.match(text, /row 199\b/);
+    assert.ok(out.content.length >= 2, "directive + truncated body");
+    assert.ok(text.length < big.content[0].text.length + 200, "truncated output must be much shorter");
+  } finally {
+    resetTokenPipeline();
+    rmSync(withTs, { recursive: true, force: true });
+  }
 });
 
 test("phrases and extra fillers are compressed by default", () => {

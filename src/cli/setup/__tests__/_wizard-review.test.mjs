@@ -83,7 +83,7 @@ test("the apply screen reports every task in the plan", async () => {
   await settle(1200);
 
   assert.match(handles.stdout.output, /Runtime home/, "the first task must have been shown");
-  assert.match(handles.stdout.output, /Instruction file/, "an optional task must have been shown");
+  assert.match(handles.stdout.output, /Instruction rules/, "an optional task must have been shown");
 
   handles.instance.unmount();
 });

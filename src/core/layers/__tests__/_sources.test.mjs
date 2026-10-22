@@ -12,6 +12,7 @@ import { mkdirSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
 
 const home = mkdtempSync(join(tmpdir(), "rule-layers-home-"));
 
@@ -56,7 +57,7 @@ test("each layer points where that layer lives", () => {
   try {
     const [native, projectLayer, user] = layerSources("skills", { cwd: root });
 
-    assert.ok(native.dir.endsWith(join("rule-mcp", "skills")), `the native layer is the bundled directory: ${native.dir}`);
+    assert.equal(native.dir, fileURLToPath(new URL("../../../../skills", import.meta.url)), `the native layer is the bundled directory: ${native.dir}`);
     assert.equal(projectLayer.dir, join(root, ".rule-mcp", "skills"), "the project layer lives in the checkout");
     assert.equal(user.dir, join(home, "skills"), "the user layer lives under the rule home");
   } finally {
@@ -70,7 +71,7 @@ test("personas resolve through the same three layers", () => {
   try {
     const [native, projectLayer, user] = layerSources("personas", { cwd: root });
 
-    assert.ok(native.dir.endsWith(join("rule-mcp", "personas")), `personas are bundled beside skills: ${native.dir}`);
+    assert.equal(native.dir, fileURLToPath(new URL("../../../../personas", import.meta.url)), `personas are bundled beside skills: ${native.dir}`);
     assert.equal(projectLayer.dir, join(root, ".rule-mcp", "personas"));
     assert.equal(user.dir, join(home, "personas"));
   } finally {

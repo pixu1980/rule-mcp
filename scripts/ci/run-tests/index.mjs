@@ -23,6 +23,10 @@ const ALIAS_HOOK = ["--import", fileURLToPath(new URL("../../alias-hook.mjs", im
 // cache another suite wrote is a suite whose result depends on run order.
 process.env.NODE_DISABLE_COMPILE_CACHE = "1";
 
+// The branch-sync guard reads the local checkout, so a suite must not depend on
+// how far the base branch moved. Tests that exercise the guard enable it.
+process.env.RULE_MCP_NO_SYNC_GUARD = "1";
+
 const name = process.argv[2];
 const suite = SUITES[name];
 
