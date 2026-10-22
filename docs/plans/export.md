@@ -1,8 +1,10 @@
 # export plan
 
+Status: `planned`
+
 - **Role**: export v1
 - **Date**: 2026-10-21
-- **Branch**: `feat/export` from `main`
+- **Execution branch**: `feat/export` from `main`
 - **Depends (doc)**: `feat/decision-models` consumes decision-cache; no merge required for export v1 ship
 
 Steps re-derived from [the review](../reviews/export.md). Mark `[x]` when done.
@@ -22,6 +24,16 @@ Runtime hook short-circuit from decision-cache is **out of scope** until
 decision-models lands.
 
 ## Dependency graph
+
+Branch: feat/export
+Path: docs/plans/export.md
+Depends on: -
+Feeds: `decision-models` (ORDER): it consumes the decision-cache this plan defines; export v1 ships without the runtime hook
+Shared files: `docs/handoff/HANDOFF.md`, `tests/fixtures/census.json`, `docs/02-architecture.md`, `docs/16-surface-map.md`
+
+The lines above are this plan's node in the cross-branch graph, verified from
+`docs/plans/plan-of-plans.md` on `feat/evolution`. The workstreams below are the
+order of the export work itself.
 
 ```
 WS-0  session map adapters (list/sort/identify current)     EX-02
