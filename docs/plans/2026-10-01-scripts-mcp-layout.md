@@ -1,9 +1,10 @@
 # Plan: pnpm workspace with `packages/{mcp,shared,docs}` + sibling Nyx
 
+Status: `planned` (not executed)
+
 - **Date**: 2026-10-01
 - **Updated**: 2026-10-01 (package names `rule-mcp*`; shared boundary re-audited)
-- **Status**: planned (not executed)
-- **Branch (when executing)**: `refactor/packages-mcp-nyx-workspace`
+- **Execution branch**: `refactor/packages-mcp-nyx-workspace`
 - **Repos**: workspace root (this git tree) + sibling `../nyx` (`nyx-gateway`)
 
 ## Goal
@@ -142,16 +143,16 @@ packages:
 
 ## Execution order
 
-1. Branch `refactor/packages-mcp-nyx-workspace`
-2. Create `packages/`; `git mv src/shared packages/shared`; `git mv src/utils packages/shared/utils` (or flatten utils files into shared root — **concrete: keep `packages/shared/utils/*` subfolder** matching today’s module paths, export from shared `package.json` `exports`)
-3. Add `packages/shared/package.json` (`rule-mcp-shared`) with exports for `.`, `./ports`, `./utils`, etc. as needed
-4. `git mv src packages/mcp`; add `packages/mcp/package.json` (`rule-mcp`); depend on shared + nyx-gateway; fix imports
-5. `git mv scripts/docs-site packages/docs`; add `rule-mcp-docs`; retarget root scripts; move `marked`
-6. Rename root package to `rule-mcp-workspace` (private); keep public bin name `rule-mcp`
-7. Move tests → `scripts/__tests__`; case-studies → `docs/case-studies`
-8. Workspace yaml, alias `@mcp`, Docker/CI/census, Nyx specifier `nyx-gateway/mcp`
-9. Sweep + ADR 134
-10. Commits by concern
+- [ ] 1. Branch `refactor/packages-mcp-nyx-workspace`
+- [ ] 2. Create `packages/`; `git mv src/shared packages/shared`; `git mv src/utils packages/shared/utils` (or flatten utils files into shared root — **concrete: keep `packages/shared/utils/*` subfolder** matching today’s module paths, export from shared `package.json` `exports`)
+- [ ] 3. Add `packages/shared/package.json` (`rule-mcp-shared`) with exports for `.`, `./ports`, `./utils`, etc. as needed
+- [ ] 4. `git mv src packages/mcp`; add `packages/mcp/package.json` (`rule-mcp`); depend on shared + nyx-gateway; fix imports
+- [ ] 5. `git mv scripts/docs-site packages/docs`; add `rule-mcp-docs`; retarget root scripts; move `marked`
+- [ ] 6. Rename root package to `rule-mcp-workspace` (private); keep public bin name `rule-mcp`
+- [ ] 7. Move tests → `scripts/__tests__`; case-studies → `docs/case-studies`
+- [ ] 8. Workspace yaml, alias `@mcp`, Docker/CI/census, Nyx specifier `nyx-gateway/mcp`
+- [ ] 9. Sweep + ADR 134
+- [ ] 10. Commits by concern
 
 ### Shared export shape (concrete)
 
@@ -192,6 +193,18 @@ Must find zero hits for:
 - Extracting `core/text` into shared
 - Skills depending on shared
 - Extra packages beyond `mcp` / `shared` / `docs`
+
+## Dependency graph
+
+Branch: feat/nyx
+Path: docs/plans/2026-10-01-scripts-mcp-layout.md
+Depends on: -
+Feeds: -
+Shared files: `docs/handoff/HANDOFF.md`, `docs/02-architecture.md`, `docs/05-env-variables.md`, `package.json`
+
+`Branch:` is the branch that owns this file; the layout itself executes on
+`refactor/packages-mcp-nyx-workspace`, named at the top. The five lines make the
+node findable from `docs/plans/plan-of-plans.md` on `feat/evolution`.
 
 ## Model assignment
 
