@@ -139,11 +139,19 @@ Each of these stops a step instead of shipping it, and each is a number a test c
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step           | Class     | Model                   | Why                                                 |
-| -------------- | --------- | ----------------------- | --------------------------------------------------- |
-| the whole plan | `T1-plan` | `gemini-4-argon` (high) | endpoint audit, review and plan: evidence and prose |
+| Step                                         | Class       | Model                    | Why                                                                   |
+| -------------------------------------------- | ----------- | ------------------------ | --------------------------------------------------------------------- |
+| 1 - loopback client and fake server          | `T3-rules`  | `kimi-k2.7-code`         | a small deterministic HTTP contract with a security invariant         |
+| 2 - supervisor and circuit breaker           | `T3-rules`  | `kimi-k2.7-code`         | a state machine and counters, deterministic and testable              |
+| 3 - measurement harness and corpus repair    | `T6-review` | `muse-wonder-full` (max) | evidence measurement and corpus judgment: the ruler before the rerank |
+| 4 - probability, shortlist cap, gated rerank | `T3-rules`  | `kimi-k2.7-code`         | ranker contract and threshold logic                                   |
+| 5 - language registry                        | `T3-rules`  | `kimi-k2.7-code`         | registry data and language selection                                  |
+| 6 - deterministic cache                      | `T3-rules`  | `kimi-k2.7-code`         | cache key and invalidation contract                                   |
+| 7 - semantic advisory rule                   | `T3-rules`  | `kimi-k2.7-code`         | one guardrail rule with its good and bad fixtures                     |
+| 8 - persona severity measurement             | `T6-review` | `muse-wonder-full` (max) | agreement is measured first and the step may be rejected              |
+| 9 - env, ADR, census, docs                   | `T1-plan`   | `gemini-4-argon` (high)  | ADR prose and counts, the riskier half of the step                    |
 
-Plan default: `T1-plan` - `gemini-4-argon` (high). Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
+Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits, `gemini-4-argon` (high) for the ADR and prose in Step 9.
 
 ## Verification gates
 
