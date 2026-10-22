@@ -5,11 +5,17 @@ work in, which plan to implement next, and in what order the branches return to
 `main`. It does not plan a skill.
 
 Format: the contract of ADR 154 (status line, `## Dependency graph`, checkboxes)
-applied to this file. ADR 153 and 154 live on `feat/guardrails-evolution` and are
+applied to this file. ADR 153 and 154 live on `feat/guardrails` and are
 not on `main` yet; this file follows them in advance, and the fold in stage 0
 brings them here.
 
-Scope: the **four local feature branches plus `main`**. `origin/develop` is out of
+Topology (2026-10-21): **`feat/evolution` is the convergence branch.** Every feature
+branch merges into it, and `main` receives `feat/evolution` once it is reviewed -
+so a merge here is `X -> feat/evolution`, never `X -> main` directly. `main` stays
+the released line; `feat/evolution` is where the work converges and where the
+rebase pain is paid once instead of once per branch.
+
+Scope: the **four local feature branches, `feat/evolution` and `main`**. `origin/develop` is out of
 scope: it holds `architect.md`, `backlog.md` and `github.md`, which belong to the
 `rule-mcp-architect` track, not to this catalogue.
 
@@ -17,8 +23,9 @@ scope: it holds `architect.md`, `backlog.md` and `github.md`, which belong to th
 
 | Branch | Ahead of main | Unique commits | Plan files | Unique plan paths | Contended with `ge` |
 | ------ | ------------: | -------------: | ---------: | ----------------: | ------------------: |
-| `main` | 0 | - | 2 | 2 | - |
-| `feat/guardrails-evolution` (`ge`) | 92 | 92 | 95 | 95 | - |
+| `main` | 0 | - | 3 | 3 | - |
+| `feat/evolution` (convergence) | 0 | - | 3 | 3 | - |
+| `feat/guardrails` (`ge`) | 94 | 94 | 95 | 95 | - |
 | `feat/decision-models` (`dm`) | 63 | **1** | 45 | 1 | **233 files** |
 | `feat/export` (`ex`) | 5 | 5 | 3 | 1 | 3 files |
 | `feat/nyx` (`nyx`) | 6 | 6 | 3 | 1 | 1 file |
@@ -47,7 +54,7 @@ branch that owns the catalogue.
 
 ## 2 - What this file is not
 
-`feat/guardrails-evolution` already carries a level-1 orchestrator,
+`feat/guardrails` already carries a level-1 orchestrator,
 `docs/plans/skills/skills-plan.md`: 83 nodes, stages 0-10, edge taxonomy, ten
 precedence policies, human gates, and ADR 153/154 behind it. This file **delegates
 to it**: for anything inside `ge`, the answer is in that file, not here.
@@ -76,7 +83,7 @@ Every level-2 node carries these parseable lines in its own plan:
 
 ```
 Status: planned
-Branch: feat/guardrails-evolution
+Branch: feat/guardrails
 Path: docs/plans/skills/data/rule-data-sql.md
 Depends on: rule-process#2 (CONTRACT), rule-data-sql (HARD)
 Feeds: rule-data (HARD)
@@ -86,8 +93,8 @@ Shared files: tests/fixtures/guardrail-corpus.mjs
 That is **six lines**, and ADR 154 currently specifies four. The review's finding
 F5 records the divergence: ADR 154 is amended to this set rather than a third
 format being invented. `Branch:` and `Path:` are what make a node findable from
-`main`, so they cannot be derived from the file location as long as the file is
-not on `main`.
+`feat/evolution`, so they cannot be derived from the file location as long as the
+file is not on `feat/evolution`.
 
 ## 4 - Edge taxonomy
 
@@ -99,7 +106,7 @@ Four kinds inherited from ADR 153, four new ones for the cross-branch layer:
 | `ORDER` | B can start, but after A avoids churn | warn |
 | `CONFLICT` | A and B edit the same shared file, same branch | serialise |
 | `CONTRACT` | A exports a surface B consumes, named by phase | block on that phase |
-| `MERGE` | Branch A must enter `main` before B | block the merge, not the work |
+| `MERGE` | Branch A must enter `feat/evolution` before B | block the merge, not the work |
 | `REBASE` | A and B touch the same path on different branches; one rebases after the other | order the rebase |
 | `DIVERGENCE` | The same plan path exists on two branches with different content | reconcile before either is implemented |
 | `SUPERSEDES` | A replaces B; B is not executed | retire B |
@@ -108,10 +115,10 @@ Four kinds inherited from ADR 153, four new ones for the cross-branch layer:
 
 ```
 dm --FOLD--> ge          (1 commit cherry-picked; 45 plan files removed, 1 kept)
-ex --MERGE--> main       (3 contended files with ge)
-nyx --MERGE--> main      (1 contended file with ge)
-ge --MERGE--> main       (last: 413 changed files, carries the removals)
-main --SUPERSEDES--> nothing; main receives, it does not orbit
+ex --MERGE--> feat/evolution    (3 contended files with ge)
+nyx --MERGE--> feat/evolution   (1 contended file with ge)
+ge --MERGE--> feat/evolution    (last: 413 changed files, carries the removals)
+feat/evolution --MERGE--> main  (one reviewed merge, after the four above)
 ```
 
 Edges, spelled out:
@@ -120,9 +127,9 @@ Edges, spelled out:
 | ---- | -- | ---- | --- |
 | `dm` | `ge` | `SUPERSEDES` | 29 identical copies, 3 diverged by ≤4 lines, 1 unique plan, 1 unique commit |
 | `dm` -> `decision-models.md` | `ge` | `MERGE` | the one plan that survives the fold, and it moves with the commit |
-| `ex` | `main` | `MERGE` | independent content (7 files), 3 shared generated files |
-| `nyx` | `main` | `MERGE` | independent content (19 files), 1 shared generated file |
-| `ge` | `main` | `MERGE` | largest diff, carries ADR 151/152 removals |
+| `ex` | `feat/evolution` | `MERGE` | independent content (7 files), 3 shared generated files |
+| `nyx` | `feat/evolution` | `MERGE` | independent content (19 files), 1 shared generated file |
+| `ge` | `feat/evolution` | `MERGE` | largest diff, carries ADR 151/152 removals |
 | `ex`, `nyx` | `ge` | `REBASE` | both touch `docs/handoff/HANDOFF.md`; `ex` also touches `docs/02-architecture.md` and `tests/fixtures/census.json` |
 | `decision-models.md` (3 divergent copies) | `ge`'s versions | `DIVERGENCE` | 1, 1 and 4 lines; reconcile before implementing either |
 
@@ -142,7 +149,7 @@ phases). This file owns only the choice of node and the movement between branche
 3. Work the node's own phases, in order, closing its checkboxes as they complete.
 4. Run the node's gates plus the shared ones in section 9.
 5. Commit on that branch, in the format the branch already uses.
-6. `git switch main` and update the node's row here, then take the next node.
+6. `git switch feat/evolution` and update the node's row here, then take the next node.
 7. At the end of a stage, return to `main`, run the contended-file checks from
    section 8, and only then merge.
 
@@ -175,27 +182,34 @@ Gate: human, because it deletes 32 files.
 
 Gate: the test of section 10 goes green for these four plans.
 
-### Stage 2 - Merge `ex`
+### Stage 2 - Merge `ex` into `feat/evolution`
 
-- [ ] Rebase `ex` onto `main`; resolve `docs/handoff/HANDOFF.md`,
+- [ ] Rebase `ex` onto `feat/evolution`; resolve `docs/handoff/HANDOFF.md`,
       `docs/02-architecture.md` and `tests/fixtures/census.json` by
       **regenerating** the last two, never by hand-editing.
 - [ ] Human gate: any change to `census.json` and the generated docs.
 
-### Stage 3 - Merge `nyx`
+### Stage 3 - Merge `nyx` into `feat/evolution`
 
-- [ ] Rebase onto `main`; resolve `HANDOFF.md` by regeneration.
+- [ ] Rebase onto `feat/evolution`; resolve `HANDOFF.md` by regeneration.
 - [ ] Human gate: `nyx` carries real code (`feat(nyx)` commits), not documents.
 
-### Stage 4 - Merge `ge` (last)
+### Stage 4 - Merge `ge` into `feat/evolution` (last)
 
-- [ ] Rebase onto `main` after stages 2 and 3, so the catalogue's generated files
+- [ ] Rebase onto `feat/evolution` after stages 2 and 3, so the catalogue's generated files
       are regenerated once, at the end.
 - [ ] Human gate: ADR 151 and 152 are one-way in review terms.
-- [ ] After the merge, `main` carries the 98 plans, `skills-plan.md`, ADR 153/154
-      and the 81-skill catalogue.
+- [ ] After the merge, `feat/evolution` carries the plans, `skills-plan.md`,
+      ADR 153/154 and the 81-skill catalogue.
 
-### Stage 5 - Bring the format to every plan
+### Stage 5 - `feat/evolution` into `main`
+
+- [ ] Only after stages 0-4: one merge, reviewed as a whole, with the full gate set.
+- [ ] Human gate: this is the merge that changes what `main` ships (81 skills
+      instead of 89, ADRs 153/154, the plan catalogue).
+- [ ] `main` then equals `feat/evolution`, and the branch is kept for the next cycle.
+
+### Stage 6 - Bring the format to every plan
 
 - [x] The contract exists (ADR 154, on `ge`).
 - [ ] Every one of the 98 plan paths carries the status line, the graph section and
@@ -277,7 +291,7 @@ belong to the merged branches, not to this plan.
 ## 13 - Fixes the review requires before the first node
 
 From `docs/reviews/plan-graph.md`. **All of them are resolved on
-`feat/guardrails-evolution`** (`3553780c` test, `6cda42ea` fix), where the plans
+`feat/guardrails`** (`3553780c` test, `6cda42ea` fix), where the plans
 live; this list is kept so a reader on `main` knows the state without switching
 branch. The files themselves arrive with the merge in stage 4.
 

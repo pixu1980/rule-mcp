@@ -1,7 +1,7 @@
 # Review: can the plan graph be implemented linearly?
 
 Status: `done`. Scope: `docs/plans/plan-of-plans.md` on `main`, and the 93 plan
-files on `feat/guardrails-evolution`, `feat/decision-models`, `feat/export`,
+files on `feat/guardrails`, `feat/decision-models`, `feat/export`,
 `feat/nyx`. Method: measurement, not re-reading. Every number below comes from a
 command in section 8.
 
@@ -149,7 +149,7 @@ M9  per-plan diff dm:plan vs ge:plan -> 29 identical, 3 diverged (1, 1, 4 lines)
 
 ## Resolution (2026-10-21)
 
-Every finding was closed on `feat/guardrails-evolution`, where the plans live:
+Every finding was closed on `feat/guardrails`, where the plans live:
 `3553780c` adds `tests/plans/skills-plan.test.mjs` (nine assertions, written
 first and seen red), `6cda42ea` applies the fixes. Verified on that branch: the
 nine assertions pass, `_corpus`, `_router-child-coverage`, `_retired-skills` and
@@ -171,3 +171,6 @@ nine assertions pass, `_corpus`, `_router-child-coverage`, `_retired-skills` and
 Not resolved, and deliberately out of scope: the sync banner shifts
 `content[0]`, and six tests read fixed indices. Measured: they pass in a detached
 worktree and fail in the checkout after the base advances by two commits.
+
+Branch names in this review were updated on 2026-10-21, after `feat/guardrails-evolution`
+was renamed to `feat/guardrails` and `feat/evolution` became the convergence branch.
