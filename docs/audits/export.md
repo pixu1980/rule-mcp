@@ -1,6 +1,7 @@
 # export audit
 
-- **Role**: export / session distill / decision-cache
+- **Role**: export v1
+- **Focus**: session distill / decision-cache
 - **Date**: 2026-10-21
 - **Branch target**: `feat/export` (from `main`)
 - **Related**: `feat/decision-models` (consumer of decision-cache, WS-5 / DM-07)
