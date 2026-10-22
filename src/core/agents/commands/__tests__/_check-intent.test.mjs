@@ -23,11 +23,12 @@ test("ignores substrings that are not whole tokens", () => {
 test("empty or non-string is not check intent", () => {
   assert.equal(hasCheckIntent(""), false);
   assert.equal(hasCheckIntent(null), false);
-  assert.equal(hasCheckIntent(undefined), false);
+  assert.equal(hasCheckIntent(), false);
 });
 
 test("the exported keyword list stays non-empty and lowercase", () => {
   assert.ok(CHECK_INTENT_KEYWORDS.length >= 10);
+
   for (const word of CHECK_INTENT_KEYWORDS) {
     assert.equal(word, word.toLowerCase());
     assert.ok(!/\s/.test(word));

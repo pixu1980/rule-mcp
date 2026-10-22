@@ -10,7 +10,7 @@ import { OPERATION_INTENT_KEYWORDS, PLAN_INTENT_KEYWORDS, REVIEW_INTENT_KEYWORDS
 test("no stage keyword means the cheapest run: audit", () => {
   assert.equal(operationForPrompt(""), "audit");
   assert.equal(operationForPrompt(null), "audit");
-  assert.equal(operationForPrompt(undefined), "audit");
+  assert.equal(operationForPrompt(), "audit");
   assert.equal(operationForPrompt("the auth flow"), "audit");
   assert.equal(operationForPrompt("dammi un parere su questo file"), "audit");
 });
@@ -46,12 +46,14 @@ test("whole-token matching ignores substrings", () => {
 test("the exported keyword lists stay non-empty, lowercase and ASCII", () => {
   for (const [name, list] of Object.entries(OPERATION_INTENT_KEYWORDS)) {
     assert.ok(list.length >= 5, `${name} needs a usable set`);
+
     for (const word of list) {
       assert.equal(word, word.toLowerCase(), `${name}: ${word} must be lowercase`);
-      assert.equal(word, word.normalize("NFD").replace(/\p{Diacritic}/gu, ""), `${name}: ${word} must be ASCII (accents are stripped at match time)`);
+      assert.equal(word, word.normalize("NFD").replaceAll(/\p{Diacritic}/gu, ""), `${name}: ${word} must be ASCII (accents are stripped at match time)`);
       assert.ok(!/\s/.test(word), `${name}: ${word} must be one token`);
     }
   }
+
   assert.equal(OPERATION_INTENT_KEYWORDS.review, REVIEW_INTENT_KEYWORDS);
   assert.equal(OPERATION_INTENT_KEYWORDS.plan, PLAN_INTENT_KEYWORDS);
 });
