@@ -13,7 +13,10 @@ test("a shortlist above six options is refused with the cap in the message", () 
 
   assert.equal(SHORTLIST_CAP, 6);
   assert.throws(() => buildChoiceQuestion(seven), /caps at six options, got 7/u);
-  assert.throws(() => buildChoiceQuestion(seven), (error) => error.code === "shortlist");
+  assert.throws(
+    () => buildChoiceQuestion(seven),
+    (error) => error.code === "shortlist",
+  );
 });
 
 test("the choice question describes every option", () => {
@@ -26,6 +29,7 @@ test("rerankShortlist returns the pick and the probability of the chosen label",
   const answer = await rerankShortlist({
     prompt: "route this",
     shortlist: [option("a"), option("b")],
+    model: "laya",
     ask: async (prompt, questions) => {
       asked = { prompt, questions };
 

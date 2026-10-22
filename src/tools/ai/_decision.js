@@ -51,7 +51,12 @@ export async function applyDecision({ prompt, top, primaryRoute }) {
   }));
 
   try {
-    const rerank = await rerankShortlist({ prompt, shortlist, ask: runtime.supervisor.ask });
+    const rerank = await rerankShortlist({
+      prompt,
+      shortlist,
+      ask: runtime.supervisor.ask,
+      model: runtime.model.id,
+    });
     const chosen = shortlist.find((option) => option.skill === rerank.pick);
 
     if (chosen && rerank.probability >= runtime.model.threshold) {
