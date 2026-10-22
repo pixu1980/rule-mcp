@@ -5,7 +5,7 @@
 <p>An MCP server that routes free-text requests to the right skill, serves styleguides and templates as tools and resources, and validates generated code with guardrails. Same behavior behind Claude, GPT, Gemini, Llama, or Qwen. Local-first. Model-agnostic.</p>
 <ul data-part="stats">
 <li><strong>89 skills</strong></li>
-<li><strong>109 tools</strong></li>
+<li><strong>110 tools</strong></li>
 <li><strong>186 resources</strong></li>
 <li><strong>38 prompts</strong></li>
 <li><strong>41 slash commands</strong></li>
@@ -34,8 +34,8 @@
 </article>
 <article>
 <h3><a href="docs/16-surface-map.md">Surface map</a></h3>
-<p>Every command, tool, and skill in one generated table: Command · Tool · Skill.</p>
+<p>Every command, tool, and skill in one generated table: Command - Tool - Skill.</p>
 </article>
 </section>
 
-Node ≥ 20 · [MIT](LICENSE) · runtime deps: `@modelcontextprotocol/sdk` + `zod` only.
+Node >= 20 - [MIT](LICENSE) - [Contributing](CONTRIBUTING.md) - [Governance](GOVERNANCE.md) - [Code of Conduct](CODE_OF_CONDUCT.md) - [Maintainers](MAINTAINERS.md) - [Security](SECURITY.md) - runtime deps: `@modelcontextprotocol/sdk` + `zod` only.
