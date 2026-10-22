@@ -11,7 +11,7 @@ brings them here.
 
 Topology (2026-10-21): **`feat/evolution` is the only destination.** Every feature
 branch merges into it, every commit of every stage lands there, and `main` is out
-of scope for this work: the owner opens the merge request when the catalogue is
+of scope for this work: the owner opens the merge request when the catalog is
 ready. No stage touches `main`, and nothing here waits on it.
 
 Scope: the **four feature branches plus `feat/evolution`**. Two things are out of
@@ -21,13 +21,13 @@ the `rule-mcp-architect` track.
 
 ## 1 - Branch inventory (measured 2026-10-21)
 
-| Branch | Commits ahead of the common base | Plan files | Unique plan paths | Contended with `ge` |
-| ------ | -------------------------------: | ---------: | ----------------: | ------------------: |
-| `feat/evolution` (the destination) | 5 | 2 | 2 | - |
-| `feat/guardrails` (`ge`) | 97 | 97 | 95 plans plus 2 indexes | - |
-| `feat/decision-models` (`dm`) | 66 | 45 | 1 | **233 files** |
-| `feat/export` (`ex`) | 8 | 3 | 1 | 3 files |
-| `feat/nyx` (`nyx`) | 9 | 3 | 1 | 1 file |
+| Branch                             | Commits ahead of the common base | Plan files |       Unique plan paths | Contended with `ge` |
+| ---------------------------------- | -------------------------------: | ---------: | ----------------------: | ------------------: |
+| `feat/evolution` (the destination) |                                5 |          2 |                       2 |                   - |
+| `feat/guardrails` (`ge`)           |                               97 |         97 | 95 plans plus 2 indexes |                   - |
+| `feat/decision-models` (`dm`)      |                               66 |         45 |                       1 |       **233 files** |
+| `feat/export` (`ex`)               |                                8 |          3 |                       1 |             3 files |
+| `feat/nyx` (`nyx`)                 |                                9 |          3 |                       1 |              1 file |
 
 Totals: **150 plan-file instances, 102 unique plan paths** across the five
 branches. `ge` carries every plan this work needs; `evolution` carries this file
@@ -35,8 +35,9 @@ and its reference; `dm`, `ex` and `nyx` add one plan each. The branches share th
 same base, so the first merge needs no rebase.
 
 Reference for this plan: [`plan-of-plans-reference.md`](plan-of-plans-reference.md)
+
 - the audit that asked whether the graph allows a linear implementation, with its
-findings and their resolution.
+  findings and their resolution.
 
 ### What the measurement says about `dm`
 
@@ -50,7 +51,7 @@ findings and their resolution.
 
 So `dm` is not a parallel branch. It is an earlier state of `ge` plus one handoff
 pointer, and its 32 skill plans are **demanded to `ge`**: they belong to the
-branch that owns the catalogue.
+branch that owns the catalog.
 
 ## 2 - What this file is not
 
@@ -62,13 +63,13 @@ to it**: for anything inside `ge`, the answer is in that file, not here.
 The hierarchy is the decision, and it has one rule: **every branch that carries
 more than one plan gets its own level-1 orchestrator, or this file says why not.**
 
-| Branch | Level-1 orchestrator | State |
-| ------ | -------------------- | ----- |
-| `ge` | `docs/plans/skills/skills-plan.md` | exists, 83 nodes |
-| `dm` | none, and it does not need one | folded into `ge` in stage 2 |
-| `ex` | `docs/plans/export.md` gains a dependency section | retrofit |
-| `nyx` | `docs/plans/2026-10-01-scripts-mcp-layout.md` gains a dependency section | retrofit |
-| `feat/evolution` | this file | plus the per-branch orchestrators it delegates to |
+| Branch           | Level-1 orchestrator                                                     | State                                             |
+| ---------------- | ------------------------------------------------------------------------ | ------------------------------------------------- |
+| `ge`             | `docs/plans/skills/skills-plan.md`                                       | exists, 83 nodes                                  |
+| `dm`             | none, and it does not need one                                           | folded into `ge` in stage 2                       |
+| `ex`             | `docs/plans/export.md` gains a dependency section                        | retrofit                                          |
+| `nyx`            | `docs/plans/2026-10-01-scripts-mcp-layout.md` gains a dependency section | retrofit                                          |
+| `feat/evolution` | this file                                                                | plus the per-branch orchestrators it delegates to |
 
 ## 3 - Nodes, two levels
 
@@ -100,16 +101,16 @@ file is not on `feat/evolution`.
 
 Four kinds inherited from ADR 153, four new ones for the cross-branch layer:
 
-| Kind | Meaning | Executor rule |
-| ---- | ------- | ------------- |
-| `HARD` | B cannot start before A is closed | block |
-| `ORDER` | B can start, but after A avoids churn | warn |
-| `CONFLICT` | A and B edit the same shared file, same branch | serialise |
-| `CONTRACT` | A exports a surface B consumes, named by phase | block on that phase |
-| `MERGE` | Branch A must enter `feat/evolution` before B | block the merge, not the work |
-| `REBASE` | A and B touch the same path on different branches; one rebases after the other | order the rebase |
-| `DIVERGENCE` | The same plan path exists on two branches with different content | reconcile before either is implemented |
-| `SUPERSEDES` | A replaces B; B is not executed | retire B |
+| Kind         | Meaning                                                                        | Executor rule                          |
+| ------------ | ------------------------------------------------------------------------------ | -------------------------------------- |
+| `HARD`       | B cannot start before A is closed                                              | block                                  |
+| `ORDER`      | B can start, but after A avoids churn                                          | warn                                   |
+| `CONFLICT`   | A and B edit the same shared file, same branch                                 | serialize                              |
+| `CONTRACT`   | A exports a surface B consumes, named by phase                                 | block on that phase                    |
+| `MERGE`      | Branch A must enter `feat/evolution` before B                                  | block the merge, not the work          |
+| `REBASE`     | A and B touch the same path on different branches; one rebases after the other | order the rebase                       |
+| `DIVERGENCE` | The same plan path exists on two branches with different content               | reconcile before either is implemented |
+| `SUPERSEDES` | A replaces B; B is not executed                                                | retire B                               |
 
 ## 5 - The level-1 graph
 
@@ -123,15 +124,15 @@ feat/evolution                (the destination: every merge above lands here)
 
 Edges, spelled out:
 
-| From | To | Kind | Why |
-| ---- | -- | ---- | --- |
-| `dm` | `ge` | `SUPERSEDES` | 29 identical copies, 3 diverged by ≤4 lines, 1 unique plan, 1 unique commit |
-| `dm` -> `decision-models.md` | `ge` | `MERGE` | the one plan that survives the fold, and it moves with the commit |
-| `ex` | `feat/evolution` | `MERGE` | independent content (7 files), 3 shared generated files |
-| `nyx` | `feat/evolution` | `MERGE` | independent content (19 files), 1 shared generated file |
-| `ge` | `feat/evolution` | `MERGE` | largest diff, carries ADR 151/152 removals |
-| `ex`, `nyx` | `ge` | `REBASE` | both touch `docs/handoff/HANDOFF.md`; `ex` also touches `docs/02-architecture.md` and `tests/fixtures/census.json` |
-| `decision-models.md` (3 divergent copies) | `ge`'s versions | `DIVERGENCE` | 1, 1 and 4 lines; reconcile before implementing either |
+| From                                      | To               | Kind         | Why                                                                                                                |
+| ----------------------------------------- | ---------------- | ------------ | ------------------------------------------------------------------------------------------------------------------ |
+| `dm`                                      | `ge`             | `SUPERSEDES` | 29 identical copies, 3 diverged by <=4 lines, 1 unique plan, 1 unique commit                                       |
+| `dm` -> `decision-models.md`              | `ge`             | `MERGE`      | the one plan that survives the fold, and it moves with the commit                                                  |
+| `ex`                                      | `feat/evolution` | `MERGE`      | independent content (7 files), 3 shared generated files                                                            |
+| `nyx`                                     | `feat/evolution` | `MERGE`      | independent content (19 files), 1 shared generated file                                                            |
+| `ge`                                      | `feat/evolution` | `MERGE`      | largest diff, carries ADR 151/152 removals                                                                         |
+| `ex`, `nyx`                               | `ge`             | `REBASE`     | both touch `docs/handoff/HANDOFF.md`; `ex` also touches `docs/02-architecture.md` and `tests/fixtures/census.json` |
+| `decision-models.md` (3 divergent copies) | `ge`'s versions  | `DIVERGENCE` | 1, 1 and 4 lines; reconcile before implementing either                                                             |
 
 The merge order is **derived, not chosen**: `ge` is last because it carries the
 most files and the two removals; `dm` is first because it is the cheapest fold;
@@ -170,92 +171,125 @@ decisions, and the eighth is a README link sweep that waits on nothing.
 
 **The five decisions (owner):**
 
-- [ ] Signing: is every release tag signed, with which key, and where is the key
-      documented? (`v0.1.0` has no signature: `git tag -v v0.1.0` exits 1)
-- [ ] Supported version line: which released pre-1.0 series receives security
-      fixes? (`SECURITY.md` names 1.0.x while the package and tag are 0.1.0)
-- [ ] Conduct escalation: who is the independent contact when the BDFL is the
-      subject, and through which confidential channel?
-- [ ] Funding disclosure: is sponsorship active, and what may be published as an
-      aggregate without exposing donors?
-- [ ] Inbound license: is the policy inbound=outbound MIT, with the DCO as
-      provenance certification only?
+- [x] Signing: is every release tag signed, with which key, and where is the key
+      documented? (`v0.1.0` has no signature: `git tag -v v0.1.0` exits 1) -
+      decided (ADR 135): dedicated Ed25519 GPG key
+      (`37D68446F3ADCF1C8C37C07A15571530D4B63084`), public key committed at
+      `.github/release-signing-key.asc` and documented in `CONTRIBUTING.md` and
+      `SECURITY.md`; `v0.1.0` stays unchanged.
+- [x] Supported version line: which released pre-1.0 series receives security
+      fixes? (`SECURITY.md` names 1.0.x while the package and tag are 0.1.0) -
+      decided (ADR 135): active `0.1.x` minor line supported, `< 0.1.0`
+      unsupported until `1.0.0` ships.
+- [x] Conduct escalation: who is the independent contact when the BDFL is the
+      subject, and through which confidential channel? - decided (ADR 135):
+      mandatory BDFL recusal once a co-maintainer is listed in
+      `MAINTAINERS.md`, and direct confidential escalation via GitHub Trust &
+      Safety (`https://github.com/contact/report-abuse`) while bus factor is
+      one.
+- [x] Funding disclosure: is sponsorship active, and what may be published as an
+      aggregate without exposing donors? - decided (ADR 135): GitHub Sponsors
+      (`pixu1980` in `.github/FUNDING.yml`) active with zero funds received to
+      date, and an annual aggregate summary in `GOVERNANCE.md` without exposing
+      donor identities.
+- [x] Inbound license: is the policy inbound=outbound MIT, with the DCO as
+      provenance certification only? - decided (ADR 135): `inbound = outbound
+MIT` with the DCO `Signed-off-by` trailer certifying provenance only and
+      no CLA.
 
 **OSS-01 (high) - the release workflow accepts unsigned annotated tags:**
 
-- [ ] 1.1 Confirm the signed-tag and key-management policy; do not rewrite the
-      existing release tag.
-- [ ] 1.2 Add and test a cryptographic signature verification gate in
-      `.github/workflows/release.yml`, distinguishing annotated from verified.
-- [ ] 1.3 On a new signed test tag, assert the gate passes and that an unsigned
-      annotated tag fails before release creation.
+- [x] 1.1 Confirm the signed-tag and key-management policy; do not rewrite the
+      existing release tag (`v0.1.0` left intact; GPG key committed at
+      `.github/release-signing-key.asc`).
+- [x] 1.2 Add and test a cryptographic signature verification gate in
+      `.github/workflows/release.yml`, distinguishing annotated from verified
+      (`git verify-tag` after `git cat-file -t`, covered in
+      `tests/release/workflow.test.mjs`).
+- [x] 1.3 On a new signed test tag, assert the gate passes and that an unsigned
+      annotated tag fails before release creation (verified on `v0.1.0-sigtest`
+      vs `v0.1.0-unsigned` and in `tests/release/workflow.test.mjs`).
 
 **OSS-02 (medium) - the security support table disagrees with the release:**
 
-- [ ] 2.1 Confirm which version line receives security fixes.
-- [ ] 2.2 Align `SECURITY.md` with the policy and with `package.json` and
-      `server.json`; check the release tag.
-- [ ] 2.3 Validate that the advisory and README links resolve to the updated
-      support policy.
+- [x] 2.1 Confirm which version line receives security fixes (`0.1.x`).
+- [x] 2.2 Align `SECURITY.md` with the policy and with `package.json` and
+      `server.json`; check the release tag (`v0.1.0`).
+- [x] 2.3 Validate that the advisory and README links resolve to the updated
+      support policy (`tests/docs/security-policy.test.mjs`,
+      `tests/docs/link-integrity.test.mjs`).
 
 **OSS-03 (medium) - the code of conduct appeal routes back to the BDFL:**
 
-- [ ] 3.1 Nominate a willing independent contact and agree a confidential
-      escalation channel; never publish a person's address without consent.
-- [ ] 3.2 Update `CODE_OF_CONDUCT.md` and `GOVERNANCE.md` with reporting,
+- [x] 3.1 Nominate a willing independent contact and agree a confidential
+      escalation channel; never publish a person's address without consent
+      (bus-factor-1 recusal policy plus `https://github.com/contact/report-abuse`).
+- [x] 3.2 Update `CODE_OF_CONDUCT.md` and `GOVERNANCE.md` with reporting,
       recusal, appeal and response handling when the BDFL is involved.
-- [ ] 3.3 Test that every public link reaches a working private reporting
-      channel without exposing reporter identity.
+- [x] 3.3 Test that every public link reaches a working private reporting
+      channel without exposing reporter identity
+      (`tests/docs/security-policy.test.mjs`).
 
 **OSS-04 (low) - response targets disagree between documents:**
 
-- [ ] 4.1 Confirm which triage and review targets are sustainable.
-- [ ] 4.2 Align `CONTRIBUTING.md` and `MAINTAINERS.md`, and say business or
-      calendar days.
-- [ ] 4.3 Check the issue templates and contributor links reference the policy.
+- [x] 4.1 Confirm which triage and review targets are sustainable (2 business
+      days for issue triage, 7 business days for PR review).
+- [x] 4.2 Align `CONTRIBUTING.md` and `MAINTAINERS.md`, and say business or
+      calendar days (`2 business days` and `7 business days`).
+- [x] 4.3 Check the issue templates and contributor links reference the policy
+      (`tests/docs/security-policy.test.mjs`).
 
 **OSS-05 (medium) - local lint and generated-document checks fail on a dirty tree:**
 
-- [ ] 5.1 Run `pnpm lint` and `pnpm census:check` on a clean checkout before
-      attributing anything to another branch.
-- [ ] 5.2 For confirmed failures, fix only the failing files and regenerate the
+- [x] 5.1 Run `pnpm lint` and `pnpm census:check` on a clean checkout before
+      attributing anything to another branch (confirmed 22 ESLint errors across
+      13 files and stale `tests/fixtures/census.json`).
+- [x] 5.2 For confirmed failures, fix only the failing files and regenerate the
       named census outputs with `pnpm census`.
-- [ ] 5.3 Re-run `pnpm test:all`, `pnpm lint` and `pnpm census:check` and record
-      the results.
+- [x] 5.3 Re-run `pnpm test:all`, `pnpm lint` and `pnpm census:check` and record
+      the results (`pnpm lint` exits 0 with 0 errors and 36 warnings;
+      `pnpm census:check` exits 0; `README.md` tool count aligned to 110;
+      `tests/release/workflow.test.mjs`, `tests/docs/security-policy.test.mjs`,
+      `tests/docs/dco.test.mjs`, `tests/docs/link-integrity.test.mjs` and
+      `tests/docs/docs-accuracy.test.mjs` all pass).
 
 **OSS-06 (low) - funding promises transparency with no cadence:**
 
-- [ ] 6.1 Confirm whether sponsorship is active and what may be disclosed.
-- [ ] 6.2 If donations are accepted, document the reporting location and period
+- [x] 6.1 Confirm whether sponsorship is active and what may be disclosed
+      (GitHub Sponsors `pixu1980` active, annual aggregate summary).
+- [x] 6.2 If donations are accepted, document the reporting location and period
       in `GOVERNANCE.md`, keeping sponsor preferences out of the roadmap.
-- [ ] 6.3 Verify `.github/FUNDING.yml` points at the approved channel without
-      claiming unverified balances.
+- [x] 6.3 Verify `.github/FUNDING.yml` points at the approved channel without
+      claiming unverified balances (`tests/docs/security-policy.test.mjs`).
 
 **OSS-07 (medium) - the contribution guide calls the DCO a license:**
 
-- [ ] 7.1 Confirm the intended inbound=outbound MIT policy; obtain legal review
-      if it is uncertain.
-- [ ] 7.2 Correct `CONTRIBUTING.md` so provenance certification and licensing
+- [x] 7.1 Confirm the intended inbound=outbound MIT policy; obtain legal review
+      if it is uncertain (`inbound = outbound MIT` confirmed).
+- [x] 7.2 Correct `CONTRIBUTING.md` so provenance certification and licensing
       are separate, without introducing a CLA.
-- [ ] 7.3 Recheck `LICENSE`, `REUSE.toml`, the installed commit-msg hook and the
-      DCO CI gate for consistent language and behaviour.
+- [x] 7.3 Recheck `LICENSE`, `REUSE.toml`, the installed commit-msg hook and the
+      DCO CI gate for consistent language and behavior
+      (`tests/docs/dco.test.mjs`).
 
 **OSS-08 (low) - the README entry page links no policy:**
 
-- [ ] 8.1 Add concise links to `CONTRIBUTING.md`, `GOVERNANCE.md`,
+- [x] 8.1 Add concise links to `CONTRIBUTING.md`, `GOVERNANCE.md`,
       `CODE_OF_CONDUCT.md`, `MAINTAINERS.md` and `SECURITY.md`.
-- [ ] 8.2 Check every link locally and keep the handbook links intact.
+- [x] 8.2 Check every link locally and keep the handbook links intact
+      (`tests/docs/link-integrity.test.mjs`).
 
 **Closing the stage:**
 
-- [ ] Refresh the records with the evidence and the statuses. On this branch
+- [x] Refresh the records with the evidence and the statuses. On this branch
       that means section 9 of this file and the evidence inside each closed
       step; the three documents that used to hold it are not on this branch.
-- [ ] `GOVERNANCE.md` names where the branch-protection setting is recorded
+- [x] `GOVERNANCE.md` names where the branch-protection setting is recorded
       (owner action 16.5) without pointing at a file this branch does not carry.
 
-Gate: **human**, on all five decisions. Nothing in stages 1-7 starts before it,
-and the four merge stages stay blocked while the policy questions are open.
+Gate: **human**, on all five decisions (confirmed 2026-10-22, ADR 135). Nothing
+in stages 1-7 starts before it, and the four merge stages are now unblocked on
+policy.
 
 ### Stage 1 - Fold `dm` (1 node, mechanical)
 
@@ -295,15 +329,15 @@ Gate: the test of section 10 goes green for these four plans.
 
 ### Stage 5 - Merge `ge` into `feat/evolution` (last)
 
-- [ ] Rebase onto `feat/evolution` after stages 3 and 4, so the catalogue's generated files
+- [ ] Rebase onto `feat/evolution` after stages 3 and 4, so the catalog's generated files
       are regenerated once, at the end.
 - [ ] Human gate: ADR 151 and 152 are one-way in review terms.
 - [ ] After the merge, `feat/evolution` carries the plans, `skills-plan.md`,
-      ADR 153/154 and the 81-skill catalogue.
+      ADR 153/154 and the 81-skill catalog.
 
 ### Stage 6 - Hand over to the owner
 
-- [ ] Only after stages 0-5: the catalogue is complete on `feat/evolution`.
+- [ ] Only after stages 0-5: the catalog is complete on `feat/evolution`.
 - [ ] The owner opens the merge request. This plan does not touch `main`, does
       not rebase onto it, and does not merge into it: `feat/evolution` is the
       destination, and the merge request is the owner's step.
@@ -320,30 +354,37 @@ Gate: the test of section 10 goes green for these four plans.
 This is **the** list: `skills-plan.md` names five of these and must point here
 instead of keeping its own copy (review finding F6).
 
-| File | Branches | Resolution |
-| ---- | -------- | ---------- |
-| `docs/handoff/HANDOFF.md` | `ge`, `ex`, `nyx` | regenerate the index, never merge by hand |
-| `tests/fixtures/census.json` | `ge`, `ex` | `pnpm census`, once, at each merge |
-| `docs/02-architecture.md` | `ge`, `ex` | regenerated by census |
-| `docs/08-skills.md`, `docs/09-tools.md`, `docs/15-resources.md`, `docs/16-surface-map.md` | `ge`, `ex` | regenerated by census |
-| `docs/adr/ADR.md` + ADR numbering | `ge`, `dm`, `ex`, `nyx` | one allocator: numbers taken at merge time, collisions re-numbered |
-| `docs/0*.md` (other generated docs) | `ge`, `dm` | `dm` folds into `ge`, so the conflict disappears with the branch |
-| `skills/rule/SKILL.md` | `ge` only | no cross-branch conflict, heavy intra-branch conflict |
-| `tests/fixtures/guardrail-corpus.mjs` | `ge` only | append-only, one plan at a time |
+| File                                                                                      | Branches                | Resolution                                                         |
+| ----------------------------------------------------------------------------------------- | ----------------------- | ------------------------------------------------------------------ |
+| `docs/handoff/HANDOFF.md`                                                                 | `ge`, `ex`, `nyx`       | regenerate the index, never merge by hand                          |
+| `tests/fixtures/census.json`                                                              | `ge`, `ex`              | `pnpm census`, once, at each merge                                 |
+| `docs/02-architecture.md`                                                                 | `ge`, `ex`              | regenerated by census                                              |
+| `docs/08-skills.md`, `docs/09-tools.md`, `docs/15-resources.md`, `docs/16-surface-map.md` | `ge`, `ex`              | regenerated by census                                              |
+| `docs/adr/ADR.md` + ADR numbering                                                         | `ge`, `dm`, `ex`, `nyx` | one allocator: numbers taken at merge time, collisions re-numbered |
+| `docs/0*.md` (other generated docs)                                                       | `ge`, `dm`              | `dm` folds into `ge`, so the conflict disappears with the branch   |
+| `skills/rule/SKILL.md`                                                                     | `ge` only               | no cross-branch conflict, heavy intra-branch conflict              |
+| `tests/fixtures/guardrail-corpus.mjs`                                                     | `ge` only               | append-only, one plan at a time                                    |
 
 ## 9 - Gates
 
 Automatic, on every node: the corpus and router-coverage suites, `census:check`,
 lint and typecheck.
 
+Stage 0 gate record (2026-10-22, ADR 135):
+
+- `pnpm lint`: exit `0` (`0 errors, 36 warnings`, under `--max-warnings 50`).
+- `pnpm census:check`: exit `0` (`the census is current` after regenerating `tests/fixtures/census.json`).
+- `node --import ./scripts/alias-hook.mjs --test tests/release/workflow.test.mjs tests/docs/security-policy.test.mjs tests/docs/dco.test.mjs tests/docs/link-integrity.test.mjs tests/docs/docs-accuracy.test.mjs`: `25/25` pass.
+- `pnpm test:all`: remaining failures on this machine are the two pre-existing environment items outside Stage 0 (`core.hooksPath` in global git config rejecting scope-less fixture commits `first`/`base`/`a` in `docs-numbering-doctor` and `handon`/`handoff` fixtures, and the sync-banner `content[0]` shift documented in section 13).
+
 Human, and only there:
 
-| Gate | Where | Why |
-| ---- | ----- | --- |
-| Every merge into `feat/evolution` | stages 3, 4, 5 | nothing lands unreviewed |
-| Contended files | any PR touching the five files in section 8 | a mistake there multiplies |
-| Destructive plans | `ge`'s ADR 151/152 removals, and the `dm` fold that deletes 32 files | one-way in review terms |
-| Any commit that changes this graph | this file | the graph is the contract |
+| Gate                               | Where                                                                | Why                        |
+| ---------------------------------- | -------------------------------------------------------------------- | -------------------------- |
+| Every merge into `feat/evolution`  | stages 3, 4, 5                                                       | nothing lands unreviewed   |
+| Contended files                    | any PR touching the five files in section 8                          | a mistake there multiplies |
+| Destructive plans                  | `ge`'s ADR 151/152 removals, and the `dm` fold that deletes 32 files | one-way in review terms    |
+| Any commit that changes this graph | this file                                                            | the graph is the contract  |
 
 ## 10 - Verification
 
@@ -369,6 +410,7 @@ Shared files: `docs/plans/plan-of-plans.md` only. The contended files in section
 belong to the merged branches, not to this plan.
 
 ## 12 - Open notes and risks
+
 - **The 3 divergent plans are cheap and must not be skipped.** 1, 1 and 4 lines
   apart. Reconciling them is minutes; discovering them after the fold is a lost
   afternoon. Stage 2 takes `ge`'s version as authoritative, because `ge` is where
@@ -379,7 +421,7 @@ belong to the merged branches, not to this plan.
   maintain twice.
 - **`ge` last is deliberate.** It changes 413 files, removes two skills and
   rewrites the counts. Merging it first would force `ex` and `nyx` to rebase onto
-  a catalogue that moved under them.
+  a catalog that moved under them.
 - **The level-1 orchestrator exists for one branch out of four.** `ex` and `nyx`
   get a dependency section because their plans are single documents; a full
   `skills-plan.md` for a 3-file branch would be ceremony. The rule stays in
@@ -406,17 +448,17 @@ Evidence gathered 2026-10-22 from three sources, cited per claim:
 
 ### The classes
 
-| Class | Task | Model | Why, from the evidence |
-| ----- | ---- | ----- | ---------------------- |
-| `T1-plan` | Planning, architecture, ADRs, prose that argues | `gemini-4-argon` (high) | Arena Agent #6 overall and AA index 53 at $1.99; the Google family leads public edit-format compliance (Gemini 2.5 Pro 83.1% on Aider, the best non-excluded score) |
-| `T2-git` | Cross-branch work: fold, rebase, merge resolution | `grok-4.7` (xhigh) | AA index 46 with 500k context; Grok 4 scored 79.6% on Aider, the strongest agentic-coding family outside the excluded two |
-| `T3-rules` | Guardrail rules: small deterministic code, regex, engine contracts | `kimi-k2.7-code` | A code-tuned family (Kimi K2: 59.1% Aider at $1.24) at $0.54 per 1M; the cheap end of the code-correctness range |
-| `T4-tests` | Test writing: node:test suites, fixtures, assertions | `deepseek-v4.1-flash` | AA index 45 at **$0.26** and 206 tokens/s; DeepSeek's reasoning line scored 74.2% on Aider at a tenth of the frontier price |
-| `T5-bulk` | Mechanical edits at scale: retrofits, renames, regeneration | `minimax-m3.1-flash` | AA index 43 at $0.22, 93 tokens/s, 1M context; MiMo-V2.6-Flash ($0.06) is the cheaper alternate and sits on the Arena cost/task Pareto |
-| `T6-review` | Audits, contradiction hunting, evidence measurement | `muse-wonder-full` (max) | AA index **56**, the highest reachable score, with a 1M context window; Arena Agent #7 |
-| `T7-author` | Skill bodies: framework content, references, prose trimming | `qwen3.8-max` | AA index 45 with the broadest framework knowledge of the pool (Qwen3-235B: 59.6% Aider) |
-| `T8-verify` | Verification loops, gate runs, small format fixes | `gemini-3.8-flash` (high) | AA index 41 at $1.24 with 137 tokens/s: fast enough to re-run a gate loop without waiting |
-| `T9-local` | Offline checks with no network | `llama.cpp/Laya-GGUF:Q8_0` | The only local model served here; use it for trivial mechanical reads, never for judgement |
+| Class       | Task                                                               | Model                      | Why, from the evidence                                                                                                                                              |
+| ----------- | ------------------------------------------------------------------ | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `T1-plan`   | Planning, architecture, ADRs, prose that argues                    | `gemini-4-argon` (high)    | Arena Agent #6 overall and AA index 53 at $1.99; the Google family leads public edit-format compliance (Gemini 2.5 Pro 83.1% on Aider, the best non-excluded score) |
+| `T2-git`    | Cross-branch work: fold, rebase, merge resolution                  | `grok-4.7` (xhigh)         | AA index 46 with 500k context; Grok 4 scored 79.6% on Aider, the strongest agentic-coding family outside the excluded two                                           |
+| `T3-rules`  | Guardrail rules: small deterministic code, regex, engine contracts | `kimi-k2.7-code`           | A code-tuned family (Kimi K2: 59.1% Aider at $1.24) at $0.54 per 1M; the cheap end of the code-correctness range                                                    |
+| `T4-tests`  | Test writing: node:test suites, fixtures, assertions               | `deepseek-v4.1-flash`      | AA index 45 at **$0.26** and 206 tokens/s; DeepSeek's reasoning line scored 74.2% on Aider at a tenth of the frontier price                                         |
+| `T5-bulk`   | Mechanical edits at scale: retrofits, renames, regeneration        | `minimax-m3.1-flash`       | AA index 43 at $0.22, 93 tokens/s, 1M context; MiMo-V2.6-Flash ($0.06) is the cheaper alternate and sits on the Arena cost/task Pareto                              |
+| `T6-review` | Audits, contradiction hunting, evidence measurement                | `muse-wonder-full` (max)   | AA index **56**, the highest reachable score, with a 1M context window; Arena Agent #7                                                                              |
+| `T7-author` | Skill bodies: framework content, references, prose trimming        | `qwen3.8-max`              | AA index 45 with the broadest framework knowledge of the pool (Qwen3-235B: 59.6% Aider)                                                                             |
+| `T8-verify` | Verification loops, gate runs, small format fixes                  | `gemini-3.8-flash` (high)  | AA index 41 at $1.24 with 137 tokens/s: fast enough to re-run a gate loop without waiting                                                                           |
+| `T9-local`  | Offline checks with no network                                     | `llama.cpp/Laya-GGUF:Q8_0` | The only local model served here; use it for trivial mechanical reads, never for judgment                                                                           |
 
 Two alternates worth naming because the pool is deep: `step-5-preview` (AA 44,
 $1.03, 95 tokens/s) for `T7` when Qwen is unavailable, and `glm-5.3-flash`
@@ -467,16 +509,16 @@ not part of this graph.
 
 ## 15 - Model assignment
 
-| Step in this plan | Class | Model | Why |
-| ----------------- | ----- | ----- | --- |
-| Stage 0 - policy decisions | `T1-plan` | `gemini-4-argon` (high) | five public commitments argued from evidence; needs long context and careful prose |
-| Stage 0 - OSS-01/02/07 code and config edits | `T3-rules` | `kimi-k2.7-code` | workflow gates, SECURITY.md tables, DCO wording: small precise edits |
-| Stage 1 - fold `dm` | `T2-git` | `grok-4.7` (xhigh) | cherry-pick, delete 32 files, retire a branch: git judgement |
-| Stage 2 - retrofit `ex` and `nyx` | `T5-bulk` | `minimax-m3.1-flash` | the same section added to a handful of files |
-| Stages 3-5 - merges and rebases | `T2-git` | `grok-4.7` (xhigh) | conflict resolution on generated files; the risk is a wrong merge, not a wrong line |
-| Stage 6 - hand over to the owner | `T1-plan` | `gemini-4-argon` (high) | a status summary the owner reads before opening the merge request |
-| Stage 7 - format across every plan | `T5-bulk` | `minimax-m3.1-flash` | mechanical, 95 files, checked by the test |
-| Section 14 - keep the evidence current | `T6-review` | `muse-wonder-full` (max) | re-reading three leaderboards and re-deriving the mapping |
+| Step in this plan                            | Class       | Model                    | Why                                                                                 |
+| -------------------------------------------- | ----------- | ------------------------ | ----------------------------------------------------------------------------------- |
+| Stage 0 - policy decisions                   | `T1-plan`   | `gemini-4-argon` (high)  | five public commitments argued from evidence; needs long context and careful prose  |
+| Stage 0 - OSS-01/02/07 code and config edits | `T3-rules`  | `kimi-k2.7-code`         | workflow gates, SECURITY.md tables, DCO wording: small precise edits                |
+| Stage 1 - fold `dm`                          | `T2-git`    | `grok-4.7` (xhigh)       | cherry-pick, delete 32 files, retire a branch: git judgment                         |
+| Stage 2 - retrofit `ex` and `nyx`            | `T5-bulk`   | `minimax-m3.1-flash`     | the same section added to a handful of files                                        |
+| Stages 3-5 - merges and rebases              | `T2-git`    | `grok-4.7` (xhigh)       | conflict resolution on generated files; the risk is a wrong merge, not a wrong line |
+| Stage 6 - hand over to the owner             | `T1-plan`   | `gemini-4-argon` (high)  | a status summary the owner reads before opening the merge request                   |
+| Stage 7 - format across every plan           | `T5-bulk`   | `minimax-m3.1-flash`     | mechanical, 95 files, checked by the test                                           |
+| Section 14 - keep the evidence current       | `T6-review` | `muse-wonder-full` (max) | re-reading three leaderboards and re-deriving the mapping                           |
 
 Fallback: if `muse-wonder-full` is unreachable, `glm-5.3` (max) is the next
 highest allowed index at 45, and it is on the Arena open-model trend list.
