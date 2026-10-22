@@ -1,6 +1,6 @@
 # plan-of-plans - cross-branch orchestration
 
-Status: `planned`. This is the level-0 orchestrator: it decides which branch to
+Status: `in-progress`. This is the level-0 orchestrator: it decides which branch to
 work in, which plan to implement next, and in what order the branches merge into
 `feat/evolution`. It does not plan a skill, and it never touches `main`.
 
@@ -34,6 +34,11 @@ branches. `ge` carries every plan this work needs; `evolution` carries this file
 and its reference; `dm`, `ex` and `nyx` add one plan each. The branches share the
 same base, so the first merge needs no rebase.
 
+After Stage 1 (2026-10-22): `ge` carries **98 files** under `docs/plans`
+(96 plans plus the two indexes) and `dm` carries **none**. The fold moved the
+one unique plan and the decision-models evidence to `ge`, so the table above
+stays as the measurement that motivated the stage, not as the current count.
+
 Reference for this plan: [`plan-of-plans-reference.md`](plan-of-plans-reference.md)
 
 - the audit that asked whether the graph allows a linear implementation, with its
@@ -41,17 +46,27 @@ Reference for this plan: [`plan-of-plans-reference.md`](plan-of-plans-reference.
 
 ### What the measurement says about `dm`
 
-`feat/decision-models` is **`ge` minus one commit**:
+The 2026-10-21 measurement said `feat/decision-models` was **`ge` minus one
+commit**. The fold measured it again on 2026-10-22 and found a larger, older
+branch:
 
-- 29 of its 32 skill plans are **byte-identical** to `ge`'s;
-- 3 differ by 1, 1 and 4 lines (`rule-process-ai.md`, `rule-styleguide-javascript.md`,
-  `rule-ui.md`);
-- the only plan it has that `ge` does not is `docs/plans/decision-models.md`;
-- its only commit not in `ge` is `b27c088a chore(handoff): point session 24 at feat/decision-models`.
+- **44 of 44** shared plan files diverged, not 3. `ge` carries the ADR 154
+  status lines and `## Dependency graph` sections and the ADR 152 removals;
+  `dm` still says `Status: plan only` and still names the retired
+  `rule-frontend-custom-element` and `rule-frontend-vanilla-reactive` skills. No
+  `dm` line survives the comparison, so `ge`'s versions supersede all of them.
+- `dm` carries **33** skill plans and **11** shared orchestrator/index
+  documents, 45 plan paths in all with `decision-models.md`; not 32.
+- It has **four** commits not in `ge`, not one: three are rebased twins of
+  commits `ge` already has (`eba6861c`/`32e2ea08`, `775270f8`/`c9d24fc1`,
+  `4564ea95`/`e0389952`) and `b27c088a` is the `dm` half of the split `ge`
+  recorded as `7afaf605`.
+- It also owns the audit, the review and the probe harness, which `7afaf605`
+  had moved off `ge`. Those moved back with the plan.
 
-So `dm` is not a parallel branch. It is an earlier state of `ge` plus one handoff
-pointer, and its 32 skill plans are **demanded to `ge`**: they belong to the
-branch that owns the catalog.
+So `dm` was not a parallel branch, but it was not `ge` minus one commit either:
+it was an earlier state of the catalogue plus a track `ge` had split away. The
+fold retires it as a plan owner and keeps `ge` as the only catalogue.
 
 ## 2 - What this file is not
 
@@ -115,7 +130,7 @@ Four kinds inherited from ADR 153, four new ones for the cross-branch layer:
 ## 5 - The level-1 graph
 
 ```
-dm --FOLD--> ge          (1 commit cherry-picked; 45 plan files removed, 1 kept)
+dm --FOLD--> ge          (commit skipped: 7afaf605 records the split; 45 plans removed, 1 kept)
 ex --MERGE--> feat/evolution    (3 contended files with ge)
 nyx --MERGE--> feat/evolution   (1 contended file with ge)
 ge --MERGE--> feat/evolution    (last: 413 changed files, carries the removals)
@@ -124,15 +139,15 @@ feat/evolution                (the destination: every merge above lands here)
 
 Edges, spelled out:
 
-| From                                      | To               | Kind         | Why                                                                                                                |
-| ----------------------------------------- | ---------------- | ------------ | ------------------------------------------------------------------------------------------------------------------ |
-| `dm`                                      | `ge`             | `SUPERSEDES` | 29 identical copies, 3 diverged by <=4 lines, 1 unique plan, 1 unique commit                                       |
-| `dm` -> `decision-models.md`              | `ge`             | `MERGE`      | the one plan that survives the fold, and it moves with the commit                                                  |
-| `ex`                                      | `feat/evolution` | `MERGE`      | independent content (7 files), 3 shared generated files                                                            |
-| `nyx`                                     | `feat/evolution` | `MERGE`      | independent content (19 files), 1 shared generated file                                                            |
-| `ge`                                      | `feat/evolution` | `MERGE`      | largest diff, carries ADR 151/152 removals                                                                         |
-| `ex`, `nyx`                               | `ge`             | `REBASE`     | both touch `docs/handoff/HANDOFF.md`; `ex` also touches `docs/02-architecture.md` and `tests/fixtures/census.json` |
-| `decision-models.md` (3 divergent copies) | `ge`'s versions  | `DIVERGENCE` | 1, 1 and 4 lines; reconcile before implementing either                                                             |
+| From                         | To               | Kind         | Why                                                                                                                |
+| ---------------------------- | ---------------- | ------------ | ------------------------------------------------------------------------------------------------------------------ |
+| `dm`                         | `ge`             | `SUPERSEDES` | 44 of 44 shared plans superseded, 1 unique plan, 4 commits (3 rebased twins, 1 split mirror)                       |
+| `dm` -> `decision-models.md` | `ge`             | `MERGE`      | the one plan that survives the fold, and it moves with the commit                                                  |
+| `ex`                         | `feat/evolution` | `MERGE`      | independent content (7 files), 3 shared generated files                                                            |
+| `nyx`                        | `feat/evolution` | `MERGE`      | independent content (19 files), 1 shared generated file                                                            |
+| `ge`                         | `feat/evolution` | `MERGE`      | largest diff, carries ADR 151/152 removals                                                                         |
+| `ex`, `nyx`                  | `ge`             | `REBASE`     | both touch `docs/handoff/HANDOFF.md`; `ex` also touches `docs/02-architecture.md` and `tests/fixtures/census.json` |
+| `dm`'s 44 shared plan files  | `ge`'s versions  | `DIVERGENCE` | all 44 superseded: ADR 154 format and ADR 152 removals; no dm-only content                                         |
 
 The merge order is **derived, not chosen**: `ge` is last because it carries the
 most files and the two removals; `dm` is first because it is the cheapest fold;
@@ -291,17 +306,33 @@ Gate: **human**, on all five decisions (confirmed 2026-10-22, ADR 135). Nothing
 in stages 1-7 starts before it, and the four merge stages are now unblocked on
 policy.
 
-### Stage 1 - Fold `dm` (1 node, mechanical)
+### Stage 1 - Fold `dm` (1 node, mechanical, done 2026-10-22)
 
-- [ ] Cherry-pick `b27c088a` onto `ge`.
-- [ ] Delete the 32 skill-plan copies from `dm` (29 identical, 3 superseded by
-      `ge`'s versions after the `DIVERGENCE` check).
-- [ ] Move `docs/plans/decision-models.md` to `ge` with its own status line.
-- [ ] Retire `feat/decision-models`: `Status: superseded` in
-      `decision-models.md` names the owner.
-- [ ] Verify: `ge` now carries 96 unique plan paths and `dm` carries none.
+- [x] Skip the cherry-pick of `b27c088a`: it is the `dm` half of the split
+      `ge` recorded as `7afaf605`, and applying it would repoint this branch's
+      merge-only session record at the retired branch. Deviation recorded below.
+- [x] Delete the 45 plan paths from `dm`: 33 skill plans and 11 shared
+      orchestrator/index documents superseded by `ge` (44 of 44 diverged, not
+      3), plus `decision-models.md`, which moved.
+- [x] Move `docs/plans/decision-models.md` to `ge` as `planned`, with the
+      ADR 154 status line, a `Notes` line naming `feat/guardrails`, and the
+      three graph lines.
+- [x] Move the audit, the review and the probe harness to `ge`, so the track
+      survives the retirement whole; `ge`'s catalogue now names it as local.
+- [x] Retire `feat/decision-models` as a plan owner: it carries no plan file.
+- [x] Verify: `ge` carries 96 unique plan paths (98 files with the two
+      indexes); `dm` carries none.
 
-Gate: human, because it deletes 32 files.
+Gate: human, because it deletes 45 files (confirmed 2026-10-22).
+
+Stage 1 gate record (2026-10-22):
+
+- `ge` `a747508a` `chore(decision-models): fold the track into feat/guardrails`.
+- `dm` `2ec1db4e` `docs(plans): retire the copies the fold supersedes`.
+- `node --test tests/plans/skills-plan.test.mjs` on `ge`: 9/9 pass.
+- Deviation: `b27c088a` was cherry-picked first and aborted. It conflicts on
+  the session record `7afaf605` renamed, and resolving it would undo the split.
+  The split is already recorded on both sides, so skipping it loses nothing.
 
 ### Stage 2 - Retrofit `ex` and `nyx`
 
@@ -391,7 +422,7 @@ Human, and only there:
 | ---------------------------------- | -------------------------------------------------------------------- | -------------------------- |
 | Every merge into `feat/evolution`  | stages 3, 4, 5                                                       | nothing lands unreviewed   |
 | Contended files                    | any PR touching the five files in section 8                          | a mistake there multiplies |
-| Destructive plans                  | `ge`'s ADR 151/152 removals, and the `dm` fold that deletes 32 files | one-way in review terms    |
+| Destructive plans                  | `ge`'s ADR 151/152 removals, and the `dm` fold that deletes 45 files | one-way in review terms    |
 | Any commit that changes this graph | this file                                                            | the graph is the contract  |
 
 ## 10 - Verification
@@ -419,14 +450,14 @@ belong to the merged branches, not to this plan.
 
 ## 12 - Open notes and risks
 
-- **The 3 divergent plans are cheap and must not be skipped.** 1, 1 and 4 lines
-  apart. Reconciling them is minutes; discovering them after the fold is a lost
-  afternoon. Stage 2 takes `ge`'s version as authoritative, because `ge` is where
+- **The divergent plans are not cheap, and the fold must not skip them.** All 44
+  shared files differ, because `ge` carries the ADR 154 format and the ADR 152
+  removals. Stage 1 takes `ge`'s version as authoritative, because `ge` is where
   those plans were rewritten.
-- **`dm` looks like a branch and is not one.** 29 byte-identical copies and a
-  single unique commit mean any merge from it is a rebase disguised as a merge.
-  The fold is the cheap path, and it removes 32 files a reader would otherwise
-  maintain twice.
+- **`dm` looks like a branch and is not one.** 44 superseded copies and four
+  commits that are three rebased twins plus one split mirror mean any merge from
+  it is a rebase disguised as a merge. The fold is the cheap path, and it removes
+  45 files a reader would otherwise maintain twice.
 - **`ge` last is deliberate.** It changes 413 files, removes two skills and
   rewrites the counts. Merging it first would force `ex` and `nyx` to rebase onto
   a catalog that moved under them.
@@ -521,7 +552,7 @@ not part of this graph.
 | -------------------------------------------- | ----------- | ------------------------ | ----------------------------------------------------------------------------------- |
 | Stage 0 - policy decisions                   | `T1-plan`   | `gemini-4-argon` (high)  | five public commitments argued from evidence; needs long context and careful prose  |
 | Stage 0 - OSS-01/02/07 code and config edits | `T3-rules`  | `kimi-k2.7-code`         | workflow gates, SECURITY.md tables, DCO wording: small precise edits                |
-| Stage 1 - fold `dm`                          | `T2-git`    | `grok-4.7` (xhigh)       | cherry-pick, delete 32 files, retire a branch: git judgment                         |
+| Stage 1 - fold `dm`                          | `T2-git`    | `grok-4.7` (xhigh)       | skip a cherry-pick, move a track, delete 45 files, retire a branch: git judgment    |
 | Stage 2 - retrofit `ex` and `nyx`            | `T5-bulk`   | `minimax-m3.1-flash`     | the same section added to a handful of files                                        |
 | Stages 3-5 - merges and rebases              | `T2-git`    | `grok-4.7` (xhigh)       | conflict resolution on generated files; the risk is a wrong merge, not a wrong line |
 | Stage 6 - hand over to the owner             | `T1-plan`   | `gemini-4-argon` (high)  | a status summary the owner reads before opening the merge request                   |
