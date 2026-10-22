@@ -6,7 +6,7 @@ work in, which plan to implement next, and in what order the branches return to
 
 Format: the contract of ADR 154 (status line, `## Dependency graph`, checkboxes)
 applied to this file. ADR 153 and 154 live on `feat/guardrails` and are not on
-`feat/evolution` yet; this file follows them in advance, and the merge in stage 4
+`feat/evolution` yet; this file follows them in advance, and the merge in stage 5
 brings them here.
 
 Topology (2026-10-21): **`feat/evolution` is the convergence branch.** Every feature
@@ -65,7 +65,7 @@ more than one plan gets its own level-1 orchestrator, or this file says why not.
 | Branch | Level-1 orchestrator | State |
 | ------ | -------------------- | ----- |
 | `ge` | `docs/plans/skills/skills-plan.md` | exists, 83 nodes |
-| `dm` | none, and it does not need one | folded into `ge` in stage 0 |
+| `dm` | none, and it does not need one | folded into `ge` in stage 2 |
 | `ex` | `docs/plans/export.md` gains a dependency section | retrofit |
 | `nyx` | `docs/plans/2026-10-01-scripts-mcp-layout.md` gains a dependency section | retrofit |
 | `feat/evolution` | this file | plus the per-branch orchestrators it delegates to |
@@ -159,7 +159,107 @@ that blocks it, never moved to another branch.
 
 ## 7 - Stages
 
-### Stage 0 - Fold `dm` (1 node, mechanical)
+### Stage 0 - Project policy decisions (prerequisite to everything else)
+
+These steps were `docs/plans/execution-plan.md` and `docs/plans/oss.md` on `main`.
+They move here because nothing in this graph can be finished while five public
+commitments are undecided, and because the two files are not part of this branch
+any more: the originals stay on `main` until this stage closes them.
+
+The dependency is not a formality. Six of the eight findings wait on the owner's
+decisions, and the eighth is a README link sweep that waits on nothing.
+
+**The five decisions (owner):**
+
+- [ ] Signing: is every release tag signed, with which key, and where is the key
+      documented? (`v0.1.0` has no signature: `git tag -v v0.1.0` exits 1)
+- [ ] Supported version line: which released pre-1.0 series receives security
+      fixes? (`SECURITY.md` names 1.0.x while the package and tag are 0.1.0)
+- [ ] Conduct escalation: who is the independent contact when the BDFL is the
+      subject, and through which confidential channel?
+- [ ] Funding disclosure: is sponsorship active, and what may be published as an
+      aggregate without exposing donors?
+- [ ] Inbound license: is the policy inbound=outbound MIT, with the DCO as
+      provenance certification only?
+
+**OSS-01 (high) - the release workflow accepts unsigned annotated tags:**
+
+- [ ] 1.1 Confirm the signed-tag and key-management policy; do not rewrite the
+      existing release tag.
+- [ ] 1.2 Add and test a cryptographic signature verification gate in
+      `.github/workflows/release.yml`, distinguishing annotated from verified.
+- [ ] 1.3 On a new signed test tag, assert the gate passes and that an unsigned
+      annotated tag fails before release creation.
+
+**OSS-02 (medium) - the security support table disagrees with the release:**
+
+- [ ] 2.1 Confirm which version line receives security fixes.
+- [ ] 2.2 Align `SECURITY.md` with the policy and with `package.json` and
+      `server.json`; check the release tag.
+- [ ] 2.3 Validate that the advisory and README links resolve to the updated
+      support policy.
+
+**OSS-03 (medium) - the code of conduct appeal routes back to the BDFL:**
+
+- [ ] 3.1 Nominate a willing independent contact and agree a confidential
+      escalation channel; never publish a person's address without consent.
+- [ ] 3.2 Update `CODE_OF_CONDUCT.md` and `GOVERNANCE.md` with reporting,
+      recusal, appeal and response handling when the BDFL is involved.
+- [ ] 3.3 Test that every public link reaches a working private reporting
+      channel without exposing reporter identity.
+
+**OSS-04 (low) - response targets disagree between documents:**
+
+- [ ] 4.1 Confirm which triage and review targets are sustainable.
+- [ ] 4.2 Align `CONTRIBUTING.md` and `MAINTAINERS.md`, and say business or
+      calendar days.
+- [ ] 4.3 Check the issue templates and contributor links reference the policy.
+
+**OSS-05 (medium) - local lint and generated-document checks fail on a dirty tree:**
+
+- [ ] 5.1 Run `pnpm lint` and `pnpm census:check` on a clean checkout before
+      attributing anything to `main`.
+- [ ] 5.2 For confirmed failures, fix only the failing files and regenerate the
+      named census outputs with `pnpm census`.
+- [ ] 5.3 Re-run `pnpm test:all`, `pnpm lint` and `pnpm census:check` and record
+      the results.
+
+**OSS-06 (low) - funding promises transparency with no cadence:**
+
+- [ ] 6.1 Confirm whether sponsorship is active and what may be disclosed.
+- [ ] 6.2 If donations are accepted, document the reporting location and period
+      in `GOVERNANCE.md`, keeping sponsor preferences out of the roadmap.
+- [ ] 6.3 Verify `.github/FUNDING.yml` points at the approved channel without
+      claiming unverified balances.
+
+**OSS-07 (medium) - the contribution guide calls the DCO a license:**
+
+- [ ] 7.1 Confirm the intended inbound=outbound MIT policy; obtain legal review
+      if it is uncertain.
+- [ ] 7.2 Correct `CONTRIBUTING.md` so provenance certification and licensing
+      are separate, without introducing a CLA.
+- [ ] 7.3 Recheck `LICENSE`, `REUSE.toml`, the installed commit-msg hook and the
+      DCO CI gate for consistent language and behaviour.
+
+**OSS-08 (low) - the README entry page links no policy:**
+
+- [ ] 8.1 Add concise links to `CONTRIBUTING.md`, `GOVERNANCE.md`,
+      `CODE_OF_CONDUCT.md`, `MAINTAINERS.md` and `SECURITY.md`.
+- [ ] 8.2 Check every link locally and keep the handbook links intact.
+
+**Closing the stage:**
+
+- [ ] Refresh the records with the evidence and the statuses. On this branch
+      that means the summary in section 9; `docs/audits/oss.md`,
+      `docs/reviews/oss.md` and `docs/plans/oss.md` live on `main` and are
+      updated there by the merge that closes this stage.
+- [ ] `GOVERNANCE.md` names where the branch-protection setting is recorded
+      (owner action 16.5) without pointing at a file this branch does not carry.
+
+Gate: **human**, on all five decisions. Nothing in stages 1-7 starts before it,
+and the four merge stages stay blocked while the policy questions are open.
+
+### Stage 1 - Fold `dm` (1 node, mechanical)
 
 - [ ] Cherry-pick `b27c088a` onto `ge`.
 - [ ] Delete the 32 skill-plan copies from `dm` (29 identical, 3 superseded by
@@ -171,7 +271,7 @@ that blocks it, never moved to another branch.
 
 Gate: human, because it deletes 32 files.
 
-### Stage 1 - Retrofit `ex` and `nyx`
+### Stage 2 - Retrofit `ex` and `nyx`
 
 - [ ] `export.md` gains `Branch:`, `Path:`, `Depends on:`, `Feeds:`,
       `Shared files:` and its own `## Dependency graph`.
@@ -183,34 +283,34 @@ Gate: human, because it deletes 32 files.
 
 Gate: the test of section 10 goes green for these four plans.
 
-### Stage 2 - Merge `ex` into `feat/evolution`
+### Stage 3 - Merge `ex` into `feat/evolution`
 
 - [ ] Rebase `ex` onto `feat/evolution`; resolve `docs/handoff/HANDOFF.md`,
       `docs/02-architecture.md` and `tests/fixtures/census.json` by
       **regenerating** the last two, never by hand-editing.
 - [ ] Human gate: any change to `census.json` and the generated docs.
 
-### Stage 3 - Merge `nyx` into `feat/evolution`
+### Stage 4 - Merge `nyx` into `feat/evolution`
 
 - [ ] Rebase onto `feat/evolution`; resolve `HANDOFF.md` by regeneration.
 - [ ] Human gate: `nyx` carries real code (`feat(nyx)` commits), not documents.
 
-### Stage 4 - Merge `ge` into `feat/evolution` (last)
+### Stage 5 - Merge `ge` into `feat/evolution` (last)
 
-- [ ] Rebase onto `feat/evolution` after stages 2 and 3, so the catalogue's generated files
+- [ ] Rebase onto `feat/evolution` after stages 3 and 4, so the catalogue's generated files
       are regenerated once, at the end.
 - [ ] Human gate: ADR 151 and 152 are one-way in review terms.
 - [ ] After the merge, `feat/evolution` carries the plans, `skills-plan.md`,
       ADR 153/154 and the 81-skill catalogue.
 
-### Stage 5 - `feat/evolution` into `main`
+### Stage 6 - `feat/evolution` into `main`
 
-- [ ] Only after stages 0-4: one merge, reviewed as a whole, with the full gate set.
+- [ ] Only after stages 0-5: one merge, reviewed as a whole, with the full gate set.
 - [ ] Human gate: this is the merge that changes what `main` ships (81 skills
       instead of 89, ADRs 153/154, the plan catalogue).
 - [ ] `main` then equals `feat/evolution`, and the branch is kept for the next cycle.
 
-### Stage 6 - Bring the format to every plan
+### Stage 7 - Bring the format to every plan
 
 - [x] The contract exists (ADR 154, on `ge`).
 - [ ] Every one of the 98 plan paths carries the status line, the graph section and
@@ -242,7 +342,7 @@ Human, and only there:
 
 | Gate | Where | Why |
 | ---- | ----- | --- |
-| Every merge into `main` | stages 2, 3, 4 | nothing lands unreviewed |
+| Every merge into `main` | stages 3, 4, 5 | nothing lands unreviewed |
 | Contended files | any PR touching the five files in section 8 | a mistake there multiplies |
 | Destructive plans | `ge`'s ADR 151/152 removals, and the `dm` fold that deletes 32 files | one-way in review terms |
 | Any commit that changes this graph | this file | the graph is the contract |
@@ -266,14 +366,14 @@ Human, and only there:
 
 Depends on: nothing. This is the level-0 node: it waits only on the decisions
 already recorded (ADR 153, ADR 154) and on the branch states measured above.
-Feeds: every level-2 node, and `main`'s final state after stage 4.
+Feeds: every level-2 node, and `main`'s final state after stage 5.
 Shared files: `docs/plans/plan-of-plans.md` only. The contended files in section 8
 belong to the merged branches, not to this plan.
 
 ## 12 - Open notes and risks
 - **The 3 divergent plans are cheap and must not be skipped.** 1, 1 and 4 lines
   apart. Reconciling them is minutes; discovering them after the fold is a lost
-  afternoon. Stage 0 takes `ge`'s version as authoritative, because `ge` is where
+  afternoon. Stage 2 takes `ge`'s version as authoritative, because `ge` is where
   those plans were rewritten.
 - **`dm` looks like a branch and is not one.** 29 byte-identical copies and a
   single unique commit mean any merge from it is a rebase disguised as a merge.
@@ -294,7 +394,7 @@ belong to the merged branches, not to this plan.
 From `docs/reviews/plan-graph.md`. **All of them are resolved on
 `feat/guardrails`** (`3553780c` test, `6cda42ea` fix), where the plans
 live; this list is kept so a reader on `main` knows the state without switching
-branch. The files themselves arrive with the merge in stage 4.
+branch. The files themselves arrive with the merge in stage 5.
 
 - [x] F1 - every plan carries a `## Dependency graph` section: 92 files
       retrofitted, checked by `tests/plans/skills-plan.test.mjs`.
