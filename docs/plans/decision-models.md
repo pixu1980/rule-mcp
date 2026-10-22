@@ -80,11 +80,11 @@ Dependencies: WS-0 first and alone, because every later step calls it. WS-1 and 
   - [x] **1.2**: Add `src/core/decision/_client.js` with the two calls the audit used (`GET /models`, `POST /v1/systemone`), a hard timeout, no retry, and no other host reachable by construction.
   - [x] **1.3**: Add the fake decision server the rest of the suite reuses: a Node HTTP server in a fixture that answers a scripted distribution, so no test needs a model.
   - [x] **1.4**: Gate: `_client.test.mjs` green, `rule_tool_check` clean, `pnpm lint` and `pnpm test:foundations` unchanged. Note: the only failure left is the pre-existing file-size budget on six files (`src/cli/_init.js`, `src/core/__tests__/_prompt-directive.test.mjs`, `src/core/guardrails/project/_checks.js`, `src/core/self-update/_run.js`, `src/tools/skill/_check-tool.js`, `tests/plans/skills-plan.test.mjs`), all over the cap at `a747508a` before this track; recorded as debt, not introduced here.
-- [ ] **Step 2 - DM-06 (medium)**: The model lifecycle has no supervisor, so a load, a slot error or a hung router lands on the caller
-  - [ ] **2.1**: Failing test: with the fake server answering `loading` then `loaded`, the client returns only after the state flips, and the load time it reports is the settled one.
-  - [ ] **2.2**: Failing test: three consecutive failures open the breaker, the fourth call answers from BM25 without touching the socket, and the breaker closes on the next successful probe.
-  - [ ] **2.3**: Implement `src/core/decision/_supervisor.js`: wait-for-state, one retry on `model limit reached`, breaker counters, unload on shutdown, and a status line the doctor can print.
-  - [ ] **2.4**: Gate: the supervisor suite green with the router stopped, plus `pnpm doctor` unchanged with no endpoint configured.
+- [x] **Step 2 - DM-06 (medium)**: The model lifecycle has no supervisor, so a load, a slot error or a hung router lands on the caller
+  - [x] **2.1**: Failing test: with the fake server answering `loading` then `loaded`, the client returns only after the state flips, and the load time it reports is the settled one.
+  - [x] **2.2**: Failing test: three consecutive failures open the breaker, the fourth call answers from BM25 without touching the socket, and the breaker closes on the next successful probe.
+  - [x] **2.3**: Implement `src/core/decision/_supervisor.js`: wait-for-state, one retry on `model limit reached`, breaker counters, unload on shutdown, and a status line the doctor can print.
+  - [x] **2.4**: Gate: the supervisor suite green with the router stopped, plus `pnpm doctor` unchanged with no endpoint configured.
 - [ ] **Step 3 - DM-02, DM-09 (high)**: A reranker would ship without a ruler, and the ruler is broken by three unaddressable corpus entries
   - [ ] **3.1**: Failing test: every corpus `expect` names a skill that exists, so the three entries (`backend-api-design`, `ai-agents`, `devops-gitlab-ci`) fail until they are corrected or re-pointed at the skill that now owns the topic.
   - [ ] **3.2**: Add the measurement command: run the corpus with the model off and on, print exact, top-or-alternative, per-model mean latency and input tokens, and store the run as a fixture so a later change is compared against a number, not a memory.

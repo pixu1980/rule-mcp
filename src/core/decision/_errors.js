@@ -11,3 +11,16 @@ export class DecisionClientError extends Error {
     this.name = "DecisionClientError";
   }
 }
+
+/** An error the supervisor attributes to the model lifecycle or the breaker. */
+export class DecisionSupervisorError extends Error {
+  /**
+   * @param {string} message
+   * @param {{ cause?: unknown, code?: string }} [options]
+   */
+  constructor(message, options = {}) {
+    super(message, { cause: options.cause });
+    this.name = "DecisionSupervisorError";
+    this.code = options.code ?? "decision";
+  }
+}

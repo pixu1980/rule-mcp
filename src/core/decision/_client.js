@@ -70,6 +70,8 @@ export function assertLoopbackUrl(baseUrl) {
  *   baseUrl: string,
  *   timeoutMs: number,
  *   listModels: () => Promise<any>,
+ *   loadModel: (model: string) => Promise<any>,
+ *   unloadModel: (model: string) => Promise<any>,
  *   ask: (model: string, state: string, questions: object) => Promise<{ answers: object, usage: object, ms: number }>,
  * }}
  */
@@ -109,6 +111,16 @@ export function createDecisionClient(options = {}) {
       const { json } = await call("/models");
 
       return json.data ?? json;
+    },
+    async loadModel(model) {
+      const { json } = await call("/models/load", { model });
+
+      return json;
+    },
+    async unloadModel(model) {
+      const { json } = await call("/models/unload", { model });
+
+      return json;
     },
     async ask(model, state, questions) {
       const { json, ms } = await call("/v1/systemone", { model, state, questions });
