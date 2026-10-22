@@ -6,7 +6,7 @@ work in, which plan to implement next, and in what order the branches merge into
 
 Format: the contract of ADR 154 (status line, `## Dependency graph`, checkboxes)
 applied to this file. ADR 153 and 154 live on `feat/guardrails` and are not on
-`feat/evolution` yet; this file follows them in advance, and the merge in stage 5
+`feat/evolution` yet; this file follows them in advance, and the merge in stage 4
 brings them here.
 
 Topology (2026-10-21): **`feat/evolution` is the only destination.** Every feature
@@ -38,6 +38,10 @@ After Stage 1 (2026-10-22): `ge` carries **98 files** under `docs/plans`
 (96 plans plus the two indexes) and `dm` carries **none**. The fold moved the
 one unique plan and the decision-models evidence to `ge`, so the table above
 stays as the measurement that motivated the stage, not as the current count.
+
+Order amendment (2026-10-22): `ge` merges before `nyx` (Stage 4), because the
+decision-models track lives on `ge` and `nyx` rewrites the same shortlist
+pipeline. The counts above remain the measurement, not a merge order.
 
 Reference for this plan: [`plan-of-plans-reference.md`](plan-of-plans-reference.md)
 
@@ -132,28 +136,31 @@ Four kinds inherited from ADR 153, four new ones for the cross-branch layer:
 ```
 dm --FOLD--> ge          (commit skipped: 7afaf605 records the split; 45 plans removed, 1 kept)
 ex --MERGE--> feat/evolution    (3 contended files with ge)
-nyx --MERGE--> feat/evolution   (1 contended file with ge)
-ge --MERGE--> feat/evolution    (last: 413 changed files, carries the removals)
+ge --MERGE--> feat/evolution    (before nyx: decision-models, ADR 153/154, the removals)
+nyx --MERGE--> feat/evolution   (last: rebases onto the settled shortlist)
 feat/evolution                (the destination: every merge above lands here)
 ```
 
 Edges, spelled out:
 
-| From                                         | To                          | Kind         | Why                                                                                                                |
-| -------------------------------------------- | --------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------ |
-| `dm`                                         | `ge`                        | `SUPERSEDES` | 44 of 44 shared plans superseded, 1 unique plan, 4 commits (3 rebased twins, 1 split mirror)                       |
-| `dm` -> `decision-models.md`                 | `ge`                        | `MERGE`      | the one plan that survives the fold, and it moves with the commit                                                  |
-| `ex`                                         | `feat/evolution`            | `MERGE`      | independent content (7 files), 3 shared generated files                                                            |
-| `nyx`                                        | `feat/evolution`            | `MERGE`      | independent content (19 files), 1 shared generated file                                                            |
-| `ge`                                         | `feat/evolution`            | `MERGE`      | largest diff, carries ADR 151/152 removals                                                                         |
-| `ex`, `nyx`                                  | `ge`                        | `REBASE`     | both touch `docs/handoff/HANDOFF.md`; `ex` also touches `docs/02-architecture.md` and `tests/fixtures/census.json` |
-| `dm`'s 44 shared plan files                  | `ge`'s versions             | `DIVERGENCE` | all 44 superseded: ADR 154 format and ADR 152 removals; no dm-only content                                         |
-| `ex`, `nyx`'s `docs/plans/execution-plan.md` | Stage 0 of `feat/evolution` | `SUPERSEDES` | retired: its three phases are section 7 of this file, which closed them                                            |
-| `ex`, `nyx`'s `docs/plans/oss.md`            | Stage 0 of `feat/evolution` | `SUPERSEDES` | retired: OSS-01 to OSS-08 are closed in section 7 of this file                                                     |
+| From                                         | To                          | Kind         | Why                                                                                            |
+| -------------------------------------------- | --------------------------- | ------------ | ---------------------------------------------------------------------------------------------- |
+| `dm`                                         | `ge`                        | `SUPERSEDES` | 44 of 44 shared plans superseded, 1 unique plan, 4 commits (3 rebased twins, 1 split mirror)   |
+| `dm` -> `decision-models.md`                 | `ge`                        | `MERGE`      | the one plan that survives the fold, and it moves with the commit                              |
+| `ex`                                         | `feat/evolution`            | `MERGE`      | independent content (7 files), 3 shared generated files                                        |
+| `ge`                                         | `feat/evolution`            | `MERGE`      | before `nyx`: carries the decision-models track, ADR 153/154 and the ADR 151/152 removals      |
+| `nyx`                                        | `feat/evolution`            | `MERGE`      | last: rebases onto the settled shortlist contract, 1 shared generated file plus the env docs   |
+| `nyx`                                        | `ge`                        | `REBASE`     | nyx rewrites the router pipeline and `05-env-variables.md` after the decision layer settles    |
+| `ge`'s `decision-models.md`                  | `nyx`                       | `ORDER`      | both rewrite `src/tools/router/call/_pipeline.js` and `_stages.js`; settle the shortlist first |
+| `dm`'s 44 shared plan files                  | `ge`'s versions             | `DIVERGENCE` | all 44 superseded: ADR 154 format and ADR 152 removals; no dm-only content                     |
+| `ex`, `nyx`'s `docs/plans/execution-plan.md` | Stage 0 of `feat/evolution` | `SUPERSEDES` | retired: its three phases are section 7 of this file, which closed them                        |
+| `ex`, `nyx`'s `docs/plans/oss.md`            | Stage 0 of `feat/evolution` | `SUPERSEDES` | retired: OSS-01 to OSS-08 are closed in section 7 of this file                                 |
 
-The merge order is **derived, not chosen**: `ge` is last because it carries the
-most files and the two removals; `dm` is first because it is the cheapest fold;
-`ex` and `nyx` are in between and independent of each other.
+The merge order is **derived, not chosen**: `dm` is first because it is the
+cheapest fold; `ex` follows because its generated files are the smallest set;
+`ge` lands before `nyx` because it carries the decision-models track and ADR
+153/154, and `nyx` rewrites the same shortlist pipeline; `nyx` is last and
+rebases onto that contract.
 
 ## 6 - Protocol: how the agent moves between branches
 
@@ -367,7 +374,7 @@ the git tree`.
   and no checkbox; ADR 154 requires a checkbox step, so its ten items became
   `- [ ]` boxes.
 - `feat/guardrails` keeps its copies of `execution-plan.md` and `oss.md` as
-  `planned`: the retirement is effective through section 5, and Stage 5 resolves
+  `planned`: the retirement is effective through section 5, and Stage 4 resolves
   those two paths there.
 - Section 2 also corrects `dm`'s fold from stage 2 to stage 1, which is where it
   happened.
@@ -399,10 +406,10 @@ Stage 3 gate record (2026-10-22):
 - Human gate: the only generated file that changes is `HANDOFF.md` (+2 rows).
   `docs/adr/ADR.md` is stale on both sides (11 historical rows still print `->`
   where the source ADRs hold `→`), is out of Stage 3's scope, and stays for the
-  final regeneration.
+  `ge` regeneration in Stage 4.
 - Gates: `pnpm census:check` current; `pnpm format` clean; `pnpm lint` 0 errors,
   36 warnings; `tests/docs` 139/141. The two failures pre-exist: the ADR 154
-  citations of the Stage 2 test file land only with `ge` in Stage 5, and
+  citations of the Stage 2 test file land only with `ge` in Stage 4, and
   `file-size-budget` names the two residuals of section 13.
 - Deviation: `11c2854b` (census digest) is superseded by the regenerated
   snapshot on the merged tree, and `git rebase` drops both it and `c2ff412c`
@@ -412,18 +419,35 @@ Stage 3 gate record (2026-10-22):
   describes a branch that carries the two retired plans. It is in no CI suite;
   Stage 7 widens it to the merged shape.
 
-### Stage 4 - Merge `nyx` into `feat/evolution`
+### Stage 4 - Close `decision-models` on `ge`, then merge `ge`
 
-- [ ] Rebase onto `feat/evolution`; resolve `HANDOFF.md` by regeneration.
-- [ ] Human gate: `nyx` carries real code (`feat(nyx)` commits), not documents.
-
-### Stage 5 - Merge `ge` into `feat/evolution` (last)
-
-- [ ] Rebase onto `feat/evolution` after stages 3 and 4, so the catalog's generated files
-      are regenerated once, at the end.
-- [ ] Human gate: ADR 151 and 152 are one-way in review terms.
+- [ ] Rebase `ge` onto `feat/evolution` after Stage 3.
+- [ ] Close `docs/plans/decision-models.md` on `ge`: nine steps, failing test
+      first, each step ships against its kill criterion or is deleted.
+- [ ] Re-derive the node's model table per step before the first commit: the
+      table currently names one class for the whole plan, and section 14 assigns
+      the class of the work.
+- [ ] Keep `execution-plan.md` and `oss.md` deleted at the merge: the same
+      `SUPERSEDES` resolution Stage 3 applied to `ex`.
+- [ ] Regenerate the catalog's generated files once (`census`, `HANDOFF`,
+      `ADR`), then merge.
+- [ ] Human gate: ADR 151/152 are one-way in review terms, and the
+      decision-models outcome is recorded step by step (shipped against its
+      number, or killed and deleted).
 - [ ] After the merge, `feat/evolution` carries the plans, `skills-plan.md`,
-      ADR 153/154 and the 81-skill catalog.
+      ADR 153/154, the 81-skill catalog and the decision layer as far as the
+      criteria allow.
+
+### Stage 5 - Merge `nyx` into `feat/evolution` (last)
+
+- [ ] Rebase onto `feat/evolution` after Stage 4; regenerate `HANDOFF.md`,
+      `tests/fixtures/census.json` and `docs/02-architecture.md`; reconcile
+      `docs/05-env-variables.md` (both sides add variables) and the router
+      pipeline (the decision layer is the base).
+- [ ] Keep `execution-plan.md` and `oss.md` deleted at this merge too.
+- [ ] Human gate: `nyx` carries real code (`feat(nyx)` commits), and its
+      reranker consumes the settled shortlist instead of adding a second
+      arbiter.
 
 ### Stage 6 - Hand over to the owner
 
@@ -450,6 +474,8 @@ instead of keeping its own copy (review finding F6).
 | `tests/fixtures/census.json`                                                              | `ge`, `ex`              | `pnpm census`, once, at each merge                                 |
 | `docs/02-architecture.md`                                                                 | `ge`, `ex`              | regenerated by census                                              |
 | `docs/08-skills.md`, `docs/09-tools.md`, `docs/15-resources.md`, `docs/16-surface-map.md` | `ge`, `ex`              | regenerated by census                                              |
+| `docs/05-env-variables.md`                                                                | `ge`, `nyx`             | rebase `nyx`; keep both variable sets, decision variables first    |
+| `src/tools/router/call/_pipeline.js`, `src/tools/router/call/_stages.js`                  | `ge`, `nyx`             | `ge` settles the shortlist; `nyx` rebases onto it                  |
 | `docs/adr/ADR.md` + ADR numbering                                                         | `ge`, `dm`, `ex`, `nyx` | one allocator: numbers taken at merge time, collisions re-numbered |
 | `docs/0*.md` (other generated docs)                                                       | `ge`, `dm`              | `dm` folds into `ge`, so the conflict disappears with the branch   |
 | `skills/rule/SKILL.md`                                                                     | `ge` only               | no cross-branch conflict, heavy intra-branch conflict              |
@@ -477,12 +503,13 @@ Stage 0 gate record (2026-10-22, ADR 135):
 
 Human, and only there:
 
-| Gate                               | Where                                                                | Why                        |
-| ---------------------------------- | -------------------------------------------------------------------- | -------------------------- |
-| Every merge into `feat/evolution`  | stages 3, 4, 5                                                       | nothing lands unreviewed   |
-| Contended files                    | any PR touching the five files in section 8                          | a mistake there multiplies |
-| Destructive plans                  | `ge`'s ADR 151/152 removals, and the `dm` fold that deletes 45 files | one-way in review terms    |
-| Any commit that changes this graph | this file                                                            | the graph is the contract  |
+| Gate                               | Where                                                                | Why                                  |
+| ---------------------------------- | -------------------------------------------------------------------- | ------------------------------------ |
+| Every merge into `feat/evolution`  | stages 3, 4, 5                                                       | nothing lands unreviewed             |
+| Decision-models kill criteria      | Stage 4, before the `ge` merge                                       | a step ships only against its number |
+| Contended files                    | any PR touching the files in section 8                               | a mistake there multiplies           |
+| Destructive plans                  | `ge`'s ADR 151/152 removals, and the `dm` fold that deletes 45 files | one-way in review terms              |
+| Any commit that changes this graph | this file                                                            | the graph is the contract            |
 
 ## 10 - Verification
 
@@ -523,9 +550,15 @@ belong to the merged branches, not to this plan.
   commits that are three rebased twins plus one split mirror mean any merge from
   it is a rebase disguised as a merge. The fold is the cheap path, and it removes
   45 files a reader would otherwise maintain twice.
-- **`ge` last is deliberate.** It changes 413 files, removes two skills and
-  rewrites the counts. Merging it first would force `ex` and `nyx` to rebase onto
-  a catalog that moved under them.
+- **`ge` before `nyx` is deliberate.** The decision-models track lives on `ge`
+  (Stage 1 moved the plan, the review and ADR 153/154 there), and `nyx` rewrites
+  the same shortlist pipeline. Merging `ge` first settles the contract before the
+  reranker rebases; `ex` is already in, and the catalog's generated files are
+  regenerated once, at the `ge` merge, not again at the end.
+- **The decision-models track is code, not a plan-file merge.** Nine steps with
+  kill criteria and a deletion rule: Stage 4 closes them on `ge` before the
+  merge, records which shipped and which were killed, and deletes the file only
+  when nothing is open. A step that misses its number is deleted, not tuned.
 - **The level-1 orchestrator exists for one branch out of four.** `ex` and `nyx`
   get a dependency section because their plans are single documents; a full
   `skills-plan.md` for a 3-file branch would be ceremony. The rule stays in
@@ -619,7 +652,7 @@ not part of this graph.
 | Stage 0 - OSS-01/02/07 code and config edits | `T3-rules`  | `kimi-k2.7-code`         | workflow gates, SECURITY.md tables, DCO wording: small precise edits                |
 | Stage 1 - fold `dm`                          | `T2-git`    | `grok-4.7` (xhigh)       | skip a cherry-pick, move a track, delete 45 files, retire a branch: git judgment    |
 | Stage 2 - retrofit `ex` and `nyx`            | `T5-bulk`   | `minimax-m3.1-flash`     | the same section added to a handful of files                                        |
-| Stages 3-5 - merges and rebases              | `T2-git`    | `grok-4.7` (xhigh)       | conflict resolution on generated files; the risk is a wrong merge, not a wrong line |
+| Stages 4-5 - merges and rebases              | `T2-git`    | `grok-4.7` (xhigh)       | conflict resolution on generated files; the risk is a wrong merge, not a wrong line |
 | Stage 6 - hand over to the owner             | `T1-plan`   | `gemini-4-argon` (high)  | a status summary the owner reads before opening the merge request                   |
 | Stage 7 - format across every plan           | `T5-bulk`   | `minimax-m3.1-flash`     | mechanical, 95 files, checked by the test                                           |
 | Section 14 - keep the evidence current       | `T6-review` | `muse-wonder-full` (max) | re-reading three leaderboards and re-deriving the mapping                           |
