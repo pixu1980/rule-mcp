@@ -92,9 +92,9 @@ Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
 | Step | Class | Model | Why |
 | ---- | ----- | ----- | --- |
-| the whole plan | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
+| the whole plan | `T7-author` | `qwen3.8-max` | a shared contract three bundler leaves inherit |
 
-Plan default: `T1-plan` - `gemini-4-argon` (high). Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
+Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 
 ## Open notes
 
