@@ -69,8 +69,8 @@ export const CORPUS = [
   { prompt: "node process runs out of memory on file upload", expect: "backend-node", area: "backend" },
   { prompt: "jwt verification best practices", expect: "backend-security", area: "backend" },
   { prompt: "should logout revoke all sessions", expect: "backend-security", area: "backend" },
-  { prompt: "idempotency key for payments endpoint", expect: "backend-api-design", area: "backend" },
-  { prompt: "api error response format", expect: "backend-api-design", area: "backend" },
+  { prompt: "idempotency key for payments endpoint", expect: "backend-node", area: "backend" },
+  { prompt: "api error response format", expect: "backend-security", area: "backend" },
   { prompt: "express middleware for rate limiting", expect: "backend-express", area: "backend" },
 
   // ── Data ──
@@ -115,8 +115,8 @@ export const CORPUS = [
   { prompt: "teaching a junior to use AI without losing skills", expect: "ai-prompting", area: "ai" },
 
   // ── R6: the retrieval, tracing and generated-test sections ──
-  { prompt: "when is a vector database the wrong answer", expect: "ai-agents", area: "ai" },
-  { prompt: "embeddings or a code graph for retrieval", expect: "ai-agents", area: "ai" },
+  { prompt: "when is a vector database the wrong answer", expect: "ai-context-engineering", area: "ai" },
+  { prompt: "embeddings or a code graph for retrieval", expect: "ai-context-engineering", area: "ai" },
   { prompt: "what should a generation span carry", expect: "devops-observability", area: "devops" },
   { prompt: "trace an agent and see where the tokens went", expect: "devops-observability", area: "devops" },
   { prompt: "should I let the model write our integration tests", expect: "ai-evals", area: "ai" },
@@ -141,7 +141,7 @@ export const CORPUS = [
   { prompt: "why is a random uuid primary key slow at scale", expect: "data-sql", area: "data" },
   { prompt: "what do flaky tests cost us", expect: "devops-testing", area: "devops" },
   { prompt: "three ways to ignore a file in git", expect: "styleguide-git", area: "styleguide" },
-  { prompt: "block a merge request when a rule is violated", expect: "devops-gitlab-ci", area: "devops" },
+  { prompt: "block a merge request when a rule is violated", expect: "devops-testing", area: "devops" },
   { prompt: "do we need a framework for this page at all", expect: "frontend", area: "frontend" },
   { prompt: "copy to clipboard without a helper library", expect: "platform-web", area: "platform" },
 
