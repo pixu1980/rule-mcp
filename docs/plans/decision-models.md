@@ -75,11 +75,11 @@ Shared files: none: outside the skills graph, and it owns `src/core/decision/`
 
 Dependencies: WS-0 first and alone, because every later step calls it. WS-1 and WS-2 can then run in parallel. Nothing in WS-3 starts before WS-2 has published a baseline, because a reranker without a ruler is a guess. WS-6 is independent of the whole routing branch and may be pulled forward if the semantic rules matter more than routing. WS-8 last: the counts it edits are enforced by tests, so it must describe what shipped, not what was planned. No step turns a feature on by default; each ships off, with the flag documented next to the environment variable that enables it.
 
-- [ ] **Step 1 - DM-03, DM-12 (high)**: No decision client exists and nothing stops a URL from pointing off the machine
+- [x] **Step 1 - DM-03, DM-12 (high)**: No decision client exists and nothing stops a URL from pointing off the machine
   - [x] **1.1**: Write the failing test first: a URL that is not loopback (`127.0.0.1`, `::1`, `localhost`) is refused with the reason, and the refusal is testable without a socket.
   - [x] **1.2**: Add `src/core/decision/_client.js` with the two calls the audit used (`GET /models`, `POST /v1/systemone`), a hard timeout, no retry, and no other host reachable by construction.
   - [x] **1.3**: Add the fake decision server the rest of the suite reuses: a Node HTTP server in a fixture that answers a scripted distribution, so no test needs a model.
-  - [ ] **1.4**: Gate: `_client.test.mjs` green, `rule_tool_check` clean, `pnpm lint` and `pnpm test:foundations` unchanged.
+  - [x] **1.4**: Gate: `_client.test.mjs` green, `rule_tool_check` clean, `pnpm lint` and `pnpm test:foundations` unchanged. Note: the only failure left is the pre-existing file-size budget on six files (`src/cli/_init.js`, `src/core/__tests__/_prompt-directive.test.mjs`, `src/core/guardrails/project/_checks.js`, `src/core/self-update/_run.js`, `src/tools/skill/_check-tool.js`, `tests/plans/skills-plan.test.mjs`), all over the cap at `a747508a` before this track; recorded as debt, not introduced here.
 - [ ] **Step 2 - DM-06 (medium)**: The model lifecycle has no supervisor, so a load, a slot error or a hung router lands on the caller
   - [ ] **2.1**: Failing test: with the fake server answering `loading` then `loaded`, the client returns only after the state flips, and the load time it reports is the settled one.
   - [ ] **2.2**: Failing test: three consecutive failures open the breaker, the fourth call answers from BM25 without touching the socket, and the breaker closes on the next successful probe.
