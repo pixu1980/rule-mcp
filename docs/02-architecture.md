@@ -66,21 +66,21 @@ Live counts and the Command · Tool · Skill table: [Surface map](./16-surface-m
 
 | Surface                   | Count | Defined in                                    |
 | ------------------------- | ----- | --------------------------------------------- |
-| MCP tools                 | 110   | `src/tools/*` via `src/tools/router/index.js` |
+| MCP tools                 | 102   | `src/tools/*` via `src/tools/router/index.js` |
 | - action tools            | 21    | one per module, registered explicitly         |
-| - skill tools             | 89    | one per catalog skill, generated              |
-| MCP resources             | 186   | `src/resources/index.js`                      |
+| - skill tools             | 81    | one per catalog skill, generated              |
+| MCP resources             | 170   | `src/resources/index.js`                      |
 | MCP prompts               | 38    | `src/prompts/index.js`                        |
 | - reusable                | 19    | workflow and area prompts                     |
 | - persona                 | 19    | 19 active roles, one command each             |
-| Skills                    | 89    | `skills/rule-*/SKILL.md`                       |
+| Skills                    | 81    | `skills/rule-*/SKILL.md`                       |
 | Review personas           | 19    | `src/core/review/roles/index.js`              |
 | Guardrail rules           | 8     | `src/core/guardrails/index.js`                |
 | Agent slash commands      | 41    | `src/core/agents/commands/index.js`           |
 | Agent/IDE command targets | 13    | `src/core/agents/command-targets/index.js`    |
 | CLI commands              | 25    | `src/cli/_program.js`                         |
 | Hook events               | 4     | `src/core/agents/_hooks.js`                   |
-| Architecture decisions    | 135   | [`docs/adr/ADR.md`](adr/ADR.md)               |
+| Architecture decisions    | 155   | [`docs/adr/ADR.md`](adr/ADR.md)               |
 
 Regenerate with `pnpm census`. The inventories themselves are
 [`08-skills.md`](08-skills.md) through [`15-resources.md`](15-resources.md).

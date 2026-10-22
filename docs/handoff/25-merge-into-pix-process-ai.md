@@ -1,4 +1,4 @@
-# 24 - Merge of three skills into rule-process-ai
+# 25 - Merge of three skills into rule-process-ai
 
 - **Branch**: `feat/guardrails-evolution`
 - **Date**: 2026-10-21

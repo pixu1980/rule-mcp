@@ -200,7 +200,7 @@ Shared files: none: absorbed into the leaf plans named above
 - [x] Interview the owner and record the decisions above.
 - [ ] Confirm the Tier A / Tier B split (open item above).
 - [x] Create the ADR for the devops guardrail family and enforcement policy
-      (ADR 135, status proposed).
+      (ADR 155, status proposed).
 - [ ] Extend the guardrail engine with an optional `severity` field and keep
       `pass` semantics unchanged when the field is absent.
 
@@ -249,15 +249,15 @@ Shared files: none: absorbed into the leaf plans named above
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions and scaffolding | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - CI/CD rules in rule-devops | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 2 - Docker rules in rule-devops-docker | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Testing rules in rule-devops-testing | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 4 - Observability rules in rule-devops-observability | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 5 - Preview rules in rule-devops-deploy-preview | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 6 - Runtime scripts, promotion and documentation | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
+| Step                                                      | Class      | Model                   | Why                            |
+| --------------------------------------------------------- | ---------- | ----------------------- | ------------------------------ |
+| Phase 0 - Decisions and scaffolding                       | `T1-plan`  | `gemini-4-argon` (high) | planning and prose that argues |
+| Phase 1 - CI/CD rules in rule-devops                       | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 2 - Docker rules in rule-devops-docker               | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 3 - Testing rules in rule-devops-testing             | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 4 - Observability rules in rule-devops-observability | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 5 - Preview rules in rule-devops-deploy-preview      | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 6 - Runtime scripts, promotion and documentation    | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 
