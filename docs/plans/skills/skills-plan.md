@@ -7,22 +7,23 @@ Where it lives: `docs/plans/skills/skills-plan.md`, inside the skills catalogue 
 orchestrates, so the structure used to plan the skills is the structure used to
 plan their execution.
 
-Scope: **this branch only** (`feat/guardrails-evolution`). Other branches
-(`feat/decision-models`, `feat/export`, `feat/nyx`, `develop`) are out of scope
-and named here only so nobody looks for their plans in this graph.
+Scope: **this branch only** (`feat/guardrails`). Other branches
+(`feat/export`, `feat/nyx`, `develop`) are out of scope and named here only so
+nobody looks for their plans in this graph.
 
 Decisions recorded: ADR 153 (this model), ADR 154 (the plan format contract).
 
 ## 1 - The universe
 
 Measured on 2026-10-21 on this branch: **94 files** under `docs/plans` before this
-file existed, 95 after.
+file existed, 95 after, 96 after the Stage 1 fold added `decision-models.md`.
 
 | Kind | Count | In the graph |
 | ---- | ----- | ------------ |
 | Skill plans (`docs/plans/skills/<area>/<skill>.md`) | 82 | yes, one node each |
 | Cross-skill plan (`docs/plans/skills/toolchain/bundler-family.md`) | 1 | yes: a shared contract for Vite, Rspack and Parcel, owned by `rule-toolchain` |
 | Area plans (`docs/plans/*-guardrails.md`, `oss.md`, `execution-plan.md`, `installer-scope-adr-policy-features.md`) | 9 | **no**: absorbed, see section 9 |
+| Decision-models plan (`docs/plans/decision-models.md`) | 1 | **no**: outside the skills graph, see `DEPENDENCIES.md` |
 | `docs/plans/skills/README.md` | 1 | no: it is the index table |
 | `docs/plans/skills/DEPENDENCIES.md` | 1 | no: superseded by section 5, kept as history |
 | `docs/plans/skills/skills-plan.md` | 1 | no: this file orchestrates, it is not work |

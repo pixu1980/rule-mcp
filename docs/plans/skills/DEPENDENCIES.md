@@ -39,5 +39,5 @@ rule-process-ai                    <- first: every other plan writes prose, scop
 ## What is not a dependency
 
 - The `oss`, `execution-plan` and `*-guardrails` plans at `docs/plans/` are area plans, not skill plans. They read the same corpus but they do not edit skill text, so they can run alongside any step above.
-- The `decision-models` track (audit, review, plan, probe harness) lives on `feat/decision-models`. It re-measures the routing corpus after skill text settles, so it is not a skill-plan edge on this branch.
+- The `decision-models` track (audit, review, plan, probe harness) lives here since the fold retired `feat/decision-models`. It re-measures the routing corpus after skill text settles, so it is not a skill-plan edge on this branch.
 - A plan with no graph edge to another is genuinely independent: the graph shows every edge that exists, so an absent edge is an absent dependency and not an omission.
