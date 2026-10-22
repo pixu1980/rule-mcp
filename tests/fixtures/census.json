@@ -11,7 +11,7 @@
       "file": "02-architecture.md",
       "kind": "block",
       "marker": "surface-counts",
-      "sha256": "e416b06911229228fb267987f5bac6a3759a87c2591347bb50982016fdd85ec1"
+      "sha256": "07a1c97c51a331d179d322b0fa1f5281f7056bb3aa9ad341c74ebdb94ee1399c"
     },
     {
       "file": "05-env-variables.md",
@@ -28,17 +28,17 @@
     {
       "file": "08-skills.md",
       "kind": "document",
-      "sha256": "96fd89028630f57cef0181b7e549d98c5f1669f5c7d52f12b4738bb23f028d05"
+      "sha256": "3df1088bfce7d289f867266a681316999d3c436b0f68d8d761e981b1e3947236"
     },
     {
       "file": "09-tools.md",
       "kind": "document",
-      "sha256": "b44ef7064b75c11b621736903abaf767738822c13829a1c71e6deb4ba0cd4fdc"
+      "sha256": "8ac1237f7b3bde38e006cd12596dc340a7e48c940eab02084b5ce2a2b336979a"
     },
     {
       "file": "10-prompts.md",
       "kind": "document",
-      "sha256": "6ada390dd0f64a48822f2c381f467eb4eca75e0b9917021641f27465d81db144"
+      "sha256": "d77290882e6e08d0532e6d7a86feef9e0a129275930a2ff0054335fd661b26fa"
     },
     {
       "file": "11-instructions.md",
@@ -48,12 +48,12 @@
     {
       "file": "12-cli.md",
       "kind": "document",
-      "sha256": "34f694ba86ab92f99263f57672fb03c7daaaa66ecb013cb21c5e8a13846b55b8"
+      "sha256": "b885198535847030e3c88095cefff95af3f7916fc5e8607a2215d16d6b53a4e9"
     },
     {
       "file": "13-personas.md",
       "kind": "document",
-      "sha256": "d56188fac16907bf6d276d5c24734e7044786c6510195397d4ac8043ac8af147"
+      "sha256": "775348b00f244ab0c3b7206fe37610dbf43c3a98496eae172d36825dd3760d31"
     },
     {
       "file": "14-guardrails.md",
@@ -63,12 +63,12 @@
     {
       "file": "15-resources.md",
       "kind": "document",
-      "sha256": "3b7cdb51f32f9ef320c9b98633ce5f9c5107bc5dc1da510bf78148e3efca7721"
+      "sha256": "e8ee5d7926be835153a3e445e8908fc1680589f6890f8aa05207c2f30c0e647f"
     },
     {
       "file": "16-surface-map.md",
       "kind": "document",
-      "sha256": "c244349b1c739df77f56c813eeb9903cc3bcb7b02ace93e3981ae82eb7d872c9"
+      "sha256": "5a1893fcf4720bef9e614c9d84f96de204cc2555c96ee297f88e7475e31680c0"
     }
   ]
 }
