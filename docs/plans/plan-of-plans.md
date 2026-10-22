@@ -5,8 +5,8 @@ work in, which plan to implement next, and in what order the branches return to
 `main`. It does not plan a skill.
 
 Format: the contract of ADR 154 (status line, `## Dependency graph`, checkboxes)
-applied to this file. ADR 153 and 154 live on `feat/guardrails` and are
-not on `main` yet; this file follows them in advance, and the fold in stage 0
+applied to this file. ADR 153 and 154 live on `feat/guardrails` and are not on
+`feat/evolution` yet; this file follows them in advance, and the merge in stage 4
 brings them here.
 
 Topology (2026-10-21): **`feat/evolution` is the convergence branch.** Every feature
@@ -23,8 +23,8 @@ scope: it holds `architect.md`, `backlog.md` and `github.md`, which belong to th
 
 | Branch | Ahead of main | Unique commits | Plan files | Unique plan paths | Contended with `ge` |
 | ------ | ------------: | -------------: | ---------: | ----------------: | ------------------: |
-| `main` | 0 | - | 3 | 3 | - |
-| `feat/evolution` (convergence) | 0 | - | 3 | 3 | - |
+| `main` | 0 | - | 2 | 2 | - |
+| `feat/evolution` (convergence) | 2 | 2 | 3 | 3 | - |
 | `feat/guardrails` (`ge`) | 94 | 94 | 95 | 95 | - |
 | `feat/decision-models` (`dm`) | 63 | **1** | 45 | 1 | **233 files** |
 | `feat/export` (`ex`) | 5 | 5 | 3 | 1 | 3 files |
@@ -68,12 +68,13 @@ more than one plan gets its own level-1 orchestrator, or this file says why not.
 | `dm` | none, and it does not need one | folded into `ge` in stage 0 |
 | `ex` | `docs/plans/export.md` gains a dependency section | retrofit |
 | `nyx` | `docs/plans/2026-10-01-scripts-mcp-layout.md` gains a dependency section | retrofit |
-| `main` | this file | plus `execution-plan.md` and `oss.md`, outside the skills graph |
+| `feat/evolution` | this file | plus the per-branch orchestrators it delegates to |
+| `main` | none | `execution-plan.md` and `oss.md` stay there, outside the skills graph |
 
 ## 3 - Nodes, two levels
 
-**Level 1 - branches.** Five nodes: `main`, `ge`, `dm`, `ex`, `nyx`. They carry
-the merge order and the rebase work.
+**Level 1 - branches.** Six nodes: `feat/evolution` (the convergence), `main`,
+`ge`, `dm`, `ex`, `nyx`. They carry the merge order and the rebase work.
 
 **Level 2 - plans.** 98 nodes, one per unique plan path, each owned by exactly one
 branch. A path that appears on two branches is one node with an owner and, when
@@ -150,7 +151,7 @@ phases). This file owns only the choice of node and the movement between branche
 4. Run the node's gates plus the shared ones in section 9.
 5. Commit on that branch, in the format the branch already uses.
 6. `git switch feat/evolution` and update the node's row here, then take the next node.
-7. At the end of a stage, return to `main`, run the contended-file checks from
+7. At the end of a stage, return to `feat/evolution`, run the contended-file checks from
    section 8, and only then merge.
 
 A node that cannot be finished on its branch is marked `blocked` with the edge
