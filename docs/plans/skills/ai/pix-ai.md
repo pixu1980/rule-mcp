@@ -1,7 +1,7 @@
 # pix-ai - plan
 
-Status: plan only, 2026-10-21. Index row `#84`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#84`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: ai, router, planned last in the area and last in the catalogue.
 Siblings: `pix-ai-prompting`, `pix-ai-evals`, `pix-ai-context-engineering`,
@@ -92,6 +92,16 @@ inherit. The children instead link the leaf that owns the floor, and
 `router-ai-floor-reachable` keeps that link alive.
 
 ## Phases
+
+## Dependency graph
+
+The router closes after its leaves and after the shared router rules and the route-table generator are exported.
+
+Depends on: `pix-ai-agent-architecture` (HARD), `pix-ai-context-engineering` (HARD), `pix-ai-evals` (HARD), `pix-ai-prompting` (HARD), `pix-process#2` (CONTRACT), `pix-process#3` (CONTRACT)
+
+Feeds: —
+
+Shared files: skills/pix/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 

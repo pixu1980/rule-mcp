@@ -1,8 +1,7 @@
 # pix-platform-mobile - plan
 
-Status: plan only, 2026-10-21. New skill: the catalog has no mobile skill, and
-this plan is opened from `pix-platform` Phase 3. No index row existed for it
-until now; it appends as `#85`.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. New skill: the catalog has no mobile skill, and this plan is opened from `pix-platform` Phase 3. No index row existed for it until now; it appends as `#85`.
 
 Area: platform, fifth leaf. Sibling plans: `pix-platform` (the router that
 promised this platform), `pix-platform-web` (whose web rules still apply),
@@ -77,6 +76,16 @@ The `expo` rule `pix-process-tdd` cites becomes `mobile-test-runner`, and that
 skill's line is updated to name it. That is the one edit outside this skill.
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `pix-process-ai` (HARD)
+
+Feeds: `pix-platform` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 

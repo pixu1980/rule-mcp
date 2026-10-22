@@ -1,8 +1,7 @@
 # pix-devops guardrails execution plan
 
-Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153).
-Absorbed by: the four pix-devops leaves, one rule set per plan.
-Graph: not a node; see the absorbed table in `skills-plan.md`.
+Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four pix-devops leaves.
+Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four pix-devops leaves. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four pix-devops leaves, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
 
 Scope: extend the deterministic guardrails of the five `pix-devops*` skills,
 reorganize the four rules that already exist, and record every rule against a
@@ -183,6 +182,16 @@ target rule alone, so the fixture is the right place for the literal.
    it never runs inside `pix_tool_check`.
 
 ## Phases
+
+## Dependency graph
+
+Absorbed or outside the graph: listed for completeness, not executed as a node.
+
+Depends on: -
+
+Feeds: -
+
+Shared files: none: absorbed into the leaf plans named above
 
 ### Phase 0 - Decisions and scaffolding
 

@@ -1,7 +1,7 @@
 # pix-devops-testing - plan
 
-Status: plan only, 2026-10-21. Index row `#57`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#57`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: devops, leaf. Sibling plans: `pix-devops-observability`,
 `pix-devops-docker`, `pix-devops-deploy-preview` (same series) and `pix-devops`
@@ -116,6 +116,16 @@ node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing
 pnpm census && pnpm census:check
 pnpm lint
 ```
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `pix-process-ai` (HARD)
+
+Feeds: `pix-devops` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ## Open notes
 

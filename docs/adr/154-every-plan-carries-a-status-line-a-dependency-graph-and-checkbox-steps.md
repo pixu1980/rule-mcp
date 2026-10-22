@@ -13,6 +13,16 @@ The 83 plan files were written across eleven areas over several sessions. Each o
 
 A plan file carries, in this order: an H1; a status line with one of five values (planned, in-progress, done, blocked, superseded) plus a reason when it is blocked or superseded; a '## Dependency graph' section with free prose plus three parseable lines - Depends on:, Feeds:, Shared files:; and checkbox steps in the form - [ ] while open and - [x] when closed, lowercase x, no other marker form. The progress table in skills-plan.md keeps one row per node and the verification test recomputes it, so a stale row fails. A node is done when its boxes are closed and the gates its own plan declares have run; nothing else is required.
 
+**Amendment 2026-10-21 (finding F5 of `docs/reviews/plan-graph.md`):** a plan that
+lives inside a branch carries four lines - `Depends on:`, `Feeds:`, `Shared files:`
+- while a document that coordinates plans across branches additionally carries
+`Branch:` and `Path:`. The owner's decision was the conditional form: six lines
+where a node must be findable from another branch, four where the file's location
+already says everything. `plan-of-plans.md` on `main` is the six-line case.
+A `CONTRACT` edge names a phase (`target#2`) and is exempt from the rule that a
+dependency sits in an earlier stage, because what closes first is the phase.
+
+
 ## Consequences
 
 The verification test can assert the format, so a plan written next month fails instead of drifting. Cost: 83 files need the head and the graph section, added stage by stage as their work begins, and the five status values are one more thing to get right on every commit. The status line also makes 'blocked' explicit, which is the state nine plans are actually in today without saying so.

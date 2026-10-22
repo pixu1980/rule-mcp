@@ -1,8 +1,7 @@
 # pix-styleguide - best-practice implementation plan
 
-Status: plan only.
-Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`.
-Index: `docs/plans/skills/README.md`.
+Status: `planned`
+Notes:`planned` Notes: plan only. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
 
 Area: styleguide. Order: reverse alphabetical, twenty-ninth skill (the area
 router).
@@ -139,6 +138,16 @@ Owned by `pix`, inherited here; advisory first, blocking after the corpus gate.
 6. The existing content and link-integrity tests, plus `pnpm census`.
 
 ## Phases
+
+## Dependency graph
+
+The router closes after its leaves and after the shared router rules and the route-table generator are exported.
+
+Depends on: `pix-styleguide-a11y` (HARD), `pix-styleguide-baseline` (HARD), `pix-styleguide-comments` (HARD), `pix-styleguide-configuration` (HARD), `pix-styleguide-css` (HARD), `pix-styleguide-file-tree` (HARD), `pix-styleguide-git` (HARD), `pix-styleguide-html` (HARD), `pix-styleguide-i18n` (HARD), `pix-styleguide-javascript` (HARD), `pix-styleguide-json` (HARD), `pix-styleguide-markdown` (HARD), `pix-styleguide-naming` (HARD), `pix-styleguide-typescript` (HARD), `pix-process#2` (CONTRACT), `pix-process#3` (CONTRACT)
+
+Feeds: —
+
+Shared files: skills/pix/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions and scaffolding
 

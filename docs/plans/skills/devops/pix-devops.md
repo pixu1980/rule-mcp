@@ -1,7 +1,7 @@
 # pix-devops - plan
 
-Status: plan only, 2026-10-21. Index row `#61`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#61`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: devops, router, planned last in the area (`DEPENDENCIES.md`). Sibling
 plans: `pix-devops-testing`, `pix-devops-observability`, `pix-devops-docker`,
@@ -133,6 +133,16 @@ node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing
 pnpm census && pnpm census:check
 pnpm lint
 ```
+
+## Dependency graph
+
+The router closes after its leaves and after the shared router rules and the route-table generator are exported.
+
+Depends on: `pix-devops-deploy-preview` (HARD), `pix-devops-docker` (HARD), `pix-devops-observability` (HARD), `pix-devops-testing` (HARD), `pix-process#2` (CONTRACT), `pix-process#3` (CONTRACT)
+
+Feeds: —
+
+Shared files: skills/pix/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ## Open notes
 

@@ -8,8 +8,9 @@ Run order and the four real dependencies: [`DEPENDENCIES.md`](DEPENDENCIES.md).
 Live ordering authority, stages, gates and per-plan progress:
 [`skills-plan.md`](skills-plan.md).
 
-Total: 81 skills in the catalog, each with a plan, plus one planned skill that
-does not exist yet (`pix-platform-mobile`, number 85). Numbers 40, 49 and 54 are
+Total: 81 skills in the catalog, each with a plan, plus three planned skills that
+do not exist yet: `pix-platform-mobile` (85), `pix-toolchain-electron` (86) and
+`pix-toolchain-tauri` (87). Numbers 40, 49 and 54 are
 retired: those skills were removed from the catalog and their plans are gone.
 New rows append and existing numbers stay put, so the `#NN` references in the
 plans keep pointing at the same skill.
@@ -98,3 +99,5 @@ plans keep pointing at the same skill.
 | 83  | `pix-ai-agent-architecture`     | ai         | `docs/plans/skills/ai/pix-ai-agent-architecture.md`            | planned |
 | 84  | `pix-ai`                        | ai         | `docs/plans/skills/ai/pix-ai.md`                               | planned |
 | 85  | `pix-platform-mobile`           | platform   | `docs/plans/skills/platform/pix-platform-mobile.md`            | planned |
+| 86  | `pix-toolchain-electron`        | toolchain  | `docs/plans/skills/toolchain/pix-toolchain-electron.md`        | planned |
+| 87  | `pix-toolchain-tauri`           | toolchain  | `docs/plans/skills/toolchain/pix-toolchain-tauri.md`           | planned |

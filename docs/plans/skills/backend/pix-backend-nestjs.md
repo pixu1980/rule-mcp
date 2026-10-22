@@ -1,7 +1,7 @@
 # pix-backend-nestjs - plan
 
-Status: plan only, 2026-10-21. Index row `#74`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#74`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: backend, leaf. **93 lines**, one file, no `guardrails/`. It inherits the
 router's six rules through `inherits: [pix-backend]`.
@@ -27,6 +27,16 @@ guard or a DTO.
 | `nestjs-owner-named` | A section delegating pooling, validation or observability without naming the owner | B | partially red |
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `pix-process-ai` (HARD)
+
+Feeds: `pix-backend` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 

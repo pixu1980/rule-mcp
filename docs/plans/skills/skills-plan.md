@@ -99,102 +99,165 @@ other marker form. The test normalises `[X]` rather than rejecting it.
 
 ## 5 - The graph, stage by stage
 
-Stages are ordered. Inside a stage, nodes are parallel unless a `HARD` edge says
-otherwise.
+Stages are ordered; inside a stage, nodes are parallel unless a `HARD` edge says
+otherwise. Every node appears in exactly one table, so the counts can be summed
+instead of asserted: **85 nodes**. A `CONTRACT` edge names a phase and is exempt
+from the stage rule, because what closes first is the phase, not the plan (ADR 154).
 
-### Stage 0 - Foundations (contract exports, in this order)
+### Stage 0a - Foundations: the prose and scope rules
 
-| Order | Node | Exports |
-| ----- | ---- | ------- |
-| 1 | `pix-process-ai` | prose, scope and gate rules (P1) |
-| 2 | `pix-process-adr` | ADR record format, `reviewed:` mechanism |
-| 3 | `pix-platform-desktop#3` | served-references surface (P5) |
-| 4 | `pix-process#2`, `pix-process#3` | the 6 shared router rules and the route-table generator (P4) |
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `pix-process-ai` | leaf | router of the area |
 
-The order inside the stage is deliberate: the prose rules govern every later
-commit, the ADR format governs every later record, and only then do the two
-contracts that unblock 9 and 7 plans respectively.
+### Stage 0b - Foundations: the ADR record format
 
-Gate: the export phases are closed and their contracts are named in the plans
-that consume them. **Human gate** on `pix-process-adr` (it defines the record
-format for every later plan) and on the whole stage before stage 1 starts.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `pix-process-adr` | leaf | router of the area |
 
-### Stage 1 - ui, toolchain (12 nodes)
+### Stage 1 - ui, toolchain
 
-`pix-ui`, `pix-ui-design-system`, the 8 `pix-toolchain-*` skill plans,
-`bundler-family` (the shared contract those bundler leaves inherit) and
-`pix-toolchain` if P2 lets it in. `pix-toolchain-electron` and
-`pix-toolchain-tauri` do not exist yet and have no plan: they are deliverables of
-`pix-platform-desktop#4` and become nodes when their plans are written.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `bundler-family` | cross | the three bundler leaves |
+| `pix-toolchain-biome` | leaf | router of the area |
+| `pix-toolchain-eslint` | leaf | router of the area |
+| `pix-toolchain-husky` | leaf | router of the area |
+| `pix-toolchain-parcel` | leaf | router of the area |
+| `pix-toolchain-pnpm` | leaf | router of the area |
+| `pix-toolchain-rspack` | leaf | router of the area |
+| `pix-toolchain-turborepo` | leaf | router of the area |
+| `pix-toolchain-vite` | leaf | router of the area |
+| `pix-ui-design-system` | leaf | router of the area |
 
-Gate: `_router-child-coverage` and `_corpus` green.
+### Stage 2 - styleguide, process leaves
 
-### Stage 2 - styleguide, process leaves (22 nodes)
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `pix-process-bmad` | leaf | the area router, and produces `pix-method` |
+| `pix-process-changelog` | leaf | router of the area |
+| `pix-process-code-review` | leaf | router of the area |
+| `pix-process-npm-release` | leaf | router of the area |
+| `pix-process-readme` | leaf | router of the area |
+| `pix-styleguide-a11y` | leaf | router of the area |
+| `pix-styleguide-baseline` | leaf | router of the area |
+| `pix-styleguide-comments` | leaf | router of the area |
+| `pix-styleguide-configuration` | leaf | router of the area |
+| `pix-styleguide-css` | leaf | router of the area |
+| `pix-styleguide-file-tree` | leaf | router of the area |
+| `pix-styleguide-git` | leaf | router of the area |
+| `pix-styleguide-html` | leaf | router of the area |
+| `pix-styleguide-i18n` | leaf | router of the area |
+| `pix-styleguide-javascript` | leaf | router of the area |
+| `pix-styleguide-json` | leaf | router of the area |
+| `pix-styleguide-markdown` | leaf | router of the area |
+| `pix-styleguide-naming` | leaf | router of the area |
+| `pix-styleguide-typescript` | leaf | router of the area |
 
-15 styleguide nodes and the 7 process leaves. `pix-process-bmad` closes here (P3)
-and exports the `pix-method` family. `pix-process-tdd` is **not** in this stage:
-it carries a `CONTRACT` edge to `pix-platform-mobile#2` and moves to stage 4.
+### Stage 3a - platform: the umbrella that exports the references surface
 
-Gate: corpus green. **Human gate** on `pix-process-bmad` (it renames a family).
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `pix-platform-desktop` | leaf | router of the area |
 
-### Stage 3 - platform leaves (6 nodes)
+### Stage 3b - platform: the other leaves
 
-`pix-platform-web`, `pix-platform-library`, `pix-platform-auth`,
-`pix-platform-desktop`, `pix-platform-mobile`, and `pix-platform` if P2 lets it
-in. `pix-platform-agent` is not a node: removed in ADR 151, its plan with it.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `pix-platform-auth` | leaf | router of the area |
+| `pix-platform-library` | leaf | router of the area |
+| `pix-platform-mobile` | leaf | router of the area |
+| `pix-platform-web` | leaf | router of the area |
 
-`pix-platform-desktop#4` creates `pix-toolchain-electron` and
-`pix-toolchain-tauri`, which become nodes only when their plans are written.
+### Stage 4 - meta leaves, process-tdd and the two desktop runtimes
 
-Gate: the 9 references-consuming plans in stage 4+ can now start.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `pix-meta-astro` | leaf | router of the area |
+| `pix-meta-next` | leaf | router of the area |
+| `pix-meta-nuxt` | leaf | router of the area |
+| `pix-meta-remix` | leaf | router of the area |
+| `pix-process-tdd` | leaf | router of the area |
+| `pix-toolchain-electron` | leaf | router of the area |
+| `pix-toolchain-tauri` | leaf | router of the area |
 
-### Stage 4 - meta leaves, plus `pix-process-tdd` (6 nodes)
+### Stage 5 - frontend leaves
 
-`pix-meta-astro` (the 347-line scaffold defect), `pix-meta-next`, `pix-meta-nuxt`,
-`pix-meta-remix`, and `pix-process-tdd` once `pix-platform-mobile#2` has exported
-`mobile-test-runner`.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `pix-frontend-angular` | leaf | router of the area |
+| `pix-frontend-react` | leaf | router of the area |
+| `pix-frontend-solidjs` | leaf | router of the area |
+| `pix-frontend-svelte` | leaf | router of the area |
+| `pix-frontend-template-engine` | leaf | router of the area |
+| `pix-frontend-vue` | leaf | router of the area |
+| `pix-frontend-workers` | leaf | router of the area |
 
-### Stage 5 - frontend leaves (7 nodes)
+### Stage 6 - devops leaves
 
-`pix-frontend-workers`, `pix-frontend-vue`, `pix-frontend-svelte`,
-`pix-frontend-solidjs`, `pix-frontend-react`, `pix-frontend-angular`,
-`pix-frontend-template-engine`. The scaffold-termination fix that 7 leaves share
-is a cross-cutting commit in section 6, not a node.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `pix-devops-deploy-preview` | leaf | router of the area |
+| `pix-devops-docker` | leaf | router of the area |
+| `pix-devops-observability` | leaf | router of the area |
+| `pix-devops-testing` | leaf | router of the area |
 
-### Stage 6 - devops leaves (4 nodes)
+### Stage 7a - data: the dialect-neutral leaf
 
-`pix-devops-testing` (exports the runner policy), `pix-devops-docker`,
-`pix-devops-observability`, `pix-devops-deploy-preview`.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `pix-data-sql` | leaf | the seven dialect leaves |
 
-### Stage 7 - data leaves (8 nodes)
+### Stage 7b - data: the dialect leaves
 
-`pix-data-sql` closes first (the four dialect leaves link its generic DDL), then
-`pix-data-sqlite`, `pix-data-postgresql`, `pix-data-mysql`, `pix-data-mongodb`,
-`pix-data-duckdb`, `pix-data-indexed-db`, `pix-data-validation`.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `pix-data-duckdb` | leaf | router of the area |
+| `pix-data-indexed-db` | leaf | router of the area |
+| `pix-data-mongodb` | leaf | router of the area |
+| `pix-data-mysql` | leaf | router of the area |
+| `pix-data-postgresql` | leaf | router of the area |
+| `pix-data-sqlite` | leaf | router of the area |
+| `pix-data-validation` | leaf | router of the area |
 
-### Stage 8 - backend leaves (8 nodes)
+### Stage 8 - backend leaves
 
-`pix-backend-security` (carries a `CONTRACT` edge from `pix-platform-auth`),
-`pix-backend-node`, `pix-backend-nestjs`, `pix-backend-hono`,
-`pix-backend-graphql`, `pix-backend-fastify`, `pix-backend-express`,
-`pix-backend-workers`.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `pix-backend-express` | leaf | router of the area |
+| `pix-backend-fastify` | leaf | router of the area |
+| `pix-backend-graphql` | leaf | router of the area |
+| `pix-backend-hono` | leaf | router of the area |
+| `pix-backend-nestjs` | leaf | router of the area |
+| `pix-backend-node` | leaf | router of the area |
+| `pix-backend-security` | leaf | router of the area |
+| `pix-backend-workers` | leaf | router of the area |
 
-### Stage 9 - ai leaves (4 nodes)
+### Stage 9 - ai leaves
 
-`pix-ai-prompting`, `pix-ai-evals`, `pix-ai-context-engineering`,
-`pix-ai-agent-architecture`. The last one owns ADR 137's eight rules (P10), so the
-area needs no exception and no early router: the rules land in the leaf, and
-`pix-ai` lists them in stage 10 like every other router.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `pix-ai-agent-architecture` | leaf | router of the area |
+| `pix-ai-context-engineering` | leaf | router of the area |
+| `pix-ai-evals` | leaf | router of the area |
+| `pix-ai-prompting` | leaf | router of the area |
 
-### Stage 10 - area routers (11 nodes)
+### Stage 10 - area routers
 
-`pix-ai`, `pix-backend`, `pix-data`, `pix-devops`, `pix-frontend`, `pix-meta`,
-`pix-platform`, `pix-process`, `pix-styleguide`, `pix-toolchain`, `pix-ui`. Each
-is `HARD`-blocked by its own leaves (P2) and, for the seven that carry route
-tables, by `pix-process#2` and `#3` (P4). They are `CONFLICT` with each other on
-the dispatcher and on `router-gaps`, so they serialise.
-
-**Human gate** at area close, per area.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `pix-ai` | router | none: terminal |
+| `pix-backend` | router | none: terminal |
+| `pix-data` | router | none: terminal |
+| `pix-devops` | router | none: terminal |
+| `pix-frontend` | router | none: terminal |
+| `pix-meta` | router | none: terminal |
+| `pix-platform` | router | none: terminal |
+| `pix-process` | router | none: terminal |
+| `pix-styleguide` | router | none: terminal |
+| `pix-toolchain` | router | none: terminal |
+| `pix-ui` | router | none: terminal |
 
 ## 6 - The cross-cutting commits
 
@@ -250,22 +313,95 @@ Human gates, exactly where they are worth a human:
 ## 9 - Progress table
 
 One row per node. The verification test recomputes the `box` column from each
-file, so a stale row fails rather than misleads. No node is `done`; 35 have at
-least one closed step, all of them the work that landed before this graph existed.
+file, so a stale row fails rather than misleads.
 
-| Area | Nodes | Status | box (closed/total) | Stage |
-| ---- | ----: | ------ | ------------------ | ----- |
-| process | 9 | `in-progress` (7 of 9 started) | adr 0/22, ai 10/22, bmad 4/37, changelog 3/18, code-review 3/16, npm-release 4/19, readme 5/17, tdd 4/19, process 0/25 | 0, 2, 4, 10 |
-| ui | 2 | `in-progress` | 4/21, 4/19 | 1, 10 |
-| toolchain | 10 | `in-progress` | bundler-family 3/6; the 8 skill plans 4 of 18-22 each; toolchain 3/18 | 1, 10 |
-| styleguide | 15 | `in-progress` | 4-9 closed of 15-19 each (baseline and configuration lead at 9) | 2, 10 |
-| platform | 6 | `planned` | 0 each | 3, 10 |
-| meta | 5 | `planned` | 0 each | 4, 10 |
-| frontend | 8 | `planned` | 0 each | 5, 10 |
-| devops | 5 | `planned` | 0 each | 6, 10 |
-| data | 9 | `planned` | validation 4/15; the rest 0 | 7, 10 |
-| backend | 9 | `planned` | 0 each | 8, 10 |
-| ai | 5 | `planned` | 0 each | 9, 10 |
+| Node | Area | Status | box | Stage |
+| ---- | ---- | ------ | --- | ----- |
+| `pix-process-adr` | leaf | planned | 0/22 | 0 |
+| `pix-process-ai` | leaf | in-progress | 10/22 | 0 |
+| `bundler-family` | cross | in-progress | 3/6 | 1 |
+| `pix-toolchain-biome` | leaf | in-progress | 4/18 | 1 |
+| `pix-toolchain-eslint` | leaf | in-progress | 4/19 | 1 |
+| `pix-toolchain-husky` | leaf | in-progress | 4/19 | 1 |
+| `pix-toolchain-parcel` | leaf | in-progress | 4/22 | 1 |
+| `pix-toolchain-pnpm` | leaf | in-progress | 4/20 | 1 |
+| `pix-toolchain-rspack` | leaf | in-progress | 4/20 | 1 |
+| `pix-toolchain-turborepo` | leaf | in-progress | 4/19 | 1 |
+| `pix-toolchain-vite` | leaf | in-progress | 4/19 | 1 |
+| `pix-ui-design-system` | leaf | in-progress | 4/21 | 1 |
+| `pix-process-bmad` | leaf | in-progress | 4/37 | 2 |
+| `pix-process-changelog` | leaf | in-progress | 3/18 | 2 |
+| `pix-process-code-review` | leaf | in-progress | 3/16 | 2 |
+| `pix-process-npm-release` | leaf | in-progress | 4/19 | 2 |
+| `pix-process-readme` | leaf | in-progress | 5/17 | 2 |
+| `pix-styleguide-a11y` | leaf | in-progress | 4/18 | 2 |
+| `pix-styleguide-baseline` | leaf | in-progress | 9/15 | 2 |
+| `pix-styleguide-comments` | leaf | in-progress | 8/15 | 2 |
+| `pix-styleguide-configuration` | leaf | in-progress | 9/16 | 2 |
+| `pix-styleguide-css` | leaf | in-progress | 5/17 | 2 |
+| `pix-styleguide-file-tree` | leaf | in-progress | 4/16 | 2 |
+| `pix-styleguide-git` | leaf | in-progress | 4/17 | 2 |
+| `pix-styleguide-html` | leaf | in-progress | 4/15 | 2 |
+| `pix-styleguide-i18n` | leaf | in-progress | 4/17 | 2 |
+| `pix-styleguide-javascript` | leaf | in-progress | 4/16 | 2 |
+| `pix-styleguide-json` | leaf | in-progress | 4/17 | 2 |
+| `pix-styleguide-markdown` | leaf | in-progress | 4/17 | 2 |
+| `pix-styleguide-naming` | leaf | in-progress | 4/16 | 2 |
+| `pix-styleguide-typescript` | leaf | in-progress | 4/16 | 2 |
+| `pix-platform-desktop` | leaf | planned | 0/24 | 3a |
+| `pix-platform-auth` | leaf | planned | 0/23 | 3b |
+| `pix-platform-library` | leaf | planned | 0/28 | 3b |
+| `pix-platform-mobile` | leaf | planned | 0/16 | 3b |
+| `pix-platform-web` | leaf | planned | 0/24 | 3b |
+| `pix-meta-astro` | leaf | planned | 0/19 | 4 |
+| `pix-meta-next` | leaf | planned | 0/17 | 4 |
+| `pix-meta-nuxt` | leaf | planned | 0/16 | 4 |
+| `pix-meta-remix` | leaf | planned | 0/17 | 4 |
+| `pix-process-tdd` | leaf | in-progress | 4/19 | 4 |
+| `pix-toolchain-electron` | leaf | planned | 0/15 | 4 |
+| `pix-toolchain-tauri` | leaf | planned | 0/15 | 4 |
+| `pix-frontend-angular` | leaf | planned | 0/19 | 5 |
+| `pix-frontend-react` | leaf | planned | 0/19 | 5 |
+| `pix-frontend-solidjs` | leaf | planned | 0/18 | 5 |
+| `pix-frontend-svelte` | leaf | planned | 0/19 | 5 |
+| `pix-frontend-template-engine` | leaf | planned | 0/21 | 5 |
+| `pix-frontend-vue` | leaf | planned | 0/18 | 5 |
+| `pix-frontend-workers` | leaf | planned | 0/21 | 5 |
+| `pix-devops-deploy-preview` | leaf | planned | 0/16 | 6 |
+| `pix-devops-docker` | leaf | planned | 0/14 | 6 |
+| `pix-devops-observability` | leaf | planned | 0/14 | 6 |
+| `pix-devops-testing` | leaf | planned | 0/15 | 6 |
+| `pix-data-duckdb` | leaf | planned | 0/14 | 7 |
+| `pix-data-indexed-db` | leaf | planned | 0/14 | 7 |
+| `pix-data-mongodb` | leaf | planned | 0/14 | 7 |
+| `pix-data-mysql` | leaf | planned | 0/14 | 7 |
+| `pix-data-postgresql` | leaf | planned | 0/14 | 7 |
+| `pix-data-sql` | leaf | planned | 0/14 | 7 |
+| `pix-data-sqlite` | leaf | planned | 0/14 | 7 |
+| `pix-data-validation` | leaf | in-progress | 4/15 | 7 |
+| `pix-backend-express` | leaf | planned | 0/13 | 8 |
+| `pix-backend-fastify` | leaf | planned | 0/13 | 8 |
+| `pix-backend-graphql` | leaf | planned | 0/13 | 8 |
+| `pix-backend-hono` | leaf | planned | 0/12 | 8 |
+| `pix-backend-nestjs` | leaf | planned | 0/12 | 8 |
+| `pix-backend-node` | leaf | planned | 0/15 | 8 |
+| `pix-backend-security` | leaf | planned | 0/14 | 8 |
+| `pix-backend-workers` | leaf | planned | 0/14 | 8 |
+| `pix-ai-agent-architecture` | leaf | planned | 0/14 | 9 |
+| `pix-ai-context-engineering` | leaf | planned | 0/14 | 9 |
+| `pix-ai-evals` | leaf | planned | 0/14 | 9 |
+| `pix-ai-prompting` | leaf | planned | 0/15 | 9 |
+| `pix-ai` | router | planned | 0/18 | 10 |
+| `pix-backend` | router | planned | 0/16 | 10 |
+| `pix-data` | router | planned | 0/16 | 10 |
+| `pix-devops` | router | planned | 0/16 | 10 |
+| `pix-frontend` | router | planned | 0/18 | 10 |
+| `pix-meta` | router | planned | 0/16 | 10 |
+| `pix-platform` | router | planned | 0/20 | 10 |
+| `pix-process` | router | planned | 0/25 | 10 |
+| `pix-styleguide` | router | in-progress | 4/19 | 10 |
+| `pix-toolchain` | router | in-progress | 3/18 | 10 |
+| `pix-ui` | router | in-progress | 4/19 | 10 |
 
 ### The nine area plans are not nodes
 
@@ -340,7 +476,7 @@ One test, `tests/plans/skills-plan.test.mjs`, parses `docs/plans` and this file:
 - [x] Fold the nine area plans out of the graph: six absorbed and marked
       superseded, three declared outside the skills graph.
 
-### Phase 2 - Retrofit, stage by stage
+### Phase 2 - Retrofit, stage by stage (F1)
 
 - [ ] Stage 0 nodes gain their status line and their focused dependency graph.
 - [ ] Each later stage does the same for its nodes, as it starts.

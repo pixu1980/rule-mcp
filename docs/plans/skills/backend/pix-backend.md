@@ -1,7 +1,7 @@
 # pix-backend - plan
 
-Status: plan only, 2026-10-21. Index row `#79`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#79`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: backend, router, planned last in the area (`DEPENDENCIES.md`). Siblings:
 the eight leaves (`workers`, `security`, `node`, `nestjs`, `hono`, `graphql`,
@@ -77,6 +77,16 @@ the catalog covers them, and no rule can check them. They stay.
 | `backend-no-cross-area-rows` | A row for a skill another area owns | B | **red**: 4 data rows |
 
 ## Phases
+
+## Dependency graph
+
+The router closes after its leaves and after the shared router rules and the route-table generator are exported.
+
+Depends on: `pix-backend-express` (HARD), `pix-backend-fastify` (HARD), `pix-backend-graphql` (HARD), `pix-backend-hono` (HARD), `pix-backend-nestjs` (HARD), `pix-backend-node` (HARD), `pix-backend-security` (HARD), `pix-backend-workers` (HARD), `pix-process#2` (CONTRACT), `pix-process#3` (CONTRACT)
+
+Feeds: —
+
+Shared files: skills/pix/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 
