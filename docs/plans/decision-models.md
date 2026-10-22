@@ -104,11 +104,13 @@ Dependencies: WS-0 first and alone, because every later step calls it. WS-1 and 
   - [x] **5.3**: Choose the model by the language detected from the prompt, with Julia-1 as the multilingual entry and Laya as the English one; do not load both on a single-instance router without measuring the swap cost.
   - [x] **5.4**: Gate: the Italian slice improves against its recorded baseline and the English slice does not regress; a router with one slot must show the swap cost in the same table.
     - Note: the auto selection is proven with a fake model (Julia-1 for Italian, Laya for English) and the runtime unloads the previous model before switching. Julia-1 is not installed, so the live Italian slice does not improve; per the kill criterion the harness and registry ship and the Italian routing claim is dropped. The English corpus stays 77/95 exact and 91/95 top-or-alternative with the feature off; the swap cost is not measured.
-- [ ] **Step 6 - DM-07 (medium)**: Determinism is proven but not used, and nothing invalidates an answer when the model changes
-  - [ ] **6.1**: Failing test: the same state and questions with the fake model answer from the cache on the second call, and a different model id misses the cache.
-  - [ ] **6.2**: Implement the key: a digest of the model id, the questions and the state, with the shortlist folded in, so an unchanged prompt cannot hit an answer computed for a different candidate set.
-  - [ ] **6.3**: Failing test: a recorded real answer replays to the same numbers, which is what makes the cache safe to trust and the audit reproducible.
-  - [ ] **6.4**: Gate: the cache suite green, `RULE_MCP_NO_CACHE` honored like every other cache in the server.
+- [x] **Step 6 - DM-07 (medium)**: Determinism is proven but not used, and nothing invalidates an answer when the model changes
+  - [x] **6.1**: Failing test: the same state and questions with the fake model answer from the cache on the second call, and a different model id misses the cache.
+  - [x] **6.2**: Implement the key: a digest of the model id, the questions and the state, with the shortlist folded in, so an unchanged prompt cannot hit an answer computed for a different candidate set.
+  - [x] **6.3**: Failing test: a recorded real answer replays to the same numbers, which is what makes the cache safe to trust and the audit reproducible.
+  - [x] **6.4**: Gate: the cache suite green, `RULE_MCP_NO_CACHE` honored like every other cache in the server.
+    - Note: the cache lives in `rerankShortlist`, keyed by the model id, the prompt and the questions with the shortlist folded in; the 256-entry store evicts the oldest. `RULE_MCP_NO_CACHE=1` bypasses it, and the decision tests set that flag while the cache suite enables it. The measurement command asks the supervisor directly, so its latency table is uncached; the production path caches.
+    - Note: the recorded answer is the audit's Laya control (route billing 0.9917, 67 input tokens, 42 ms), stored in `tests/fixtures/decision-models/recorded-answer.mjs`; the replay test asserts those numbers.
 - [ ] **Step 7 - DM-08 (medium)**: The guardrail families are structural, and meaning-level properties are unreachable
   - [ ] **7.1**: Pick one rule that a regex cannot express and that has an answer a reader would agree with, and write the `good` and `bad` fixtures before the rule.
   - [ ] **7.2**: Implement it as an `advisory` rule in a new family, so it reports and never fails a check; the existing `advisory` flag is the mechanism, not a new one.
