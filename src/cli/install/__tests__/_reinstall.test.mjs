@@ -38,7 +38,7 @@ import { hermeticEnv, root } from "./_purge.fixture.mjs";
     }
     throw error;
   } finally {
-    if (!hookExisted) {
+    if (!hookExisted && existsSync(hookPath)) {
       rmSync(hookPath, { force: true });
     } else if (hookBefore !== null) {
       writeFileSync(hookPath, hookBefore);
