@@ -38,4 +38,4 @@
 </article>
 </section>
 
-Node ≥ 20 · [MIT](LICENSE) · runtime deps: `@modelcontextprotocol/sdk` + `zod` only.
+Node ≥ 20 · [MIT](LICENSE) · [Contributing](CONTRIBUTING.md) · [Governance](GOVERNANCE.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Maintainers](MAINTAINERS.md) · [Security](SECURITY.md) · runtime deps: `@modelcontextprotocol/sdk` + `zod` only.
