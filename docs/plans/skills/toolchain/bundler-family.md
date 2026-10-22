@@ -86,6 +86,16 @@ The family cannot be implemented before its owner exists in the plan order.
 - [ ] Implement the family guardrails in `rule-toolchain`.
 - [ ] Confirm each bundler plan points here instead of restating a row.
 
+## Model assignment
+
+Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
+
+| Step | Class | Model | Why |
+| ---- | ----- | ----- | --- |
+| the whole plan | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
+
+Plan default: `T1-plan` - `gemini-4-argon` (high). Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
+
 ## Open notes
 
 - Parcel has no public variable prefix by default, which makes the secret rule

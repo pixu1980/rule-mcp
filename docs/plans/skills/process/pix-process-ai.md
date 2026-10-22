@@ -144,6 +144,20 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Confirm the persona that carried the old skill still points here.
 - [ ] Announce the tool rename in the changelog entry for the next release.
 
+## Model assignment
+
+Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
+
+| Step | Class | Model | Why |
+| ---- | ----- | ----- | --- |
+| Phase 0 - The merge | `T2-git` | `grok-4.7` (xhigh) | cross-branch git work |
+| Phase 1 - Content | `T7-author` | `qwen3.8-max` | skill bodies and references |
+| Phase 2 - The guards | `T7-author` | `qwen3.8-max` | skill bodies and references |
+| Phase 3 - The routers | `T7-author` | `qwen3.8-max` | skill bodies and references |
+| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+
+Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
+
 ## Verification gates
 
 ```bash

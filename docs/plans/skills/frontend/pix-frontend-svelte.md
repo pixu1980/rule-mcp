@@ -164,6 +164,21 @@ playbook, and the four folders moved as-is.
       exist.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
 
+## Model assignment
+
+Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
+
+| Step | Class | Model | Why |
+| ---- | ----- | ----- | --- |
+| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
+| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
+| Phase 3 - Fix the Guardrails section | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
+| Phase 4 - Split and serve | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
+| Phase 5 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+
+Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
+
 ## Verification gates
 
 ```bash

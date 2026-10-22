@@ -166,6 +166,20 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Run the eight rules against this repository's own `.github/workflows/` and fix what they report, since a rule the author's own repository fails is a rule nobody will trust.
 - [ ] Hand the cooldown requirement to the `rule-toolchain-pnpm` plan.
 
+## Model assignment
+
+Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
+
+| Step | Class | Model | Why |
+| ---- | ----- | ----- | --- |
+| Phase 0 - Evaluation and decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
+| Phase 1 - The helper | `T7-author` | `qwen3.8-max` | skill bodies and references |
+| Phase 2 - The blocking rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
+| Phase 3 - The advisory rules and the cut | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
+| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+
+Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
+
 ## Verification gates
 
 ```bash
