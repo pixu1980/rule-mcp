@@ -17,6 +17,8 @@ export const DECISION_MODELS = Object.freeze({
   "ggml-org/Laya-GGUF": Object.freeze({
     id: "ggml-org/Laya-GGUF",
     alias: "laya",
+    size: 421_000_000,
+    context: 8192,
     threshold: 0.05,
     languages: Object.freeze(["en"]),
     shortlist: 6,
@@ -25,6 +27,8 @@ export const DECISION_MODELS = Object.freeze({
   "julia-1": Object.freeze({
     id: "julia-1",
     alias: "julia",
+    size: 144_000_000,
+    context: 8192,
     threshold: 0.05,
     languages: Object.freeze(["en", "it"]),
     shortlist: 6,
@@ -47,4 +51,30 @@ export function resolveDecisionModel(id) {
   }
 
   return Object.values(DECISION_MODELS).find((entry) => entry.alias === id) ?? null;
+}
+
+/** The first registry entry that covers a language, or null. */
+export function modelForLanguage(language) {
+  return Object.values(DECISION_MODELS).find((entry) => entry.languages.includes(language)) ?? null;
+}
+
+/**
+ * Whether a model's context can hold its shortlist.
+ *
+ * A description costs roughly 128 tokens per option, so a model with 8192
+ * context holds the six-option cap with room for the prompt. The check is what
+ * makes a registry entry with a tiny context a fallback instead of a failure.
+ *
+ * @param {{ context: number, shortlist: number } | null} model
+ * @param {number} [options]
+ * @returns {boolean}
+ */
+export function modelFits(model, options = 0) {
+  if (!model) {
+    return false;
+  }
+
+  const count = Number.isInteger(options) ? options : 0;
+
+  return model.shortlist >= count && model.context >= count * 128;
 }
