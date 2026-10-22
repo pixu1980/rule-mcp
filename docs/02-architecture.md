@@ -80,7 +80,7 @@ Live counts and the Command · Tool · Skill table: [Surface map](./16-surface-m
 | Agent/IDE command targets | 13    | `src/core/agents/command-targets/index.js`    |
 | CLI commands              | 25    | `src/cli/_program.js`                         |
 | Hook events               | 4     | `src/core/agents/_hooks.js`                   |
-| Architecture decisions    | 155   | [`docs/adr/ADR.md`](adr/ADR.md)               |
+| Architecture decisions    | 156   | [`docs/adr/ADR.md`](adr/ADR.md)               |
 
 Regenerate with `pnpm census`. The inventories themselves are
 [`08-skills.md`](08-skills.md) through [`15-resources.md`](15-resources.md).

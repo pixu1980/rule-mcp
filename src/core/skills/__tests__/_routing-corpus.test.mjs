@@ -36,7 +36,7 @@ process.env.RULE_MCP_NO_CACHE = "1";
 process.env.RULE_MCP_SKILL_UNIVERSE = "base";
 
 const { loadAllSkills } = await import("../index.js");
-const { callTool } = await import("../../../tools/router/index.js");
+const { callTool, getSkillNames } = await import("../../../tools/router/index.js");
 const { CORPUS, NONSENSE, PERSONAS, NOT_PERSONAS } = await import("../../../../tests/fixtures/routing-corpus.mjs");
 
 /** Measured at 87% exact and 100% top-or-alt when BM25 landed (ADR 048).
@@ -63,6 +63,15 @@ for (const entry of CORPUS) {
     inAlternatives: alternatives.some((name) => name.includes(entry.expect)),
   });
 }
+
+test("every corpus expectation names a skill that exists", () => {
+  const skillNames = getSkillNames();
+  const unknown = CORPUS.filter((entry) => !skillNames.some((name) => name.includes(entry.expect))).map(
+    (entry) => `${entry.expect} (${entry.prompt})`,
+  );
+
+  assert.deepEqual(unknown, [], `the corpus expects a skill no skill carries:\n  ${unknown.join("\n  ")}`);
+});
 
 test("the corpus routes to the intended skill", () => {
   const exact = results.filter((result) => result.exact).length;
