@@ -42,3 +42,13 @@ Dependencies: confirm the owner's release-signing, supported-version, moderation
 - [ ] **Step 8 - OSS-08 (low)**: README entry page has no direct links to contribution, governance, conduct or security policies
   - [ ] **8.1**: Add concise links to CONTRIBUTING.md, GOVERNANCE.md, CODE_OF_CONDUCT.md, MAINTAINERS.md and SECURITY.md to the README landing page.
   - [ ] **8.2**: Check each link locally and keep the handbook reference links intact.
+
+## Model assignment
+
+Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
+
+| Step | Class | Model | Why |
+| ---- | ----- | ----- | --- |
+| the whole plan | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
+
+Plan default: `T1-plan` - `gemini-4-argon` (high). Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.

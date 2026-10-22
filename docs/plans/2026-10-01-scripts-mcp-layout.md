@@ -192,3 +192,13 @@ Must find zero hits for:
 - Extracting `core/text` into shared
 - Skills depending on shared
 - Extra packages beyond `mcp` / `shared` / `docs`
+
+## Model assignment
+
+Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
+
+| Step | Class | Model | Why |
+| ---- | ----- | ----- | --- |
+| the whole plan | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
+
+Plan default: `T1-plan` - `gemini-4-argon` (high). Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
