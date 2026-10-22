@@ -57,9 +57,9 @@ WS-0  session map adapters (list/sort/identify current)     EX-02
 
 ## Env
 
-| Variable | Default | Meaning |
-| -------- | ------- | ------- |
-| `RULE_MCP_EXPORT_KEEP_SESSIONS` | `5` | Newest sessions retained on cleanup (current always retained even if outside top N) |
+| Variable                              | Default | Meaning                                                                             |
+| ------------------------------------- | ------- | ----------------------------------------------------------------------------------- |
+| `RULE_MCP_EXPORT_KEEP_SESSIONS` | `5`     | Newest sessions retained on cleanup (current always retained even if outside top N) |
 
 Honor `RULE_MCP_NO_CACHE` for cache writes like other caches.
 
@@ -160,8 +160,8 @@ never delete.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
+| Step           | Class      | Model            | Why                                       |
+| -------------- | ---------- | ---------------- | ----------------------------------------- |
 | the whole plan | `T3-rules` | `kimi-k2.7-code` | the export path is code and configuration |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.

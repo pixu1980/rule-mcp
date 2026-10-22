@@ -16,13 +16,13 @@ the restored `/rule-adr` (ADR + keep). No implementation in this pass.
 
 `src/core/agents/transcripts/_registry.js` — `AGENT_TRANSCRIPTS`:
 
-| Agent | Usage read | Session roots (project-scoped) |
-| ----- | ---------- | ------------------------------ |
-| pi | yes | `~/.pi/agent/sessions/<pi-slug>/` (JSONL per session) |
-| claude | yes | `~/.claude/projects/<claude-slug>/` (JSONL per session) |
-| codex | yes | `~/.codex/sessions/YYYY/MM/DD/rollout-*.jsonl` (filter `session_meta.cwd`) |
-| opencode | yes | `~/.local/share/opencode/storage/message/` (JSON per message; project via `path.root`/`cwd`) |
-| copilot, cursor, windsurf, vibe | no | documented `reason`; no usage schema |
+| Agent                           | Usage read | Session roots (project-scoped)                                                               |
+| ------------------------------- | ---------- | -------------------------------------------------------------------------------------------- |
+| pi                              | yes        | `~/.pi/agent/sessions/<pi-slug>/` (JSONL per session)                                        |
+| claude                          | yes        | `~/.claude/projects/<claude-slug>/` (JSONL per session)                                      |
+| codex                           | yes        | `~/.codex/sessions/YYYY/MM/DD/rollout-*.jsonl` (filter `session_meta.cwd`)                   |
+| opencode                        | yes        | `~/.local/share/opencode/storage/message/` (JSON per message; project via `path.root`/`cwd`) |
+| copilot, cursor, windsurf, vibe | no         | documented `reason`; no usage schema                                                         |
 
 Helpers: `filesUnder`, `readJsonl`, `slugsFor`, windowing in `_window.js`.
 Readers aggregate **usage tallies**; they do **not** yet expose a first-class
@@ -75,12 +75,12 @@ still gates on transcript capability, not merely "MCP installed".
 
 ## Locked product decisions (interview)
 
-| # | Decision |
-| - | -------- |
-| Pipeline | scan → merge telemetry → emit `.flight` → optional cleanup |
-| Cache | new decision-cache (export-owned) + tool-cache promote where safe |
-| Agents v1 | pi/claude/codex/opencode only; others deferred with reason |
-| Cleanup | hard delete after confirm; keep newest N **∪** current session |
+| #                 | Decision                                                          |
+| ----------------- | ----------------------------------------------------------------- |
+| Pipeline          | scan → merge telemetry → emit `.flight` → optional cleanup        |
+| Cache             | new decision-cache (export-owned) + tool-cache promote where safe |
+| Agents v1         | pi/claude/codex/opencode only; others deferred with reason        |
+| Cleanup           | hard delete after confirm; keep newest N **∪** current session    |
 | Dubious decisions | heuristic triage + interview now; hook short-circuit waits for DM |
-| Env | `RULE_MCP_EXPORT_KEEP_SESSIONS` default `5` |
-| Base | `main` |
+| Env               | `RULE_MCP_EXPORT_KEEP_SESSIONS` default `5`                 |
+| Base              | `main`                                                            |

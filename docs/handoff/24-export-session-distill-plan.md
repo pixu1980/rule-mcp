@@ -21,15 +21,15 @@ export track.
 
 ### Locked decisions
 
-| Topic | Choice |
-| ----- | ------ |
-| Pipeline | scan sessions (CWD) → merge MCP telemetry → emit `.flight` → optional cleanup |
-| Cache | export-owned **decision-cache** + tool-cache promote where safe |
-| Agents v1 | pi / claude / codex / opencode only; others deferred with registry `reason` |
-| Cleanup | hard delete after confirm; keep newest N ∪ current; env `RULE_MCP_EXPORT_KEEP_SESSIONS` default 5 |
-| Dubious decisions | heuristic interview now writes pending/confirmed; hook short-circuit waits for decision-models |
-| `/rule-adr` | restore as ADR via `rule_tool_process_adr` **plus** `/rule-keep` (product ADR required; undoes handoff 13 removal for this reason) |
-| Base | `main` |
+| Topic             | Choice                                                                                                                           |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Pipeline          | scan sessions (CWD) → merge MCP telemetry → emit `.flight` → optional cleanup                                                    |
+| Cache             | export-owned **decision-cache** + tool-cache promote where safe                                                                  |
+| Agents v1         | pi / claude / codex / opencode only; others deferred with registry `reason`                                                      |
+| Cleanup           | hard delete after confirm; keep newest N ∪ current; env `RULE_MCP_EXPORT_KEEP_SESSIONS` default 5                          |
+| Dubious decisions | heuristic interview now writes pending/confirmed; hook short-circuit waits for decision-models                                   |
+| `/rule-adr`        | restore as ADR via `rule_tool_process_adr` **plus** `/rule-keep` (product ADR required; undoes handoff 13 removal for this reason) |
+| Base              | `main`                                                                                                                           |
 
 ### Open review findings
 
