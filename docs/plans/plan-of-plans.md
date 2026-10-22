@@ -375,7 +375,15 @@ Stage 0 gate record (2026-10-22, ADR 135):
 - `pnpm lint`: exit `0` (`0 errors, 36 warnings`, under `--max-warnings 50`).
 - `pnpm census:check`: exit `0` (`the census is current` after regenerating `tests/fixtures/census.json`).
 - `node --import ./scripts/alias-hook.mjs --test tests/release/workflow.test.mjs tests/docs/security-policy.test.mjs tests/docs/dco.test.mjs tests/docs/link-integrity.test.mjs tests/docs/docs-accuracy.test.mjs`: `25/25` pass.
-- `pnpm test:all`: remaining failures on this machine are the two pre-existing environment items outside Stage 0 (`core.hooksPath` in global git config rejecting scope-less fixture commits `first`/`base`/`a` in `docs-numbering-doctor` and `handon`/`handoff` fixtures, and the sync-banner `content[0]` shift documented in section 13).
+- `pnpm test:all`: exit `1`. Neutralizing the machine's global `core.hooksPath`
+  (a temporary `GIT_CONFIG_GLOBAL` carrying only `user.*`) takes the 119 `✖`
+  down to the pre-existing failures outside Stage 0: the sync-banner
+  `content[0]` shift in four suites (section 13), and
+  `tests/docs/file-size-budget.test.mjs` naming
+  `src/core/__tests__/_prompt-directive.test.mjs` (152) and
+  `src/core/self-update/_run.js` (202). Two further failures were stale
+  assertions, corrected in `test(drift)`: the core-tool constant in
+  `_minimal-tools` (23 -> 24) and the spacing in `_install-skills`.
 
 Human, and only there:
 
