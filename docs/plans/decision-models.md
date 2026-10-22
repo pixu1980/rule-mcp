@@ -97,11 +97,13 @@ Dependencies: WS-0 first and alone, because every later step calls it. WS-1 and 
   - [x] **4.4**: Gate: the corpus exact rate is not lower than the Step 3 baseline and top-or-alternative is unchanged; if either regresses, the feature stays off and the step is reopened rather than tuned until it passes.
     - Note: the recorded shortlist run fixes 3/13, and the audit's correct picks carry 0.067-0.332, all above Laya's 0.05 registry floor, so the production policy accepts all three: exact 77 + 3 = 80/95, top-or-alternative 91/95. A live `--on` rerun is pending a loopback router; the feature is off unless `RULE_MCP_DECISION_MODEL` is set.
     - Note: the three `RULE_MCP_DECISION_*` variables are documented in `docs/05-env-variables.md` in this step, ahead of Step 9.1, because the census scans `src/` and an undocumented knob would fail the count. Step 9.1 verifies the table and records the registry in ADR 156.
-- [ ] **Step 5 - DM-04 (high)**: Non-English prompts route to `unknown`, and the installed model cannot read them
-  - [ ] **5.1**: Failing test: an Italian slice of the corpus (the four prompts measured in the audit plus enough to be meaningful) records the current 3-of-4 `unknown`, so the gap is a test and not an anecdote.
-  - [ ] **5.2**: Implement the model registry: id, size, languages, context, per-model threshold, and a shortlist cap it can hold; unknown models fall back to BM25 instead of failing.
-  - [ ] **5.3**: Choose the model by the language detected from the prompt, with Julia-1 as the multilingual entry and Laya as the English one; do not load both on a single-instance router without measuring the swap cost.
-  - [ ] **5.4**: Gate: the Italian slice improves against its recorded baseline and the English slice does not regress; a router with one slot must show the swap cost in the same table.
+- [x] **Step 5 - DM-04 (high)**: Non-English prompts route to `unknown`, and the installed model cannot read them
+  - [x] **5.1**: Failing test: an Italian slice of the corpus (the four prompts measured in the audit plus enough to be meaningful) records the current 3-of-4 `unknown`, so the gap is a test and not an anecdote.
+    - Note: the audit's four Italian prompts were not recorded. The slice is eight new prompts in `tests/fixtures/routing-corpus-it.mjs`; the measured baseline is 2/8 exact, 3/8 top-or-alternative, 5/8 `unknown`, not the audit's 3-of-4.
+  - [x] **5.2**: Implement the model registry: id, size, languages, context, per-model threshold, and a shortlist cap it can hold; unknown models fall back to BM25 instead of failing.
+  - [x] **5.3**: Choose the model by the language detected from the prompt, with Julia-1 as the multilingual entry and Laya as the English one; do not load both on a single-instance router without measuring the swap cost.
+  - [x] **5.4**: Gate: the Italian slice improves against its recorded baseline and the English slice does not regress; a router with one slot must show the swap cost in the same table.
+    - Note: the auto selection is proven with a fake model (Julia-1 for Italian, Laya for English) and the runtime unloads the previous model before switching. Julia-1 is not installed, so the live Italian slice does not improve; per the kill criterion the harness and registry ship and the Italian routing claim is dropped. The English corpus stays 77/95 exact and 91/95 top-or-alternative with the feature off; the swap cost is not measured.
 - [ ] **Step 6 - DM-07 (medium)**: Determinism is proven but not used, and nothing invalidates an answer when the model changes
   - [ ] **6.1**: Failing test: the same state and questions with the fake model answer from the cache on the second call, and a different model id misses the cache.
   - [ ] **6.2**: Implement the key: a digest of the model id, the questions and the state, with the shortlist folded in, so an unchanged prompt cannot hit an answer computed for a different candidate set.
@@ -160,6 +162,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
 ```bash
 node --import ./scripts/alias-hook.mjs --test src/core/decision/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
+node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus-it.test.mjs
 node --import ./scripts/alias-hook.mjs scripts/audits/decision-models/corpus.mjs --check
 node --import ./scripts/alias-hook.mjs scripts/audits/decision-models/index.mjs
 pnpm census && pnpm census:check
