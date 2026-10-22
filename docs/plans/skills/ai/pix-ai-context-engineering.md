@@ -1,7 +1,7 @@
 # rule-ai-context-engineering - plan
 
-Status: plan only, 2026-10-21. Index row `#82`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#82`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: ai, leaf. **195 lines**, one file, no `guardrails/`, **no dispatcher row**,
 no `inherits:`. Siblings: `rule-ai-prompting`, `rule-ai-evals`,
@@ -31,6 +31,16 @@ number in it is a preference.
 | `context-owner-named` | A section delegating prompting, evals or the handoff tool without naming the owner | B | partially red |
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD)
+
+Feeds: `rule-ai` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 

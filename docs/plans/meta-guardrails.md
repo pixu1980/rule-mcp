@@ -1,8 +1,7 @@
 # rule-meta guardrails execution plan
 
-Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153).
-Absorbed by: the four rule-meta leaves, one rule set per plan.
-Graph: not a node; see the absorbed table in `skills-plan.md`.
+Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four rule-meta leaves.
+Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four rule-meta leaves. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four rule-meta leaves, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
 
 Scope: give the meta-framework area its first deterministic guardrails, focused
 on the server/client boundary, and record every rule against a citable public
@@ -94,6 +93,16 @@ name ends in `_KEY`, `_SECRET`, `_TOKEN` or `_PASSWORD` is the signal.
    an inheritance test once the open item is decided.
 
 ## Phases
+
+## Dependency graph
+
+Absorbed or outside the graph: listed for completeness, not executed as a node.
+
+Depends on: -
+
+Feeds: -
+
+Shared files: none: absorbed into the leaf plans named above
 
 ### Phase 0 - Decisions and scaffolding
 

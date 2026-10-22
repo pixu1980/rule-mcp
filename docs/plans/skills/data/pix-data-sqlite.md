@@ -1,7 +1,7 @@
 # rule-data-sqlite - plan
 
-Status: plan only, 2026-10-21. Index row `#63`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#63`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: data, leaf. **243 lines**, one file, no auxiliary folders. Siblings:
 `rule-data-sql`, `rule-data-postgresql`, `rule-data-mysql`, `rule-data-mongodb`,
@@ -42,6 +42,16 @@ the planner, and **off at runtime** unless the pragma runs on every connection.
 | `sqlite-owner-named` | A section delegating generic SQL, pooling or migrations without naming the owner | B | partially red |
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD), `rule-data-sql` (ORDER)
+
+Feeds: `rule-data` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 

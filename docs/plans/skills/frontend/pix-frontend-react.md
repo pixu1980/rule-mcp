@@ -1,7 +1,7 @@
 # rule-frontend-react - plan
 
-Status: plan only, 2026-10-21. Index row `#53`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#53`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: frontend, framework leaf, and the largest one. Sibling plans:
 `rule-frontend-vue`, `rule-frontend-svelte`, `rule-frontend-solidjs` (same shape),
@@ -185,6 +185,16 @@ node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing
 pnpm census && pnpm census:check
 pnpm lint
 ```
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD), `rule-platform-desktop#3` (CONTRACT)
+
+Feeds: `rule-frontend` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ## Open notes
 

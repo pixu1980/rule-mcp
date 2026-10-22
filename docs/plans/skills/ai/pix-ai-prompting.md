@@ -1,7 +1,7 @@
 # rule-ai-prompting - plan
 
-Status: plan only, 2026-10-21. Index row `#80`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#80`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: ai, leaf. **159 lines**, one file, no `guardrails/`, **no dispatcher row**
 (zero occurrences in `rule/SKILL.md`), and no `inherits:` line. Siblings:
@@ -45,6 +45,16 @@ prompt, and it owns three things ADR 137 does not name:
 | `ai-prompt-owner-named` | A section delegating context, evals or lifecycle without naming the owner | B | partially red |
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD)
+
+Feeds: `rule-ai` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 

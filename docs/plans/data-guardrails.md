@@ -1,8 +1,7 @@
 # rule-data guardrails execution plan
 
-Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153).
-Absorbed by: rule-data and the eight data leaves, one rule set per plan.
-Graph: not a node; see the absorbed table in `skills-plan.md`.
+Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-data and the eight data leaves.
+Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-data and the eight data leaves. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-data and the eight data leaves, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
 
 Scope: extend the four guardrails the data area already owns and add
 engine-specific rules, each against a citable public source. Implementation
@@ -111,6 +110,16 @@ Tier B: `mongo-esr-index`, `db-least-privilege`, `migration-down`.
    an inheritance test that asserts the rule reaches the right child.
 
 ## Phases
+
+## Dependency graph
+
+Absorbed or outside the graph: listed for completeness, not executed as a node.
+
+Depends on: -
+
+Feeds: -
+
+Shared files: none: absorbed into the leaf plans named above
 
 ### Phase 0 - Decisions and scaffolding
 

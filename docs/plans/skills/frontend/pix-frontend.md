@@ -1,7 +1,7 @@
 # rule-frontend - plan
 
-Status: plan only, 2026-10-21. Index row `#56`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#56`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: frontend, router, planned last in the area (`DEPENDENCIES.md`). Sibling
 plans: the seven leaves (`workers`, `vue`, `svelte`, `solidjs`, `react`,
@@ -135,6 +135,16 @@ node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing
 pnpm census && pnpm census:check
 pnpm lint
 ```
+
+## Dependency graph
+
+The router closes after its leaves and after the shared router rules and the route-table generator are exported.
+
+Depends on: `rule-frontend-angular` (HARD), `rule-frontend-react` (HARD), `rule-frontend-solidjs` (HARD), `rule-frontend-svelte` (HARD), `rule-frontend-template-engine` (HARD), `rule-frontend-vue` (HARD), `rule-frontend-workers` (HARD), `rule-process#2` (CONTRACT), `rule-process#3` (CONTRACT)
+
+Feeds: —
+
+Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ## Open notes
 

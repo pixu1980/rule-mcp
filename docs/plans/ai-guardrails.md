@@ -1,8 +1,7 @@
 # rule-ai guardrails execution plan
 
-Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153).
-Absorbed by: rule-ai-agent-architecture, one rule set per plan.
-Graph: not a node; see the absorbed table in `skills-plan.md`.
+Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-ai-agent-architecture.
+Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-ai-agent-architecture. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-ai-agent-architecture, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
 
 Scope: give the AI area its first deterministic guardrails, keep the rest of the
 area narrative, and record every rule against a citable public source.
@@ -98,6 +97,16 @@ carries the prompt and model version. Only one of the two owns each claim.
    decided.
 
 ## Phases
+
+## Dependency graph
+
+Absorbed or outside the graph: listed for completeness, not executed as a node.
+
+Depends on: -
+
+Feeds: -
+
+Shared files: none: absorbed into the leaf plans named above
 
 ### Phase 0 - Decisions and scaffolding
 

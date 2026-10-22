@@ -1,7 +1,7 @@
 # rule-ai-agent-architecture - plan
 
-Status: plan only, 2026-10-21. Index row `#83`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#83`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: ai, leaf and the area's architectural centre. **205 lines**, one file, no
 `guardrails/`, **no dispatcher row**, no `inherits:` (it had one until this
@@ -63,6 +63,16 @@ Eight from ADR 137 plus three of its own:
 | `agent-owner-named` | A section delegating context, evals, telemetry or the tool surface without naming the owner | B | partially red |
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD)
+
+Feeds: `rule-ai` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 

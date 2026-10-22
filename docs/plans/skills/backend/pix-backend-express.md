@@ -1,7 +1,7 @@
 # rule-backend-express - plan
 
-Status: plan only, 2026-10-21. Index row `#78`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#78`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: backend, leaf. **153 lines**, one file, no `guardrails/`. It inherits the
 router's six rules through `inherits: [rule-backend]`.
@@ -42,6 +42,16 @@ most common Express bug, it is stated in the body, and no rule checks it.
 | `express-owner-named` | A section delegating validation, pooling or layout without naming the owner | B | partially red |
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD)
+
+Feeds: `rule-backend` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 

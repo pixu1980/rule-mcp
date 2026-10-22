@@ -1,10 +1,7 @@
 # rule-method - the methodology family and its guardrails
 
-Status: revision 2, 2026-10-21. Written for `skills/rule-process-bmad`; the
-family it describes is now `rule-method`. This file replaces the previous
-"best-practice implementation plan" in place, and then supersedes its own
-single-skill scope: the owner decided on 2026-10-21 that each methodology gets
-a skill, under a new `rule-method` area.
+Status: `planned`
+Notes:`planned` Notes:revision 2, 2026-10-21. Written for `skills/rule-process-bmad`; the family it describes is now `rule-method`. This file replaces the previous "best-practice implementation plan" in place, and then supersedes its own single-skill scope: the owner decided on 2026-10-21 that each methodology gets a skill, under a new `rule-method` area.
 
 Area: method. Old index row: `#32`, `rule-process-bmad` (process). Read this
 plan together with ADR 149 (superseded by 150) and ADR 150.
@@ -144,6 +141,18 @@ Repo-relative, POSIX separators, no leading `./`. A rule that receives no
 failure, the same stance the project layer takes on an unreachable graph.
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD)
+
+Feeds: `rule-process` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
+
+Produces: `rule-method`
 
 ### Phase 0 - Lock the decisions
 

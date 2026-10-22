@@ -1,8 +1,7 @@
 # rule-ui-design-system - best-practice implementation plan
 
-Status: plan only. Each skill waits for the owner before implementation.
-Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`.
-Index: `docs/plans/skills/README.md`.
+Status: `planned`
+Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
 
 Area: ui. Order: reverse alphabetical, started from this skill.
 
@@ -157,6 +156,16 @@ owns the rest of the state matrix. The two never check the same property.
 - A case-study fixture under `case-studies/` with tokens, button, form and card.
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD)
+
+Feeds: `rule-ui` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions and scaffolding
 

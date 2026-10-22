@@ -1,7 +1,7 @@
 # rule-frontend-vue - plan
 
-Status: plan only, 2026-10-21. Index row `#48`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#48`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: frontend, framework leaf. Sibling plans: `rule-frontend-workers` (same
 series), the other framework leaves, and `rule-frontend` (the area router).
@@ -169,6 +169,16 @@ node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing
 pnpm census && pnpm census:check
 pnpm lint
 ```
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD), `rule-platform-desktop#3` (CONTRACT)
+
+Feeds: `rule-frontend` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ## Open notes
 

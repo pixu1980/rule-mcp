@@ -1,9 +1,7 @@
 # Port plan: ADR policy, project installs, features, host paths
 
-Status: `planned`.
-Outside the skills graph: this plan covers repository policy and the
-installer, not skills, so it is not a node in
-`docs/plans/skills/skills-plan.md` and is tracked on its own.
+Status: `planned`
+Notes:`planned` Notes:`planned`. Outside the skills graph: this plan covers repository policy and the installer, not skills, so it is not a node in `docs/plans/skills/skills-plan.md` and is tracked on its own.
 
 A sibling project shipped this set of installer and documentation changes on 2026-10-18. This plan
 replays it here, adapted to this repository's names (`rule-mcp`, `RULE_MCP_*`,
@@ -292,3 +290,17 @@ rule-mcp handoff doctor
 ```
 
 Then `/rule-handoff close-feature` and hand the person the close command. Never push.
+
+## Dependency graph
+
+Absorbed or outside the graph: listed for completeness, not executed as a node.
+
+Depends on: -
+
+Feeds: -
+
+Shared files: none: outside the skills graph
+
+## Steps
+
+- [ ] Diff each ported subsystem against this repository and keep what is already better.

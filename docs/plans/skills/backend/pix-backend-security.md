@@ -1,7 +1,7 @@
 # rule-backend-security - plan
 
-Status: plan only, 2026-10-21. Index row `#72`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#72`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: backend, leaf and the area's security owner. **425 lines**, one file, no
 `guardrails/`. It inherits the router's six rules through `inherits: [rule-backend]`.
@@ -54,6 +54,16 @@ level down. The rules exist; the prose should point at them.
 | `security-owner-named` | A section that keeps the auth strategy instead of pointing at `rule-platform-auth` | B | **red** |
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD), `rule-platform-auth` (HARD)
+
+Feeds: `rule-backend` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 

@@ -1,8 +1,7 @@
 # rule-styleguide - best-practice implementation plan
 
-Status: plan only.
-Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`.
-Index: `docs/plans/skills/README.md`.
+Status: `planned`
+Notes:`planned` Notes: plan only. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
 
 Area: styleguide. Order: reverse alphabetical, twenty-ninth skill (the area
 router).
@@ -139,6 +138,16 @@ Owned by `rule`, inherited here; advisory first, blocking after the corpus gate.
 6. The existing content and link-integrity tests, plus `pnpm census`.
 
 ## Phases
+
+## Dependency graph
+
+The router closes after its leaves and after the shared router rules and the route-table generator are exported.
+
+Depends on: `rule-styleguide-a11y` (HARD), `rule-styleguide-baseline` (HARD), `rule-styleguide-comments` (HARD), `rule-styleguide-configuration` (HARD), `rule-styleguide-css` (HARD), `rule-styleguide-file-tree` (HARD), `rule-styleguide-git` (HARD), `rule-styleguide-html` (HARD), `rule-styleguide-i18n` (HARD), `rule-styleguide-javascript` (HARD), `rule-styleguide-json` (HARD), `rule-styleguide-markdown` (HARD), `rule-styleguide-naming` (HARD), `rule-styleguide-typescript` (HARD), `rule-process#2` (CONTRACT), `rule-process#3` (CONTRACT)
+
+Feeds: —
+
+Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions and scaffolding
 

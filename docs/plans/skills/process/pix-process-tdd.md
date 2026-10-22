@@ -1,8 +1,7 @@
 # rule-process-tdd - best-practice implementation plan
 
-Status: plan only. Each skill waits for the owner before implementation.
-Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`.
-Index: `docs/plans/skills/README.md`.
+Status: `planned`
+Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
 
 Area: process. Order: reverse alphabetical, thirtieth skill, and the first of
 the process area.
@@ -234,6 +233,16 @@ None. The four templates already exist in the scaffold catalog and only the name
 `components` needs correcting, so this plan ships no new asset.
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD), `rule-platform-mobile#2` (CONTRACT)
+
+Feeds: `rule-process` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Evaluation and decisions
 

@@ -8,8 +8,9 @@ Run order and the four real dependencies: [`DEPENDENCIES.md`](DEPENDENCIES.md).
 Live ordering authority, stages, gates and per-plan progress:
 [`skills-plan.md`](skills-plan.md).
 
-Total: 81 skills in the catalog, each with a plan, plus one planned skill that
-does not exist yet (`rule-platform-mobile`, number 85). Numbers 40, 49 and 54 are
+Total: 81 skills in the catalog, each with a plan, plus three planned skills that
+do not exist yet: `rule-platform-mobile` (85), `rule-toolchain-electron` (86) and
+`rule-toolchain-tauri` (87). Numbers 40, 49 and 54 are
 retired: those skills were removed from the catalog and their plans are gone.
 New rows append and existing numbers stay put, so the `#NN` references in the
 plans keep pointing at the same skill.
@@ -98,3 +99,5 @@ plans keep pointing at the same skill.
 | 83  | `rule-ai-agent-architecture`     | ai         | `docs/plans/skills/ai/rule-ai-agent-architecture.md`            | planned |
 | 84  | `rule-ai`                        | ai         | `docs/plans/skills/ai/rule-ai.md`                               | planned |
 | 85  | `rule-platform-mobile`           | platform   | `docs/plans/skills/platform/rule-platform-mobile.md`            | planned |
+| 86  | `rule-toolchain-electron`        | toolchain  | `docs/plans/skills/toolchain/rule-toolchain-electron.md`        | planned |
+| 87  | `rule-toolchain-tauri`           | toolchain  | `docs/plans/skills/toolchain/rule-toolchain-tauri.md`           | planned |

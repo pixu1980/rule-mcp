@@ -1,7 +1,7 @@
 # rule-ai-evals - plan
 
-Status: plan only, 2026-10-21. Index row `#81`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#81`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: ai, leaf. **247 lines**, one file, no `guardrails/`, **no dispatcher row**,
 no `inherits:`. Siblings: `rule-ai-prompting`, `rule-ai-context-engineering`,
@@ -31,6 +31,16 @@ three that make an eval worth running.
 | `eval-owner-named` | A section delegating the harness, telemetry or review process without naming the owner | B | partially red |
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD)
+
+Feeds: `rule-ai` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 

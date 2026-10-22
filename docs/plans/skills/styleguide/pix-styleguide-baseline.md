@@ -1,9 +1,7 @@
 # rule-styleguide-baseline - best-practice implementation plan
 
-Status: plan plus the vocabulary alignment, the floor section and the three
-corpus fixes, applied now.
-Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`.
-Index: `docs/plans/skills/README.md`.
+Status: `planned`
+Notes:`planned` Notes: plan plus the vocabulary alignment, the floor section and the three corpus fixes, applied now. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
 
 Area: styleguide. Order: reverse alphabetical, twenty-seventh skill.
 
@@ -122,6 +120,16 @@ they start as advisory and earn their tier on the corpus.
    word; note it for the English plan rather than working around it here.
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD)
+
+Feeds: `rule-styleguide` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions and scaffolding
 

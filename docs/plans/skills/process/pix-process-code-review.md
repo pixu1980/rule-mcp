@@ -1,8 +1,7 @@
 # rule-process-code-review - best-practice implementation plan
 
-Status: plan only. Each skill waits for the owner before implementation.
-Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`.
-Index: `docs/plans/skills/README.md`. Order: `docs/plans/skills/DEPENDENCIES.md`, after `rule-process-npm-release`.
+Status: `planned`
+Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`. Order: `docs/plans/skills/DEPENDENCIES.md`, after `rule-process-npm-release`.
 
 Area: process. Order: reverse alphabetical, thirtieth skill.
 
@@ -91,6 +90,16 @@ The template rule blocks because a pull request without those five statements is
 | `review-evidence-resolves` | an evidence pointer at a path that does not exist          | B    | `src/core/review/docs` |
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD)
+
+Feeds: `rule-process` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Evaluation and decisions
 

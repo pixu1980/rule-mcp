@@ -1,7 +1,7 @@
 # rule-data-indexed-db - plan
 
-Status: plan only, 2026-10-21. Index row `#68`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#68`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: data, leaf. **323 lines**, one file, no auxiliary folders. Siblings:
 `rule-data-sql`, `rule-data-postgresql`, `rule-data-mysql`, `rule-data-mongodb`,
@@ -45,6 +45,16 @@ transaction lets the transaction auto-commit, and the next request throws.
 | `idb-no-stale-skill-id` | A `rule-...` id with no skill directory | B | clean |
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD), `rule-data-sql` (ORDER)
+
+Feeds: `rule-data` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 

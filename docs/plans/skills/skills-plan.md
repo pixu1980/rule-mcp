@@ -99,102 +99,165 @@ other marker form. The test normalises `[X]` rather than rejecting it.
 
 ## 5 - The graph, stage by stage
 
-Stages are ordered. Inside a stage, nodes are parallel unless a `HARD` edge says
-otherwise.
+Stages are ordered; inside a stage, nodes are parallel unless a `HARD` edge says
+otherwise. Every node appears in exactly one table, so the counts can be summed
+instead of asserted: **85 nodes**. A `CONTRACT` edge names a phase and is exempt
+from the stage rule, because what closes first is the phase, not the plan (ADR 154).
 
-### Stage 0 - Foundations (contract exports, in this order)
+### Stage 0a - Foundations: the prose and scope rules
 
-| Order | Node | Exports |
-| ----- | ---- | ------- |
-| 1 | `rule-process-ai` | prose, scope and gate rules (P1) |
-| 2 | `rule-process-adr` | ADR record format, `reviewed:` mechanism |
-| 3 | `rule-platform-desktop#3` | served-references surface (P5) |
-| 4 | `rule-process#2`, `rule-process#3` | the 6 shared router rules and the route-table generator (P4) |
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `rule-process-ai` | leaf | router of the area |
 
-The order inside the stage is deliberate: the prose rules govern every later
-commit, the ADR format governs every later record, and only then do the two
-contracts that unblock 9 and 7 plans respectively.
+### Stage 0b - Foundations: the ADR record format
 
-Gate: the export phases are closed and their contracts are named in the plans
-that consume them. **Human gate** on `rule-process-adr` (it defines the record
-format for every later plan) and on the whole stage before stage 1 starts.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `rule-process-adr` | leaf | router of the area |
 
-### Stage 1 - ui, toolchain (12 nodes)
+### Stage 1 - ui, toolchain
 
-`rule-ui`, `rule-ui-design-system`, the 8 `rule-toolchain-*` skill plans,
-`bundler-family` (the shared contract those bundler leaves inherit) and
-`rule-toolchain` if P2 lets it in. `rule-toolchain-electron` and
-`rule-toolchain-tauri` do not exist yet and have no plan: they are deliverables of
-`rule-platform-desktop#4` and become nodes when their plans are written.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `bundler-family` | cross | the three bundler leaves |
+| `rule-toolchain-biome` | leaf | router of the area |
+| `rule-toolchain-eslint` | leaf | router of the area |
+| `rule-toolchain-husky` | leaf | router of the area |
+| `rule-toolchain-parcel` | leaf | router of the area |
+| `rule-toolchain-pnpm` | leaf | router of the area |
+| `rule-toolchain-rspack` | leaf | router of the area |
+| `rule-toolchain-turborepo` | leaf | router of the area |
+| `rule-toolchain-vite` | leaf | router of the area |
+| `rule-ui-design-system` | leaf | router of the area |
 
-Gate: `_router-child-coverage` and `_corpus` green.
+### Stage 2 - styleguide, process leaves
 
-### Stage 2 - styleguide, process leaves (22 nodes)
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `rule-process-bmad` | leaf | the area router, and produces `rule-method` |
+| `rule-process-changelog` | leaf | router of the area |
+| `rule-process-code-review` | leaf | router of the area |
+| `rule-process-npm-release` | leaf | router of the area |
+| `rule-process-readme` | leaf | router of the area |
+| `rule-styleguide-a11y` | leaf | router of the area |
+| `rule-styleguide-baseline` | leaf | router of the area |
+| `rule-styleguide-comments` | leaf | router of the area |
+| `rule-styleguide-configuration` | leaf | router of the area |
+| `rule-styleguide-css` | leaf | router of the area |
+| `rule-styleguide-file-tree` | leaf | router of the area |
+| `rule-styleguide-git` | leaf | router of the area |
+| `rule-styleguide-html` | leaf | router of the area |
+| `rule-styleguide-i18n` | leaf | router of the area |
+| `rule-styleguide-javascript` | leaf | router of the area |
+| `rule-styleguide-json` | leaf | router of the area |
+| `rule-styleguide-markdown` | leaf | router of the area |
+| `rule-styleguide-naming` | leaf | router of the area |
+| `rule-styleguide-typescript` | leaf | router of the area |
 
-15 styleguide nodes and the 7 process leaves. `rule-process-bmad` closes here (P3)
-and exports the `rule-method` family. `rule-process-tdd` is **not** in this stage:
-it carries a `CONTRACT` edge to `rule-platform-mobile#2` and moves to stage 4.
+### Stage 3a - platform: the umbrella that exports the references surface
 
-Gate: corpus green. **Human gate** on `rule-process-bmad` (it renames a family).
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `rule-platform-desktop` | leaf | router of the area |
 
-### Stage 3 - platform leaves (6 nodes)
+### Stage 3b - platform: the other leaves
 
-`rule-platform-web`, `rule-platform-library`, `rule-platform-auth`,
-`rule-platform-desktop`, `rule-platform-mobile`, and `rule-platform` if P2 lets it
-in. `rule-platform-agent` is not a node: removed in ADR 151, its plan with it.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `rule-platform-auth` | leaf | router of the area |
+| `rule-platform-library` | leaf | router of the area |
+| `rule-platform-mobile` | leaf | router of the area |
+| `rule-platform-web` | leaf | router of the area |
 
-`rule-platform-desktop#4` creates `rule-toolchain-electron` and
-`rule-toolchain-tauri`, which become nodes only when their plans are written.
+### Stage 4 - meta leaves, process-tdd and the two desktop runtimes
 
-Gate: the 9 references-consuming plans in stage 4+ can now start.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `rule-meta-astro` | leaf | router of the area |
+| `rule-meta-next` | leaf | router of the area |
+| `rule-meta-nuxt` | leaf | router of the area |
+| `rule-meta-remix` | leaf | router of the area |
+| `rule-process-tdd` | leaf | router of the area |
+| `rule-toolchain-electron` | leaf | router of the area |
+| `rule-toolchain-tauri` | leaf | router of the area |
 
-### Stage 4 - meta leaves, plus `rule-process-tdd` (6 nodes)
+### Stage 5 - frontend leaves
 
-`rule-meta-astro` (the 347-line scaffold defect), `rule-meta-next`, `rule-meta-nuxt`,
-`rule-meta-remix`, and `rule-process-tdd` once `rule-platform-mobile#2` has exported
-`mobile-test-runner`.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `rule-frontend-angular` | leaf | router of the area |
+| `rule-frontend-react` | leaf | router of the area |
+| `rule-frontend-solidjs` | leaf | router of the area |
+| `rule-frontend-svelte` | leaf | router of the area |
+| `rule-frontend-template-engine` | leaf | router of the area |
+| `rule-frontend-vue` | leaf | router of the area |
+| `rule-frontend-workers` | leaf | router of the area |
 
-### Stage 5 - frontend leaves (7 nodes)
+### Stage 6 - devops leaves
 
-`rule-frontend-workers`, `rule-frontend-vue`, `rule-frontend-svelte`,
-`rule-frontend-solidjs`, `rule-frontend-react`, `rule-frontend-angular`,
-`rule-frontend-template-engine`. The scaffold-termination fix that 7 leaves share
-is a cross-cutting commit in section 6, not a node.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `rule-devops-deploy-preview` | leaf | router of the area |
+| `rule-devops-docker` | leaf | router of the area |
+| `rule-devops-observability` | leaf | router of the area |
+| `rule-devops-testing` | leaf | router of the area |
 
-### Stage 6 - devops leaves (4 nodes)
+### Stage 7a - data: the dialect-neutral leaf
 
-`rule-devops-testing` (exports the runner policy), `rule-devops-docker`,
-`rule-devops-observability`, `rule-devops-deploy-preview`.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `rule-data-sql` | leaf | the seven dialect leaves |
 
-### Stage 7 - data leaves (8 nodes)
+### Stage 7b - data: the dialect leaves
 
-`rule-data-sql` closes first (the four dialect leaves link its generic DDL), then
-`rule-data-sqlite`, `rule-data-postgresql`, `rule-data-mysql`, `rule-data-mongodb`,
-`rule-data-duckdb`, `rule-data-indexed-db`, `rule-data-validation`.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `rule-data-duckdb` | leaf | router of the area |
+| `rule-data-indexed-db` | leaf | router of the area |
+| `rule-data-mongodb` | leaf | router of the area |
+| `rule-data-mysql` | leaf | router of the area |
+| `rule-data-postgresql` | leaf | router of the area |
+| `rule-data-sqlite` | leaf | router of the area |
+| `rule-data-validation` | leaf | router of the area |
 
-### Stage 8 - backend leaves (8 nodes)
+### Stage 8 - backend leaves
 
-`rule-backend-security` (carries a `CONTRACT` edge from `rule-platform-auth`),
-`rule-backend-node`, `rule-backend-nestjs`, `rule-backend-hono`,
-`rule-backend-graphql`, `rule-backend-fastify`, `rule-backend-express`,
-`rule-backend-workers`.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `rule-backend-express` | leaf | router of the area |
+| `rule-backend-fastify` | leaf | router of the area |
+| `rule-backend-graphql` | leaf | router of the area |
+| `rule-backend-hono` | leaf | router of the area |
+| `rule-backend-nestjs` | leaf | router of the area |
+| `rule-backend-node` | leaf | router of the area |
+| `rule-backend-security` | leaf | router of the area |
+| `rule-backend-workers` | leaf | router of the area |
 
-### Stage 9 - ai leaves (4 nodes)
+### Stage 9 - ai leaves
 
-`rule-ai-prompting`, `rule-ai-evals`, `rule-ai-context-engineering`,
-`rule-ai-agent-architecture`. The last one owns ADR 137's eight rules (P10), so the
-area needs no exception and no early router: the rules land in the leaf, and
-`rule-ai` lists them in stage 10 like every other router.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `rule-ai-agent-architecture` | leaf | router of the area |
+| `rule-ai-context-engineering` | leaf | router of the area |
+| `rule-ai-evals` | leaf | router of the area |
+| `rule-ai-prompting` | leaf | router of the area |
 
-### Stage 10 - area routers (11 nodes)
+### Stage 10 - area routers
 
-`rule-ai`, `rule-backend`, `rule-data`, `rule-devops`, `rule-frontend`, `rule-meta`,
-`rule-platform`, `rule-process`, `rule-styleguide`, `rule-toolchain`, `rule-ui`. Each
-is `HARD`-blocked by its own leaves (P2) and, for the seven that carry route
-tables, by `rule-process#2` and `#3` (P4). They are `CONFLICT` with each other on
-the dispatcher and on `router-gaps`, so they serialise.
-
-**Human gate** at area close, per area.
+| Node | Kind | Exits |
+| ---- | ---- | ----- |
+| `rule-ai` | router | none: terminal |
+| `rule-backend` | router | none: terminal |
+| `rule-data` | router | none: terminal |
+| `rule-devops` | router | none: terminal |
+| `rule-frontend` | router | none: terminal |
+| `rule-meta` | router | none: terminal |
+| `rule-platform` | router | none: terminal |
+| `rule-process` | router | none: terminal |
+| `rule-styleguide` | router | none: terminal |
+| `rule-toolchain` | router | none: terminal |
+| `rule-ui` | router | none: terminal |
 
 ## 6 - The cross-cutting commits
 
@@ -250,22 +313,95 @@ Human gates, exactly where they are worth a human:
 ## 9 - Progress table
 
 One row per node. The verification test recomputes the `box` column from each
-file, so a stale row fails rather than misleads. No node is `done`; 35 have at
-least one closed step, all of them the work that landed before this graph existed.
+file, so a stale row fails rather than misleads.
 
-| Area | Nodes | Status | box (closed/total) | Stage |
-| ---- | ----: | ------ | ------------------ | ----- |
-| process | 9 | `in-progress` (7 of 9 started) | adr 0/22, ai 10/22, bmad 4/37, changelog 3/18, code-review 3/16, npm-release 4/19, readme 5/17, tdd 4/19, process 0/25 | 0, 2, 4, 10 |
-| ui | 2 | `in-progress` | 4/21, 4/19 | 1, 10 |
-| toolchain | 10 | `in-progress` | bundler-family 3/6; the 8 skill plans 4 of 18-22 each; toolchain 3/18 | 1, 10 |
-| styleguide | 15 | `in-progress` | 4-9 closed of 15-19 each (baseline and configuration lead at 9) | 2, 10 |
-| platform | 6 | `planned` | 0 each | 3, 10 |
-| meta | 5 | `planned` | 0 each | 4, 10 |
-| frontend | 8 | `planned` | 0 each | 5, 10 |
-| devops | 5 | `planned` | 0 each | 6, 10 |
-| data | 9 | `planned` | validation 4/15; the rest 0 | 7, 10 |
-| backend | 9 | `planned` | 0 each | 8, 10 |
-| ai | 5 | `planned` | 0 each | 9, 10 |
+| Node | Area | Status | box | Stage |
+| ---- | ---- | ------ | --- | ----- |
+| `rule-process-adr` | leaf | planned | 0/22 | 0 |
+| `rule-process-ai` | leaf | in-progress | 10/22 | 0 |
+| `bundler-family` | cross | in-progress | 3/6 | 1 |
+| `rule-toolchain-biome` | leaf | in-progress | 4/18 | 1 |
+| `rule-toolchain-eslint` | leaf | in-progress | 4/19 | 1 |
+| `rule-toolchain-husky` | leaf | in-progress | 4/19 | 1 |
+| `rule-toolchain-parcel` | leaf | in-progress | 4/22 | 1 |
+| `rule-toolchain-pnpm` | leaf | in-progress | 4/20 | 1 |
+| `rule-toolchain-rspack` | leaf | in-progress | 4/20 | 1 |
+| `rule-toolchain-turborepo` | leaf | in-progress | 4/19 | 1 |
+| `rule-toolchain-vite` | leaf | in-progress | 4/19 | 1 |
+| `rule-ui-design-system` | leaf | in-progress | 4/21 | 1 |
+| `rule-process-bmad` | leaf | in-progress | 4/37 | 2 |
+| `rule-process-changelog` | leaf | in-progress | 3/18 | 2 |
+| `rule-process-code-review` | leaf | in-progress | 3/16 | 2 |
+| `rule-process-npm-release` | leaf | in-progress | 4/19 | 2 |
+| `rule-process-readme` | leaf | in-progress | 5/17 | 2 |
+| `rule-styleguide-a11y` | leaf | in-progress | 4/18 | 2 |
+| `rule-styleguide-baseline` | leaf | in-progress | 9/15 | 2 |
+| `rule-styleguide-comments` | leaf | in-progress | 8/15 | 2 |
+| `rule-styleguide-configuration` | leaf | in-progress | 9/16 | 2 |
+| `rule-styleguide-css` | leaf | in-progress | 5/17 | 2 |
+| `rule-styleguide-file-tree` | leaf | in-progress | 4/16 | 2 |
+| `rule-styleguide-git` | leaf | in-progress | 4/17 | 2 |
+| `rule-styleguide-html` | leaf | in-progress | 4/15 | 2 |
+| `rule-styleguide-i18n` | leaf | in-progress | 4/17 | 2 |
+| `rule-styleguide-javascript` | leaf | in-progress | 4/16 | 2 |
+| `rule-styleguide-json` | leaf | in-progress | 4/17 | 2 |
+| `rule-styleguide-markdown` | leaf | in-progress | 4/17 | 2 |
+| `rule-styleguide-naming` | leaf | in-progress | 4/16 | 2 |
+| `rule-styleguide-typescript` | leaf | in-progress | 4/16 | 2 |
+| `rule-platform-desktop` | leaf | planned | 0/24 | 3a |
+| `rule-platform-auth` | leaf | planned | 0/23 | 3b |
+| `rule-platform-library` | leaf | planned | 0/28 | 3b |
+| `rule-platform-mobile` | leaf | planned | 0/16 | 3b |
+| `rule-platform-web` | leaf | planned | 0/24 | 3b |
+| `rule-meta-astro` | leaf | planned | 0/19 | 4 |
+| `rule-meta-next` | leaf | planned | 0/17 | 4 |
+| `rule-meta-nuxt` | leaf | planned | 0/16 | 4 |
+| `rule-meta-remix` | leaf | planned | 0/17 | 4 |
+| `rule-process-tdd` | leaf | in-progress | 4/19 | 4 |
+| `rule-toolchain-electron` | leaf | planned | 0/15 | 4 |
+| `rule-toolchain-tauri` | leaf | planned | 0/15 | 4 |
+| `rule-frontend-angular` | leaf | planned | 0/19 | 5 |
+| `rule-frontend-react` | leaf | planned | 0/19 | 5 |
+| `rule-frontend-solidjs` | leaf | planned | 0/18 | 5 |
+| `rule-frontend-svelte` | leaf | planned | 0/19 | 5 |
+| `rule-frontend-template-engine` | leaf | planned | 0/21 | 5 |
+| `rule-frontend-vue` | leaf | planned | 0/18 | 5 |
+| `rule-frontend-workers` | leaf | planned | 0/21 | 5 |
+| `rule-devops-deploy-preview` | leaf | planned | 0/16 | 6 |
+| `rule-devops-docker` | leaf | planned | 0/14 | 6 |
+| `rule-devops-observability` | leaf | planned | 0/14 | 6 |
+| `rule-devops-testing` | leaf | planned | 0/15 | 6 |
+| `rule-data-duckdb` | leaf | planned | 0/14 | 7 |
+| `rule-data-indexed-db` | leaf | planned | 0/14 | 7 |
+| `rule-data-mongodb` | leaf | planned | 0/14 | 7 |
+| `rule-data-mysql` | leaf | planned | 0/14 | 7 |
+| `rule-data-postgresql` | leaf | planned | 0/14 | 7 |
+| `rule-data-sql` | leaf | planned | 0/14 | 7 |
+| `rule-data-sqlite` | leaf | planned | 0/14 | 7 |
+| `rule-data-validation` | leaf | in-progress | 4/15 | 7 |
+| `rule-backend-express` | leaf | planned | 0/13 | 8 |
+| `rule-backend-fastify` | leaf | planned | 0/13 | 8 |
+| `rule-backend-graphql` | leaf | planned | 0/13 | 8 |
+| `rule-backend-hono` | leaf | planned | 0/12 | 8 |
+| `rule-backend-nestjs` | leaf | planned | 0/12 | 8 |
+| `rule-backend-node` | leaf | planned | 0/15 | 8 |
+| `rule-backend-security` | leaf | planned | 0/14 | 8 |
+| `rule-backend-workers` | leaf | planned | 0/14 | 8 |
+| `rule-ai-agent-architecture` | leaf | planned | 0/14 | 9 |
+| `rule-ai-context-engineering` | leaf | planned | 0/14 | 9 |
+| `rule-ai-evals` | leaf | planned | 0/14 | 9 |
+| `rule-ai-prompting` | leaf | planned | 0/15 | 9 |
+| `rule-ai` | router | planned | 0/18 | 10 |
+| `rule-backend` | router | planned | 0/16 | 10 |
+| `rule-data` | router | planned | 0/16 | 10 |
+| `rule-devops` | router | planned | 0/16 | 10 |
+| `rule-frontend` | router | planned | 0/18 | 10 |
+| `rule-meta` | router | planned | 0/16 | 10 |
+| `rule-platform` | router | planned | 0/20 | 10 |
+| `rule-process` | router | planned | 0/25 | 10 |
+| `rule-styleguide` | router | in-progress | 4/19 | 10 |
+| `rule-toolchain` | router | in-progress | 3/18 | 10 |
+| `rule-ui` | router | in-progress | 4/19 | 10 |
 
 ### The nine area plans are not nodes
 
@@ -340,7 +476,7 @@ One test, `tests/plans/skills-plan.test.mjs`, parses `docs/plans` and this file:
 - [x] Fold the nine area plans out of the graph: six absorbed and marked
       superseded, three declared outside the skills graph.
 
-### Phase 2 - Retrofit, stage by stage
+### Phase 2 - Retrofit, stage by stage (F1)
 
 - [ ] Stage 0 nodes gain their status line and their focused dependency graph.
 - [ ] Each later stage does the same for its nodes, as it starts.

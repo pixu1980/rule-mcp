@@ -1,7 +1,7 @@
 # rule-platform - plan
 
-Status: plan only, 2026-10-21. Index row `#41`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#41`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: platform, router, planned last in the area (`DEPENDENCIES.md`). Sibling
 plans: `rule-platform-auth`, `rule-platform-library`, `rule-platform-web`,
@@ -143,6 +143,16 @@ node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing
 pnpm census && pnpm census:check
 pnpm lint
 ```
+
+## Dependency graph
+
+The router closes after its leaves and after the shared router rules and the route-table generator are exported.
+
+Depends on: `rule-platform-auth` (HARD), `rule-platform-desktop` (HARD), `rule-platform-library` (HARD), `rule-platform-mobile` (HARD), `rule-platform-web` (HARD), `rule-process#2` (CONTRACT), `rule-process#3` (CONTRACT)
+
+Feeds: —
+
+Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ## Open notes
 

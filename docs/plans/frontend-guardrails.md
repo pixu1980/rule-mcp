@@ -1,8 +1,7 @@
 # rule-frontend guardrails execution plan
 
-Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153).
-Absorbed by: the seven rule-frontend leaves, one rule set per plan.
-Graph: not a node; see the absorbed table in `skills-plan.md`.
+Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the seven rule-frontend leaves.
+Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the seven rule-frontend leaves. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the seven rule-frontend leaves, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
 
 Scope: add the framework-agnostic rules the frontend area is missing, extend
 the per-framework set, and record every rule against a citable public source.
@@ -107,6 +106,16 @@ corpus pins both so a single escape hatch cannot satisfy the pair.
    an inheritance test once open item 1 is decided.
 
 ## Phases
+
+## Dependency graph
+
+Absorbed or outside the graph: listed for completeness, not executed as a node.
+
+Depends on: -
+
+Feeds: -
+
+Shared files: none: absorbed into the leaf plans named above
 
 ### Phase 0 - Decisions and scaffolding
 

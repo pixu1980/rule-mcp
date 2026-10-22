@@ -1,7 +1,7 @@
 # rule-ai - plan
 
-Status: plan only, 2026-10-21. Index row `#84`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#84`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: ai, router, planned last in the area and last in the catalogue.
 Siblings: `rule-ai-prompting`, `rule-ai-evals`, `rule-ai-context-engineering`,
@@ -92,6 +92,16 @@ inherit. The children instead link the leaf that owns the floor, and
 `router-ai-floor-reachable` keeps that link alive.
 
 ## Phases
+
+## Dependency graph
+
+The router closes after its leaves and after the shared router rules and the route-table generator are exported.
+
+Depends on: `rule-ai-agent-architecture` (HARD), `rule-ai-context-engineering` (HARD), `rule-ai-evals` (HARD), `rule-ai-prompting` (HARD), `rule-process#2` (CONTRACT), `rule-process#3` (CONTRACT)
+
+Feeds: —
+
+Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 

@@ -1,8 +1,7 @@
 # rule-toolchain - best-practice implementation plan
 
-Status: plan only. Each skill waits for the owner before implementation.
-Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`.
-Index: `docs/plans/skills/README.md`.
+Status: `planned`
+Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
 
 Area: toolchain. Order: reverse alphabetical, eleventh skill (the router).
 
@@ -112,6 +111,16 @@ inherits them.
 - A registry-backed routing table generator, shared with the `rule-ui` plan.
 
 ## Phases
+
+## Dependency graph
+
+The router closes after its leaves and after the shared router rules and the route-table generator are exported.
+
+Depends on: `bundler-family` (HARD), `rule-toolchain-biome` (HARD), `rule-toolchain-eslint` (HARD), `rule-toolchain-husky` (HARD), `rule-toolchain-parcel` (HARD), `rule-toolchain-pnpm` (HARD), `rule-toolchain-rspack` (HARD), `rule-toolchain-turborepo` (HARD), `rule-toolchain-vite` (HARD), `rule-process#2` (CONTRACT), `rule-process#3` (CONTRACT)
+
+Feeds: —
+
+Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions and scaffolding
 

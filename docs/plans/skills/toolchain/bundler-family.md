@@ -1,12 +1,7 @@
 # Bundler family - shared contract (Vite, Rspack, Parcel)
 
-Status: plan only. Cross-skill plan, not tied to a single skill file.
-Owner when implemented: `rule-toolchain` (the router), inherited by every
-toolchain skill through `inherits`.
-Per-bundler plans: `rule-toolchain-vite` (this pass), `rule-toolchain-rspack`,
-`rule-toolchain-parcel`.
-Webpack is removed from the family entirely: no guidance, not even a migration
-section.
+Status: `planned`
+Notes:`planned` Notes: plan only. Cross-skill plan, not tied to a single skill file. Owner when implemented: `rule-toolchain` (the router), inherited by every toolchain skill through `inherits`. Per-bundler plans: `rule-toolchain-vite` (this pass), `rule-toolchain-rspack`, `rule-toolchain-parcel`. Webpack is removed from the family entirely: no guidance, not even a migration section.
 
 ## Evidence base
 
@@ -68,6 +63,16 @@ blocking after 100% precision and recall.
 | `bundler-target-declared`  | a build with no declared browser target                                                           | B    | Vite target; Rspack target; Parcel targets                |
 | `bundler-io-declared`      | a build with no explicit entry or output                                                          | B    | Bundler docs                                              |
 | `bundler-sourcemap-policy` | source maps on in production without an explicit decision                                         | B    | Vite build options                                        |
+
+## Dependency graph
+
+A cross-skill contract: the three bundler leaves inherit it and it depends on nothing but the prose rules.
+
+Depends on: `rule-process-ai` (HARD)
+
+Feeds: `rule-toolchain-vite`, `rule-toolchain-rspack`, `rule-toolchain-parcel` (HARD)
+
+Shared files: tests/fixtures/census.json, docs/adr/ADR.md
 
 ## Phases
 

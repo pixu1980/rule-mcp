@@ -1,7 +1,7 @@
 # rule-data - plan
 
-Status: plan only, 2026-10-21. Index row `#70`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#70`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: data, router, planned last in the area (`DEPENDENCIES.md`). Siblings: the
 eight leaves. `rule-data-validation` keeps the plan it already has (`#62`), which
@@ -73,6 +73,16 @@ in the catalog duplicates it and no rule can check it. It stays.
 | `router-tag-single-owner` | A subject tag claimed by the router and a leaf | B | **red**: `sql`, `nosql` |
 
 ## Phases
+
+## Dependency graph
+
+The router closes after its leaves and after the shared router rules and the route-table generator are exported.
+
+Depends on: `rule-data-duckdb` (HARD), `rule-data-indexed-db` (HARD), `rule-data-mongodb` (HARD), `rule-data-mysql` (HARD), `rule-data-postgresql` (HARD), `rule-data-sql` (HARD), `rule-data-sqlite` (HARD), `rule-data-validation` (HARD), `rule-process#2` (CONTRACT), `rule-process#3` (CONTRACT)
+
+Feeds: —
+
+Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 

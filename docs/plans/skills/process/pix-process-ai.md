@@ -1,8 +1,7 @@
 # rule-process-ai - best-practice implementation plan
 
-Status: merge, rename and guardrail move applied; the absorbed content work is listed below and still open.
-Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`.
-Index: `docs/plans/skills/README.md`. Order: `docs/plans/skills/DEPENDENCIES.md`, where this plan runs first.
+Status: `planned`
+Notes:`planned` Notes:merge, rename and guardrail move applied; the absorbed content work is listed below and still open. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`. Order: `docs/plans/skills/DEPENDENCIES.md`, where this plan runs first.
 
 Area: process. Order: first, because every other plan is written by these rules.
 
@@ -97,6 +96,16 @@ The six-line contract is now in `SKILL.md` and the catalog is in the reference. 
 28 phrases, English only, undocumented until this plan. The section naming them, and the corpus test that keeps them honest, are still open; the Italian half lives on `feat/decision-models` and is not duplicated here.
 
 ## Phases
+
+## Dependency graph
+
+The root of the graph: it owns the prose, scope and gate rules every other plan obeys, so it depends on nothing.
+
+Depends on: -
+
+Feeds: `rule-process` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - The merge
 

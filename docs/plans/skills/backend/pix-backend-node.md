@@ -1,7 +1,7 @@
 # rule-backend-node - plan
 
-Status: plan only, 2026-10-21. Index row `#73`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#73`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: backend, leaf and the area's scaffolding runbook. **395 lines**, three
 files: the body plus `assets/templates/scripts/create-tool.ts` and
@@ -54,6 +54,16 @@ leaf must agree**, and today the only thing connecting them is prose.
 | `node-owner-named` | A section delegating tests, containers or observability without naming the owner | B | partially red |
 
 ## Phases
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD)
+
+Feeds: `rule-backend` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 

@@ -1,7 +1,7 @@
 # rule-process - plan
 
-Status: plan only, 2026-10-21. Index row `#35`, `pending` until this file
-existed, now `planned`. The implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#35`, `pending` until this file existed, now `planned`. The implementation waits for the owner.
 
 Area: process, and the router is the last thing planned in its area
 (`docs/plans/skills/DEPENDENCIES.md`). Sibling plans: `rule-process-ai` (prose
@@ -193,6 +193,16 @@ node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing
 pnpm census && pnpm census:check
 pnpm lint
 ```
+
+## Dependency graph
+
+The router closes after its leaves. The shared rules and the route-table generator are its own phases 2 and 3, not dependencies: this is the node that exports them.
+
+Depends on: `rule-process-adr` (HARD), `rule-process-ai` (HARD), `rule-process-bmad` (HARD), `rule-process-changelog` (HARD), `rule-process-code-review` (HARD), `rule-process-npm-release` (HARD), `rule-process-readme` (HARD), `rule-process-tdd` (HARD)
+
+Feeds: —
+
+Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ## Open notes
 

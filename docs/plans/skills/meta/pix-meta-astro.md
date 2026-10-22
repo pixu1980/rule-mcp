@@ -1,7 +1,7 @@
 # rule-meta-astro - plan
 
-Status: plan only, 2026-10-21. Index row `#45`, `pending` until this file
-existed, now `planned`. Implementation waits for the owner.
+Status: `planned`
+Notes:`planned` Notes: plan only, 2026-10-21. Index row `#45`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: meta, leaf, and the largest skill in the area. Sibling plans:
 `rule-meta-remix`, `rule-meta-nuxt`, `rule-meta-next` (same rule set) and
@@ -158,6 +158,16 @@ node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing
 pnpm census && pnpm census:check
 pnpm lint
 ```
+
+## Dependency graph
+
+This leaf closes before its area router, which cannot list a child that does not exist.
+
+Depends on: `rule-process-ai` (HARD), `rule-platform-desktop#3` (CONTRACT)
+
+Feeds: `rule-meta` (HARD)
+
+Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ## Open notes
 
