@@ -24,7 +24,7 @@ Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
 | Step | Class | Model | Why |
 | ---- | ----- | ----- | --- |
-| Phase 1 - Evidence and decisions | `T6-review` | `muse-wonder-full` (max) | audit and contradiction hunting |
+| Phase 1 - Evidence and decisions | `T6-review` | `muse-wonder-full` (max) | audit and evidence measurement |
 | Phase 2 - Release and contributor safeguards | `T7-author` | `qwen3.8-max` | skill bodies and references |
 | Phase 3 - Quality and onboarding | `T7-author` | `qwen3.8-max` | skill bodies and references |
 
