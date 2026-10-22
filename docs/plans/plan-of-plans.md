@@ -389,6 +389,52 @@ belong to the merged branches, not to this plan.
 - **`develop` is out of scope and stays that way** until the architect track is
   brought into this repository's plans.
 
+## 14 - Task classes and model assignment
+
+Every plan in every branch carries a `## Model assignment` section that maps its
+own steps to one of these classes. This is the taxonomy those sections cite, so
+a plan can be executed without re-deciding which model to reach for.
+
+**Pool:** the models this pi instance can reach, minus OpenAI and Anthropic
+families (excluded by decision, including those served through other providers).
+Evidence gathered 2026-10-22 from three sources, cited per claim:
+
+- **Artificial Analysis** model leaderboard: intelligence index, price per 1M
+  tokens, output speed in tokens/s.
+- **Arena (LMArena)** Agent leaderboard: share of head-to-head wins, plus its
+  cost-per-task Pareto frontier.
+- **Aider polyglot** leaderboard: percentage of edits applied correctly, which is
+  the closest public measure of "can it change a file without breaking it".
+
+### The classes
+
+| Class | Task | Model | Why, from the evidence |
+| ----- | ---- | ----- | ---------------------- |
+| `T1-plan` | Planning, architecture, ADRs, prose that argues | `gemini-4-argon` (high) | Arena Agent #6 overall and AA index 53 at $1.99; the Google family leads public edit-format compliance (Gemini 2.5 Pro 83.1% on Aider, the best non-excluded score) |
+| `T2-git` | Cross-branch work: fold, rebase, merge resolution | `grok-4.7` (xhigh) | AA index 46 with 500k context; Grok 4 scored 79.6% on Aider, the strongest agentic-coding family outside the excluded two |
+| `T3-rules` | Guardrail rules: small deterministic code, regex, engine contracts | `kimi-k2.7-code` | A code-tuned family (Kimi K2: 59.1% Aider at $1.24) at $0.54 per 1M; the cheap end of the code-correctness range |
+| `T4-tests` | Test writing: node:test suites, fixtures, assertions | `deepseek-v4.1-flash` | AA index 45 at **$0.26** and 206 tokens/s; DeepSeek's reasoning line scored 74.2% on Aider at a tenth of the frontier price |
+| `T5-bulk` | Mechanical edits at scale: retrofits, renames, regeneration | `minimax-m3.1-flash` | AA index 43 at $0.22, 93 tokens/s, 1M context; MiMo-V2.6-Flash ($0.06) is the cheaper alternate and sits on the Arena cost/task Pareto |
+| `T6-review` | Audits, contradiction hunting, evidence measurement | `muse-wonder-full` (max) | AA index **56**, the highest reachable score, with a 1M context window; Arena Agent #7 |
+| `T7-author` | Skill bodies: framework content, references, prose trimming | `qwen3.8-max` | AA index 45 with the broadest framework knowledge of the pool (Qwen3-235B: 59.6% Aider) |
+| `T8-verify` | Verification loops, gate runs, small format fixes | `gemini-3.8-flash` (high) | AA index 41 at $1.24 with 137 tokens/s: fast enough to re-run a gate loop without waiting |
+| `T9-local` | Offline checks with no network | `llama.cpp/Laya-GGUF:Q8_0` | The only local model served here; use it for trivial mechanical reads, never for judgement |
+
+Two alternates worth naming because the pool is deep: `step-5-preview` (AA 44,
+$1.03, 95 tokens/s) for `T7` when Qwen is unavailable, and `glm-5.3-flash`
+(AA 42, $0.28) for `T5` when MiniMax is.
+
+### How a plan uses this
+
+Each plan's `## Model assignment` section lists its own phases against these
+classes, with the model and one line of reasoning, and names a fallback. A step
+that mixes classes takes the class of its **riskier** half: a rule implementation
+that also writes prose is `T3-rules`, not `T7-author`.
+
+The classes are about the work, not the file: the same `T4-tests` step in a
+frontend plan and a data plan gets the same model, because the work is the same
+and the evidence does not distinguish them.
+
 ## 13 - Fixes the review requires before the first node
 
 From `docs/reviews/plan-graph.md`. **All of them are resolved on
@@ -420,3 +466,19 @@ read `content[0]` or `content[1]`. They pass in a detached worktree and fail in
 a checkout whose base advanced. It needs a decision - change the banner position
 and its contract test, or give every affected test a shared reader - and it is
 not part of this graph.
+
+## 15 - Model assignment for this plan
+
+| Step in this plan | Class | Model | Why |
+| ----------------- | ----- | ----- | --- |
+| Stage 0 - policy decisions | `T1-plan` | `gemini-4-argon` (high) | five public commitments argued from evidence; needs long context and careful prose |
+| Stage 0 - OSS-01/02/07 code and config edits | `T3-rules` | `kimi-k2.7-code` | workflow gates, SECURITY.md tables, DCO wording: small precise edits |
+| Stage 1 - fold `dm` | `T2-git` | `grok-4.7` (xhigh) | cherry-pick, delete 32 files, retire a branch: git judgement |
+| Stage 2 - retrofit `ex` and `nyx` | `T5-bulk` | `minimax-m3.1-flash` | the same section added to a handful of files |
+| Stages 3-5 - merges and rebases | `T2-git` | `grok-4.7` (xhigh) | conflict resolution on generated files; the risk is a wrong merge, not a wrong line |
+| Stage 6 - `feat/evolution` into `main` | `T1-plan` | `gemini-4-argon` (high) | one reviewed merge whose diff is the whole catalogue |
+| Stage 7 - format across every plan | `T5-bulk` | `minimax-m3.1-flash` | mechanical, 95 files, checked by the test |
+| Section 14 - keep the evidence current | `T6-review` | `muse-wonder-full` (max) | re-reading three leaderboards and re-deriving the mapping |
+
+Fallback: if `muse-wonder-full` is unreachable, `glm-5.3` (max) is the next
+highest allowed index at 45, and it is on the Arena open-model trend list.
