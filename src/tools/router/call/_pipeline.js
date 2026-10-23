@@ -10,8 +10,8 @@ import { resumeAnnouncement } from "@src/core/session/resume/index.js";
 import { touchActivity } from "@src/core/session/_activity.js";
 import { z } from "zod/v4";
 import { recordCrashed } from "./_telemetry.js";
-import { replayIfCached, replayIfSemanticCached, storeAndFinalize } from "./_stages.js";
-import { observeDecisionShadow } from "@src/core/cache/tool-cache/index.js";
+import { replayIfCached, replayIfDecisionCached, replayIfSemanticCached, storeAndFinalize } from "./_stages.js";
+import { observeDecisionShadow, replayEnabled } from "@src/core/cache/tool-cache/index.js";
 
 /**
  * Run one tool call end to end: activity, self-update, resume banner, cache
@@ -81,14 +81,32 @@ export async function callTool(name, args) {
       return withBanner(banner, similar);
     }
 
+    // L3 is opt-in. When it is on it must run before compute, because a hit has
+    // to skip the work; a miss has already paid the model call, so it does not
+    // also run the shadow observer.
+    let decisionTried = false;
+
+    if (replayEnabled()) {
+      decisionTried = true;
+      const decided = await replayIfDecisionCached(name, validated, startedAt);
+
+      if (decided) {
+        return withBanner(banner, decided);
+      }
+    }
+
     stage = "preprocessing";
+    const computeStartedAt = Date.now();
     const { arguments: processedArguments, core } = await computeCore(name, tool, validated);
+    const computeMs = Date.now() - computeStartedAt;
 
     stage = "finalize";
 
     // Phase 1: record what the L3 gate would replay. The response is already
     // computed, so the observation is fire-and-forget and can never replay it.
-    void observeDecisionShadow(name, validated);
+    if (!decisionTried) {
+      void observeDecisionShadow(name, validated, { core, computeMs });
+    }
 
     return withBanner(banner, storeAndFinalize(name, processedArguments, core, startedAt));
   } catch (error) {

@@ -1,12 +1,22 @@
 // SPDX-FileCopyrightText: 2025-2026 pixu1980
 // SPDX-License-Identifier: MIT
-/** The decision-cache gate switches: opt-in shadow mode and the provisional floor. */
+/** The decision-cache gate switches: opt-in shadow, opt-in replay, and the floor. */
 import { cacheEnabled } from "./_config.js";
 import { SHADOW_THRESHOLD } from "./_decision-protocol.js";
 
-/** Shadow mode is opt-in and needs a configured model; replay lands in phase 2. */
+/** The gate needs a usable cache and a configured model. */
+export function decisionEnabled(env = process.env) {
+  return cacheEnabled() && Boolean(env.PIX_GALAXY_MCP_DECISION_MODEL);
+}
+
+/** Replay is opt-in and never the default; the shadow report is its gate. */
+export function replayEnabled(env = process.env) {
+  return decisionEnabled(env) && env.PIX_GALAXY_MCP_DECISION_CACHE_REPLAY === "1";
+}
+
+/** Shadow mode is opt-in; replay wins when both flags are set. */
 export function shadowEnabled(env = process.env) {
-  return cacheEnabled() && env.PIX_GALAXY_MCP_DECISION_CACHE_SHADOW === "1" && Boolean(env.PIX_GALAXY_MCP_DECISION_MODEL);
+  return decisionEnabled(env) && env.PIX_GALAXY_MCP_DECISION_CACHE_SHADOW === "1" && !replayEnabled(env);
 }
 
 /** The provisional replay floor; an invalid value falls back to the default. */

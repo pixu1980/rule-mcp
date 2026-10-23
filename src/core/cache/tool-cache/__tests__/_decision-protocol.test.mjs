@@ -23,7 +23,7 @@ test("redaction removes home paths and obvious secrets", () => {
   assert.equal(text.includes("hunter2"), false);
   assert.match(text, /~/u);
   assert.equal(redact("/home/ada/p").includes("ada"), false);
-  assert.equal(redact("C:\\Users\\ada\\p").includes("ada"), false);
+  assert.equal(redact(String.raw`C:\Users\ada\p`).includes("ada"), false);
 });
 
 test("truncation collapses whitespace and caps the text", () => {
