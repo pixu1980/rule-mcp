@@ -16,8 +16,8 @@ importers:
         specifier: 1.8.1
         version: 1.8.1
       '@modelcontextprotocol/sdk':
-        specifier: 1.31.0
-        version: 1.31.0(supports-color@7.2.0)(zod@4.6.5)
+        specifier: 1.32.0
+        version: 1.32.0(supports-color@7.2.0)(zod@4.6.5)
       commander:
         specifier: 15.0.0
         version: 15.0.0
@@ -278,8 +278,8 @@ packages:
     engines: {node: '>=22.19.0'}
     hasBin: true
 
-  '@modelcontextprotocol/sdk@1.31.0':
-    resolution: {integrity: sha512-UvTMgnNlnIBO/22ob2RcVGDlcvOslQs8T59+FTGdA0L27a39fdGF/EDETNtDVK4DZGpwomlsYpRdA8UXcVL/pw==}
+  '@modelcontextprotocol/sdk@1.32.0':
+    resolution: {integrity: sha512-8BviX/hK4Gd2eL1KdTwm0gfl4d3wdoErW0Jd00h6nomUAtk6IJk5vwQJc6kfWtJTzN5OEV/lgIiJKI8fiDGAlA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@cfworker/json-schema': ^4.1.1
@@ -530,6 +530,11 @@ packages:
 
   ajv-formats@3.0.1:
     resolution: {integrity: sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==}
+    peerDependencies:
+      ajv: ^8.0.0
+    peerDependenciesMeta:
+      ajv:
+        optional: true
 
   ajv@6.15.0:
     resolution: {integrity: sha512-fgFx7Hfoq60ytK2c7DhnF8jIvzYgOMxfugjLOSMHjLIPgenqa7S7oaagATUq99mV6IYvN2tRmC0wnTYX6iPbMw==}
@@ -1009,8 +1014,8 @@ packages:
     resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==}
     engines: {node: '>= 0.4'}
 
-  hono@4.13.8:
-    resolution: {integrity: sha512-/Gng7NfoykZl2pjukW5Z6+8Yxm3BPRf86GTbQnt0SbySkvax4fyL4H3HhY1cCpBGmiW9XDRFzRV+CXK2W8QudQ==}
+  hono@4.13.13:
+    resolution: {integrity: sha512-CQ46U0ZkAGmbT/4UxdzzGJpacP2IeKgY4a5/tOI9AABbpOMfK739wfDXmv1usCk+3RkKj1hQy4/fjhiwa2xlrA==}
     engines: {node: '>=16.9.0'}
 
   hookified@1.15.1:
@@ -1079,8 +1084,8 @@ packages:
       react-devtools-core:
         optional: true
 
-  ip-address@10.7.2:
-    resolution: {integrity: sha512-7H/2gFSIitxc0hG3nOI1glS8QLo/EHBFFLk8vEUjXY/xu0AdL8jZ9U1IzO2PUm0d2D/ofQcAifb0g6OBkt8U7w==}
+  ip-address@10.7.4:
+    resolution: {integrity: sha512-DWBMKyeM25D70nrIiTkgQth59/G+naKOTep6huF9j+GmeK3DMD60Zvxg5d5qQnz+38AHgou6ean2LECX+lrKDg==}
     engines: {node: '>= 12'}
 
   ipaddr.js@1.9.1:
@@ -2000,9 +2005,9 @@ snapshots:
 
   '@exodus/bytes@1.15.2': {}
 
-  '@hono/node-server@2.1.1(hono@4.13.8)':
+  '@hono/node-server@2.1.1(hono@4.13.13)':
     dependencies:
-      hono: 4.13.8
+      hono: 4.13.13
 
   '@humanfs/core@0.19.2':
     dependencies:
@@ -2065,7 +2070,7 @@ snapshots:
 
   '@modelcontextprotocol/inspector@2.9.0':
     dependencies:
-      '@hono/node-server': 2.1.1(hono@4.13.8)
+      '@hono/node-server': 2.1.1(hono@4.13.13)
       '@modelcontextprotocol/client': 2.2.0
       '@modelcontextprotocol/core': 2.2.0
       '@modelcontextprotocol/ext-apps': 2.0.0(@modelcontextprotocol/client@2.2.0)(@modelcontextprotocol/core@2.2.0)(@modelcontextprotocol/server@2.2.0)(react@19.3.0)(zod@4.6.5)
@@ -2076,7 +2081,7 @@ snapshots:
       atomically: 2.1.1
       chokidar: 4.0.3
       commander: 13.1.0
-      hono: 4.13.8
+      hono: 4.13.13
       ink: 6.8.0(react@19.3.0)
       open: 10.2.0
       pino: 9.14.0
@@ -2107,9 +2112,9 @@ snapshots:
       - tsx
       - utf-8-validate
 
-  '@modelcontextprotocol/sdk@1.31.0(supports-color@7.2.0)(zod@4.6.5)':
+  '@modelcontextprotocol/sdk@1.32.0(supports-color@7.2.0)(zod@4.6.5)':
     dependencies:
-      '@hono/node-server': 2.1.1(hono@4.13.8)
+      '@hono/node-server': 2.1.1(hono@4.13.13)
       ajv: 8.20.0
       ajv-formats: 3.0.1
       content-type: 1.0.5
@@ -2119,7 +2124,7 @@ snapshots:
       eventsource-parser: 3.1.1
       express: 5.2.1(supports-color@7.2.0)
       express-rate-limit: 8.7.0(express@5.2.1(supports-color@7.2.0))(supports-color@7.2.0)
-      hono: 4.13.8
+      hono: 4.13.13
       jose: 6.2.12
       json-schema-typed: 8.0.2
       pkce-challenge: 5.0.1
@@ -2623,7 +2628,7 @@ snapshots:
     dependencies:
       debug: 4.4.3(supports-color@7.2.0)
       express: 5.2.1(supports-color@7.2.0)
-      ip-address: 10.7.2
+      ip-address: 10.7.4
     transitivePeerDependencies:
       - supports-color
 
@@ -2776,7 +2781,7 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  hono@4.13.8: {}
+  hono@4.13.13: {}
 
   hookified@1.15.1: {}
 
@@ -2878,7 +2883,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  ip-address@10.7.2: {}
+  ip-address@10.7.4: {}
 
   ipaddr.js@1.9.1: {}
 
