@@ -5,7 +5,17 @@
 import { K1, B, tokenize, DEFAULT_MAX_RESULTS } from "./_terms.js";
 import { _index } from "./_state.js";
 
-function bm25Score(tf, docLen, avgDocLen, N, n) {
+/**
+ * The BM25 score for one query term in one document.
+ *
+ * @param {number} tf term frequency in the document
+ * @param {number} docLen document length in tokens
+ * @param {number} avgDocLen average document length
+ * @param {number} N number of documents
+ * @param {number} n number of documents containing the term
+ * @returns {number}
+ */
+export function bm25Score(tf, docLen, avgDocLen, N, n) {
   if (n === 0 || N === 0) {
     return 0;
   }

@@ -4,7 +4,8 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
-import { CANDIDATE_CAP, depsFingerprint, describeCandidate, nonPromptArgs, rankCandidates } from "../_decision-candidates.js";
+import { depsFingerprint, describeCandidate, nonPromptArgs } from "../_decision-candidates.js";
+import { CANDIDATE_CAP, rankCandidates } from "../_decision-ranker.js";
 
 test("non-prompt args are stable and exclude the prompt", () => {
   assert.equal(nonPromptArgs("pix_tool", { prompt: "x", framework: "react", path: "/repo" }), '{"framework":"react","path":"/repo"}');
@@ -71,4 +72,14 @@ test("ties break deterministically by prompt and key", () => {
     ranked.map((entry) => entry.key),
     ["a", "b"],
   );
+});
+
+test("BM25 rewards a repeated query term without letting length win", () => {
+  const ranked = rankCandidates("react button", [
+    { key: "a", prompt: "react button" },
+    { key: "b", prompt: "react button button" },
+    { key: "c", prompt: "react button button button" },
+  ]);
+
+  assert.equal(ranked[0].key, "b");
 });
