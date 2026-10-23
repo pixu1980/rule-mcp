@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [159](159-keep-the-single-batch-decision-cache-shortlist.md)                                                            | Keep the single-batch decision-cache shortlist                                                            | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md)                                           | Replay the decision-cache gate only behind a measured threshold                                           | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [157](157-shadow-the-decision-cache-gate-before-replaying.md)                                                           | Shadow the decision-cache gate before replaying                                                           | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md)                                             | Keep BM25 and gate a local decision model as a second opinion                                             | 2026-10-22 | accepted   | routing, decision-models, architecture, security, testing                           |
@@ -174,6 +175,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [159](159-keep-the-single-batch-decision-cache-shortlist.md)                                                            | Revert the two-batch variant and keep the single five-candidate batch.                                                                                                                                                          | The top-ten pool did not change recall, so the ranker is the measured blocker, not the model's batch size.                                                                                                                      |
 | [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md)                                           | Add an opt-in replay behind RULE_MCP_DECISION_CACHE_REPLAY=1, off by default.                                                                                                                                             | A wrong replay is silent, so the default remains off.                                                                                                                                                                           |
 | [157](157-shadow-the-decision-cache-gate-before-replaying.md)                                                           | Add an opt-in L3 gate built from deterministic parts: same-tool, same non-prompt args, fresh and non-echoing candidates; IDF-weighted overlap top five plus none; a redacted state and stable candidate descriptions; a...      | No response changes in phase 1; an opt-in model call runs after the response on a cache miss; the report is local.                                                                                                              |
 | [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md)                                             | 1. BM25 remains the router.                                                                                                                                                                                                     | Positive: the baseline is a file and a command, not a memory; a model or router change is compared against the same 95 prompts; the model cannot send prompt text off the machine; the ranker cannot be silently replaced by... |
@@ -489,6 +491,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### routing
 
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
 - [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
 - [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
 - [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
@@ -771,6 +774,13 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [010](010-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
 
+### decision-models
+
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+
 ### infrastructure
 
 - [008](008-scaffold-skill-consolidation.md) scaffold skill consolidation
@@ -833,6 +843,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
 - [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
+### cache
+
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+
 ### code-graph
 
 - [108](108-the-handoff-family-gets-a-generated-index-and-the-root-handoff-summary-retires.md) The handoff family gets a generated index, and the root HANDOFF summary retires
@@ -844,12 +860,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [138](138-extend-the-data-guardrail-family-with-shared-and-per-engine-rules.md) Extend the data guardrail family with shared and per-engine rules
 - [042](042-strengthen-database-relational-constraint-skills.md) Strengthen database relational constraint skills
 - [012](012-database-skills.md) Database Skills
-
-### decision-models
-
-- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
-- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
-- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
 
 ### determinism
 
@@ -886,6 +896,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [012](012-database-skills.md) Database Skills
 - [010](010-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
+
+### observability
+
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
 
 ### quality
 
