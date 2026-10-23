@@ -1,7 +1,12 @@
 
 
 /** The deterministic plan behind the decision-cache corpus benchmark. */
-import { CACHE_GROUPS, CACHE_NEGATIVES } from "../../../tests/fixtures/decision-cache-corpus.mjs";
+import { CACHE_GROUPS as GROUPS_1, CACHE_NEGATIVES as NEGATIVES_1 } from "../../../tests/fixtures/decision-cache-corpus.mjs";
+import { CACHE_GROUPS as GROUPS_2, CACHE_NEGATIVES as NEGATIVES_2 } from "../../../tests/fixtures/decision-cache-corpus-2.mjs";
+
+/** Both slices are one corpus: the plan and the validator see the merge. */
+export const CACHE_GROUPS = [...GROUPS_1, ...GROUPS_2];
+export const CACHE_NEGATIVES = [...NEGATIVES_1, ...NEGATIVES_2];
 
 /**
  * Build the leave-one-out plan: for each prompt in a group, the cache holds the

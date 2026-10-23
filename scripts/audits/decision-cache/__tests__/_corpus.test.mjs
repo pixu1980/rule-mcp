@@ -4,8 +4,7 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
-import { CACHE_GROUPS, CACHE_NEGATIVES } from "../../../../tests/fixtures/decision-cache-corpus.mjs";
-import { planCorpus, validateCorpus } from "../_corpus.mjs";
+import { CACHE_GROUPS, CACHE_NEGATIVES, planCorpus, validateCorpus } from "../_corpus.mjs";
 
 test("the leave-one-out corpus is valid, unique and seeds the group peers", () => {
   assert.equal(validateCorpus(), null);
