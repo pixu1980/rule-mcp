@@ -64,7 +64,7 @@ export async function runCorpus({ model, limit }) {
     throw new Error(invalid);
   }
 
-  const { seeds, samples } = planCorpus();
+  const { prompts, seeds, samples } = planCorpus();
   const selected = limit > 0 ? samples.slice(0, limit) : samples;
 
   await loadAllSkills(true);
@@ -78,36 +78,36 @@ export async function runCorpus({ model, limit }) {
   try {
     await runtime.supervisor.ensureLoaded();
 
-    const seedRoutes = new Map();
+    const goldByPrompt = new Map();
 
-    for (const seed of seeds) {
-      seedRoutes.set(seed.group, await gold(seed.prompt));
+    for (const prompt of prompts) {
+      goldByPrompt.set(prompt, await gold(prompt));
     }
-
-    const liveGold = [];
 
     for (const sample of selected) {
-      liveGold.push(await gold(sample.prompt));
-    }
-
-    cacheClear();
-
-    for (const seed of seeds) {
-      const route = seedRoutes.get(seed.group)?.route;
-
-      if (!route || route === "none") {
-        continue;
+      if (!goldByPrompt.has(sample.prompt)) {
+        goldByPrompt.set(sample.prompt, await gold(sample.prompt));
       }
-
-      cacheStore("pix_tool", { prompt: seed.prompt }, { content: [{ type: "text", text: JSON.stringify({ route }) }] }, {});
     }
 
     process.env.RULE_MCP_DECISION_CACHE_SHADOW = "1";
     clearShadows();
     clearDecisionCache();
 
-    for (const [index, sample] of selected.entries()) {
-      const oracle = liveGold[index];
+    for (const sample of selected) {
+      cacheClear();
+
+      for (const seed of sample.seeds) {
+        const route = goldByPrompt.get(seed.prompt)?.route;
+
+        if (!route || route === "none") {
+          continue;
+        }
+
+        cacheStore("pix_tool", { prompt: seed.prompt }, { content: [{ type: "text", text: JSON.stringify({ route }) }] }, {});
+      }
+
+      const oracle = goldByPrompt.get(sample.prompt);
       const core = { content: [{ type: "text", text: JSON.stringify({ route: oracle.route ?? "none" }) }] };
 
       await observeDecisionShadow("pix_tool", { prompt: sample.prompt }, { core, computeMs: oracle.ms });
