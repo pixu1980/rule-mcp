@@ -52,6 +52,7 @@ test("the question offers the candidates plus none", () => {
 
   assert.deepEqual(Object.keys(question.pick.criteria), ["candidate-1", "candidate-2", "none"]);
   assert.match(question.pick.instructions, /cached result/u);
+  assert.match(question.pick.instructions, /same skill/u);
 });
 
 test("a choice above the threshold is a replay candidate", () => {

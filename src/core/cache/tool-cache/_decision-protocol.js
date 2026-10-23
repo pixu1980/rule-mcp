@@ -13,7 +13,8 @@ export const NONE_LABEL = "none";
 /** What the model reads for the none label. */
 export const NONE_DESCRIPTION = "none of these is the same request";
 /** The cache gate's question, distinct from the routing question. */
-export const GATE_INSTRUCTIONS = "Which cached result answers the same request? Pick none if none matches.";
+export const GATE_INSTRUCTIONS =
+  "Pick the cached result that is the same request as the query, even when the wording differs. A candidate with the same skill and the same intent is the right replay; pick none only when no candidate shares the intent.";
 
 const HOME = /\/(?:Users|home)\/[^/\s]+/gu;
 const WINDOWS_HOME = /[A-Za-z]:\\Users\\[^\\\s]+/gu;
