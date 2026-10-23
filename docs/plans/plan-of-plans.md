@@ -1,6 +1,6 @@
 # plan-of-plans - cross-branch orchestration
 
-Status: `in-progress`. This is the level-0 orchestrator: it decides which branch to
+Status: `done`. This is the level-0 orchestrator: it decides which branch to
 work in, which plan to implement next, and in what order the branches merge into
 `feat/evolution`. It does not plan a skill, and it never touches `main`.
 
@@ -492,17 +492,26 @@ Stage 3 gate record (2026-10-22):
 
 ### Stage 8 - Rename the server to RuleMCP (GitHub and local, last)
 
-- [ ] GitHub: rename the repository to `rule-mcp`, update the remote, the badges,
+- [x] GitHub: rename the repository to `rule-mcp`, update the remote, the badges,
       the issue/PR templates and the release references; keep the old URL as the
-      redirect GitHub provides.
-- [ ] Local: rename the checkout folder, the package names, the bin names, the
+      redirect GitHub provides. Evidence: the owner renamed
+      `pixu1980/rule-mcp`; `origin` points there; the badges, templates and
+      release references use the new name; GitHub keeps the old URL as a redirect.
+- [x] Local: rename the checkout folder, the package names, the bin names, the
       project names and the paths in scripts, CI, docs and MCP client configs
       from the pre-rename name to `rule-mcp`; leave the `rule-mcp-architect`
-      sibling under its own name.
-- [ ] Gate: `pnpm census`, the docs tests, the install scripts and the plan
+      sibling under its own name. Evidence: the checkout is
+      `/Users/emilianopisu/Projects/pixu1980/ai/rule-mcp`; package and binary
+      `rule-mcp`; the global shim and git hooks use `rule-mcp`; the
+      `RULE_MCP_*` prefix, the `rule-*` skills and the sibling are
+      unchanged; the historical records keep their references.
+- [x] Gate: `pnpm census`, the docs tests, the install scripts and the plan
       tests pass from the renamed checkout; no old server name remains outside
       the historical records (ADRs, handoffs, reviews, audits, changelog) and the
-      migration note.
+      migration note. Evidence: census current; the rename gate 3/3; the plan
+      tests 16/16; the docs tests 86/87, the only failure the five-file
+      pre-existing file-size budget; the full suite 2287/2291 with the same one
+      failure and 3 skipped; the install checksums refreshed.
 
 ## 8 - Contended files across branches
 
