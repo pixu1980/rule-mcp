@@ -10,12 +10,19 @@ import { test } from "node:test";
 const stateDir = mkdtempSync(join(tmpdir(), "rule-decision-shadow-report-"));
 
 process.env.RULE_MCP_STATE_DIR = stateDir;
+process.env.RULE_MCP_DECISION_CACHE_SHADOW = "1";
+process.env.RULE_MCP_DECISION_MODEL = "laya";
+delete process.env.RULE_MCP_NO_CACHE;
 
+const { cacheClear } = await import("../index.js");
+const { observeDecisionShadow, waitForDecisionShadows } = await import("../_decision-gate.js");
 const { clearShadows, readShadows, recordShadow, summarizeShadows } = await import("../_decision-shadow.js");
 
 test.after(() => {
   rmSync(stateDir, { recursive: true, force: true });
   delete process.env.RULE_MCP_STATE_DIR;
+  delete process.env.RULE_MCP_DECISION_CACHE_SHADOW;
+  delete process.env.RULE_MCP_DECISION_MODEL;
 });
 
 function event(overrides) {
@@ -64,4 +71,20 @@ test("the record round-trips through the JSONL file and clears", () => {
   clearShadows();
 
   assert.deepEqual(readShadows(), []);
+});
+
+test("a no-candidates record still carries the gold route and no prediction", async () => {
+  cacheClear();
+  clearShadows();
+  const core = { content: [{ type: "text", text: JSON.stringify({ route: "rule-frontend-react" }) }] };
+
+  await observeDecisionShadow("pix_tool", { prompt: "a prompt that matches no cached call", framework: "react" }, { core, computeMs: 2 });
+  await waitForDecisionShadows();
+  const last = readShadows().at(-1);
+
+  assert.equal(last.reason, "no-candidates");
+  assert.equal(last.goldRoute, "rule-frontend-react");
+  assert.equal(last.candidateRoute, null);
+  assert.equal(last.correct, null);
+  assert.equal(last.wouldReplay, false);
 });
