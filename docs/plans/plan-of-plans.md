@@ -142,18 +142,18 @@ feat/evolution                (the destination: every merge above lands here)
 
 Edges, spelled out:
 
-| From                                         | To                          | Kind         | Why                                                                                            |
-| -------------------------------------------- | --------------------------- | ------------ | ---------------------------------------------------------------------------------------------- |
-| `dm`                                         | `ge`                        | `SUPERSEDES` | 44 of 44 shared plans superseded, 1 unique plan, 4 commits (3 rebased twins, 1 split mirror)   |
-| `dm` -> `decision-models.md`                 | `ge`                        | `MERGE`      | the one plan that survives the fold, and it moves with the commit                              |
-| `ex`                                         | `feat/evolution`            | `MERGE`      | independent content (7 files), 3 shared generated files                                        |
-| `ge`                                         | `feat/evolution`            | `MERGE`      | before `nyx`: carries the decision-models track, ADR 153/154 and the ADR 151/152 removals      |
-| `nyx`                                        | `feat/evolution`            | `MERGE`      | last: rebases onto the settled shortlist contract, 1 shared generated file plus the env docs   |
-| `nyx`                                        | `ge`                        | `REBASE`     | nyx rewrites the router pipeline and `05-env-variables.md` after the decision layer settles    |
-| `ge`'s `decision-models.md`                  | `nyx`                       | `ORDER`      | both rewrite `src/tools/router/call/_pipeline.js` and `_stages.js`; settle the shortlist first |
-| `dm`'s 44 shared plan files                  | `ge`'s versions             | `DIVERGENCE` | all 44 superseded: ADR 154 format and ADR 152 removals; no dm-only content                     |
-| `ex`'s `docs/plans/execution-plan.md`           | Stage 0 of `feat/evolution` | `SUPERSEDES` | retired: its three phases are section 7 of this file, which closed them                        |
-| `ex`'s `docs/plans/oss.md`                      | Stage 0 of `feat/evolution` | `SUPERSEDES` | retired: OSS-01 to OSS-08 are closed in section 7 of this file                                 |
+| From                                  | To                          | Kind         | Why                                                                                            |
+| ------------------------------------- | --------------------------- | ------------ | ---------------------------------------------------------------------------------------------- |
+| `dm`                                  | `ge`                        | `SUPERSEDES` | 44 of 44 shared plans superseded, 1 unique plan, 4 commits (3 rebased twins, 1 split mirror)   |
+| `dm` -> `decision-models.md`          | `ge`                        | `MERGE`      | the one plan that survives the fold, and it moves with the commit                              |
+| `ex`                                  | `feat/evolution`            | `MERGE`      | independent content (7 files), 3 shared generated files                                        |
+| `ge`                                  | `feat/evolution`            | `MERGE`      | before `nyx`: carries the decision-models track, ADR 153/154 and the ADR 151/152 removals      |
+| `nyx`                                 | `feat/evolution`            | `MERGE`      | last: rebases onto the settled shortlist contract, 1 shared generated file plus the env docs   |
+| `nyx`                                 | `ge`                        | `REBASE`     | nyx rewrites the router pipeline and `05-env-variables.md` after the decision layer settles    |
+| `ge`'s `decision-models.md`           | `nyx`                       | `ORDER`      | both rewrite `src/tools/router/call/_pipeline.js` and `_stages.js`; settle the shortlist first |
+| `dm`'s 44 shared plan files           | `ge`'s versions             | `DIVERGENCE` | all 44 superseded: ADR 154 format and ADR 152 removals; no dm-only content                     |
+| `ex`'s `docs/plans/execution-plan.md` | Stage 0 of `feat/evolution` | `SUPERSEDES` | retired: its three phases are section 7 of this file, which closed them                        |
+| `ex`'s `docs/plans/oss.md`            | Stage 0 of `feat/evolution` | `SUPERSEDES` | retired: OSS-01 to OSS-08 are closed in section 7 of this file                                 |
 
 The merge order is **derived, not chosen**: `dm` is first because it is the
 cheapest fold; `ex` follows because its generated files are the smallest set;
@@ -418,6 +418,19 @@ Stage 3 gate record (2026-10-22):
   describes a branch that carries the two retired plans. It is in no CI suite;
   Stage 7 widens it to the merged shape.
 
+### Stage 3.5 - Quick-start before the engineering guides
+
+- [ ] Create `docs/07-quick-start.md`: the main flows in short, practical
+      examples - init, check, fix, handoff/handon, personas, the cache and the
+      decision layer - so a reader can use the server without reading a guide.
+- [ ] Renumber `docs/07-engineering-guides.md` to `docs/08-engineering-guides.md`
+      and update the README index, every cross-reference and the docs numbering
+      tests. The quick-start is the shallow entry; the engineering guides stay
+      the deep version.
+- [ ] Gate: the docs numbering doctor and the docs tests pass with the new
+      number, and the quick-start covers every flow the engineering guides list
+      as a chapter.
+
 ### Stage 4 - Close `decision-models` on `ge`, then merge `ge`
 
 - [x] Rebase `ge` onto `feat/evolution` after Stage 3. Evidence: the evolution fast-forwarded to `1ecb14ef`.
@@ -468,6 +481,19 @@ Stage 3 gate record (2026-10-22):
       `tests/plans/skills-plan.test.mjs` 9/9, `tests/plans/plan-of-plans.test.mjs`
       7/7, the level-0 format on `feat/export`.
 - [x] `dm`'s retired copies are gone, so they are not retrofitted at all.
+
+### Stage 8 - Rename `rule-mcp` to `rule-mcp` (GitHub and local, last)
+
+- [ ] GitHub: rename the repository to `rule-mcp`, update the remote, the badges,
+      the issue/PR templates and the release references; keep the old URL as the
+      redirect GitHub provides.
+- [ ] Local: rename the checkout folder, the package names, the bin names, the
+      project names and the paths in scripts, CI, docs and MCP client configs
+      from `rule-mcp` to `rule-mcp`; leave the `rule-mcp-architect`
+      sibling under its own name.
+- [ ] Gate: `pnpm census`, the docs tests, the install scripts and the plan
+      tests pass from the renamed checkout; no `rule-mcp` remains outside
+      the historical ADRs and the migration note.
 
 ## 8 - Contended files across branches
 
