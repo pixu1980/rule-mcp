@@ -1,20 +1,23 @@
 
 
-/** Deterministic decision-cache protocol: redact, state, question, parse and guards. */
+/** Deterministic decision-cache protocol: redact, state, question, parse and decide. */
 import { createHash } from "node:crypto";
 
 import { buildChoiceQuestion, probabilityOf } from "../../decision/_rerank.js";
+import { guardAmbiguity, guardCandidate } from "./_decision-guards.js";
 import { NORMALIZABLE } from "./_state.js";
 
-/** Provisional shadow floor; phase 2 replaces it with the measured value. */
-export const SHADOW_THRESHOLD = 0.9;
+export { guardAmbiguity, guardCandidate } from "./_decision-guards.js";
+
+/** The measured floor: the corpus report recommends it with ten predictions and zero false replays. */
+export const SHADOW_THRESHOLD = 0.7;
 /** The label that means "none of these is the same request". */
 export const NONE_LABEL = "none";
 /** What the model reads for the none label. */
 export const NONE_DESCRIPTION = "none of these is the same request";
 /** The cache gate's question, distinct from the routing question. */
 export const GATE_INSTRUCTIONS =
-  "Pick the cached result that is the same request as the query, even when the wording differs. A candidate with the same skill and the same intent is the right replay; pick none only when no candidate shares the intent.";
+  "Pick the candidate only when it would answer the same request as the query, even when the wording differs. The same skill is not enough: the intent must match. Pick none when no candidate shares the intent.";
 
 const HOME = /\/(?:Users|home)\/[^/\s]+/gu;
 const WINDOWS_HOME = /[A-Za-z]:\\Users\\[^\\\s]+/gu;
@@ -60,7 +63,6 @@ export function buildGateState({ toolName, args, livePrompt, candidates }) {
   const lines = [
     `tool: ${toolName}`,
     `query: ${truncate(redact(livePrompt), PROMPT_CHAR_CAP)}`,
-    `queryHash: ${promptHash(livePrompt)}`,
     ...context,
     `candidates: ${candidates.length}`,
   ];
@@ -106,40 +108,12 @@ export function parseGateAnswer(answer, candidates, threshold = SHADOW_THRESHOLD
   return { choice, probability, candidate, wouldReplay: true, reason: "candidate" };
 }
 
-/** The hard guards: a model pick can never override them. */
-export function guardCandidate(candidate, live = {}) {
-  if (!candidate) {
-    return "missing-candidate";
-  }
-
-  if (candidate.argsKey !== live.argsKey) {
-    return "args-mismatch";
-  }
-
-  if (candidate.echo) {
-    return "echo";
-  }
-
-  if (!candidate.fresh) {
-    return "stale";
-  }
-
-  if (candidate.isError) {
-    return "error";
-  }
-
-  return null;
-}
-
 /** Parse, threshold and guard in one place; the default is a miss. */
 export function decideShadow({ answer, candidates, live, threshold = SHADOW_THRESHOLD }) {
   const parsed = parseGateAnswer(answer, candidates, threshold);
+  const reason = parsed.candidate
+    ? (guardCandidate(parsed.candidate, live) ?? guardAmbiguity(parsed.candidate, candidates))
+    : null;
 
-  if (!parsed.wouldReplay) {
-    return parsed;
-  }
-
-  const reason = guardCandidate(parsed.candidate, live);
-
-  return reason ? { ...parsed, wouldReplay: false, reason } : parsed;
+  return reason ? { ...parsed, wouldReplay: false, reason, guard: reason } : { ...parsed, guard: null };
 }

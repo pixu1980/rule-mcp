@@ -19,7 +19,7 @@ test("the deps fingerprint is order-independent and content-sensitive", () => {
   assert.notEqual(depsFingerprint({ a: "1" }), depsFingerprint({ a: "2" }));
 });
 
-test("a candidate description carries the request, skill, deps and id but not hits", () => {
+test("a candidate description carries the request and skill but no hashes or hits", () => {
   const description = describeCandidate({
     key: "abcdef012345",
     prompt: "  create   a button ",
@@ -27,7 +27,7 @@ test("a candidate description carries the request, skill, deps and id but not hi
     deps: "abcd1234",
   });
 
-  assert.equal(description, "request: create a button; skill: rule-frontend-react; deps: abcd1234; id: abcdef01");
+  assert.equal(description, "request: create a button; skill: rule-frontend-react");
   assert.ok(describeCandidate({ key: "k", prompt: "x".repeat(500) }).length <= 200);
 });
 

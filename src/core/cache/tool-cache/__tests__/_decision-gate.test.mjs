@@ -142,7 +142,7 @@ test("an invalid threshold falls back to the explicit default", () => {
   process.env.RULE_MCP_DECISION_CACHE_THRESHOLD = "nope";
 
   try {
-    assert.equal(shadowThreshold(), 0.9);
+    assert.equal(shadowThreshold(), 0.7);
   } finally {
     delete process.env.RULE_MCP_DECISION_CACHE_THRESHOLD;
   }

@@ -32,20 +32,12 @@ export function depsFingerprint(deps) {
     .slice(0, 8);
 }
 
-/** A stable candidate description: no hits, no age, no result text. */
-export function describeCandidate({ key, prompt, route, deps }) {
+/** A stable candidate description: no hits, no age, no hashes, no result text. */
+export function describeCandidate({ prompt, route }) {
   const parts = [`request: ${truncate(redact(prompt), PROMPT_CHAR_CAP)}`];
 
   if (route) {
     parts.push(`skill: ${truncate(redact(route), ROUTE_CHAR_CAP)}`);
-  }
-
-  if (deps) {
-    parts.push(`deps: ${deps}`);
-  }
-
-  if (key) {
-    parts.push(`id: ${String(key).slice(0, 8)}`);
   }
 
   return parts.join("; ");

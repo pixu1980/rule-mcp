@@ -60,6 +60,7 @@ export function clearShadows() {
 export function summarizeShadows(events, { minPredictions = 10 } = {}) {
   const predictions = events.filter((event) => event.choice && event.choice !== "none" && typeof event.probability === "number");
   const labeled = predictions.filter((event) => event.correct === true || event.correct === false);
+  const eligible = labeled.filter((event) => !event.guard);
   const would = events.filter((event) => event.wouldReplay);
   const reasons = new Map();
 
@@ -71,7 +72,7 @@ export function summarizeShadows(events, { minPredictions = 10 } = {}) {
 
   for (let step = 0.3; step <= 0.99; step += 0.05) {
     const threshold = Math.round(step * 100) / 100;
-    const at = labeled.filter((event) => event.probability >= threshold);
+    const at = eligible.filter((event) => event.probability >= threshold);
     const wrong = at.filter((event) => event.correct === false).length;
 
     thresholds.push({
@@ -90,6 +91,8 @@ export function summarizeShadows(events, { minPredictions = 10 } = {}) {
     wouldReplay: would.length,
     currentWrong: would.filter((event) => event.correct === false).length,
     labeled: labeled.length,
+    eligible: eligible.length,
+    guarded: events.filter((event) => event.guard).length,
     unlabeled: predictions.length - labeled.length,
     cacheHits: events.filter((event) => event.decisionCacheHit).length,
     meanMs: mean(modeled.map((event) => event.ms)),

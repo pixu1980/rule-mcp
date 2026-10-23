@@ -4,11 +4,16 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
-import { buildGateQuestion, buildGateState, decideShadow, guardCandidate, parseGateAnswer, promptHash, redact, SHADOW_THRESHOLD, truncate } from "../_decision-protocol.js";
+import { buildGateQuestion, buildGateState, decideShadow, guardAmbiguity, guardCandidate, parseGateAnswer, promptHash, redact, SHADOW_THRESHOLD, truncate } from "../_decision-protocol.js";
 
 const candidates = [
   { label: "candidate-1", description: "prompt: a; route: r", argsKey: "{}", echo: false, fresh: true, isError: false },
   { label: "candidate-2", description: "prompt: b; route: r", argsKey: "{}", echo: false, fresh: true, isError: false },
+];
+
+const routed = [
+  { label: "candidate-1", description: "request: a; skill: rule-frontend", route: "rule-frontend", argsKey: "{}", echo: false, fresh: true, isError: false },
+  { label: "candidate-2", description: "request: b; skill: rule-frontend-vue", route: "rule-frontend-vue", argsKey: "{}", echo: false, fresh: true, isError: false },
 ];
 
 function answer(choice, probability) {
@@ -41,7 +46,7 @@ test("the gate state carries the tool, query, context and candidate count", () =
 
   assert.match(state, /^tool: pix_tool/u);
   assert.match(state, /query: x/u);
-  assert.match(state, /queryHash: [a-f0-9]{12}/u);
+  assert.equal(state.includes("queryHash"), false, "the hash is noise to the model");
   assert.match(state, /framework: react/u);
   assert.match(state, /path: ~\/p/u);
   assert.match(state, /candidates: 2/u);
@@ -51,8 +56,8 @@ test("the question offers the candidates plus none", () => {
   const question = buildGateQuestion(candidates);
 
   assert.deepEqual(Object.keys(question.pick.criteria), ["candidate-1", "candidate-2", "none"]);
-  assert.match(question.pick.instructions, /cached result/u);
-  assert.match(question.pick.instructions, /same skill/u);
+  assert.match(question.pick.instructions, /same request/u);
+  assert.match(question.pick.instructions, /Pick none when no candidate shares the intent/u);
 });
 
 test("a choice above the threshold is a replay candidate", () => {
@@ -96,6 +101,37 @@ test("a guarded choice whose candidate echoes never replays", () => {
   assert.equal(parsed.reason, "echo");
 });
 
+test("a hub pick beside a leaf of the same area is ambiguous", () => {
+  assert.equal(guardAmbiguity(routed[0], routed), "ambiguous-hub");
+  assert.equal(guardAmbiguity(routed[1], routed), null, "the specific leaf wins over the hub");
+  assert.equal(guardAmbiguity({ ...routed[0], route: "rule-backend" }, routed), null);
+  assert.equal(guardAmbiguity({ ...routed[0], route: undefined }, routed), null);
+});
+
+test("an ambiguous hub pick never replays", () => {
+  const parsed = decideShadow({
+    answer: answer("candidate-1", 0.95),
+    candidates: routed,
+    live: { argsKey: "{}" },
+  });
+
+  assert.equal(parsed.wouldReplay, false);
+  assert.equal(parsed.reason, "ambiguous-hub");
+  assert.equal(parsed.guard, "ambiguous-hub");
+});
+
+test("a below-threshold pick still carries its guard for the sweep", () => {
+  const parsed = decideShadow({
+    answer: answer("candidate-1", 0.5),
+    candidates: routed,
+    live: { argsKey: "{}" },
+  });
+
+  assert.equal(parsed.wouldReplay, false);
+  assert.equal(parsed.reason, "ambiguous-hub");
+  assert.equal(parsed.guard, "ambiguous-hub");
+});
+
 test("the default threshold is explicit", () => {
-  assert.equal(SHADOW_THRESHOLD, 0.9);
+  assert.equal(SHADOW_THRESHOLD, 0.7);
 });
