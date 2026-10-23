@@ -4,26 +4,39 @@
 import { CACHE_GROUPS, CACHE_NEGATIVES } from "../../../tests/fixtures/decision-cache-corpus.mjs";
 
 /**
- * Each group contributes one cached seed; its paraphrases and the negatives
- * become the live samples the benchmark labels against the gold route.
+ * Build the leave-one-out plan: for each prompt in a group, the cache holds the
+ * group's other prompts plus the other groups' seeds. The negatives keep the
+ * one-seed-per-group cache, so a missing route stays a safe miss.
  *
- * @returns {{ seeds: Array<{ group: string, prompt: string }>, samples: Array<{ group: string, kind: string, prompt: string }> }}
+ * @returns {{
+ *   prompts: string[],
+ *   seeds: Array<{ group: string, prompt: string }>,
+ *   samples: Array<{ group: string, kind: string, prompt: string, seeds: Array<{ group: string, prompt: string }> }>,
+ * }}
  */
 export function planCorpus() {
   const seeds = CACHE_GROUPS.map(({ id, seed }) => ({ group: id, prompt: seed }));
+  const prompts = CACHE_GROUPS.flatMap((group) => [group.seed, ...group.paraphrases]);
   const samples = [];
 
   for (const group of CACHE_GROUPS) {
-    for (const prompt of group.paraphrases) {
-      samples.push({ group: group.id, kind: "paraphrase", prompt });
+    const peers = [group.seed, ...group.paraphrases];
+
+    for (const prompt of peers) {
+      samples.push({
+        group: group.id,
+        kind: "loo",
+        prompt,
+        seeds: [...seeds.filter((seed) => seed.group !== group.id), ...peers.filter((peer) => peer !== prompt).map((peer) => ({ group: group.id, prompt: peer }))],
+      });
     }
   }
 
   for (const negative of CACHE_NEGATIVES) {
-    samples.push({ group: negative.id, kind: "negative", prompt: negative.prompt });
+    samples.push({ group: negative.id, kind: "negative", prompt: negative.prompt, seeds });
   }
 
-  return { seeds, samples };
+  return { prompts, seeds, samples };
 }
 
 /** One error string, or null when the corpus is safe to run. */

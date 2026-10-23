@@ -15,7 +15,7 @@ Adopt BM25 as the decision-cache candidate ranker, with the existing five-candid
 
 ## Consequences
 
-Recall is unchanged (31/47 Laya, 22/47 Julia), so the ranker is still not the fix for the missing gold seed. Laya precision below 0.75 improves (0.50 92.9% vs 86.7%, 0.70 66.7% vs 50%), but the 0.90 floor has no Laya predictions, so replay stays off. Julia at 0.90 worsens (41.7% vs 58.8%) and at 0.95 (50% vs 66.7%); the Julia caveat is recorded. The model time is unchanged (Laya 62 ms, Julia 18 ms), and the eight negatives stay no-candidates. The recall work (route-aware filtering or seed expansion) is next.
+Recall is unchanged (31/47 Laya, 22/47 Julia), so the ranker is still not the fix for the missing gold seed. Laya precision below 0.75 improves (0.50 92.9% vs 86.7%, 0.70 66.7% vs 50%), but the 0.90 floor has no Laya predictions, so replay stays off. Julia at 0.90 worsens (41.7% vs 58.8%) and at 0.95 (50% vs 66.7%); the Julia caveat is recorded. The model time is unchanged (Laya 62 ms, Julia 18 ms), and the eight negatives stay no-candidates. The leave-one-out corpus (ADR 161) lifted Laya coverage to 76.8% (53/69) and Julia to 49.3% (34/69); the model's choice is the next blocker.
 
 ## What would end this
 
