@@ -68,7 +68,7 @@ test("auto selects Julia for Italian and Laya for English", async () => {
       const italian = await rule("Come faccio a creare un componente React?");
       const english = await rule("I need a React button component");
 
-      assert.deepEqual(models, ["julia-1", "ggml-org/Laya-GGUF"]);
+      assert.deepEqual(models, ["ggml-org/Julia-1-GGUF:Q8_0", "ggml-org/Laya-GGUF"]);
       assert.equal(italian.route, "rule-frontend-react");
       assert.equal(italian.confidence, 0.9);
       assert.equal(english.route, "rule-frontend-react");

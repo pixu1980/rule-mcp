@@ -23,9 +23,9 @@ export const DECISION_MODELS = Object.freeze({
     languages: Object.freeze(["en"]),
     shortlist: 6,
   }),
-  // The multilingual entry: the installed id is filled in when Julia-1 is.
-  "julia-1": Object.freeze({
-    id: "julia-1",
+  // The multilingual entry, installed as ggml-org/Julia-1-GGUF:Q8_0 on llama.cpp.
+  "ggml-org/Julia-1-GGUF:Q8_0": Object.freeze({
+    id: "ggml-org/Julia-1-GGUF:Q8_0",
     alias: "julia",
     size: 144_000_000,
     context: 8192,
