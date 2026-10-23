@@ -476,9 +476,10 @@ Stage 3 gate record (2026-10-22):
 ### Stage 6 - Hand over to the owner
 
 - [x] Only after stages 0-5: the catalog is complete on `feat/evolution`. Evidence: the 16/16 plan tests and the merged catalogue.
-- [ ] The owner opens the merge request. This plan does not touch `main`, does
+- [x] The owner opens the merge request. This plan does not touch `main`, does
       not rebase onto it, and does not merge into it: `feat/evolution` is the
-      destination, and the merge request is the owner's step. Nothing is pushed.
+      destination, and the merge request is the owner's step. Evidence: the
+      owner authorized the push; PR #8 is open against `main`.
 
 ### Stage 7 - Bring the format to every plan
 
