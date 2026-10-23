@@ -79,4 +79,10 @@ export const CACHE_HISTORY = [
   { group: "vite-alias", prompt: "alias src in Vite" },
   { group: "nuxt-server", prompt: "Nuxt server API route" },
   { group: "nuxt-server", prompt: "server route in Nuxt" },
+  { group: "remix-loader", prompt: "Remix route loader data" },
+  { group: "remix-loader", prompt: "Remix form action data" },
+  { group: "hono-auth", prompt: "Hono JWT middleware" },
+  { group: "hono-auth", prompt: "Hono auth guard" },
+  { group: "angular-signal", prompt: "Angular signal input binding" },
+  { group: "angular-signal", prompt: "Angular input signals" },
 ];
