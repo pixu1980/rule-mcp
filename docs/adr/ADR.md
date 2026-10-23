@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [160](160-rank-decision-cache-candidates-with-bm25.md)                                                                  | Rank decision-cache candidates with BM25                                                                  | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [159](159-keep-the-single-batch-decision-cache-shortlist.md)                                                            | Keep the single-batch decision-cache shortlist                                                            | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md)                                           | Replay the decision-cache gate only behind a measured threshold                                           | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [157](157-shadow-the-decision-cache-gate-before-replaying.md)                                                           | Shadow the decision-cache gate before replaying                                                           | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
@@ -175,6 +176,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [160](160-rank-decision-cache-candidates-with-bm25.md)                                                                  | Adopt BM25 as the decision-cache candidate ranker, with the existing five-candidate cap, the single batch, and the replay still off.                                                                                            | Recall is unchanged (31/47 Laya, 22/47 Julia), so the ranker is still not the fix for the missing gold seed.                                                                                                                    |
 | [159](159-keep-the-single-batch-decision-cache-shortlist.md)                                                            | Revert the two-batch variant and keep the single five-candidate batch.                                                                                                                                                          | The top-ten pool did not change recall, so the ranker is the measured blocker, not the model's batch size.                                                                                                                      |
 | [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md)                                           | Add an opt-in replay behind RULE_MCP_DECISION_CACHE_REPLAY=1, off by default.                                                                                                                                             | A wrong replay is silent, so the default remains off.                                                                                                                                                                           |
 | [157](157-shadow-the-decision-cache-gate-before-replaying.md)                                                           | Add an opt-in L3 gate built from deterministic parts: same-tool, same non-prompt args, fresh and non-echoing candidates; IDF-weighted overlap top five plus none; a redacted state and stable candidate descriptions; a...      | No response changes in phase 1; an opt-in model call runs after the response on a cache miss; the report is local.                                                                                                              |
@@ -473,6 +475,23 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [071](071-the-census-generates-eight-numbered-documents-and-three-fenced-blocks-inside-the-chapters-a-person-writes.md) The census generates eight numbered documents and three fenced blocks inside the chapters a person writes
 - [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
+### routing
+
+- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
+- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
+- [026](026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
+- [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
+- [024](024-skill-routing-parcel-bundler-zero-config-build-tool.md) Skill routing: Parcel bundler zero config build tool
+- [023](023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.md) Skill routing: Husky git hooks pre-commit lint-staged commitlint
+- [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
+- [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
+- [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
+
 ### commands
 
 - [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md) The fix tool and command apply the deterministic guardrails, not the file tree
@@ -488,22 +507,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
 - [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 - [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
-
-### routing
-
-- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
-- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
-- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
-- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
-- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
-- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
-- [026](026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
-- [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
-- [024](024-skill-routing-parcel-bundler-zero-config-build-tool.md) Skill routing: Parcel bundler zero config build tool
-- [023](023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.md) Skill routing: Husky git hooks pre-commit lint-staged commitlint
-- [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
-- [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
-- [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
 
 ### testing
 
@@ -727,6 +730,14 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
 - [073](073-compression-has-four-levels-and-no-llm-in-the-output-path.md) Compression has four levels and no LLM in the output path
 
+### decision-models
+
+- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+
 ### frontend
 
 - [152](152-retire-rule-frontend-vanilla-reactive-and-rule-frontend-custom-element.md) Retire rule-frontend-vanilla-reactive and rule-frontend-custom-element
@@ -774,12 +785,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [010](010-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
 
-### decision-models
+### cache
 
+- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
 - [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
 - [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
 - [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
-- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
 
 ### infrastructure
 
@@ -794,6 +805,13 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
 - [092](092-surface-selection-amends-the-install-stack-freeze-with-an-additive-loader-filter.md) Surface selection amends the install stack freeze with an additive loader filter
 - [091](091-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md) Install/uninstall rework keeps current stack, steps and contents only
+
+### observability
+
+- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
 
 ### plans
 
@@ -843,12 +861,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
 - [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
-### cache
-
-- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
-- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
-- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
-
 ### code-graph
 
 - [108](108-the-handoff-family-gets-a-generated-index-and-the-root-handoff-summary-retires.md) The handoff family gets a generated index, and the root HANDOFF summary retires
@@ -896,12 +908,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [012](012-database-skills.md) Database Skills
 - [010](010-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
-
-### observability
-
-- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
-- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
-- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
 
 ### quality
 
