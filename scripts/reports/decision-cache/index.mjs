@@ -12,7 +12,7 @@ console.log("Decision-cache shadow report");
 console.log(`records: ${summary.total}`);
 console.log(`would replay at the current floor: ${summary.wouldReplay} (${pct(summary.wouldReplay, summary.total)}%)`);
 console.log(`false replays at the current floor: ${summary.currentWrong}`);
-console.log(`predictions labeled: ${summary.labeled}; unlabeled: ${summary.unlabeled}`);
+console.log(`predictions labeled: ${summary.labeled}; eligible: ${summary.eligible}; guarded: ${summary.guarded}; unlabeled: ${summary.unlabeled}`);
 console.log(`decision-cache hits: ${summary.cacheHits} (${pct(summary.cacheHits, summary.total)}%)`);
 console.log(`mean model time: ${ms(summary.meanMs)} ms; mean compute time: ${ms(summary.meanGoldMs)} ms`);
 

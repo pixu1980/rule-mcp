@@ -61,6 +61,26 @@ test("the summary counts false replays and recommends the lowest safe threshold"
   assert.equal(summary.meanGoldMs, 4);
 });
 
+test("guarded events never count toward the floor", () => {
+  const events = [
+    event({ probability: 0.99, correct: false, guard: "ambiguous-hub", wouldReplay: false, reason: "ambiguous-hub" }),
+    event({ probability: 0.95, correct: true, guard: null }),
+    event({ probability: 0.9, correct: true, guard: null }),
+  ];
+  const summary = summarizeShadows(events, { minPredictions: 2 });
+  const withoutGuard = summarizeShadows(
+    events.map(({ guard, ...rest }) => rest),
+    { minPredictions: 2 },
+  );
+
+  assert.equal(summary.guarded, 1);
+  assert.equal(summary.eligible, 2);
+  assert.equal(summary.recommended.threshold, 0.3);
+  assert.equal(summary.recommended.predicted, 2);
+  assert.equal(summary.recommended.wrong, 0);
+  assert.equal(withoutGuard.recommended, null, "without the guard the 0.99 wrong blocks every floor");
+});
+
 test("the record round-trips through the JSONL file and clears", () => {
   clearShadows();
   recordShadow({ tool: "pix_tool", correct: true });

@@ -70,7 +70,7 @@ console.log(`state: ${stateDir}`);
 console.log(`model: ${model}; groups: ${seeds.length}; history: ${history}; samples: ${rows.length} (${loo} leave-one-out, ${rows.length - loo} negatives)`);
 console.log(`would replay at the current floor: ${summary.wouldReplay} (${pct(summary.wouldReplay, summary.total)}%)`);
 console.log(`false replays at the current floor: ${summary.currentWrong}`);
-console.log(`labeled: ${summary.labeled}; unlabeled: ${summary.unlabeled}`);
+console.log(`labeled: ${summary.labeled}; eligible: ${summary.eligible}; guarded: ${summary.guarded}; unlabeled: ${summary.unlabeled}`);
 console.log(`leave-one-out gold present in candidates: ${covered}/${loo} (${pct(covered, loo)}%)`);
 console.log("negatives: no seed is the only safe choice");
 console.log(`decision-cache hits: ${summary.cacheHits}`);
