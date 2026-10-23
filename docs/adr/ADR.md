@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md)                                                | Seed the decision-cache corpus with historical paraphrases                                                | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [164](164-reject-the-route-aware-candidate-filter.md)                                                                   | Reject the route-aware candidate filter                                                                   | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md)                                               | Exclude the multilingual model from the decision-cache gate                                               | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md)                                       | Name the skill and accept paraphrase in the decision-cache question                                       | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
@@ -180,6 +181,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md)                                                | Adopt the 68 historical paraphrase seeds in the corpus benchmark.                                                                                                                                                               | Laya coverage rose to 88/105 (83.8%); predictions to 82. Wrong choices were 22 at 0.30 but 1 at 0.50 and 0 at 0.55, where 9 predictions were correct (one short of the 10-sample floor).                                        |
 | [164](164-reject-the-route-aware-candidate-filter.md)                                                                   | Reject the route-aware candidate filter.                                                                                                                                                                                        | The BM25 route is not the cache route: filtering by it removes correct seeds when the decision layer had overridden the route.                                                                                                  |
 | [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md)                                               | Exclude the multilingual model from the decision-cache gate.                                                                                                                                                                    | The Julia cache gate is off, so its overconfident cache picks can no longer replay or shadow.                                                                                                                                   |
 | [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md)                                       | Describe the cached candidate as request/skill and ask the model to accept a paraphrase when the skill and intent match, choosing none only when no candidate shares the intent.                                                | Laya's none fell from 38 to 24; predictions rose from 31 to 46, correct from 23 to 33, wrong from 8 to 13. The 0.45 precision rose to 84.2% (from 70.6%) but 0.60-0.75 got worse; no floor emerged.                             |
@@ -429,6 +431,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### routing
 
+- [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md) Seed the decision-cache corpus with historical paraphrases
 - [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
 - [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
 - [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
@@ -590,6 +593,19 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
 - [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
 
+### decision-models
+
+- [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md) Seed the decision-cache corpus with historical paraphrases
+- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
+- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
+- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
+- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
+- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+
 ### personas
 
 - [132](132-rename-rule-tool-plan-docs-to-rule-tool-impersonation.md) Rename rule_tool_plan_docs to rule_tool_impersonation
@@ -616,8 +632,9 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [015](015-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
 - [009](009-toolchain-vite.md) Toolchain Skill Isolation (Vite)
 
-### decision-models
+### cache
 
+- [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md) Seed the decision-cache corpus with historical paraphrases
 - [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
 - [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
 - [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
@@ -626,7 +643,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
 - [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
 - [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
-- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
 
 ### governance
 
@@ -640,8 +656,9 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [079](079-add-the-oss-architect-review-persona.md) Add the OSS Architect review persona
 - [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
 
-### cache
+### observability
 
+- [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md) Seed the decision-cache corpus with historical paraphrases
 - [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
 - [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
 - [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
@@ -661,17 +678,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
 - [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
 - [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
-
-### observability
-
-- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
-- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
-- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
-- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
-- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
-- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
-- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
-- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
 
 ### security
 

@@ -64,7 +64,7 @@ export async function runCorpus({ model, limit }) {
     throw new Error(invalid);
   }
 
-  const { prompts, seeds, samples } = planCorpus();
+  const { history, prompts, seeds, samples } = planCorpus();
   const selected = limit > 0 ? samples.slice(0, limit) : samples;
 
   await loadAllSkills(true);
@@ -117,7 +117,7 @@ export async function runCorpus({ model, limit }) {
     const records = readShadows();
     const rows = selected.map((sample, index) => ({ ...sample, ...records[index] }));
 
-    return { seeds, selected, rows, records, summary: summarizeShadows(records) };
+    return { history: history.length, seeds, selected, rows, records, summary: summarizeShadows(records) };
   } finally {
     await runtime.supervisor.shutdown();
   }
