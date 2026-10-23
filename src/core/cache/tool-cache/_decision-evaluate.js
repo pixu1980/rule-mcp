@@ -42,6 +42,12 @@ export async function evaluateDecision(toolName, args, threshold = SHADOW_THRESH
     return { prompt, candidates, reason: "no-model" };
   }
 
+  // The multilingual model's cache answers were overconfident on the corpus
+  // (ADR 163): keep it on routing and leave the cache gate to the English model.
+  if (model.alias === "julia") {
+    return null;
+  }
+
   const state = buildGateState({ toolName, args, livePrompt: prompt, candidates });
   const shortlist = candidates.map(({ label, description }) => ({ skill: label, description }));
 
