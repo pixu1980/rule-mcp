@@ -9,7 +9,7 @@ import { DECISION_MODELS, modelFits, modelForLanguage, resolveDecisionModel } fr
 test("the registry resolves the plan aliases and their thresholds", () => {
   const laya = resolveDecisionModel("laya");
 
-  assert.equal(laya.id, "ggml-org/Laya-GGUF");
+  assert.equal(laya.id, "ggml-org/Laya-GGUF:Q8_0");
   assert.equal(laya.threshold, 0.05);
   assert.equal(resolveDecisionModel(laya.id), laya);
   assert.equal(resolveDecisionModel("julia").languages.includes("it"), true);
@@ -33,7 +33,7 @@ test("every entry carries a size, a context, its languages and a shortlist cap",
 });
 
 test("the language picks the model and a context that cannot hold the cap is refused", () => {
-  assert.equal(modelForLanguage("en").id, "ggml-org/Laya-GGUF");
+  assert.equal(modelForLanguage("en").id, "ggml-org/Laya-GGUF:Q8_0");
   assert.equal(modelForLanguage("it").id, "ggml-org/Julia-1-GGUF:Q8_0");
   assert.equal(modelForLanguage("fr"), null);
   assert.equal(modelFits(resolveDecisionModel("laya"), 6), true);

@@ -45,20 +45,20 @@ Both tables come from one run of the harness on the machine above, with every mo
 
 ### Requests
 
-| Model              | Probe     | Questions | Latency | Input tokens | Answers                                                              |
-| ------------------ | --------- | --------- | ------- | ------------ | -------------------------------------------------------------------- |
-| ggml-org/Laya-GGUF | billing   | 3         | 69 ms   | 167          | route=billing 0.9917 (conf 0.9876)<br>angry=0.7862<br>urgency=1.90   |
-| ggml-org/Laya-GGUF | shipping  | 3         | 64 ms   | 170          | route=shipping 0.7918 (conf 0.6877)<br>angry=0.1255<br>urgency=2.27  |
-| ggml-org/Laya-GGUF | technical | 3         | 65 ms   | 164          | route=technical 0.9483 (conf 0.9225)<br>angry=0.3030<br>urgency=2.59 |
-| ggml-org/Laya-GGUF | control   | 1         | 42 ms   | 67           | route=billing 0.9917 (conf 0.9876)                                   |
-| ggml-org/Laya-GGUF | bare      | 1         | 38 ms   | 36           | route=billing 0.9905 (conf 0.9857)                                   |
-| ggml-org/Laya-GGUF | repeat    | 3         | 70 ms   | 167          | route=billing 0.9917 (conf 0.9876)<br>angry=0.7862<br>urgency=1.90   |
+| Model                   | Probe     | Questions | Latency | Input tokens | Answers                                                              |
+| ----------------------- | --------- | --------- | ------- | ------------ | -------------------------------------------------------------------- |
+| ggml-org/Laya-GGUF:Q8_0 | billing   | 3         | 69 ms   | 167          | route=billing 0.9917 (conf 0.9876)<br>angry=0.7862<br>urgency=1.90   |
+| ggml-org/Laya-GGUF:Q8_0 | shipping  | 3         | 64 ms   | 170          | route=shipping 0.7918 (conf 0.6877)<br>angry=0.1255<br>urgency=2.27  |
+| ggml-org/Laya-GGUF:Q8_0 | technical | 3         | 65 ms   | 164          | route=technical 0.9483 (conf 0.9225)<br>angry=0.3030<br>urgency=2.59 |
+| ggml-org/Laya-GGUF:Q8_0 | control   | 1         | 42 ms   | 67           | route=billing 0.9917 (conf 0.9876)                                   |
+| ggml-org/Laya-GGUF:Q8_0 | bare      | 1         | 38 ms   | 36           | route=billing 0.9905 (conf 0.9857)                                   |
+| ggml-org/Laya-GGUF:Q8_0 | repeat    | 3         | 70 ms   | 167          | route=billing 0.9917 (conf 0.9876)<br>angry=0.7862<br>urgency=1.90   |
 
 ### Summary
 
 | Model                                 | Verdict                            | Load (explicit) | Route | Latency (median) | Confidence | Repeat delta | Batch delta | Bare labels           |
 | ------------------------------------- | ---------------------------------- | --------------- | ----- | ---------------- | ---------- | ------------ | ----------- | --------------------- |
-| ggml-org/Laya-GGUF                    | decision model                     | 519 ms          | 3/3   | 65 ms            | 0.866      | 0.000000     | 100         | billing (conf 0.9857) |
+| ggml-org/Laya-GGUF:Q8_0               | decision model                     | 519 ms          | 3/3   | 65 ms            | 0.866      | 0.000000     | 100         | billing (conf 0.9857) |
 | prithivMLmods/APUS-OpenJev-v1-9B-GGUF | This model is not a decision model | 8867 ms         | 0/0   | -                | -          | -            | -           | -                     |
 
 The three battery states are a billing complaint, a late parcel and a login error. `route` is the only scored label, because it is the only one where "correct" is not a matter of taste: each state names its team in the first sentence. `angry` and `urgency` are recorded as observations.
