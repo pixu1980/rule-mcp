@@ -10,3 +10,4 @@ export * from "./_echo.js";
 export * from "./_replay.js";
 export * from "./_promote.js";
 export * from "./_nyx-tier.js";
+export * from "./_decision-gate.js";
