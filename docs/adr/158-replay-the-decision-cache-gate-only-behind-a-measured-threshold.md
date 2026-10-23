@@ -17,6 +17,8 @@ Add an opt-in replay behind PIX_GALAXY_MCP_DECISION_CACHE_REPLAY=1, off by defau
 
 A wrong replay is silent, so the default remains off. The oracle is route equality with fresh deps, not full payload equality, and the report exposes unlabeled predictions. The model call runs before compute and may cost more than it saves on pix_tool; the report compares both times, and the tier is a consistency/cache tier when the model is slower. L0/L1 and the Nyx tier still answer first, and NON_CACHEABLE, errors, echoes, stale deps and PIX_GALAXY_MCP_NO_CACHE still win.
 
+The first local corpus run (`pnpm audit:decision-cache`, Laya, 30 samples) produced 11 predictions and 2 false replays: a 0.51 test-first pair and a 0.71 docker pair. The gold route was in the candidates for 18 of 25 paraphrases, and no floor reached zero false replays with at least 10 labeled predictions. Replay therefore stays off; the next run needs more groups, better candidate recall or a different model, not a lower floor.
+
 ## What would end this
 
 The assumption this leans on, and the observation that would make it wrong.

@@ -31,7 +31,7 @@ for (const row of summary.thresholds) {
 console.log(
   summary.recommended
     ? `recommended floor: ${summary.recommended.threshold.toFixed(2)} (${summary.recommended.predicted} predictions, ${summary.recommended.wrong} wrong)`
-    : "recommended floor: none with zero false replays and at least 10 predictions; keep shadow",
+    : "recommended floor: none reaches zero false replays with at least 10 labeled predictions; keep shadow",
 );
 console.log("reasons:");
 
