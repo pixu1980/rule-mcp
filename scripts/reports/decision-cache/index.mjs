@@ -1,33 +1,44 @@
 
 
-/** Summarize the L3 decision-cache shadow records; phase 1 never replays. */
-import { readShadows } from "../../../src/core/cache/tool-cache/_decision-shadow.js";
+/** Summarize the L3 decision-cache shadow records: precision, floor sweep, latency. */
+import { readShadows, summarizeShadows } from "../../../src/core/cache/tool-cache/_decision-shadow.js";
 
 const events = readShadows();
-const would = events.filter((event) => event.wouldReplay);
-const cacheHits = events.filter((event) => event.decisionCacheHit);
-const reasons = new Map();
-
-for (const event of events) {
-  reasons.set(event.reason, (reasons.get(event.reason) ?? 0) + 1);
-}
-
-const mean = (values) => (values.length === 0 ? 0 : values.reduce((sum, value) => sum + value, 0) / values.length);
-const rate = (part) => (events.length === 0 ? 0 : Math.round((part / events.length) * 1000) / 10);
+const summary = summarizeShadows(events);
+const pct = (part, total) => (total === 0 ? "0.0" : ((part / total) * 100).toFixed(1));
+const ms = (value) => value.toFixed(1);
 
 console.log("Decision-cache shadow report");
-console.log(`records: ${events.length}`);
-console.log(`would replay: ${would.length} (${rate(would.length)}%)`);
-console.log(`decision-cache hits: ${cacheHits.length} (${rate(cacheHits.length)}%)`);
-console.log(`mean probability (would replay): ${mean(would.map((event) => event.probability)).toFixed(3)}`);
-console.log(`mean latency: ${mean(events.map((event) => event.ms)).toFixed(1)} ms`);
-console.log(`candidates per call: ${mean(events.map((event) => event.candidates?.length ?? 0)).toFixed(1)}`);
+console.log(`records: ${summary.total}`);
+console.log(`would replay at the current floor: ${summary.wouldReplay} (${pct(summary.wouldReplay, summary.total)}%)`);
+console.log(`false replays at the current floor: ${summary.currentWrong}`);
+console.log(`predictions labeled: ${summary.labeled}; unlabeled: ${summary.unlabeled}`);
+console.log(`decision-cache hits: ${summary.cacheHits} (${pct(summary.cacheHits, summary.total)}%)`);
+console.log(`mean model time: ${ms(summary.meanMs)} ms; mean compute time: ${ms(summary.meanGoldMs)} ms`);
+
+if (summary.meanMs > summary.meanGoldMs && summary.meanGoldMs > 0) {
+  console.log("note: the model costs more than the compute; replay is a consistency tier here, not a latency win");
+}
+
+console.log("threshold sweep:");
+
+for (const row of summary.thresholds) {
+  const precision = row.precision === null ? "n/a" : `${(row.precision * 100).toFixed(1)}%`;
+
+  console.log(`  ${row.threshold.toFixed(2)}: ${row.predicted} predicted, ${row.wrong} wrong, precision ${precision}`);
+}
+
+console.log(
+  summary.recommended
+    ? `recommended floor: ${summary.recommended.threshold.toFixed(2)} (${summary.recommended.predicted} predictions, ${summary.recommended.wrong} wrong)`
+    : "recommended floor: none with zero false replays and at least 10 predictions; keep shadow",
+);
 console.log("reasons:");
 
-for (const [reason, count] of [...reasons].sort((a, b) => b[1] - a[1])) {
+for (const [reason, count] of Object.entries(summary.reasons).sort((a, b) => b[1] - a[1])) {
   console.log(`  ${reason}: ${count}`);
 }
 
 if (process.argv.includes("--json")) {
-  console.log(JSON.stringify(events, null, 2));
+  console.log(JSON.stringify({ summary, events }, null, 2));
 }

@@ -2,7 +2,7 @@
 
 /** Deterministic cache candidates: eligibility, dedupe and IDF-weighted ranking. */
 import { tokenize } from "../../bm25/_terms.js";
-import { compare, depsFingerprint, describeCandidate, nonPromptArgs } from "./_decision-identity.js";
+import { compare, depsFingerprint, describeCandidate, nonPromptArgs, routeOf } from "./_decision-identity.js";
 import { dependenciesHold } from "./_digests.js";
 import { echoesArguments } from "./_echo.js";
 import { stableStringify } from "./_keys.js";
@@ -64,16 +64,6 @@ export function rankCandidates(query, descriptors, cap = CANDIDATE_CAP) {
     .slice(0, cap);
 }
 
-function routeOf(result) {
-  try {
-    const parsed = JSON.parse(result?.content?.[0]?.text ?? "{}");
-
-    return typeof parsed.route === "string" && parsed.route !== "none" ? parsed.route : undefined;
-  } catch {
-    return;
-  }
-}
-
 function eligible(toolName, entry, liveArgs) {
   return (
     entry.tool === toolName &&
@@ -107,8 +97,9 @@ export function buildDecisionCandidates(toolName, args) {
     }
 
     const prompt = promptOf(toolName, entry.args);
+    const route = routeOf(entry.result);
 
-    if (!prompt) {
+    if (!prompt || !route) {
       continue;
     }
 
@@ -122,7 +113,7 @@ export function buildDecisionCandidates(toolName, args) {
     descriptors.push({
       key,
       prompt,
-      route: routeOf(entry.result),
+      route,
       deps: depsFingerprint(entry.deps),
       argsKey: liveArgs,
       echo: false,

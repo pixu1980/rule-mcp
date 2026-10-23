@@ -2,7 +2,7 @@
 
 /** callTool's two heavy stages, split out so the orchestrator stays a thin sequence. */
 import { finalize, guardrailRulesOf } from "../_helpers.js";
-import { cacheLookup, cacheLookupSemantic, cacheStore } from "@src/core/cache/tool-cache/index.js";
+import { cacheLookup, cacheLookupDecision, cacheLookupSemantic, cacheStore } from "@src/core/cache/tool-cache/index.js";
 import { estimateRoutingSaving } from "../_compute.js";
 import { dependenciesOf } from "../_entry.js";
 import { recordFailure, recordHit, recordMiss } from "./_telemetry.js";
@@ -18,7 +18,8 @@ import { runAfterHooks } from "./_after.js";
  * @returns {{ isError?: boolean, content: Array<{ type: string, text: string }> }}
  */
 function replayCached(cached, name, validated, startedAt) {
-  const replay = { ...cached.result, _meta: { ...cached.result._meta, pixCache: { tier: cached.tier } } };
+  const pixCache = { tier: cached.tier, ...cached.meta };
+  const replay = { ...cached.result, _meta: { ...cached.result._meta, pixCache } };
   const { final, compressionSaved, reminderTokens } = finalize(name, replay);
 
   recordHit({ tool: name, args: validated, startedAt, cached, final, compressionSaved, reminderTokens });
@@ -51,6 +52,22 @@ export function replayIfCached(name, validated, startedAt) {
  */
 export async function replayIfSemanticCached(name, validated, startedAt) {
   const cached = await cacheLookupSemantic(name, validated);
+
+  return cached ? replayCached(cached, name, validated, startedAt) : undefined;
+}
+
+/**
+ * The opt-in L3 replay: the decision model chose a cached core above the floor.
+ * Off unless `RULE_MCP_DECISION_CACHE_REPLAY=1`; a miss costs only the
+ * lookup and falls through to compute.
+ *
+ * @param {string} name
+ * @param {object} validated
+ * @param {number} startedAt
+ * @returns {Promise<{ isError?: boolean, content: Array<{ type: string, text: string }> } | undefined>}
+ */
+export async function replayIfDecisionCached(name, validated, startedAt) {
+  const cached = await cacheLookupDecision(name, validated);
 
   return cached ? replayCached(cached, name, validated, startedAt) : undefined;
 }

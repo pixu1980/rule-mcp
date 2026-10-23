@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md)                                           | Replay the decision-cache gate only behind a measured threshold                                           | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [157](157-shadow-the-decision-cache-gate-before-replaying.md)                                                           | Shadow the decision-cache gate before replaying                                                           | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md)                                             | Keep BM25 and gate a local decision model as a second opinion                                             | 2026-10-22 | accepted   | routing, decision-models, architecture, security, testing                           |
 | [155](155-extend-the-devops-guardrail-family-with-file-scoped-source-cited-rules.md)                                    | Extend the devops guardrail family with file-scoped, source-cited rules                                   | 2026-10-17 | proposed   | guardrails, devops, quality-gate                                                    |
@@ -173,6 +174,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md)                                           | Add an opt-in replay behind RULE_MCP_DECISION_CACHE_REPLAY=1, off by default.                                                                                                                                             | A wrong replay is silent, so the default remains off.                                                                                                                                                                           |
 | [157](157-shadow-the-decision-cache-gate-before-replaying.md)                                                           | Add an opt-in L3 gate built from deterministic parts: same-tool, same non-prompt args, fresh and non-echoing candidates; IDF-weighted overlap top five plus none; a redacted state and stable candidate descriptions; a...      | No response changes in phase 1; an opt-in model call runs after the response on a cache miss; the report is local.                                                                                                              |
 | [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md)                                             | 1. BM25 remains the router.                                                                                                                                                                                                     | Positive: the baseline is a file and a command, not a memory; a model or router change is compared against the same 95 prompts; the model cannot send prompt text off the machine; the ranker cannot be silently replaced by... |
 | [155](155-extend-the-devops-guardrail-family-with-file-scoped-source-cited-rules.md)                                    | Add twenty guardrails across the five devops skills, each scoped to its target file name (Dockerfile, .dockerignore, docker-compose.autodeploy.yml, .gitlab-ci.yml, vitest.config.*, _.test._, server entry,...                 | Positive: the devops skills stop being narrative only; every rule is traceable to a public source; the engine stays predictable because triggers are file-scoped.                                                               |
@@ -485,6 +487,21 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 - [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
 
+### routing
+
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
+- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
+- [026](026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
+- [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
+- [024](024-skill-routing-parcel-bundler-zero-config-build-tool.md) Skill routing: Parcel bundler zero config build tool
+- [023](023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.md) Skill routing: Husky git hooks pre-commit lint-staged commitlint
+- [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
+- [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
+- [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
+
 ### testing
 
 - [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
@@ -541,20 +558,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
 - [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
 - [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
-
-### routing
-
-- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
-- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
-- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
-- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
-- [026](026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
-- [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
-- [024](024-skill-routing-parcel-bundler-zero-config-build-tool.md) Skill routing: Parcel bundler zero config build tool
-- [023](023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.md) Skill routing: Husky git hooks pre-commit lint-staged commitlint
-- [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
-- [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
-- [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
 
 ### cli
 
@@ -841,6 +844,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [138](138-extend-the-data-guardrail-family-with-shared-and-per-engine-rules.md) Extend the data guardrail family with shared and per-engine rules
 - [042](042-strengthen-database-relational-constraint-skills.md) Strengthen database relational constraint skills
 - [012](012-database-skills.md) Database Skills
+
+### decision-models
+
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
 
 ### determinism
 

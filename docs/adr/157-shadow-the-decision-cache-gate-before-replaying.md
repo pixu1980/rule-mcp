@@ -11,7 +11,7 @@ The decision model is a closed-choice reranker, not a code analyzer. The tool ca
 
 ## Decision
 
-Add an opt-in L3 gate built from deterministic parts: same-tool, same non-prompt args, fresh and non-echoing candidates; IDF-weighted overlap top five plus none; a redacted state and stable candidate descriptions; a choice question; a strict parser and hard guards. Phase 1 is shadow-only behind RULE_MCP_DECISION_CACHE_SHADOW=1: it writes decision-shadow.jsonl and never replays. The threshold defaults to 0.9 and is provisional. Replay waits until the corpus shows zero false replays.
+Add an opt-in L3 gate built from deterministic parts: same-tool, same non-prompt args, fresh and non-echoing candidates; IDF-weighted overlap top five plus none; a redacted state and stable candidate descriptions; a choice question; a strict parser and hard guards. Phase 1 is shadow-only behind RULE_MCP_DECISION_CACHE_SHADOW=1: it writes decision-shadow.jsonl and never replays. The threshold defaults to 0.9 and is provisional. Replay waits until the corpus shows zero false replays. ADR 158 records the later opt-in replay and its measured floor.
 
 ## Consequences
 

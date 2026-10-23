@@ -58,3 +58,21 @@ export function compare(left, right) {
 
   return a < b ? -1 : a > b ? 1 : 0;
 }
+
+/** The raw route field, including "none", for the replay label oracle. */
+export function rawRouteOf(result) {
+  try {
+    const parsed = JSON.parse(result?.content?.[0]?.text ?? "{}");
+
+    return typeof parsed.route === "string" ? parsed.route : undefined;
+  } catch {
+    return;
+  }
+}
+
+/** The route a cached result can answer with; "none" is not a candidate. */
+export function routeOf(result) {
+  const route = rawRouteOf(result);
+
+  return route && route !== "none" ? route : undefined;
+}

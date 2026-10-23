@@ -83,7 +83,7 @@ test("shadow records the model choice and never calls the cache replay", async (
   process.env.RULE_MCP_DECISION_URL = server.url;
 
   try {
-    await observeDecisionShadow("pix_tool", { prompt: "create a react form component", framework: "react" });
+    await observeDecisionShadow("pix_tool", { prompt: "create a react form component", framework: "react" }, { core: result("rule-frontend-react"), computeMs: 3 });
     await waitForDecisionShadows();
     const last = readShadows().at(-1);
 
@@ -92,6 +92,10 @@ test("shadow records the model choice and never calls the cache replay", async (
     assert.equal(last.choice, "candidate-1");
     assert.equal(last.probability, 0.95);
     assert.equal(last.decisionCacheHit, false);
+    assert.equal(last.goldRoute, "rule-frontend-react");
+    assert.equal(last.candidateRoute, "rule-frontend-react");
+    assert.equal(last.correct, true);
+    assert.equal(last.goldMs, 3);
     assert.match(last.promptHash, /^[a-f0-9]{12}$/u);
     assert.equal(JSON.stringify(last).includes("create a react"), false, "the report keeps no prompt text");
   } finally {
