@@ -104,6 +104,7 @@ Dependencies: WS-0 first and alone, because every later step calls it. WS-1 and 
 - The corpus widened to 34 groups / 105 leave-one-out prompts / 13 negatives. Laya coverage is 78/105 (74.3%); 66 predictions, 20 wrong at 0.30, 2 at 0.50, 1 at 0.60; no floor. Replay off; the route-aware filter is the next precision experiment.
 - The route-aware hint (ADR 164) was rejected: the BM25 top route does not match the cached post-decision route, so the filter drops the correct seed. Laya coverage fell from 78/105 (74.3%) to 68/105 (64.8%); 58 predictions, 19 wrong at 0.30; no floor. The hint is reverted; the BM25 single-batch gate remains; replay off. The next is the seed expansion or the model.
 - The corpus now seeds 68 historical paraphrases (2 per group), each with its own gold route. Laya coverage rose to 88/105 (83.8%); 82 predictions; 22 wrong at 0.30, 1 at 0.50; at 0.55 9 predictions and 0 wrong (one short of the 10-sample floor). No floor; replay off. The next is a small third slice or the model.
+- The third slice (3 groups, 3 negatives, 6 history) lifted Laya coverage to 97/114 (85.1%); 90 predictions; 28 wrong at 0.30, 2 at 0.50, 1 at 0.55; at 0.60+ 4/0, 3/0, 2/0, 2/0, 1/0, 1/0; no floor with >=10. Replay off; the next is the model or samples above 0.60.
 - The commit-lint closeout archived this plan while DM-04 and DM-10 were still open; the plan was restored with the 5.4 gate open so it is not archived again.
 
 ## Kill criteria

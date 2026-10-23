@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md)                                                      | Keep the third corpus slice and leave the replay off                                                      | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md)                                                | Seed the decision-cache corpus with historical paraphrases                                                | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [164](164-reject-the-route-aware-candidate-filter.md)                                                                   | Reject the route-aware candidate filter                                                                   | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md)                                               | Exclude the multilingual model from the decision-cache gate                                               | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
@@ -181,6 +182,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md)                                                      | Keep the third slice for its recall, and leave the replay off.                                                                                                                                                                  | The corpus is the best recall so far at 85.1%, but the floor still does not exist: the model's probability distribution puts too few predictions above 0.60 and one wrong at 0.55. Replay stays off.                            |
 | [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md)                                                | Adopt the 68 historical paraphrase seeds in the corpus benchmark.                                                                                                                                                               | Laya coverage rose to 88/105 (83.8%); predictions to 82. Wrong choices were 22 at 0.30 but 1 at 0.50 and 0 at 0.55, where 9 predictions were correct (one short of the 10-sample floor).                                        |
 | [164](164-reject-the-route-aware-candidate-filter.md)                                                                   | Reject the route-aware candidate filter.                                                                                                                                                                                        | The BM25 route is not the cache route: filtering by it removes correct seeds when the decision layer had overridden the route.                                                                                                  |
 | [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md)                                               | Exclude the multilingual model from the decision-cache gate.                                                                                                                                                                    | The Julia cache gate is off, so its overconfident cache picks can no longer replay or shadow.                                                                                                                                   |
@@ -407,6 +409,29 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
 - [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
+### routing
+
+- [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md) Keep the third corpus slice and leave the replay off
+- [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md) Seed the decision-cache corpus with historical paraphrases
+- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
+- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
+- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
+- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
+- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
+- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
+- [026](026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
+- [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
+- [024](024-skill-routing-parcel-bundler-zero-config-build-tool.md) Skill routing: Parcel bundler zero config build tool
+- [023](023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.md) Skill routing: Husky git hooks pre-commit lint-staged commitlint
+- [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
+- [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
+- [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
+
 ### architecture
 
 - [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
@@ -428,28 +453,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 - [017](017-forms-per-framework-merger-and-distribution.md) forms per framework merger and distribution
 - [011](011-forms-per-framework.md) Forms per Framework - Merger & Distribution
-
-### routing
-
-- [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md) Seed the decision-cache corpus with historical paraphrases
-- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
-- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
-- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
-- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
-- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
-- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
-- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
-- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
-- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
-- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
-- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
-- [026](026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
-- [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
-- [024](024-skill-routing-parcel-bundler-zero-config-build-tool.md) Skill routing: Parcel bundler zero config build tool
-- [023](023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.md) Skill routing: Husky git hooks pre-commit lint-staged commitlint
-- [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
-- [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
-- [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
 
 ### installer
 
@@ -538,6 +541,20 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
 - [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
+### decision-models
+
+- [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md) Keep the third corpus slice and leave the replay off
+- [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md) Seed the decision-cache corpus with historical paraphrases
+- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
+- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
+- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
+- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
+- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+
 ### git
 
 - [147](147-never-install-commit-hooks-into-a-machine-wide-core-hookspath.md) Never install commit hooks into a machine-wide core.hooksPath
@@ -580,6 +597,19 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
 - [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
+### cache
+
+- [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md) Keep the third corpus slice and leave the replay off
+- [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md) Seed the decision-cache corpus with historical paraphrases
+- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
+- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
+- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
+- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
+- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+
 ### cli
 
 - [108](108-the-handoff-family-gets-a-generated-index-and-the-root-handoff-summary-retires.md) The handoff family gets a generated index, and the root HANDOFF summary retires
@@ -593,8 +623,9 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
 - [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
 
-### decision-models
+### observability
 
+- [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md) Keep the third corpus slice and leave the replay off
 - [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md) Seed the decision-cache corpus with historical paraphrases
 - [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
 - [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
@@ -604,7 +635,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
 - [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
 - [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
-- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
 
 ### personas
 
@@ -632,18 +662,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [015](015-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
 - [009](009-toolchain-vite.md) Toolchain Skill Isolation (Vite)
 
-### cache
-
-- [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md) Seed the decision-cache corpus with historical paraphrases
-- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
-- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
-- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
-- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
-- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
-- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
-- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
-- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
-
 ### governance
 
 - [154](154-every-plan-carries-a-status-line-a-dependency-graph-and-checkbox-steps.md) Every plan carries a status line, a dependency graph and checkbox steps
@@ -655,18 +673,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [083](083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.md) Governance is an explicit BDFL with a path to co-maintainers
 - [079](079-add-the-oss-architect-review-persona.md) Add the OSS Architect review persona
 - [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
-
-### observability
-
-- [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md) Seed the decision-cache corpus with historical paraphrases
-- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
-- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
-- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
-- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
-- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
-- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
-- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
-- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
 
 ### closeout
 
