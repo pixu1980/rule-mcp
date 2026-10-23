@@ -60,14 +60,14 @@ try {
   process.exit(2);
 }
 
-const { seeds, rows, summary } = result;
+const { history, seeds, rows, summary } = result;
 const loo = rows.filter((row) => row.kind === "loo").length;
 const covered = rows.filter((row) => row.kind === "loo" && row.goldRoute && row.candidates?.some((candidate) => candidate.route === row.goldRoute)).length;
 const pct = (part, total) => (total === 0 ? "0.0" : ((part / total) * 100).toFixed(1));
 
 console.log("Decision-cache corpus benchmark");
 console.log(`state: ${stateDir}`);
-console.log(`model: ${model}; groups: ${seeds.length}; samples: ${rows.length} (${loo} leave-one-out, ${rows.length - loo} negatives)`);
+console.log(`model: ${model}; groups: ${seeds.length}; history: ${history}; samples: ${rows.length} (${loo} leave-one-out, ${rows.length - loo} negatives)`);
 console.log(`would replay at the current floor: ${summary.wouldReplay} (${pct(summary.wouldReplay, summary.total)}%)`);
 console.log(`false replays at the current floor: ${summary.currentWrong}`);
 console.log(`labeled: ${summary.labeled}; unlabeled: ${summary.unlabeled}`);

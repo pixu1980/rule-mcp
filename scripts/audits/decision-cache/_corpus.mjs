@@ -3,17 +3,21 @@
 /** The deterministic plan behind the decision-cache corpus benchmark. */
 import { CACHE_GROUPS as GROUPS_1, CACHE_NEGATIVES as NEGATIVES_1 } from "../../../tests/fixtures/decision-cache-corpus.mjs";
 import { CACHE_GROUPS as GROUPS_2, CACHE_NEGATIVES as NEGATIVES_2 } from "../../../tests/fixtures/decision-cache-corpus-2.mjs";
+import { CACHE_HISTORY } from "../../../tests/fixtures/decision-cache-history.mjs";
 
 /** Both slices are one corpus: the plan and the validator see the merge. */
 export const CACHE_GROUPS = [...GROUPS_1, ...GROUPS_2];
+/** The merged unseeded negatives. */
 export const CACHE_NEGATIVES = [...NEGATIVES_1, ...NEGATIVES_2];
 
 /**
  * Build the leave-one-out plan: for each prompt in a group, the cache holds the
- * group's other prompts plus the other groups' seeds. The negatives keep the
- * one-seed-per-group cache, so a missing route stays a safe miss.
+ * group's other prompts, the group's historical paraphrases and the other
+ * groups' seeds. The negatives keep the one-seed-per-group cache, so a missing
+ * route stays a safe miss.
  *
  * @returns {{
+ *   history: Array<{ group: string, prompt: string }>,
  *   prompts: string[],
  *   seeds: Array<{ group: string, prompt: string }>,
  *   samples: Array<{ group: string, kind: string, prompt: string, seeds: Array<{ group: string, prompt: string }> }>,
@@ -21,7 +25,9 @@ export const CACHE_NEGATIVES = [...NEGATIVES_1, ...NEGATIVES_2];
  */
 export function planCorpus() {
   const seeds = CACHE_GROUPS.map(({ id, seed }) => ({ group: id, prompt: seed }));
-  const prompts = CACHE_GROUPS.flatMap((group) => [group.seed, ...group.paraphrases]);
+  const groupPrompts = CACHE_GROUPS.flatMap((group) => [group.seed, ...group.paraphrases]);
+  const prompts = [...groupPrompts, ...CACHE_HISTORY.map((item) => item.prompt)];
+  const historyByGroup = Map.groupBy(CACHE_HISTORY, (item) => item.group);
   const samples = [];
 
   for (const group of CACHE_GROUPS) {
@@ -32,16 +38,20 @@ export function planCorpus() {
         group: group.id,
         kind: "loo",
         prompt,
-        seeds: [...seeds.filter((seed) => seed.group !== group.id), ...peers.filter((peer) => peer !== prompt).map((peer) => ({ group: group.id, prompt: peer }))],
+        seeds: [
+          ...seeds.filter((seed) => seed.group !== group.id),
+          ...peers.filter((peer) => peer !== prompt).map((peer) => ({ group: group.id, prompt: peer })),
+          ...(historyByGroup.get(group.id) ?? []),
+        ],
       });
     }
   }
 
   for (const negative of CACHE_NEGATIVES) {
-    samples.push({ group: negative.id, kind: "negative", prompt: negative.prompt, seeds });
+    samples.push({ group: negative.id, kind: "negative", prompt: negative.prompt, seeds: [...seeds, ...CACHE_HISTORY] });
   }
 
-  return { prompts, seeds, samples };
+  return { history: CACHE_HISTORY, prompts, seeds, samples };
 }
 
 /** One error string, or null when the corpus is safe to run. */
@@ -89,6 +99,22 @@ export function validateCorpus() {
     }
 
     prompts.add(negative.prompt);
+  }
+
+  for (const item of CACHE_HISTORY) {
+    if (CACHE_GROUPS.every((group) => group.id !== item.group)) {
+      return `unknown history group: ${item.group}`;
+    }
+
+    if (!item.prompt?.trim()) {
+      return `empty history prompt: ${item.group}`;
+    }
+
+    if (prompts.has(item.prompt)) {
+      return `duplicate prompt: ${item.prompt}`;
+    }
+
+    prompts.add(item.prompt);
   }
 
   return null;
