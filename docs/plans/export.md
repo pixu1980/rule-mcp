@@ -65,7 +65,7 @@ Honor `PIX_GALAXY_MCP_NO_CACHE` for cache writes like other caches.
 
 ## Decision-cache contract (export-owned)
 
-Path: under `~/.pix-galaxy-mcp/projects/<slug>/` (exact filename in WS-3;
+Path: under `~/.rule-mcp/projects/<slug>/` (exact filename in WS-3;
 not in the consumer git tree).
 
 Minimum record:

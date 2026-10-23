@@ -32,8 +32,8 @@ import { fileURLToPath } from "node:url";
 import { HOOK_MARKER, hasHooks, hookEntries, isCommitCommand, isMigrationCommand, withHooks, withoutHooks } from "../_hooks.js";
 import { decide, skillForPath } from "../../../cli/guard/index.js";
 
-const LAUNCHER = { command: "/usr/local/bin/pix-galaxy-mcp", args: [] };
-const BIN = fileURLToPath(new URL("../../../../bin/pix-galaxy-mcp.js", import.meta.url));
+const LAUNCHER = { command: "/usr/local/bin/rule-mcp", args: [] };
+const BIN = fileURLToPath(new URL("../../../../bin/rule-mcp.js", import.meta.url));
 
 // ── T1: which commands are the point of no return ──
 for (const command of [

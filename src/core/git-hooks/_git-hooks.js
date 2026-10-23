@@ -26,7 +26,7 @@ import { join } from "node:path";
 export const HOOKED_GIT_EVENTS = ["post-checkout", "post-merge"];
 
 /** The marker that says a line is ours. */
-export const GIT_HOOK_MARKER = "pix-galaxy-mcp";
+export const GIT_HOOK_MARKER = "rule-mcp";
 
 /** The second block earlier versions appended, which has no end marker. */
 const CHAIN_MARKER = "chain";

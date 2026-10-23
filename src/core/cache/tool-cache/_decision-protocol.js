@@ -60,12 +60,7 @@ export function buildGateState({ toolName, args, livePrompt, candidates }) {
     .filter((key) => !fields.has(key) && args[key] !== undefined)
     .sort()
     .map((key) => `${key}: ${truncate(redact(String(args[key])), CONTEXT_CHAR_CAP)}`);
-  const lines = [
-    `tool: ${toolName}`,
-    `query: ${truncate(redact(livePrompt), PROMPT_CHAR_CAP)}`,
-    ...context,
-    `candidates: ${candidates.length}`,
-  ];
+  const lines = [`tool: ${toolName}`, `query: ${truncate(redact(livePrompt), PROMPT_CHAR_CAP)}`, ...context, `candidates: ${candidates.length}`];
   const state = lines.join("\n");
 
   return state.length <= STATE_CHAR_CAP ? state : `${state.slice(0, STATE_CHAR_CAP - 3)}...`;
@@ -111,9 +106,7 @@ export function parseGateAnswer(answer, candidates, threshold = SHADOW_THRESHOLD
 /** Parse, threshold and guard in one place; the default is a miss. */
 export function decideShadow({ answer, candidates, live, threshold = SHADOW_THRESHOLD }) {
   const parsed = parseGateAnswer(answer, candidates, threshold);
-  const reason = parsed.candidate
-    ? (guardCandidate(parsed.candidate, live) ?? guardAmbiguity(parsed.candidate, candidates))
-    : null;
+  const reason = parsed.candidate ? (guardCandidate(parsed.candidate, live) ?? guardAmbiguity(parsed.candidate, candidates)) : null;
 
   return reason ? { ...parsed, wouldReplay: false, reason, guard: reason } : { ...parsed, guard: null };
 }

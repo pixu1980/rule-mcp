@@ -52,7 +52,7 @@ const uninstallCursor = ({ dryRun }) => {
 
 const uninstallCopilot = ({ dryRun }) => {
   const hostsFile = join(HOME, ".config", "github-copilot", "hosts.json");
-  const agentFile = join(HOME, ".copilot", "agents", "pix-galaxy-mcp.agent.md");
+  const agentFile = join(HOME, ".copilot", "agents", "rule-mcp.agent.md");
 
   if (!dryRun && existsSync(hostsFile)) {
     const current = readText(hostsFile);

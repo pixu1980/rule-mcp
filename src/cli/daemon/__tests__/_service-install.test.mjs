@@ -45,7 +45,7 @@ test("a systemctl that reports a failure fails the install, and says what it sai
 
   assert.equal(run.install.ok, false, "a failed restart is not a successful install");
   assert.match(run.install.error, /systemctl restart failed/, "the error names the step");
-  assert.match(run.install.error, /Failed to restart pix-galaxy-mcp/, "and quotes what systemctl said");
+  assert.match(run.install.error, /Failed to restart rule-mcp/, "and quotes what systemctl said");
   assert.equal(run.install.action, undefined, "a failed install claims no action");
   assert.equal(run.unitWritten, true, "the unit was written before the restart was attempted");
 });

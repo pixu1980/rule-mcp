@@ -27,20 +27,20 @@ mismatch.
 
 What it states and nothing checks:
 
-| Statement | Enforced |
-| --------- | -------- |
-| DuckDB is analytical: do not treat it as an OLTP store | **no** |
-| Configuration pragmas belong in the connection setup, not in ad-hoc calls | **no** |
-| Read Parquet directly instead of importing into a table first | **no** |
+| Statement                                                                 | Enforced |
+| ------------------------------------------------------------------------- | -------- |
+| DuckDB is analytical: do not treat it as an OLTP store                    | **no**   |
+| Configuration pragmas belong in the connection setup, not in ad-hoc calls | **no**   |
+| Read Parquet directly instead of importing into a table first             | **no**   |
 
 ## The four rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `duckdb-analytical-only` | A point-write-per-request pattern, an auto-increment id, or a per-row `UPDATE` loop | B | n/a |
-| `duckdb-pragma-at-connect` | A setting applied ad-hoc instead of at connection setup | B | n/a |
-| `duckdb-version-single-source` | The same version stated in the title and in the router | B | **red** |
-| `duckdb-owner-named` | A section delegating generic SQL or pooling without naming the owner | B | partially red |
+| id                             | Rejects                                                                             | Tier | Today         |
+| ------------------------------ | ----------------------------------------------------------------------------------- | ---- | ------------- |
+| `duckdb-analytical-only`       | A point-write-per-request pattern, an auto-increment id, or a per-row `UPDATE` loop | B    | n/a           |
+| `duckdb-pragma-at-connect`     | A setting applied ad-hoc instead of at connection setup                             | B    | n/a           |
+| `duckdb-version-single-source` | The same version stated in the title and in the router                              | B    | **red**       |
+| `duckdb-owner-named`           | A section delegating generic SQL or pooling without naming the owner                | B    | partially red |
 
 ## Phases
 
@@ -90,13 +90,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Doors and shape | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Doors and shape      | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

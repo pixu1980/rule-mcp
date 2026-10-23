@@ -20,7 +20,7 @@ const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", i
 
 const root = new URL("../../../..", import.meta.url).pathname;
 const installModule = new URL("../index.js", import.meta.url).href;
-const ENTRY = "/tmp/fake-pix-galaxy-mcp.js";
+const ENTRY = "/tmp/fake-rule-mcp.js";
 const USER_INSTRUCTION = "/home/u/tokensave.md";
 
 const fakeHome = mkdtempSync(join(tmpdir(), "pix-galaxy-opencode-"));
@@ -46,7 +46,7 @@ writeFileSync(
         tokensave: { type: "local", command: ["tokensave", "serve"] },
         // The hand-edit that stopped opencode from loading its config: a
         // `command` string with `args` beside it is not schema-valid.
-        "pix-galaxy-mcp": { type: "local", command: "/old/bin/pix-galaxy-mcp", args: ["serve"] },
+        "rule-mcp": { type: "local", command: "/old/bin/rule-mcp", args: ["serve"] },
       },
     },
     null,
@@ -54,12 +54,12 @@ writeFileSync(
   ) + "\n",
 );
 // What the generic installer used to write here: a file opencode never reads.
-writeFileSync(legacyFile, JSON.stringify({ mcpServers: { "pix-galaxy-mcp": { command: "/old/bin" }, keep: {} } }, null, 2) + "\n");
+writeFileSync(legacyFile, JSON.stringify({ mcpServers: { "rule-mcp": { command: "/old/bin" }, keep: {} } }, null, 2) + "\n");
 
 run(`import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "opencode", entrypoint: ${JSON.stringify(ENTRY)} });`);
 
 const installed = JSON.parse(readFileSync(configFile, "utf8"));
-const server = installed.mcp["pix-galaxy-mcp"];
+const server = installed.mcp["rule-mcp"];
 
 assert.ok(server, "the server lands under the `mcp` key opencode reads");
 assert.equal(server.type, "local", "opencode's local type replaces the mcpServers shape");
@@ -71,16 +71,16 @@ assert.equal(server.environment.PIX_GALAXY_MCP_NO_AUTOUPDATE, "0", "the opt-out 
 assert.deepEqual(installed.mcp.tokensave, { type: "local", command: ["tokensave", "serve"] }, "the user's own server survives");
 assert.ok(installed.instructions.includes(USER_INSTRUCTION), "the user's instruction survives");
 assert.ok(installed.instructions.includes(instructionsFile), "the instruction file is registered so opencode reads it");
-assert.ok(readFileSync(instructionsFile, "utf8").includes("pix-galaxy-mcp"), "instructions.md carries the blocks");
+assert.ok(readFileSync(instructionsFile, "utf8").includes("rule-mcp"), "instructions.md carries the blocks");
 
 const legacy = JSON.parse(readFileSync(legacyFile, "utf8"));
-assert.equal(legacy.mcpServers["pix-galaxy-mcp"], undefined, "the entry the old installer wrote is swept");
+assert.equal(legacy.mcpServers["rule-mcp"], undefined, "the entry the old installer wrote is swept");
 assert.deepEqual(legacy.mcpServers.keep, {}, "other legacy servers survive");
 
 run(`import { uninstallAgent } from ${JSON.stringify(installModule)}; uninstallAgent({ agent: "opencode" });`);
 
 const removed = JSON.parse(readFileSync(configFile, "utf8"));
-assert.equal(removed.mcp["pix-galaxy-mcp"], undefined, "the uninstall drops the server");
+assert.equal(removed.mcp["rule-mcp"], undefined, "the uninstall drops the server");
 assert.deepEqual(removed.mcp.tokensave, { type: "local", command: ["tokensave", "serve"] }, "the user's server survives the uninstall");
 assert.ok(!removed.instructions.includes(instructionsFile), "the instruction registration is dropped");
 assert.ok(removed.instructions.includes(USER_INSTRUCTION), "the user's instruction survives the uninstall");

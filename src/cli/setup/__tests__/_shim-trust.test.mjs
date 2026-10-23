@@ -3,7 +3,7 @@
 /**
  * SEC-5: the shim on PATH is resolved before it is run.
  *
- * `pix-galaxy-mcp --version` executes whatever PATH yields. A program wearing
+ * `rule-mcp --version` executes whatever PATH yields. A program wearing
  * the name is not this project, so the check reads where the shim points and
  * refuses anything that does not resolve to this checkout's entrypoint.
  */
@@ -28,10 +28,10 @@ function withPath(dir, fn) {
   }
 }
 
-/** A scratch dir with an executable `pix-galaxy-mcp` whose body is given. */
+/** A scratch dir with an executable `rule-mcp` whose body is given. */
 function scratchShim(body) {
   const dir = mkdtempSync(join(tmpdir(), "pix-shim-trust-"));
-  const shim = join(dir, "pix-galaxy-mcp");
+  const shim = join(dir, "rule-mcp");
 
   writeFileSync(shim, body);
   chmodSync(shim, 0o755);
@@ -76,7 +76,7 @@ test("a launcher naming this checkout's entrypoint is ours, and the shim is what
 
 test("a symlink to the entrypoint resolves to it", () => {
   const dir = mkdtempSync(join(tmpdir(), "pix-shim-trust-"));
-  const link = join(dir, "pix-galaxy-mcp");
+  const link = join(dir, "rule-mcp");
 
   try {
     symlinkSync(ownEntrypoint(), link);
@@ -88,7 +88,7 @@ test("a symlink to the entrypoint resolves to it", () => {
 });
 
 test("a shim naming a checkout-shaped path that is not ours is refused", () => {
-  const { dir, shim } = scratchShim(`#!/bin/sh\nexec node "/somewhere/else/bin/pix-galaxy-mcp.js" "$@"\n`);
+  const { dir, shim } = scratchShim(`#!/bin/sh\nexec node "/somewhere/else/bin/rule-mcp.js" "$@"\n`);
 
   try {
     assert.equal(shimTarget(shim), "", "another checkout's entrypoint is not this one");

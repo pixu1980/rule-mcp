@@ -2,27 +2,27 @@ header:
   schema-version: 2.2.0
   last-updated: "2026-09-11"
   last-reviewed: "2026-09-11"
-  url: https://github.com/pixu1980/pix-galaxy-mcp/raw/refs/heads/main/SECURITY-INSIGHTS.yml
+  url: https://github.com/pixu1980/rule-mcp/raw/refs/heads/main/SECURITY-INSIGHTS.yml
   comment: |
     Single-repository file: project and repository sections in one file.
     Mirrors SECURITY.md, GOVERNANCE.md and MAINTAINERS.md in machine-readable
     form; those files stay the human-readable source of truth.
 
 project:
-  name: pix-galaxy-mcp
+  name: rule-mcp
   administrators:
     - name: pixu1980
       email: pisuemiliano.1980@gmail.com
       primary: true
   repositories:
-    - name: pix-galaxy-mcp
-      url: https://github.com/pixu1980/pix-galaxy-mcp
+    - name: rule-mcp
+      url: https://github.com/pixu1980/rule-mcp
   vulnerability-reporting:
     reports-accepted: true
     bug-bounty-available: false
 
 repository:
-  url: https://github.com/pixu1980/pix-galaxy-mcp
+  url: https://github.com/pixu1980/rule-mcp
   status: active
   accepts-change-request: true
   accepts-automated-change-request: true
@@ -31,7 +31,7 @@ repository:
       email: pisuemiliano.1980@gmail.com
       primary: true
   license:
-    url: https://github.com/pixu1980/pix-galaxy-mcp/blob/main/LICENSE
+    url: https://github.com/pixu1980/rule-mcp/blob/main/LICENSE
     expression: MIT
   security:
     assessments:

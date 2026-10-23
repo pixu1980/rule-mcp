@@ -10,7 +10,7 @@
 /*
  * @module cli/install
  *
- * Agent/IDE/model installation support for pix-galaxy-mcp.
+ * Agent/IDE/model installation support for rule-mcp.
  * Generates MCP configuration files for ALL supported coding agents.
  *
  * Inspired by tokensave's architecture:

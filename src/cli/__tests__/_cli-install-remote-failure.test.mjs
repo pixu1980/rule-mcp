@@ -9,7 +9,7 @@ import { join } from "node:path";
 
 const root = new URL("../../..", import.meta.url).pathname;
 const fakeHome = mkdtempSync(join(tmpdir(), "pix-cli-remote-failure-"));
-const result = spawnSync(process.execPath, [join(root, "bin", "pix-galaxy-mcp.js"), "install", "--agent", "claude", "--mode", "daemon", "--json"], {
+const result = spawnSync(process.execPath, [join(root, "bin", "rule-mcp.js"), "install", "--agent", "claude", "--mode", "daemon", "--json"], {
   cwd: root,
   env: { ...process.env, HOME: fakeHome },
   encoding: "utf8",

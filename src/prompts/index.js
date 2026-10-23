@@ -3,7 +3,7 @@
 /**
  * @module prompts/index
  *
- * MCP Prompt registry for pix-galaxy-mcp.
+ * MCP Prompt registry for rule-mcp.
  * Provides reusable prompt templates that guide agents through pix AI
  * workflow phases: one-shot workflow prompts (orchestrate multiple tools),
  * area prompts (one per area hub; ADR 117), and persona prompts. Flight costing is not a

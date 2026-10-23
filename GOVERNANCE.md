@@ -1,6 +1,6 @@
 # Governance
 
-pix-galaxy-mcp is led by an explicit **BDFL** with a documented path to
+rule-mcp is led by an explicit **BDFL** with a documented path to
 co-maintainers (ADR 083). The bus factor is one today; this file exists so
 that fact is stated, not discovered.
 

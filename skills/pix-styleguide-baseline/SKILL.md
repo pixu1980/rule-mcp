@@ -41,11 +41,11 @@ Not a percentage. A percentage is a fact about the world that changes weekly and
 is useless at the moment of writing a line of code. What matters is what you owe
 the feature.
 
-| State                    | Means                                                                                            | What you owe it                                           |
-| ------------------------ | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------- |
+| State                    | Means                                                                                                    | What you owe it                                           |
+| ------------------------ | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | **Widely available**     | Interoperable in every Baseline browser for at least 2.5 years, long enough that the long tail has moved | Nothing. A fallback here is code that will never run      |
-| **Newly available**      | Interoperable in the latest version of every Baseline browser, but not for long                  | A judgment call, and this skill is mostly about making it |
-| **Limited availability** | Not interoperable. One engine, behind a flag, or specified and unshipped                         | A stated reason, in the code, next to the use             |
+| **Newly available**      | Interoperable in the latest version of every Baseline browser, but not for long                          | A judgment call, and this skill is mostly about making it |
+| **Limited availability** | Not interoperable. One engine, behind a flag, or specified and unshipped                                 | A stated reason, in the code, next to the use             |
 
 Two facts make the table checkable rather than rhetorical:
 

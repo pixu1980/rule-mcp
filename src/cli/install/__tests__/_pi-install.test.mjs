@@ -26,7 +26,7 @@ execFileSync(
     ALIAS_HOOK,
     "--input-type=module",
     "--eval",
-    `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "pi", entrypoint: "/tmp/pix-galaxy-mcp.js" });`,
+    `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "pi", entrypoint: "/tmp/rule-mcp.js" });`,
   ],
   { cwd: root, env: { ...process.env, HOME: fakeHome, PI_CODING_AGENT_DIR: piDir } },
 );
@@ -34,8 +34,8 @@ execFileSync(
 const mcpConfig = join(piDir, "mcp.json");
 const prompt = join(piDir, "prompts", "pix.md");
 assert.ok(existsSync(mcpConfig), "Pi MCP config must be installed");
-assert.ok(readFileSync(mcpConfig, "utf8").includes("pix-galaxy-mcp"), "Pi MCP config must register server");
+assert.ok(readFileSync(mcpConfig, "utf8").includes("rule-mcp"), "Pi MCP config must register server");
 assert.ok(existsSync(prompt), "Pi slash-command prompt must be installed");
 assert.ok(readFileSync(prompt, "utf8").includes("$ARGUMENTS"), "Installed Pi prompt must forward arguments");
 
-console.log("  ✅ Pi MCP config and /pix-galaxy-mcp prompt installed");
+console.log("  ✅ Pi MCP config and /rule-mcp prompt installed");

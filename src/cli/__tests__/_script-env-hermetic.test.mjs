@@ -4,11 +4,11 @@
  * Tests that shell out to install.sh / uninstall.sh must sandbox PNPM_HOME.
  *
  * The scripts honor $PNPM_HOME when resolving the global bin directory:
- * install.sh writes the pix-galaxy-mcp shim there and uninstall.sh deletes it
+ * install.sh writes the rule-mcp shim there and uninstall.sh deletes it
  * there. A test that spreads process.env leaks the developer's real PNPM_HOME
  * into the child, so running the installer suite silently deleted (or
- * repointed) the real ~/Library/pnpm/bin/pix-galaxy-mcp shim - the recurring
- * "spawn .../pix-galaxy-mcp ENOENT" at session start. This gate makes the
+ * repointed) the real ~/Library/pnpm/bin/rule-mcp shim - the recurring
+ * "spawn .../rule-mcp ENOENT" at session start. This gate makes the
  * sandbox a contract: every spawning test names PNPM_HOME explicitly.
  */
 import { strict as assert } from "node:assert";

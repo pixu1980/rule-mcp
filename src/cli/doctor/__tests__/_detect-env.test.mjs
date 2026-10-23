@@ -49,7 +49,7 @@ test("detectModelConfig reads key presence from the environment", () => {
 });
 
 test("detectStoredModelKeys reads the key files under the config dir", () => {
-  const configDir = join(home, ".config", "pix-galaxy-mcp");
+  const configDir = join(home, ".config", "rule-mcp");
   mkdirSync(configDir, { recursive: true });
   writeFileSync(join(configDir, "openai-key"), "sk-fake");
 

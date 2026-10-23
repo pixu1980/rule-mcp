@@ -52,7 +52,7 @@ export function warnWizardOnly(options, warn = (text) => process.stderr.write(`$
     .map(([, flag]) => flag);
 
   if (given.length > 0) {
-    warn(`install: ${given.join(", ")} need the wizard - run \`pix-galaxy-mcp setup\` (it runs the same plan when piped).`);
+    warn(`install: ${given.join(", ")} need the wizard - run \`rule-mcp setup\` (it runs the same plan when piped).`);
   }
 
   return given;
@@ -62,7 +62,7 @@ export function warnWizardOnly(options, warn = (text) => process.stderr.write(`$
 export function registerInstallCommand(program) {
   program
     .command("install")
-    .description("Install pix-galaxy-mcp into an agent/IDE (edits mcp.json)")
+    .description("Install rule-mcp into an agent/IDE (edits mcp.json)")
     .option("--agent <name>", "target agent, or 'all' for every supported agent", "all")
     .addOption(new Option("--mode <name>", MODE_HELP).choices(["stdio", "daemon", "sse", "docker", "skills"]))
     .option("--global", "use clean command path (requires global install)")
@@ -128,7 +128,7 @@ export function registerInstallCommand(program) {
 export function registerUninstallCommand(program) {
   program
     .command("uninstall")
-    .description("Remove pix-galaxy-mcp from an agent/IDE")
+    .description("Remove rule-mcp from an agent/IDE")
     .option("--agent <name>", "target agent, or 'all' for every configured agent", "all")
     .option("--dry-run", "preview without removing")
     .option("--json", "print machine-readable JSON instead of Terminal UI")

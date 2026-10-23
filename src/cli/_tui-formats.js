@@ -10,7 +10,7 @@ export function formatInstallResult(result) {
   const agents = Object.keys(installed);
   const rows = agents.map((agent) => ["✅", agent, (installed[agent] || []).join(", ")]);
   const lines = [
-    banner("pix-galaxy-mcp install", result.dryRun ? "dry run" : "agent integration"),
+    banner("rule-mcp install", result.dryRun ? "dry run" : "agent integration"),
     "",
     section("Summary", "📦"),
     kv([
@@ -26,7 +26,7 @@ export function formatInstallResult(result) {
     lines.push("", section("Configured agents", "🤖"), table(["", "Agent", "Files"], rows));
   }
 
-  lines.push("", color("Tip: use `pix-galaxy-mcp doctor --json` for automation output.", "dim"));
+  lines.push("", color("Tip: use `rule-mcp doctor --json` for automation output.", "dim"));
 
   return `${lines.join("\n")}\n`;
 }
@@ -35,7 +35,7 @@ export function formatInstallResult(result) {
 export function formatUninstallResult(result) {
   const rows = Object.entries(result.uninstalled || {}).map(([agent, files]) => ["🧹", agent, (files || []).join(", ")]);
   const lines = [
-    banner("pix-galaxy-mcp uninstall", result.dryRun ? "dry run" : "agent cleanup"),
+    banner("rule-mcp uninstall", result.dryRun ? "dry run" : "agent cleanup"),
     "",
     section("Summary", "🧽"),
     kv([
@@ -58,12 +58,12 @@ export function formatToolsList(tools) {
   const rows = tools.map((tool) => ["🔧", tool.name, tool.description || ""]);
 
   return `${[
-    banner("pix-galaxy-mcp tools", `${tools.length} registered tools`),
+    banner("rule-mcp tools", `${tools.length} registered tools`),
     "",
     section("Tool registry", "🧰"),
     table(["", "Tool", "Description"], rows, { maxWidth: 72 }),
     "",
-    color("Use `pix-galaxy-mcp tools list --json` to export machine-readable JSON.", "dim"),
+    color("Use `rule-mcp tools list --json` to export machine-readable JSON.", "dim"),
   ].join("\n")}\n`;
 }
 
@@ -72,11 +72,11 @@ export function formatSkillsList(skills) {
   const rows = skills.map((skill) => [skill.installed ? "✅" : "○", skill.name, skill.installed ? "installed" : "available", skill.description || ""]);
 
   return `${[
-    banner("pix-galaxy-mcp skills", `${skills.length} available skills`),
+    banner("rule-mcp skills", `${skills.length} available skills`),
     "",
     section("Skill catalog", "🧠"),
     table(["", "Skill", "Status", "Description"], rows, { maxWidth: 64 }),
     "",
-    color("Use `pix-galaxy-mcp skills list --json` to export machine-readable JSON.", "dim"),
+    color("Use `rule-mcp skills list --json` to export machine-readable JSON.", "dim"),
   ].join("\n")}\n`;
 }

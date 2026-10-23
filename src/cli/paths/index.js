@@ -3,9 +3,9 @@
 /**
  * @module cli/paths
  *
- * Runtime path resolution for pix-galaxy-mcp.
+ * Runtime path resolution for rule-mcp.
  * Provides paths for state, data, config, and skill directories.
- * All paths derive from a single home directory: `~/.pix-galaxy-mcp`, one
+ * All paths derive from a single home directory: `~/.rule-mcp`, one
  * visible root with `state/`, `data/`, `projects/`, `config/` underneath.
  */
 

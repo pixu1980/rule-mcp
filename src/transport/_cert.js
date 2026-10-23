@@ -8,7 +8,7 @@
  * proper X.509 certificates.
  *
  * Certificates are valid for 2 years (730 days) with the
- * subject CN "pix-galaxy-mcp.local" and SAN DNS:localhost,127.0.0.1.
+ * subject CN "rule-mcp.local" and SAN DNS:localhost,127.0.0.1.
  *
  * @see module:transport/sse - startSseServer imports cert generation
  */
@@ -30,7 +30,7 @@ import { tmpdir } from "node:os";
  * }} options
  * @returns {boolean} - true on success, false on failure
  */
-export function generateSelfSignedCert({ certPath, keyPath, commonName = "pix-galaxy-mcp.local", days = 730 }) {
+export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-mcp.local", days = 730 }) {
   // Config written to a real temp file (not /dev/stdin, which is POSIX-only) so
   // certificate generation works on Windows as well as macOS/Linux.
   const configPath = join(tmpdir(), `pix-cert-${process.pid}.cnf`);

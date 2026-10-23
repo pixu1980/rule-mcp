@@ -82,13 +82,13 @@ answers `ask`, never `deny`: these are judgment calls with a human in the
 room, and a hard block on a false positive costs more than the prompt it
 saves.
 
-| Event              | Matcher                  | Command                              | What it says while it runs                             | Timeout |
-| ------------------ | ------------------------ | ------------------------------------ | ------------------------------------------------------ | ------- |
-| `PreToolUse`       | `Bash`                   | `pix-galaxy-mcp guard bash`          | pix guard: migration and commit checks                 | 60s     |
-| `PreToolUse`       | `Write\|Edit\|MultiEdit` | `pix-galaxy-mcp guard structure`     | pix guard: structural change, once per task            | 60s     |
-| `PostToolUse`      | `Write\|Edit\|MultiEdit` | `pix-galaxy-mcp guard write`         | pix guard: language and guardrails on the written file | 60s     |
-| `SessionStart`     | -                        | `pix-galaxy-mcp guard session-start` | pix: session directive, handoff on resume              | 60s     |
-| `UserPromptSubmit` | -                        | `pix-galaxy-mcp guard prompt-submit` | pix: prompt directive                                  | 60s     |
+| Event              | Matcher                  | Command                        | What it says while it runs                             | Timeout |
+| ------------------ | ------------------------ | ------------------------------ | ------------------------------------------------------ | ------- |
+| `PreToolUse`       | `Bash`                   | `rule-mcp guard bash`          | pix guard: migration and commit checks                 | 60s     |
+| `PreToolUse`       | `Write\|Edit\|MultiEdit` | `rule-mcp guard structure`     | pix guard: structural change, once per task            | 60s     |
+| `PostToolUse`      | `Write\|Edit\|MultiEdit` | `rule-mcp guard write`         | pix guard: language and guardrails on the written file | 60s     |
+| `SessionStart`     | -                        | `rule-mcp guard session-start` | pix: session directive, handoff on resume              | 60s     |
+| `UserPromptSubmit` | -                        | `rule-mcp guard prompt-submit` | pix: prompt directive                                  | 60s     |
 
 ## The rest of the census
 

@@ -4,7 +4,7 @@
  * Regression: Node's child_process.spawn does not expand a leading `~`.
  * MCP stdio configurations must therefore contain concrete absolute paths.
  *
- * When a globally installed pix-galaxy-mcp binary is available the installer
+ * When a globally installed rule-mcp binary is available the installer
  * prefers it as the single command (like Homebrew tokensave).  Otherwise
  * the config falls back to the local Node + entrypoint pair.
  */
@@ -15,8 +15,8 @@ import { mcpServerConfig, DEFAULT_OPTOUT_ENV } from "../index.js";
 import { resolveGlobalBinary } from "../../installers/_paths.js";
 
 const HOME = homedir();
-const entrypoint = join(HOME, "Projects", "pix-galaxy-mcp", "bin", "pix-galaxy-mcp.js");
-const config = mcpServerConfig(entrypoint)["pix-galaxy-mcp"];
+const entrypoint = join(HOME, "Projects", "rule-mcp", "bin", "rule-mcp.js");
+const config = mcpServerConfig(entrypoint)["rule-mcp"];
 
 // Invariant: generated stdio config ships every opt-out flag at its own default
 // (feature ON), so the switches are discoverable and easy to flip in the user's

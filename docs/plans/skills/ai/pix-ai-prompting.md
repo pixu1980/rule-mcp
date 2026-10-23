@@ -29,20 +29,20 @@ through inheritance.
 The router's eight `ai-*` rules are about agent code. This leaf is about the
 prompt, and it owns three things ADR 137 does not name:
 
-| Statement in the body | Rule |
-| --------------------- | ---- |
-| Point at files instead of pasting them | `ai-prompt-points-not-pastes` |
-| In learning mode, no code in, no code out | `ai-prompt-teaching-no-code` |
-| Review what comes back before it lands | `ai-prompt-output-reviewed` |
+| Statement in the body                     | Rule                          |
+| ----------------------------------------- | ----------------------------- |
+| Point at files instead of pasting them    | `ai-prompt-points-not-pastes` |
+| In learning mode, no code in, no code out | `ai-prompt-teaching-no-code`  |
+| Review what comes back before it lands    | `ai-prompt-output-reviewed`   |
 
 ## The four rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `ai-prompt-points-not-pastes` | A prompt that pastes a whole file where a path would do | B | n/a |
-| `ai-prompt-teaching-no-code` | A teaching-mode answer that writes the solution instead of the next step | B | n/a |
-| `ai-prompt-output-reviewed` | Generated code merged with no review step named | B | n/a |
-| `ai-prompt-owner-named` | A section delegating context, evals or lifecycle without naming the owner | B | partially red |
+| id                            | Rejects                                                                   | Tier | Today         |
+| ----------------------------- | ------------------------------------------------------------------------- | ---- | ------------- |
+| `ai-prompt-points-not-pastes` | A prompt that pastes a whole file where a path would do                   | B    | n/a           |
+| `ai-prompt-teaching-no-code`  | A teaching-mode answer that writes the solution instead of the next step  | B    | n/a           |
+| `ai-prompt-output-reviewed`   | Generated code merged with no review step named                           | B    | n/a           |
+| `ai-prompt-owner-named`       | A section delegating context, evals or lifecycle without naming the owner | B    | partially red |
 
 ## Phases
 
@@ -97,13 +97,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Door and cross-links | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Door and cross-links | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

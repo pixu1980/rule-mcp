@@ -21,10 +21,10 @@ keeps only the six shared router rules. That is the same model `pix-data` and
 `pix-backend` use, moved one level down because AI has exactly one leaf that
 describes the code ADR 137's rules check.
 
-| Tier | Rules | Owner |
-| ---- | ----- | ----- |
-| A | `ai-tool-schema`, `ai-call-timeout`, `ai-max-tokens`, `ai-output-validated`, `ai-no-secrets-in-prompt`, `ai-trace-span` | `pix-ai-agent-architecture` |
-| B | `ai-eval-presence`, `ai-mcp-token-validation` | `pix-ai-agent-architecture` |
+| Tier | Rules                                                                                                                   | Owner                       |
+| ---- | ----------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| A    | `ai-tool-schema`, `ai-call-timeout`, `ai-max-tokens`, `ai-output-validated`, `ai-no-secrets-in-prompt`, `ai-trace-span` | `pix-ai-agent-architecture` |
+| B    | `ai-eval-presence`, `ai-mcp-token-validation`                                                                           | `pix-ai-agent-architecture` |
 
 ## Evidence base (measured 2026-10-21)
 
@@ -32,15 +32,15 @@ describes the code ADR 137's rules check.
 and no `guardrails:`, a four-row table, an "AI features to build that are not
 another chatbot" section, and See also.
 
-| Fact | State |
-| ---- | ----- |
-| Children | 4: prompting, evals, context-engineering, agent-architecture |
-| Table rows | 4: complete |
-| Quick Selection | 4 lines, one per child |
-| Dispatcher rows | **1 of 5**: the router is listed, all four children are not |
-| Own rules | **none** |
-| `inherits:` in the area | **none** |
-| Dangling or invented ids | none |
+| Fact                     | State                                                        |
+| ------------------------ | ------------------------------------------------------------ |
+| Children                 | 4: prompting, evals, context-engineering, agent-architecture |
+| Table rows               | 4: complete                                                  |
+| Quick Selection          | 4 lines, one per child                                       |
+| Dispatcher rows          | **1 of 5**: the router is listed, all four children are not  |
+| Own rules                | **none**                                                     |
+| `inherits:` in the area  | **none**                                                     |
+| Dangling or invented ids | none                                                         |
 
 ### The description names a package that does not exist
 
@@ -53,11 +53,11 @@ project:
 { deps: ["@pix/pix-galaxy-core"], key: "agents" },
 ```
 
-The package this repository ships is **`pix-galaxy-mcp`**, no `@pix` scope is
+The package this repository ships is **`rule-mcp`**, no `@pix` scope is
 installed anywhere, and the string is a leftover from the pre-rename project. Two
 consequences, both measurable:
 
-1. A project that depends on `pix-galaxy-mcp` is **not detected** as an agents
+1. A project that depends on `rule-mcp` is **not detected** as an agents
    project, so `agents → pix-ai` never fires for the one project that obviously
    should.
 2. The router and the dispatcher describe the area in terms of a dependency a
@@ -73,15 +73,15 @@ is the reason the AI area plans carry dispatcher rows in their own phases too.
 
 Six shared router rules, plus the one this router motivated:
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `router-dead-link` | A relative link resolving to no `SKILL.md` | B | clean |
-| `router-tool-name` | A tool name the registry does not know | B | clean |
-| `router-child-listed` | A skill under the area with no row | B | clean |
-| `router-quick-selection` | A row the Quick Selection cannot reach | B | clean |
-| `router-no-stale-name` | A reference to a skill that no longer exists | B | clean |
-| `router-no-stale-package` | A dependency named in a description or a detector rule that the catalogue does not ship | B | **red**: `@pix/pix-galaxy-core` |
-| `router-ai-floor-reachable` | A child of the AI area with no pointer to the rules it must follow | B | **red**: four children, no link |
+| id                          | Rejects                                                                                 | Tier | Today                           |
+| --------------------------- | --------------------------------------------------------------------------------------- | ---- | ------------------------------- |
+| `router-dead-link`          | A relative link resolving to no `SKILL.md`                                              | B    | clean                           |
+| `router-tool-name`          | A tool name the registry does not know                                                  | B    | clean                           |
+| `router-child-listed`       | A skill under the area with no row                                                      | B    | clean                           |
+| `router-quick-selection`    | A row the Quick Selection cannot reach                                                  | B    | clean                           |
+| `router-no-stale-name`      | A reference to a skill that no longer exists                                            | B    | clean                           |
+| `router-no-stale-package`   | A dependency named in a description or a detector rule that the catalogue does not ship | B    | **red**: `@pix/pix-galaxy-core` |
+| `router-ai-floor-reachable` | A child of the AI area with no pointer to the rules it must follow                      | B    | **red**: four children, no link |
 
 ## Reaching the children
 
@@ -155,14 +155,14 @@ Shared files: skills/pix/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixt
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Fix the package name | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Finish the catalogue | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 5 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Fix the package name | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 4 - Finish the catalogue | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 5 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

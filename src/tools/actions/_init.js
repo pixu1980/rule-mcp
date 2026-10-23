@@ -3,8 +3,8 @@
 /**
  * @module tools/actions/init
  *
- * `pix_tool_init`: prepare a project for pix-galaxy-mcp (central recorder dir
- * and optional tokensave). Same work as `pix-galaxy-mcp init` / `/pix-init`.
+ * `pix_tool_init`: prepare a project for rule-mcp (central recorder dir
+ * and optional tokensave). Same work as `rule-mcp init` / `/pix-init`.
  *
  * @see module:cli/init
  */
@@ -19,9 +19,9 @@ export function registerInitTool() {
     name: "pix_tool_init",
     entry: "action",
     description:
-      "Prepare a project for pix-galaxy-mcp: create the central recorder directory under the state dir, " +
+      "Prepare a project for rule-mcp: create the central recorder directory under the state dir, " +
       "install or integrate the git governance (a commit-msg gate and a pre-push gate that enforce type(scope): subject, " +
-      "installing Husky only when a Node project has no hook mechanism), migrate a leftover local .pix-galaxy-mcp if " +
+      "installing Husky only when a Node project has no hook mechanism), migrate a leftover local .rule-mcp if " +
       "present, and run tokensave init when installed. Recorder state is never written into the repository. " +
       "Pass noTokensave: true to skip tokensave.",
     zodSchema: z.object({

@@ -1,5 +1,5 @@
 /**
- * Example plugin.js for pix-galaxy-mcp.
+ * Example plugin.js for rule-mcp.
  * Provides custom guardrails and generators.
  *
  * @module my-custom-rules/plugin

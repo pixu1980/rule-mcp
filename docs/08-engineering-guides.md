@@ -1,6 +1,6 @@
 # Engineering guides
 
-Practical guides for working on pix-galaxy-mcp itself: the engineering loop,
+Practical guides for working on rule-mcp itself: the engineering loop,
 the guardrails, the docs pipeline, and the numbers that matter. Counts here are
 verified by `tests/docs/docs-accuracy.test.mjs` against the live registries; the
 heavy inventories live in the generated census blocks of `docs/01-`,

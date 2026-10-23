@@ -90,8 +90,8 @@ test("missing hook files are skipped", () => {
   rmSync(dir, { recursive: true, force: true });
 });
 
-test("the marker has the pix-galaxy-mcp identity", () => {
-  assert.equal(GIT_HOOK_MARKER, "pix-galaxy-mcp");
+test("the marker has the rule-mcp identity", () => {
+  assert.equal(GIT_HOOK_MARKER, "rule-mcp");
   assert.ok(HOOKED_GIT_EVENTS.includes("post-checkout"));
   assert.ok(HOOKED_GIT_EVENTS.includes("post-merge"));
 });

@@ -15,13 +15,13 @@ A plan file carries, in this order: an H1; a status line with one of five values
 
 **Amendment 2026-10-21 (finding F5 of `docs/reviews/plan-graph.md`):** a plan that
 lives inside a branch carries four lines - `Depends on:`, `Feeds:`, `Shared files:`
-- while a document that coordinates plans across branches additionally carries
-`Branch:` and `Path:`. The owner's decision was the conditional form: six lines
-where a node must be findable from another branch, four where the file's location
-already says everything. `plan-of-plans.md` on `main` is the six-line case.
-A `CONTRACT` edge names a phase (`target#2`) and is exempt from the rule that a
-dependency sits in an earlier stage, because what closes first is the phase.
 
+- while a document that coordinates plans across branches additionally carries
+  `Branch:` and `Path:`. The owner's decision was the conditional form: six lines
+  where a node must be findable from another branch, four where the file's location
+  already says everything. `plan-of-plans.md` on `main` is the six-line case.
+  A `CONTRACT` edge names a phase (`target#2`) and is exempt from the rule that a
+  dependency sits in an earlier stage, because what closes first is the phase.
 
 ## Consequences
 

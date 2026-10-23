@@ -41,7 +41,7 @@ export async function autoLog(toolName, arguments_, result) {
     `- **Date**: ${dateString} ${timeString}`,
     `- **Status**: accepted`,
     `- **Tags**: ${tags}`,
-    "- **Author**: pix-galaxy-mcp",
+    "- **Author**: rule-mcp",
     "",
     "## Context",
     "",

@@ -6,7 +6,7 @@ import test from "node:test";
 
 import { parseJson, removeJsonServer, removeVscodeServer, upsertJsonServer, upsertVscode, vscodeServerType } from "../_writers-json.js";
 
-const SERVER = "pix-galaxy-mcp";
+const SERVER = "rule-mcp";
 
 test("parseJson parses or returns null", () => {
   assert.deepEqual(parseJson('{"a":1}'), { a: 1 });

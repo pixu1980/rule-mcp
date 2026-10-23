@@ -69,7 +69,7 @@ export async function applyUpgrade({ root, current, latest, reinstall = runReins
   const changed = ((await git(["diff", "--name-only", before, after], root)) ?? "").split("\n").filter(Boolean);
   const installed = await reinstall(root);
 
-  process.stderr.write(`[pix-galaxy-mcp] upgraded ${current || "?"} -> ${latest.version} (${latest.tag})\n`);
+  process.stderr.write(`[rule-mcp] upgraded ${current || "?"} -> ${latest.version} (${latest.tag})\n`);
 
   return {
     checked: true,

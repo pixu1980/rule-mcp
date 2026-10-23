@@ -26,12 +26,12 @@ test("shimCandidates sweeps every bin dir plus the retired alias", () => {
   const withoutPnpm = withEnv({ PNPM_HOME: undefined }, () => shimCandidates(home));
 
   assert.equal(withoutPnpm.length, 8, "four bin dirs times two names");
-  assert.ok(withoutPnpm.includes(join(home, ".local", "share", "pnpm", "bin", "pix-galaxy-mcp")), "the platform default bin is swept");
-  assert.ok(withoutPnpm.includes(join(home, ".local", "share", "pnpm", "bin", "pix-galaxy-mcpd")), "the retired -mcpd alias is swept alongside");
+  assert.ok(withoutPnpm.includes(join(home, ".local", "share", "pnpm", "bin", "rule-mcp")), "the platform default bin is swept");
+  assert.ok(withoutPnpm.includes(join(home, ".local", "share", "pnpm", "bin", "rule-mcpd")), "the retired -mcpd alias is swept alongside");
 
   const withPnpm = withEnv({ PNPM_HOME: "/fake/pnpm" }, () => shimCandidates(home));
 
-  assert.ok(withPnpm.includes(join("/fake/pnpm", "bin", "pix-galaxy-mcp")), "PNPM_HOME leads the sweep");
+  assert.ok(withPnpm.includes(join("/fake/pnpm", "bin", "rule-mcp")), "PNPM_HOME leads the sweep");
   assert.ok(new Set(withoutPnpm).size === withoutPnpm.length, "no duplicate paths");
 });
 

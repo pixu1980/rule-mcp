@@ -5,10 +5,10 @@
 /**
  * The help text shown by the top-level CLI command.
  */
-export const HELP_TEXT = `pix-galaxy-mcp - MCP server for the pix-* skill ecosystem.
+export const HELP_TEXT = `rule-mcp - MCP server for the pix-* skill ecosystem.
 
 Usage:
-  pix-galaxy-mcp <command> [options]
+  rule-mcp <command> [options]
 
 Commands:
   serve [opts]           Start MCP server (stdio or SSE)
@@ -47,7 +47,7 @@ Commands:
 
   config [opts]          Print mcp.json config snippet
     --mode <name>          stdio (default), daemon (SSE), or docker
-    --global               Uses clean \`pix-galaxy-mcp\` command
+    --global               Uses clean \`rule-mcp\` command
 
   tools <sub> [args]     List or call MCP tools
     tools list             List all registered tools as Terminal UI
@@ -90,19 +90,19 @@ Commands:
   help |-h | --help      Show this help message
 
 Aliases:
-  pix-galaxy-mcp <command> --help    Show per-command help
+  rule-mcp <command> --help    Show per-command help
 
 Examples:
-  pix-galaxy-mcp help
+  rule-mcp help
   pnpm start / pnpm dev           # STDIO - spawnable by IDE/agent via mcp.json
   pnpm up                          # SSE - on-demand HTTP daemon from repo
-  pix-galaxy-mcp serve --transport sse
-  pix-galaxy-mcp tools list
-  pix-galaxy-mcp doctor --telemetry
-  pix-galaxy-mcp adr new "Use PostgreSQL" --status accepted --tags database
-  pix-galaxy-mcp handoff --compress | pbcopy
-  pix-galaxy-mcp completions --shell zsh > ~/.zsh/completions/_pix-galaxy-mcp
-  pix-galaxy-mcp config --global
+  rule-mcp serve --transport sse
+  rule-mcp tools list
+  rule-mcp doctor --telemetry
+  rule-mcp adr new "Use PostgreSQL" --status accepted --tags database
+  rule-mcp handoff --compress | pbcopy
+  rule-mcp completions --shell zsh > ~/.zsh/completions/_rule-mcp
+  rule-mcp config --global
 
 Install modes:
   local (default)    Uses node + script path - works without global install

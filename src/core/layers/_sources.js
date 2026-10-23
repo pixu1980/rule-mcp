@@ -49,7 +49,7 @@ export function layerSources(kind, { cwd = process.cwd() } = {}) {
 
   return [
     { layer: "native", dir: nativeDir(kind) },
-    { layer: "project", dir: join(findProjectRoot(cwd), ".pix-galaxy-mcp", kind) },
+    { layer: "project", dir: join(findProjectRoot(cwd), ".rule-mcp", kind) },
     { layer: "user", dir: join(homeDir, kind) },
   ];
 }

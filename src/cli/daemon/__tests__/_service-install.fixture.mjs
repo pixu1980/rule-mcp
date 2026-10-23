@@ -32,7 +32,7 @@ if (behavior !== "absent") {
 
   // `present` prints a line naming the service, which every caller reads as
   // "installed"; `failing` prints the word the installers check for.
-  const body = behavior === "failing" ? `#!/bin/sh\necho "Failed to restart pix-galaxy-mcp"\n` : `#!/bin/sh\necho "SERVICE_NAME: pix-galaxy-mcp"\n`;
+  const body = behavior === "failing" ? `#!/bin/sh\necho "Failed to restart rule-mcp"\n` : `#!/bin/sh\necho "SERVICE_NAME: rule-mcp"\n`;
 
   const stub = join(bin, "systemctl");
   writeFileSync(stub, body);

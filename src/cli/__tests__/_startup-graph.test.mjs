@@ -91,7 +91,7 @@ test("the commander program is still built statically, so help text cannot drift
 });
 
 test("the bin loads the app dynamically, so the compile cache is on first", () => {
-  const bin = readFileSync(join(ROOT, "bin/pix-galaxy-mcp.js"), "utf8");
+  const bin = readFileSync(join(ROOT, "bin/rule-mcp.js"), "utf8");
 
   assert.match(bin, /enableCompileCache/, "the bin turns the compiled code cache on");
   assert.match(bin, /await import\("\.\.\/src\/index\.js"\)/, "and loads the app after it, dynamically");

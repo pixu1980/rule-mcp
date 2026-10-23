@@ -3,7 +3,7 @@
 /**
  * @module cli/commands/commit
  *
- * `pix-galaxy-mcp commit-lint`: the gate the `commit-msg` and `pre-push` hooks
+ * `rule-mcp commit-lint`: the gate the `commit-msg` and `pre-push` hooks
  * invoke.
  *
  * Three inputs, one rule: a message file (what `commit-msg` is handed), a

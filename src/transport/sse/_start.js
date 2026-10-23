@@ -33,7 +33,7 @@ export async function startSseServer(options = {}) {
   // Persisted token keeps daemon client configuration valid after restarts.
   const serverToken = getOrCreateSseBearerToken();
   setServerToken(serverToken);
-  console.error("[pix-galaxy-mcp] SSE authentication enabled");
+  console.error("[rule-mcp] SSE authentication enabled");
 
   // Handle SSL: resolve cert files, auto-generate if missing
   const resolvedCert = sslCert;
@@ -50,7 +50,7 @@ export async function startSseServer(options = {}) {
         throw new Error(`Failed to generate self-signed cert at ${resolvedCert}. Provide valid --ssl-cert and --ssl-key.`);
       }
 
-      console.error(`[pix-galaxy-mcp] Generated self-signed cert: ${resolvedCert}`);
+      console.error(`[rule-mcp] Generated self-signed cert: ${resolvedCert}`);
     }
   }
 

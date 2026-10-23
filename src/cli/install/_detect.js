@@ -9,7 +9,7 @@ import { serverName, allAgents, HOME, vscodeGlobalDir } from "../installers/inde
 export * from "../installers/index.js";
 
 /**
- * Detect which agents have pix-galaxy-mcp configured.
+ * Detect which agents have rule-mcp configured.
  * Checks common config file locations for the MCP server entry.
  *
  * @returns {Array<{ name: string, configured: boolean, configFile: string|null }>}

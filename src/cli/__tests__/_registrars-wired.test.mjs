@@ -54,11 +54,11 @@ test("every CLI command a prompt tells the reader to run is registered", () => {
   const missing = new Set();
 
   for (const command of listAgentCommands()) {
-    for (const match of command.body.matchAll(/`?pix-galaxy-mcp ([a-z][a-z-]*)/g)) {
+    for (const match of command.body.matchAll(/`?rule-mcp ([a-z][a-z-]*)/g)) {
       const name = match[1];
 
       if (!registered.has(name)) {
-        missing.add(`${command.name} names \`pix-galaxy-mcp ${name}\``);
+        missing.add(`${command.name} names \`rule-mcp ${name}\``);
       }
     }
   }

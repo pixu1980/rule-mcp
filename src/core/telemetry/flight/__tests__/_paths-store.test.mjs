@@ -19,9 +19,9 @@ const { getProjectPaths, getRuntimePaths } = await import("../../../../cli/paths
 // ── F1: one home directory, one project directory ──
 const paths = getRuntimePaths();
 
-check("F1 state lives under the state dir/state", paths.stateDir === join(home, ".pix-galaxy-mcp", "state"));
-check("F1.1 data lives beside it", paths.dataDir === join(home, ".pix-galaxy-mcp", "data"));
-check("F1.2 config lives beside it", paths.configDir === join(home, ".pix-galaxy-mcp", "config"));
+check("F1 state lives under the state dir/state", paths.stateDir === join(home, ".rule-mcp", "state"));
+check("F1.1 data lives beside it", paths.dataDir === join(home, ".rule-mcp", "data"));
+check("F1.2 config lives beside it", paths.configDir === join(home, ".rule-mcp", "config"));
 check(
   "F1.3 the state override still works",
   (() => {
@@ -40,7 +40,7 @@ check("F1.4 the project root is the repository root", projectPaths.projectDir ==
 // A recording is filed per project under the home directory.
 check("F1.5 project data lives under the install, not the project", !projectPaths.dir.startsWith(project));
 check("F1.6 exports live under it", projectPaths.exportsDir === join(projectPaths.dir, "exports"));
-check("F1.7 the project itself is left alone", !existsSync(join(project, ".pix-galaxy-mcp")));
+check("F1.7 the project itself is left alone", !existsSync(join(project, ".rule-mcp")));
 
 // ── F2: the log is project-scoped ──
 const { eventsFile, rollupFile } = await import("../../store/index.js");

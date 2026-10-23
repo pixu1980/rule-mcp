@@ -25,25 +25,25 @@ position.
 
 ### What it states and nothing checks
 
-| Statement | Enforced |
-| --------- | -------- |
-| CPU work in a request handler blocks every other request | **no** |
-| The libuv pool defaults to four threads: crypto, DNS and fs share it | **no** |
-| A worker thread pays off above a threshold, not below it | **no** |
-| Transferred buffers are detached; do not read them after transfer | **no** |
+| Statement                                                            | Enforced |
+| -------------------------------------------------------------------- | -------- |
+| CPU work in a request handler blocks every other request             | **no**   |
+| The libuv pool defaults to four threads: crypto, DNS and fs share it | **no**   |
+| A worker thread pays off above a threshold, not below it             | **no**   |
+| Transferred buffers are detached; do not read them after transfer    | **no**   |
 
 The first is the rule that matters: the leaf spends 400 lines explaining why, and
 a three-line check catches the pattern.
 
 ## The five rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `node-workers-no-cpu-in-handler` | Synchronous CPU work (hashing, compression, parsing) inside a request handler | B | n/a |
-| `node-workers-pool-sized` | A `Worker` constructed per request, or a pool with no size limit | B | n/a |
-| `node-workers-transfer-detached` | A buffer read after it was transferred | B | n/a |
-| `node-workers-piscina-for-pooling` | A hand-rolled pool where the configured library is available | B | n/a |
-| `node-workers-owner-named` | A section delegating browser workers or observability without naming the owner | B | partially red |
+| id                                 | Rejects                                                                        | Tier | Today         |
+| ---------------------------------- | ------------------------------------------------------------------------------ | ---- | ------------- |
+| `node-workers-no-cpu-in-handler`   | Synchronous CPU work (hashing, compression, parsing) inside a request handler  | B    | n/a           |
+| `node-workers-pool-sized`          | A `Worker` constructed per request, or a pool with no size limit               | B    | n/a           |
+| `node-workers-transfer-detached`   | A buffer read after it was transferred                                         | B    | n/a           |
+| `node-workers-piscina-for-pooling` | A hand-rolled pool where the configured library is available                   | B    | n/a           |
+| `node-workers-owner-named`         | A section delegating browser workers or observability without naming the owner | B    | partially red |
 
 ## Phases
 
@@ -95,13 +95,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Door and shape | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Door and shape       | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

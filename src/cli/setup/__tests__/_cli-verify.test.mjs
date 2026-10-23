@@ -34,7 +34,7 @@ test("verifyGlobalCli passes when the CLI answers", () => {
   const result = verifyGlobalCli({ skip: false, path: "/bin/pix", works: () => true, exec });
 
   assert.equal(result.status, "ok");
-  assert.deepEqual(calls, ["pix-galaxy-mcp tools list", "pix-galaxy-mcp doctor"]);
+  assert.deepEqual(calls, ["rule-mcp tools list", "rule-mcp doctor"]);
 });
 
 test("verifyGlobalCli skips when the global link is disabled", () => {

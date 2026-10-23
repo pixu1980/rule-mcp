@@ -10,49 +10,49 @@ Area: meta, leaf. Sibling plans: `pix-meta-remix`, `pix-meta-nuxt`,
 
 Inherited from the platform interviews, 2026-10-21:
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Identity | Thin leaf that delegates: App Router, server components and caching stay, everything another skill owns becomes a pointer |
-| Shared owners | `pix-frontend-react` owns the component model; `pix-styleguide-configuration` owns environment handling; `pix-platform-web` owns deployment, performance budgets and image policy; `pix-devops-testing` owns the runner |
-| Reach | Fixed here: the leaf links the dispatcher, the dispatcher lists the leaf |
-| Rule set | Six rules, all Tier B (advisory) |
-| Detection | Both: section and table parsing, plus injected `fileList` |
-| Fixtures | Shared corpus pairs plus skill trees on disk |
-| Flow | Failing test first |
-| Gates | Skill suite, corpora, catalog clean, census, lint and typecheck |
-| Commits | One per phase |
-| ADR | Two for the whole area: the meta family shape, the rule design |
-| Done | The leaf owns what it claims and the rules pass |
+| Question           | Decision                                                                                                                                                                                                                |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass | **Plan only**                                                                                                                                                                                                           |
+| Identity           | Thin leaf that delegates: App Router, server components and caching stay, everything another skill owns becomes a pointer                                                                                               |
+| Shared owners      | `pix-frontend-react` owns the component model; `pix-styleguide-configuration` owns environment handling; `pix-platform-web` owns deployment, performance budgets and image policy; `pix-devops-testing` owns the runner |
+| Reach              | Fixed here: the leaf links the dispatcher, the dispatcher lists the leaf                                                                                                                                                |
+| Rule set           | Six rules, all Tier B (advisory)                                                                                                                                                                                        |
+| Detection          | Both: section and table parsing, plus injected `fileList`                                                                                                                                                               |
+| Fixtures           | Shared corpus pairs plus skill trees on disk                                                                                                                                                                            |
+| Flow               | Failing test first                                                                                                                                                                                                      |
+| Gates              | Skill suite, corpora, catalog clean, census, lint and typecheck                                                                                                                                                         |
+| Commits            | One per phase                                                                                                                                                                                                           |
+| ADR                | Two for the whole area: the meta family shape, the rule design                                                                                                                                                          |
+| Done               | The leaf owns what it claims and the rules pass                                                                                                                                                                         |
 
 ## Evidence base (measured 2026-10-21)
 
 `skills/pix-meta-next/SKILL.md` is **197 lines**, no `guardrails/`, no
 `references/`, no auxiliary folders.
 
-| Section | Lines | Owner today |
-| ------- | ----- | ----------- |
-| When to use | 4 | **keep** |
-| Core Rules | 3 | clean: a pointer at `pix-frontend-react` and `pix-styleguide` |
-| File Tree Convention (App Router) | ~32 | `pix-styleguide-file-tree`, with the `app/` conventions kept |
-| App Router | ~10 | **keep** |
-| Server vs Client Components | ~20 | **keep**: the decision this framework is built around |
-| Data Fetching | ~17 | **keep**: caching and revalidation semantics |
-| API Routes | ~11 | **keep** |
-| Middleware | ~16 | **keep** |
-| Image Optimization | ~16 | `pix-platform-web` owns the image and budget policy; keep the Next API |
-| Static Export | ~9 | **keep** |
-| Environment Variables | ~7 | `pix-styleguide-configuration`; this leaf duplicates the `NEXT_PUBLIC_` rule |
-| Deployment | ~8 | `pix-platform-web` and `pix-devops` own the targets |
-| Quick Reference | ~20 | derived |
+| Section                           | Lines | Owner today                                                                  |
+| --------------------------------- | ----- | ---------------------------------------------------------------------------- |
+| When to use                       | 4     | **keep**                                                                     |
+| Core Rules                        | 3     | clean: a pointer at `pix-frontend-react` and `pix-styleguide`                |
+| File Tree Convention (App Router) | ~32   | `pix-styleguide-file-tree`, with the `app/` conventions kept                 |
+| App Router                        | ~10   | **keep**                                                                     |
+| Server vs Client Components       | ~20   | **keep**: the decision this framework is built around                        |
+| Data Fetching                     | ~17   | **keep**: caching and revalidation semantics                                 |
+| API Routes                        | ~11   | **keep**                                                                     |
+| Middleware                        | ~16   | **keep**                                                                     |
+| Image Optimization                | ~16   | `pix-platform-web` owns the image and budget policy; keep the Next API       |
+| Static Export                     | ~9    | **keep**                                                                     |
+| Environment Variables             | ~7    | `pix-styleguide-configuration`; this leaf duplicates the `NEXT_PUBLIC_` rule |
+| Deployment                        | ~8    | `pix-platform-web` and `pix-devops` own the targets                          |
+| Quick Reference                   | ~20   | derived                                                                      |
 
 ### Reach
 
-| Door | State |
-| ---- | ----- |
-| `pix` dispatcher | listed |
-| `pix-meta` dispatcher | the leaf does not link it, and `pix-meta` is itself missing from `pix` |
-| See also | `pix`, `pix-frontend`, `pix-styleguide`: no meta router, no `pix-platform-web` |
+| Door                  | State                                                                          |
+| --------------------- | ------------------------------------------------------------------------------ |
+| `pix` dispatcher      | listed                                                                         |
+| `pix-meta` dispatcher | the leaf does not link it, and `pix-meta` is itself missing from `pix`         |
+| See also              | `pix`, `pix-frontend`, `pix-styleguide`: no meta router, no `pix-platform-web` |
 
 ### The duplication that matters
 
@@ -69,14 +69,14 @@ around 120 lines.
 
 ## The six rules
 
-| id | Rejects | Reads | Tier | Today |
-| -- | ------- | ----- | ---- | ----- |
-| `meta-no-duplicate-core-rules` | A restatement of the markup and CSS rules | `code` | B | clean |
-| `meta-router-linked` | A meta leaf that does not link `pix-meta` | `code` | B | red: four leaves |
-| `meta-owner-named` | A delegated section naming no owner | `code` | B | red: env, images, deployment |
-| `meta-no-stale-file-ref` | A reference to a file that does not exist | `code` + `context.fileList` | B | clean |
-| `meta-no-stale-skill-id` | A `pix-...` id with no skill directory | `code` + `context.fileList` | B | clean |
-| `meta-scaffold-terminated` | A `## Project Scaffolding` block the parser cannot close | `code` | B | n/a: no scaffold block |
+| id                             | Rejects                                                  | Reads                       | Tier | Today                        |
+| ------------------------------ | -------------------------------------------------------- | --------------------------- | ---- | ---------------------------- |
+| `meta-no-duplicate-core-rules` | A restatement of the markup and CSS rules                | `code`                      | B    | clean                        |
+| `meta-router-linked`           | A meta leaf that does not link `pix-meta`                | `code`                      | B    | red: four leaves             |
+| `meta-owner-named`             | A delegated section naming no owner                      | `code`                      | B    | red: env, images, deployment |
+| `meta-no-stale-file-ref`       | A reference to a file that does not exist                | `code` + `context.fileList` | B    | clean                        |
+| `meta-no-stale-skill-id`       | A `pix-...` id with no skill directory                   | `code` + `context.fileList` | B    | clean                        |
+| `meta-scaffold-terminated`     | A `## Project Scaffolding` block the parser cannot close | `code`                      | B    | n/a: no scaffold block       |
 
 ## Phase 0 - Decisions
 
@@ -116,13 +116,13 @@ around 120 lines.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Trim and wire | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Trim and wire        | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

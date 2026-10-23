@@ -3,7 +3,7 @@
 /**
  * @module utils/sandbox
  *
- * Sandbox / resilience layer for pix-galaxy-mcp.
+ * Sandbox / resilience layer for rule-mcp.
  * Prevents uncaught errors from crashing the server by wrapping
  * every external operation in safe handlers.
  *

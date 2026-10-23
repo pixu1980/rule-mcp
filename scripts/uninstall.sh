@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # =============================================================================
-# pix-galaxy-mcp - uninstaller bootstrap
+# rule-mcp - uninstaller bootstrap
 # =============================================================================
 #
 # The mirror of scripts/install.sh: check node, resolve the binary, hand over
-# to `pix-galaxy-mcp setup --uninstall`. The removal logic - the scan, the
+# to `rule-mcp setup --uninstall`. The removal logic - the scan, the
 # per-group choices, the purge - lives in src/cli/setup/ (ADR 080).
 #
 # Scope guarantee:
@@ -13,7 +13,7 @@
 #
 # Usage:
 #   ./scripts/uninstall.sh [options]
-#   curl -fsSL https://raw.githubusercontent.com/pixu1980/pix-galaxy-mcp/v0.1.0-beta/scripts/uninstall.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/pixu1980/rule-mcp/v0.1.0-beta/scripts/uninstall.sh | bash
 #
 # Options are forwarded verbatim, with one translation kept for
 # compatibility: `--force` used to mean "do not ask for confirmation", which
@@ -25,7 +25,7 @@ set -euo pipefail
 NODE_MIN=20
 
 die() {
-  echo "pix-galaxy-mcp: $1" >&2
+  echo "rule-mcp: $1" >&2
   exit 1
 }
 
@@ -44,18 +44,18 @@ for arg in "$@"; do
 done
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-local_bin="${script_dir}/../bin/pix-galaxy-mcp.js"
+local_bin="${script_dir}/../bin/rule-mcp.js"
 
 if [ -f "$local_bin" ]; then
   set -- node "$local_bin" setup --uninstall ${args[@]+"${args[@]}"}
-elif command -v pix-galaxy-mcp >/dev/null 2>&1 && pix-galaxy-mcp --version >/dev/null 2>&1; then
-  set -- pix-galaxy-mcp setup --uninstall ${args[@]+"${args[@]}"}
+elif command -v rule-mcp >/dev/null 2>&1 && rule-mcp --version >/dev/null 2>&1; then
+  set -- rule-mcp setup --uninstall ${args[@]+"${args[@]}"}
 elif command -v pnpm >/dev/null 2>&1; then
-  set -- pnpm dlx pix-galaxy-mcp setup --uninstall ${args[@]+"${args[@]}"}
+  set -- pnpm dlx rule-mcp setup --uninstall ${args[@]+"${args[@]}"}
 elif command -v npx >/dev/null 2>&1; then
-  set -- npx --yes pix-galaxy-mcp setup --uninstall ${args[@]+"${args[@]}"}
+  set -- npx --yes rule-mcp setup --uninstall ${args[@]+"${args[@]}"}
 else
-  die "no pix-galaxy-mcp binary and no pnpm/npx to fetch one"
+  die "no rule-mcp binary and no pnpm/npx to fetch one"
 fi
 
 # Same reason as the installer: a piped run still deserves the wizard.

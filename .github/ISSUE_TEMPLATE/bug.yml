@@ -6,7 +6,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: Output of `pix-galaxy-mcp --version`, or the commit you run on.
+      description: Output of `rule-mcp --version`, or the commit you run on.
     validations:
       required: true
   - type: textarea

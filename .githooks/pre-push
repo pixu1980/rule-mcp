@@ -1,5 +1,5 @@
 #!/bin/sh
-# pix-galaxy-mcp: validate the commits a push would send, then formatting.
+# rule-mcp: validate the commits a push would send, then formatting.
 #
 # The commit gate runs first: a push carrying a non-conforming message is
 # blocked with the sha, the message and the reason. The rule lives in
@@ -15,7 +15,7 @@ echo "pre-push: checking commit messages..."
 if ! node scripts/build/commit-types/index.mjs --stdin-push; then
   echo "" >&2
   echo "pre-push: rejected - a commit in this push does not follow type(scope): subject." >&2
-  echo "  Fix it with: pix-galaxy-mcp commit-lint --range <base>..<head>" >&2
+  echo "  Fix it with: rule-mcp commit-lint --range <base>..<head>" >&2
   exit 1
 fi
 

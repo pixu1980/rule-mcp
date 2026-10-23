@@ -23,13 +23,13 @@
 | `PIX_GALAXY_MCP_TEST_SLOW_CHECK_MS`           | Test-only: busy-wait this long inside the worker before checking, so the kill path can be exercised. Never set it in a real install.                                                                                                                                                                                                                                       | unset                               | milliseconds                                        |
 | `PIX_GALAXY_MCP_NO_FINGERPRINT`               | Disable AI-fingerprint removal on tool results (em dashes and typographic characters become ASCII, British spelling becomes American; code, inline spans, URLs and JSON are never touched).                                                                                                                                                                                | unset                               | `1` = disable                                       |
 | `PIX_GALAXY_MCP_NO_TELEMETRY`                 | Disable local telemetry entirely: no events recorded, no files written. Telemetry is local-only and never sent anywhere.                                                                                                                                                                                                                                                   | unset                               | `1` = disable                                       |
-| `PIX_GALAXY_MCP_NO_PROMPTS`                   | Record only the prompt length, never its text. Prompt text is recorded by default, into the home recording (`~/.pix-galaxy-mcp/`), and is never sent anywhere.                                                                                                                                                                                                             | unset                               | `1` = lengths only                                  |
+| `PIX_GALAXY_MCP_NO_PROMPTS`                   | Record only the prompt length, never its text. Prompt text is recorded by default, into the home recording (`~/.rule-mcp/`), and is never sent anywhere.                                                                                                                                                                                                                   | unset                               | `1` = lengths only                                  |
 | `PIX_GALAXY_MCP_NO_TOKENSAVE`                 | Disable tokensave awareness: no code-graph directive, no context suppression, no branch-staleness warning.                                                                                                                                                                                                                                                                 | unset                               | `1` = disable                                       |
 | `PIX_GALAXY_MCP_TOKENSAVE_AUTOTRACK`          | Let the server run `tokensave branch add <branch>` (detached, once per branch per process) when the graph is serving a fallback index. Off by default because it writes to the user's project; `auto_track` in `.tokensave/config.json` is the preferred fix and is set by the installer.                                                                                  | unset                               | `1` = enable                                        |
 | `PIX_GALAXY_MCP_NO_CACHE`                     | Disable the deterministic result cache at every tier, including a committed catalog. Every call recomputes.                                                                                                                                                                                                                                                                | unset                               | `1` = disable                                       |
 | `PIX_GALAXY_MCP_CACHE_EXACT_ONLY`             | Answer only from the exact key, never the normalized one. Reported by `cache stats`, so a low hit rate stays explainable.                                                                                                                                                                                                                                                  | unset                               | `1` = exact only                                    |
-| `PIX_GALAXY_MCP_STATE_DIR`                    | Where mutable state lives: the result cache, the bm25 index, the SSE token, the daemon pid/log.                                                                                                                                                                                                                                                                            | `~/.pix-galaxy-mcp/state`           | an absolute path                                    |
-| `PIX_GALAXY_MCP_HOME`                         | The whole pix-galaxy-mcp home root (state, data, projects, config under it). `PIX_GALAXY_MCP_STATE_DIR` overrides just the state subdirectory.                                                                                                                                                                                                                             | `~/.pix-galaxy-mcp`                 | an absolute path                                    |
+| `PIX_GALAXY_MCP_STATE_DIR`                    | Where mutable state lives: the result cache, the bm25 index, the SSE token, the daemon pid/log.                                                                                                                                                                                                                                                                            | `~/.rule-mcp/state`                 | an absolute path                                    |
+| `PIX_GALAXY_MCP_HOME`                         | The whole rule-mcp home root (state, data, projects, config under it). `PIX_GALAXY_MCP_STATE_DIR` overrides just the state subdirectory.                                                                                                                                                                                                                                   | `~/.rule-mcp`                       | an absolute path                                    |
 | `PIX_GALAXY_MCP_REPO_ROOT`                    | The repository the server reads its own skills and version from.                                                                                                                                                                                                                                                                                                           | the installed package               | an absolute path                                    |
 | `PIX_GALAXY_MCP_PORT`                         | Port for the HTTP and SSE transports.                                                                                                                                                                                                                                                                                                                                      | `37999`                             | a port number                                       |
 | `PIX_GALAXY_MCP_HOST`                         | Interface the HTTP and SSE transports bind to.                                                                                                                                                                                                                                                                                                                             | `127.0.0.1`                         | a hostname or address                               |
@@ -62,7 +62,7 @@
 Set these variables via:
 
 ```bash
-# CLI (persisted to ~/.config/pix-galaxy-mcp/env.json)
+# CLI (persisted to ~/.config/rule-mcp/env.json)
 pix config env --set PIX_GALAXY_MCP_MINIMAL_TOOLS=1
 
 # Interactive mode
@@ -74,7 +74,7 @@ export PIX_GALAXY_MCP_MINIMAL_TOOLS=1
 
 ## Persistence
 
-Variables set via `pix config env` are saved to `~/.config/pix-galaxy-mcp/env.json`
+Variables set via `pix config env` are saved to `~/.config/rule-mcp/env.json`
 and automatically injected into the MCP stdio configuration on install/update.
 
 Environment variables set in your shell profile override the persisted config.
@@ -92,19 +92,19 @@ Local, on by default, and never sent anywhere. Disable with
 Telemetry belongs to a project, not to a machine: a cache hit rate averaged
 over every repository on a disk answers nothing.
 
-| What                               | Where                                                        |
-| ---------------------------------- | ------------------------------------------------------------ |
-| Raw events, 7-day retention        | `~/.pix-galaxy-mcp/projects/<project>/telemetry.jsonl`       |
-| Daily aggregates                   | `~/.pix-galaxy-mcp/projects/<project>/telemetry-rollup.json` |
-| Usage an agent declared for itself | `~/.pix-galaxy-mcp/projects/<project>/usage.json`            |
-| Id of the current recording window | `~/.pix-galaxy-mcp/projects/<project>/project-id`            |
-| Exported flights                   | `~/.pix-galaxy-mcp/projects/<project>/exports/*.flight`      |
-| Random installation id             | `<stateDir>/installation-id`                                 |
+| What                               | Where                                                  |
+| ---------------------------------- | ------------------------------------------------------ |
+| Raw events, 7-day retention        | `~/.rule-mcp/projects/<project>/telemetry.jsonl`       |
+| Daily aggregates                   | `~/.rule-mcp/projects/<project>/telemetry-rollup.json` |
+| Usage an agent declared for itself | `~/.rule-mcp/projects/<project>/usage.json`            |
+| Id of the current recording window | `~/.rule-mcp/projects/<project>/project-id`            |
+| Exported flights                   | `~/.rule-mcp/projects/<project>/exports/*.flight`      |
+| Random installation id             | `<stateDir>/installation-id`                           |
 
-`pix-galaxy-mcp telemetry export` writes one `.flight` holding the timeline,
+`rule-mcp telemetry export` writes one `.flight` holding the timeline,
 the KPI block, the model's own usage and a snapshot of the project, then empties
 the log: the file is the archive, not a copy of it. `--keep` leaves the log in
-place. `pix-galaxy-mcp telemetry show <file>` reports an export as tables, and
+place. `rule-mcp telemetry show <file>` reports an export as tables, and
 `pix_tool_stats` does the same with a `flight` argument.
 
 The model's tokens and cost are read from the coding agent's own transcript -
@@ -114,7 +114,7 @@ always wins over a declaration, and a declaration is labeled as one.
 
 Nothing is written into the project: a recording is filed per project under the
 home directory, so a checkout has nothing to ignore (ADR 082).
-`pix-galaxy-mcp init` sets that up, and installs git hooks so a clone or a
+`rule-mcp init` sets that up, and installs git hooks so a clone or a
 checkout re-asserts the rule.
 
 Recorded per tool call: tool name, duration, outcome, cache hit, routed skill,
@@ -124,10 +124,10 @@ guardrail failure count, and tokens saved per source.
 behind an interface and switched off in code, not by an environment variable,
 because enabling it is a decision with a legal basis attached.
 
-Read it with `pix-galaxy-mcp stats` or the `pix_tool_stats` tool. Export a
+Read it with `rule-mcp stats` or the `pix_tool_stats` tool. Export a
 session for the AI Flight Recorder DevTools timeline with
-`pix-galaxy-mcp telemetry export`. Roll up and prune with
-`pix-galaxy-mcp telemetry prune`.
+`rule-mcp telemetry export`. Roll up and prune with
+`rule-mcp telemetry prune`.
 
 ## Target-only additions
 
@@ -136,14 +136,14 @@ session for the AI Flight Recorder DevTools timeline with
 ## Node variables this server sets or honors
 
 stdio starts the server as a subprocess per client, so module compilation is
-paid on every connect. `bin/pix-galaxy-mcp.js` calls
+paid on every connect. `bin/rule-mcp.js` calls
 `module.enableCompileCache()` before it loads the application graph, and the
 installer writes a cache directory into the generated agent config.
 
-| Variable                     | Description                                                                                                                              | Default                                 |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| `NODE_COMPILE_CACHE`         | Directory for the compiled code cache. The installer sets it for every agent spawn; unset, Node picks its own location.                  | `~/.cache/pix-galaxy-mcp/compile-cache` |
-| `NODE_DISABLE_COMPILE_CACHE` | `1` turns the cache off, including the one the bin enables. The test runner sets it so no suite result depends on a cache another wrote. | unset                                   |
+| Variable                     | Description                                                                                                                              | Default                           |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `NODE_COMPILE_CACHE`         | Directory for the compiled code cache. The installer sets it for every agent spawn; unset, Node picks its own location.                  | `~/.cache/rule-mcp/compile-cache` |
+| `NODE_DISABLE_COMPILE_CACHE` | `1` turns the cache off, including the one the bin enables. The test runner sets it so no suite result depends on a cache another wrote. | unset                             |
 
 Measured with `pnpm report:startup`: the cache takes 2-6% off a warm start.
 The larger win came from what the entry point no longer loads - `--help` went

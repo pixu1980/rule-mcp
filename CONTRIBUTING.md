@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping with pix-galaxy-mcp. The short version: small fixes
+Thanks for helping with rule-mcp. The short version: small fixes
 need no ceremony, structural change needs an ADR first.
 
 ## Prerequisites
@@ -16,8 +16,8 @@ bans it, so the version is not pinned there.
 ## Setup
 
 ```bash
-git clone https://github.com/pixu1980/pix-galaxy-mcp.git
-cd pix-galaxy-mcp
+git clone https://github.com/pixu1980/rule-mcp.git
+cd rule-mcp
 pnpm install
 ```
 
@@ -34,7 +34,7 @@ pnpm test:all         # the whole suite - green before every pull request
 pnpm lint             # eslint over bin/, src/, tests/
 pnpm format           # prettier check (fix with pnpm format:fix)
 pnpm census:check     # generated catalog docs are current (fix with pnpm census)
-pix-galaxy-mcp doctor # health report for your machine
+rule-mcp doctor # health report for your machine
 ```
 
 ## How to contribute

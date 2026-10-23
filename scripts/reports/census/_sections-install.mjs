@@ -43,7 +43,7 @@ export function agentTargetSection(_data) {
   return [
     `## Install targets (${allAgents.length})`,
     "",
-    "`pix-galaxy-mcp install --agent <name>` and the setup wizard accept exactly",
+    "`rule-mcp install --agent <name>` and the setup wizard accept exactly",
     "these names. A host listed with command files also gets the slash commands in",
     "its own format; the others receive the MCP configuration and reach the same",
     "prompts through the server.",

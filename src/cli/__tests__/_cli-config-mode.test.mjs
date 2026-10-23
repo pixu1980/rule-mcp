@@ -9,12 +9,12 @@ import { join } from "node:path";
 
 const root = new URL("../../..", import.meta.url).pathname;
 const fakeHome = mkdtempSync(join(tmpdir(), "pix-config-mode-"));
-const output = execFileSync(process.execPath, [join(root, "bin", "pix-galaxy-mcp.js"), "config", "--mode", "daemon"], {
+const output = execFileSync(process.execPath, [join(root, "bin", "rule-mcp.js"), "config", "--mode", "daemon"], {
   cwd: root,
   env: { ...process.env, HOME: fakeHome },
   encoding: "utf8",
 });
-const server = JSON.parse(output)["pix-galaxy-mcp"];
+const server = JSON.parse(output)["rule-mcp"];
 
 assert.equal(server.command, undefined);
 assert.equal(server.url, "http://127.0.0.1:37999/sse");

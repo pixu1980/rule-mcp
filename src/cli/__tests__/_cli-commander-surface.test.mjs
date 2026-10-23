@@ -20,7 +20,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const BIN = fileURLToPath(new URL("../../../bin/pix-galaxy-mcp.js", import.meta.url));
+const BIN = fileURLToPath(new URL("../../../bin/rule-mcp.js", import.meta.url));
 
 /** The version the manifest declares, prerelease suffix and all. */
 function packageVersion() {
@@ -34,7 +34,7 @@ function run(...args) {
     ...process.env,
     HOME: fakeHome,
     PI_CODING_AGENT_DIR: join(fakeHome, ".pi", "agent"),
-    PIX_GALAXY_MCP_STATE_DIR: join(fakeHome, ".pix-galaxy-mcp", "state"),
+    PIX_GALAXY_MCP_STATE_DIR: join(fakeHome, ".rule-mcp", "state"),
     PIX_GALAXY_MCP_NO_AUTOUPDATE: "1",
   };
 
@@ -91,7 +91,7 @@ test("config env collects every repeated --set value", () => {
     ...process.env,
     HOME: home,
     PI_CODING_AGENT_DIR: join(home, ".pi", "agent"),
-    PIX_GALAXY_MCP_STATE_DIR: join(home, ".pix-galaxy-mcp", "state"),
+    PIX_GALAXY_MCP_STATE_DIR: join(home, ".rule-mcp", "state"),
     PIX_GALAXY_MCP_NO_AUTOUPDATE: "1",
   };
   const spawn = (args) =>

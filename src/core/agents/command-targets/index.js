@@ -7,8 +7,8 @@
  *
  * Every MCP host namespaces the prompts a server exposes, and none of them let a
  * server drop that prefix:
- *   - Claude Code → `/pix-galaxy-mcp:pix-backend (MCP)`
- *   - VS Code (Copilot Chat) → `/mcp.pix-galaxy-mcp.pix-backend`
+ *   - Claude Code → `/rule-mcp:pix-backend (MCP)`
+ *   - VS Code (Copilot Chat) → `/mcp.rule-mcp.pix-backend`
  * The only surface that yields a bare `/pix-backend` is the host's own
  * command/prompt FILES. This module is the single registry of those file
  * locations, so "clean commands everywhere" is a property of the codebase rather

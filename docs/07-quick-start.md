@@ -1,22 +1,22 @@
 # Quick start
 
-Use pix-galaxy-mcp through an agent in eight short flows. The
+Use rule-mcp through an agent in eight short flows. The
 [engineering guides](./08-engineering-guides.md) are the deep version; this page
 is the shallow entry.
 
 ## 1. Install and init
 
 ```bash
-git clone https://github.com/pixu1980/pix-galaxy-mcp.git
-cd pix-galaxy-mcp
+git clone https://github.com/pixu1980/rule-mcp.git
+cd rule-mcp
 pnpm install
 ./scripts/install.sh
-pix-galaxy-mcp init
+rule-mcp init
 ```
 
 `init` prepares the recorder directory, the git hooks and the TokenSave graph
 when it is installed. `--no-tokensave` skips the graph. Wire the server once
-with `pix-galaxy-mcp setup`; `pix-galaxy-mcp doctor` is the health check.
+with `rule-mcp setup`; `rule-mcp doctor` is the health check.
 
 ## 2. Route a request
 
@@ -51,7 +51,7 @@ typography, American spelling) to changed files or an explicit list:
 pix_tool_fix({ "files": ["src/App.tsx"], "mode": "fix" })
 ```
 
-`pix-galaxy-mcp fix --no-dry-run` does the same from the shell; the default is
+`rule-mcp fix --no-dry-run` does the same from the shell; the default is
 a dry run.
 
 ## 5. Handoff and handon
@@ -59,11 +59,11 @@ a dry run.
 Before a context boundary, write a handoff:
 
 ```bash
-pix-galaxy-mcp handoff
+rule-mcp handoff
 ```
 
 The agent can call `pix_tool_handoff` instead. On the next session,
-`pix_tool_handon` (or `pix-galaxy-mcp handon`) reads the last handoff and
+`pix_tool_handon` (or `rule-mcp handon`) reads the last handoff and
 reports which claims still hold. `--list` lists the handoffs; `--file` verifies
 one.
 
@@ -78,7 +78,7 @@ pix_tool_review({ "role": "security", "topic": "the diff" })
 ```
 
 The slash command is `/pix-persona-security`; the request selects the
-operation. `pix-galaxy-mcp roles list` shows the registry, and `roles new` adds
+operation. `rule-mcp roles list` shows the registry, and `roles new` adds
 a role.
 
 ## 7. The cache
@@ -86,7 +86,7 @@ a role.
 The tool cache answers repeated calls. Inspect it with:
 
 ```bash
-pix-galaxy-mcp cache stats
+rule-mcp cache stats
 pnpm cache:report
 ```
 
@@ -102,7 +102,7 @@ request. It is off by default. Measure it in shadow mode first:
 ```bash
 PIX_GALAXY_MCP_DECISION_MODEL=laya \
 PIX_GALAXY_MCP_DECISION_CACHE_SHADOW=1 \
-pix-galaxy-mcp serve
+rule-mcp serve
 ```
 
 Then read the report:
@@ -118,7 +118,7 @@ the report confirms it:
 ```bash
 PIX_GALAXY_MCP_DECISION_MODEL=laya \
 PIX_GALAXY_MCP_DECISION_CACHE_REPLAY=1 \
-pix-galaxy-mcp serve
+rule-mcp serve
 ```
 
 `PIX_GALAXY_MCP_DECISION_CACHE_THRESHOLD` overrides the floor; an invalid value

@@ -1,6 +1,6 @@
 # Maintainers
 
-The people who can merge to pix-galaxy-mcp today, the areas they own,
+The people who can merge to rule-mcp today, the areas they own,
 and how fast they answer.
 
 | Maintainer                             | Areas             | Response                                                                             |

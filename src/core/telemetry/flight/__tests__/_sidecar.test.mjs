@@ -54,7 +54,7 @@ const untouched = join(workspace, "untouched");
 mkdirSync(join(untouched, ".git"), { recursive: true });
 telemetry.recordToolCall({ tool: "pix_tool", durationMs: 1, ok: true, now: T0 + 970_000 });
 telemetry.flush();
-check("F10 no directory is created in the project", !existsSync(join(untouched, ".pix-galaxy-mcp")));
+check("F10 no directory is created in the project", !existsSync(join(untouched, ".rule-mcp")));
 check("F10.1 and no .gitignore is written", !existsSync(join(untouched, ".gitignore")));
 check("F10.2 the log still recorded the call", readEvents().length > 0);
 

@@ -42,7 +42,7 @@ process.env.USERPROFILE = home;
 process.env.PIX_GALAXY_MCP_NO_AUTOUPDATE = "1";
 
 const { installAgent } = await import("../index.js");
-const entrypoint = join(sandbox, "pix-galaxy-mcp.js");
+const entrypoint = join(sandbox, "rule-mcp.js");
 writeFileSync(entrypoint, "// entrypoint\n");
 
 const install = (options = {}) => installAgent({ agent: "claude", entrypoint, ...options });
@@ -84,10 +84,10 @@ check("T7 the config itself moved on", readFileSync(configFile, "utf8") !== EDIT
 // installed once was the text they kept forever.
 
 const claudeMd = join(home, ".claude", "CLAUDE.md");
-const marker = "<!-- pix-galaxy-mcp -->";
+const marker = "<!-- rule-mcp -->";
 check("T9 the install wrote the instruction block", existsSync(claudeMd) && readFileSync(claudeMd, "utf8").includes(marker));
 
-const withStale = `# My own notes\n\n${marker}\nSTALE INSTRUCTIONS FROM AN OLDER VERSION\n<!-- /pix-galaxy-mcp -->\n`;
+const withStale = `# My own notes\n\n${marker}\nSTALE INSTRUCTIONS FROM AN OLDER VERSION\n<!-- /rule-mcp -->\n`;
 writeFileSync(claudeMd, withStale);
 install({ force: true });
 const refreshed = readFileSync(claudeMd, "utf8");

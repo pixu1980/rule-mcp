@@ -119,10 +119,10 @@ export const dockerTask = () => ({
 export const doctorTask = () => ({
   id: "doctor",
   title: "Health check",
-  detail: "pix-galaxy-mcp doctor",
+  detail: "rule-mcp doctor",
   run: async ({ dryRun }) => {
     if (dryRun) {
-      return { status: "ok", summary: "would run pix-galaxy-mcp doctor" };
+      return { status: "ok", summary: "would run rule-mcp doctor" };
     }
 
     const result = await runCliCommand(["doctor"]);

@@ -11,12 +11,12 @@ export * from "../installers/index.js";
 
 /** Record what was installed, so uninstall can undo exactly that. */
 export function writeInstalledManifest(agents, entrypoint, global, mode) {
-  const stateDir = join(HOME, ".local", "share", "pix-galaxy-mcp");
+  const stateDir = join(HOME, ".local", "share", "rule-mcp");
   mkdirSync(stateDir, { recursive: true });
   const manifestPath = join(stateDir, "installed.md");
   const timestamp = new Date().toISOString();
   const lines = [
-    "# pix-galaxy-mcp - Installation Manifest",
+    "# rule-mcp - Installation Manifest",
     "",
     `Generated: ${timestamp}`,
     `Install source: ${global ? "global" : "local"}`,
@@ -33,7 +33,7 @@ export function writeInstalledManifest(agents, entrypoint, global, mode) {
     lines.push(`- [x] ${name}`);
   }
 
-  lines.push("", "---", "", `To reinstall: \`pix-galaxy-mcp install --agent all --mode ${mode}\``);
+  lines.push("", "---", "", `To reinstall: \`rule-mcp install --agent all --mode ${mode}\``);
   writeFileSync(manifestPath, lines.join("\n") + "\n");
 
   return manifestPath;

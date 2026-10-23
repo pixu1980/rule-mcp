@@ -121,7 +121,7 @@ export async function skillsInstallCommand(options = {}) {
   }
 
   installNativeSkills(skills);
-  process.stdout.write(`Run 'pix-galaxy-mcp skills reload' to load them.\n`);
+  process.stdout.write(`Run 'rule-mcp skills reload' to load them.\n`);
 }
 
 /**

@@ -5,7 +5,7 @@
  *
  * Validates the registry-driven agent slash-command generator
  * (src/core/agents/commands/index.js):
- *   - canonical order: pix-galaxy-mcp router pinned first, rest alphabetical
+ *   - canonical order: rule-mcp router pinned first, rest alphabetical
  *   - coverage: one command per MCP prompt + the router
  *   - render formats: args (md frontmatter), workflow (md heading), gemini (toml)
  *   - handoff command drives atomic scoped commits and never pushes
@@ -23,7 +23,7 @@ const names = commandNames();
 const promptNames = listPrompts().map((p) => p.name);
 
 test("router is pinned first and the rest are alphabetical", () => {
-  assert.equal(names[0], ROUTER_COMMAND, "pix-galaxy-mcp must be first");
+  assert.equal(names[0], ROUTER_COMMAND, "rule-mcp must be first");
   const rest = names.slice(1);
   const sorted = [...rest].sort((a, b) => a.localeCompare(b));
   assert.deepEqual(rest, sorted, "commands after the router must be locale-alphabetical");

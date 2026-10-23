@@ -26,7 +26,7 @@ const toLines = (text) =>
     .filter(Boolean);
 
 /**
- * Run `pix-galaxy-mcp <args>` and capture what it printed.
+ * Run `rule-mcp <args>` and capture what it printed.
  *
  * @param {string[]} args
  * @param {{ cwd?: string, timeout?: number, env?: object }} [options]

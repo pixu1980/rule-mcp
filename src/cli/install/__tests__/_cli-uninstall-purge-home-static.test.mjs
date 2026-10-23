@@ -3,8 +3,8 @@
 /**
  * The runtime home is created by an install and taken by a purge.
  *
- * Regression: `uninstall --purge` removed `~/.config/pix-galaxy-mcp/` and left
- * `~/.pix-galaxy-mcp/` - the daemon token, the telemetry, the caches and the
+ * Regression: `uninstall --purge` removed `~/.config/rule-mcp/` and left
+ * `~/.rule-mcp/` - the daemon token, the telemetry, the caches and the
  * per-project recordings - behind. Reinstalling then started from stale state,
  * and the promise the word "purge" makes was silently broken.
  *
@@ -49,12 +49,12 @@ function seeded() {
   const home = mkdtempSync(join(tmpdir(), "pix-purge-home-"));
 
   for (const dir of ["state", "projects", "data", "config"]) {
-    mkdirSync(join(home, ".pix-galaxy-mcp", dir), { recursive: true });
+    mkdirSync(join(home, ".rule-mcp", dir), { recursive: true });
   }
 
-  writeFileSync(join(home, ".pix-galaxy-mcp", "state", "sse-token"), "test-token\n");
-  mkdirSync(join(home, ".config", "pix-galaxy-mcp"), { recursive: true });
-  writeFileSync(join(home, ".config", "pix-galaxy-mcp", "keys.json"), "{}");
+  writeFileSync(join(home, ".rule-mcp", "state", "sse-token"), "test-token\n");
+  mkdirSync(join(home, ".config", "rule-mcp"), { recursive: true });
+  writeFileSync(join(home, ".config", "rule-mcp", "keys.json"), "{}");
 
   return home;
 }
@@ -66,12 +66,12 @@ test("an install recreates the whole layout, not just the directory", () => {
     const result = inHome(home, "ensureRuntimeHome({})");
 
     for (const dir of ["state", "data", "projects", "config"]) {
-      assert.ok(existsSync(join(home, ".pix-galaxy-mcp", dir)), `${dir}/ must exist after an install`);
+      assert.ok(existsSync(join(home, ".rule-mcp", dir)), `${dir}/ must exist after an install`);
     }
 
-    assert.equal(result.homeDir, join(home, ".pix-galaxy-mcp"));
+    assert.equal(result.homeDir, join(home, ".rule-mcp"));
     assert.equal(result.settings, "written", "a fresh install defaults the switches file");
-    assert.ok(existsSync(join(home, ".config", "pix-galaxy-mcp", "env.json")), "the switches file is part of the install");
+    assert.ok(existsSync(join(home, ".config", "rule-mcp", "env.json")), "the switches file is part of the install");
   } finally {
     rmSync(home, { recursive: true, force: true });
   }
@@ -83,7 +83,7 @@ test("a dry run creates nothing", () => {
   try {
     inHome(home, "ensureRuntimeHome({ dryRun: true })");
 
-    assert.ok(!existsSync(join(home, ".pix-galaxy-mcp")), "a preview must leave the machine as it found it");
+    assert.ok(!existsSync(join(home, ".rule-mcp")), "a preview must leave the machine as it found it");
   } finally {
     rmSync(home, { recursive: true, force: true });
   }
@@ -96,8 +96,8 @@ test("a purge names the runtime home, the cache and the configuration", () => {
     const targets = inHome(home, "purgeTargets()");
     const dirs = targets.map((target) => target.dir);
 
-    assert.ok(dirs.includes(join(home, ".pix-galaxy-mcp")), `the runtime home must be purged: ${dirs.join(", ")}`);
-    assert.ok(dirs.includes(join(home, ".config", "pix-galaxy-mcp")), `the configuration must be purged: ${dirs.join(", ")}`);
+    assert.ok(dirs.includes(join(home, ".rule-mcp")), `the runtime home must be purged: ${dirs.join(", ")}`);
+    assert.ok(dirs.includes(join(home, ".config", "rule-mcp")), `the configuration must be purged: ${dirs.join(", ")}`);
     assert.ok(
       targets.some((target) => target.id === "runtime-home" && target.files > 0),
       "a purge counts what it will take, so the user can see it",

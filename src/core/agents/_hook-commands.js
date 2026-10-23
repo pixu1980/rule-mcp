@@ -3,7 +3,7 @@
 /** @module core/agents/hook-commands - the marker and the command classifiers */
 
 /** Marks our entries so merge and uninstall can find them without touching others. */
-export const HOOK_MARKER = "pix-galaxy-mcp-guard";
+export const HOOK_MARKER = "rule-mcp-guard";
 
 /**
  * Commands that change a database schema. Matched against the Bash command

@@ -1,10 +1,10 @@
 # Getting Started
 
-Install pix-galaxy-mcp once, wire your agent, and route the first request in under five minutes.
+Install RuleMCP once, wire your agent, and route the first request in under five minutes.
 
 ## What it is
 
-**pix-galaxy-mcp** is an [MCP](https://modelcontextprotocol.io) server for the pix skill catalog. It:
+**RuleMCP** is an [MCP](https://modelcontextprotocol.io) server for the pix skill catalog. It:
 
 1. **Routes** free-text requests to the matching skill (or area hub).
 2. **Serves** skills as MCP tools, resources, and prompts, no LLM inside the server.
@@ -26,11 +26,11 @@ Identical behavior behind any model. Everything runs on your machine.
 The package is not on the npm registry yet. Install from a clone:
 
 ```bash
-git clone https://github.com/pixu1980/pix-galaxy-mcp.git
-cd pix-galaxy-mcp
+git clone https://github.com/pixu1980/rule-mcp.git
+cd rule-mcp
 pnpm install
 ./scripts/install.sh
-pix-galaxy-mcp doctor
+rule-mcp doctor
 ```
 
 Expected: health report with `ok: true`, tools registered, detected agents.
@@ -38,11 +38,11 @@ Expected: health report with `ok: true`, tools registered, detected agents.
 ### Verify
 
 ```bash
-pix-galaxy-mcp tools list
-pix-galaxy-mcp serve
+rule-mcp tools list
+rule-mcp serve
 ```
 
-Wire `pix-galaxy-mcp serve` into your agent's MCP config (the installer writes common targets for you via `pix-galaxy-mcp setup`).
+Wire `rule-mcp serve` into your agent's MCP config (the installer writes common targets for you via `rule-mcp setup`).
 
 ## Compatibility
 
@@ -56,7 +56,7 @@ have or miss one it gained.
 
 ## Install targets (23)
 
-`pix-galaxy-mcp install --agent <name>` and the setup wizard accept exactly
+`rule-mcp install --agent <name>` and the setup wizard accept exactly
 these names. A host listed with command files also gets the slash commands in
 its own format; the others receive the MCP configuration and reach the same
 prompts through the server.

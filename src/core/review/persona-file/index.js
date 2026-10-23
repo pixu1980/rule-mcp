@@ -6,7 +6,7 @@
  * One persona, one file: read and write a persona as markdown.
  *
  * The catalog is a directory (`src/personas/*.md`, plus the user overlay layer
- * `~/.pix-galaxy-mcp/config/roles/*.md`) read by the server at startup; adding
+ * `~/.rule-mcp/config/roles/*.md`) read by the server at startup; adding
  * or removing a persona is a filesystem op, not a code change. This module is
  * the only thing that knows the file format.
  *

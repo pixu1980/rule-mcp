@@ -35,7 +35,7 @@ console.log("=== Per-prompt directive ===\n");
 import { MANTRA, NO_SUBAGENTS, directiveEnabled, promptDirective, sessionDirective } from "../index.js";
 import { HOOK_MARKER, hasHooks, hookEntries, withHooks, withoutHooks } from "../agents/_hooks.js";
 
-const LAUNCHER = { command: "/usr/local/bin/pix-galaxy-mcp", args: [] };
+const LAUNCHER = { command: "/usr/local/bin/rule-mcp", args: [] };
 const EVENTS = ["PreToolUse", "PostToolUse", "SessionStart", "UserPromptSubmit"];
 
 // ── T1: one canonical wording, reused verbatim everywhere ──
@@ -130,7 +130,7 @@ check("T6.5 empty containers are dropped", withoutHooks(withHooks({}, LAUNCHER))
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
-const BIN = fileURLToPath(new URL("../../../bin/pix-galaxy-mcp.js", import.meta.url));
+const BIN = fileURLToPath(new URL("../../../bin/rule-mcp.js", import.meta.url));
 const run = (subcommand, input = "{}", env = {}) =>
   JSON.parse(
     execFileSync(process.execPath, [BIN, "guard", subcommand], {

@@ -1,7 +1,7 @@
-# Report Comparativo: `pix-galaxy-mcp` × 3 Modelli (Bookmarks Manager)
+# Report Comparativo: `rule-mcp` × 3 Modelli (Bookmarks Manager)
 
 > **Stesso prompt, 3 modelli, 3 applicazioni bookmarks manager (React + Express/TS).**
-> Benchmark oggettivo dell'efficacia del server MCP locale `pix-galaxy-mcp` su un task full-stack più complesso del phonebook: scraping lato server, persistenza, validazione SSRF, microinterazioni di paste-link, e suite di test a11y obbligatoria.
+> Benchmark oggettivo dell'efficacia del server MCP locale `rule-mcp` su un task full-stack più complesso del phonebook: scraping lato server, persistenza, validazione SSRF, microinterazioni di paste-link, e suite di test a11y obbligatoria.
 
 ---
 
@@ -24,7 +24,7 @@
 | Input tokens "uncached" cumulato (REALE)                |                                    178 |                          255.496 |                              119.602 |
 | **Cache write** (REALE, token messi in cache)           |                         **275.803** ✅ |                             0 ❌ |                                 0 ❌ |
 | Cache read cumulato (N × context, **informativo solo**) |                                19.14 M |                          13.84 M |                              13.11 M |
-| Tool call pix-galaxy-mcp                                |                                     23 |                           **30** |                                   10 |
+| Tool call rule-mcp                                      |                                     23 |                           **30** |                                   10 |
 | Test passati al primo colpo (sui 6 definiti)            |                                 ✅ 6/6 |              ✅ 6/6 (dopo 1 fix) |                     ❌ 0 (zero test) |
 | ADR generati                                            |                                  **7** |                                6 |                                    3 |
 | Handoff consegnato                                      |         ✅ `docs/handoff/2026-07-11-…` |             ✅ `docs/handoff.md` |                 ✅ `docs/handoff.md` |
@@ -46,7 +46,7 @@
 
 Tutte e 3 le sessioni sono partite dallo stesso identico prompt utente (verbatim, abbreviato qui per leggibilità — integrale analizzato in §3):
 
-> _"usa `pix-galaxy-mcp` per creare una applicazione react che implementi una bookmarks manager con i seguenti requisiti:_
+> _"usa `rule-mcp` per creare una applicazione react che implementi una bookmarks manager con i seguenti requisiti:_
 > _- implementa tutti gli standard indicati dalle skills e dai tools del server MCP_
 > _- un frontend accessibile scritto in react che consenta all'utente di incollare un link in un campo principale (come il megasearch su amazon per dire) e che scateni scraping, fetch delle og images, estrazione di metadati e anteprima testuale del contenuto del link_
 > _- un backend scritto in node/express/typescript che rispecchi le specifiche richieste dal frontend_
@@ -71,7 +71,7 @@ Nota: la sessione Sonnet 5 è partita con 2 swap di modello (gpt-5.6-luna → cl
 
 ### 1.3 Tool MCP resi disponibili
 
-Il server `pix-galaxy-mcp` ha esposto **105 tool** + 186 risorse `pix://*` + 1 router, organizzati in skill folder: `frontend/*`, `backend/*`, `data/*`, `devops/*`, `platform/*`, `process/*`, `styleguide/*`, `toolchain/*`, `ui/*`, `ai-agents/*`.
+Il server `rule-mcp` ha esposto **105 tool** + 186 risorse `pix://*` + 1 router, organizzati in skill folder: `frontend/*`, `backend/*`, `data/*`, `devops/*`, `platform/*`, `process/*`, `styleguide/*`, `toolchain/*`, `ui/*`, `ai-agents/*`.
 
 ---
 
@@ -141,7 +141,7 @@ L'API LLM restituisce per ogni chiamata un blocco `usage` con 4 contatori:
 
 GPT 5.6 Luna e DS4 Flash non hanno mai scritto in cache (entrambi `cache_write=0`). Hanno goduto del prompt caching del provider (presumibilmente Anthropic o il routing) ma non lo hanno _alimentato attivamente_.
 
-### 2.4 Quanto è costato `pix-galaxy-mcp` in sé
+### 2.4 Quanto è costato `rule-mcp` in sé
 
 **Risposta: il costo del server MCP è < 6% del costo totale del task.** Ecco perché:
 
@@ -222,7 +222,7 @@ Se Sonnet avesse usato `tokensave_read` invece di leggere i file interi:
 **Sonnet 5:**
 
 ```
-[14:46:33.997Z]  usa pix-galaxy-mcp per creare una applicazione react che implementi una bookmarks manager...
+[14:46:33.997Z]  usa rule-mcp per creare una applicazione react che implementi una bookmarks manager...
 ```
 
 → **1 prompt, MVP pronto.** Caso ideale. Caso benchmark.
@@ -230,7 +230,7 @@ Se Sonnet avesse usato `tokensave_read` invece di leggere i file interi:
 **GPT 5.6 Luna:**
 
 ```
-[14:45:44.497Z]  usa pix-galaxy-mcp per creare una applicazione react...
+[14:45:44.497Z]  usa rule-mcp per creare una applicazione react...
 [15:04:17.844Z]  le API sembrano andare in errore                    (gap: 18:33)
 ```
 
@@ -239,7 +239,7 @@ Se Sonnet avesse usato `tokensave_read` invece di leggere i file interi:
 **DeepSeek v4 Flash:**
 
 ```
-[14:41:17.996Z]  usa pix-galaxy-mcp per creare una applicazione react...
+[14:41:17.996Z]  usa rule-mcp per creare una applicazione react...
 [14:51:04.981Z]  devono esserci dei problemi in merito all'import di CSS, l'interfaccia mi pare rotta    (gap: 9:47)
 [14:54:02.831Z]  il caricamento del link è failed ho provato a incollare questo:                       (gap: 2:58)
                    - https://ilfattoalimentare.it/ciclosporiasi-usa.html
@@ -636,7 +636,7 @@ Su una sessione come Sonnet 5, **tokensave avrebbe potuto risparmiare ~30-50% de
 
 ### 7.3 Verdetto su caveman/tokensave
 
-> **L'infrastruttura di risparmio (caveman, tokensave) era disponibile ma il test non l'ha attivata.** Tre modelli su tre l'hanno ignorata — due con 0 invocazioni (GPT) o 2 invocazioni cosmetiche (DS4, Sonnet). Questo significa che il benchmark misura le capacità _pure_ dei modelli con `pix-galaxy-mcp`, non l'efficienza del sistema completo. Per un test rigoroso sull'efficienza, servirebbe:
+> **L'infrastruttura di risparmio (caveman, tokensave) era disponibile ma il test non l'ha attivata.** Tre modelli su tre l'hanno ignorata — due con 0 invocazioni (GPT) o 2 invocazioni cosmetiche (DS4, Sonnet). Questo significa che il benchmark misura le capacità _pure_ dei modelli con `rule-mcp`, non l'efficienza del sistema completo. Per un test rigoroso sull'efficienza, servirebbe:
 >
 > 1. Una 4ª sessione in cui l'utente istruisca esplicitamente _"ad ogni `read` di un file > 2KB usa `tokensave_read` invece di `read` puro"_
 > 2. Una 5ª sessione in cui l'utente chieda esplicitamente _"usa caveman per i tuoi memo di pensiero"_
@@ -739,7 +739,7 @@ GPT 5.6 Luna ha il secondo posto per la completezza di docs e OpenAPI, ma ha bar
 
 ## 10. Conclusioni e verdict
 
-### 10.1 Sul server MCP `pix-galaxy-mcp`
+### 10.1 Sul server MCP `rule-mcp`
 
 - **Il server funziona e fa rispettare gli standard.** Tutti e 3 i modelli hanno prodotto applicazioni _funzionanti e strutturate_ usando il server. Senza il server, lo stesso prompt avrebbe probabilmente generato:
   - Codice con naming inconsistente (no `_PascalCase` sui barrel)
@@ -769,7 +769,7 @@ GPT 5.6 Luna ha il secondo posto per la completezza di docs e OpenAPI, ma ha bar
 
 ### 10.3 Risposta diretta alla domanda del test
 
-> _"Il server MCP locale `pix-galaxy-mcp` è utile?"_
+> _"Il server MCP locale `rule-mcp` è utile?"_
 
 **Sì, oggettivamente.** Tutti e 3 i modelli hanno prodotto applicazioni _funzionanti, strutturate e con documentazione_ usando il server. Senza il server, lo stesso prompt avrebbe probabilmente generato 3 "blob" di codice non strutturato, senza ADR, senza handoff, senza test, con naming inconsistente e bundle 3-5× più pesanti.
 
@@ -785,7 +785,7 @@ GPT 5.6 Luna ha il secondo posto per la completezza di docs e OpenAPI, ma ha bar
 
 - 1 sessione aggiuntiva per modello _con_ istruzioni esplicite di usare caveman+tokensave-read
 - Misurazione del delta di token risparmiati
-- Confronto con una sessione "baseline" senza `pix-galaxy-mcp` (per misurare il delta _grazie al_ server)
+- Confronto con una sessione "baseline" senza `rule-mcp` (per misurare il delta _grazie al_ server)
 
 ### 10.4 Numeriche finali in pillole
 

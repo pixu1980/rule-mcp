@@ -32,7 +32,7 @@ export function taskPrompt(name, args, user) {
         description: "Verify the last handoff against the repository now",
         messages: user(
           [
-            "Call `pix_tool_handon` for this project (or `pix-galaxy-mcp handon --dir .`).",
+            "Call `pix_tool_handon` for this project (or `rule-mcp handon --dir .`).",
             "",
             "1. Every claim it returns carries its own verdict: act on what is still true, re-derive what changed,",
             "   and treat unverified as unknown.",
@@ -51,13 +51,13 @@ export function taskPrompt(name, args, user) {
     case "pix-init": {
       return {
         name,
-        description: "Prepare a project for pix-galaxy-mcp",
+        description: "Prepare a project for rule-mcp",
         messages: user(
           [
-            `Initialise this project for pix-galaxy-mcp. Options: ${args.options ?? "the full init"}.`,
+            `Initialise this project for rule-mcp. Options: ${args.options ?? "the full init"}.`,
             "",
-            "1. Call `pix_tool_init` (or `pix-galaxy-mcp init`) - it prepares this project's directory under the",
-            "   state dir, moves a local `./.pix-galaxy-mcp` left by an earlier version, and runs tokensave init",
+            "1. Call `pix_tool_init` (or `rule-mcp init`) - it prepares this project's directory under the",
+            "   state dir, moves a local `./.rule-mcp` left by an earlier version, and runs tokensave init",
             "   unless `no-tokensave` / noTokensave is set.",
             "2. For a brand-new project with no config yet, bootstrap via `/pix-area-styleguide` and",
             "   `/pix-area-toolchain` (name leaves like file-tree / vite in the request) plus `pix_tool_detect` before step 3.",
@@ -86,7 +86,7 @@ export function taskPrompt(name, args, user) {
             `Update the server. Options: ${args.options ?? "apply the update"}.`,
             "",
             "1. Updates are notify-only by default: the banner announces what is available and the merge happens",
-            "   explicitly, via `pix_tool_update` or `pix-galaxy-mcp update`.",
+            "   explicitly, via `pix_tool_update` or `rule-mcp update`.",
             "2. Report the commit range that was merged and whether skills or server code changed - code changes",
             "   schedule a restart.",
             "3. Run the project's tests afterwards and report the real outcome, not an assumed one.",

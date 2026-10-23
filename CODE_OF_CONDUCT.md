@@ -49,7 +49,7 @@ Community Moderators take reports of violations seriously and will make every ef
 
 ## Addressing and Repairing Harm
 
-For pix-galaxy-mcp, Community Moderators means a non-conflicted maintainer first, then the BDFL on escalation (with mandatory BDFL recusal and external escalation via [https://github.com/contact/report-abuse](https://github.com/contact/report-abuse) when the BDFL is involved; see GOVERNANCE.md). The ladder below is adopted as written and applied that way.
+For rule-mcp, Community Moderators means a non-conflicted maintainer first, then the BDFL on escalation (with mandatory BDFL recusal and external escalation via [https://github.com/contact/report-abuse](https://github.com/contact/report-abuse) when the BDFL is involved; see GOVERNANCE.md). The ladder below is adopted as written and applied that way.
 
 If an investigation by the Community Moderators finds that this Code of Conduct has been violated, the following enforcement ladder may be used to determine how best to repair harm, based on the incident's impact on the individuals involved and the community as a whole. Depending on the severity of a violation, lower rungs on the ladder may be skipped.
 

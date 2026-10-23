@@ -70,7 +70,7 @@ export function actionToolSection(data) {
       data.actionTools.map((tool) => [`[\`${tool.name}\`](${anchor(tool.name)})`, firstSentence(tool.description)]),
     ),
     "",
-    "Call any of them from a shell with `pix-galaxy-mcp tools call <name> --json '{...}'`.",
+    "Call any of them from a shell with `rule-mcp tools call <name> --json '{...}'`.",
     "",
     ...data.actionTools.flatMap((tool) => [`### ${tool.name}`, "", cell(tool.description), "", ...parameters(tool.inputSchema)]),
   ];

@@ -1,14 +1,14 @@
 version: "3.9"
 
-# pix-galaxy-mcp Docker Compose
+# rule-mcp Docker Compose
 # Use for IDE integration via SSE transport.
 # Exposes MCP server on port 37999 with health check.
 
 services:
   mcp:
     build: .
-    image: ghcr.io/pix/pix-galaxy-mcp:latest
-    container_name: pix-galaxy-mcp
+    image: ghcr.io/pix/rule-mcp:latest
+    container_name: rule-mcp
     # Loopback-only publication. An unqualified "37999:37999" binds the host's
     # 0.0.0.0 and puts the MCP server on the LAN, where the bearer token is the
     # only barrier and failed auth is neither rate-limited nor logged.
@@ -16,7 +16,7 @@ services:
       - "127.0.0.1:37999:37999"
     command: ["node", "src/index.js", "serve", "--transport", "sse", "--port", "37999"]
     environment:
-      PIX_GALAXY_MCP_SSE_TOKEN: "${PIX_GALAXY_MCP_SSE_TOKEN:?Set by the pix-galaxy-mcp installer}"
+      PIX_GALAXY_MCP_SSE_TOKEN: "${PIX_GALAXY_MCP_SSE_TOKEN:?Set by the rule-mcp installer}"
       # Bind all interfaces inside the container so the mapped port is reachable from the host.
       PIX_GALAXY_MCP_HOST: "0.0.0.0"
       # Feature opt-out switches, shipped at "0" (feature ON) for discoverability.

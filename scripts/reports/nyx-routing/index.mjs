@@ -17,7 +17,7 @@
  * `ensemble`) when the adapter is on. The script is self-contained so the
  * baseline runs even when Nyx is not installed.
  *
- * @see docs/integration/pix-galaxy-mcp.md
+ * @see docs/integration/rule-mcp.md
  */
 
 process.env.PIX_GALAXY_MCP_NO_TELEMETRY ??= "1";

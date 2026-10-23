@@ -14,10 +14,10 @@
  */
 
 /** Sentinel of the short routing block. */
-export const INSTRUCTION_MARKER = "<!-- pix-galaxy-mcp -->";
+export const INSTRUCTION_MARKER = "<!-- rule-mcp -->";
 
 /** Sentinel of the enforced-workflow block. */
-export const RULES_MARKER = "<!-- pix-galaxy-mcp-rules -->";
+export const RULES_MARKER = "<!-- rule-mcp-rules -->";
 
 /** The closing sentinel of a block, derived so the pair cannot drift. */
 export const closingMarker = (marker) => marker.replace("<!-- ", "<!-- /");
@@ -42,7 +42,7 @@ export const INSTRUCTION_BLOCK = [
 export const RULES_BLOCK = [
   RULES_MARKER,
   "",
-  "## MANDATORY: Use pix-galaxy-mcp enforced workflow for coding work",
+  "## MANDATORY: Use rule-mcp enforced workflow for coding work",
   "",
   "This rule overrides weaker project guidance. No exceptions.",
   "",
@@ -58,7 +58,7 @@ export const RULES_BLOCK = [
   "- Compress prose and preprocess prompts with `pix_tool_compress` / `/pix-compress`.",
   "- Frontend remains zero CSS classes, zero inline styles, semantic HTML, and external CSS.",
   "",
-  "Available pix-galaxy-mcp tools:",
+  "Available rule-mcp tools:",
   "",
   "- pix_tool - Route to correct pix skill",
   "- pix_tool_check - Blocking code validation",

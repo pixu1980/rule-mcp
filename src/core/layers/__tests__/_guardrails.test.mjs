@@ -43,7 +43,7 @@ function skill(base, name, { declares = [], exports_ = declares, inherits = [], 
 }
 
 test("a skill's own rules load from its guardrails folder", async () => {
-  skill(join(projectRoot, ".pix-galaxy-mcp"), "pix-house-rules", { declares: ["no-todo", "no-fixme"] });
+  skill(join(projectRoot, ".rule-mcp"), "pix-house-rules", { declares: ["no-todo", "no-fixme"] });
 
   const loaded = await loadLayerGuardrails({ cwd: projectRoot });
   const entry = loaded.get("pix-house-rules");
@@ -58,7 +58,7 @@ test("a skill's own rules load from its guardrails folder", async () => {
 });
 
 test("the inheritance a skill declares is carried through", async () => {
-  skill(join(projectRoot, ".pix-galaxy-mcp"), "pix-house-child", { declares: ["child-rule"], inherits: ["pix-house-rules"] });
+  skill(join(projectRoot, ".rule-mcp"), "pix-house-child", { declares: ["child-rule"], inherits: ["pix-house-rules"] });
 
   const loaded = await loadLayerGuardrails({ cwd: projectRoot });
 
@@ -66,7 +66,7 @@ test("the inheritance a skill declares is carried through", async () => {
 });
 
 test("a skill with no guardrails folder loads with none", async () => {
-  const dir = join(projectRoot, ".pix-galaxy-mcp", "skills", "pix-text-only");
+  const dir = join(projectRoot, ".rule-mcp", "skills", "pix-text-only");
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "SKILL.md"), "---\nname: pix-text-only\n---\n\n# Text only\n");
 
@@ -81,7 +81,7 @@ test("a skill with no guardrails folder loads with none", async () => {
 });
 
 test("a guardrails folder that throws on import is reported, not fatal", async () => {
-  skill(join(projectRoot, ".pix-galaxy-mcp"), "pix-broken-rules", { declares: ["never-loads"], body: "throw new Error('boom');\n" });
+  skill(join(projectRoot, ".rule-mcp"), "pix-broken-rules", { declares: ["never-loads"], body: "throw new Error('boom');\n" });
 
   const loaded = await loadLayerGuardrails({ cwd: projectRoot });
 
@@ -94,7 +94,7 @@ test("a guardrails folder that throws on import is reported, not fatal", async (
 });
 
 test("a rule that is not a rule is refused", async () => {
-  skill(join(projectRoot, ".pix-galaxy-mcp"), "pix-bad-shape", {
+  skill(join(projectRoot, ".rule-mcp"), "pix-bad-shape", {
     declares: ["fine"],
     body: `export const GUARDRAILS = [{ id: "fine", check: () => ({ pass: true }) }, { label: "no id" }, { id: "no-check" }];\n`,
   });
@@ -110,7 +110,7 @@ test("a rule that is not a rule is refused", async () => {
 });
 
 test("a frontmatter that does not match the folder is reported", async () => {
-  skill(join(projectRoot, ".pix-galaxy-mcp"), "pix-drifted", { declares: ["declared-only"], exports_: ["exported-only"] });
+  skill(join(projectRoot, ".rule-mcp"), "pix-drifted", { declares: ["declared-only"], exports_: ["exported-only"] });
 
   const loaded = await loadLayerGuardrails({ cwd: projectRoot });
   const drift = loaded.problems.filter((problem) => problem.skill === "pix-drifted");

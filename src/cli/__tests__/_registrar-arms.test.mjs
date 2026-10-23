@@ -8,7 +8,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const BIN = new URL("../../../bin/pix-galaxy-mcp.js", import.meta.url).pathname;
+const BIN = new URL("../../../bin/rule-mcp.js", import.meta.url).pathname;
 
 /** Run the CLI in a subprocess with a sandboxed home and state. */
 function runCli(args, { cwd, env = {} } = {}) {

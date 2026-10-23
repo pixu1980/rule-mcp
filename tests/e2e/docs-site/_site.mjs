@@ -92,7 +92,7 @@ export async function darkContext(browser) {
   const context = await browser.newContext({ colorScheme: "dark" });
 
   await context.addInitScript(() => {
-    localStorage.setItem("pix-galaxy-mcp-docs-prefs", JSON.stringify({ theme: "dark" }));
+    localStorage.setItem("rule-mcp-docs-prefs", JSON.stringify({ theme: "dark" }));
   });
 
   return context;

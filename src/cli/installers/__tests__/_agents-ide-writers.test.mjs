@@ -12,7 +12,7 @@ process.env.HOME = home;
 
 const { createGenericInstaller, installDevin, installEmacs } = await import("../_agents-ide.js");
 
-const ENTRY = "/tmp/fake-pix-galaxy-mcp.js";
+const ENTRY = "/tmp/fake-rule-mcp.js";
 
 test.after(() => rmSync(home, { recursive: true, force: true }));
 
@@ -21,7 +21,7 @@ test("installEmacs appends its block once and leaves an existing block alone", (
 
   installEmacs({ entrypoint: ENTRY, dryRun: false, global: false });
   const written = readFileSync(initFile, "utf8");
-  assert.match(written, /;; pix-galaxy-mcp/, "the emacs block is appended");
+  assert.match(written, /;; rule-mcp/, "the emacs block is appended");
 
   installEmacs({ entrypoint: ENTRY, dryRun: false, global: false });
   assert.equal(readFileSync(initFile, "utf8"), written, "a second install does not duplicate the block");

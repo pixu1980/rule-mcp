@@ -4,11 +4,11 @@
  * Regression: reinstalling must not drop per-server user keys from the pi
  * MCP config. Previously upsertJsonServer replaced the whole server entry,
  * silently wiping the user's `toolPrefix: "none"` - which is what made the
- * `/mcp__pix_galaxy_mcp__*` command prefixes come back after uninstall+install.
+ * `/mcp__rule_mcp__*` command prefixes come back after uninstall+install.
  *
  * Also asserts that fresh pi installs now default to `toolPrefix: "none"`,
  * i.e. bare `pix-tool-*` tools and `/pix-*` prompts instead of the
- * `mcp__pix_galaxy_mcp__*` form.
+ * `mcp__rule_mcp__*` form.
  */
 import { strict as assert } from "node:assert";
 import { fileURLToPath } from "node:url";
@@ -32,7 +32,7 @@ const installForPi = (home, piDir) =>
       ALIAS_HOOK,
       "--input-type=module",
       "--eval",
-      `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "pi", entrypoint: "/tmp/pix-galaxy-mcp.js" });`,
+      `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "pi", entrypoint: "/tmp/rule-mcp.js" });`,
     ],
     { cwd: root, env: { ...process.env, HOME: home, PI_CODING_AGENT_DIR: piDir } },
   );
@@ -48,8 +48,8 @@ writeFileSync(
   JSON.stringify(
     {
       mcpServers: {
-        "pix-galaxy-mcp": {
-          command: "/old/bin/pix-galaxy-mcp",
+        "rule-mcp": {
+          command: "/old/bin/rule-mcp",
           args: ["serve"],
           type: "stdio",
           toolPrefix: "none",
@@ -64,7 +64,7 @@ writeFileSync(
 
 installForPi(fakeHome, piDir);
 
-const entry = JSON.parse(readFileSync(mcpConfig, "utf8")).mcpServers["pix-galaxy-mcp"];
+const entry = JSON.parse(readFileSync(mcpConfig, "utf8")).mcpServers["rule-mcp"];
 assert.ok(entry, "server entry must exist after reinstall");
 assert.equal(entry.toolPrefix, "none", "reinstall must preserve user-set toolPrefix");
 assert.equal(entry.idleTimeout, 42, "reinstall must preserve unrelated custom keys");
@@ -77,7 +77,7 @@ const fakeHome2 = mkdtempSync(join(tmpdir(), "pix-galaxy-fresh-"));
 const piDir2 = join(fakeHome2, ".pi", "agent");
 installForPi(fakeHome2, piDir2);
 
-const fresh = JSON.parse(readFileSync(join(piDir2, "mcp.json"), "utf8")).mcpServers["pix-galaxy-mcp"];
+const fresh = JSON.parse(readFileSync(join(piDir2, "mcp.json"), "utf8")).mcpServers["rule-mcp"];
 assert.equal(fresh.toolPrefix, "none", "fresh pi install must default to toolPrefix none");
 assert.equal(fresh.directTools, true);
 
@@ -91,6 +91,6 @@ execFileSync(
   },
 );
 const afterUninstall = readFileSync(join(piDir2, "mcp.json"), "utf8").trim();
-assert.ok(!afterUninstall || !JSON.parse(afterUninstall).mcpServers?.["pix-galaxy-mcp"], "uninstall must remove the pix-galaxy-mcp entry");
+assert.ok(!afterUninstall || !JSON.parse(afterUninstall).mcpServers?.["rule-mcp"], "uninstall must remove the rule-mcp entry");
 
 console.log("  ✅ pi reinstall preserves toolPrefix and defaults to clean /pix-* naming");

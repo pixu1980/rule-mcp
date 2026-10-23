@@ -20,7 +20,7 @@ test("formatInstallResult renders a populated result with the agents table", () 
     installed: { claude: ["~/.claude.json"], pi: ["~/.pi/agent/mcp.json"] },
   });
 
-  assert.match(ui, /pix-galaxy-mcp install/);
+  assert.match(ui, /rule-mcp install/);
   assert.match(ui, /Status.*ok/);
   assert.match(ui, /global command/);
   assert.match(ui, /Configured agents/);
@@ -44,7 +44,7 @@ test("formatUninstallResult renders cleanup rows and the agent count fallback", 
     uninstalled: { claude: ["~/.claude.json"], cursor: [] },
   });
 
-  assert.match(ui, /pix-galaxy-mcp uninstall/);
+  assert.match(ui, /rule-mcp uninstall/);
   assert.match(ui, /Updated configs/);
   assert.match(ui, /Agents\s+2/, "falls back to the row count when agents is absent");
 });

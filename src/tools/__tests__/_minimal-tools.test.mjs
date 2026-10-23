@@ -15,7 +15,7 @@ import { strict as assert } from "node:assert";
 import { MINIMAL_ALLOWLIST } from "../../core/skills/_minimal.js";
 import { REGISTERED_BY_CODE } from "../../core/skills/_skill-tools.js";
 
-const bin = fileURLToPath(new URL("../../../bin/pix-galaxy-mcp.js", import.meta.url));
+const bin = fileURLToPath(new URL("../../../bin/rule-mcp.js", import.meta.url));
 
 const embeddedSkillCount = readdirSync(new URL("../../../skills", import.meta.url).pathname, { withFileTypes: true }).filter(
   (e) => e.isDirectory() && e.name.startsWith("pix-"),

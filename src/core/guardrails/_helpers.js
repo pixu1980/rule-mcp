@@ -8,7 +8,7 @@
  * A rule imports nothing. The engine passes this bag as `context.helpers` on
  * every check, so a rule file is a plain module that resolves the same wherever
  * the skill it belongs to was loaded from - this repository, a project's
- * `.pix-galaxy-mcp/skills`, a user's own, a folder copied between machines.
+ * `.rule-mcp/skills`, a user's own, a folder copied between machines.
  * There is no package to install and no path to get wrong.
  *
  * The trade is deliberate: a rule is a pure function of what it receives, and

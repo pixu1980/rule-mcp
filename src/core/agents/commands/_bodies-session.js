@@ -36,7 +36,7 @@ export const HANDOFF_BODY = [
 export const HANDON_BODY = [
   "Verify the last handoff against the repository now: $ARGUMENTS",
   "",
-  "1. Call `pix_tool_handon` for this project (or `pix-galaxy-mcp handon --dir .`). Pass any tokens from the arguments through unchanged (e.g. `list`, `file=<path>`, `no-archive`).",
+  "1. Call `pix_tool_handon` for this project (or `rule-mcp handon --dir .`). Pass any tokens from the arguments through unchanged (e.g. `list`, `file=<path>`, `no-archive`).",
   "2. Every claim it returns carries its own verdict: act on what is still true, re-derive what changed, and treat unverified as unknown.",
   "3. The call also sweeps completed audits/reviews/plans into ADRs and reports them under Closeout. Those writes are uncommitted: stage them as one `docs(adr): ...` commit (pass `no-archive` to skip the sweep).",
   "4. Under `Next from the plans` it proposes the first open step of each plan that still has one. Present that proposal and ask the user which workstream to start. Do not begin it unprompted.",
@@ -89,10 +89,10 @@ export const USAGE_BODY = [
 
 /** /pix-init → pix_tool_init. */
 export const INIT_BODY = [
-  "Prepare this project for pix-galaxy-mcp: $ARGUMENTS",
+  "Prepare this project for rule-mcp: $ARGUMENTS",
   "",
-  "1. Call `pix_tool_init` (or `pix-galaxy-mcp init --dir .`). Pass `no-tokensave` / `noTokensave` when the arguments carry it. It is idempotent: missing installs, incomplete is integrated, correct is preserved.",
-  "2. Report what it answered, per item, without restating it as done when it says `existing` or `refused`: the central recorder directory under `~/.pix-galaxy-mcp/projects/` (a local `.pix-galaxy-mcp` an earlier version left behind is migrated, and recorder state is never read from the project), the `commit-msg` and `pre-push` gates that enforce `type(scope): subject` (in `core.hooksPath`, `.husky` or `.githooks`, whichever the project keeps - an existing mechanism is integrated, never replaced), tokensave (`initialized`, `failed: ...` or `not installed`), the release tooling it detected, and every ranged specifier it found.",
+  "1. Call `pix_tool_init` (or `rule-mcp init --dir .`). Pass `no-tokensave` / `noTokensave` when the arguments carry it. It is idempotent: missing installs, incomplete is integrated, correct is preserved.",
+  "2. Report what it answered, per item, without restating it as done when it says `existing` or `refused`: the central recorder directory under `~/.rule-mcp/projects/` (a local `.rule-mcp` an earlier version left behind is migrated, and recorder state is never read from the project), the `commit-msg` and `pre-push` gates that enforce `type(scope): subject` (in `core.hooksPath`, `.husky` or `.githooks`, whichever the project keeps - an existing mechanism is integrated, never replaced), tokensave (`initialized`, `failed: ...` or `not installed`), the release tooling it detected, and every ranged specifier it found.",
   "3. MANDATORY dependency policy: every dependency is an exact `x.y.z` pin - never `^`, `~`, `*` or a range, because a range lets a sub-dependency arrive without a decision. Pin each ranged specifier init reported with the project's package manager and `--save-exact` (e.g. `pnpm add <name>@latest --save-exact`), refresh the lockfile, and report the manifests that changed. `workspace:`, `file:`, `link:` and `npm:` aliases are not ranges and are left alone.",
   "4. When the project has no framework config yet (a fresh checkout, an empty repo) and the arguments do not say `no-scaffold`, call `pix_tool_detect`, then `pix_tool_styleguide mode=scaffold` for the missing config and toolchain files.",
   "5. Check the project's test setup exists; when there is no test surface, ask the user what to cover.",

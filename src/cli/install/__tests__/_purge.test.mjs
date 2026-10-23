@@ -22,8 +22,8 @@ test("--purge takes the runtime home and the configuration with it", () => {
     const output = runUninstall(home, []);
 
     assert.match(output, /Purge state and config/, "the plan must name the step that deletes them");
-    assert.ok(!existsSync(join(home, ".pix-galaxy-mcp")), "--purge must delete ~/.pix-galaxy-mcp/");
-    assert.ok(!existsSync(join(home, ".config", "pix-galaxy-mcp")), "--purge must also delete ~/.config/pix-galaxy-mcp/");
+    assert.ok(!existsSync(join(home, ".rule-mcp")), "--purge must delete ~/.rule-mcp/");
+    assert.ok(!existsSync(join(home, ".config", "rule-mcp")), "--purge must also delete ~/.config/rule-mcp/");
   } finally {
     rmSync(home, { recursive: true, force: true });
   }
@@ -35,9 +35,9 @@ test("--keep-config keeps both directories, token and all", () => {
   try {
     runUninstall(home, ["--keep-config"]);
 
-    assert.ok(existsSync(join(home, ".pix-galaxy-mcp")), "--keep-config must keep the runtime home");
-    assert.ok(existsSync(join(home, ".config", "pix-galaxy-mcp")), "--keep-config must keep ~/.config/pix-galaxy-mcp/");
-    assert.ok(existsSync(join(home, ".pix-galaxy-mcp", "state", "sse-token")), "--keep-config must keep the SSE token untouched");
+    assert.ok(existsSync(join(home, ".rule-mcp")), "--keep-config must keep the runtime home");
+    assert.ok(existsSync(join(home, ".config", "rule-mcp")), "--keep-config must keep ~/.config/rule-mcp/");
+    assert.ok(existsSync(join(home, ".rule-mcp", "state", "sse-token")), "--keep-config must keep the SSE token untouched");
   } finally {
     rmSync(home, { recursive: true, force: true });
   }

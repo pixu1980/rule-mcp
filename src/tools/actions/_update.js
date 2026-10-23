@@ -67,7 +67,7 @@ export function registerUpdateTool() {
       } else if (result.available) {
         lines.push(buildBanner(result) ?? `ℹ️ Update available: ${result.from} → ${result.to}`);
       } else {
-        lines.push(`✅ pix-galaxy-mcp is already up to date (install: ${detectInstallType()}).`);
+        lines.push(`✅ rule-mcp is already up to date (install: ${detectInstallType()}).`);
       }
 
       return {

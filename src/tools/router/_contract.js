@@ -47,7 +47,7 @@ export function resolveToolName(name, map = DEPRECATIONS) {
 
   if (!warned.has(name)) {
     warned.add(name);
-    process.stderr.write(`[pix-galaxy-mcp] tool ${name} is deprecated, use ${entry.to} (removed after ${entry.removeAfter})\n`);
+    process.stderr.write(`[rule-mcp] tool ${name} is deprecated, use ${entry.to} (removed after ${entry.removeAfter})\n`);
   }
 
   return { name: entry.to, alias: name };

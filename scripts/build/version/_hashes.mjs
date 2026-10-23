@@ -51,8 +51,8 @@ export function refreshManifests(root, version, oldPkg) {
       writeFileSync(file, text);
     };
 
-    bump(join(root, ".github", "scoop", "pix-galaxy-mcp.json"));
-    bump(join(root, ".github", "winget", "pixu1980.pix-galaxy-mcp.yaml"));
+    bump(join(root, ".github", "scoop", "rule-mcp.json"));
+    bump(join(root, ".github", "winget", "pixu1980.rule-mcp.yaml"));
     process.stdout.write(`version: manifest hashes refreshed (${digest.slice(0, 12)}...).\n`);
   } finally {
     rmSync(tmp, { recursive: true, force: true });

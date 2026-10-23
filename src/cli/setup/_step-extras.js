@@ -79,7 +79,7 @@ export function extraItems({ mode, hasClaude, agents = [], ruleFiles = [] }) {
     {
       id: "doctor",
       label: "Health check",
-      detail: ["Runs pix-galaxy-mcp doctor at the end and", "shows the tail of its report."],
+      detail: ["Runs rule-mcp doctor at the end and", "shows the tail of its report."],
     },
   ];
 }

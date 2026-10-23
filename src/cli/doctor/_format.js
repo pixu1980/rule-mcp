@@ -5,7 +5,7 @@ import { agentsSection, automationSection, daemonSection, modelsSection, pathsSe
 
 /**
  * Format a doctor report for humans in the terminal.
- * JSON remains available through `pix-galaxy-mcp doctor --json`.
+ * JSON remains available through `rule-mcp doctor --json`.
  *
  * @param {object} report - Result from runDoctor()
  * @returns {string}

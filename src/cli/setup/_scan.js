@@ -74,7 +74,7 @@ export function scanInstallation() {
     {
       id: "agents",
       label: "Agent MCP configs",
-      detail: "remove the pix-galaxy-mcp entry",
+      detail: "remove the rule-mcp entry",
       count: agents.length,
       items: agents.map((agent) => `${agent.name} - ${agent.configFile}`),
     },
@@ -125,7 +125,7 @@ export function scanInstallation() {
       label: "Global shim",
       detail: "launchers and pnpm global links",
       count: shim ? 1 : 0,
-      items: shim ? ["pix-galaxy-mcp on PATH"] : [],
+      items: shim ? ["rule-mcp on PATH"] : [],
     },
   ];
 

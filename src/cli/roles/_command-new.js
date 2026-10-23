@@ -10,7 +10,7 @@ import { list, print, userRolesDir, writeUserRole } from "./_store.js";
 /** `roles new <id> --role <title> --skills <a,b,c>`: write a role into the user layer. */
 export function newSubcommand(options) {
   if (!options.id) {
-    print("Usage: pix-galaxy-mcp roles new <id> --role <title> --skills <a,b,c> [--years N]");
+    print("Usage: rule-mcp roles new <id> --role <title> --skills <a,b,c> [--years N]");
     process.exitCode = 1;
 
     return;

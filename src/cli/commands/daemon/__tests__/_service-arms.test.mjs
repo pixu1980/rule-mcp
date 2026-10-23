@@ -23,7 +23,7 @@ test("install names the artifact each platform creates", () => {
   assert.match(output("darwin", "install"), /LaunchAgent created:/, "macos reports the plist");
   assert.match(output("darwin", "install"), /Login Items & Extensions/, "and where the user will see it");
   assert.match(output("linux", "install"), /systemd unit created:/, "linux reports the unit");
-  assert.match(output("win32", "install"), /Windows service created: pix-galaxy-mcp/, "windows reports the service");
+  assert.match(output("win32", "install"), /Windows service created: rule-mcp/, "windows reports the service");
   assert.match(output("freebsd", "install"), /Service installed \(process\)/, "an unsupported platform falls back to the process daemon");
 });
 
@@ -64,10 +64,10 @@ test("enable and disable name the service they act on", () => {
   // win32 matters most: a Windows service has no file on disk, so a guard on
   // the service path skipped these branches entirely.
   for (const forced of ["linux", "win32"]) {
-    assert.match(output(forced, "enable"), /Enabling service: pix-galaxy-mcp/, `${forced}: enable names the service`);
+    assert.match(output(forced, "enable"), /Enabling service: rule-mcp/, `${forced}: enable names the service`);
     assert.match(output(forced, "enable"), /enabled and started/, `${forced}: and reports the outcome`);
 
-    assert.match(output(forced, "disable"), /Disabling service: pix-galaxy-mcp/, `${forced}: disable names the service`);
+    assert.match(output(forced, "disable"), /Disabling service: rule-mcp/, `${forced}: disable names the service`);
     assert.match(output(forced, "disable"), /stopped and disabled/, `${forced}: and reports the outcome`);
   }
 });

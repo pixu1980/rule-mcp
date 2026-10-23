@@ -43,8 +43,8 @@ jobs:
       - name: Checksum the tarball
         run: |
           mkdir -p dist
-          mv pix-galaxy-mcp-*.tgz dist/
-          cd dist && sha256sum pix-galaxy-mcp-*.tgz > SHA256SUMS && cat SHA256SUMS
+          mv rule-mcp-*.tgz dist/
+          cd dist && sha256sum rule-mcp-*.tgz > SHA256SUMS && cat SHA256SUMS
       # npm sbom cannot read a pnpm tree (no package-lock.json), so the SBOM
       # comes from cdxgen, which parses pnpm-lock.yaml. It rides along with
       # `files: dist/*` next to the checksum file.
@@ -78,8 +78,8 @@ jobs:
       - name: Install the tarball from scratch # zizmor: ignore[adhoc-packages] -- installs our own just-built tarball, not a remote package
         run: |
           rm -rf /tmp/pix-verify && mkdir -p /tmp/pix-verify && cd /tmp/pix-verify
-          npm install "$GITHUB_WORKSPACE/dist/pix-galaxy-mcp-"*.tgz
-          ./node_modules/.bin/pix-galaxy-mcp --version
+          npm install "$GITHUB_WORKSPACE/dist/rule-mcp-"*.tgz
+          ./node_modules/.bin/rule-mcp --version
 
   release:
     runs-on: ubuntu-latest

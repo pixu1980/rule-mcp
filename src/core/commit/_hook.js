@@ -3,7 +3,7 @@
 /**
  * @module core/commit/hook
  *
- * The hook files pix-galaxy-mcp installs, and the idempotent write of one.
+ * The hook files rule-mcp installs, and the idempotent write of one.
  *
  * A hook whose file is already ours is left alone; a hook someone else wrote is
  * kept beside ours as `<name>.pix-backup` and chained from the end of ours, so
@@ -16,13 +16,13 @@ import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "n
 import { join } from "node:path";
 
 /** The marker every file this module writes carries. */
-export const HOOK_MARKER = "pix-galaxy-mcp:commit-lint";
+export const HOOK_MARKER = "rule-mcp:commit-lint";
 
 /** The suffix a hook we displaced is kept under. */
 export const BACKUP_SUFFIX = ".pix-backup";
 
 /** The default binary the hooks invoke. */
-export const DEFAULT_COMMAND = "pix-galaxy-mcp";
+export const DEFAULT_COMMAND = "rule-mcp";
 
 /**
  * The one command a hook of this name runs.

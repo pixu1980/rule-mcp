@@ -25,7 +25,7 @@ export const statusText = (result) => `${result.status}${result.reason ? ` - ${r
 export const runtimeHomeTask = () => ({
   id: "runtime-home",
   title: "Runtime home",
-  detail: "~/.pix-galaxy-mcp/{state,data,projects,config}",
+  detail: "~/.rule-mcp/{state,data,projects,config}",
   run: ({ dryRun }) => {
     const result = ensureRuntimeHome({ dryRun });
 
@@ -41,7 +41,7 @@ export const runtimeHomeTask = () => ({
 export const shimTask = (localBin) => ({
   id: "shim",
   title: "Global shim",
-  detail: "pix-galaxy-mcp on PATH",
+  detail: "rule-mcp on PATH",
   run: ({ dryRun }) => {
     const result = ensureGlobalShim({ localBin, dryRun });
 

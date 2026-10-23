@@ -46,7 +46,7 @@ test("with no layers the embedded persona answers", () => {
 });
 
 test("a project persona overrides the embedded one, wholesale", () => {
-  persona(join(project, ".pix-galaxy-mcp", "personas"), "security", "Project Security Engineer", 12);
+  persona(join(project, ".rule-mcp", "personas"), "security", "Project Security Engineer", 12);
 
   const role = resolved("security");
   assert.equal(role.role, "Project Security Engineer", "the repository's own persona wins over the bundled one");
@@ -63,7 +63,7 @@ test("the machine owner overrides the project", () => {
 });
 
 test("a persona only the project ships is added, not just substituted", () => {
-  persona(join(project, ".pix-galaxy-mcp", "personas"), "house-style", "House Style Reviewer");
+  persona(join(project, ".rule-mcp", "personas"), "house-style", "House Style Reviewer");
 
   const role = resolved("house-style");
   assert.ok(role, "a project can bring a persona the server never shipped");
@@ -75,7 +75,7 @@ test("a persona only the project ships is added, not just substituted", () => {
 });
 
 test("a persona that does not validate is reported, and the layer below still answers", () => {
-  const dir = join(project, ".pix-galaxy-mcp", "personas");
+  const dir = join(project, ".rule-mcp", "personas");
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, "privacy.md"), '---\nid: "privacy"\nrole: ""\n---\n\nbroken\n');
 

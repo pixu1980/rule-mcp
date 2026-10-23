@@ -55,7 +55,7 @@ for (const suite of RUN) {
     // suites the parallel runner has in flight (the old check watched the real
     // home, which anything could touch mid-window).
     const home = mkdtempSync(join(tmpdir(), "pix-leak-home-"));
-    const projects = join(home, ".pix-galaxy-mcp", "projects");
+    const projects = join(home, ".rule-mcp", "projects");
     const env = { ...process.env, HOME: home, USERPROFILE: home };
     // The point is the default path: a pin from the parent would hide the leak.
     delete env.PIX_GALAXY_MCP_STATE_DIR;

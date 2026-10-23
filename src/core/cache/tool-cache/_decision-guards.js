@@ -48,7 +48,5 @@ export function guardAmbiguity(candidate, candidates = []) {
 
   const prefix = `${route}-`;
 
-  return candidates.some((other) => other !== candidate && typeof other.route === "string" && other.route.startsWith(prefix))
-    ? "ambiguous-hub"
-    : null;
+  return candidates.some((other) => other !== candidate && typeof other.route === "string" && other.route.startsWith(prefix)) ? "ambiguous-hub" : null;
 }

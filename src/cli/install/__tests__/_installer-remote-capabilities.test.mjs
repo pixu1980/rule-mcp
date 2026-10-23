@@ -24,7 +24,7 @@ const output = execFileSync(
     ALIAS_HOOK,
     "--input-type=module",
     "--eval",
-    `import { installAgent } from ${JSON.stringify(installModule)}; console.log(JSON.stringify(installAgent({ agent: "claude", entrypoint: "/tmp/pix-galaxy-mcp.js", mode: "daemon" })));`,
+    `import { installAgent } from ${JSON.stringify(installModule)}; console.log(JSON.stringify(installAgent({ agent: "claude", entrypoint: "/tmp/rule-mcp.js", mode: "daemon" })));`,
   ],
   { env: { ...process.env, HOME: fakeHome }, encoding: "utf8" },
 );

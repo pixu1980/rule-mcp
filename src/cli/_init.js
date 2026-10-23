@@ -3,11 +3,11 @@
 /**
  * @module cli/init
  *
- * `pix-galaxy-mcp init`: prepare a project for this server.
+ * `rule-mcp init`: prepare a project for this server.
  *
  * Three things, all idempotent:
  *
- *   1. Move a local `./.pix-galaxy-mcp` into `~/.pix-galaxy-mcp/projects/`, if
+ *   1. Move a local `./.rule-mcp` into `~/.rule-mcp/projects/`, if
  *      an earlier version left one behind, and create the central directory
  *      this project records into. No recorder state is written into the project.
  *   2. Give the repository git governance: detect its hook mechanism (Husky, a

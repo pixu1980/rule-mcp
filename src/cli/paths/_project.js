@@ -8,13 +8,13 @@ import { basename, dirname, join, resolve } from "node:path";
 import { getRuntimePaths } from "./_runtime.js";
 
 /** What marks a directory as the root of a project, in the order checked. */
-const ROOT_MARKERS = [".git", ".pix-galaxy-mcp"];
+const ROOT_MARKERS = [".git", ".rule-mcp"];
 
 /**
  * Walk up looking for a project root. Falls back to the starting directory,
  * which is the right answer for a project that is not under version control.
  *
- * Either marker is enough: `.git` for a checkout, `.pix-galaxy-mcp` for a
+ * Either marker is enough: `.git` for a checkout, `.rule-mcp` for a
  * directory that declares itself a project by carrying skills or personas
  * (ADR 089). A server started in a subdirectory of a monorepo therefore still
  * finds the layers the project ships.

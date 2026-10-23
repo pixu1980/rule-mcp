@@ -1,6 +1,6 @@
 # Trademark
 
-"pix-galaxy-mcp" names this project. The name is not a registered
+"rule-mcp" names this project. The name is not a registered
 trademark; this file states the posture until one exists, so a fork
 knows the boundary before crossing it.
 
@@ -8,8 +8,8 @@ knows the boundary before crossing it.
 
 - Fork the repository under a different name.
 - Reference the package name in text: dependency lists, install
-  instructions, compatibility statements ("works with pix-galaxy-mcp").
-- Name a fork `something-pix-galaxy-mcp` only if the name cannot read as
+  instructions, compatibility statements ("works with rule-mcp").
+- Name a fork `something-rule-mcp` only if the name cannot read as
   the project itself - when in doubt, ask first.
 
 ## What requires permission
@@ -26,7 +26,7 @@ us, or us as endorsing you.
 
 ## The npm name question
 
-The `pix-galaxy-mcp` name on the npm registry is unclaimed, and npm
+The `rule-mcp` name on the npm registry is unclaimed, and npm
 publication is out of scope by decision (see the naming ADR). Whether
 to hold the name with a placeholder or to record the squat risk is an
 open owner decision; it is recorded in the ADR below, not silently left.

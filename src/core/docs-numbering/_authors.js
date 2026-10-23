@@ -7,7 +7,7 @@ import { FAMILIES, documentsIn } from "./_families.js";
 import { addedBy } from "./_git.js";
 
 /** Authors that name a program rather than a person. */
-const TOOL_AUTHORS = new Set(["pix-galaxy-mcp"]);
+const TOOL_AUTHORS = new Set(["rule-mcp"]);
 
 /** The `- **Author**:` bullet, in both punctuations the ADRs use. */
 const AUTHOR_LINE = /^- \*\*Author(\*\*:|:\*\*) *(.*)$/m;

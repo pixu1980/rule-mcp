@@ -3,10 +3,10 @@
 # SPDX-License-Identifier: MIT
 #
 # Reinstall this checkout from scratch: purge node_modules (and optionally the
-# lockfile), install again, and refresh the global pix-galaxy-mcp bin.
+# lockfile), install again, and refresh the global rule-mcp bin.
 #
 # Three entry points, one implementation: `pnpm reinstall`,
-# `pix-galaxy-mcp reinstall`, and this script directly.
+# `rule-mcp reinstall`, and this script directly.
 #
 #   --keep-lock   keep pnpm-lock.yaml (what a release-tag update needs)
 #
@@ -47,7 +47,7 @@ fi
 echo "reinstall: pnpm install"
 pnpm install
 
-echo "reinstall: pnpm install -g . (global pix-galaxy-mcp)"
+echo "reinstall: pnpm install -g . (global rule-mcp)"
 pnpm install -g .
 
-echo "reinstall: done - $(command -v pix-galaxy-mcp || echo 'global bin not on PATH yet')"
+echo "reinstall: done - $(command -v rule-mcp || echo 'global bin not on PATH yet')"

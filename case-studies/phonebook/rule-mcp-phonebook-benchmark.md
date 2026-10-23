@@ -1,7 +1,7 @@
-# Report Comparativo: `pix-galaxy-mcp` × 3 Modelli (Phonebook)
+# Report Comparativo: `rule-mcp` × 3 Modelli (Phonebook)
 
 > **Stesso prompt, 3 modelli, 3 applicazioni phonebook (Electron + React).**
-> Benchmark oggettivo dell'efficacia del server MCP locale `pix-galaxy-mcp` su un task **client-only** (no backend, no DB): UI Apple-style, microinterazioni, design system, sample data, tests opzionali.
+> Benchmark oggettivo dell'efficacia del server MCP locale `rule-mcp` su un task **client-only** (no backend, no DB): UI Apple-style, microinterazioni, design system, sample data, tests opzionali.
 
 ---
 
@@ -24,7 +24,7 @@
 | Input tokens "uncached" cumulato (REALE)                |                                                                                                             **59** |                              250.516 |                                                                                               149.734 |
 | **Cache write** (REALE, token messi in cache)           |                                                                                                     **285.619** ✅ |                                 0 ❌ |                                                                                                  0 ❌ |
 | Cache read cumulato (N × context, **informativo solo**) |                                                                                                          9.181.217 |                            6.617.600 |                                                                                            10.995.456 |
-| Tool call pix-galaxy-mcp                                |                                                                                                                  5 |                               **25** |                                                                                                    14 |
+| Tool call rule-mcp                                      |                                                                                                                  5 |                               **25** |                                                                                                    14 |
 | Test passati al primo colpo                             |                                                                                               n/a (no test creati) |            ✅ 2 file (vitest + a11y) |                                                                                  n/a (no test creati) |
 | ADR generati                                            |                                                                                                                  0 |                                **9** |                                                                                                     2 |
 | Sample data                                             |                                                                                              ✅ 24 contatti ricchi |                 🟡 3 contatti inline |                                                                              ✅ 75 generati a runtime |
@@ -46,7 +46,7 @@
 
 Tutte e 3 le sessioni sono partite dallo stesso identico prompt utente (verbatim, integrale):
 
-> _"usa pix-galaxy MCP per creare una applicazione react che implementi una rubrica, sfrutta tutti gli standard indicati dalle skills e dai tools di `pix-galaxy-mcp` per fare una app electron che implementi una rubrica dettagliata, con darti di esempio, ui degna di apple e experience con microinterazioni, il tutto implementando un design system di base che abbia una consistenza in termini di typography proporzionale, spacings proporzionali, focus, radii, elevations e quel che serve"_
+> _"usa pix-galaxy MCP per creare una applicazione react che implementi una rubrica, sfrutta tutti gli standard indicati dalle skills e dai tools di `rule-mcp` per fare una app electron che implementi una rubrica dettagliata, con darti di esempio, ui degna di apple e experience con microinterazioni, il tutto implementando un design system di base che abbia una consistenza in termini di typography proporzionale, spacings proporzionali, focus, radii, elevations e quel che serve"_
 
 ### 1.2 Modelli e provider
 
@@ -60,7 +60,7 @@ Nota: la sessione GPT 5.6 Luna è partita con 1 swap di modello (`gpt-5.5` → `
 
 ### 1.3 Tool MCP resi disponibili
 
-Il server `pix-galaxy-mcp` ha esposto **105 tool** + 186 risorse `pix://*` + 1 router, organizzati in skill folder: `frontend/*`, `backend/*`, `data/*`, `devops/*`, `platform/*`, `process/*`, `styleguide/*`, `toolchain/*`, `ui/*`, `ai-agents/*`.
+Il server `rule-mcp` ha esposto **105 tool** + 186 risorse `pix://*` + 1 router, organizzati in skill folder: `frontend/*`, `backend/*`, `data/*`, `devops/*`, `platform/*`, `process/*`, `styleguide/*`, `toolchain/*`, `ui/*`, `ai-agents/*`.
 
 ---
 
@@ -131,7 +131,7 @@ L'API LLM restituisce per ogni chiamata un blocco `usage` con 4 contatori:
 
 GPT 5.6 Luna e DS4 Flash non hanno mai scritto in cache (`cache_write=0` su entrambi). Hanno goduto del prompt caching del provider (presumibilmente OpenAI/Anthropic) ma non lo hanno _alimentato attivamente_.
 
-### 2.4 Quanto è costato `pix-galaxy-mcp` in sé
+### 2.4 Quanto è costato `rule-mcp` in sé
 
 **Risposta: il costo del server MCP è < 1% del costo totale del task.** Ecco perché:
 
@@ -544,7 +544,7 @@ phonebook/
 | **caveman**   | tutte e 3             |              **0 token** (skill mai invocata, 0 chiamate) |
 | **tokensave** | solo DS4 (2 chiamate) | **~0 token** (entrambe `record_*` — scritture, 0 letture) |
 
-**Audit onesto del prompt utente:** il prompt del test phonebook **NON** chiedeva esplicitamente di usare caveman/tokensave (a differenza del test bookmarks). Quindi l'assenza di invocazioni è coerente con il prompt. Tuttavia, il prompt chiedeva "sfrutta tutti gli standard indicati dalle skills e dai tools di `pix-galaxy-mcp`" — tokensave è un tool MCP accessibile, quindi il modello avrebbe potuto autonomamente decidere di usarlo come acceleratore.
+**Audit onesto del prompt utente:** il prompt del test phonebook **NON** chiedeva esplicitamente di usare caveman/tokensave (a differenza del test bookmarks). Quindi l'assenza di invocazioni è coerente con il prompt. Tuttavia, il prompt chiedeva "sfrutta tutti gli standard indicati dalle skills e dai tools di `rule-mcp`" — tokensave è un tool MCP accessibile, quindi il modello avrebbe potuto autonomamente decidere di usarlo come acceleratore.
 
 **Cosa hanno fatto i 3 modelli:**
 
@@ -671,7 +671,7 @@ GPT 5.6 Luna ha usato il **maggior numero di tool MCP** (25 invocazioni, 15 dist
 
 ## 10. Conclusioni e verdict
 
-### 10.1 Sul server MCP `pix-galaxy-mcp`
+### 10.1 Sul server MCP `rule-mcp`
 
 - **Il server funziona e fa rispettare gli standard.** Tutti e 3 i modelli hanno prodotto applicazioni _funzionanti e strutturate_ usando il server. Senza il server, lo stesso prompt avrebbe probabilmente generato:
   - Codice con naming inconsistente (no `_PascalCase` sui barrel)
@@ -698,7 +698,7 @@ GPT 5.6 Luna ha usato il **maggior numero di tool MCP** (25 invocazioni, 15 dist
 
 ### 10.3 Risposta diretta alla domanda del test
 
-> _"Il server MCP locale `pix-galaxy-mcp` è utile?"_
+> _"Il server MCP locale `rule-mcp` è utile?"_
 
 **Sì, oggettivamente.** Tutti e 3 i modelli hanno prodotto applicazioni _funzionanti e strutturate_ usando il server. Senza il server, lo stesso prompt avrebbe probabilmente generato:
 
@@ -713,7 +713,7 @@ Con il server, anche il modello peggiore (GPT 5.6 Luna, 1 solo componente) ha ri
 
 - 1 sessione aggiuntiva per modello _con_ istruzioni esplicite di usare caveman+tokensave-read
 - Misurazione del delta di token risparmiati
-- Confronto con una sessione "baseline" senza `pix-galaxy-mcp` (per misurare il delta _grazie al_ server)
+- Confronto con una sessione "baseline" senza `rule-mcp` (per misurare il delta _grazie al_ server)
 
 ### 10.4 Numeriche finali in pillole
 

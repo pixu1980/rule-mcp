@@ -3,7 +3,7 @@
 /**
  * @module test/project-init.test
  *
- * `pix-galaxy-mcp init`, and the cleanup of what earlier versions installed.
+ * `rule-mcp init`, and the cleanup of what earlier versions installed.
  *
  * The command used to create a directory in the project, add a `.gitignore`
  * rule for it, and install git hooks that re-asserted the rule after every
@@ -46,7 +46,7 @@ test("init writes nothing into the project", () => {
 
   const result = initProject({ projectDir: project, tokensave: false });
 
-  assert.equal(existsSync(join(project, ".pix-galaxy-mcp")), false, "no directory in the repository");
+  assert.equal(existsSync(join(project, ".rule-mcp")), false, "no directory in the repository");
   assert.equal(existsSync(join(project, ".gitignore")), false, "and no ignore rule written for one");
   assert.equal(result.dir, getProjectPaths(project).dir, "it reports the central directory it prepared");
   assert.ok(existsSync(result.dir), "which exists afterwards");
@@ -64,7 +64,7 @@ test("removal takes our block out of a shared hook and leaves the rest", () => {
         "tokensave sync >/dev/null 2>&1 &",
         "# tokensave: end",
         `# ${GIT_HOOK_MARKER}: begin`,
-        "pix-galaxy-mcp init >/dev/null 2>&1 &",
+        "rule-mcp init >/dev/null 2>&1 &",
         `# ${GIT_HOOK_MARKER}: end`,
         "",
       ].join("\n"),

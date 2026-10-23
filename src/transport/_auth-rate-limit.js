@@ -79,7 +79,7 @@ export function createAuthRateLimiter(options = {}) {
         bucket.tokens -= 1;
       }
 
-      const parts = ["[pix-galaxy-mcp] auth-failure", `remote=${key}`];
+      const parts = ["[rule-mcp] auth-failure", `remote=${key}`];
 
       if (context.transport) {
         parts.splice(1, 0, `transport=${context.transport}`);

@@ -3,13 +3,13 @@
 // SPDX-License-Identifier: MIT
 
 /**
- * @module bin/pix-galaxy-mcp
+ * @module bin/rule-mcp
  *
- * CLI entry point for pix-galaxy-mcp.
+ * CLI entry point for rule-mcp.
  * Delegates to the cli() function in src/index.js.
  *
- * Usage: pix-galaxy-mcp [command] [options]
- *   See `pix-galaxy-mcp help` for full usage.
+ * Usage: rule-mcp [command] [options]
+ *   See `rule-mcp help` for full usage.
  *
  * The compiled code cache is turned on before the application graph is loaded,
  * and the load is a dynamic import for that reason: a static import is hoisted

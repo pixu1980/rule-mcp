@@ -3,14 +3,14 @@
 /**
  * @module cli/skills-install
  *
- * Interactive skill installer for pix-galaxy-mcp.
+ * Interactive skill installer for rule-mcp.
  * Shows a checkbox-style selection of available skills
  * and installs them to a global (~/.agents/skills/) or local (.agents/skills/) path.
  *
  * Usage:
- *   pix-galaxy-mcp skills install
- *   pix-galaxy-mcp skills install --scope project
- *   pix-galaxy-mcp skills install --scope global --all
+ *   rule-mcp skills install
+ *   rule-mcp skills install --scope project
+ *   rule-mcp skills install --scope global --all
  */
 
 export * from "./_catalog.js";

@@ -490,18 +490,19 @@ Stage 3 gate record (2026-10-22):
       7/7, the level-0 format on `feat/export`.
 - [x] `dm`'s retired copies are gone, so they are not retrofitted at all.
 
-### Stage 8 - Rename `pix-galaxy-mcp` to `pix-mcp` (GitHub and local, last)
+### Stage 8 - Rename the server to RuleMCP (GitHub and local, last)
 
-- [ ] GitHub: rename the repository to `pix-mcp`, update the remote, the badges,
+- [ ] GitHub: rename the repository to `rule-mcp`, update the remote, the badges,
       the issue/PR templates and the release references; keep the old URL as the
       redirect GitHub provides.
 - [ ] Local: rename the checkout folder, the package names, the bin names, the
       project names and the paths in scripts, CI, docs and MCP client configs
-      from `pix-galaxy-mcp` to `pix-mcp`; leave the `pix-galaxy-architect`
+      from the pre-rename name to `rule-mcp`; leave the `pix-galaxy-architect`
       sibling under its own name.
 - [ ] Gate: `pnpm census`, the docs tests, the install scripts and the plan
-      tests pass from the renamed checkout; no `pix-galaxy-mcp` remains outside
-      the historical ADRs and the migration note.
+      tests pass from the renamed checkout; no old server name remains outside
+      the historical records (ADRs, handoffs, reviews, audits, changelog) and the
+      migration note.
 
 ## 8 - Contended files across branches
 

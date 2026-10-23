@@ -15,7 +15,7 @@ import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
-const BIN = fileURLToPath(new URL("../../../../bin/pix-galaxy-mcp.js", import.meta.url));
+const BIN = fileURLToPath(new URL("../../../../bin/rule-mcp.js", import.meta.url));
 
 /** One session against one project, with its own state directory. */
 function session() {

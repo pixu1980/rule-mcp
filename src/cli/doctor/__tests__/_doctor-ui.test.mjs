@@ -25,7 +25,7 @@ const report = {
   node: "v24.18.0",
   platform: "darwin",
   arch: "arm64",
-  entrypoint: "/repo/bin/pix-galaxy-mcp.js",
+  entrypoint: "/repo/bin/rule-mcp.js",
   tools: ["pix", "pix_tool_check", "pix_tool_detect"],
   agentsConfigured: 2,
   agentsTotal: 3,
@@ -36,9 +36,9 @@ const report = {
   ],
   ides: [{ name: "VS Code", configured: true, configFile: "/repo/.vscode/mcp.json" }],
   models: { totalConfigured: 1 },
-  stateDir: "/home/.pix-galaxy-mcp/state",
-  dataDir: "/home/.pix-galaxy-mcp/data",
-  configDir: "/home/.config/pix-galaxy-mcp",
+  stateDir: "/home/.rule-mcp/state",
+  dataDir: "/home/.rule-mcp/data",
+  configDir: "/home/.config/rule-mcp",
   daemon: {
     running: true,
     pid: 123,
@@ -62,7 +62,7 @@ assert.ok(ui.includes("🖥️"), "UI should include system emoji");
 assert.ok(ui.includes("🧰"), "UI should include tools emoji");
 assert.ok(ui.includes("🤖"), "UI should include agents emoji");
 assert.ok(ui.includes("🚀"), "UI should include daemon emoji");
-assert.ok(ui.includes("pix-galaxy-mcp doctor"), "UI should include title");
+assert.ok(ui.includes("rule-mcp doctor"), "UI should include title");
 assert.ok(ui.includes("System"), "UI should include system section");
 assert.ok(ui.includes("MCP Tools"), "UI should include tools section");
 assert.ok(ui.includes("Agents"), "UI should include agents section");
@@ -70,7 +70,7 @@ assert.ok(ui.includes("Daemon"), "UI should include daemon section");
 assert.ok(ui.includes("pix_tool_check"), "UI should show tool examples");
 assert.ok(ui.includes("claude"), "UI should show configured agents");
 assert.ok(ui.includes("copilot"), "UI should show missing agents");
-assert.ok(ui.includes("Use `pix-galaxy-mcp doctor --json`"), "UI should advertise JSON export");
+assert.ok(ui.includes("Use `rule-mcp doctor --json`"), "UI should advertise JSON export");
 
 const previousForceColor = process.env.FORCE_COLOR;
 process.env.FORCE_COLOR = "1";

@@ -6,13 +6,13 @@
  * Where a role can come from besides this repository (personas plan A.2).
  *
  * Two layers sit above the embedded catalog, in the order skills use
- * (ADR 089): the project's own (`./.pix-galaxy-mcp/personas/*.md`, versioned
+ * (ADR 089): the project's own (`./.rule-mcp/personas/*.md`, versioned
  * with the code it judges) and then the machine owner's
- * (`~/.pix-galaxy-mcp/personas/*.md`), which therefore has the last word over
+ * (`~/.rule-mcp/personas/*.md`), which therefore has the last word over
  * any repository. A match by id replaces the embedded entry WHOLESALE -
  * field-level merging would make "which lens applies here" undebuggable.
  *
- * `~/.pix-galaxy-mcp/config/roles/` is read as well, after both, so a set kept
+ * `~/.rule-mcp/config/roles/` is read as well, after both, so a set kept
  * there still answers. It also accepts `*.json`, which the persona directories
  * do not.
  *

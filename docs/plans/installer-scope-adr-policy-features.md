@@ -4,8 +4,8 @@ Status: `planned`
 Notes:`planned` Notes:`planned`. Outside the skills graph: this plan covers repository policy and the installer, not skills, so it is not a node in `docs/plans/skills/skills-plan.md` and is tracked on its own.
 
 A sibling project shipped this set of installer and documentation changes on 2026-10-18. This plan
-replays it here, adapted to this repository's names (`pix-galaxy-mcp`, `PIX_GALAXY_MCP_*`,
-`pix_process_adr`, `/pix-handoff`, `~/.pix-galaxy-mcp/`). A port is a merge, not a copy: diff each
+replays it here, adapted to this repository's names (`rule-mcp`, `PIX_GALAXY_MCP_*`,
+`pix_process_adr`, `/pix-handoff`, `~/.rule-mcp/`). A port is a merge, not a copy: diff each
 subsystem first and keep what this repository already does better.
 
 Rules for every step: tests first, Conventional Commits with a scope, never push, run the full
@@ -103,7 +103,7 @@ One table, read by install, uninstall and detection, so the three cannot disagre
    - `_resolve.js`: the first source that parses answers whole, never merged:
      `.context/adr.json` (nearest, up to the repo root) -> env var (a level or JSON
      `{"default":"handoff","categories":{"dependency":"full"}}`) -> the same key in
-     `~/.pix-galaxy-mcp/config/env.json` -> default `handoff`.
+     `~/.rule-mcp/config/env.json` -> default `handoff`.
    - `_rule.js`: `ADR_RULE` (static text for rules blocks and generated commands) and
      `adrRule(policy, { terse })` (for surfaces that run inside a project).
 2. `pix_process_adr` gains `category` and `moment` (`handoff` or `task`, default `task`) and
@@ -128,7 +128,7 @@ One table, read by install, uninstall and detection, so the three cannot disagre
    - `_settle.js`: off the trunk, separate documents a merge left on one number.
    - `_merge-index.js`: a git merge driver for `ADR.md` and `HANDOFF.md` that regenerates instead of
      merging.
-3. CLI: `pix-galaxy-mcp handoff land [--commit] [--quiet]` and
+3. CLI: `rule-mcp handoff land [--commit] [--quiet]` and
    `handoff merge-index <O> <A> <B> <P>`.
 4. Git: `.githooks/post-merge` and `post-rewrite` run `handoff land --quiet --commit`.
    `.gitattributes` gets `docs/adr/ADR.md merge=<driver>` and `docs/handoff/HANDOFF.md merge=<driver>`.
@@ -150,8 +150,8 @@ One table, read by install, uninstall and detection, so the three cannot disagre
    - `tokensave`: on, autotrack (also `tokensave branch add`), off.
    - `minimal-tools`: off, on.
 2. `READERS`: each feature's level read back from env, legacy keys included.
-3. Saved to `~/.pix-galaxy-mcp/config/env.json`, which every server reads at start.
-4. CLI `pix-galaxy-mcp feature list | enable <id> [--level x] | disable <id> [--dry-run]`: writes the
+3. Saved to `~/.rule-mcp/config/env.json`, which every server reads at start.
+4. CLI `rule-mcp feature list | enable <id> [--level x] | disable <id> [--dry-run]`: writes the
    level, then re-applies the remembered global install and every recorded project (step 8), so
    rules, commands and hooks follow it.
 5. `setup --feature id=level` (repeatable), `setup --adr-policy <level>`, and a Features step in the
@@ -195,7 +195,7 @@ One table, read by install, uninstall and detection, so the three cannot disagre
    to `.agents/`.
 
 2. `src/cli/installers/_install-project.js`: one writer per row. A shared entry is
-   `{ command: "pix-galaxy-mcp", args: ["serve"] }` with no machine paths. A local entry carries the
+   `{ command: "rule-mcp", args: ["serve"] }` with no machine paths. A local entry carries the
    full launcher and `PIX_GALAXY_MCP_ADR_POLICY` when set. A host with no local file throws
    "`<agent>` has no local project config: use --project-config shared".
 3. Claude shared: the short instruction block in `CLAUDE.md`, the commands in `.claude/commands/`,
@@ -205,9 +205,9 @@ One table, read by install, uninstall and detection, so the three cannot disagre
    and get no command files.
 5. Setup: `--scope global|project`, `--project <path>` (repeatable), `--project-config local|shared`.
    A shared install is stdio only and writes nothing global (no skills, service or remember).
-6. `~/.pix-galaxy-mcp/state/projects.json` records each project install. `update`,
+6. `~/.rule-mcp/state/projects.json` records each project install. `update`,
    `setup --refresh-projects` and `setup --uninstall` walk it.
-7. `pix-galaxy-mcp project add [path] [--project-config] [--agent]` copies the last recorded
+7. `rule-mcp project add [path] [--project-config] [--agent]` copies the last recorded
    project's configuration; `project remove [path]` takes back every config and forgets it.
    `/pix-init` adds its own project when the install is per project.
 8. Each project also gets the numbering hooks and merge driver from step 5.
@@ -244,7 +244,7 @@ One table, read by install, uninstall and detection, so the three cannot disagre
 A global install never writes into a project, so a rules block a project carries keeps its old
 text forever.
 
-1. Test: a project whose `CLAUDE.md` holds a stale `<!-- pix-galaxy-mcp-rules -->` block plus its
+1. Test: a project whose `CLAUDE.md` holds a stale `<!-- rule-mcp-rules -->` block plus its
    own text, and an `AGENTS.md` without one.
    - The refresh replaces the block and keeps the text.
    - It leaves `AGENTS.md` alone and creates no file.
@@ -283,10 +283,10 @@ text forever.
 
 ```sh
 pnpm run ci
-pix-galaxy-mcp commits --range main..HEAD
-pix-galaxy-mcp feature list
-pix-galaxy-mcp setup --scope project --project /tmp/try --project-config shared --dry-run
-pix-galaxy-mcp handoff doctor
+rule-mcp commits --range main..HEAD
+rule-mcp feature list
+rule-mcp setup --scope project --project /tmp/try --project-config shared --dry-run
+rule-mcp handoff doctor
 ```
 
 Then `/pix-handoff close-feature` and hand the person the close command. Never push.
@@ -309,8 +309,8 @@ Shared files: none: outside the skills graph
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
+| Step           | Class      | Model            | Why                                                      |
+| -------------- | ---------- | ---------------- | -------------------------------------------------------- |
 | the whole plan | `T3-rules` | `kimi-k2.7-code` | installer and ADR-policy code paths: small precise edits |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.

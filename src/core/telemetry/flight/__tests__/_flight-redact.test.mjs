@@ -17,7 +17,7 @@ import { redactFlight } from "../index.js";
 const flight = () => ({
   version: 2,
   exportedAt: 1,
-  server: "pix-galaxy-mcp",
+  server: "rule-mcp",
   project: { dir: "/Users/someone/Projects/acme-secret", id: "p1", branch: "feat/x" },
   kpi: { measuredSaved: 0, reminderOverhead: 460 },
   prompts: [

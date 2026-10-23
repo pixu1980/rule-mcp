@@ -7,7 +7,7 @@ import test from "node:test";
 import { parseJson, toJson } from "../_writers-json.js";
 import { removeOpencode, upsertOpencode } from "../_writers-opencode.js";
 
-const SERVER = "pix-galaxy-mcp";
+const SERVER = "rule-mcp";
 
 test("upsertOpencode creates the mcp block in opencode's own shape", () => {
   const out = parseJson(upsertOpencode("", { command: "node", args: ["x.js", "serve"], env: { K: "v" } }, "/tmp/instructions.md"));

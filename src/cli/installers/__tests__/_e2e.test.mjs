@@ -5,7 +5,7 @@
  * cost the install.
  *
  * `scripts/install.sh` checks node, resolves the binary and forwards every
- * argument to `pix-galaxy-mcp setup` (ADR 090). Piped, with `--no-wizard`,
+ * argument to `rule-mcp setup` (ADR 090). Piped, with `--no-wizard`,
  * that is the plain runner over the same plan - so this is the one test that
  * proves the shell half and the node half still meet.
  */
@@ -28,8 +28,8 @@ test("install.sh --no-wizard configures the agent even with a broken shim on PAT
   writeFileSync(join(home, ".pi", "agent", "mcp.json"), '{"mcpServers":{}}\n');
   // Resolves with `command -v`, crashes on launch: the shape that used to
   // make an install report success and configure nothing.
-  writeFileSync(join(bin, "pix-galaxy-mcp"), "#!/bin/sh\nexit 3\n");
-  chmodSync(join(bin, "pix-galaxy-mcp"), 0o755);
+  writeFileSync(join(bin, "rule-mcp"), "#!/bin/sh\nexit 3\n");
+  chmodSync(join(bin, "rule-mcp"), 0o755);
 
   try {
     const output = execFileSync("bash", [join(root, "scripts", "install.sh"), "--agent", "pi", "--mode", "stdio", "--no-wizard", "--no-rules", "--no-commands", "--no-doctor"], {
@@ -50,7 +50,7 @@ test("install.sh --no-wizard configures the agent even with a broken shim on PAT
 
     const mcp = JSON.parse(readFileSync(join(home, ".pi", "agent", "mcp.json"), "utf8"));
 
-    assert.ok(mcp.mcpServers["pix-galaxy-mcp"], "pi mcp.json must contain the server entry");
+    assert.ok(mcp.mcpServers["rule-mcp"], "pi mcp.json must contain the server entry");
   } finally {
     rmSync(home, { recursive: true, force: true });
   }

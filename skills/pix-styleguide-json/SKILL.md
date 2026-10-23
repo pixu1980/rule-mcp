@@ -139,7 +139,7 @@ Three fields must never appear in a `package.json`:
 ```
 
 `packageManager` and `devEngines.packageManager` hand the install to corepack;
-`engines` gives npm, pnpm or yarn a range to warn or refuse on. pix-galaxy-mcp
+`engines` gives npm, pnpm or yarn a range to warn or refuse on. rule-mcp
 does not support either: the install must not be something a tool can decline on
 a machine the project cannot see. Pin Node with `.nvmrc` and the dependency tree
 with the lockfile. Guardrails: `pkg-no-corepack`, `pkg-no-engines` (owned by

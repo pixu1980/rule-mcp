@@ -16,7 +16,7 @@ export function render(criteria, generatedOn) {
  *
  * GENERATED FILE - do not edit by hand.
  * Regenerate with \`node scripts/update-wcag-data.mjs --apply\`, or
- * \`pix-galaxy-mcp a11y-update\`.
+ * \`rule-mcp a11y-update\`.
  *
  * Source: ${SOURCE}
  * Generated: ${generatedOn}

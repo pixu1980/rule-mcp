@@ -25,19 +25,19 @@ this is the leaf that describes the code they check.
 
 ## ADR 137's eight rules, owned here
 
-| Tier | Rules |
-| ---- | ----- |
-| A | `ai-tool-schema`, `ai-call-timeout`, `ai-max-tokens`, `ai-output-validated`, `ai-no-secrets-in-prompt`, `ai-trace-span` |
-| B | `ai-eval-presence`, `ai-mcp-token-validation` |
+| Tier | Rules                                                                                                                   |
+| ---- | ----------------------------------------------------------------------------------------------------------------------- |
+| A    | `ai-tool-schema`, `ai-call-timeout`, `ai-max-tokens`, `ai-output-validated`, `ai-no-secrets-in-prompt`, `ai-trace-span` |
+| B    | `ai-eval-presence`, `ai-mcp-token-validation`                                                                           |
 
 All eight ship advisory first and are promoted after the corpus gate reports full
 precision and recall - ADR 137's own rule, kept as written.
 
 ## What this leaf adds on top of ADR 137
 
-| Statement in the body | Rule |
-| --------------------- | ---- |
-| A degenerate loop is a design error, not a model error | `agent-loop-has-exit` |
+| Statement in the body                                                | Rule                      |
+| -------------------------------------------------------------------- | ------------------------- |
+| A degenerate loop is a design error, not a model error               | `agent-loop-has-exit`     |
 | A graph earns its complexity only after a loop fails a measured case | `agent-loop-before-graph` |
 
 Both are checks on the code the leaf describes, and both are the kind of claim a
@@ -48,19 +48,19 @@ repeatable.
 
 Eight from ADR 137 plus three of its own:
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `ai-tool-schema` | A tool declared without a schema the model can be held to | A | n/a |
-| `ai-call-timeout` | A model call with no timeout | A | n/a |
-| `ai-max-tokens` | A generation with no output cap | A | n/a |
-| `ai-output-validated` | Model output used without validation against its schema | A | n/a |
-| `ai-no-secrets-in-prompt` | A credential or key interpolated into a prompt | A | n/a |
-| `ai-trace-span` | A generation with no span emitted | A | n/a |
-| `ai-eval-presence` | An AI feature with no eval | B | n/a |
-| `ai-mcp-token-validation` | An MCP server accepting a token it does not validate | B | n/a |
-| `agent-loop-has-exit` | A loop or recursion with no iteration cap and no termination predicate | B | n/a |
-| `agent-loop-before-graph` | A graph or multi-agent orchestration introduced with no measured failure of the simpler loop | B | n/a |
-| `agent-owner-named` | A section delegating context, evals, telemetry or the tool surface without naming the owner | B | partially red |
+| id                        | Rejects                                                                                      | Tier | Today         |
+| ------------------------- | -------------------------------------------------------------------------------------------- | ---- | ------------- |
+| `ai-tool-schema`          | A tool declared without a schema the model can be held to                                    | A    | n/a           |
+| `ai-call-timeout`         | A model call with no timeout                                                                 | A    | n/a           |
+| `ai-max-tokens`           | A generation with no output cap                                                              | A    | n/a           |
+| `ai-output-validated`     | Model output used without validation against its schema                                      | A    | n/a           |
+| `ai-no-secrets-in-prompt` | A credential or key interpolated into a prompt                                               | A    | n/a           |
+| `ai-trace-span`           | A generation with no span emitted                                                            | A    | n/a           |
+| `ai-eval-presence`        | An AI feature with no eval                                                                   | B    | n/a           |
+| `ai-mcp-token-validation` | An MCP server accepting a token it does not validate                                         | B    | n/a           |
+| `agent-loop-has-exit`     | A loop or recursion with no iteration cap and no termination predicate                       | B    | n/a           |
+| `agent-loop-before-graph` | A graph or multi-agent orchestration introduced with no measured failure of the simpler loop | B    | n/a           |
+| `agent-owner-named`       | A section delegating context, evals, telemetry or the tool surface without naming the owner  | B    | partially red |
 
 ## Phases
 
@@ -117,13 +117,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Door and neighbours | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Door and neighbours  | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

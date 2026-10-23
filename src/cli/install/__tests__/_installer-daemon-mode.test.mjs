@@ -18,16 +18,15 @@ const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", i
 
 const fakeHome = mkdtempSync(join(tmpdir(), "pix-daemon-install-"));
 const installModule = new URL("../index.js", import.meta.url).href;
-const source = [
-  `import { mcpServerConfig } from ${JSON.stringify(installModule)};`,
-  'console.log(JSON.stringify(mcpServerConfig("/tmp/pix-galaxy-mcp.js", { mode: "daemon" })));',
-].join(" ");
+const source = [`import { mcpServerConfig } from ${JSON.stringify(installModule)};`, 'console.log(JSON.stringify(mcpServerConfig("/tmp/rule-mcp.js", { mode: "daemon" })));'].join(
+  " ",
+);
 const output = execFileSync(process.execPath, ["--import", ALIAS_HOOK, "--input-type=module", "--eval", source], {
   env: { ...process.env, HOME: fakeHome },
   encoding: "utf8",
 });
-const config = JSON.parse(output)["pix-galaxy-mcp"];
-const tokenFile = join(fakeHome, ".pix-galaxy-mcp", "state", "sse-token");
+const config = JSON.parse(output)["rule-mcp"];
+const tokenFile = join(fakeHome, ".rule-mcp", "state", "sse-token");
 
 assert.equal(config.command, undefined, "daemon config must not spawn a stdio process");
 assert.equal(config.url, "http://127.0.0.1:37999/sse", "daemon config must target local SSE");

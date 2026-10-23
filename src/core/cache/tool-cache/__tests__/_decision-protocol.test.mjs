@@ -4,7 +4,18 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
-import { buildGateQuestion, buildGateState, decideShadow, guardAmbiguity, guardCandidate, parseGateAnswer, promptHash, redact, SHADOW_THRESHOLD, truncate } from "../_decision-protocol.js";
+import {
+  buildGateQuestion,
+  buildGateState,
+  decideShadow,
+  guardAmbiguity,
+  guardCandidate,
+  parseGateAnswer,
+  promptHash,
+  redact,
+  SHADOW_THRESHOLD,
+  truncate,
+} from "../_decision-protocol.js";
 
 const candidates = [
   { label: "candidate-1", description: "prompt: a; route: r", argsKey: "{}", echo: false, fresh: true, isError: false },

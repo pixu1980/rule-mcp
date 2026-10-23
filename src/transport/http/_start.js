@@ -25,7 +25,7 @@ export async function startHttpServer(options = {}) {
 
   const serverToken = getOrCreateSseBearerToken();
   setServerToken(serverToken);
-  console.error("[pix-galaxy-mcp] Streamable HTTP authentication enabled");
+  console.error("[rule-mcp] Streamable HTTP authentication enabled");
 
   if (sslCert && sslKey) {
     try {
@@ -38,7 +38,7 @@ export async function startHttpServer(options = {}) {
         throw new Error(`Failed to generate self-signed cert at ${sslCert}. Provide valid --ssl-cert and --ssl-key.`);
       }
 
-      console.error(`[pix-galaxy-mcp] Generated self-signed cert: ${sslCert}`);
+      console.error(`[rule-mcp] Generated self-signed cert: ${sslCert}`);
     }
   }
 

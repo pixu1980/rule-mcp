@@ -3,7 +3,7 @@
 /**
  * @module transport/sse
  *
- * SSE (Server-Sent Events) transport for pix-galaxy-mcp.
+ * SSE (Server-Sent Events) transport for rule-mcp.
  * Provides an HTTP/HTTPS server with:
  *   - GET /sse    - SSE stream for MCP protocol
  *   - POST /message - MCP message handler

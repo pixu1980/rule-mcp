@@ -21,7 +21,7 @@ const snapshot = JSON.parse(readFileSync(`${root}tests/fixtures/tool-surface.jso
 
 /** The live surface, read from the binary a client would launch. */
 const liveTools = () => {
-  const out = execFileSync(process.execPath, [`${root}bin/pix-galaxy-mcp.js`, "tools", "list", "--json"], {
+  const out = execFileSync(process.execPath, [`${root}bin/rule-mcp.js`, "tools", "list", "--json"], {
     encoding: "utf8",
     env: { ...process.env, PIX_GALAXY_MCP_NO_AUTOUPDATE: "1", PIX_GALAXY_MCP_NO_TELEMETRY: "1" },
     timeout: 120_000,

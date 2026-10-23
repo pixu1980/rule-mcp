@@ -1,6 +1,6 @@
 # Privacy: what is recorded, where it lives, and how to erase it
 
-- **Applies to**: pix-galaxy-mcp, every transport (stdio, SSE, HTTP, daemon, Docker)
+- **Applies to**: rule-mcp, every transport (stdio, SSE, HTTP, daemon, Docker)
 - **Last reviewed**: 2026-09-06
 - **Related**: ADR 019 (persistent local bearer token), ADR 034 (SSE bearer auth),
   ADR 040 (per-invocation self-update with throttle, fire-and-forget), ADR 051
@@ -21,22 +21,22 @@ not mean sharing your prompts.
 
 ## What is recorded
 
-All paths resolve under the runtime home `~/.pix-galaxy-mcp/`
+All paths resolve under the runtime home `~/.rule-mcp/`
 (`PIX_GALAXY_MCP_HOME` relocates the whole root; `PIX_GALAXY_MCP_STATE_DIR`
 relocates mutable state). One per-project directory is recorded for the current
 project (`<slug>` below).
 
-| Data category                                                                       | Where                                                     | Retention                                      | Kill switch                                 |
-| ----------------------------------------------------------------------------------- | --------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------- |
-| Tool call metadata (tool name, timestamps, latency, byte/token counts, error flags) | `~/.pix-galaxy-mcp/projects/<slug>/telemetry.jsonl`       | 7 days raw, then rolled up to daily aggregates | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
-| Prompt text, verbatim (only while `prompts` are enabled)                            | same file, `prompt` field                                 | same 7 days                                    | `PIX_GALAXY_MCP_NO_PROMPTS=1`               |
-| File paths passed to tools                                                          | same file, `path` field (clear text locally)              | same 7 days                                    | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
-| Daily rollups (counts only)                                                         | `~/.pix-galaxy-mcp/projects/<slug>/telemetry-rollup.json` | kept until deleted                             | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
-| Per-project id                                                                      | `~/.pix-galaxy-mcp/projects/<slug>/project-id`            | kept until deleted                             | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
-| Agent-declared usage (sidecar)                                                      | `~/.pix-galaxy-mcp/projects/<slug>/usage.json`            | kept until deleted                             | don't write it (sidecar opt-in)             |
-| Exported recordings                                                                 | `~/.pix-galaxy-mcp/projects/<slug>/exports/*.flight`      | newest 10, or everything within 90 days        | do not export                               |
-| Bearer token for SSE/HTTP                                                           | `~/.pix-galaxy-mcp/state/sse-token` (mode 0600, dir 0700) | until deleted                                  | n/a - required for authenticated transports |
-| Failed-auth audit lines                                                             | stderr of the server process                              | wherever your process manager keeps stderr     | n/a - security logging                      |
+| Data category                                                                       | Where                                               | Retention                                      | Kill switch                                 |
+| ----------------------------------------------------------------------------------- | --------------------------------------------------- | ---------------------------------------------- | ------------------------------------------- |
+| Tool call metadata (tool name, timestamps, latency, byte/token counts, error flags) | `~/.rule-mcp/projects/<slug>/telemetry.jsonl`       | 7 days raw, then rolled up to daily aggregates | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
+| Prompt text, verbatim (only while `prompts` are enabled)                            | same file, `prompt` field                           | same 7 days                                    | `PIX_GALAXY_MCP_NO_PROMPTS=1`               |
+| File paths passed to tools                                                          | same file, `path` field (clear text locally)        | same 7 days                                    | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
+| Daily rollups (counts only)                                                         | `~/.rule-mcp/projects/<slug>/telemetry-rollup.json` | kept until deleted                             | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
+| Per-project id                                                                      | `~/.rule-mcp/projects/<slug>/project-id`            | kept until deleted                             | `PIX_GALAXY_MCP_NO_TELEMETRY=1`             |
+| Agent-declared usage (sidecar)                                                      | `~/.rule-mcp/projects/<slug>/usage.json`            | kept until deleted                             | don't write it (sidecar opt-in)             |
+| Exported recordings                                                                 | `~/.rule-mcp/projects/<slug>/exports/*.flight`      | newest 10, or everything within 90 days        | do not export                               |
+| Bearer token for SSE/HTTP                                                           | `~/.rule-mcp/state/sse-token` (mode 0600, dir 0700) | until deleted                                  | n/a - required for authenticated transports |
+| Failed-auth audit lines                                                             | stderr of the server process                        | wherever your process manager keeps stderr     | n/a - security logging                      |
 
 A recording never enters a repository: it is written under the runtime home,
 filed per project (ADR 082), so there is nothing in a checkout to ignore and
@@ -74,13 +74,13 @@ treated as personal data here even though this server never transmits them:
 - **Minimization**: raw events expire after 7 days; the raw log is size-capped;
   exports have a retention cap; the redacted variant exists so the useful part
   can be shared without the identifying part.
-- **Erasure**: delete `~/.pix-galaxy-mcp/projects/<slug>/` for one project and
-  `~/.pix-galaxy-mcp/state` for machine-level state. `pix-galaxy-mcp setup
+- **Erasure**: delete `~/.rule-mcp/projects/<slug>/` for one project and
+  `~/.rule-mcp/state` for machine-level state. `rule-mcp setup
 --uninstall --purge` (and `scripts/uninstall.sh --purge`) removes the whole
   runtime home; `--keep-config` preserves the configuration directories. In the
   wizard the purge is its own screen, starts empty, and names the file count
   before it deletes anything.
-- **Access/portability**: the format is JSON on your disk. `pix-galaxy-mcp
+- **Access/portability**: the format is JSON on your disk. `rule-mcp
 stats` renders the local aggregate; any text editor reads the raw files.
 
 ## EU AI Act positioning

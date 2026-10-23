@@ -10,7 +10,7 @@ import { test } from "node:test";
 import { dockerTask, doctorTask, rulesTask, serviceTask, skillsTask } from "../_task-extras.js";
 
 test("dry runs describe instead of doing", async () => {
-  assert.deepEqual(await doctorTask().run({ dryRun: true }), { status: "ok", summary: "would run pix-galaxy-mcp doctor" });
+  assert.deepEqual(await doctorTask().run({ dryRun: true }), { status: "ok", summary: "would run rule-mcp doctor" });
   assert.deepEqual(await skillsTask().run({ dryRun: true }), { status: "ok", summary: "would install to ~/.agents/skills" });
 
   const rules = rulesTask().run({ dryRun: true });

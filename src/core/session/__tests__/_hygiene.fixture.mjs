@@ -14,7 +14,7 @@ export { isAlive as alive } from "../../../cli/daemon/_process-status.js";
 export { until } from "../../../shared/_testkit.js";
 
 export const root = fileURLToPath(new URL("../../../..", import.meta.url));
-export const bin = join(root, "bin", "pix-galaxy-mcp.js");
+export const bin = join(root, "bin", "rule-mcp.js");
 
 /** A port nobody is listening on. */
 export function reservePort() {

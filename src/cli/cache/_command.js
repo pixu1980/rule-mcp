@@ -50,7 +50,7 @@ export async function cacheCommand(subcommand = "stats", options = {}) {
     }
 
     default: {
-      print("Usage: pix-galaxy-mcp cache <stats|export|verify|prime|clear> [--dir <path>]");
+      print("Usage: rule-mcp cache <stats|export|verify|prime|clear> [--dir <path>]");
       process.exitCode = 1;
     }
   }

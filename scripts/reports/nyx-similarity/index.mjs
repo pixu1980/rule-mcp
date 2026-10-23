@@ -26,7 +26,7 @@
  *   node --import ./scripts/alias-hook.mjs scripts/reports/nyx-similarity/index.mjs
  *   node --import ./scripts/alias-hook.mjs scripts/reports/nyx-similarity/index.mjs --json
  *
- * @see docs/integration/pix-galaxy-mcp.md
+ * @see docs/integration/rule-mcp.md
  */
 
 process.env.PIX_GALAXY_MCP_NO_TELEMETRY ??= "1";

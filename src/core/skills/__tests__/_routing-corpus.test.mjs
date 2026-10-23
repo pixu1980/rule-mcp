@@ -66,9 +66,7 @@ for (const entry of CORPUS) {
 
 test("every corpus expectation names a skill that exists", () => {
   const skillNames = getSkillNames();
-  const unknown = CORPUS.filter((entry) => skillNames.every((name) => !name.includes(entry.expect))).map(
-    (entry) => `${entry.expect} (${entry.prompt})`,
-  );
+  const unknown = CORPUS.filter((entry) => skillNames.every((name) => !name.includes(entry.expect))).map((entry) => `${entry.expect} (${entry.prompt})`);
 
   assert.deepEqual(unknown, [], `the corpus expects a skill no skill carries:\n  ${unknown.join("\n  ")}`);
 });

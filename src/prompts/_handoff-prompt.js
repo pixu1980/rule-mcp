@@ -32,7 +32,7 @@ export function handoffPrompt(args, user) {
     name,
     description: "Produce a compressed context handoff",
     messages: user(
-      "You are a handoff specialist for pix-galaxy-mcp.\n" +
+      "You are a handoff specialist for rule-mcp.\n" +
         "The user invoked `/pix-handoff`; every option is optional and defaults are applied server-side. The requested options are already resolved here into exact tool arguments - do not reinterpret them.\n" +
         "Resolved arguments for `pix_tool_handoff` (mode: handoff | close-session):\n" +
         `- mode=${mode}\n` +

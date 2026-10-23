@@ -11,58 +11,58 @@ registry, so a stale copy fails the build instead of misleading a reader.
 
 Every command is listed with the arguments and options it reads, taken from
 the commander definitions that parse them. The same definitions answer
-`pix-galaxy-mcp <command> --help`, so nothing here is a promise the binary
+`rule-mcp <command> --help`, so nothing here is a promise the binary
 does not keep.
 
-`pix-galaxy-mcp` with no command starts the stdio server, which is how an
+`rule-mcp` with no command starts the stdio server, which is how an
 agent spawns it. `-h, --help` works on every command; `-v, --version` prints
 the package version from anywhere. An error exits 1 and prints to stderr;
 `--help` exits 0.
 
-| Command                                            | Options | What it does                                                                              |
-| -------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------- |
-| [`help`](#pix-galaxy-mcp-help)                     | 0       | Show the full usage guide                                                                 |
-| [`serve`](#pix-galaxy-mcp-serve)                   | 4       | Start the MCP server (STDIO by default)                                                   |
-| [`up`](#pix-galaxy-mcp-up)                         | 1       | Same as "serve --transport sse" (on-demand HTTP daemon)                                   |
-| [`daemon`](#pix-galaxy-mcp-daemon)                 | 1       | Manage the MCP daemon (process and native platform services)                              |
-| [`install`](#pix-galaxy-mcp-install)               | 26      | Install pix-galaxy-mcp into an agent/IDE (edits mcp.json)                                 |
-| [`uninstall`](#pix-galaxy-mcp-uninstall)           | 7       | Remove pix-galaxy-mcp from an agent/IDE                                                   |
-| [`setup`](#pix-galaxy-mcp-setup)                   | 29      | Full-screen install/uninstall wizard (falls back to flags when piped)                     |
-| [`tools`](#pix-galaxy-mcp-tools)                   | 1       | List or call MCP tools directly                                                           |
-| [`config`](#pix-galaxy-mcp-config)                 | 5       | Print the mcp.json snippet, or manage PIX_* env vars with `config env`                    |
-| [`doctor`](#pix-galaxy-mcp-doctor)                 | 4       | Run system health check                                                                   |
-| [`adr`](#pix-galaxy-mcp-adr)                       | 5       | Create a new Architecture Decision Record (ADR)                                           |
-| [`handoff`](#pix-galaxy-mcp-handoff)               | 7       | Generate a compressed LLM context handoff summary                                         |
-| [`skills`](#pix-galaxy-mcp-skills)                 | 4       | Manage the pix AI skill system                                                            |
-| [`fix`](#pix-galaxy-mcp-fix)                       | 3       | Apply the deterministic guardrail fixes of every skill                                    |
-| [`completions`](#pix-galaxy-mcp-completions)       | 1       | Generate shell auto-completion script                                                     |
-| [`handon`](#pix-galaxy-mcp-handon)                 | 4       | Verify the last handoff against the repo now                                              |
-| [`stats`](#pix-galaxy-mcp-stats)                   | 0       | Show telemetry statistics from the local log                                              |
-| [`cache`](#pix-galaxy-mcp-cache)                   | 1       | Inspect the on-disk tool cache                                                            |
-| [`roles`](#pix-galaxy-mcp-roles)                   | 7       | Manage review persona roles                                                               |
-| [`guard`](#pix-galaxy-mcp-guard)                   | 0       | Permission-guard payload processor (invoked by PreToolUse hooks, reads stdin)             |
-| [`update`](#pix-galaxy-mcp-update)                 | 0       | Self-update to the newest release tag (or fast-forward when none exist)                   |
-| [`agent-commands`](#pix-galaxy-mcp-agent-commands) | 13      | Registry-driven agent slash-command management                                            |
-| [`reinstall`](#pix-galaxy-mcp-reinstall)           | 0       | Purge node_modules and pnpm-lock.yaml, install again, refresh the global bin              |
-| [`commit-lint`](#pix-galaxy-mcp-commit-lint)       | 6       | Validate commits against type(scope): subject (the git hooks call this)                   |
-| [`init`](#pix-galaxy-mcp-init)                     | 2       | Prepare a project: recorder directory, git hooks, tokensave and the dependency pin report |
+| Command                                      | Options | What it does                                                                              |
+| -------------------------------------------- | ------- | ----------------------------------------------------------------------------------------- |
+| [`help`](#rule-mcp-help)                     | 0       | Show the full usage guide                                                                 |
+| [`serve`](#rule-mcp-serve)                   | 4       | Start the MCP server (STDIO by default)                                                   |
+| [`up`](#rule-mcp-up)                         | 1       | Same as "serve --transport sse" (on-demand HTTP daemon)                                   |
+| [`daemon`](#rule-mcp-daemon)                 | 1       | Manage the MCP daemon (process and native platform services)                              |
+| [`install`](#rule-mcp-install)               | 26      | Install rule-mcp into an agent/IDE (edits mcp.json)                                       |
+| [`uninstall`](#rule-mcp-uninstall)           | 7       | Remove rule-mcp from an agent/IDE                                                         |
+| [`setup`](#rule-mcp-setup)                   | 29      | Full-screen install/uninstall wizard (falls back to flags when piped)                     |
+| [`tools`](#rule-mcp-tools)                   | 1       | List or call MCP tools directly                                                           |
+| [`config`](#rule-mcp-config)                 | 5       | Print the mcp.json snippet, or manage PIX_* env vars with `config env`                    |
+| [`doctor`](#rule-mcp-doctor)                 | 4       | Run system health check                                                                   |
+| [`adr`](#rule-mcp-adr)                       | 5       | Create a new Architecture Decision Record (ADR)                                           |
+| [`handoff`](#rule-mcp-handoff)               | 7       | Generate a compressed LLM context handoff summary                                         |
+| [`skills`](#rule-mcp-skills)                 | 4       | Manage the pix AI skill system                                                            |
+| [`fix`](#rule-mcp-fix)                       | 3       | Apply the deterministic guardrail fixes of every skill                                    |
+| [`completions`](#rule-mcp-completions)       | 1       | Generate shell auto-completion script                                                     |
+| [`handon`](#rule-mcp-handon)                 | 4       | Verify the last handoff against the repo now                                              |
+| [`stats`](#rule-mcp-stats)                   | 0       | Show telemetry statistics from the local log                                              |
+| [`cache`](#rule-mcp-cache)                   | 1       | Inspect the on-disk tool cache                                                            |
+| [`roles`](#rule-mcp-roles)                   | 7       | Manage review persona roles                                                               |
+| [`guard`](#rule-mcp-guard)                   | 0       | Permission-guard payload processor (invoked by PreToolUse hooks, reads stdin)             |
+| [`update`](#rule-mcp-update)                 | 0       | Self-update to the newest release tag (or fast-forward when none exist)                   |
+| [`agent-commands`](#rule-mcp-agent-commands) | 13      | Registry-driven agent slash-command management                                            |
+| [`reinstall`](#rule-mcp-reinstall)           | 0       | Purge node_modules and pnpm-lock.yaml, install again, refresh the global bin              |
+| [`commit-lint`](#rule-mcp-commit-lint)       | 6       | Validate commits against type(scope): subject (the git hooks call this)                   |
+| [`init`](#rule-mcp-init)                     | 2       | Prepare a project: recorder directory, git hooks, tokensave and the dependency pin report |
 
-## pix-galaxy-mcp help
+## rule-mcp help
 
 Show the full usage guide
 
 ```sh
-pix-galaxy-mcp help
+rule-mcp help
 ```
 
 Takes no options beyond the global `-h, --help`.
 
-## pix-galaxy-mcp serve
+## rule-mcp serve
 
 Start the MCP server (STDIO by default)
 
 ```sh
-pix-galaxy-mcp serve
+rule-mcp serve
 ```
 
 **Options**
@@ -74,12 +74,12 @@ pix-galaxy-mcp serve
 | `--ssl-cert <path>`  | -       | -       | TLS certificate (requires --ssl-key)                       |
 | `--ssl-key <path>`   | -       | -       | TLS private key (auto-generates self-signed if missing)    |
 
-## pix-galaxy-mcp up
+## rule-mcp up
 
 Same as "serve --transport sse" (on-demand HTTP daemon)
 
 ```sh
-pix-galaxy-mcp up
+rule-mcp up
 ```
 
 **Options**
@@ -88,12 +88,12 @@ pix-galaxy-mcp up
 | ----------------- | ------- | ------- | ----------------------- |
 | `--port <number>` | -       | -       | port for the SSE server |
 
-## pix-galaxy-mcp daemon
+## rule-mcp daemon
 
 Manage the MCP daemon (process and native platform services)
 
 ```sh
-pix-galaxy-mcp daemon action
+rule-mcp daemon action
 ```
 
 **Arguments**
@@ -108,12 +108,12 @@ pix-galaxy-mcp daemon action
 | ----------- | ------- | ------- | -------------------------------------------------------- |
 | `--dry-run` | -       | -       | preview changes without writing (install/uninstall only) |
 
-## pix-galaxy-mcp install
+## rule-mcp install
 
-Install pix-galaxy-mcp into an agent/IDE (edits mcp.json)
+Install rule-mcp into an agent/IDE (edits mcp.json)
 
 ```sh
-pix-galaxy-mcp install
+rule-mcp install
 ```
 
 **Options**
@@ -147,12 +147,12 @@ pix-galaxy-mcp install
 | `--commands-areas <list>`    | -       | -                                            | comma-separated area names, e.g. frontend,data                              |
 | `--commands-skills <list>`   | -       | -                                            | comma-separated skill names                                                 |
 
-## pix-galaxy-mcp uninstall
+## rule-mcp uninstall
 
-Remove pix-galaxy-mcp from an agent/IDE
+Remove rule-mcp from an agent/IDE
 
 ```sh
-pix-galaxy-mcp uninstall
+rule-mcp uninstall
 ```
 
 **Options**
@@ -167,12 +167,12 @@ pix-galaxy-mcp uninstall
 | `--purge`          | -       | -       | also remove the runtime home and caches            |
 | `--keep-config`    | -       | -       | keep user configuration when purging               |
 
-## pix-galaxy-mcp setup
+## rule-mcp setup
 
 Full-screen install/uninstall wizard (falls back to flags when piped)
 
 ```sh
-pix-galaxy-mcp setup
+rule-mcp setup
 ```
 
 **Options**
@@ -209,12 +209,12 @@ pix-galaxy-mcp setup
 | `--no-interactive`           | -       | -                             | run the plan with defaults and no wizard                                    |
 | `--json`                     | -       | -                             | print machine-readable output instead of the wizard                         |
 
-## pix-galaxy-mcp tools
+## rule-mcp tools
 
 List or call MCP tools directly
 
 ```sh
-pix-galaxy-mcp tools subcommand name
+rule-mcp tools subcommand name
 ```
 
 **Arguments**
@@ -230,12 +230,12 @@ pix-galaxy-mcp tools subcommand name
 | ---------------- | ------- | ------- | ---------------------------------------- |
 | `--json [value]` | -       | -       | list as JSON, or JSON arguments for call |
 
-## pix-galaxy-mcp config
+## rule-mcp config
 
 Print the mcp.json snippet, or manage PIX_* env vars with `config env`
 
 ```sh
-pix-galaxy-mcp config section
+rule-mcp config section
 ```
 
 **Arguments**
@@ -254,12 +254,12 @@ pix-galaxy-mcp config section
 | `--list`        | -       | -       | list saved PIX_* env vars                        |
 | `--unset <key>` | -       | -       | remove a saved PIX_* env var                     |
 
-## pix-galaxy-mcp doctor
+## rule-mcp doctor
 
 Run system health check
 
 ```sh
-pix-galaxy-mcp doctor
+rule-mcp doctor
 ```
 
 **Options**
@@ -271,12 +271,12 @@ pix-galaxy-mcp doctor
 | `--output <path>`   | -       | -       | alias for --json-out                                        |
 | `--telemetry`       | -       | -       | include anonymous usage stats in the report                 |
 
-## pix-galaxy-mcp adr
+## rule-mcp adr
 
 Create a new Architecture Decision Record (ADR)
 
 ```sh
-pix-galaxy-mcp adr action title
+rule-mcp adr action title
 ```
 
 **Arguments**
@@ -296,12 +296,12 @@ pix-galaxy-mcp adr action title
 | `--consequences <text>` | -       | -       | positive and negative consequences           |
 | `--tags <list>`         | -       | -       | comma-separated tags (default: architecture) |
 
-## pix-galaxy-mcp handoff
+## rule-mcp handoff
 
 Generate a compressed LLM context handoff summary
 
 ```sh
-pix-galaxy-mcp handoff subcommand
+rule-mcp handoff subcommand
 ```
 
 **Arguments**
@@ -322,12 +322,12 @@ pix-galaxy-mcp handoff subcommand
 | `--fix`         | -       | -       | apply the ADR renumber plan                                            |
 | `--fix-commits` | -       | -       | amend local commit messages to match renumbered ADRs                   |
 
-## pix-galaxy-mcp skills
+## rule-mcp skills
 
 Manage the pix AI skill system
 
 ```sh
-pix-galaxy-mcp skills action
+rule-mcp skills action
 ```
 
 **Arguments**
@@ -345,12 +345,12 @@ pix-galaxy-mcp skills action
 | `--dry-run`   | -       | -       | report what would be removed without removing it                 |
 | `--json`      | -       | -       | list as machine-readable JSON                                    |
 
-## pix-galaxy-mcp fix
+## rule-mcp fix
 
 Apply the deterministic guardrail fixes of every skill
 
 ```sh
-pix-galaxy-mcp fix
+rule-mcp fix
 ```
 
 **Options**
@@ -361,12 +361,12 @@ pix-galaxy-mcp fix
 | `--mode <m>`   | lint    | -       | lint (report what would change) or fix (write) |
 | `--no-dry-run` | -       | -       | apply fixes instead of previewing              |
 
-## pix-galaxy-mcp completions
+## rule-mcp completions
 
 Generate shell auto-completion script
 
 ```sh
-pix-galaxy-mcp completions
+rule-mcp completions
 ```
 
 **Options**
@@ -375,12 +375,12 @@ pix-galaxy-mcp completions
 | ------------- | ------- | ------- | ------------------------- |
 | `--shell <s>` | zsh     | -       | zsh (default), bash, fish |
 
-## pix-galaxy-mcp handon
+## rule-mcp handon
 
 Verify the last handoff against the repo now
 
 ```sh
-pix-galaxy-mcp handon
+rule-mcp handon
 ```
 
 **Options**
@@ -392,22 +392,22 @@ pix-galaxy-mcp handon
 | `--list`        | -       | -       | list handoffs                           |
 | `--no-archive`  | -       | -       | verify without archiving completed docs |
 
-## pix-galaxy-mcp stats
+## rule-mcp stats
 
 Show telemetry statistics from the local log
 
 ```sh
-pix-galaxy-mcp stats
+rule-mcp stats
 ```
 
 Takes no options beyond the global `-h, --help`.
 
-## pix-galaxy-mcp cache
+## rule-mcp cache
 
 Inspect the on-disk tool cache
 
 ```sh
-pix-galaxy-mcp cache action
+rule-mcp cache action
 ```
 
 **Arguments**
@@ -422,12 +422,12 @@ pix-galaxy-mcp cache action
 | -------------- | ------- | ------- | -------------------------- |
 | `--dir <path>` | -       | -       | cache directory to inspect |
 
-## pix-galaxy-mcp roles
+## rule-mcp roles
 
 Manage review persona roles
 
 ```sh
-pix-galaxy-mcp roles action id
+rule-mcp roles action id
 ```
 
 **Arguments**
@@ -449,12 +449,12 @@ pix-galaxy-mcp roles action id
 | `--evidence-skills <list>` | -       | -       | evidence skills alias             |
 | `--by <role>`              | -       | -       | role that deprecates this one     |
 
-## pix-galaxy-mcp guard
+## rule-mcp guard
 
 Permission-guard payload processor (invoked by PreToolUse hooks, reads stdin)
 
 ```sh
-pix-galaxy-mcp guard action
+rule-mcp guard action
 ```
 
 **Arguments**
@@ -465,22 +465,22 @@ pix-galaxy-mcp guard action
 
 Takes no options beyond the global `-h, --help`.
 
-## pix-galaxy-mcp update
+## rule-mcp update
 
 Self-update to the newest release tag (or fast-forward when none exist)
 
 ```sh
-pix-galaxy-mcp update
+rule-mcp update
 ```
 
 Takes no options beyond the global `-h, --help`.
 
-## pix-galaxy-mcp agent-commands
+## rule-mcp agent-commands
 
 Registry-driven agent slash-command management
 
 ```sh
-pix-galaxy-mcp agent-commands
+rule-mcp agent-commands
 ```
 
 **Options**
@@ -501,22 +501,22 @@ pix-galaxy-mcp agent-commands
 | `--areas <list>`    | -       | -                             | comma-separated area names, e.g. frontend,data  |
 | `--skills <list>`   | -       | -                             | comma-separated skill names                     |
 
-## pix-galaxy-mcp reinstall
+## rule-mcp reinstall
 
 Purge node_modules and pnpm-lock.yaml, install again, refresh the global bin
 
 ```sh
-pix-galaxy-mcp reinstall
+rule-mcp reinstall
 ```
 
 Takes no options beyond the global `-h, --help`.
 
-## pix-galaxy-mcp commit-lint
+## rule-mcp commit-lint
 
 Validate commits against type(scope): subject (the git hooks call this)
 
 ```sh
-pix-galaxy-mcp commit-lint
+rule-mcp commit-lint
 ```
 
 **Options**
@@ -530,12 +530,12 @@ pix-galaxy-mcp commit-lint
 | `--stdin-push`      | -       | -       | validate the refs git is about to push, read from stdin (pre-push hook) |
 | `--dir <path>`      | -       | -       | project directory (default: cwd)                                        |
 
-## pix-galaxy-mcp init
+## rule-mcp init
 
 Prepare a project: recorder directory, git hooks, tokensave and the dependency pin report
 
 ```sh
-pix-galaxy-mcp init
+rule-mcp init
 ```
 
 **Options**

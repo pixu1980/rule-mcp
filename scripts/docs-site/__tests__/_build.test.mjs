@@ -136,7 +136,7 @@ test("the stored theme applies before the stylesheet loads, so it cannot flash",
   buildSite({ projectDir: root, outDir });
 
   const html = readFileSync(join(outDir, "index.html"), "utf8");
-  const inlineMatch = /<script>(?:(?!<\/script>)[\s\S])*pix-galaxy-mcp-docs-prefs[\s\S]*?<\/script>/u.exec(html);
+  const inlineMatch = /<script>(?:(?!<\/script>)[\s\S])*rule-mcp-docs-prefs[\s\S]*?<\/script>/u.exec(html);
   const stylesheetIndex = html.indexOf('<link rel="stylesheet"');
 
   assert.ok(inlineMatch, "a non-deferred inline script must apply the stored theme before first paint");

@@ -1,19 +1,19 @@
 // SPDX-FileCopyrightText: 2025-2026 pixu1980
 // SPDX-License-Identifier: MIT
 /**
- * uninstall --purge must delete the runtime home ~/.pix-galaxy-mcp/ (state,
+ * uninstall --purge must delete the runtime home ~/.rule-mcp/ (state,
  * projects, data, config — the layout src/cli/paths/index.js defines), and install
  * must recreate it on the next run.
  *
  * Regression: `./scripts/uninstall.sh --purge` only removed
- * ~/.config/pix-galaxy-mcp/ and left ~/.pix-galaxy-mcp/ (with the daemon SSE
+ * ~/.config/rule-mcp/ and left ~/.rule-mcp/ (with the daemon SSE
  * token, telemetry, caches and per-project recordings) behind. Reinstalling
  * then started from stale state, and the "purge" promise — remove everything —
  * was silently broken.
  *
  * Contract guarded here, through the bootstrap that forwards to the wizard
- * (ADR 090): `uninstall.sh --purge` removes ~/.pix-galaxy-mcp/ along with
- * ~/.config/pix-galaxy-mcp/, and --keep-config keeps the configuration while
+ * (ADR 090): `uninstall.sh --purge` removes ~/.rule-mcp/ along with
+ * ~/.config/rule-mcp/, and --keep-config keeps the configuration while
  * still taking the runtime home.
  */
 import { execFileSync } from "node:child_process";
@@ -35,26 +35,26 @@ export const uninstallPs1 = readScript("scripts/uninstall.ps1");
 /**
  * A minimal hermetic PATH: /usr/bin + /bin so the bootstrap's probes work,
  * plus node's own directory, which the bootstrap requires before it forwards
- * anything. No pix-galaxy-mcp and no pnpm: the checkout's own bin is what
+ * anything. No rule-mcp and no pnpm: the checkout's own bin is what
  * must be resolved.
  */
 export function minimalPath() {
   return [dirname(process.execPath), "/usr/bin", "/bin", "/usr/sbin", "/sbin"].join(":");
 }
 
-/** Create a fake HOME with ~/.pix-galaxy-mcp and ~/.config/pix-galaxy-mcp. */
+/** Create a fake HOME with ~/.rule-mcp and ~/.config/rule-mcp. */
 export function seedHome() {
   const home = mkdtempSync(join(tmpdir(), "pix-purge-home-"));
   for (const dir of ["state", "projects", "data", "config"]) {
-    mkdirSync(join(home, ".pix-galaxy-mcp", dir), { recursive: true });
+    mkdirSync(join(home, ".rule-mcp", dir), { recursive: true });
   }
-  writeFileSync(join(home, ".pix-galaxy-mcp", "state", "sse-token"), "test-token\n");
-  mkdirSync(join(home, ".config", "pix-galaxy-mcp"), { recursive: true });
-  writeFileSync(join(home, ".config", "pix-galaxy-mcp", "keys.json"), "{}");
+  writeFileSync(join(home, ".rule-mcp", "state", "sse-token"), "test-token\n");
+  mkdirSync(join(home, ".config", "rule-mcp"), { recursive: true });
+  writeFileSync(join(home, ".config", "rule-mcp", "keys.json"), "{}");
   return home;
 }
 
-/** env without the runtime-relocation vars, so the real ~/.pix-galaxy-mcp is used. */
+/** env without the runtime-relocation vars, so the real ~/.rule-mcp is used. */
 export function hermeticEnv(home, path) {
   const env = { ...process.env, HOME: home, PATH: path, PNPM_HOME: join(home, ".pnpm") };
   delete env.PIX_GALAXY_MCP_HOME;

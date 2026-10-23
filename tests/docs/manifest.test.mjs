@@ -8,7 +8,7 @@ import test from "node:test";
  * The published tarball must install under any npm-family client.
  *
  * `package.json` once declared a runtime dependency on itself through the
- * pnpm-only `link:` protocol, so `npm install ./pix-galaxy-mcp-*.tgz`
+ * pnpm-only `link:` protocol, so `npm install ./rule-mcp-*.tgz`
  * aborted with EUNSUPPORTEDPROTOCOL before unpacking (OSS-5). A public
  * package (anything without `"private": true`) may not reference
  * `link:`, `file:` or `workspace:` in any dependency table: those

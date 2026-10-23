@@ -1,4 +1,4 @@
-# pix-galaxy-mcp
+# RuleMCP
 
 <section data-part="hero">
 <p><strong>Deterministic skills for every AI coding agent, without calling an LLM.</strong></p>

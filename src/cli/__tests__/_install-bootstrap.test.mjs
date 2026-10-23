@@ -30,7 +30,7 @@ function sandbox(prefix) {
     HOME: home,
     // Never let a test write or delete the developer's real global shim.
     PNPM_HOME: join(home, ".pnpm"),
-    PIX_GALAXY_MCP_HOME: join(home, ".pix-galaxy-mcp"),
+    PIX_GALAXY_MCP_HOME: join(home, ".rule-mcp"),
     PIX_GALAXY_MCP_SKIP_GLOBAL_LINK: "1",
     TERM: "dumb",
   };
@@ -46,7 +46,7 @@ for (const name of ["install.sh", "uninstall.sh"]) {
     // 160, not 120: the bootstrap validates the flags `setup` accepts before
     // anything is fetched, and that table is the one thing it has to know.
     assert.ok(lines < 160, `${name} is ${lines} lines - logic belongs in src/cli/setup/, not here`);
-    assert.match(source, /pix-galaxy-mcp setup/, "the bootstrap must hand over to the setup wizard");
+    assert.match(source, /rule-mcp setup/, "the bootstrap must hand over to the setup wizard");
   });
 
   test(`${name} refuses a Node it cannot run on`, () => {

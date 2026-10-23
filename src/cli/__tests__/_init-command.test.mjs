@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2025-2026 pixu1980
 // SPDX-License-Identifier: MIT
 /**
- * `pix-galaxy-mcp init`: the shell path `/pix-init` names, and the same work.
+ * `rule-mcp init`: the shell path `/pix-init` names, and the same work.
  *
  * A project pointed at by `--dir` is prepared without touching this checkout:
  * the recorder directory is created under the state dir, the git governance is
@@ -15,7 +15,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { test } from "node:test";
 
-const BIN = fileURLToPath(new URL("../../../bin/pix-galaxy-mcp.js", import.meta.url));
+const BIN = fileURLToPath(new URL("../../../bin/rule-mcp.js", import.meta.url));
 
 /** Run the CLI in a sandboxed home and state dir. */
 function run(args) {

@@ -23,12 +23,12 @@ three that make an eval worth running.
 
 ## The four rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `eval-error-analysis-first` | An eval suite written with no trace review behind it | B | n/a |
-| `eval-judge-calibrated` | An LLM judge with no agreement measurement against labels | B | n/a |
-| `eval-binary-per-failure-mode` | A judge scoring several failure modes on one scale | B | n/a |
-| `eval-owner-named` | A section delegating the harness, telemetry or review process without naming the owner | B | partially red |
+| id                             | Rejects                                                                                | Tier | Today         |
+| ------------------------------ | -------------------------------------------------------------------------------------- | ---- | ------------- |
+| `eval-error-analysis-first`    | An eval suite written with no trace review behind it                                   | B    | n/a           |
+| `eval-judge-calibrated`        | An LLM judge with no agreement measurement against labels                              | B    | n/a           |
+| `eval-binary-per-failure-mode` | A judge scoring several failure modes on one scale                                     | B    | n/a           |
+| `eval-owner-named`             | A section delegating the harness, telemetry or review process without naming the owner | B    | partially red |
 
 ## Phases
 
@@ -80,13 +80,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Door and neighbours | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Door and neighbours  | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

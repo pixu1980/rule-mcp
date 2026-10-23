@@ -21,7 +21,7 @@ test("a minimal install plan is the runtime home, the skills reconcile and the c
 });
 
 test("building a plan touches no filesystem", () => {
-  const sentinel = join(homedir(), ".pix-galaxy-mcp-plan-sentinel");
+  const sentinel = join(homedir(), ".rule-mcp-plan-sentinel");
 
   buildInstallPlan({ agents: ["claude"], mode: "daemon", extras: { rules: true, skills: true, service: true, doctor: true }, context: { hasLocalBin: true, localBin: "/x" } });
 

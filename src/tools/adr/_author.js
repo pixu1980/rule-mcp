@@ -14,14 +14,14 @@ export function adrAuthor(read = gitConfig) {
     const name = read("user.name");
 
     if (!name) {
-      return "pix-galaxy-mcp";
+      return "rule-mcp";
     }
 
     const email = read("user.email");
 
     return email ? `${name} <${email}>` : name;
   } catch {
-    return "pix-galaxy-mcp";
+    return "rule-mcp";
   }
 }
 

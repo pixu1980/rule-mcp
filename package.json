@@ -1,38 +1,38 @@
 {
-  "name": "pix-galaxy-mcp",
+  "name": "rule-mcp",
   "version": "0.1.0",
-  "description": "MCP server for the pix-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
+  "description": "RuleMCP - MCP server for the pix-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "type": "module",
   "license": "MIT",
   "author": "pixu1980",
-  "homepage": "https://github.com/pixu1980/pix-galaxy-mcp",
-  "repository": "github:pixu1980/pix-galaxy-mcp",
+  "homepage": "https://github.com/pixu1980/rule-mcp",
+  "repository": "github:pixu1980/rule-mcp",
   "bugs": {
-    "url": "https://github.com/pixu1980/pix-galaxy-mcp/issues"
+    "url": "https://github.com/pixu1980/rule-mcp/issues"
   },
   "private": false,
   "publishConfig": {
     "access": "public"
   },
   "bin": {
-    "pix-galaxy-mcp": "./bin/pix-galaxy-mcp.js"
+    "rule-mcp": "./bin/rule-mcp.js"
   },
   "scripts": {
-    "dev": "node ./bin/pix-galaxy-mcp.js serve",
+    "dev": "node ./bin/rule-mcp.js serve",
     "case-studies": "node scripts/case-studies/index.mjs",
     "docs:dev": "node scripts/docs-site/serve.mjs",
     "docs:build": "node scripts/docs-site/build.mjs",
-    "dev:sse": "node ./bin/pix-galaxy-mcp.js serve --transport sse",
-    "dev:daemon": "node ./bin/pix-galaxy-mcp.js daemon start",
-    "inspector": "node ./node_modules/@modelcontextprotocol/inspector/cli/build/cli.js node ./bin/pix-galaxy-mcp.js serve",
-    "doctor": "node ./bin/pix-galaxy-mcp.js doctor",
+    "dev:sse": "node ./bin/rule-mcp.js serve --transport sse",
+    "dev:daemon": "node ./bin/rule-mcp.js daemon start",
+    "inspector": "node ./node_modules/@modelcontextprotocol/inspector/cli/build/cli.js node ./bin/rule-mcp.js serve",
+    "doctor": "node ./bin/rule-mcp.js doctor",
     "postinstall": "pnpm install -g . 2>/dev/null || true",
     "prepare": "node scripts/install/git-hooks/index.mjs",
     "hooks:install": "node scripts/install/git-hooks/index.mjs",
     "hooks:check": "node scripts/install/git-hooks/index.mjs --check",
-    "setup": "node ./bin/pix-galaxy-mcp.js setup",
-    "setup:uninstall": "node ./bin/pix-galaxy-mcp.js setup --uninstall",
-    "tools": "node ./bin/pix-galaxy-mcp.js tools list",
+    "setup": "node ./bin/rule-mcp.js setup",
+    "setup:uninstall": "node ./bin/rule-mcp.js setup --uninstall",
+    "tools": "node ./bin/rule-mcp.js tools list",
     "mcp:install": "bash ./scripts/install.sh --force",
     "mcp:install:ps1": "pwsh ./scripts/install.ps1",
     "reinstall": "bash ./scripts/reinstall.sh",

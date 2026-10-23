@@ -17,7 +17,7 @@ import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
-const BIN = fileURLToPath(new URL("../../../../bin/pix-galaxy-mcp.js", import.meta.url));
+const BIN = fileURLToPath(new URL("../../../../bin/rule-mcp.js", import.meta.url));
 
 /** Every shape a host reads as "do not run this tool call". */
 function stops(answer) {

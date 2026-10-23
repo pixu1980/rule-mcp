@@ -3,7 +3,7 @@
 /**
  * @module cli/tui
  *
- * Small, dependency-free Terminal UI primitives for pix-galaxy-mcp commands.
+ * Small, dependency-free Terminal UI primitives for rule-mcp commands.
  * Keeps command handlers focused on behavior while this module owns human
  * presentation: color, emojis, sections, compact tables, and JSON escape hatches.
  */

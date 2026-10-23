@@ -46,7 +46,7 @@ async function install(options) {
   const { context } = preflight();
 
   if (context.blocked) {
-    process.stderr.write("Preflight failed - run `pix-galaxy-mcp doctor` for details.\n");
+    process.stderr.write("Preflight failed - run `rule-mcp doctor` for details.\n");
     process.exitCode = 1;
 
     return;
@@ -59,7 +59,7 @@ async function install(options) {
     settleExit(
       printSummary({
         ...outcome,
-        title: "pix-galaxy-mcp setup",
+        title: "rule-mcp setup",
         nextSteps: installNextSteps({ mode: options.mode, dryRun: outcome.dryRun }),
       }),
     );
@@ -85,7 +85,7 @@ async function install(options) {
   const { counts } = await runPlain({
     plan,
     dryRun: options.dryRun,
-    title: "pix-galaxy-mcp setup",
+    title: "rule-mcp setup",
     nextSteps: installNextSteps({ mode: options.mode, dryRun: options.dryRun }),
   });
 
@@ -101,7 +101,7 @@ async function uninstall(options) {
     settleExit(
       printSummary({
         ...outcome,
-        title: "pix-galaxy-mcp uninstall",
+        title: "rule-mcp uninstall",
         nextSteps: uninstallNextSteps({ dryRun: outcome.dryRun, purged: options.purge }),
       }),
     );
@@ -116,7 +116,7 @@ async function uninstall(options) {
   const { counts } = await runPlain({
     plan,
     dryRun: options.dryRun,
-    title: "pix-galaxy-mcp uninstall",
+    title: "rule-mcp uninstall",
     nextSteps: uninstallNextSteps({ dryRun: options.dryRun, purged: purgeIds.length > 0 }),
   });
 

@@ -6,7 +6,7 @@
  * `scripts/install.{sh,ps1}` and `scripts/uninstall.{sh,ps1}` used to be a
  * second installer: agent detection, pickers, modes, instruction files, the
  * daemon service. They are bootstraps now (ADR 090) - check node, resolve the
- * binary, forward to `pix-galaxy-mcp setup` - and the contract worth asserting
+ * binary, forward to `rule-mcp setup` - and the contract worth asserting
  * is that they stay that way. Parity is the point: a question one platform
  * asks and the other does not is how the two drifted the first time.
  */
@@ -25,8 +25,8 @@ test("every bootstrap hands the arguments to the wizard", () => {
     const direction = name.startsWith("uninstall") ? /setup (--uninstall |@?\$?forwarded)/ : /setup/;
 
     assert.match(script, direction, `${name} must call setup`);
-    assert.match(script, /pnpm dlx pix-galaxy-mcp setup/, `${name} must be able to fetch the binary`);
-    assert.match(script, /npx --yes pix-galaxy-mcp setup/, `${name} must keep the npx fallback`);
+    assert.match(script, /pnpm dlx rule-mcp setup/, `${name} must be able to fetch the binary`);
+    assert.match(script, /npx --yes rule-mcp setup/, `${name} must keep the npx fallback`);
   }
 });
 
@@ -35,14 +35,14 @@ test("the binary is resolved, in the same order, before it is trusted", () => {
     const script = read(name);
 
     assert.match(script, /if \[ -f "\$local_bin" \]/, `${name} must prefer the checkout it came from`);
-    assert.match(script, /command -v pix-galaxy-mcp >\/dev\/null 2>&1 && pix-galaxy-mcp --version/, `${name} must verify the global shim launches, not just that it resolves`);
+    assert.match(script, /command -v rule-mcp >\/dev\/null 2>&1 && rule-mcp --version/, `${name} must verify the global shim launches, not just that it resolves`);
   }
 
   for (const name of WINDOWS) {
     const script = read(name);
 
     assert.match(script, /if \(Test-Path \$localBin\)/, `${name} must prefer the checkout it came from`);
-    assert.match(script, /& pix-galaxy-mcp --version \*> \$null/, `${name} must verify the global shim launches`);
+    assert.match(script, /& rule-mcp --version \*> \$null/, `${name} must verify the global shim launches`);
   }
 });
 

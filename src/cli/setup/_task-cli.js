@@ -9,14 +9,14 @@
 
 import { verifyGlobalCli } from "./_cli-verify.js";
 
-/** Prove the global `pix-galaxy-mcp` CLI on PATH actually answers. */
+/** Prove the global `rule-mcp` CLI on PATH actually answers. */
 export const cliVerifyTask = () => ({
   id: "cli",
   title: "Global CLI",
-  detail: "pix-galaxy-mcp --version, tools list and doctor answer",
+  detail: "rule-mcp --version, tools list and doctor answer",
   run: async ({ dryRun }) => {
     if (dryRun) {
-      return { status: "ok", summary: "would verify pix-galaxy-mcp on PATH" };
+      return { status: "ok", summary: "would verify rule-mcp on PATH" };
     }
 
     const result = verifyGlobalCli();

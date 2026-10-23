@@ -14,7 +14,7 @@ import { hermeticEnv, root } from "./_purge.fixture.mjs";
   mkdirSync(join(home, ".pi", "agent"), { recursive: true });
   writeFileSync(join(home, ".pi", "agent", "mcp.json"), '{"mcpServers":{}}\n');
   // Symlink-free local-binary install path: install.sh resolves the CLI from
-  // the repo (bin/pix-galaxy-mcp.js) and PIX_GALAXY_MCP_SKIP_GLOBAL_LINK=1
+  // the repo (bin/rule-mcp.js) and PIX_GALAXY_MCP_SKIP_GLOBAL_LINK=1
   // skips the global shim entirely, keeping the e2e hermetic.
   const path = [dirname(process.execPath), "/usr/bin", "/bin", "/usr/sbin", "/sbin", "/opt/homebrew/bin", "/usr/local/bin"].join(":");
   const hookPath = join(root, ".git", "hooks", "post-commit");
@@ -29,8 +29,8 @@ import { hermeticEnv, root } from "./_purge.fixture.mjs";
       timeout: 180_000,
     });
     assert.match(output, /Runtime home/, "install.sh must report the runtime home creation");
-    assert.ok(existsSync(join(home, ".pix-galaxy-mcp")), "install.sh must recreate ~/.pix-galaxy-mcp/");
-    assert.ok(existsSync(join(home, ".pix-galaxy-mcp", "state")), "install.sh must recreate state/");
+    assert.ok(existsSync(join(home, ".rule-mcp")), "install.sh must recreate ~/.rule-mcp/");
+    assert.ok(existsSync(join(home, ".rule-mcp", "state")), "install.sh must recreate state/");
     assert.ok(existsSync(join(home, ".pi", "agent", "mcp.json")), "pi must still be configured by the install");
   } catch (error) {
     if (error.stdout) {
@@ -47,4 +47,4 @@ import { hermeticEnv, root } from "./_purge.fixture.mjs";
   }
 }
 
-console.log("  \u{2705} install.sh explicitly recreates ~/.pix-galaxy-mcp/{state,data,projects,config}");
+console.log("  \u{2705} install.sh explicitly recreates ~/.rule-mcp/{state,data,projects,config}");
