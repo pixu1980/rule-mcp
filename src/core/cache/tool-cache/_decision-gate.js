@@ -41,6 +41,8 @@ async function runShadow(name, validated, gold) {
   }
 
   const base = baseRecord(name, evaluated.prompt, evaluated.candidates, startedAt);
+  const hasGold = Boolean(gold?.core);
+  const goldRoute = hasGold ? rawRouteOf(gold.core) : null;
 
   if (evaluated.reason) {
     recordShadow({
@@ -52,6 +54,10 @@ async function runShadow(name, validated, gold) {
       wouldReplay: false,
       reason: evaluated.reason,
       decisionCacheHit: false,
+      goldRoute,
+      candidateRoute: null,
+      correct: null,
+      goldMs: gold?.computeMs ?? null,
       ms: Date.now() - startedAt,
     });
 
@@ -59,8 +65,6 @@ async function runShadow(name, validated, gold) {
   }
 
   const decision = evaluated.decision;
-  const hasGold = Boolean(gold?.core);
-  const goldRoute = hasGold ? rawRouteOf(gold.core) : null;
   const candidateRoute = decision.candidate?.route ?? null;
 
   recordShadow({
