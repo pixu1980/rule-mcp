@@ -22,9 +22,10 @@ export const SHORTLIST_CAP = 6;
  * Build the one question the reranker asks.
  *
  * @param {Array<{ skill: string, description?: string }>} shortlist
+ * @param {string} [instructions] the prompt the model answers
  * @returns {{ pick: { type: "choice", instructions: string, criteria: Record<string, string> } }}
  */
-export function buildChoiceQuestion(shortlist) {
+export function buildChoiceQuestion(shortlist, instructions = "Which skill should answer this request?") {
   if (!Array.isArray(shortlist) || shortlist.length === 0) {
     throw new DecisionSupervisorError("decision shortlist needs at least one option", { code: "shortlist" });
   }
@@ -38,7 +39,7 @@ export function buildChoiceQuestion(shortlist) {
   return {
     pick: {
       type: "choice",
-      instructions: "Which skill should answer this request?",
+      instructions,
       criteria: Object.fromEntries(shortlist.map(({ skill, description }) => [skill, description ?? ""])),
     },
   };
@@ -69,11 +70,12 @@ export function probabilityOf(answer, pick) {
  *   ask: (prompt: string, questions: object) => Promise<any>,
  *   model?: string,
  *   cache?: { key: Function, read: Function, write: Function },
+ *   instructions?: string,
  * }} options
  * @returns {Promise<{ pick: string | null, probability: number, answers: object, usage: object, ms: number }>}
  */
-export async function rerankShortlist({ prompt, shortlist, ask, model, cache = decisionCache }) {
-  const questions = buildChoiceQuestion(shortlist);
+export async function rerankShortlist({ prompt, shortlist, ask, model, cache = decisionCache, instructions }) {
+  const questions = buildChoiceQuestion(shortlist, instructions);
   const key = cache.key({ model, state: prompt, questions });
   const hit = cache.read(key);
 
