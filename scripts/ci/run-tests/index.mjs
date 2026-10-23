@@ -10,14 +10,15 @@
  * with no runner edit.
  */
 import { spawnSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
 
 import { expandSuite, resolveSuite } from "./_expand.mjs";
 import { SUITES } from "./_suites.data.mjs";
 
 // Server code resolves `@src/*` through a hook (ADR 089). Every process this
-// runner spawns loads server code, so every one of them registers it.
-const ALIAS_HOOK = ["--import", fileURLToPath(new URL("../../alias-hook.mjs", import.meta.url))];
+// runner spawns loads server code, so every one of them registers it. The
+// `file://` URL is required: a bare `D:\...` path is rejected by `--import` on
+// Windows.
+const ALIAS_HOOK = ["--import", new URL("../../alias-hook.mjs", import.meta.url).href];
 
 // The compiled code cache never changes behavior, but a suite that reads a
 // cache another suite wrote is a suite whose result depends on run order.
