@@ -272,10 +272,10 @@ text forever.
    - "Claude attribution".
 3. `docs/05-env-variables.md`: `RULE_MCP_ADR_POLICY`, `NO_ADR`, `TELEMETRY` (full/anonymous/off),
    `NO_MCP_PROMPTS` (client list), and the feature -> env key table.
-4. `docs/07-engineering-guides.md`:
+4. `docs/08-engineering-guides.md`:
    - The init table: numbering hooks, merge driver, rules refresh, project install.
    - The handoff section: `handoff land` and `_pending/`.
-5. `docs/12-cli.md` and the census files: regenerate with the repo's generator (`feature`,
+5. `docs/13-cli.md` and the census files: regenerate with the repo's generator (`feature`,
    `project`, `handoff land|merge-index`, the new `setup` flags).
 6. Commit: `docs(project): document ADR policy, project installs, features and rules refresh`.
 

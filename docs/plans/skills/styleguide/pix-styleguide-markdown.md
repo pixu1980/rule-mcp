@@ -172,7 +172,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Run the corpus gate.
 - [ ] Run the link-integrity test over the samples.
 - [ ] Run `prettier --check` on the samples.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 

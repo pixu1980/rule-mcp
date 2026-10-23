@@ -266,7 +266,7 @@ Shared files: none: absorbed into the leaf plans named above
 
 - [ ] Promote Tier A rules to blocking once the corpus reports 100% precision
       and recall per rule.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census` and commit.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census` and commit.
 - [ ] Run the full project gates listed below.
 - [ ] Add the changelog entry and a scoped conventional commit.
 
@@ -302,5 +302,5 @@ the promotion list.
 ## See also
 
 - `docs/plans/devops-guardrails.md` - the sibling plan for the devops area
-- `docs/14-guardrails.md` - the generated guardrail census
-- `docs/07-engineering-guides.md` - the guardrail workflow and quality gates
+- `docs/15-guardrails.md` - the generated guardrail census
+- `docs/08-engineering-guides.md` - the guardrail workflow and quality gates

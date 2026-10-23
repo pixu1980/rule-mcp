@@ -170,7 +170,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
       rejected.
 - [ ] Confirm lint-staged touches only staged files.
 - [ ] Confirm `HUSKY=0` disables the hooks cleanly.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 

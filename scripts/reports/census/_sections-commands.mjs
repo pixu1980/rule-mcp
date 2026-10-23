@@ -75,14 +75,14 @@ export function commandKindsSection(data) {
       return [`**${entry.kind}**: ${entry.commands.map((name) => `\`/${name}\``).join(", ")}`, ""];
     }),
     `The ${named("persona").commands.length} persona commands are one per role and operation`,
-    "([`13-personas.md`](13-personas.md)).",
+    "([`14-personas.md`](14-personas.md)).",
     "",
   ];
 }
 
 /**
  * The block the workflow chapter carries: what a developer types, and the
- * counts behind each kind. Written into `docs/07-engineering-guides.md`.
+ * counts behind each kind. Written into `docs/08-engineering-guides.md`.
  */
 export function commandSurfaceBlock(data) {
   const kinds = commandKinds(data);
@@ -114,7 +114,7 @@ export function commandSurfaceBlock(data) {
       .join(", ")}`,
     "",
     "Every command, with its description and its install target, is in",
-    "[`11-instructions.md`](11-instructions.md). Regenerate this block with `pnpm census`.",
+    "[`12-instructions.md`](12-instructions.md). Regenerate this block with `pnpm census`.",
     "",
   ];
 }

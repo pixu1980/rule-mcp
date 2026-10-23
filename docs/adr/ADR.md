@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [168](168-insert-a-quick-start-chapter-and-shift-the-handbook-numbering.md)                                             | Insert a quick-start chapter and shift the handbook numbering                                             | 2026-10-23 | accepted   | docs, handbook, process                                                             |
 | [167](167-set-the-decision-cache-replay-floor-to-0-70.md)                                                               | Set the decision-cache replay floor to 0.70                                                               | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md)                                                      | Keep the third corpus slice and leave the replay off                                                      | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md)                                                | Seed the decision-cache corpus with historical paraphrases                                                | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
@@ -183,6 +184,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [168](168-insert-a-quick-start-chapter-and-shift-the-handbook-numbering.md)                                             | Create docs/07-quick-start.md as the shallow entry and shift the existing chapters 07-16 to 08-17. The engineering guides become chapter 08 and keep their depth; the generated inventories become chapters 09-17, so the...    | A reader gets a short, practical entry before the deep guide, and the sequence stays gapless from 01 to 17. The generated documents still occupy the tail, so the numbering test keeps its invariant.                           |
 | [167](167-set-the-decision-cache-replay-floor-to-0-70.md)                                                               | Adopt the symmetric gate instruction, drop queryHash from the state and deps/id from the candidate descriptions, add the asymmetric hub guard, and set SHADOW_THRESHOLD to 0.7, the measured floor.                             | The final corpus run measured 113 labeled predictions, 100 eligible, 13 guarded, 10 would replay at 0.70 and zero false replays; the report recommends 0.70 with 10 predictions and 0 wrong.                                    |
 | [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md)                                                      | Keep the third slice for its recall, and leave the replay off.                                                                                                                                                                  | The corpus is the best recall so far at 85.1%, but the floor still does not exist: the model's probability distribution puts too few predictions above 0.60 and one wrong at 0.55. Replay stays off.                            |
 | [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md)                                                | Adopt the 68 historical paraphrase seeds in the corpus benchmark.                                                                                                                                                               | Laya coverage rose to 88/105 (83.8%); predictions to 82. Wrong choices were 22 at 0.30 but 1 at 0.50 and 0 at 0.55, where 9 predictions were correct (one short of the 10-sample floor).                                        |
@@ -498,6 +500,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### docs
 
+- [168](168-insert-a-quick-start-chapter-and-shift-the-handbook-numbering.md) Insert a quick-start chapter and shift the handbook numbering
 - [128](128-consolidate-the-feature-adrs-and-handoffs-into-one-commit-at-the-close-squash.md) Consolidate the feature ADRs and handoffs into one commit at the close squash
 - [119](119-close-out-audit-ui.md) Close out audit ui
 - [118](118-close-out-review-ui.md) Close out review ui
@@ -691,6 +694,17 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
 - [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
 
+### process
+
+- [168](168-insert-a-quick-start-chapter-and-shift-the-handbook-numbering.md) Insert a quick-start chapter and shift the handbook numbering
+- [153](153-orchestrate-the-plan-catalogue-with-a-staged-dependency-graph.md) Orchestrate the plan catalogue with a staged dependency graph
+- [149](149-choose-one-sdd-framework-per-repository-instead-of-peer-methodology-skills.md) Choose one SDD framework per repository instead of peer methodology skills
+- [148](148-merge-simplicity-english-and-fingerprint-into-rule-process-ai.md) Merge simplicity, English and fingerprint into rule-process-ai
+- [145](145-move-the-readme-skill-from-styleguide-to-process.md) Move the README skill from styleguide to process
+- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
+- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
+- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
+
 ### security
 
 - [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
@@ -701,16 +715,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [045](045-migrate-repo-tooling-to-eslint-10-flat-config-with-eslint-plugin-unicorn.md) Migrate repo tooling to ESLint 10 flat config with eslint-plugin-unicorn
 - [019](019-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
 - [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
-
-### process
-
-- [153](153-orchestrate-the-plan-catalogue-with-a-staged-dependency-graph.md) Orchestrate the plan catalogue with a staged dependency graph
-- [149](149-choose-one-sdd-framework-per-repository-instead-of-peer-methodology-skills.md) Choose one SDD framework per repository instead of peer methodology skills
-- [148](148-merge-simplicity-english-and-fingerprint-into-rule-process-ai.md) Merge simplicity, English and fingerprint into rule-process-ai
-- [145](145-move-the-readme-skill-from-styleguide-to-process.md) Move the README skill from styleguide to process
-- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
-- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
-- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
 
 ### quality-gate
 

@@ -182,7 +182,7 @@ Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fix
 - [ ] Implement the four rules with fixtures and a unit test each.
 - [ ] Apply them to every area router, not only this one.
 - [ ] Promote Tier A after the corpus gate reports 100%.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 

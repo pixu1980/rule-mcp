@@ -236,7 +236,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Vendor the role and attribute snapshot.
 - [ ] Add the six rules with fixtures and a unit test each.
 - [ ] Promote Tier A after the corpus gate reports 100%.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 - [ ] Write the ADR for the vendored ARIA snapshot, since it adds a data source
       the engine did not have before.
 

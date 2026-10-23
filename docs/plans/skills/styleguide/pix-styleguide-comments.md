@@ -150,7 +150,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Add the four rules with fixtures and a unit test each.
 - [ ] Add the false-positive matrix and the Markdown span check.
 - [ ] Promote the Tier A rules after the corpus gate reports 100%.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 - [ ] Write the ADR for the JSDoc ownership move, since it moves a rule between
       skills.
 

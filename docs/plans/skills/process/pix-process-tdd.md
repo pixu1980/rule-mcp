@@ -272,7 +272,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 - [ ] Implement the four rules with fixtures and a unit test each.
 - [ ] Promote the Tier A rules after the corpus gate reports 100%.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 - [ ] Write the ADR if the runner rule or the rule family turns out to be
       structural.
 

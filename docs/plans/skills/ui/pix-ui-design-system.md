@@ -208,7 +208,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 - [ ] Build the case-study fixture and confirm the matrix renders every state.
 - [ ] Run the a11y criteria report on the fixture as the Pass 1 sample.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 

@@ -188,7 +188,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 ### Phase 4 - Verification
 
 - [ ] Run the gates below.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census` and update frontmatter `guardrails:` on the skill.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census` and update frontmatter `guardrails:` on the skill.
 - [ ] Confirm `SECTION_FOR_TYPE` lock test fails if the skill table and `_sections.mjs` diverge.
 
 ## Model assignment

@@ -420,16 +420,23 @@ Stage 3 gate record (2026-10-22):
 
 ### Stage 3.5 - Quick-start before the engineering guides
 
-- [ ] Create `docs/07-quick-start.md`: the main flows in short, practical
+- [x] Create `docs/07-quick-start.md`: the main flows in short, practical
       examples - init, check, fix, handoff/handon, personas, the cache and the
       decision layer - so a reader can use the server without reading a guide.
-- [ ] Renumber `docs/07-engineering-guides.md` to `docs/08-engineering-guides.md`
+      Evidence: the chapter covers all eight flows; `tests/docs/quick-start.test.mjs`
+      passes 4/4.
+- [x] Renumber `docs/07-engineering-guides.md` to `docs/08-engineering-guides.md`
       and update the README index, every cross-reference and the docs numbering
       tests. The quick-start is the shallow entry; the engineering guides stay
-      the deep version.
-- [ ] Gate: the docs numbering doctor and the docs tests pass with the new
+      the deep version. Evidence: chapters 07-16 shifted to 08-17; the README
+      index, live handbook references, census generators, docs-site routes and
+      tests, and the pre-commit hook follow the new numbers; `pnpm census:check`
+      reports the census is current.
+- [x] Gate: the docs numbering doctor and the docs tests pass with the new
       number, and the quick-start covers every flow the engineering guides list
-      as a chapter.
+      as a chapter. Evidence: `tests/docs` 83/84, the only failure being the
+      five pre-existing 150-line offenders; docs-site 13/13; link-integrity and
+      the numbering test green; the quick-start test enforces the eight flows.
 
 ### Stage 4 - Close `decision-models` on `ge`, then merge `ge`
 

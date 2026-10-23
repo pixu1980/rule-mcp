@@ -40,7 +40,7 @@ rule-mcp doctor # health report for your machine
 ## How to contribute
 
 1. Read `docs/README.md`, then the numbered handbook chapters relevant to
-   your change (`docs/07-engineering-guides.md` first for process).
+   your change (`docs/08-engineering-guides.md` first for process).
 2. Open work is tracked in the issue tracker; plans inside the repo are
    deleted when fully executed or obsolete.
 3. Small fixes: open the pull request directly.

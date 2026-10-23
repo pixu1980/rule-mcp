@@ -157,7 +157,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
       every invalid sample fails.
 - [ ] Verify the IBAN mod-97 and the Luhn implementation with known vectors.
 - [ ] Mock VIES and confirm the client handles both answers.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 

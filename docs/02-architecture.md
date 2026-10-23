@@ -45,7 +45,7 @@ The flow graph below is the same path an agent takes, top to bottom.
 | Guardrails     | Deterministic checks by family / framework                                        |
 | CLI            | Install, doctor, serve, setup, tools                                              |
 
-Live counts and the Command · Tool · Skill table: [Surface map](./16-surface-map.md). Full inventories: [08-16](./README.md).
+Live counts and the Command · Tool · Skill table: [Surface map](./17-surface-map.md). Full inventories: [09-17](./README.md).
 
 ## Design constraints
 
@@ -58,7 +58,7 @@ Live counts and the Command · Tool · Skill table: [Surface map](./16-surface-m
 
 - [Getting Started](./01-getting-started.md)
 - [Env vars](./05-env-variables.md)
-- [Surface map](./16-surface-map.md)
+- [Surface map](./17-surface-map.md)
 
 <!-- census:begin:surface-counts -->
 
@@ -80,9 +80,9 @@ Live counts and the Command · Tool · Skill table: [Surface map](./16-surface-m
 | Agent/IDE command targets | 13    | `src/core/agents/command-targets/index.js`    |
 | CLI commands              | 25    | `src/cli/_program.js`                         |
 | Hook events               | 4     | `src/core/agents/_hooks.js`                   |
-| Architecture decisions    | 167   | [`docs/adr/ADR.md`](adr/ADR.md)               |
+| Architecture decisions    | 168   | [`docs/adr/ADR.md`](adr/ADR.md)               |
 
 Regenerate with `pnpm census`. The inventories themselves are
-[`08-skills.md`](08-skills.md) through [`15-resources.md`](15-resources.md).
+[`09-skills.md`](09-skills.md) through [`16-resources.md`](16-resources.md).
 
 <!-- census:end:surface-counts -->

@@ -33,7 +33,7 @@
 <p>Architecture, surface map, prompts, guardrails, personas, CLI, and env vars.</p>
 </article>
 <article>
-<h3><a href="docs/16-surface-map.md">Surface map</a></h3>
+<h3><a href="docs/17-surface-map.md">Surface map</a></h3>
 <p>Every command, tool, and skill in one generated table: Command · Tool · Skill.</p>
 </article>
 </section>

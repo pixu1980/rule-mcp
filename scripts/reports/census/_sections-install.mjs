@@ -61,7 +61,7 @@ export function agentTargetSection(_data) {
       : []),
     "Regenerate with `pnpm census`.",
     "",
-    `Per-host formats and the command surface itself: [\`11-instructions.md\`](11-instructions.md). Slash-command targets: ${COMMAND_TARGETS.length} across ${commands.size} hosts.`,
+    `Per-host formats and the command surface itself: [\`12-instructions.md\`](12-instructions.md). Slash-command targets: ${COMMAND_TARGETS.length} across ${commands.size} hosts.`,
     "",
   ];
 }

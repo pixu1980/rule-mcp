@@ -174,7 +174,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Build the fixture monorepo and run `turbo run build`.
 - [ ] Run `turbo run build --dry=json` and assert the graph.
 - [ ] Validate the reference `turbo.jsonc` against the schema.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 

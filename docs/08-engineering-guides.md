@@ -4,7 +4,8 @@ Practical guides for working on rule-mcp itself: the engineering loop,
 the guardrails, the docs pipeline, and the numbers that matter. Counts here are
 verified by `tests/docs/docs-accuracy.test.mjs` against the live registries; the
 heavy inventories live in the generated census blocks of `docs/01-`,
-`docs/02-` and `docs/04-`.
+`docs/02-` and `docs/04-`. For the shallow entry, start with
+[Quick start](./07-quick-start.md).
 
 ## The engineering loop
 
@@ -54,13 +55,14 @@ docs and is wired into `prebuild`:
 - `docs/01-getting-started.md` - the install targets
 - `docs/02-architecture.md` - tool-family counts
 - `docs/05-env-variables.md` - the environment registry
-- `docs/07-engineering-guides.md` - the command surface
+- `docs/08-engineering-guides.md` - the command surface
 
-The remaining generated documents (`08` to `16`) are whole files, not blocks,
+The remaining generated documents (`09` to `17`) are whole files, not blocks,
 and `docs/README.md` is the index. ADRs in `docs/adr/` are immutable decision
 records (a merger or a reversal writes a new ADR). A roadmap or plan never
 claims a numbered slot: it is deleted when fully executed or obsolete.
-`01-getting-started.md` is the first-run guide.
+`01-getting-started.md` installs the server; `07-quick-start.md` is the shallow
+entry.
 
 To add a surface, change the code, run `pnpm census`, verify
 `tests/docs/census-generated.test.mjs` and `tests/docs/docs-accuracy.test.mjs`, then
@@ -218,6 +220,6 @@ Measured on 2026-09-15, `develop`:
 **Sessions**: `/rule-compress`, `/rule-handoff`, `/rule-handon`, `/rule-init`, `/rule-stats`, `/rule-update`, `/rule-usage`
 
 Every command, with its description and its install target, is in
-[`11-instructions.md`](11-instructions.md). Regenerate this block with `pnpm census`.
+[`12-instructions.md`](12-instructions.md). Regenerate this block with `pnpm census`.
 
 <!-- census:end:command-surface -->

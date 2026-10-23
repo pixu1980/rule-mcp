@@ -5,13 +5,13 @@
       "file": "01-getting-started.md",
       "kind": "block",
       "marker": "agent-targets",
-      "sha256": "7f5e66660440d3535a8257b8e4e619ef98772dcb9d3d230e27cba3646968930b"
+      "sha256": "d6d212df6a1f1a46451470b6c47db8c37515696b39835036dc729b4c57fb0cf2"
     },
     {
       "file": "02-architecture.md",
       "kind": "block",
       "marker": "surface-counts",
-      "sha256": "02757cf84a943793a546f6ad9018390b54f1fb1a49da469f211c49aa81e27138"
+      "sha256": "1c955f01588c040b33aae167a1bbfb780b46c5290f7fd280c13d6e41d25a1f92"
     },
     {
       "file": "05-env-variables.md",
@@ -20,55 +20,55 @@
       "sha256": "bfbc2ca80875c16695af68c325d60bb57788d0a4bd2e49ddf5ff2a68176112f9"
     },
     {
-      "file": "07-engineering-guides.md",
+      "file": "08-engineering-guides.md",
       "kind": "block",
       "marker": "command-surface",
-      "sha256": "9572d81a9404c484fecbbb03f49ccb8ba5b5c10b192707f79a0a82c282a18463"
+      "sha256": "3c12bc699757a58aec31b6eaa5d1190d1ebe535e657c8b681d720dfb35f4ee9b"
     },
     {
-      "file": "08-skills.md",
+      "file": "09-skills.md",
       "kind": "document",
-      "sha256": "3df1088bfce7d289f867266a681316999d3c436b0f68d8d761e981b1e3947236"
+      "sha256": "3f60f7c677701c6fdf770f77814043c51f56c7c6c9d46ce2544d7edf0d2f92c7"
     },
     {
-      "file": "09-tools.md",
+      "file": "10-tools.md",
       "kind": "document",
-      "sha256": "ca0817af40d428f82a87fba15ebfb3622132833594b627cd387dc62720d31c63"
+      "sha256": "cc733b1cd3d8d2623c3e40a13d07ddbd151cb8d81b9d9661b13a8d4308f97c2c"
     },
     {
-      "file": "10-prompts.md",
+      "file": "11-prompts.md",
       "kind": "document",
-      "sha256": "d77290882e6e08d0532e6d7a86feef9e0a129275930a2ff0054335fd661b26fa"
+      "sha256": "2c3b4fdc67eaa250d569de34c3c0e91ef0442f0736386f572d0fe750e39ea148"
     },
     {
-      "file": "11-instructions.md",
+      "file": "12-instructions.md",
       "kind": "document",
-      "sha256": "b2417a82309895de0b5f75e58af7cfe5be06dc7df785fb1aa47a04392ce1cc24"
+      "sha256": "312144881ed882ffd887e965fe569545c81680b38518715ce5086687e3464bab"
     },
     {
-      "file": "12-cli.md",
+      "file": "13-cli.md",
       "kind": "document",
-      "sha256": "b885198535847030e3c88095cefff95af3f7916fc5e8607a2215d16d6b53a4e9"
+      "sha256": "6bd9df8d4fae12f2dd33c385ba970b78574be1b895a18a2ab402a559471e0a9f"
     },
     {
-      "file": "13-personas.md",
+      "file": "14-personas.md",
       "kind": "document",
-      "sha256": "775348b00f244ab0c3b7206fe37610dbf43c3a98496eae172d36825dd3760d31"
+      "sha256": "201617ba253726ed7a60679002f6d4e7d0ce2a869906774b4792e650c5e1d374"
     },
     {
-      "file": "14-guardrails.md",
+      "file": "15-guardrails.md",
       "kind": "document",
-      "sha256": "6249cc374c728cd2bab3e2a8071dc47983426ccfaa433d07d8d90c6bd73a3be6"
+      "sha256": "4dd2760b1b26f608f935a02aeba174b576676e69527f3181e25e221d23e4b45d"
     },
     {
-      "file": "15-resources.md",
+      "file": "16-resources.md",
       "kind": "document",
-      "sha256": "e8ee5d7926be835153a3e445e8908fc1680589f6890f8aa05207c2f30c0e647f"
+      "sha256": "ae8ad5715a618f29654e294c4d8b5442dbe5611d171febc047620380e6f9571c"
     },
     {
-      "file": "16-surface-map.md",
+      "file": "17-surface-map.md",
       "kind": "document",
-      "sha256": "5a1893fcf4720bef9e614c9d84f96de204cc2555c96ee297f88e7475e31680c0"
+      "sha256": "8cdd7d538e1aaab1a2684d825671aa87421091228ccf774c9f09dd2032d2688a"
     }
   ]
 }

@@ -55,11 +55,11 @@ test("the handbook quotes the surface the server serves", () => {
     .map((entry) => entry.name);
   const skillToolNames = new Set(catalog.map((name) => `rule_tool_${name.slice("rule-".length).replaceAll("-", "_")}`));
   const actionTools = liveTools().filter((name) => !skillToolNames.has(name));
-  const handbook = readFileSync(`${root}docs/09-tools.md`, "utf8");
+  const handbook = readFileSync(`${root}docs/10-tools.md`, "utf8");
   const quoted = handbook.match(/## Action tools \((\d+)\)/);
 
   assert.ok(quoted, "the tool reference states its action-tool count");
-  assert.equal(Number(quoted[1]), actionTools.length, "docs/09-tools.md drifted - run `pnpm census`");
+  assert.equal(Number(quoted[1]), actionTools.length, "docs/10-tools.md drifted - run `pnpm census`");
 
   const skillQuoted = handbook.match(/Arguments, the same for all (\d+)/);
 

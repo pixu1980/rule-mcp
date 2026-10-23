@@ -174,7 +174,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Build the fixture and run `biome ci` with the reference config.
 - [ ] Confirm the schema URL resolves for the installed version.
 - [ ] Run the migrator on a 1.x config and inspect the diff.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 

@@ -177,7 +177,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Build the fixture and run `eslint` with the reference config.
 - [ ] Confirm a `var` or `==` violation fails the run.
 - [ ] Run the migrator on a sample `.eslintrc` and check the output.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 

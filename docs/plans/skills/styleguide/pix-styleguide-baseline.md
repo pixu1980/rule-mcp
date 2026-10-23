@@ -152,7 +152,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Add the corpus scan with the curated feature list.
 - [ ] Add the alignment fixture.
 - [ ] Promote Tier A after the corpus gate reports 100%.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 - [ ] Write the ADR only if the Markdown-reading guardrail family is new to the
       engine, which it is: record the decision there.
 

@@ -19,7 +19,7 @@ Audited in this session (read-only):
 - `skills/rule-devops-deploy-preview/SKILL.md` (no guardrails directory)
 - `src/core/guardrails/engine/_registry.js` (`getGuardrails`, baseline skills, inheritance)
 - `src/core/guardrails/_scaffold.js` (file-presence scaffold checks)
-- `tests/fixtures/guardrail-corpus.mjs` and `docs/07-engineering-guides.md` (100% precision/recall gate)
+- `tests/fixtures/guardrail-corpus.mjs` and `docs/08-engineering-guides.md` (100% precision/recall gate)
 
 Current state: 4 rules only.
 
@@ -241,7 +241,7 @@ Shared files: none: absorbed into the leaf plans named above
 - [ ] Add the CI scripts for the runtime claims (health probe, teardown check).
 - [ ] Promote Tier A rules to blocking once the corpus reports 100% precision
       and recall per rule.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census` and commit.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census` and commit.
 - [ ] Run the full project gates listed below.
 - [ ] Add the changelog entry and a scoped conventional commit.
 
@@ -278,6 +278,6 @@ the promotion list.
 
 ## See also
 
-- `docs/14-guardrails.md` - the generated guardrail census
-- `docs/07-engineering-guides.md` - the guardrail workflow and quality gates
+- `docs/15-guardrails.md` - the generated guardrail census
+- `docs/08-engineering-guides.md` - the guardrail workflow and quality gates
 - `docs/plans/execution-plan.md` - the unrelated OSS stewardship plan

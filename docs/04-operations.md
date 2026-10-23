@@ -9,10 +9,10 @@ The tool, prompt and resource lists are generated from the running server by
 `pnpm census`, so they cannot drift from what it actually registers. They are
 never hand-edited; this document points at them instead of restating them.
 
-- Every tool, with its schema and modes: [09-tools.md](./09-tools.md)
-- Every prompt and its arguments: [10-prompts.md](./10-prompts.md)
-- Every `rule://` resource URI: [15-resources.md](./15-resources.md)
-- What each skill covers: [08-skills.md](./08-skills.md)
+- Every tool, with its schema and modes: [10-tools.md](./10-tools.md)
+- Every prompt and its arguments: [11-prompts.md](./11-prompts.md)
+- Every `rule://` resource URI: [16-resources.md](./16-resources.md)
+- What each skill covers: [09-skills.md](./09-skills.md)
 
 ## Plugins
 
