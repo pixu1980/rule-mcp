@@ -35,7 +35,7 @@ function stub(name, stdout = "") {
 
 stub("launchctl");
 stub("systemctl");
-stub("sc", "SERVICE_NAME: pix-galaxy-mcp");
+stub("sc", "SERVICE_NAME: rule-mcp");
 
 process.env.PATH = `${binDir}:${process.env.PATH}`;
 

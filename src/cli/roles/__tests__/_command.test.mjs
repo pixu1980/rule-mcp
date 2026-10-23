@@ -70,7 +70,7 @@ test("show renders a known role and refuses an unknown one", () => {
 test("new refuses with no id, an existing id, or a missing title/skills, and writes on success", () => {
   const noId = out(() => rolesCommand("new", {}));
 
-  assert.match(noId, /Usage: pix-galaxy-mcp roles new/);
+  assert.match(noId, /Usage: rule-mcp roles new/);
   assert.equal(process.exitCode, 1);
 
   process.exitCode = 0;
@@ -123,7 +123,7 @@ test("deprecate refuses an unknown id, a missing --by, an unknown --by, and writ
 test("an unrecognized subcommand prints usage and exits 1", () => {
   const text = out(() => rolesCommand("bogus"));
 
-  assert.match(text, /Usage: pix-galaxy-mcp roles/);
+  assert.match(text, /Usage: rule-mcp roles/);
   assert.equal(process.exitCode, 1);
   process.exitCode = 0;
 });

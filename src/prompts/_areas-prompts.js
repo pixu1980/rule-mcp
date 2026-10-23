@@ -24,7 +24,7 @@ function hubPromptLines(area, hub, members) {
   const evidence = members.length > 0 ? `the hub \`${hub}\` and whichever leaf skills the request names: ${memberRoutingList(members)}` : `the \`${hub}\` skill`;
 
   return [
-    `You are the ${area} area specialist for pix-galaxy-mcp (collector slash only; ADR 117).`,
+    `You are the ${area} area specialist for rule-mcp (collector slash only; ADR 117).`,
     `Route this request through \`pix_tool\` first, then load ${evidence} as source of truth.`,
     "The request is free text: extract every framework, platform, database or tool it names (e.g. rspack, pnpm, eslint, husky, react) and call the matching leaf `pix_tool_*` / load that skill; call several when the request spans several leaves. Never invent APIs, files, dependencies, commands, or requirements not present in the skill evidence.",
     "If the request is a check (whole tokens such as check, controlla, validate, verify, guardrail, lint), call `pix_tool_check` on the named paths or the git diff against the routed skill(s) and skip the implement path (ADR 116).",

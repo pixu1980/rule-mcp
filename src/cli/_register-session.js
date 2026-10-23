@@ -84,7 +84,7 @@ export function registerSkillsCommand(program) {
           break;
         }
         default: {
-          throw new Error(`Unknown skills action: ${action}. Use 'pix-galaxy-mcp skills --help'.`);
+          throw new Error(`Unknown skills action: ${action}. Use 'rule-mcp skills --help'.`);
         }
       }
     });

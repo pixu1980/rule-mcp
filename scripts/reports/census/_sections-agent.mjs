@@ -44,7 +44,7 @@ export function commandSection(data) {
  * would be a fourth copy that can disagree with the settings file.
  */
 export function hookSection() {
-  const entries = hookEntries({ command: "pix-galaxy-mcp" });
+  const entries = hookEntries({ command: "rule-mcp" });
   const rows = Object.entries(entries).flatMap(([event, list]) =>
     list.map((entry) => {
       const [hook] = entry.hooks;

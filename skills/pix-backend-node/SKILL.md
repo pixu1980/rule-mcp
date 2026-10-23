@@ -123,7 +123,7 @@ app.get("/health", (_req: Request, res: Response) => {
 ### 5 · Apply the surrounding standards
 
 - Testing and coverage: align with `pix-devops-testing`.
-- Types: follow `pix-toolchain-typescript` (strict, no loose casts).
+- Types: follow `pix-styleguide-typescript` (strict, no loose casts).
 - Containers: follow `pix-devops-docker` for images and base-image policy.
 - Prose and records: `pix-styleguide-markdown` for documentation,
   `pix-process-adr` for decisions.
@@ -391,5 +391,5 @@ a dependency ([pix-toolchain-pnpm](../pix-toolchain-pnpm/SKILL.md)).
 
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher
 - [pix-backend](../pix-backend/SKILL.md) - Backend skill index
-- [pix-toolchain-project](../pix-toolchain-project/SKILL.md) - Project configuration baseline
+- [pix-styleguide-configuration](../pix-styleguide-configuration/SKILL.md) - Project configuration baseline
 - [pix-devops-testing](../pix-devops-testing/SKILL.md) - Testing and coverage

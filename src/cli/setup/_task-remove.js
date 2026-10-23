@@ -132,7 +132,7 @@ export const profilesTask = () => ({
 export const purgeTask = (ids) => ({
   id: "purge",
   title: "Purge state and config",
-  detail: "delete ~/.pix-galaxy-mcp, ~/.config/pix-galaxy-mcp and the compiled-code cache",
+  detail: "delete ~/.rule-mcp, ~/.config/rule-mcp and the compiled-code cache",
   run: ({ dryRun }) => {
     const results = purgeRuntimeDirs({ dryRun, ids });
 

@@ -33,10 +33,10 @@ test("a sensitive file name is refused before anything is compressed", async () 
 });
 
 test("an ordinary file name compresses, and the saving is reported", async () => {
-  const result = await call({ text: "The value is really just very large.", fileName: "docs/07-engineering-guides.md" });
+  const result = await call({ text: "The value is really just very large.", fileName: "docs/08-engineering-guides.md" });
 
   assert.notEqual(result.isError, true);
-  assert.equal(isSensitivePath("docs/07-engineering-guides.md"), false);
+  assert.equal(isSensitivePath("docs/08-engineering-guides.md"), false);
   assert.ok(result._meta.pixCompress.saved >= 0);
   assert.equal(result._meta.pixCompress.guarded, true, "a clean pass reports a clean guard");
   assert.deepEqual(result._meta.pixCompress.violations, []);

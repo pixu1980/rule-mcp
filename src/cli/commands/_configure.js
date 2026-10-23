@@ -98,7 +98,7 @@ export async function configureCommand(opts = {}) {
   }
 
   writeEnvironmentConfig(saved);
-  outro(`Saved ${Object.keys(PIX_VARS).length} variable(s). Run 'pix-galaxy-mcp config env --list' to review.`);
+  outro(`Saved ${Object.keys(PIX_VARS).length} variable(s). Run 'rule-mcp config env --list' to review.`);
 }
 
 /**

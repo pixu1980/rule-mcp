@@ -58,7 +58,7 @@ export function renumberLines(renumber, { isMinimal }) {
     "### Renumber",
     "",
     `Renumbered ${renumber.applied.renamed} document(s); ${renumber.applied.referencesUpdated} file(s) had references updated${regenerated.length > 0 ? `; ${regenerated.join(" and ")} regenerated` : ""}.`,
-    "Commit messages are not rewritten; run `pix-galaxy-mcp handoff doctor --fix-commits` to amend the local ones.",
+    "Commit messages are not rewritten; run `rule-mcp handoff doctor --fix-commits` to amend the local ones.",
     "",
   ];
 }

@@ -10,8 +10,13 @@ skills:
   - "deletion as a feature"
   - "complexity budgets"
 evidenceSkills:
-  - "pix-process-simplicity"
-  - "pix-styleguide-patterns"
+  - "pix-process-ai"
+  - "pix-styleguide-naming"
+  - "pix-styleguide-file-tree"
+  - "pix-styleguide-html"
+  - "pix-styleguide-css"
+  - "pix-styleguide-javascript"
+  - "pix-styleguide-a11y"
 aliases:
   - "simplicity-staff-eng"
   - "staff engineer for simplicity"

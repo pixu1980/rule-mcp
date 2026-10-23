@@ -5,7 +5,7 @@
  *
  * Runtime accounting of the token-efficiency pipeline (text compression +
  * tokensave suppression + directives). Pure counters, zero dependencies.
- * Surfaced by `pix-galaxy-mcp doctor` so the savings are measurable, not
+ * Surfaced by `rule-mcp doctor` so the savings are measurable, not
  * anecdotal.
  */
 

@@ -3,7 +3,7 @@
 /**
  * @module cli/setup/runtime-home
  *
- * The runtime home (`~/.pix-galaxy-mcp/`) and the compiled-code cache: create
+ * The runtime home (`~/.rule-mcp/`) and the compiled-code cache: create
  * them on install, report them on uninstall, delete them only when the user
  * asks to purge.
  *
@@ -25,12 +25,12 @@ import { DEFAULT_OPTOUT_ENV, readEnvConfig, writeEnvConfig } from "../installers
 import { getRuntimePaths } from "../paths/index.js";
 
 /** Mirrors `cli/installers/_env.js` (not exported there): per-user compile cache. */
-const COMPILE_CACHE_DIR = join(homedir(), ".cache", "pix-galaxy-mcp", "compile-cache");
+const COMPILE_CACHE_DIR = join(homedir(), ".cache", "rule-mcp", "compile-cache");
 
 /** Also `cli/installers/_env.js`: the switches file and the stored model keys. */
-const ENV_CONFIG_DIR = join(homedir(), ".config", "pix-galaxy-mcp");
+const ENV_CONFIG_DIR = join(homedir(), ".config", "rule-mcp");
 
-/** Former `pixGalaxyHome()` - now the pix-galaxy-mcp runtime root. */
+/** Former `pixGalaxyHome()` - now the rule-mcp runtime root. */
 const pixGalaxyHome = () => getRuntimePaths().homeDir;
 
 /** Subdirectories the runtime expects to find under the home root. */

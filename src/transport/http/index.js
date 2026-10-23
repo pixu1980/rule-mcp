@@ -3,7 +3,7 @@
 /**
  * @module transport/http
  *
- * Streamable HTTP transport for pix-galaxy-mcp (MCP spec 2025-03-26+, current
+ * Streamable HTTP transport for rule-mcp (MCP spec 2025-03-26+, current
  * 2025-06-18 / 2025-11-25). Supersedes the HTTP+SSE transport in
  * transport/sse/, which is kept only as a back-compat alias.
  *

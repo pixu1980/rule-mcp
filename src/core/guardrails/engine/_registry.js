@@ -62,11 +62,9 @@ export const BASELINE_SKILLS = [
   "pix-styleguide-naming",
   "pix-styleguide-file-tree",
   "pix-styleguide-a11y",
-  "pix-styleguide-fingerprint",
-  "pix-styleguide-english",
+  "pix-process-ai",
   "pix-styleguide-comments",
   "pix-styleguide-typescript",
-  "pix-process-simplicity",
   "pix-toolchain-pnpm",
 ];
 
@@ -87,9 +85,7 @@ export const SKILL_FRAMEWORK_MAP = {
   "pix-styleguide-markdown": "vanilla",
   "pix-styleguide-a11y": "vanilla",
   "pix-styleguide-naming": "vanilla",
-  "pix-styleguide-patterns": "vanilla",
-  "pix-styleguide-validation": "vanilla",
-  "pix-frontend-vanilla-reactive": "vanilla-reactive",
+  "pix-data-validation": "vanilla",
   pix: "vanilla",
 };
 

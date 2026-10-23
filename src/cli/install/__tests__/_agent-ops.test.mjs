@@ -8,7 +8,7 @@ import { join } from "node:path";
 import { test } from "node:test";
 
 const home = mkdtempSync(join(tmpdir(), "pix-agentops-"));
-const ENTRY = "/tmp/fake-pix-galaxy-mcp.js";
+const ENTRY = "/tmp/fake-rule-mcp.js";
 
 test.before(() => {
   process.env.HOME = home;

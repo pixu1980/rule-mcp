@@ -28,7 +28,7 @@ export const CORPUS = [
   // ── TypeScript: the split added in P3 ──
   { prompt: "should I use enum or a union type", expect: "styleguide-typescript", area: "styleguide" },
   { prompt: "typescript any vs unknown in a catch block", expect: "styleguide-typescript", area: "styleguide" },
-  { prompt: "tsconfig strict mode settings", expect: "toolchain-typescript", area: "toolchain" },
+  { prompt: "tsconfig strict mode settings", expect: "styleguide-typescript", area: "styleguide" },
 
   // ── The mandatory document boilerplate ──
   { prompt: "html boilerplate for a new page", expect: "styleguide-html", area: "styleguide" },
@@ -69,8 +69,8 @@ export const CORPUS = [
   { prompt: "node process runs out of memory on file upload", expect: "backend-node", area: "backend" },
   { prompt: "jwt verification best practices", expect: "backend-security", area: "backend" },
   { prompt: "should logout revoke all sessions", expect: "backend-security", area: "backend" },
-  { prompt: "idempotency key for payments endpoint", expect: "backend-api-design", area: "backend" },
-  { prompt: "api error response format", expect: "backend-api-design", area: "backend" },
+  { prompt: "idempotency key for payments endpoint", expect: "backend-node", area: "backend" },
+  { prompt: "api error response format", expect: "backend-security", area: "backend" },
   { prompt: "express middleware for rate limiting", expect: "backend-express", area: "backend" },
 
   // ── Data ──
@@ -88,42 +88,42 @@ export const CORPUS = [
   { prompt: "accessibility guidelines a11y WCAG standards", expect: "styleguide-a11y", area: "styleguide" },
 
   // ── Process and AI: added in P2 and P4 ──
-  { prompt: "should I extract this into a helper function", expect: "process-simplicity", area: "process" },
+  { prompt: "should I extract this into a helper function", expect: "process-ai", area: "process" },
   // Compression is tool-only after ADR 115 (pix_tool_compress / /pix-compress), not a skill route.
 
   {
     prompt: "remove em dashes and use american english spelling",
-    expect: "styleguide-english",
+    expect: "process-ai",
     area: "styleguide",
   },
   {
     prompt: "americanize the comments: color -> color, behavior -> behavior",
-    expect: "styleguide-english",
+    expect: "process-ai",
     area: "styleguide",
   },
   {
     prompt: "my writing looks AI generated, fix the punctuation",
-    expect: "styleguide-fingerprint",
+    expect: "process-ai",
     area: "styleguide",
   },
   { prompt: "how do I evaluate my llm feature", expect: "ai-evals", area: "ai" },
   { prompt: "llm as a judge prompt design", expect: "ai-evals", area: "ai" },
   { prompt: "error analysis on agent traces", expect: "ai-evals", area: "ai" },
-  { prompt: "how should AI fit our development lifecycle", expect: "process-ai-sdlc", area: "process" },
-  { prompt: "plan before code and approval gates", expect: "process-ai-sdlc", area: "process" },
+  { prompt: "how should AI fit our development lifecycle", expect: "process-ai", area: "process" },
+  { prompt: "plan before code and approval gates", expect: "process-ai", area: "process" },
   { prompt: "how do I write a better prompt for the agent", expect: "ai-prompting", area: "ai" },
   { prompt: "teaching a junior to use AI without losing skills", expect: "ai-prompting", area: "ai" },
 
   // ── R6: the retrieval, tracing and generated-test sections ──
-  { prompt: "when is a vector database the wrong answer", expect: "ai-agents", area: "ai" },
-  { prompt: "embeddings or a code graph for retrieval", expect: "ai-agents", area: "ai" },
+  { prompt: "when is a vector database the wrong answer", expect: "ai-context-engineering", area: "ai" },
+  { prompt: "embeddings or a code graph for retrieval", expect: "ai-context-engineering", area: "ai" },
   { prompt: "what should a generation span carry", expect: "devops-observability", area: "devops" },
   { prompt: "trace an agent and see where the tokens went", expect: "devops-observability", area: "devops" },
   { prompt: "should I let the model write our integration tests", expect: "ai-evals", area: "ai" },
   { prompt: "how should I review code I did not write", expect: "process-code-review", area: "process" },
   { prompt: "reviewing a generated pull request", expect: "process-code-review", area: "process" },
   { prompt: "the assistant keeps adding dependencies", expect: "process-code-review", area: "process" },
-  { prompt: "why is writing code faster but delivering not", expect: "process-simplicity", area: "process" },
+  { prompt: "why is writing code faster but delivering not", expect: "process-ai", area: "process" },
   { prompt: "ask for a design critique that is actually actionable", expect: "ui-design-system", area: "ui" },
   { prompt: "the generated screen has no empty or error state", expect: "ui-design-system", area: "ui" },
   { prompt: "how do I critique a generated interface", expect: "ui-design-system", area: "ui" },
@@ -140,8 +140,8 @@ export const CORPUS = [
   { prompt: "datalist for suggestions", expect: "styleguide-html", area: "styleguide" },
   { prompt: "why is a random uuid primary key slow at scale", expect: "data-sql", area: "data" },
   { prompt: "what do flaky tests cost us", expect: "devops-testing", area: "devops" },
-  { prompt: "three ways to ignore a file in git", expect: "toolchain-commits", area: "toolchain" },
-  { prompt: "block a merge request when a rule is violated", expect: "devops-gitlab-ci", area: "devops" },
+  { prompt: "three ways to ignore a file in git", expect: "styleguide-git", area: "styleguide" },
+  { prompt: "block a merge request when a rule is violated", expect: "devops-testing", area: "devops" },
   { prompt: "do we need a framework for this page at all", expect: "frontend", area: "frontend" },
   { prompt: "copy to clipboard without a helper library", expect: "platform-web", area: "platform" },
 
@@ -161,7 +161,7 @@ export const CORPUS = [
   { prompt: "prettier or biome for formatting", expect: "toolchain", area: "toolchain" },
   { prompt: "write failing tests first", expect: "devops-testing", area: "devops" },
   { prompt: "multi-stage docker build for node", expect: "devops-docker", area: "devops" },
-  { prompt: "conventional commit message with a scope", expect: "toolchain-commits", area: "toolchain" },
+  { prompt: "conventional commit message with a scope", expect: "styleguide-git", area: "styleguide" },
   { prompt: "vite config for a library build", expect: "toolchain-vite", area: "toolchain" },
   { prompt: "should dependencies use a caret or an exact version", expect: "toolchain-pnpm", area: "toolchain" },
   { prompt: "do I need the packageManager field for corepack", expect: "toolchain-pnpm", area: "toolchain" },

@@ -1,6 +1,6 @@
 # Architecture
 
-How a request moves through pix-galaxy-mcp, simplified and product-facing. The
+How a request moves through rule-mcp, simplified and product-facing. The
 decision log behind it is not part of this site.
 
 ## Request path
@@ -45,7 +45,7 @@ The flow graph below is the same path an agent takes, top to bottom.
 | Guardrails     | Deterministic checks by family / framework                                        |
 | CLI            | Install, doctor, serve, setup, tools                                              |
 
-Live counts and the Command · Tool · Skill table: [Surface map](./16-surface-map.md). Full inventories: [08-16](./README.md).
+Live counts and the Command · Tool · Skill table: [Surface map](./17-surface-map.md). Full inventories: [09-17](./README.md).
 
 ## Design constraints
 
@@ -58,7 +58,7 @@ Live counts and the Command · Tool · Skill table: [Surface map](./16-surface-m
 
 - [Getting Started](./01-getting-started.md)
 - [Env vars](./05-env-variables.md)
-- [Surface map](./16-surface-map.md)
+- [Surface map](./17-surface-map.md)
 
 <!-- census:begin:surface-counts -->
 
@@ -66,23 +66,23 @@ Live counts and the Command · Tool · Skill table: [Surface map](./16-surface-m
 
 | Surface                   | Count | Defined in                                    |
 | ------------------------- | ----- | --------------------------------------------- |
-| MCP tools                 | 110   | `src/tools/*` via `src/tools/router/index.js` |
+| MCP tools                 | 102   | `src/tools/*` via `src/tools/router/index.js` |
 | - action tools            | 21    | one per module, registered explicitly         |
-| - skill tools             | 89    | one per catalog skill, generated              |
-| MCP resources             | 186   | `src/resources/index.js`                      |
+| - skill tools             | 81    | one per catalog skill, generated              |
+| MCP resources             | 170   | `src/resources/index.js`                      |
 | MCP prompts               | 38    | `src/prompts/index.js`                        |
 | - reusable                | 19    | workflow and area prompts                     |
 | - persona                 | 19    | 19 active roles, one command each             |
-| Skills                    | 89    | `skills/pix-*/SKILL.md`                       |
+| Skills                    | 81    | `skills/pix-*/SKILL.md`                       |
 | Review personas           | 19    | `src/core/review/roles/index.js`              |
-| Guardrail rules           | 8     | `src/core/guardrails/index.js`                |
+| Guardrail rules           | 9     | `src/core/guardrails/index.js`                |
 | Agent slash commands      | 41    | `src/core/agents/commands/index.js`           |
 | Agent/IDE command targets | 13    | `src/core/agents/command-targets/index.js`    |
-| CLI commands              | 24    | `src/cli/_program.js`                         |
+| CLI commands              | 25    | `src/cli/_program.js`                         |
 | Hook events               | 4     | `src/core/agents/_hooks.js`                   |
-| Architecture decisions    | 134   | [`docs/adr/ADR.md`](adr/ADR.md)               |
+| Architecture decisions    | 169   | [`docs/adr/ADR.md`](adr/ADR.md)               |
 
 Regenerate with `pnpm census`. The inventories themselves are
-[`08-skills.md`](08-skills.md) through [`15-resources.md`](15-resources.md).
+[`09-skills.md`](09-skills.md) through [`16-resources.md`](16-resources.md).
 
 <!-- census:end:surface-counts -->

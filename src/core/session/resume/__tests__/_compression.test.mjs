@@ -17,6 +17,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
+import "../../../../../tests/fixtures/git-hermetic.mjs";
 
 process.env.PIX_GALAXY_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "pix-resume-compression-"));
 process.env.PIX_GALAXY_MCP_NO_TELEMETRY = "1";

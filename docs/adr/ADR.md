@@ -8,6 +8,41 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [169](169-rename-the-server-to-rulemcp.md)                                                                              | Rename the server to RuleMCP                                                                              | 2026-10-23 | accepted   | architecture, naming, release, migration                                            |
+| [168](168-insert-a-quick-start-chapter-and-shift-the-handbook-numbering.md)                                             | Insert a quick-start chapter and shift the handbook numbering                                             | 2026-10-23 | accepted   | docs, handbook, process                                                             |
+| [167](167-set-the-decision-cache-replay-floor-to-0-70.md)                                                               | Set the decision-cache replay floor to 0.70                                                               | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
+| [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md)                                                      | Keep the third corpus slice and leave the replay off                                                      | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
+| [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md)                                                | Seed the decision-cache corpus with historical paraphrases                                                | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
+| [164](164-reject-the-route-aware-candidate-filter.md)                                                                   | Reject the route-aware candidate filter                                                                   | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
+| [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md)                                               | Exclude the multilingual model from the decision-cache gate                                               | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
+| [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md)                                       | Name the skill and accept paraphrase in the decision-cache question                                       | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
+| [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md)                                               | Measure the decision-cache gate with a leave-one-out corpus                                               | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
+| [160](160-rank-decision-cache-candidates-with-bm25.md)                                                                  | Rank decision-cache candidates with BM25                                                                  | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
+| [159](159-keep-the-single-batch-decision-cache-shortlist.md)                                                            | Keep the single-batch decision-cache shortlist                                                            | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
+| [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md)                                           | Replay the decision-cache gate only behind a measured threshold                                           | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
+| [157](157-shadow-the-decision-cache-gate-before-replaying.md)                                                           | Shadow the decision-cache gate before replaying                                                           | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
+| [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md)                                             | Keep BM25 and gate a local decision model as a second opinion                                             | 2026-10-22 | accepted   | routing, decision-models, architecture, security, testing                           |
+| [155](155-extend-the-devops-guardrail-family-with-file-scoped-source-cited-rules.md)                                    | Extend the devops guardrail family with file-scoped, source-cited rules                                   | 2026-10-17 | proposed   | guardrails, devops, quality-gate                                                    |
+| [154](154-every-plan-carries-a-status-line-a-dependency-graph-and-checkbox-steps.md)                                    | Every plan carries a status line, a dependency graph and checkbox steps                                   | 2026-10-21 | accepted   | plans, convention, format, governance, testing                                      |
+| [153](153-orchestrate-the-plan-catalogue-with-a-staged-dependency-graph.md)                                             | Orchestrate the plan catalogue with a staged dependency graph                                             | 2026-10-21 | accepted   | plans, orchestration, dependency-graph, process, governance                         |
+| [152](152-retire-pix-frontend-vanilla-reactive-and-pix-frontend-custom-element.md)                                      | Retire pix-frontend-vanilla-reactive and pix-frontend-custom-element                                      | 2026-10-21 | accepted   | skills, frontend, removal, breaking, detector, guardrails                           |
+| [151](151-retire-the-pix-platform-agent-skill.md)                                                                       | Retire the pix-platform-agent skill                                                                       | 2026-10-21 | accepted   | skills, platform, removal, breaking, guardrails                                     |
+| [150](150-open-a-pix-method-area-with-one-skill-per-methodology-framework.md)                                           | Open a pix-method area with one skill per methodology framework                                           | 2026-10-21 | accepted   | skills, method, bmad, spec-kit, openspec, gsd, breaking                             |
+| [149](149-choose-one-sdd-framework-per-repository-instead-of-peer-methodology-skills.md)                                | Choose one SDD framework per repository instead of peer methodology skills                                | 2026-10-21 | superseded | skills, process, bmad, methodology, guardrails                                      |
+| [148](148-merge-simplicity-english-and-fingerprint-into-pix-process-ai.md)                                              | Merge simplicity, English and fingerprint into pix-process-ai                                             | 2026-10-20 | accepted   | skills, process, guardrails, naming, breaking                                       |
+| [147](147-never-install-commit-hooks-into-a-machine-wide-core-hookspath.md)                                             | Never install commit hooks into a machine-wide core.hooksPath                                             | 2026-10-18 | accepted   | git, hooks, governance, security                                                    |
+| [146](146-remove-the-pix-styleguide-patterns-cheat-sheet.md)                                                            | Remove the pix-styleguide-patterns cheat sheet                                                            | 2026-10-18 | accepted   | skills, styleguide, duplication, breaking                                           |
+| [145](145-move-the-readme-skill-from-styleguide-to-process.md)                                                          | Move the README skill from styleguide to process                                                          | 2026-10-18 | accepted   | skills, process, styleguide, documentation, oss                                     |
+| [144](144-move-the-validation-skill-from-styleguide-to-data.md)                                                         | Move the validation skill from styleguide to data                                                         | 2026-10-17 | accepted   | skills, data, styleguide, validation, breaking                                      |
+| [143](143-rename-pix-toolchain-commits-to-pix-styleguide-git.md)                                                        | Rename pix-toolchain-commits to pix-styleguide-git                                                        | 2026-10-17 | accepted   | skills, styleguide, toolchain, git, breaking                                        |
+| [142](142-rename-pix-toolchain-project-to-pix-styleguide-configuration.md)                                              | Rename pix-toolchain-project to pix-styleguide-configuration                                              | 2026-10-17 | accepted   | skills, styleguide, toolchain, breaking                                             |
+| [141](141-merge-the-typescript-compiler-skill-into-pix-styleguide-typescript.md)                                        | Merge the TypeScript compiler skill into pix-styleguide-typescript                                        | 2026-10-17 | accepted   | skills, typescript, toolchain, styleguide, breaking                                 |
+| [140](140-give-the-meta-framework-area-its-first-server-and-client-boundary-guardrails.md)                              | Give the meta-framework area its first server and client boundary guardrails                              | 2026-10-17 | proposed   | guardrails, meta, frontend, quality-gate                                            |
+| [139](139-add-a-shared-frontend-guardrail-family-for-xss-lists-and-workers.md)                                          | Add a shared frontend guardrail family for XSS, lists and workers                                         | 2026-10-17 | proposed   | guardrails, frontend, security, quality-gate                                        |
+| [138](138-extend-the-data-guardrail-family-with-shared-and-per-engine-rules.md)                                         | Extend the data guardrail family with shared and per-engine rules                                         | 2026-10-17 | proposed   | guardrails, data, database, quality-gate                                            |
+| [137](137-give-the-ai-area-its-first-source-cited-guardrail-family.md)                                                  | Give the AI area its first source-cited guardrail family                                                  | 2026-10-17 | proposed   | guardrails, ai, agents, quality-gate                                                |
+| [136](136-add-a-source-cited-backend-guardrail-family-and-fix-the-six-existing-rules.md)                                | Add a source-cited backend guardrail family and fix the six existing rules                                | 2026-10-17 | proposed   | guardrails, backend, security, quality-gate                                         |
+| [135](135-codify-stage-0-oss-governance-signing-support-and-licensing-policies.md)                                      | Codify Stage 0 OSS governance, signing, support, and licensing policies                                   | 2026-10-22 | accepted   | governance, security, release                                                       |
 | [134](134-close-features-only-after-persisting-the-final-handoff-and-consolidate-the-featu.md)                          | Close features only after persisting the final handoff and consolidate the feature by default             | 2026-10-12 | accepted   | git, handoff, adr                                                                   |
 | [133](133-first-release-is-v0-1-0-then-semver-from-commits.md)                                                          | First release is v0.1.0, then SemVer from commits                                                         | 2026-10-01 | accepted   | release, versioning, semver                                                         |
 | [132](132-rename-pix-tool-plan-docs-to-pix-tool-impersonation.md)                                                       | Rename pix_tool_plan_docs to pix_tool_impersonation                                                       | 2026-10-01 | accepted   | tools, personas, naming, breaking                                                   |
@@ -150,6 +185,41 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [169](169-rename-the-server-to-rulemcp.md)                                                                              | Rename the project identity to RuleMCP: the package and binary are `rule-mcp`, the GitHub repository is `pixu1980/rule-mcp`, and the npm package is `rule-mcp`. Keep the `PIX_GALAXY_MCP_*` environment prefix, the `pix-*`...  | The old GitHub URL redirects to the new repository.                                                                                                                                                                             |
+| [168](168-insert-a-quick-start-chapter-and-shift-the-handbook-numbering.md)                                             | Create docs/07-quick-start.md as the shallow entry and shift the existing chapters 07-16 to 08-17. The engineering guides become chapter 08 and keep their depth; the generated inventories become chapters 09-17, so the...    | A reader gets a short, practical entry before the deep guide, and the sequence stays gapless from 01 to 17. The generated documents still occupy the tail, so the numbering test keeps its invariant.                           |
+| [167](167-set-the-decision-cache-replay-floor-to-0-70.md)                                                               | Adopt the symmetric gate instruction, drop queryHash from the state and deps/id from the candidate descriptions, add the asymmetric hub guard, and set SHADOW_THRESHOLD to 0.7, the measured floor.                             | The final corpus run measured 113 labeled predictions, 100 eligible, 13 guarded, 10 would replay at 0.70 and zero false replays; the report recommends 0.70 with 10 predictions and 0 wrong.                                    |
+| [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md)                                                      | Keep the third slice for its recall, and leave the replay off.                                                                                                                                                                  | The corpus is the best recall so far at 85.1%, but the floor still does not exist: the model's probability distribution puts too few predictions above 0.60 and one wrong at 0.55. Replay stays off.                            |
+| [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md)                                                | Adopt the 68 historical paraphrase seeds in the corpus benchmark.                                                                                                                                                               | Laya coverage rose to 88/105 (83.8%); predictions to 82. Wrong choices were 22 at 0.30 but 1 at 0.50 and 0 at 0.55, where 9 predictions were correct (one short of the 10-sample floor).                                        |
+| [164](164-reject-the-route-aware-candidate-filter.md)                                                                   | Reject the route-aware candidate filter.                                                                                                                                                                                        | The BM25 route is not the cache route: filtering by it removes correct seeds when the decision layer had overridden the route.                                                                                                  |
+| [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md)                                               | Exclude the multilingual model from the decision-cache gate.                                                                                                                                                                    | The Julia cache gate is off, so its overconfident cache picks can no longer replay or shadow.                                                                                                                                   |
+| [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md)                                       | Describe the cached candidate as request/skill and ask the model to accept a paraphrase when the skill and intent match, choosing none only when no candidate shares the intent.                                                | Laya's none fell from 38 to 24; predictions rose from 31 to 46, correct from 23 to 33, wrong from 8 to 13. The 0.45 precision rose to 84.2% (from 70.6%) but 0.60-0.75 got worse; no floor emerged.                             |
+| [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md)                                               | Use the leave-one-out corpus for the decision-cache measurement.                                                                                                                                                                | Laya coverage rose to 53/69 (76.8%) and Julia to 34/69 (49.3%).                                                                                                                                                                 |
+| [160](160-rank-decision-cache-candidates-with-bm25.md)                                                                  | Adopt BM25 as the decision-cache candidate ranker, with the existing five-candidate cap, the single batch, and the replay still off.                                                                                            | Recall is unchanged (31/47 Laya, 22/47 Julia), so the ranker is still not the fix for the missing gold seed.                                                                                                                    |
+| [159](159-keep-the-single-batch-decision-cache-shortlist.md)                                                            | Revert the two-batch variant and keep the single five-candidate batch.                                                                                                                                                          | The top-ten pool did not change recall, so the ranker is the measured blocker, not the model's batch size.                                                                                                                      |
+| [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md)                                           | Add an opt-in replay behind PIX_GALAXY_MCP_DECISION_CACHE_REPLAY=1, off by default.                                                                                                                                             | A wrong replay is silent, so the default remains off.                                                                                                                                                                           |
+| [157](157-shadow-the-decision-cache-gate-before-replaying.md)                                                           | Add an opt-in L3 gate built from deterministic parts: same-tool, same non-prompt args, fresh and non-echoing candidates; IDF-weighted overlap top five plus none; a redacted state and stable candidate descriptions; a...      | No response changes in phase 1; an opt-in model call runs after the response on a cache miss; the report is local.                                                                                                              |
+| [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md)                                             | 1. BM25 remains the router.                                                                                                                                                                                                     | Positive: the baseline is a file and a command, not a memory; a model or router change is compared against the same 95 prompts; the model cannot send prompt text off the machine; the ranker cannot be silently replaced by... |
+| [155](155-extend-the-devops-guardrail-family-with-file-scoped-source-cited-rules.md)                                    | Add twenty guardrails across the five devops skills, each scoped to its target file name (Dockerfile, .dockerignore, docker-compose.autodeploy.yml, .gitlab-ci.yml, vitest.config.*, _.test._, server entry,...                 | Positive: the devops skills stop being narrative only; every rule is traceable to a public source; the engine stays predictable because triggers are file-scoped.                                                               |
+| [154](154-every-plan-carries-a-status-line-a-dependency-graph-and-checkbox-steps.md)                                    | A plan file carries, in this order: an H1; a status line with one of five values (planned, in-progress, done, blocked, superseded) plus a reason when it is blocked or superseded; a '## Dependency graph' section with free... | The verification test can assert the format, so a plan written next month fails instead of drifting.                                                                                                                            |
+| [153](153-orchestrate-the-plan-catalogue-with-a-staged-dependency-graph.md)                                             | One orchestrator at docs/plans/skills/skills-plan.md, inside the catalogue it orders.                                                                                                                                           | The catalogue gains one file that says what to do next, and every plan gains the three lines that make the answer checkable.                                                                                                    |
+| [152](152-retire-pix-frontend-vanilla-reactive-and-pix-frontend-custom-element.md)                                      | Delete both skills and every live trace: 107 files, the 9 vanilla rules and their tests, the demo spec exclusion in the suites data, the two router-gap entries, the persona evidence entry, the template-engine...             | The catalog drops from 83 to 81 skills, 105 to 102 tools and 174 to 170 resources.                                                                                                                                              |
+| [151](151-retire-the-pix-platform-agent-skill.md)                                                                       | Delete skills/pix-platform-agent and every live trace of it: the two router rows, the three dispatcher references, the pix-ai table row and quick-selection line, the cross-reference in pix-ai-agent-architecture, the auth... | The catalog drops from 84 to 83 skills, 105 to 104 tools and 176 to 174 resources, all enforced by the docs-accuracy test.                                                                                                      |
+| [150](150-open-a-pix-method-area-with-one-skill-per-methodology-framework.md)                                           | Open a new area pix-method with a router skill pix-method plus one leaf per framework: pix-method-bmad (renamed from pix-process-bmad), pix-method-spec-kit, pix-method-openspec, pix-method-gsd.                               | Four new router rows and one renamed skill: 85 skills become 89, the method area owns two cross-framework rules, and every client calling pix_process_bmad breaks.                                                              |
+| [149](149-choose-one-sdd-framework-per-repository-instead-of-peer-methodology-skills.md)                                | Keep pix-process-bmad as the single methodology skill.                                                                                                                                                                          | One methodology skill, one ADR-visible policy, and a rule that can fail.                                                                                                                                                        |
+| [148](148-merge-simplicity-english-and-fingerprint-into-pix-process-ai.md)                                              | One skill, pix-process-ai, owns the four bodies: SKILL.md keeps the lifecycle, the scope contract and the reference table, and references/simplicity.md, references/english.md and references/fingerprint.md hold the...        | Positive: one owner per rule; the spelling map exists once; a scope or prose change lands in one file; the ranker sees the scope vocabulary in SKILL.md, which is the file it indexes.                                          |
+| [147](147-never-install-commit-hooks-into-a-machine-wide-core-hookspath.md)                                             | The installer reads `core.hooksPath` with `--local`, so only a setting the repository itself carries is treated as that project's mechanism.                                                                                    | Positive: an install can no longer reach outside the repository it was asked to govern, and no `.pix-backup` is written over a hook the user owns for every repository on the machine.                                          |
+| [146](146-remove-the-pix-styleguide-patterns-cheat-sheet.md)                                                            | Delete the skill.                                                                                                                                                                                                               | Clients that call pix_tool_styleguide_patterns break.                                                                                                                                                                           |
+| [145](145-move-the-readme-skill-from-styleguide-to-process.md)                                                          | Rename pix-styleguide-readme to pix-process-readme, change the tool to pix_tool_process_readme, move its row from the styleguide tables into the process tables in pix and pix-process, update the docs persona, add the...     | The catalog stays at 88 skills while the area counts move: styleguide loses one and process gains one.                                                                                                                          |
+| [144](144-move-the-validation-skill-from-styleguide-to-data.md)                                                         | Rename pix-styleguide-validation to pix-data-validation, change the tool to pix_tool_data_validation, move its rows from the styleguide tables into the data tables in pix and pix-data, update the personas that name it,...   | The catalog stays at 88 skills while the area counts move: styleguide loses one and data gains one.                                                                                                                             |
+| [143](143-rename-pix-toolchain-commits-to-pix-styleguide-git.md)                                                        | Rename the directory and the skill to pix-styleguide-git, change the generated tool to pix_tool_styleguide_git, move its rows from the toolchain tables into the styleguide tables in pix and pix-styleguide, update every...   | The catalog stays at 88 skills while the area counts move: toolchain loses one and styleguide gains one.                                                                                                                        |
+| [142](142-rename-pix-toolchain-project-to-pix-styleguide-configuration.md)                                              | Rename the directory and the skill to pix-styleguide-configuration, change the generated tool to pix_tool_styleguide_configuration, move its row from the toolchain tables into the styleguide tables in pix and...             | The catalog stays at 88 skills while the area counts move: toolchain loses one and styleguide gains one.                                                                                                                        |
+| [141](141-merge-the-typescript-compiler-skill-into-pix-styleguide-typescript.md)                                        | Remove pix-toolchain-typescript and move its content into skills/pix-styleguide-typescript/COMPILER.md, linked from SKILL.md as the compiler half of the same skill.                                                            | The catalog drops from 89 to 88 skills, the tool surface from 110 to 109 tools and the resources from 186 to 184. Clients that call pix_tool_toolchain_typescript break and must call pix_tool_styleguide_typescript...         |
+| [140](140-give-the-meta-framework-area-its-first-server-and-client-boundary-guardrails.md)                              | Create pix-meta/guardrails with seven rules.                                                                                                                                                                                    | Positive: the server and client boundary becomes checkable and every rule cites Next.js, Astro, React Router or Vite documentation.                                                                                             |
+| [139](139-add-a-shared-frontend-guardrail-family-for-xss-lists-and-workers.md)                                          | Create pix-frontend/guardrails with seven rules.                                                                                                                                                                                | Positive: the XSS sink and list key claims become deterministic and cite OWASP, MDN and the framework docs.                                                                                                                     |
+| [138](138-extend-the-data-guardrail-family-with-shared-and-per-engine-rules.md)                                         | Add nine rules split by owner: shared in pix-data (no-select-star, query-limit, query-timeout, db-least-privilege, migration-down), in pix-data-postgresql (index-on-fk), in pix-data-mongodb (mongo-projection,...             | Positive: the data family covers indexing, projection, limits and timeouts, and each rule cites PostgreSQL, MongoDB, SQLite or OWASP documentation.                                                                             |
+| [137](137-give-the-ai-area-its-first-source-cited-guardrail-family.md)                                                  | Create pix-ai/guardrails with eight rules split into Tier A (ai-tool-schema, ai-call-timeout, ai-max-tokens, ai-output-validated, ai-no-secrets-in-prompt, ai-trace-span) and Tier B (ai-eval-presence,...                      | Positive: the AI area gains its first deterministic checks and every rule cites OWASP, MCP or OpenTelemetry.                                                                                                                    |
+| [136](136-add-a-source-cited-backend-guardrail-family-and-fix-the-six-existing-rules.md)                                | Extend the patterns of the six existing backend rules to the framework equivalents, then add twenty-five guardrails split by owner: fifteen shared in pix-backend (auth, static analysis, resource limits, outbound timeout...  | Positive: the backend family stops being narrative only; the Hono false positives disappear; every rule is traceable to a public source.                                                                                        |
+| [135](135-codify-stage-0-oss-governance-signing-support-and-licensing-policies.md)                                      | 1. Sign release tags with a dedicated Ed25519 GPG key (fingerprint `37D68446F3ADCF1C8C37C07A15571530D4B63084`), commit the public key at `release-signing-key.asc` in `.github`, and verify tags with `git verify-tag` in...    | Positive: `release.yml` rejects unsigned annotated tags before GitHub Release creation; `SECURITY.md`, `CODE_OF_CONDUCT.md`, `GOVERNANCE.md`, `CONTRIBUTING.md`, `MAINTAINERS.md`, and `README.md` agree on signing,...         |
 | [134](134-close-features-only-after-persisting-the-final-handoff-and-consolidate-the-featu.md)                          | Treat close-feature as implicit squash intent.                                                                                                                                                                                  | The resulting feature commit includes the final handoff and consolidated ADR/handoff documents, with no post-squash commits.                                                                                                    |
 | [133](133-first-release-is-v0-1-0-then-semver-from-commits.md)                                                          | 1. The first cut is forced: `pnpm release --version 0.1.0` (and the matching.                                                                                                                                                   | `pix_tool_update` follows release tags; the first tag clients can land on is.                                                                                                                                                   |
 | [132](132-rename-pix-tool-plan-docs-to-pix-tool-impersonation.md)                                                       | Rename the tool to `pix_tool_impersonation`. The module moves to.                                                                                                                                                               | `DEPRECATIONS` keeps `pix_tool_plan_docs` answering as `pix_tool_impersonation`.                                                                                                                                                |
@@ -290,8 +360,89 @@ file. Where a line stops short the rest is in the ADR.
 Tags carried by 3 or more decisions. A decision appears under every
 theme it carries, and the early ADRs that predate the tag field are listed last.
 
+### skills
+
+- [152](152-retire-pix-frontend-vanilla-reactive-and-pix-frontend-custom-element.md) Retire pix-frontend-vanilla-reactive and pix-frontend-custom-element
+- [151](151-retire-the-pix-platform-agent-skill.md) Retire the pix-platform-agent skill
+- [150](150-open-a-pix-method-area-with-one-skill-per-methodology-framework.md) Open a pix-method area with one skill per methodology framework
+- [149](149-choose-one-sdd-framework-per-repository-instead-of-peer-methodology-skills.md) Choose one SDD framework per repository instead of peer methodology skills
+- [148](148-merge-simplicity-english-and-fingerprint-into-pix-process-ai.md) Merge simplicity, English and fingerprint into pix-process-ai
+- [146](146-remove-the-pix-styleguide-patterns-cheat-sheet.md) Remove the pix-styleguide-patterns cheat sheet
+- [145](145-move-the-readme-skill-from-styleguide-to-process.md) Move the README skill from styleguide to process
+- [144](144-move-the-validation-skill-from-styleguide-to-data.md) Move the validation skill from styleguide to data
+- [143](143-rename-pix-toolchain-commits-to-pix-styleguide-git.md) Rename pix-toolchain-commits to pix-styleguide-git
+- [142](142-rename-pix-toolchain-project-to-pix-styleguide-configuration.md) Rename pix-toolchain-project to pix-styleguide-configuration
+- [141](141-merge-the-typescript-compiler-skill-into-pix-styleguide-typescript.md) Merge the TypeScript compiler skill into pix-styleguide-typescript
+- [121](121-the-install-reconciles-the-bundled-skills-when-the-step-is-not-selected.md) The install reconciles the bundled skills when the step is not selected
+- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
+- [112](112-extend-the-file-size-cap-to-the-shipped-skill-trees.md) Extend the file-size cap to the shipped skill trees
+- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
+- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
+- [072](072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
+- [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
+- [055](055-restructure-the-command-surface-pix-router-pix-area-compression-implicit-pix-process.md) Restructure the command surface: /pix router, pix-area-*, compression implicit, pix-process-tdd skill
+- [027](027-add-pix-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add pix-toolchain-commits skill for atomic conventional commits with mandatory scope
+- [026](026-rename-pix-galaxy-agents-to-pix-ai-agents-and-add-pix-ai-collector-skill.md) Rename pix-galaxy-agents to pix-ai-agents and add pix-ai collector skill
+- [015](015-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
+- [012](012-database-skills.md) Database Skills
+- [010](010-backend-framework-skills.md) backend framework skills
+- [009](009-toolchain-vite.md) Toolchain Skill Isolation (Vite)
+- [008](008-scaffold-skill-consolidation.md) scaffold skill consolidation
+- [005](005-backend-framework-skills.md) Backend Framework Skills
+- [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
+
+### guardrails
+
+- [155](155-extend-the-devops-guardrail-family-with-file-scoped-source-cited-rules.md) Extend the devops guardrail family with file-scoped, source-cited rules
+- [152](152-retire-pix-frontend-vanilla-reactive-and-pix-frontend-custom-element.md) Retire pix-frontend-vanilla-reactive and pix-frontend-custom-element
+- [151](151-retire-the-pix-platform-agent-skill.md) Retire the pix-platform-agent skill
+- [149](149-choose-one-sdd-framework-per-repository-instead-of-peer-methodology-skills.md) Choose one SDD framework per repository instead of peer methodology skills
+- [148](148-merge-simplicity-english-and-fingerprint-into-pix-process-ai.md) Merge simplicity, English and fingerprint into pix-process-ai
+- [140](140-give-the-meta-framework-area-its-first-server-and-client-boundary-guardrails.md) Give the meta-framework area its first server and client boundary guardrails
+- [139](139-add-a-shared-frontend-guardrail-family-for-xss-lists-and-workers.md) Add a shared frontend guardrail family for XSS, lists and workers
+- [138](138-extend-the-data-guardrail-family-with-shared-and-per-engine-rules.md) Extend the data guardrail family with shared and per-engine rules
+- [137](137-give-the-ai-area-its-first-source-cited-guardrail-family.md) Give the AI area its first source-cited guardrail family
+- [136](136-add-a-source-cited-backend-guardrail-family-and-fix-the-six-existing-rules.md) Add a source-cited backend guardrail family and fix the six existing rules
+- [129](129-a-file-is-reported-on-a-task-is-confirmed.md) A file is reported on, a task is confirmed
+- [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md) The fix tool and command apply the deterministic guardrails, not the file tree
+- [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
+- [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md) No corepack activation and no engines field in a generated package.json
+- [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
+- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
+- [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
+- [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
+- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
+- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
+- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+
+### routing
+
+- [167](167-set-the-decision-cache-replay-floor-to-0-70.md) Set the decision-cache replay floor to 0.70
+- [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md) Keep the third corpus slice and leave the replay off
+- [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md) Seed the decision-cache corpus with historical paraphrases
+- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
+- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
+- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
+- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
+- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
+- [027](027-add-pix-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add pix-toolchain-commits skill for atomic conventional commits with mandatory scope
+- [026](026-rename-pix-galaxy-agents-to-pix-ai-agents-and-add-pix-ai-collector-skill.md) Rename pix-galaxy-agents to pix-ai-agents and add pix-ai collector skill
+- [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
+- [024](024-skill-routing-parcel-bundler-zero-config-build-tool.md) Skill routing: Parcel bundler zero config build tool
+- [023](023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.md) Skill routing: Husky git hooks pre-commit lint-staged commitlint
+- [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
+- [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
+- [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
+
 ### architecture
 
+- [169](169-rename-the-server-to-rulemcp.md) Rename the server to RuleMCP
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
 - [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
 - [112](112-extend-the-file-size-cap-to-the-shipped-skill-trees.md) Extend the file-size cap to the shipped skill trees
 - [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
@@ -331,28 +482,28 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [039](039-fix-vscode-extension-and-derivatives-install-uninstall.md) Fix VS Code extension and derivatives install/uninstall
 - [028](028-clean-pix-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /pix-* commands via user commands + prompt suppression, not a plugin
 
-### skills
+### breaking
 
-- [121](121-the-install-reconciles-the-bundled-skills-when-the-step-is-not-selected.md) The install reconciles the bundled skills when the step is not selected
+- [152](152-retire-pix-frontend-vanilla-reactive-and-pix-frontend-custom-element.md) Retire pix-frontend-vanilla-reactive and pix-frontend-custom-element
+- [151](151-retire-the-pix-platform-agent-skill.md) Retire the pix-platform-agent skill
+- [150](150-open-a-pix-method-area-with-one-skill-per-methodology-framework.md) Open a pix-method area with one skill per methodology framework
+- [148](148-merge-simplicity-english-and-fingerprint-into-pix-process-ai.md) Merge simplicity, English and fingerprint into pix-process-ai
+- [146](146-remove-the-pix-styleguide-patterns-cheat-sheet.md) Remove the pix-styleguide-patterns cheat sheet
+- [144](144-move-the-validation-skill-from-styleguide-to-data.md) Move the validation skill from styleguide to data
+- [143](143-rename-pix-toolchain-commits-to-pix-styleguide-git.md) Rename pix-toolchain-commits to pix-styleguide-git
+- [142](142-rename-pix-toolchain-project-to-pix-styleguide-configuration.md) Rename pix-toolchain-project to pix-styleguide-configuration
+- [141](141-merge-the-typescript-compiler-skill-into-pix-styleguide-typescript.md) Merge the TypeScript compiler skill into pix-styleguide-typescript
+- [132](132-rename-pix-tool-plan-docs-to-pix-tool-impersonation.md) Rename pix_tool_plan_docs to pix_tool_impersonation
+- [120](120-fold-the-per-operation-persona-commands-into-one-per-role-with-the-depth-read-fr.md) Fold the per-operation persona commands into one per role, with the depth read from the request
+- [117](117-area-slash-commands-are-collectors-only-leaves-route-from-the-prompt.md) Area slash commands are collectors only; leaves route from the prompt
+- [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
 - [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
-- [112](112-extend-the-file-size-cap-to-the-shipped-skill-trees.md) Extend the file-size cap to the shipped skill trees
-- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
-- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
-- [072](072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
-- [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
-- [055](055-restructure-the-command-surface-pix-router-pix-area-compression-implicit-pix-process.md) Restructure the command surface: /pix router, pix-area-*, compression implicit, pix-process-tdd skill
-- [027](027-add-pix-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add pix-toolchain-commits skill for atomic conventional commits with mandatory scope
-- [026](026-rename-pix-galaxy-agents-to-pix-ai-agents-and-add-pix-ai-collector-skill.md) Rename pix-galaxy-agents to pix-ai-agents and add pix-ai collector skill
-- [015](015-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
-- [012](012-database-skills.md) Database Skills
-- [010](010-backend-framework-skills.md) backend framework skills
-- [009](009-toolchain-vite.md) Toolchain Skill Isolation (Vite)
-- [008](008-scaffold-skill-consolidation.md) scaffold skill consolidation
-- [005](005-backend-framework-skills.md) Backend Framework Skills
-- [004](004-scaffold-consolidation.md) Scaffold Skill Consolidation
+- [114](114-flight-is-process-area-guidance-injected-on-every-prompt-not-a-slash-command.md) Flight is process-area guidance injected on every prompt, not a slash command
+- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
 
 ### docs
 
+- [168](168-insert-a-quick-start-chapter-and-shift-the-handbook-numbering.md) Insert a quick-start chapter and shift the handbook numbering
 - [128](128-consolidate-the-feature-adrs-and-handoffs-into-one-commit-at-the-close-squash.md) Consolidate the feature ADRs and handoffs into one commit at the close squash
 - [119](119-close-out-audit-ui.md) Close out audit ui
 - [118](118-close-out-review-ui.md) Close out review ui
@@ -384,19 +535,92 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 - [028](028-clean-pix-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /pix-* commands via user commands + prompt suppression, not a plugin
 
-### guardrails
+### decision-models
 
-- [129](129-a-file-is-reported-on-a-task-is-confirmed.md) A file is reported on, a task is confirmed
-- [122](122-the-fix-tool-and-command-apply-the-deterministic-guardrails-not-the-file-tree.md) The fix tool and command apply the deterministic guardrails, not the file tree
-- [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
-- [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md) No corepack activation and no engines field in a generated package.json
-- [106](106-check-runs-per-area-and-the-general-check-auto-detects-it.md) Check runs per area, and the general check auto-detects it
-- [089](089-skills-own-their-guardrails-and-three-layers-resolve-both-skills-and-personas.md) Skills own their guardrails, and three layers resolve both skills and personas
-- [058](058-one-file-per-rule-with-underscore-barrel-folders-and-a-size-ratchet.md) One file per rule with underscore-barrel folders and a size ratchet
-- [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
-- [049](049-split-hotspot-modules.md) Split the hotspot modules (guardrails + installer)
-- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
-- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+- [167](167-set-the-decision-cache-replay-floor-to-0-70.md) Set the decision-cache replay floor to 0.70
+- [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md) Keep the third corpus slice and leave the replay off
+- [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md) Seed the decision-cache corpus with historical paraphrases
+- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
+- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
+- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
+- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
+- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+
+### release
+
+- [169](169-rename-the-server-to-rulemcp.md) Rename the server to RuleMCP
+- [135](135-codify-stage-0-oss-governance-signing-support-and-licensing-policies.md) Codify Stage 0 OSS governance, signing, support, and licensing policies
+- [133](133-first-release-is-v0-1-0-then-semver-from-commits.md) First release is v0.1.0, then SemVer from commits
+- [131](131-an-update-moves-a-git-clone-install-to-the-newest-release-tag-unasked.md) An update moves a git-clone install to the newest release tag, unasked
+- [130](130-this-server-releases-itself-with-pnpm-release-and-the-push-is-the-release.md) This server releases itself with pnpm release, and the push is the release
+- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
+- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
+- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
+- [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md) Reset the project version to 0.1.0, first release will be v0.1.0
+- [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
+- [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
+- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+
+### testing
+
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+- [154](154-every-plan-carries-a-status-line-a-dependency-graph-and-checkbox-steps.md) Every plan carries a status line, a dependency graph and checkbox steps
+- [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
+- [076](076-coverage-wave-five-raises-the-branch-floor-to-91.md) Coverage wave five raises the branch floor to 91
+- [069](069-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
+- [065](065-coverage-floor-raised-to-90.md) Coverage floor raised to 90
+- [064](064-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
+- [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
+- [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
+- [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
+- [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
+- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+
+### cache
+
+- [167](167-set-the-decision-cache-replay-floor-to-0-70.md) Set the decision-cache replay floor to 0.70
+- [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md) Keep the third corpus slice and leave the replay off
+- [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md) Seed the decision-cache corpus with historical paraphrases
+- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
+- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
+- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
+- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
+- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+
+### git
+
+- [147](147-never-install-commit-hooks-into-a-machine-wide-core-hookspath.md) Never install commit hooks into a machine-wide core.hooksPath
+- [143](143-rename-pix-toolchain-commits-to-pix-styleguide-git.md) Rename pix-toolchain-commits to pix-styleguide-git
+- [134](134-close-features-only-after-persisting-the-final-handoff-and-consolidate-the-featu.md) Close features only after persisting the final handoff and consolidate the feature by default
+- [130](130-this-server-releases-itself-with-pnpm-release-and-the-push-is-the-release.md) This server releases itself with pnpm release, and the push is the release
+- [128](128-consolidate-the-feature-adrs-and-handoffs-into-one-commit-at-the-close-squash.md) Consolidate the feature ADRs and handoffs into one commit at the close squash
+- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
+- [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
+- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
+- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
+- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
+- [027](027-add-pix-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add pix-toolchain-commits skill for atomic conventional commits with mandatory scope
+
+### observability
+
+- [167](167-set-the-decision-cache-replay-floor-to-0-70.md) Set the decision-cache replay floor to 0.70
+- [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md) Keep the third corpus slice and leave the replay off
+- [165](165-seed-the-decision-cache-corpus-with-historical-paraphrases.md) Seed the decision-cache corpus with historical paraphrases
+- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
+- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
+- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
+- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
+- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
 
 ### prompts
 
@@ -438,55 +662,30 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [059](059-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
 - [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 
-### release
+### toolchain
 
-- [133](133-first-release-is-v0-1-0-then-semver-from-commits.md) First release is v0.1.0, then SemVer from commits
-- [131](131-an-update-moves-a-git-clone-install-to-the-newest-release-tag-unasked.md) An update moves a git-clone install to the newest release tag, unasked
-- [130](130-this-server-releases-itself-with-pnpm-release-and-the-push-is-the-release.md) This server releases itself with pnpm release, and the push is the release
-- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
-- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
-- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
-- [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md) Reset the project version to 0.1.0, first release will be v0.1.0
-- [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
-- [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
-- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+- [143](143-rename-pix-toolchain-commits-to-pix-styleguide-git.md) Rename pix-toolchain-commits to pix-styleguide-git
+- [142](142-rename-pix-toolchain-project-to-pix-styleguide-configuration.md) Rename pix-toolchain-project to pix-styleguide-configuration
+- [141](141-merge-the-typescript-compiler-skill-into-pix-styleguide-typescript.md) Merge the TypeScript compiler skill into pix-styleguide-typescript
+- [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md) No corepack activation and no engines field in a generated package.json
+- [045](045-migrate-repo-tooling-to-eslint-10-flat-config-with-eslint-plugin-unicorn.md) Migrate repo tooling to ESLint 10 flat config with eslint-plugin-unicorn
+- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
+- [043](043-strengthen-typescript-discipline-for-large-codebases.md) Strengthen TypeScript discipline for large codebases
+- [027](027-add-pix-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add pix-toolchain-commits skill for atomic conventional commits with mandatory scope
+- [015](015-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
+- [009](009-toolchain-vite.md) Toolchain Skill Isolation (Vite)
 
-### testing
+### governance
 
-- [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
-- [076](076-coverage-wave-five-raises-the-branch-floor-to-91.md) Coverage wave five raises the branch floor to 91
-- [069](069-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
-- [065](065-coverage-floor-raised-to-90.md) Coverage floor raised to 90
-- [064](064-coverage-floor-raised-to-89-toward-the-95-endpoint.md) Coverage floor raised to 89 toward the 95 endpoint
-- [063](063-coverage-floor-raised-to-87-95-remains-the-ratchet-endpoint.md) Coverage floor raised to 87; 95 remains the ratchet endpoint
-- [062](062-glob-suite-runner-colocated-tests-and-a-branch-coverage-ratchet.md) Glob suite runner, co-located tests, and a branch-coverage ratchet
-- [061](061-one-global-shim-and-hermetic-pnpm-home-in-script-tests.md) One global shim, and hermetic PNPM_HOME in script tests
-- [057](057-reorganize-scripts-src-tests-with-150-line-code-splitting.md) Reorganize scripts, src and tests with 150-line code splitting
-- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
-
-### git
-
-- [134](134-close-features-only-after-persisting-the-final-handoff-and-consolidate-the-featu.md) Close features only after persisting the final handoff and consolidate the feature by default
-- [130](130-this-server-releases-itself-with-pnpm-release-and-the-push-is-the-release.md) This server releases itself with pnpm release, and the push is the release
-- [128](128-consolidate-the-feature-adrs-and-handoffs-into-one-commit-at-the-close-squash.md) Consolidate the feature ADRs and handoffs into one commit at the close squash
-- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
-- [126](126-close-a-feature-with-reset-soft-onto-the-merge-base-and-one-validated-commit.md) Close a feature with reset --soft onto the merge base and one validated commit
-- [125](125-normalize-history-on-the-merge-base-and-hold-every-rewrite-to-a-tree-invariant.md) Normalize history on the merge base and hold every rewrite to a tree invariant
-- [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
+- [154](154-every-plan-carries-a-status-line-a-dependency-graph-and-checkbox-steps.md) Every plan carries a status line, a dependency graph and checkbox steps
+- [153](153-orchestrate-the-plan-catalogue-with-a-staged-dependency-graph.md) Orchestrate the plan catalogue with a staged dependency graph
+- [147](147-never-install-commit-hooks-into-a-machine-wide-core-hookspath.md) Never install commit hooks into a machine-wide core.hooksPath
+- [135](135-codify-stage-0-oss-governance-signing-support-and-licensing-policies.md) Codify Stage 0 OSS governance, signing, support, and licensing policies
 - [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
-- [027](027-add-pix-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add pix-toolchain-commits skill for atomic conventional commits with mandatory scope
-
-### routing
-
-- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
-- [027](027-add-pix-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add pix-toolchain-commits skill for atomic conventional commits with mandatory scope
-- [026](026-rename-pix-galaxy-agents-to-pix-ai-agents-and-add-pix-ai-collector-skill.md) Rename pix-galaxy-agents to pix-ai-agents and add pix-ai collector skill
-- [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
-- [024](024-skill-routing-parcel-bundler-zero-config-build-tool.md) Skill routing: Parcel bundler zero config build tool
-- [023](023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.md) Skill routing: Husky git hooks pre-commit lint-staged commitlint
-- [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
-- [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
-- [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
+- [093](093-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md) Add an Open Source Steward persona for governance, contributors and donors
+- [083](083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.md) Governance is an explicit BDFL with a path to co-maintainers
+- [079](079-add-the-oss-architect-review-persona.md) Add the OSS Architect review persona
+- [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
 
 ### closeout
 
@@ -499,25 +698,47 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
 - [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
 
-### breaking
+### process
 
-- [132](132-rename-pix-tool-plan-docs-to-pix-tool-impersonation.md) Rename pix_tool_plan_docs to pix_tool_impersonation
-- [120](120-fold-the-per-operation-persona-commands-into-one-per-role-with-the-depth-read-fr.md) Fold the per-operation persona commands into one per role, with the depth read from the request
-- [117](117-area-slash-commands-are-collectors-only-leaves-route-from-the-prompt.md) Area slash commands are collectors only; leaves route from the prompt
-- [116](116-fold-check-slash-siblings-into-parent-via-keyword-intent.md) Fold check slash siblings into the parent via keyword intent
-- [115](115-map-tools-slash-commands-and-skills-into-one-surface.md) Map tools, slash commands, and skills into one surface
-- [114](114-flight-is-process-area-guidance-injected-on-every-prompt-not-a-slash-command.md) Flight is process-area guidance injected on every prompt, not a slash command
-- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
+- [168](168-insert-a-quick-start-chapter-and-shift-the-handbook-numbering.md) Insert a quick-start chapter and shift the handbook numbering
+- [153](153-orchestrate-the-plan-catalogue-with-a-staged-dependency-graph.md) Orchestrate the plan catalogue with a staged dependency graph
+- [149](149-choose-one-sdd-framework-per-repository-instead-of-peer-methodology-skills.md) Choose one SDD framework per repository instead of peer methodology skills
+- [148](148-merge-simplicity-english-and-fingerprint-into-pix-process-ai.md) Merge simplicity, English and fingerprint into pix-process-ai
+- [145](145-move-the-readme-skill-from-styleguide-to-process.md) Move the README skill from styleguide to process
+- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
+- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
+- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
 
-### toolchain
+### security
 
-- [109](109-no-corepack-activation-and-no-engines-field-in-a-generated-package-json.md) No corepack activation and no engines field in a generated package.json
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+- [147](147-never-install-commit-hooks-into-a-machine-wide-core-hookspath.md) Never install commit hooks into a machine-wide core.hooksPath
+- [139](139-add-a-shared-frontend-guardrail-family-for-xss-lists-and-workers.md) Add a shared frontend guardrail family for XSS, lists and workers
+- [136](136-add-a-source-cited-backend-guardrail-family-and-fix-the-six-existing-rules.md) Add a source-cited backend guardrail family and fix the six existing rules
+- [135](135-codify-stage-0-oss-governance-signing-support-and-licensing-policies.md) Codify Stage 0 OSS governance, signing, support, and licensing policies
 - [045](045-migrate-repo-tooling-to-eslint-10-flat-config-with-eslint-plugin-unicorn.md) Migrate repo tooling to ESLint 10 flat config with eslint-plugin-unicorn
+- [019](019-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
+- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+
+### quality-gate
+
+- [155](155-extend-the-devops-guardrail-family-with-file-scoped-source-cited-rules.md) Extend the devops guardrail family with file-scoped, source-cited rules
+- [140](140-give-the-meta-framework-area-its-first-server-and-client-boundary-guardrails.md) Give the meta-framework area its first server and client boundary guardrails
+- [139](139-add-a-shared-frontend-guardrail-family-for-xss-lists-and-workers.md) Add a shared frontend guardrail family for XSS, lists and workers
+- [138](138-extend-the-data-guardrail-family-with-shared-and-per-engine-rules.md) Extend the data guardrail family with shared and per-engine rules
+- [137](137-give-the-ai-area-its-first-source-cited-guardrail-family.md) Give the AI area its first source-cited guardrail family
+- [136](136-add-a-source-cited-backend-guardrail-family-and-fix-the-six-existing-rules.md) Add a source-cited backend guardrail family and fix the six existing rules
+- [112](112-extend-the-file-size-cap-to-the-shipped-skill-trees.md) Extend the file-size cap to the shipped skill trees
+
+### styleguide
+
+- [146](146-remove-the-pix-styleguide-patterns-cheat-sheet.md) Remove the pix-styleguide-patterns cheat sheet
+- [145](145-move-the-readme-skill-from-styleguide-to-process.md) Move the README skill from styleguide to process
+- [144](144-move-the-validation-skill-from-styleguide-to-data.md) Move the validation skill from styleguide to data
+- [143](143-rename-pix-toolchain-commits-to-pix-styleguide-git.md) Rename pix-toolchain-commits to pix-styleguide-git
+- [142](142-rename-pix-toolchain-project-to-pix-styleguide-configuration.md) Rename pix-toolchain-project to pix-styleguide-configuration
+- [141](141-merge-the-typescript-compiler-skill-into-pix-styleguide-typescript.md) Merge the TypeScript compiler skill into pix-styleguide-typescript
 - [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
-- [043](043-strengthen-typescript-discipline-for-large-codebases.md) Strengthen TypeScript discipline for large codebases
-- [027](027-add-pix-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add pix-toolchain-commits skill for atomic conventional commits with mandatory scope
-- [015](015-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
-- [009](009-toolchain-vite.md) Toolchain Skill Isolation (Vite)
 
 ### auto-log
 
@@ -555,6 +776,15 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
 - [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
 
+### naming
+
+- [169](169-rename-the-server-to-rulemcp.md) Rename the server to RuleMCP
+- [148](148-merge-simplicity-english-and-fingerprint-into-pix-process-ai.md) Merge simplicity, English and fingerprint into pix-process-ai
+- [132](132-rename-pix-tool-plan-docs-to-pix-tool-impersonation.md) Rename pix_tool_plan_docs to pix_tool_impersonation
+- [084](084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.md) Keep the name with a written posture, no npm placeholder yet
+- [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
+- [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
+
 ### tool
 
 - [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
@@ -581,13 +811,13 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
 - [073](073-compression-has-four-levels-and-no-llm-in-the-output-path.md) Compression has four levels and no LLM in the output path
 
-### governance
+### frontend
 
-- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
-- [093](093-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md) Add an Open Source Steward persona for governance, contributors and donors
-- [083](083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.md) Governance is an explicit BDFL with a path to co-maintainers
-- [079](079-add-the-oss-architect-review-persona.md) Add the OSS Architect review persona
-- [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
+- [152](152-retire-pix-frontend-vanilla-reactive-and-pix-frontend-custom-element.md) Retire pix-frontend-vanilla-reactive and pix-frontend-custom-element
+- [140](140-give-the-meta-framework-area-its-first-server-and-client-boundary-guardrails.md) Give the meta-framework area its first server and client boundary guardrails
+- [139](139-add-a-shared-frontend-guardrail-family-for-xss-lists-and-workers.md) Add a shared frontend guardrail family for XSS, lists and workers
+- [017](017-forms-per-framework-merger-and-distribution.md) forms per framework merger and distribution
+- [011](011-forms-per-framework.md) Forms per Framework - Merger & Distribution
 
 ### mcp
 
@@ -613,6 +843,13 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [077](077-compress-every-server-model-list-surface-prompts-list-tools-list-resources-list.md) Compress every server→model list surface (prompts/list, tools/list, resources/list)
 - [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
 
+### backend
+
+- [136](136-add-a-source-cited-backend-guardrail-family-and-fix-the-six-existing-rules.md) Add a source-cited backend guardrail family and fix the six existing rules
+- [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
+- [010](010-backend-framework-skills.md) backend framework skills
+- [005](005-backend-framework-skills.md) Backend Framework Skills
+
 ### infrastructure
 
 - [008](008-scaffold-skill-consolidation.md) scaffold skill consolidation
@@ -627,12 +864,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [092](092-surface-selection-amends-the-install-stack-freeze-with-an-additive-loader-filter.md) Surface selection amends the install stack freeze with an additive loader filter
 - [091](091-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md) Install/uninstall rework keeps current stack, steps and contents only
 
-### naming
+### plans
 
-- [132](132-rename-pix-tool-plan-docs-to-pix-tool-impersonation.md) Rename pix_tool_plan_docs to pix_tool_impersonation
-- [084](084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.md) Keep the name with a written posture, no npm placeholder yet
-- [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
-- [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
+- [154](154-every-plan-carries-a-status-line-a-dependency-graph-and-checkbox-steps.md) Every plan carries a status line, a dependency graph and checkbox steps
+- [153](153-orchestrate-the-plan-catalogue-with-a-staged-dependency-graph.md) Orchestrate the plan catalogue with a staged dependency graph
+- [060](060-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
+- [059](059-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
 
 ### ratchet
 
@@ -669,17 +906,23 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
 - [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md) Reset the project version to 0.1.0, first release will be v0.1.0
 
-### backend
+### agents
 
-- [053](053-gateway-as-the-single-entrypoint-with-server-side-receipts-backend-data-devops-g.md) Gateway as the single entrypoint with server-side receipts; backend/data/devops guardrail families
-- [010](010-backend-framework-skills.md) backend framework skills
-- [005](005-backend-framework-skills.md) Backend Framework Skills
+- [137](137-give-the-ai-area-its-first-source-cited-guardrail-family.md) Give the AI area its first source-cited guardrail family
+- [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
+- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
 ### code-graph
 
 - [108](108-the-handoff-family-gets-a-generated-index-and-the-root-handoff-summary-retires.md) The handoff family gets a generated index, and the root HANDOFF summary retires
 - [100](100-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
 - [096](096-tokensave-is-the-primary-code-graph-javascript-is-the-fallback.md) TokenSave is the primary code graph, JavaScript is the fallback
+
+### database
+
+- [138](138-extend-the-data-guardrail-family-with-shared-and-per-engine-rules.md) Extend the data guardrail family with shared and per-engine rules
+- [042](042-strengthen-database-relational-constraint-skills.md) Strengthen database relational constraint skills
+- [012](012-database-skills.md) Database Skills
 
 ### determinism
 
@@ -692,6 +935,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [102](102-reinstall-is-one-shell-script-behind-three-entry-points.md) Reinstall is one shell script behind three entry points
 - [072](072-the-installer-asks-before-copying-bundled-skills-to-the-central-agents-directory.md) The installer asks before copying bundled skills to the central agents directory
 - [070](070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
+
+### documentation
+
+- [145](145-move-the-readme-skill-from-styleguide-to-process.md) Move the README skill from styleguide to process
+- [060](060-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
+- [059](059-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
 
 ### history
 
@@ -711,12 +960,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [010](010-backend-framework-skills.md) backend framework skills
 - [005](005-backend-framework-skills.md) Backend Framework Skills
 
-### process
-
-- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
-- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
-- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
-
 ### quality
 
 - [050](050-round-two-hardening-cycles-daemon-cleanup-diagnostics.md) Round-2 hardening - cycles, daemon/commands split, diagnostics, HTTP verification
@@ -728,12 +971,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
 - [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
 - [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
-
-### security
-
-- [045](045-migrate-repo-tooling-to-eslint-10-flat-config-with-eslint-plugin-unicorn.md) Migrate repo tooling to ESLint 10 flat config with eslint-plugin-unicorn
-- [019](019-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
-- [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 
 ### structure
 
@@ -752,6 +989,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [080](080-one-installer-a-node-wizard-with-shell-bootstraps.md) One installer, a Node wizard with shell bootstraps
 - [070](070-installer-mode-step-replaces-the-agent-picker-instead-of-stacking-under-it.md) Installer mode step replaces the agent picker instead of stacking under it
 - [046](046-installer-self-heals-global-shim-surfaces-failures-gates-tui-rendering.md) Installer self-heals its global shim, surfaces failures, and gates TUI rendering
+
+### typescript
+
+- [141](141-merge-the-typescript-compiler-skill-into-pix-styleguide-typescript.md) Merge the TypeScript compiler skill into pix-styleguide-typescript
+- [044](044-adopt-eslint-plugin-unicorn-for-js-ts-quality.md) Adopt eslint-plugin-unicorn for JS/TS quality
+- [043](043-strengthen-typescript-discipline-for-large-codebases.md) Strengthen TypeScript discipline for large codebases
 
 ### vscode
 

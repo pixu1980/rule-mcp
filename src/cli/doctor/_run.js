@@ -83,7 +83,7 @@ export async function runDoctor(telemetry = false) {
     platform: environment.platform,
     arch: environment.arch,
 
-    entrypoint: fileURLToPath(new URL("../../../bin/pix-galaxy-mcp.js", import.meta.url)),
+    entrypoint: fileURLToPath(new URL("../../../bin/rule-mcp.js", import.meta.url)),
 
     tools: listTools().map((t) => t.name),
 
@@ -116,10 +116,10 @@ export async function runDoctor(telemetry = false) {
 
     // Paths
     commands: {
-      stdio: `${process.execPath} ${fileURLToPath(new URL("../../../bin/pix-galaxy-mcp.js", import.meta.url))} serve`,
-      global: "pix-galaxy-mcp serve",
-      daemon: "pix-galaxy-mcp daemon start",
-      install: "pix-galaxy-mcp install --agent all",
+      stdio: `${process.execPath} ${fileURLToPath(new URL("../../../bin/rule-mcp.js", import.meta.url))} serve`,
+      global: "rule-mcp serve",
+      daemon: "rule-mcp daemon start",
+      install: "rule-mcp install --agent all",
     },
 
     // Unconfigured agents (quick reference)

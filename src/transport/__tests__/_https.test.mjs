@@ -28,7 +28,7 @@ const check = (label, ok) => {
 
 console.log("=== HTTPS Support Tests ===\n");
 
-const tmpDir = join(tmpdir(), "pix-galaxy-mcp-https-" + Date.now());
+const tmpDir = join(tmpdir(), "rule-mcp-https-" + Date.now());
 mkdirSync(tmpDir, { recursive: true });
 
 try {

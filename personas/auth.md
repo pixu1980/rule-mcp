@@ -12,7 +12,6 @@ skills:
   - "identity provider integration"
 evidenceSkills:
   - "pix-backend-security"
-  - "pix-platform-agent"
 aliases:
   - "auth-identity"
   - "authentication engineer"

@@ -24,7 +24,7 @@ import { BUILD_TOOL_RULES, FRAMEWORK_RULES, FRAMEWORK_SKILL_MAP } from "./_rules
  * @returns {{ skillName: string, toolName: string }}
  */
 export function getFrameworkSuggestion(framework) {
-  const skillName = FRAMEWORK_SKILL_MAP[framework] || "pix-frontend-vanilla-reactive";
+  const skillName = FRAMEWORK_SKILL_MAP[framework] || "pix-frontend";
   const displayName = skillName.replace(/^pix-/, "").replaceAll("-", "_");
 
   return { skillName, toolName: `pix_tool_${displayName}` };

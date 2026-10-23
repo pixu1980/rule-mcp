@@ -14,7 +14,7 @@ import { execSync } from "node:child_process";
 
 const resolvePath = (relative) => resolve(fileURLToPath(new URL("../../../", import.meta.url)), relative);
 
-const serverName = "pix-galaxy-mcp";
+const serverName = "rule-mcp";
 
 const IS_WINDOWS = platform() === "win32";
 
@@ -103,7 +103,7 @@ const backupFile = (file) => {
 const resolveGlobalBinary = () => {
   // Check common pnpm/Homebrew locations (fast path, no shell overhead).
   const HOME = homedir();
-  const candidates = [join(HOME, "Library", "pnpm", "bin", "pix-galaxy-mcp"), "/opt/homebrew/bin/pix-galaxy-mcp", "/usr/local/bin/pix-galaxy-mcp"];
+  const candidates = [join(HOME, "Library", "pnpm", "bin", "rule-mcp"), "/opt/homebrew/bin/rule-mcp", "/usr/local/bin/rule-mcp"];
 
   for (const candidate of candidates) {
     if (existsSync(candidate)) {
@@ -112,7 +112,7 @@ const resolveGlobalBinary = () => {
   }
   // Fall back to PATH scan, but exclude local node_modules/.bin (project-local shims).
   try {
-    const out = execSync("command -v pix-galaxy-mcp 2>/dev/null || which pix-galaxy-mcp 2>/dev/null", {
+    const out = execSync("command -v rule-mcp 2>/dev/null || which rule-mcp 2>/dev/null", {
       encoding: "utf8",
       timeout: 2000,
     }).trim();

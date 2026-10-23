@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 /** Theme + a11y preferences for the docs site (vanilla JS). */
 
-const STORAGE_KEY = "pix-galaxy-mcp-docs-prefs";
+const STORAGE_KEY = "rule-mcp-docs-prefs";
 
 function readPrefs() {
   try {

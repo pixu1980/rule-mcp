@@ -59,7 +59,7 @@ export function compressionLevel() {
       level = wanted;
     } else if (!warned) {
       warned = true;
-      process.stderr.write(`pix-galaxy-mcp: unknown PIX_GALAXY_MCP_COMPRESSION_LEVEL "${raw}", using "${DEFAULT_LEVEL}"\n`);
+      process.stderr.write(`rule-mcp: unknown PIX_GALAXY_MCP_COMPRESSION_LEVEL "${raw}", using "${DEFAULT_LEVEL}"\n`);
     }
   }
 

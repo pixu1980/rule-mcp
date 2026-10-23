@@ -181,7 +181,7 @@ async function branchFastForward({ root, remoteUrl, reloadSkills, opts }) {
     return { checked: true, updated: false };
   }
 
-  process.stderr.write(`[pix-galaxy-mcp] self-update ${before.slice(0, 7)}→${after.slice(0, 7)} from ${remoteUrl}\n`);
+  process.stderr.write(`[rule-mcp] self-update ${before.slice(0, 7)}→${after.slice(0, 7)} from ${remoteUrl}\n`);
 
   const diff = (await git(["diff", "--name-only", before, after], root)) ?? "";
   const changed = diff.split("\n").filter(Boolean);

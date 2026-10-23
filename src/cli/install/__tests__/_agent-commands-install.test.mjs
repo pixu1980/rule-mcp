@@ -26,7 +26,7 @@ execFileSync(
     ALIAS_HOOK,
     "--input-type=module",
     "--eval",
-    `import { installAgent } from ${JSON.stringify(installModule)}; for (const agent of ["pi", "claude", "gemini", "cursor", "copilot"]) installAgent({ agent, entrypoint: "/tmp/pix-galaxy-mcp.js" });`,
+    `import { installAgent } from ${JSON.stringify(installModule)}; for (const agent of ["pi", "claude", "gemini", "cursor", "copilot"]) installAgent({ agent, entrypoint: "/tmp/rule-mcp.js" });`,
   ],
   { cwd: fakeProject, env: { ...process.env, HOME: fakeHome, PI_CODING_AGENT_DIR: piDir } },
 );
@@ -36,7 +36,7 @@ const expectations = [
   [join(fakeHome, ".claude", "commands", "pix.md"), "$ARGUMENTS", "Claude command"],
   [join(fakeHome, ".gemini", "commands", "pix.toml"), "{{args}}", "Gemini custom command"],
   [join(fakeProject, ".cursor", "commands", "pix.md"), "$ARGUMENTS", "Cursor project command"],
-  [join(fakeHome, ".copilot", "agents", "pix-galaxy-mcp.agent.md"), "pix-galaxy-mcp", "Copilot custom agent"],
+  [join(fakeHome, ".copilot", "agents", "rule-mcp.agent.md"), "rule-mcp", "Copilot custom agent"],
 ];
 
 for (const [file, marker, label] of expectations) {

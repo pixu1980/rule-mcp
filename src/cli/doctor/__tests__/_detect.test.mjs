@@ -28,19 +28,19 @@ test("validateAgentConfigs passes unconfigured agents through and defaults to va
 
 test("validateAgentConfigs parses vscode, claude and generic mcp files", () => {
   const vscode = join(home, "vscode.json");
-  writeFileSync(vscode, JSON.stringify({ servers: { "pix-galaxy-mcp": { command: "node", args: ["x"], url: "http://h/mcp" } } }));
+  writeFileSync(vscode, JSON.stringify({ servers: { "rule-mcp": { command: "node", args: ["x"], url: "http://h/mcp" } } }));
   const [v] = validateAgentConfigs([{ name: "vscode", configured: true, configFile: vscode }]);
   assert.equal(v.validated, true, "a vscode servers entry validates");
   assert.equal(v.command, "node", "the command is extracted");
   assert.equal(v.url, "http://h/mcp", "the url is extracted");
 
   const claude = join(home, ".claude.json");
-  writeFileSync(claude, JSON.stringify({ mcpServers: { "pix-galaxy-mcp": { command: "node" } } }));
+  writeFileSync(claude, JSON.stringify({ mcpServers: { "rule-mcp": { command: "node" } } }));
   const [c] = validateAgentConfigs([{ name: "claude", configured: true, configFile: claude }]);
   assert.equal(c.validated, true, "a claude mcpServers entry validates");
 
   const generic = join(home, "mcp.json");
-  writeFileSync(generic, JSON.stringify({ mcpServers: { "pix-galaxy-mcp": { command: "node" } } }));
+  writeFileSync(generic, JSON.stringify({ mcpServers: { "rule-mcp": { command: "node" } } }));
   const [g] = validateAgentConfigs([{ name: "zed", configured: true, configFile: generic }]);
   assert.equal(g.validated, true, "a generic mcp.json entry validates");
 });
@@ -49,7 +49,7 @@ test("validateAgentConfigs reports missing, broken and unreadable configs", () =
   const empty = join(home, "empty.json");
   writeFileSync(empty, JSON.stringify({ servers: {} }));
   const [e] = validateAgentConfigs([{ name: "vscode", configured: true, configFile: empty }]);
-  assert.equal(e.validated, false, "no pix-galaxy-mcp entry means unvalidated");
+  assert.equal(e.validated, false, "no rule-mcp entry means unvalidated");
 
   const broken = join(home, "broken.claude.json");
   writeFileSync(broken, "{ nope");
@@ -96,8 +96,8 @@ test("model config maps the environment and the stored key files", () => {
   assert.equal(models.find((entry) => entry.keyName === "OPENAI_API_KEY").configured, true, "a set env key is configured");
   assert.equal(models.find((entry) => entry.keyName === "CO_API_KEY").configured, false, "an unset key is not");
 
-  mkdirSync(join(home, ".config", "pix-galaxy-mcp"), { recursive: true });
-  writeFileSync(join(home, ".config", "pix-galaxy-mcp", "anthropic-key"), "secret");
+  mkdirSync(join(home, ".config", "rule-mcp"), { recursive: true });
+  writeFileSync(join(home, ".config", "rule-mcp", "anthropic-key"), "secret");
   const stored = detectStoredModelKeys();
   const anthropic = stored.find((entry) => entry.provider === "Anthropic");
   assert.equal(anthropic.configured, true, "a stored key file is detected");

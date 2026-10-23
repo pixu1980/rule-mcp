@@ -33,7 +33,7 @@ export function truncate(value, max = 96) {
 /** Banner, status line, and the System section. */
 export function systemSection(report) {
   return [
-    banner("🩺 pix-galaxy-mcp doctor", report.ok ? "healthy" : "needs attention"),
+    banner("🩺 rule-mcp doctor", report.ok ? "healthy" : "needs attention"),
     "",
     `${color("Status", "bold")}: ${statusIcon(report.ok)} ${report.ok ? color("healthy", "green") : color("needs attention", "red")}`,
     "",
@@ -94,7 +94,7 @@ export function daemonSection(report) {
     `Installed:   ${yesNo(native.installed)}`,
     `Loaded:      ${yesNo(native.loaded)}`,
     `Running:     ${yesNo(native.running)}${native.pid ? ` ${color(`(pid ${native.pid})`, "dim")}` : ""}`,
-    `Login Item:  ${color("pix-galaxy-mcpd", native.platform === "macos" ? "cyan" : "dim")}${native.platform === "macos" ? color(" (daemon wrapper in Login Items)", "dim") : ""}`,
+    `Login Item:  ${color("rule-mcpd", native.platform === "macos" ? "cyan" : "dim")}${native.platform === "macos" ? color(" (daemon wrapper in Login Items)", "dim") : ""}`,
     `PID file:    ${color(truncate(report.daemon?.pidFile || "", 100), "dim")}`,
     `Log file:    ${color(truncate(report.daemon?.logFile || "", 100), "dim")}`,
     `Wrapper:     ${color(truncate(WRAPPER_SCRIPT_PATH, 100), "dim")}`,
@@ -122,7 +122,7 @@ export function automationSection() {
   return [
     "",
     section("Automation", "⚙️"),
-    `📤 Use ${color("`pix-galaxy-mcp doctor --json`", "cyan")} to print machine-readable JSON.`,
-    `💾 Use ${color("`pix-galaxy-mcp doctor --json-out <file>`", "cyan")} to export JSON while keeping this UI.`,
+    `📤 Use ${color("`rule-mcp doctor --json`", "cyan")} to print machine-readable JSON.`,
+    `💾 Use ${color("`rule-mcp doctor --json-out <file>`", "cyan")} to export JSON while keeping this UI.`,
   ];
 }

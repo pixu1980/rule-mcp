@@ -9,5 +9,5 @@ overrides:
   # to. Overrides, not ranges: the pin is the remediation, and the audit gate
   # reads the resolved tree.
   # (GHSA-hrr3-gc8f-f4qj fast-uri: vulnerable range >=3.0.0 <3.1.8)
-  pix-galaxy-mcp: 'link:'
+  rule-mcp: 'link:'
   fast-uri: 3.1.8

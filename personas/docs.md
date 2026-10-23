@@ -13,7 +13,7 @@ skills:
   - "plain-language editing"
 evidenceSkills:
     - "pix-styleguide-markdown"
-  - "pix-styleguide-readme"
+  - "pix-process-readme"
   - "pix-process-adr"
   - "pix-styleguide-javascript"
 aliases:

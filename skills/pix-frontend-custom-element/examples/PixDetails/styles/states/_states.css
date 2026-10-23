@@ -1,9 +1,0 @@
-[is="pix-details"] {
-  &[open] {
-    gap: var(--pix-details--gap);
-
-    summary i {
-      rotate: 180deg;
-    }
-  }
-}

@@ -37,22 +37,20 @@ Once routed here, consult the table below and load the specific sub-skill's SKIL
 
 ## Available Guides
 
-| Skill                                                                | Covers                                                                                                       | When to use                                        |
-| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------- |
-| [pix-styleguide-html](../pix-styleguide-html/SKILL.md)               | The mandatory document boilerplate, semantic HTML, document structure, template engine syntax, valid nesting | Any page, and every HTML template or component     |
-| [pix-styleguide-css](../pix-styleguide-css/SKILL.md)                 | Data-part selectors, element selectors, cascade layers, custom properties, CSS comments                      | Styling any component                              |
-| [pix-styleguide-javascript](../pix-styleguide-javascript/SKILL.md)   | Naming, functions, classes, async, JSDoc, Playwright + axe-core testing                                      | Writing JS/TS modules                              |
-| [pix-styleguide-json](../pix-styleguide-json/SKILL.md)               | Structure, property naming, date formats, numeric precision                                                  | API contracts or config files                      |
-| [pix-styleguide-fingerprint](../pix-styleguide-fingerprint/SKILL.md) | ASCII punctuation, American English, phrasing tells                                                          | Writing any prose a reader will see                |
-| [pix-styleguide-baseline](../pix-styleguide-baseline/SKILL.md)       | The three support states, what a fallback costs, `@supports`, the project's support floor                    | Deciding whether a platform feature is safe to use |
-| [pix-styleguide-markdown](../pix-styleguide-markdown/SKILL.md)       | Headings, lists, code blocks, tables, links, tone                                                            | Writing documentation                              |
-| [pix-styleguide-readme](../pix-styleguide-readme/SKILL.md)           | README structure for open source: opening block, facts, example, getting started                             | Writing or rewriting a project README              |
-| [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md)               | WCAG 2.2 AA, ARIA, AI Behavioral Contract, Compliance Profiles, platform-native mapping                      | Every PR - accessibility is mandatory              |
-| [pix-styleguide-i18n](../pix-styleguide-i18n/SKILL.md)               | Translation keys, plurals, `Intl` dates/numbers/currencies, RTL layout, pseudo-localization                  | Shipping in more than one language or region       |
-| [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md)           | PascalCase, camelCase, UPPER_SNAKE_CASE, barrel pattern, `_` prefix, directory layout                        | Creating new files, folders, or exports            |
-| [pix-styleguide-patterns](../pix-styleguide-patterns/SKILL.md)       | Quick reference cheat sheet: naming, file tree, HTML elements, CSS property order, JS patterns               | Daily reference during development                 |
-| [pix-styleguide-typescript](../pix-styleguide-typescript/SKILL.md)   | any vs unknown, type guards, unions over enum, generics, never, readonly                                     | Writing or reviewing TypeScript                    |
-| [pix-styleguide-validation](../pix-styleguide-validation/SKILL.md)   | International business validation: email, phone, VAT, tax IDs, postal codes                                  | Form/API validation rules                          |
+| Skill                                                                    | Covers                                                                                                       | When to use                                        |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------- |
+| [pix-styleguide-html](../pix-styleguide-html/SKILL.md)                   | The mandatory document boilerplate, semantic HTML, document structure, template engine syntax, valid nesting | Any page, and every HTML template or component     |
+| [pix-styleguide-css](../pix-styleguide-css/SKILL.md)                     | Data-part selectors, element selectors, cascade layers, custom properties, CSS comments                      | Styling any component                              |
+| [pix-styleguide-configuration](../pix-styleguide-configuration/SKILL.md) | Base project config files: .gitignore, .editorconfig, .nvmrc, .env.example, README, LICENSE, CONTRIBUTING    | Setting up or auditing a repository                |
+| [pix-styleguide-git](../pix-styleguide-git/SKILL.md)                     | Atomic Conventional Commits with a mandatory scope, branch naming, commit-msg and pre-push discipline        | Writing, validating or preparing git commits       |
+| [pix-styleguide-javascript](../pix-styleguide-javascript/SKILL.md)       | Naming, functions, classes, async, JSDoc, Playwright + axe-core testing                                      | Writing JS/TS modules                              |
+| [pix-styleguide-json](../pix-styleguide-json/SKILL.md)                   | Structure, property naming, date formats, numeric precision                                                  | API contracts or config files                      |
+| [pix-styleguide-baseline](../pix-styleguide-baseline/SKILL.md)           | The three support states, what a fallback costs, `@supports`, the project's support floor                    | Deciding whether a platform feature is safe to use |
+| [pix-styleguide-markdown](../pix-styleguide-markdown/SKILL.md)           | Headings, lists, code blocks, tables, links, tone                                                            | Writing documentation                              |
+| [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md)                   | WCAG 2.2 AA, ARIA, AI Behavioral Contract, Compliance Profiles, platform-native mapping                      | Every PR - accessibility is mandatory              |
+| [pix-styleguide-i18n](../pix-styleguide-i18n/SKILL.md)                   | Translation keys, plurals, `Intl` dates/numbers/currencies, RTL layout, pseudo-localization                  | Shipping in more than one language or region       |
+| [pix-styleguide-naming](../pix-styleguide-naming/SKILL.md)               | PascalCase, camelCase, UPPER_SNAKE_CASE, barrel pattern, `_` prefix, directory layout                        | Creating new files, folders, or exports            |
+| [pix-styleguide-typescript](../pix-styleguide-typescript/SKILL.md)       | any vs unknown, type guards, unions over enum, generics, never, readonly                                     | Writing or reviewing TypeScript                    |
 
 ---
 
@@ -89,7 +87,7 @@ Key guardrails enforced across all styleguides:
 
 ## See also
 
-- [pix-toolchain-project](../pix-toolchain-project/SKILL.md) - Project config files (.gitignore, .editorconfig, etc.)
+- [pix-styleguide-configuration](../pix-styleguide-configuration/SKILL.md) - Project config files (.gitignore, .editorconfig, etc.)
 - [pix-ui-design-system](../pix-ui-design-system/SKILL.md) - Design system component patterns
 - [pix](../pix/SKILL.md) - Central skill index
 

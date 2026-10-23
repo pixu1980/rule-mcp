@@ -27,7 +27,7 @@ const check = (label, ok) => {
 
 console.log("=== Daemon Command Tests ===\n");
 
-const stateDir = join(homedir(), ".pix-galaxy-mcp", "state");
+const stateDir = join(homedir(), ".rule-mcp", "state");
 const pidFile = join(stateDir, "daemon.pid");
 const logFile = join(stateDir, "daemon.log");
 

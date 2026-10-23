@@ -74,7 +74,7 @@ export function parseToolEnvelope(envelope) {
 }
 
 /** A one-line reason from a child-process failure. */
-function reasonOf(error) {
+export function reasonOf(error) {
   return String(error?.stderr || error?.message || error).trim();
 }
 

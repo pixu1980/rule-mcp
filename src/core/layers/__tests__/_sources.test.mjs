@@ -12,6 +12,7 @@ import { mkdirSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
 
 const home = mkdtempSync(join(tmpdir(), "pix-layers-home-"));
 
@@ -56,8 +57,8 @@ test("each layer points where that layer lives", () => {
   try {
     const [native, projectLayer, user] = layerSources("skills", { cwd: root });
 
-    assert.ok(native.dir.endsWith(join("pix-galaxy-mcp", "skills")), `the native layer is the bundled directory: ${native.dir}`);
-    assert.equal(projectLayer.dir, join(root, ".pix-galaxy-mcp", "skills"), "the project layer lives in the checkout");
+    assert.equal(native.dir, fileURLToPath(new URL("../../../../skills", import.meta.url)), `the native layer is the bundled directory: ${native.dir}`);
+    assert.equal(projectLayer.dir, join(root, ".rule-mcp", "skills"), "the project layer lives in the checkout");
     assert.equal(user.dir, join(home, "skills"), "the user layer lives under the pix home");
   } finally {
     rmSync(root, { recursive: true, force: true });
@@ -70,8 +71,8 @@ test("personas resolve through the same three layers", () => {
   try {
     const [native, projectLayer, user] = layerSources("personas", { cwd: root });
 
-    assert.ok(native.dir.endsWith(join("pix-galaxy-mcp", "personas")), `personas are bundled beside skills: ${native.dir}`);
-    assert.equal(projectLayer.dir, join(root, ".pix-galaxy-mcp", "personas"));
+    assert.equal(native.dir, fileURLToPath(new URL("../../../../personas", import.meta.url)), `personas are bundled beside skills: ${native.dir}`);
+    assert.equal(projectLayer.dir, join(root, ".rule-mcp", "personas"));
     assert.equal(user.dir, join(home, "personas"));
   } finally {
     rmSync(root, { recursive: true, force: true });
@@ -86,20 +87,20 @@ test("the project layer is found by walking up to the repository root", () => {
   try {
     const [, projectLayer] = layerSources("skills", { cwd: nested });
 
-    assert.equal(projectLayer.dir, join(root, ".pix-galaxy-mcp", "skills"), "a server started in a subdirectory still finds the project");
+    assert.equal(projectLayer.dir, join(root, ".rule-mcp", "skills"), "a server started in a subdirectory still finds the project");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
 });
 
-test("a .pix-galaxy-mcp directory marks a project root on its own", () => {
-  const root = project(".pix-galaxy-mcp");
+test("a .rule-mcp directory marks a project root on its own", () => {
+  const root = project(".rule-mcp");
   const nested = join(root, "src");
   mkdirSync(nested, { recursive: true });
 
   try {
     assert.equal(findProjectRoot(nested), root, "a project needs no git to declare itself");
-    assert.equal(layerSources("skills", { cwd: nested })[1].dir, join(root, ".pix-galaxy-mcp", "skills"));
+    assert.equal(layerSources("skills", { cwd: nested })[1].dir, join(root, ".rule-mcp", "skills"));
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -110,7 +111,7 @@ test("a directory that is no project falls back to itself", () => {
 
   try {
     assert.equal(findProjectRoot(root), root, "with no marker the starting directory is the project");
-    assert.equal(layerSources("skills", { cwd: root })[1].dir, join(root, ".pix-galaxy-mcp", "skills"), "so the project layer is still addressable");
+    assert.equal(layerSources("skills", { cwd: root })[1].dir, join(root, ".rule-mcp", "skills"), "so the project layer is still addressable");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

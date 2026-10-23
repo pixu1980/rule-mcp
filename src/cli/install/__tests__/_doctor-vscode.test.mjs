@@ -27,7 +27,7 @@ const output = execFileSync(
     [
       `import { installAgent } from ${JSON.stringify(installModule)};`,
       `import { runDoctor } from ${JSON.stringify(doctorModule)};`,
-      'installAgent({ agent: "vscode", entrypoint: "/tmp/pix-galaxy-mcp.js", mode: "daemon" });',
+      'installAgent({ agent: "vscode", entrypoint: "/tmp/rule-mcp.js", mode: "daemon" });',
       'runDoctor().then((r) => console.log(JSON.stringify(r.agents.find(({ name }) => name === "vscode"))));',
     ].join(" "),
   ],

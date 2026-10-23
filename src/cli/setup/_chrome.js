@@ -54,7 +54,7 @@ export function Frame({ title, subtitle, steps, active, hints, rows, columns, ch
       h(
         Box,
         null,
-        h(Text, { color: COLORS.accent, bold: true }, "pix-galaxy-mcp"),
+        h(Text, { color: COLORS.accent, bold: true }, "rule-mcp"),
         h(Text, { color: COLORS.muted }, `  ${GLYPHS.dot}  `),
         h(Text, { color: COLORS.info }, title),
         subtitle ? h(Text, { color: COLORS.muted }, `  ${subtitle}`) : null,

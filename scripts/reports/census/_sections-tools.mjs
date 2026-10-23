@@ -70,7 +70,7 @@ export function actionToolSection(data) {
       data.actionTools.map((tool) => [`[\`${tool.name}\`](${anchor(tool.name)})`, firstSentence(tool.description)]),
     ),
     "",
-    "Call any of them from a shell with `pix-galaxy-mcp tools call <name> --json '{...}'`.",
+    "Call any of them from a shell with `rule-mcp tools call <name> --json '{...}'`.",
     "",
     ...data.actionTools.flatMap((tool) => [`### ${tool.name}`, "", cell(tool.description), "", ...parameters(tool.inputSchema)]),
   ];
@@ -87,7 +87,7 @@ export function skillToolSection(data) {
     "`SKILL.md` and the sections a route selected, and every one takes the same",
     "arguments, so they are listed by area rather than one heading at a time.",
     "The catalog itself, with what each skill covers, is",
-    "[`08-skills.md`](08-skills.md).",
+    "[`09-skills.md`](09-skills.md).",
     "",
     ...table(
       ["Area", "Tools"],

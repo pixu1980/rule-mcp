@@ -84,7 +84,7 @@ test("the zsh script is valid zsh when zsh is installed", (t) => {
 });
 
 test("each script names itself and its install path", () => {
-  assert.match(generateCompletions("zsh"), /^#compdef pix-galaxy-mcp/, "zsh completions must open with the compdef tag");
-  assert.match(generateCompletions("bash"), /complete -F _pix_galaxy_mcp pix-galaxy-mcp/, "bash must register the completion function");
-  assert.match(generateCompletions("fish"), /complete -c pix-galaxy-mcp/, "fish must register completions for the command");
+  assert.match(generateCompletions("zsh"), /^#compdef rule-mcp/, "zsh completions must open with the compdef tag");
+  assert.match(generateCompletions("bash"), /complete -F _rule_mcp rule-mcp/, "bash must register the completion function");
+  assert.match(generateCompletions("fish"), /complete -c rule-mcp/, "fish must register completions for the command");
 });

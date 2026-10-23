@@ -16,7 +16,7 @@ import { resolveEntrypoint, tryExecFile } from "./_service-shared.js";
 // ═══════════════════════════════════════════════════════════════════════════
 
 /** The Windows service name. */
-export const WINDOWS_SERVICE_NAME = "pix-galaxy-mcp";
+export const WINDOWS_SERVICE_NAME = "rule-mcp";
 
 /** Quote one argv element for a Windows command line, where a space or quote needs it. */
 export function quoteWindowsArg(value) {
@@ -68,7 +68,7 @@ export function installWindowsService({ dryRun = false, exec = tryExecFile } = {
   }
 
   try {
-    execFileSync("sc", ["create", name, "binPath=", command, "start=", "auto", "displayName=", "pix-galaxy-mcp MCP Server"], {
+    execFileSync("sc", ["create", name, "binPath=", command, "start=", "auto", "displayName=", "rule-mcp MCP Server"], {
       encoding: "utf8",
       timeout: 10_000,
       stdio: "pipe",

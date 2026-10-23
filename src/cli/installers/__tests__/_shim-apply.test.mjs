@@ -23,7 +23,7 @@ import { test } from "node:test";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const applyModule = join(here, "..", "..", "setup", "_shim-apply.js");
-const localBin = join(here, "..", "..", "..", "..", "bin", "pix-galaxy-mcp.js");
+const localBin = join(here, "..", "..", "..", "..", "bin", "rule-mcp.js");
 
 /** Whether one swept entry actually went. */
 const isRemoved = (entry) => entry.status === "removed";
@@ -36,8 +36,8 @@ function sandbox({ brokenShim = false } = {}) {
   mkdirSync(bin, { recursive: true });
 
   if (brokenShim) {
-    writeFileSync(join(bin, "pix-galaxy-mcp"), "#!/bin/sh\nexit 3\n");
-    chmodSync(join(bin, "pix-galaxy-mcp"), 0o755);
+    writeFileSync(join(bin, "rule-mcp"), "#!/bin/sh\nexit 3\n");
+    chmodSync(join(bin, "rule-mcp"), 0o755);
   }
 
   return { home, bin };
@@ -93,7 +93,7 @@ test("no shim at all is a shim created", () => {
     const result = run(`ensureGlobalShim({ localBin: ${JSON.stringify(localBin)} })`, box);
 
     assert.equal(result.status, "created", JSON.stringify(result));
-    assert.equal(result.path, join(box.home, ".pnpm", "bin", "pix-galaxy-mcp"), "PNPM_HOME/bin wins when it is set");
+    assert.equal(result.path, join(box.home, ".pnpm", "bin", "rule-mcp"), "PNPM_HOME/bin wins when it is set");
   } finally {
     rmSync(box.home, { recursive: true, force: true });
   }
@@ -107,7 +107,7 @@ test("the escape hatch writes nothing, and says which one it is", () => {
 
     assert.equal(result.status, "skipped");
     assert.match(result.reason, /PIX_GALAXY_MCP_SKIP_GLOBAL_LINK/);
-    assert.equal(readFileSync(join(box.bin, "pix-galaxy-mcp"), "utf8"), "#!/bin/sh\nexit 3\n", "the stale shim is left");
+    assert.equal(readFileSync(join(box.bin, "rule-mcp"), "utf8"), "#!/bin/sh\nexit 3\n", "the stale shim is left");
   } finally {
     rmSync(box.home, { recursive: true, force: true });
   }
@@ -120,7 +120,7 @@ test("a dry run plans the write and performs none of it", () => {
     const result = run(`ensureGlobalShim({ localBin: ${JSON.stringify(localBin)}, dryRun: true })`, box);
 
     assert.equal(result.status, "planned");
-    assert.throws(() => readFileSync(join(box.home, ".pnpm", "bin", "pix-galaxy-mcp"), "utf8"));
+    assert.throws(() => readFileSync(join(box.home, ".pnpm", "bin", "rule-mcp"), "utf8"));
   } finally {
     rmSync(box.home, { recursive: true, force: true });
   }
@@ -132,7 +132,7 @@ test("a removal sweeps the current name and the retired alias", () => {
 
   mkdirSync(dir, { recursive: true });
 
-  for (const name of ["pix-galaxy-mcp", "pix-galaxy-mcpd"]) {
+  for (const name of ["rule-mcp", "rule-mcpd"]) {
     writeFileSync(join(dir, name), "#!/bin/sh\nexit 0\n");
   }
 
@@ -142,7 +142,7 @@ test("a removal sweeps the current name and the retired alias", () => {
 
     // The -mcpd alias is retired (ADR 061): a stale shim keeps `command -v`
     // resolving forever and silently breaks the next install.
-    assert.deepEqual(new Set(paths), new Set([join(dir, "pix-galaxy-mcp"), join(dir, "pix-galaxy-mcpd")]));
+    assert.deepEqual(new Set(paths), new Set([join(dir, "rule-mcp"), join(dir, "rule-mcpd")]));
     assert.ok(removed.every(isRemoved), JSON.stringify(removed));
     assert.deepEqual(run("removeGlobalShims()", box), [], "a second removal finds nothing left");
   } finally {

@@ -22,8 +22,8 @@ const displayWidth = (line) => {
   return width;
 };
 for (const [title, subtitle] of [
-  ["🩺 pix-galaxy-mcp doctor", "healthy"],
-  ["pix-galaxy-mcp install", "dry run"],
+  ["🩺 rule-mcp doctor", "healthy"],
+  ["rule-mcp install", "dry run"],
   ["a much longer banner title that forces the width to auto-grow", "subtitle"],
 ]) {
   const widths = banner(title, subtitle).split("\n").map(displayWidth);
@@ -53,7 +53,7 @@ const uninstallUi = formatUninstallResult({
   ok: true,
   dryRun: true,
   agents: ["claude"],
-  note: "Removed pix-galaxy-mcp from claude.",
+  note: "Removed rule-mcp from claude.",
   uninstalled: { claude: ["/tmp/.claude.json"] },
 });
 assert.ok(uninstallUi.includes("🧽"), "uninstall UI should include cleanup emoji");

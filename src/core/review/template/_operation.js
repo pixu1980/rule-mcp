@@ -25,7 +25,7 @@ function commonLines(role, scope) {
     "",
     "Write every finding, review, plan step and document in English, American spelling",
     "(color, behavior, organize). A user's prompt in another language does not change that.",
-    "Run `pix_tool_check` with pix-styleguide-english (or pix-styleguide-markdown) over each written",
+    "Run `pix_tool_check` with pix-process-ai (or pix-styleguide-markdown) over each written",
     "document and iterate until `allPass: true` before closing the run.",
     "",
     "Call `pix_tool_impersonation` with this role and the findings of this run rather than writing that",

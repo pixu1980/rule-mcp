@@ -25,7 +25,7 @@ test("a plan-only flag is named, and the command that honors it is too", () => {
   const { flags, lines } = said({ commandsPreset: "minimal", agent: "claude" });
 
   assert.deepEqual(flags, ["--commands-preset"]);
-  assert.match(lines[0], /pix-galaxy-mcp setup/);
+  assert.match(lines[0], /rule-mcp setup/);
 });
 
 test("an install that asks for nothing extra is not warned at", () => {

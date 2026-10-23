@@ -90,7 +90,7 @@ Guardrail: `pkg-exact-versions`.
 }
 ```
 
-`packageManager` and `devEngines.packageManager` activate corepack. pix-galaxy-mcp
+`packageManager` and `devEngines.packageManager` activate corepack. rule-mcp
 chooses not to support that: corepack gets a vote on whether the install runs at
 all. It downloads a package manager on a machine that is offline, verifies a
 signature from behind a proxy that rewrites it, and shadows the pnpm already on

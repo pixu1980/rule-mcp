@@ -52,11 +52,11 @@ test("promotableEntries merges tiers and filters below the hit floor", () => {
 });
 
 test("the hook registry merges our hooks idempotently and drops them cleanly", () => {
-  const launcher = { command: "pix-galaxy-mcp", args: [] };
+  const launcher = { command: "rule-mcp", args: [] };
 
   const once = withHooks({ hooks: { PreToolUse: [{ matcher: "Bash", hooks: [{ type: "command", command: "user hook" }] }] } }, launcher);
   assert.ok(once.hooks.PreToolUse.length >= 2, "our entry joins the user's");
-  assert.ok(JSON.stringify(once).includes("pix-galaxy-mcp"), "our marker travels");
+  assert.ok(JSON.stringify(once).includes("rule-mcp"), "our marker travels");
 
   const twice = withHooks(once, launcher);
   assert.equal(twice.hooks.PreToolUse.length, once.hooks.PreToolUse.length, "re-merging does not duplicate");
@@ -67,7 +67,7 @@ test("the hook registry merges our hooks idempotently and drops them cleanly", (
     "user hooks remain",
   );
   assert.ok(
-    removed.hooks.PreToolUse.every((entry) => !entry.hooks[0].command.includes("pix-galaxy-mcp")),
+    removed.hooks.PreToolUse.every((entry) => !entry.hooks[0].command.includes("rule-mcp")),
     "our hooks go",
   );
   assert.equal(withoutHooks({ hooks: {} }).hooks, undefined, "an empty hooks container is dropped");
@@ -81,5 +81,5 @@ test("the command matchers catch migrations, commits and miss the rest", () => {
   assert.equal(isCommitCommand("git commit -m fix"), true, "git commit matches");
   assert.equal(isCommitCommand("git -C /x commit -m fix"), true, "git -C commit matches");
   assert.equal(isCommitCommand("git status"), false, "git status does not");
-  assert.equal(HOOK_EVENTS.length, 3, "the three hook events install");
+  assert.equal(HOOK_EVENTS.length, 4, "the four hook events install: pre-tool, post-tool, session start and prompt submit");
 });

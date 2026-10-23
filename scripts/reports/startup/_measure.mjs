@@ -11,7 +11,7 @@ import { spawn, spawnSync } from "node:child_process";
 import { join } from "node:path";
 
 const ROOT = new URL("../../..", import.meta.url).pathname;
-const BIN = join(ROOT, "bin/pix-galaxy-mcp.js");
+const BIN = join(ROOT, "bin/rule-mcp.js");
 const PROBE = join(ROOT, "scripts/reports/startup/_probe.mjs");
 
 export { BIN };

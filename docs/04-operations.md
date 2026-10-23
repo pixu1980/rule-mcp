@@ -9,10 +9,10 @@ The tool, prompt and resource lists are generated from the running server by
 `pnpm census`, so they cannot drift from what it actually registers. They are
 never hand-edited; this document points at them instead of restating them.
 
-- Every tool, with its schema and modes: [09-tools.md](./09-tools.md)
-- Every prompt and its arguments: [10-prompts.md](./10-prompts.md)
-- Every `pix://` resource URI: [15-resources.md](./15-resources.md)
-- What each skill covers: [08-skills.md](./08-skills.md)
+- Every tool, with its schema and modes: [10-tools.md](./10-tools.md)
+- Every prompt and its arguments: [11-prompts.md](./11-prompts.md)
+- Every `pix://` resource URI: [16-resources.md](./16-resources.md)
+- What each skill covers: [09-skills.md](./09-skills.md)
 
 ## Plugins
 
@@ -48,10 +48,10 @@ description: Custom project rules
 EOF
 
 # 3. Reload skills
-pix-galaxy-mcp skills reload
+rule-mcp skills reload
 
 # 4. Your plugin is now available as:
-pix-galaxy-mcp tools call pix_tool_styleguide --json '{"mode": "full"}'
+rule-mcp tools call pix_tool_styleguide --json '{"mode": "full"}'
 ```
 
 ### Adding custom guardrails with plugin.js
@@ -117,7 +117,7 @@ export const generators = {
 The `pix://community` resource lists all installed plugins:
 
 ```bash
-pix-galaxy-mcp tools call pix --json '{"prompt": "List available community skills"}'
+rule-mcp tools call pix --json '{"prompt": "List available community skills"}'
 # Or directly via MCP resource:
 # pix://community
 ```
@@ -134,7 +134,7 @@ pix-galaxy-mcp tools call pix --json '{"prompt": "List available community skill
 ### 1. Repository Setup
 
 ```bash
-cd /Users/emilianopisu/Projects/ai/pix-galaxy-mcp
+cd /Users/emilianopisu/Projects/ai/rule-mcp
 
 # Initialize git
 git init
@@ -142,7 +142,7 @@ git add -A
 git commit -m "feat: initial release v0.1.0"
 
 # Add remote
-git remote add origin https://github.com/pixu1980/pix-galaxy-mcp
+git remote add origin https://github.com/pixu1980/rule-mcp
 
 # Push
 git branch -M main
@@ -153,7 +153,7 @@ git push -u origin main
 
 ### 2. Configure GitHub Secrets
 
-Go to **GitHub → pix-galaxy-pix-galaxy-mcp → Settings → Secrets and variables → Actions** and add:
+Go to **GitHub → pix-galaxy-rule-mcp → Settings → Secrets and variables → Actions** and add:
 
 | Secret      | Value                                                                                                                            |
 | ----------- | -------------------------------------------------------------------------------------------------------------------------------- |
@@ -201,7 +201,7 @@ The release pipeline (`.github/workflows/release.yml`) runs automatically:
 
 ### 5. Homebrew Tap Configuration
 
-To enable `brew install pixu1980/tap/pix-galaxy-mcp`:
+To enable `brew install pixu1980/tap/rule-mcp`:
 
 ```bash
 # Create the tap repo
@@ -209,10 +209,10 @@ To enable `brew install pixu1980/tap/pix-galaxy-mcp`:
 
 # Clone, copy the generated formula, push
 git clone https://github.com/pixu1980/homebrew-tap
-cp pix-galaxy-mcp.rb homebrew-tap/Formula/
+cp rule-mcp.rb homebrew-tap/Formula/
 cd homebrew-tap
-git add Formula/pix-galaxy-mcp.rb
-git commit -m "feat: add pix-galaxy-mcp v0.1.0"
+git add Formula/rule-mcp.rb
+git commit -m "feat: add rule-mcp v0.1.0"
 git push
 ```
 
@@ -222,28 +222,28 @@ git push
 
 Users can install using these methods:
 
-| Method               | Command                                                           |
-| -------------------- | ----------------------------------------------------------------- |
-| **Clone + launcher** | `git clone` + `./scripts/install.sh`                              |
-| **pnpx**             | `pnpx pix-galaxy-mcp serve`                                       |
-| **Homebrew**         | `brew install pixu1980/tap/pix-galaxy-mcp`                        |
-| **Docker**           | `docker pull ghcr.io/pixu1980/pix-galaxy-mcp`                     |
-| **Winget**           | `winget install pixu1980.pix-galaxy-mcp`                          |
-| **Scoop**            | `scoop bucket add pix-galaxy-mcp && scoop install pix-galaxy-mcp` |
-| **GitHub Release**   | Direct `.tgz` download                                            |
+| Method               | Command                                               |
+| -------------------- | ----------------------------------------------------- |
+| **Clone + launcher** | `git clone` + `./scripts/install.sh`                  |
+| **pnpx**             | `pnpx rule-mcp serve`                                 |
+| **Homebrew**         | `brew install pixu1980/tap/rule-mcp`                  |
+| **Docker**           | `docker pull ghcr.io/pixu1980/rule-mcp`               |
+| **Winget**           | `winget install pixu1980.rule-mcp`                    |
+| **Scoop**            | `scoop bucket add rule-mcp && scoop install rule-mcp` |
+| **GitHub Release**   | Direct `.tgz` download                                |
 
 #### Agent command artifacts
 
 `install --agent <name>` installs MCP config plus host-native reusable entry point where verified:
 
-| Agent              | Artifact                                    | Invocation                                             |
-| ------------------ | ------------------------------------------- | ------------------------------------------------------ |
-| Pi                 | `~/.pi/agent/prompts/pix-galaxy-mcp.md`     | `/pix-galaxy-mcp`                                      |
-| Claude Code        | `~/.claude/commands/pix-galaxy-mcp.md`      | `/pix-galaxy-mcp`                                      |
-| Gemini CLI         | `~/.gemini/commands/pix-galaxy-mcp.toml`    | `/pix-galaxy-mcp`                                      |
-| Cursor             | `.cursor/commands/pix-galaxy-mcp.md`        | `/pix-galaxy-mcp`                                      |
-| GitHub Copilot CLI | `~/.copilot/agents/pix-galaxy-mcp.agent.md` | `/agent` selection                                     |
-| Codex CLI          | `~/.agents/skills/pix/`                     | Skill workflow; no stable exact custom command assumed |
+| Agent              | Artifact                              | Invocation                                             |
+| ------------------ | ------------------------------------- | ------------------------------------------------------ |
+| Pi                 | `~/.pi/agent/prompts/rule-mcp.md`     | `/rule-mcp`                                            |
+| Claude Code        | `~/.claude/commands/rule-mcp.md`      | `/rule-mcp`                                            |
+| Gemini CLI         | `~/.gemini/commands/rule-mcp.toml`    | `/rule-mcp`                                            |
+| Cursor             | `.cursor/commands/rule-mcp.md`        | `/rule-mcp`                                            |
+| GitHub Copilot CLI | `~/.copilot/agents/rule-mcp.agent.md` | `/agent` selection                                     |
+| Codex CLI          | `~/.agents/skills/pix/`               | Skill workflow; no stable exact custom command assumed |
 
 Uninstall removes same artifact. Universal command body forces routing, evidence lookup, test-first implementation, blocking `pix_tool_check`, real test reporting, and ADR capture.
 
@@ -253,25 +253,25 @@ Uninstall removes same artifact. Universal command body forces routing, evidence
 
 ```bash
 # Test the clone install
-git clone https://github.com/pixu1980/pix-galaxy-mcp.git
-cd pix-galaxy-mcp
+git clone https://github.com/pixu1980/rule-mcp.git
+cd rule-mcp
 ./scripts/install.sh
-pix-galaxy-mcp doctor
-pix-galaxy-mcp install --agent all
+rule-mcp doctor
+rule-mcp install --agent all
 
 # Test Docker
-docker pull ghcr.io/pixu1980/pix-galaxy-mcp
+docker pull ghcr.io/pixu1980/rule-mcp
 docker compose up -d
 curl http://localhost:37999/health
 
 # Test tools
-pix-galaxy-mcp tools list
-pix-galaxy-mcp tools call pix_tool_detect --json '{}'
-pix-galaxy-mcp tools call pix --json '{"prompt": "React button"}'
+rule-mcp tools list
+rule-mcp tools call pix_tool_detect --json '{}'
+rule-mcp tools call pix --json '{"prompt": "React button"}'
 
 # Verify a release tarball (every GitHub Release attaches both files)
-curl -fsSLO https://github.com/pixu1980/pix-galaxy-mcp/releases/download/<tag>/pix-galaxy-mcp-<version>.tgz
-curl -fsSLO https://github.com/pixu1980/pix-galaxy-mcp/releases/download/<tag>/SHA256SUMS
+curl -fsSLO https://github.com/pixu1980/rule-mcp/releases/download/<tag>/rule-mcp-<version>.tgz
+curl -fsSLO https://github.com/pixu1980/rule-mcp/releases/download/<tag>/SHA256SUMS
 shasum -a 256 -c SHA256SUMS
 ```
 
@@ -319,8 +319,8 @@ Everything else is already configured in existing workflows:
 - CI: `.github/workflows/ci.yml`
 - Release: `.github/workflows/release.yml`
 - Docker: `Dockerfile` + `docker-compose.yml`
-- Winget: `.github/winget/pix-galaxy.pix-galaxy-mcp.yaml`
-- Scoop: `.github/scoop/pix-galaxy-mcp.json`
+- Winget: `.github/winget/pix-galaxy.rule-mcp.yaml`
+- Scoop: `.github/scoop/rule-mcp.json`
 - Server manifest: `server.json`
 - Changelog: `CHANGELOG.md`
 
@@ -330,19 +330,19 @@ Everything else is already configured in existing workflows:
 
 ```bash
 # Run the health check
-pix-galaxy-mcp doctor
+rule-mcp doctor
 
 # List all available tools
-pix-galaxy-mcp tools list
+rule-mcp tools list
 
 # Test a specific tool
-pix-galaxy-mcp tools call pix --json '{"prompt": "test"}'
+rule-mcp tools call pix --json '{"prompt": "test"}'
 
 # Check daemon status
-pix-galaxy-mcp daemon status
+rule-mcp daemon status
 
 # View daemon logs
-pix-galaxy-mcp daemon logs
+rule-mcp daemon logs
 ```
 
 ### Agent-specific issues
@@ -351,17 +351,17 @@ pix-galaxy-mcp daemon logs
 
 **Issue**: Tool not found by Claude.
 
-- **Fix**: Ensure `~/.claude.json` has the `pix-galaxy-mcp` entry.
+- **Fix**: Ensure `~/.claude.json` has the `rule-mcp` entry.
   ```bash
-  pix-galaxy-mcp install --agent claude
+  rule-mcp install --agent claude
   ```
 - **Verify**: The file should contain:
   ```json
   {
     "mcpServers": {
-      "pix-galaxy-mcp": {
+      "rule-mcp": {
         "command": "/path/to/node",
-        "args": ["/path/to/bin/pix-galaxy-mcp.js", "serve"]
+        "args": ["/path/to/bin/rule-mcp.js", "serve"]
       }
     }
   }
@@ -378,7 +378,7 @@ pix-galaxy-mcp daemon logs
 
 - **Fix**: Check `~/.cursor/mcp.json` exists and is valid JSON.
   ```bash
-  pix-galaxy-mcp install --agent cursor
+  rule-mcp install --agent cursor
   ```
 - **Known limitation**: Cursor requires the MCP server to be available at IDE startup. If you install while Cursor is running, restart Cursor.
 
@@ -389,16 +389,16 @@ pix-galaxy-mcp daemon logs
 - **Fix**: The config goes into `.vscode/mcp.json` in your project root.
   ```bash
   cd your-project
-  pix-galaxy-mcp install --agent vscode
+  rule-mcp install --agent vscode
   ```
 - **Verify**: `.vscode/mcp.json` in your project root should contain:
   ```json
   {
     "servers": {
-      "pix-galaxy-mcp": {
+      "rule-mcp": {
         "type": "stdio",
         "command": "/path/to/node",
-        "args": ["/path/to/bin/pix-galaxy-mcp.js", "serve"]
+        "args": ["/path/to/bin/rule-mcp.js", "serve"]
       }
     }
   }
@@ -410,7 +410,7 @@ pix-galaxy-mcp daemon logs
 
 - **Fix**: Copilot uses a different integration path. Copy the instructions from:
   ```bash
-  pix-galaxy-mcp install --agent copilot --dry-run
+  rule-mcp install --agent copilot --dry-run
   ```
   The generated instructions file explains how to configure Copilot.
 
@@ -420,7 +420,7 @@ pix-galaxy-mcp daemon logs
 
 - **Fix**: Ensure `~/.pi/agent/mcp.json` has the entry:
   ```bash
-  pix-galaxy-mcp install --agent pi
+  rule-mcp install --agent pi
   ```
 
 ### Daemon mode
@@ -429,20 +429,20 @@ pix-galaxy-mcp daemon logs
 
 - **Fix**: Check if another instance is running:
   ```bash
-  pix-galaxy-mcp daemon status
+  rule-mcp daemon status
   lsof -i :37999
   ```
 - **Kill the existing process**:
   ```bash
-  pix-galaxy-mcp daemon stop
-  # Or manually: kill $(cat ~/.pix-galaxy-mcp/state/daemon.pid)
+  rule-mcp daemon stop
+  # Or manually: kill $(cat ~/.rule-mcp/state/daemon.pid)
   ```
 
 **Issue**: Daemon started but health check fails.
 
 - **Debug**: Check the daemon log:
   ```bash
-  cat ~/.pix-galaxy-mcp/state/daemon.log
+  cat ~/.rule-mcp/state/daemon.log
   ```
 
 **Issue**: SSE connection drops.
@@ -475,23 +475,23 @@ pix-galaxy-mcp daemon logs
 
 - **Fix**: Re-embed skills:
   ```bash
-  pix-galaxy-mcp skills reload
+  rule-mcp skills reload
   ```
 
 **Issue**: `pix_tool` returns no matching skill.
 
 - **Verify**: Skills are loaded:
   ```bash
-  pix-galaxy-mcp tools list | grep pix-galaxy
+  rule-mcp tools list | grep pix-galaxy
   ```
 - **Try**: Use `pix_tool_search` for free-text search across all skills.
 
 ### General debugging
 
-| Symptom                             | Likely cause           | Fix                                                |
-| ----------------------------------- | ---------------------- | -------------------------------------------------- |
-| `command not found: pix-galaxy-mcp` | Not installed globally | `git clone` + `./scripts/install.sh`               |
-| `Cannot find module`                | Node.js < 20           | Upgrade to Node.js 20+                             |
-| `ECONNREFUSED` on port 37999        | Daemon not running     | `pix-galaxy-mcp daemon start`                      |
-| Tools return 0 results              | Skills not loaded      | `pix-galaxy-mcp skills reload`                     |
-| `ZodError` in tool output           | Invalid arguments      | Check tool schema with `pix-galaxy-mcp tools list` |
+| Symptom                       | Likely cause           | Fix                                          |
+| ----------------------------- | ---------------------- | -------------------------------------------- |
+| `command not found: rule-mcp` | Not installed globally | `git clone` + `./scripts/install.sh`         |
+| `Cannot find module`          | Node.js < 20           | Upgrade to Node.js 20+                       |
+| `ECONNREFUSED` on port 37999  | Daemon not running     | `rule-mcp daemon start`                      |
+| Tools return 0 results        | Skills not loaded      | `rule-mcp skills reload`                     |
+| `ZodError` in tool output     | Invalid arguments      | Check tool schema with `rule-mcp tools list` |

@@ -26,7 +26,7 @@ export function renderList(roles, problems) {
     }
   }
 
-  lines.push("", color("Tip: use `pix-galaxy-mcp roles list --json` for automation output.", "dim"));
+  lines.push("", color("Tip: use `rule-mcp roles list --json` for automation output.", "dim"));
 
   return lines.join("\n");
 }

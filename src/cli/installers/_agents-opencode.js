@@ -47,7 +47,7 @@ const sweepJsonServer = (file, dryRun) => {
 };
 
 /**
- * Installs pix-galaxy-mcp into opencode. The instruction file is registered in
+ * Installs rule-mcp into opencode. The instruction file is registered in
  * `instructions`, because opencode only reads the files that array names.
  *
  * @param {{ entrypoint: string, dryRun?: boolean, global?: boolean, mode?: string }} opts

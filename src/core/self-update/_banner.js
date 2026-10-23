@@ -16,12 +16,12 @@ export function buildBanner(r) {
 
   if (r.updated) {
     if (r.release) {
-      return `🔄 Updating MCP server - pix-galaxy-mcp upgraded ${r.from || "?"}→${r.to} (${r.release}).`;
+      return `🔄 Updating MCP server - rule-mcp upgraded ${r.from || "?"}→${r.to} (${r.release}).`;
     }
 
     const what = r.changedSkills && r.changedCode ? "skills + code" : r.changedCode ? "code" : r.changedSkills ? "skills" : "";
     const scope = what ? `${what} file(s)` : "file(s)";
-    let message = `🔄 Updating MCP server - pix-galaxy-mcp updated ${r.from}→${r.to} (${r.count} ${scope}).`;
+    let message = `🔄 Updating MCP server - rule-mcp updated ${r.from}→${r.to} (${r.count} ${scope}).`;
 
     if (r.changedSkills) {
       message += " Skills hot-reloaded.";
@@ -31,11 +31,11 @@ export function buildBanner(r) {
   }
 
   if (r.available && r.release) {
-    return `ℹ️ pix-galaxy-mcp ${r.to} (${r.release}) is available. On main it applies itself; elsewhere run \`pix-galaxy-mcp update\`, or set PIX_GALAXY_MCP_AUTO_UPDATE=notify to only hear about it.`;
+    return `ℹ️ rule-mcp ${r.to} (${r.release}) is available. On main it applies itself; elsewhere run \`rule-mcp update\`, or set PIX_GALAXY_MCP_AUTO_UPDATE=notify to only hear about it.`;
   }
 
   if (r.reason === "not-on-main") {
-    return `ℹ️ pix-galaxy-mcp ${r.to} (${r.release}) is available, but this checkout is on ${r.branch}. Switch to main or run \`pix-galaxy-mcp update\` to move.`;
+    return `ℹ️ rule-mcp ${r.to} (${r.release}) is available, but this checkout is on ${r.branch}. Switch to main or run \`rule-mcp update\` to move.`;
   }
 
   // A refused remote is never silent: it means this install's upstream is not
@@ -43,21 +43,21 @@ export function buildBanner(r) {
   // someone repointing the remote at code of their own.
   if (r.reason === "remote-not-allowed") {
     return (
-      `⚠️ pix-galaxy-mcp self-update REFUSED - the git remote (${r.remote ?? "unknown"}) is not an allowed update source. ` +
+      `⚠️ rule-mcp self-update REFUSED - the git remote (${r.remote ?? "unknown"}) is not an allowed update source. ` +
       "Set PIX_GALAXY_MCP_UPDATE_REMOTE to the upstream you trust, or update manually. No code was fetched."
     );
   }
 
   if (r.reason === "no-allowed-remote") {
-    return "⚠️ pix-galaxy-mcp self-update REFUSED - no allowed update remote is configured. Set PIX_GALAXY_MCP_UPDATE_REMOTE to the upstream you trust. No code was fetched.";
+    return "⚠️ rule-mcp self-update REFUSED - no allowed update remote is configured. Set PIX_GALAXY_MCP_UPDATE_REMOTE to the upstream you trust. No code was fetched.";
   }
 
   if (r.reason === "unsigned-upstream") {
-    return `⚠️ pix-galaxy-mcp self-update REFUSED - upstream commit ${r.to ?? ""} has no valid signature and PIX_GALAXY_MCP_UPDATE_REQUIRE_SIGNATURE=1. No code was merged.`;
+    return `⚠️ rule-mcp self-update REFUSED - upstream commit ${r.to ?? ""} has no valid signature and PIX_GALAXY_MCP_UPDATE_REQUIRE_SIGNATURE=1. No code was merged.`;
   }
   // Non-git installs get a one-line hint so the user knows how to update.
   if (r.skipped && r.note) {
-    return `ℹ️ pix-galaxy-mcp is up to date on disk. ${r.note}`;
+    return `ℹ️ rule-mcp is up to date on disk. ${r.note}`;
   }
 
   return null;

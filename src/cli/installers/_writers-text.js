@@ -51,7 +51,7 @@ const appendInstruction = (current, { refresh = false } = {}) => {
   return `${present ? removeInstruction(current) : current.trimEnd()}\n\n${INSTRUCTION_BLOCKS.join("\n\n")}\n`;
 };
 
-/** Remove every pix-galaxy-mcp instruction block, sentinels included. */
+/** Remove every rule-mcp instruction block, sentinels included. */
 
 const removeInstruction = (current) => {
   if (!carriesBlock(current)) {
@@ -74,9 +74,9 @@ const commandBody = () =>
     .replace(/^---\s*\n[\s\S]*?\n---\s*\n/, "")
     .trim();
 
-const geminiCommand = () => ['description = "Route coding work through pix-galaxy-mcp"', 'prompt = """', commandBody().replaceAll("$ARGUMENTS", "{{args}}"), '"""', ""].join("\n");
+const geminiCommand = () => ['description = "Route coding work through rule-mcp"', 'prompt = """', commandBody().replaceAll("$ARGUMENTS", "{{args}}"), '"""', ""].join("\n");
 
 const copilotAgent = () =>
-  ["---", "name: pix-galaxy-mcp", "description: Route work through pix MCP skills and enforce validation before completion.", "---", "", commandBody(), ""].join("\n");
+  ["---", "name: rule-mcp", "description: Route work through pix MCP skills and enforce validation before completion.", "---", "", commandBody(), ""].join("\n");
 
 export { upsertTomlBlock, removeTomlBlock, appendInstruction, removeInstruction, commandTemplate, commandBody, geminiCommand, copilotAgent };

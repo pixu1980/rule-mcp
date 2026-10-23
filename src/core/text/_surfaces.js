@@ -11,7 +11,7 @@
  *   - the invariant test (`./__tests__/_surfaces.test.mjs`) walks it and pins
  *     that every "prose" surface shortens verbose text, keeps JSON intact and
  *     never breaks structure;
- *   - the docs section in `docs/07-engineering-guides.md` renders it;
+ *   - the docs section in `docs/08-engineering-guides.md` renders it;
  *   - a reader auditing "is every server→model byte compressed?" can answer
  *     from this table without re-reading the handlers.
  *

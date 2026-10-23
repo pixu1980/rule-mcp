@@ -52,13 +52,13 @@ execFileSync(
     ALIAS_HOOK,
     "--input-type=module",
     "--eval",
-    `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "vscode", entrypoint: "/tmp/pix-galaxy-mcp.js", mode: "daemon" });`,
+    `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "vscode", entrypoint: "/tmp/rule-mcp.js", mode: "daemon" });`,
   ],
   { cwd: fakeProject, env: { ...process.env, HOME: fakeHome } },
 );
 
 const globalConfig = JSON.parse(readFileSync(globalFile, "utf8"));
-const globalServer = globalConfig.servers["pix-galaxy-mcp"];
+const globalServer = globalConfig.servers["rule-mcp"];
 // The daemon serves the HTTP+SSE transport at /sse, so the declared
 // client type must be "sse" (VS Code's "http" type speaks Streamable HTTP and
 // would POST to /sse, which the SSE transport does not accept).
@@ -69,7 +69,7 @@ assert.equal(globalConfig.servers["other-global-server"].command, "other", "must
 assert.equal(globalConfig.mcpServers?.other_server.command, "keep-me", "must preserve other mcpServers entries");
 
 const workspaceConfig = JSON.parse(readFileSync(join(fakeProject, ".vscode", "mcp.json"), "utf8"));
-assert.equal(workspaceConfig.servers["pix-galaxy-mcp"], undefined, "must not create a workspace pix server");
+assert.equal(workspaceConfig.servers["rule-mcp"], undefined, "must not create a workspace pix server");
 assert.equal(workspaceConfig.servers["other-workspace-server"].command, "other", "must preserve workspace config");
 assert.ok(existsSync(globalFile), "must write the user-global VS Code config");
 

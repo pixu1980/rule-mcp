@@ -9,7 +9,7 @@
  * `sed '/export OPENAI_API_KEY=".*"/d'` over every profile, which deleted the
  * user's own API keys whether or not this installer had ever written them -
  * an uninstall is not a license to edit lines it did not author. Only a
- * `# pix-galaxy-mcp:` comment, and the single export it introduces, are ours
+ * `# rule-mcp:` comment, and the single export it introduces, are ours
  * to remove.
  */
 
@@ -29,7 +29,7 @@ export function profilePaths(home = homedir()) {
   ];
 }
 
-const OWNED_COMMENT = /^\s*#\s*pix-galaxy-mcp:/;
+const OWNED_COMMENT = /^\s*#\s*rule-mcp:/;
 const EXPORT_LINE = /^\s*(?:export|set -gx)\s+[A-Z_][\w]*\s*[= ]/;
 
 /** Whether a profile carries anything this installer wrote. */
@@ -39,7 +39,7 @@ export const hasOwnedLines = (text) =>
     .some((line) => OWNED_COMMENT.test(line));
 
 /**
- * Drop every `# pix-galaxy-mcp:` line and the export it annotates.
+ * Drop every `# rule-mcp:` line and the export it annotates.
  *
  * The export is only taken when it directly follows the comment: that is the
  * shape this installer writes, and anything else in the file belongs to the

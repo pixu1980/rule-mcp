@@ -4,7 +4,7 @@
  * A skill's guardrails import nothing (ADR 089).
  *
  * Node resolves a bare specifier by walking `node_modules` up from the
- * importing file, and a skill in a project's `.pix-galaxy-mcp/skills` or in
+ * importing file, and a skill in a project's `.rule-mcp/skills` or in
  * the user's own has no `node_modules` above it. Anything a rule imported
  * therefore failed to load and the skill went silent - the extension point
  * worked only for rules that imported nothing at all.
@@ -72,7 +72,7 @@ test("a rule in the user layer loads and runs with what it was handed", async ()
 });
 
 test("a rule in the project layer does the same", async () => {
-  skill(join(projectRoot, ".pix-galaxy-mcp"), "project-rules");
+  skill(join(projectRoot, ".rule-mcp"), "project-rules");
 
   const loaded = await loadLayerGuardrails({ cwd: projectRoot });
 

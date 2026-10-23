@@ -35,7 +35,7 @@ export function checkRemoteSupport(name, normalizedMode, force = false) {
 }
 
 /**
- * Install pix-galaxy-mcp into one or more agents.
+ * Install rule-mcp into one or more agents.
  * Writes an installed.md manifest after successful installation.
  *
  * @param {{ agent: string, entrypoint: string, dryRun?: boolean, force?: boolean, global?: boolean, mode?: "stdio"|"daemon"|"sse"|"docker" }} opts

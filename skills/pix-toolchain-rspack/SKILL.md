@@ -201,5 +201,5 @@ RSPACK_PROFILE=TRACE RSPACK_TRACE_LAYER=logger RSPACK_TRACE_OUTPUT=./trace.json 
 - [pix-toolchain-vite](../pix-toolchain-vite/SKILL.md) - Vite build tool (alternative bundler)
 - [pix-toolchain-parcel](../pix-toolchain-parcel/SKILL.md) - Parcel zero-config bundler
 - [pix-toolchain-pnpm](../pix-toolchain-pnpm/SKILL.md) - Package management
-- [pix-toolchain-typescript](../pix-toolchain-typescript/SKILL.md) - TypeScript config
+- [pix-styleguide-typescript](../pix-styleguide-typescript/COMPILER.md) - TypeScript config
 - [pix](../pix/SKILL.md) - Central skill index

@@ -11,7 +11,7 @@ skills:
   - "the test pyramid"
 evidenceSkills:
   - "pix-devops-testing"
-  - "pix-styleguide-validation"
+  - "pix-data-validation"
 aliases:
   - "qa-testing"
   - "qa engineer"

@@ -150,7 +150,7 @@ any byte-for-byte test around it fails on a file nobody edited.
 
 ## See also
 
-- [pix-toolchain-commits](../pix-toolchain-commits/SKILL.md) - The commit
+- [pix-styleguide-git](../pix-styleguide-git/SKILL.md) - The commit
   convention this depends on, and the hook that enforces it
 - [pix-process-npm-release](../pix-process-npm-release/SKILL.md) - The
   release the changelog is generated for

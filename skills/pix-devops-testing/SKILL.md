@@ -363,4 +363,4 @@ After setting up coverage, verify by temporarily raising a threshold and confirm
 
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher
 - [pix-devops](../pix-devops/SKILL.md) - DevOps skill index
-- [pix-toolchain-project](../pix-toolchain-project/SKILL.md) - Project configuration baseline
+- [pix-styleguide-configuration](../pix-styleguide-configuration/SKILL.md) - Project configuration baseline

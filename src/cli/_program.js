@@ -3,7 +3,7 @@
 /**
  * @module cli/program
  *
- * Commander-backed CLI program for pix-galaxy-mcp.
+ * Commander-backed CLI program for rule-mcp.
  *
  * Commander gives us, for free and in a battle-tested way:
  *   - `--flag value` AND `--flag=value` syntax
@@ -16,7 +16,7 @@
  *     path flows through the single `runCli` error handler and sets
  *     `process.exitCode`, which keeps tests deterministic.
  *
- * Bare invocation (`pix-galaxy-mcp` with no arguments, or bin spawn by an
+ * Bare invocation (`rule-mcp` with no arguments, or bin spawn by an
  * agent's mcp.json) starts the STDIO server, exactly like before.
  *
  * @see module:index - thin entry wrapper exported as cli()
@@ -31,6 +31,7 @@ import { registerConfigCommand, registerDoctorCommand, registerCompletionsComman
 import { registerAgentCommandsCommand } from "./_register-agent-commands.js";
 import { registerReinstallCommand } from "./_register-reinstall.js";
 import { registerCommitLintCommand } from "./_register-commit.js";
+import { registerInitCommand } from "./_register-init.js";
 import { registerHandoffCommand } from "./_register-handoff.js";
 import { registerAdrCommand, registerSkillsCommand, registerFixCommand, registerHandonCommand } from "./_register-session.js";
 import {
@@ -56,7 +57,7 @@ export function buildProgram() {
   const program = new Command();
 
   program
-    .name("pix-galaxy-mcp")
+    .name("rule-mcp")
     .description("MCP server for the pix-* skill ecosystem")
     .version(version, "-v, --version")
     .helpOption("-h, --help")
@@ -75,7 +76,7 @@ export function buildProgram() {
   });
 
   // Bare invocation = STDIO server. Agent mcp.json entries spawn the binary
-  // with no arguments, so `pix-galaxy-mcp` with an empty argv must serve.
+  // with no arguments, so `rule-mcp` with an empty argv must serve.
   program.action(async () => (await import("./commands/_help.js")).serveCommand({ transport: "stdio" }));
 
   registerHelpCommand(program);
@@ -102,6 +103,7 @@ export function buildProgram() {
   registerAgentCommandsCommand(program);
   registerReinstallCommand(program);
   registerCommitLintCommand(program);
+  registerInitCommand(program);
 
   return program;
 }

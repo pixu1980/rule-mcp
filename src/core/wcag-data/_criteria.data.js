@@ -7,7 +7,7 @@
  *
  * GENERATED FILE - do not edit by hand.
  * Regenerate with `node scripts/update-wcag-data.mjs --apply`, or
- * `pix-galaxy-mcp a11y-update`.
+ * `rule-mcp a11y-update`.
  *
  * Source: https://www.w3.org/WAI/WCAG22/wcag.json
  * Generated: 2026-08-29

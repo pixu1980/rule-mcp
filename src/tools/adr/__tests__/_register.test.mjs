@@ -117,7 +117,7 @@ test("auto-logging records a routed call as an informational entry", async () =>
 
     const body = readFileSync(join(root, "docs", "adr", file), "utf8");
     assert.match(body, /Skill routing: build a react button/, "the title says what was routed");
-    assert.match(body, /\*\*Author\*\*: pix-galaxy-mcp/, "an auto entry is attributed to the server");
+    assert.match(body, /\*\*Author\*\*: rule-mcp/, "an auto entry is attributed to the server");
     assert.match(body, /None - informational entry\./, "and it claims no consequences");
   } finally {
     rmSync(root, { recursive: true, force: true });

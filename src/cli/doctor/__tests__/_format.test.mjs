@@ -41,7 +41,7 @@ const minimal = {
   node: "24.0.0",
   platform: "linux",
   arch: "x64",
-  entrypoint: "/bin/pix-galaxy-mcp.js",
+  entrypoint: "/bin/rule-mcp.js",
   agentsTotal: 15,
   agentsConfigured: 2,
   tools: Array.from({ length: 14 }, (_, i) => `pix_tool_${i}`),
@@ -53,9 +53,9 @@ const minimal = {
   daemon: {
     running: true,
     pid: 4242,
-    pidFile: "/tmp/pix-galaxy-mcp.pid",
-    logFile: "/tmp/pix-galaxy-mcp.log",
-    nativeService: { service: "pix-galaxy-mcpd", platform: "macos", installed: true, loaded: true, running: true, pid: 4243 },
+    pidFile: "/tmp/rule-mcp.pid",
+    logFile: "/tmp/rule-mcp.log",
+    nativeService: { service: "rule-mcpd", platform: "macos", installed: true, loaded: true, running: true, pid: 4243 },
   },
   models: { totalConfigured: 3 },
   stateDir: "/tmp/state",
@@ -76,7 +76,7 @@ test("formatDoctorTerminal renders a full healthy report", () => {
   assert.match(ui, /agent-0, agent-1/);
   assert.match(ui, /\.\.\./); // unconfigured overflow marker
   assert.match(ui, /running \(pid 4242\)/);
-  assert.match(ui, /pix-galaxy-mcpd/);
+  assert.match(ui, /rule-mcpd/);
   assert.match(ui, /Login Items/); // macos-only suffix
   assert.match(ui, /(pid 4243)/); // native.pid suffix
   assert.match(ui, /Configured providers: 3/);

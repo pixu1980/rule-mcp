@@ -11,7 +11,7 @@ import { HOME, resolveEntrypoint, tryExecFile, WRAPPER_SCRIPT_PATH, generateWrap
 // ═══════════════════════════════════════════════════════════════════════════
 
 /** The LaunchAgent label. */
-export const LAUNCH_AGENT_LABEL = "io.github.pix.pix-galaxy-mcp";
+export const LAUNCH_AGENT_LABEL = "io.github.pix.rule-mcp";
 
 /** Where user LaunchAgents live. */
 export const LAUNCH_AGENT_DIR = join(HOME, "Library", "LaunchAgents");
@@ -22,7 +22,7 @@ export const LAUNCH_AGENT_PATH = join(LAUNCH_AGENT_DIR, `${LAUNCH_AGENT_LABEL}.p
 /**
  * Install the macOS LaunchAgent plist and wrapper script, then load it.
  * After this, the daemon appears in System Settings → General → Login Items
- * as "pix-galaxy-mcpd" (not "Node.js Foundation").
+ * as "rule-mcpd" (not "Node.js Foundation").
  *
  * @param {{ dryRun?: boolean, exec?: Function }} [opts]
  * @returns {{ ok: boolean, path: string, action: string, error?: string }}

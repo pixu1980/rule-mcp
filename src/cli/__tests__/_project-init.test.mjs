@@ -3,7 +3,7 @@
 /**
  * @module test/project-init.test
  *
- * `pix-galaxy-mcp init`, and the cleanup of what earlier versions installed.
+ * `rule-mcp init`, and the cleanup of what earlier versions installed.
  *
  * The command used to create a directory in the project, add a `.gitignore`
  * rule for it, and install git hooks that re-asserted the rule after every
@@ -46,7 +46,7 @@ test("init writes nothing into the project", () => {
 
   const result = initProject({ projectDir: project, tokensave: false });
 
-  assert.equal(existsSync(join(project, ".pix-galaxy-mcp")), false, "no directory in the repository");
+  assert.equal(existsSync(join(project, ".rule-mcp")), false, "no directory in the repository");
   assert.equal(existsSync(join(project, ".gitignore")), false, "and no ignore rule written for one");
   assert.equal(result.dir, getProjectPaths(project).dir, "it reports the central directory it prepared");
   assert.ok(existsSync(result.dir), "which exists afterwards");
@@ -64,7 +64,7 @@ test("removal takes our block out of a shared hook and leaves the rest", () => {
         "tokensave sync >/dev/null 2>&1 &",
         "# tokensave: end",
         `# ${GIT_HOOK_MARKER}: begin`,
-        "pix-galaxy-mcp init >/dev/null 2>&1 &",
+        "rule-mcp init >/dev/null 2>&1 &",
         `# ${GIT_HOOK_MARKER}: end`,
         "",
       ].join("\n"),
@@ -90,4 +90,29 @@ test("removal is silent when there is nothing of ours to remove", () => {
 
   assert.deepEqual(removed, [], "a hook that was never ours is left alone");
   assert.equal(readFileSync(join(dir, "post-merge"), "utf8"), "#!/bin/sh\ntokensave sync\n");
+});
+
+test("an already initialized tokensave is reported as existing, not as a failure", () => {
+  const project = workspace();
+  const run = () => {
+    throw Object.assign(new Error("Command failed: tokensave init"), {
+      stderr: "error: TokenSave is already initialized at '/tmp/x'.\nUse tokensave sync to update the index.",
+    });
+  };
+
+  const result = initProject({ projectDir: project, tokensaveBinary: () => "tokensave", run });
+
+  assert.equal(result.tokensave, "existing", "the correct state must not read as a failure in the report");
+});
+
+test("a real tokensave failure still says failed, with the reason", () => {
+  const project = workspace();
+  const run = () => {
+    throw Object.assign(new Error("Command failed: tokensave init"), { stderr: "error: disk full" });
+  };
+
+  const result = initProject({ projectDir: project, tokensaveBinary: () => "tokensave", run });
+
+  assert.match(result.tokensave, /^failed: /, "an actual failure is not softened");
+  assert.match(result.tokensave, /disk full/);
 });

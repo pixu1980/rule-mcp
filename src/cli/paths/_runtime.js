@@ -30,7 +30,7 @@ export function getSseHost() {
 /**
  * Get runtime paths for state files, data, config, and skills.
  *
- * Everything lives under one root the user can see: `~/.pix-galaxy-mcp`.
+ * Everything lives under one root the user can see: `~/.rule-mcp`.
  * `state/` holds the mutable caches (result cache, bm25, token, daemon pid/log),
  * `data/` the install-time artifacts, `config/` the user configuration.
  * `PIX_GALAXY_MCP_STATE_DIR` relocates just the mutable state for containers and
@@ -46,7 +46,7 @@ export function getSseHost() {
  * }}
  */
 export function getRuntimePaths() {
-  const root = process.env.PIX_GALAXY_MCP_HOME || join(homedir(), ".pix-galaxy-mcp");
+  const root = process.env.PIX_GALAXY_MCP_HOME || join(homedir(), ".rule-mcp");
   const stateDir = process.env.PIX_GALAXY_MCP_STATE_DIR || join(root, "state");
   const dataDir = join(root, "data");
 

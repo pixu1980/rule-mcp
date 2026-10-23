@@ -33,7 +33,7 @@ export function sessionFlight() {
   return [
     `## PIX FLIGHT (${FLIGHT_CONCEPT})`,
     "",
-    "- When costing this server: `pix-galaxy-mcp telemetry export` (add `--redact` before sharing); `telemetry show <file>` / `telemetry prune`; or `pix_tool_stats`.",
+    "- When costing this server: `rule-mcp telemetry export` (add `--redact` before sharing); `telemetry show <file>` / `telemetry prune`; or `pix_tool_stats`.",
     "- Read the KPI block (savings, reminder overhead, cache hit rate, errors, latency). Propose only what the recorder supports; ask before acting on an ambiguous number.",
   ].join("\n");
 }

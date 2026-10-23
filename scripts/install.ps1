@@ -1,11 +1,11 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-  pix-galaxy-mcp installer bootstrap for Windows.
+  rule-mcp installer bootstrap for Windows.
 
 .DESCRIPTION
   Checks that Node is new enough, resolves the server binary, and hands the
-  arguments to `pix-galaxy-mcp setup`.
+  arguments to `rule-mcp setup`.
 
   Everything else - agent detection, the picker, install modes, instruction
   files, the guard hooks, skills, the daemon service, the health check - lives
@@ -30,7 +30,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $nodeMin = 20
 
-# Options `pix-galaxy-mcp setup` accepts - same contract as install.sh (see
+# Options `rule-mcp setup` accepts - same contract as install.sh (see
 # the install-script-flags test); unknown options fail before any download.
 $KnownSetupFlags = @('agent', 'mode', 'uninstall', 'rules', 'no-rules', 'commands', 'no-commands', 'hooks', 'no-hooks', 'skills', 'no-skills', 'minimal', 'no-minimal', 'surface', 'service', 'no-service', 'doctor', 'no-doctor', 'commands-preset', 'commands-families', 'commands-areas', 'commands-skills', 'purge', 'keep-config', 'force', 'dry-run', 'no-wizard', 'no-interactive', 'json', 'help', 'version')
 $ValueSetupFlags = @('agent', 'mode', 'commands-preset', 'commands-families', 'commands-areas', 'commands-skills', 'surface')
@@ -42,15 +42,15 @@ function Assert-SetupArguments([string[]]$rest) {
     $i++
     if ($arg -eq '--') {
       # Everything past `--` is positional, and `setup` takes none.
-      if ($i -lt $rest.Count) { Stop-WithMessage "unexpected argument '$($rest[$i])' - run 'pix-galaxy-mcp setup --help' for the list" }
+      if ($i -lt $rest.Count) { Stop-WithMessage "unexpected argument '$($rest[$i])' - run 'rule-mcp setup --help' for the list" }
       return
     }
-    if ($arg -notlike '-*') { Stop-WithMessage "unexpected argument '$arg' - run 'pix-galaxy-mcp setup --help' for the list" }
+    if ($arg -notlike '-*') { Stop-WithMessage "unexpected argument '$arg' - run 'rule-mcp setup --help' for the list" }
     if ($arg -notlike '--*') { continue }
     $name = $arg.Substring(2)
     $inline = $false
     if ($name -like '*=*') { $name = ($name -split '=', 2)[0]; $inline = $true }
-    if ($KnownSetupFlags -notcontains $name) { Stop-WithMessage "unknown option '--$name' - run 'pix-galaxy-mcp setup --help' for the list" }
+    if ($KnownSetupFlags -notcontains $name) { Stop-WithMessage "unknown option '--$name' - run 'rule-mcp setup --help' for the list" }
     # A separate value rides with its flag; an attached one already did.
     if (($ValueSetupFlags -contains $name) -and (-not $inline) -and ($i -lt $rest.Count)) { $i++ }
   }
@@ -59,7 +59,7 @@ function Assert-SetupArguments([string[]]$rest) {
 Assert-SetupArguments $Arguments
 
 function Stop-WithMessage([string]$message) {
-  Write-Error "pix-galaxy-mcp: $message"
+  Write-Error "rule-mcp: $message"
   exit 1
 }
 
@@ -72,26 +72,26 @@ if ($nodeMajor -lt $nodeMin) {
   Stop-WithMessage "Node.js >= $nodeMin is required (found $(& node --version))"
 }
 
-$localBin = Join-Path (Split-Path -Parent $PSScriptRoot) 'bin/pix-galaxy-mcp.js'
+$localBin = Join-Path (Split-Path -Parent $PSScriptRoot) 'bin/rule-mcp.js'
 
 # Prefer the checkout this script came from, then a global shim that actually
 # launches, then a one-off fetch.
 $shimWorks = $false
-if (Get-Command pix-galaxy-mcp -ErrorAction SilentlyContinue) {
-  & pix-galaxy-mcp --version *> $null
+if (Get-Command rule-mcp -ErrorAction SilentlyContinue) {
+  & rule-mcp --version *> $null
   $shimWorks = $LASTEXITCODE -eq 0
 }
 
 if (Test-Path $localBin) {
   & node $localBin setup @Arguments
 } elseif ($shimWorks) {
-  & pix-galaxy-mcp setup @Arguments
+  & rule-mcp setup @Arguments
 } elseif (Get-Command pnpm -ErrorAction SilentlyContinue) {
-  & pnpm dlx pix-galaxy-mcp setup @Arguments
+  & pnpm dlx rule-mcp setup @Arguments
 } elseif (Get-Command npx -ErrorAction SilentlyContinue) {
-  & npx --yes pix-galaxy-mcp setup @Arguments
+  & npx --yes rule-mcp setup @Arguments
 } else {
-  Stop-WithMessage 'no pix-galaxy-mcp binary and no pnpm/npx to fetch one'
+  Stop-WithMessage 'no rule-mcp binary and no pnpm/npx to fetch one'
 }
 
 exit $LASTEXITCODE

@@ -56,7 +56,7 @@ test("apply writes the block, and a second apply refreshes it", () => {
 
   assert.ok(underTmp(applyRules({ home }), home).every((entry) => entry.status === "appended"));
   assert.ok(underTmp(applyRules({ home }), home).every((entry) => entry.status === "refreshed"));
-  assert.match(readFileSync(join(home, ".claude", "CLAUDE.md"), "utf8"), /pix-galaxy-mcp-rules/);
+  assert.match(readFileSync(join(home, ".claude", "CLAUDE.md"), "utf8"), /rule-mcp-rules/);
 });
 
 test("every file install writes is a file uninstall finds", () => {
@@ -87,7 +87,7 @@ test("a legacy Cursor path left by an older install is still cleaned", () => {
   const removed = underTmp(removeRules({ home }), home).map((entry) => entry.file);
 
   assert.ok(removed.includes(legacy), "the legacy path must be swept");
-  assert.ok(!readFileSync(legacy, "utf8").includes("pix-galaxy-mcp-rules"));
+  assert.ok(!readFileSync(legacy, "utf8").includes("rule-mcp-rules"));
 });
 
 test("a selection narrows the targets to the agents named", () => {

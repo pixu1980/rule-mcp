@@ -23,7 +23,7 @@ writeFileSync(
   JSON.stringify(
     {
       servers: {
-        "pix-galaxy-mcp": { type: "http", url: "http://127.0.0.1:37999/sse" },
+        "rule-mcp": { type: "http", url: "http://127.0.0.1:37999/sse" },
         other: { type: "stdio", command: "other" },
       },
     },
@@ -44,7 +44,7 @@ execFileSync(
 
 assert.equal(existsSync(join(fakeProject, ".vscode", "mcp.json")), false, "must not create workspace mcp.json");
 const config = JSON.parse(readFileSync(globalFile, "utf8"));
-assert.equal(config.servers["pix-galaxy-mcp"], undefined);
+assert.equal(config.servers["rule-mcp"], undefined);
 assert.equal(config.servers.other.command, "other");
 
 console.log("  ✅ VS Code uninstall changes only existing global config");

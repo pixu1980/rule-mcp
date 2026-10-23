@@ -14,7 +14,7 @@ import { normalizeInstallMode } from "./_catalog.js";
 import { getOrCreateSseBearerToken } from "../../transport/index.js";
 import { DEFAULT_SSE_PORT } from "../paths/index.js";
 
-const ENV_CONFIG_DIR = join(homedir(), ".config", "pix-galaxy-mcp");
+const ENV_CONFIG_DIR = join(homedir(), ".config", "rule-mcp");
 
 const ENV_CONFIG_FILE = join(ENV_CONFIG_DIR, "env.json");
 
@@ -25,7 +25,7 @@ const ENV_CONFIG_FILE = join(ENV_CONFIG_DIR, "env.json");
  * paid per connect. A per-user directory keeps the cache out of the install
  * tree (which may be read-only, or shared between users).
  */
-const COMPILE_CACHE_DIR = join(homedir(), ".cache", "pix-galaxy-mcp", "compile-cache");
+const COMPILE_CACHE_DIR = join(homedir(), ".cache", "rule-mcp", "compile-cache");
 
 const DEFAULT_OPTOUT_ENV = {
   PIX_GALAXY_MCP_NO_AUTOUPDATE: "0",
@@ -101,7 +101,7 @@ const commandConfig = (entrypoint, options = {}) => {
       config.directTools = true;
       config.lifecycle = "keep-alive";
       // Bare per-server tool naming: tools become `pix-tool-*` and prompts
-      // `/pix-*` instead of the `mcp__pix_galaxy_mcp__*` prefix form.
+      // `/pix-*` instead of the `mcp__rule_mcp__*` prefix form.
       config.toolPrefix = "none";
     }
 
@@ -123,7 +123,7 @@ const commandConfig = (entrypoint, options = {}) => {
     config.directTools = true;
     config.lifecycle = "keep-alive";
     // Same clean naming as the daemon branch: bare `pix-tool-*` tools and
-    // `/pix-*` prompts instead of `mcp__pix_galaxy_mcp__*`.
+    // `/pix-*` prompts instead of `mcp__rule_mcp__*`.
     config.toolPrefix = "none";
   }
 

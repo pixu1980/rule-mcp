@@ -229,7 +229,7 @@ Key rules enforced: **no-css-classes**, **no-inline-styles**, **semantic-html**,
 **external-css** (CSS Modules or adoptedStyleSheets), **barrel-file**, **data-part**,
 **react-no-classname** (no `className`, use `data-part`), **react-hooks-rules**
 (hooks at top level),
-**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see pix-styleguide -> javascript.md),
+**jsdoc-required** (every JS/TS file MUST have complete JSDoc - see pix-styleguide -> comments.md),
 **css-comments-required** (every CSS file MUST have file-level + section comments - see pix-styleguide -> css.md),
 **a11y-test-required** (every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` - see pix-styleguide -> a11y.md -> Automated Testing).
 
@@ -697,5 +697,5 @@ function OrderForm() {
 - [pix](../pix/SKILL.md) - Central skill index and dispatcher
 - [pix-frontend](../pix-frontend/SKILL.md) - Frontend skill index
 - [pix-styleguide](../pix-styleguide/SKILL.md) - Shared frontend standards
-- [pix-styleguide-validation](../pix-styleguide-validation/SKILL.md) - Business validation rules
+- [pix-data-validation](../pix-data-validation/SKILL.md) - Business validation rules
 - [pix-toolchain-vite](../pix-toolchain-vite/SKILL.md) - Vite configuration

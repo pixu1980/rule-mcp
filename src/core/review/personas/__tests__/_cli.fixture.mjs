@@ -22,7 +22,7 @@ import { fileURLToPath } from "node:url";
 export { parsePersonaFile } from "../../persona-file/index.js";
 export { validateRole } from "../../roles/index.js";
 
-const BIN = fileURLToPath(new URL("../../../../../bin/pix-galaxy-mcp.js", import.meta.url));
+const BIN = fileURLToPath(new URL("../../../../../bin/rule-mcp.js", import.meta.url));
 
 /** A home and a project of their own, so cases cannot see each other's roles. */
 export function sandbox() {
@@ -41,9 +41,9 @@ export function roles(box, ...args) {
       ...process.env,
       HOME: box.home,
       PIX_GALAXY_MCP_NO_AUTOUPDATE: "1",
-      PIX_GALAXY_MCP_STATE_DIR: join(box.home, ".pix-galaxy-mcp", "state"),
+      PIX_GALAXY_MCP_STATE_DIR: join(box.home, ".rule-mcp", "state"),
     },
   });
 }
 
-export const overlayFile = (box, id) => join(box.home, ".pix-galaxy-mcp", "config", "roles", `${id}.md`);
+export const overlayFile = (box, id) => join(box.home, ".rule-mcp", "config", "roles", `${id}.md`);

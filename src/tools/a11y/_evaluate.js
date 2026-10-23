@@ -14,7 +14,7 @@ export const BLOCKING = new Set(["failed", "cantTell", "untested"]);
  * @returns {object} everything the renderers need
  */
 export function evaluate(input) {
-  const { scope, sample = [], results = [], evaluator = "pix-galaxy-mcp", date } = input ?? {};
+  const { scope, sample = [], results = [], evaluator = "rule-mcp", date } = input ?? {};
 
   if (!scope?.title || !scope?.url) {
     throw new Error("scope.title and scope.url are required: a result with no declared scope cannot be reproduced or disputed");

@@ -303,6 +303,6 @@ Before shipping any frontend feature, verify:
 
 - [pix-styleguide-a11y](../pix-styleguide-a11y/SKILL.md) - `lang` and `dir` are accessibility attributes before they are i18n ones
 - [pix-styleguide-css](../pix-styleguide-css/SKILL.md) - logical properties and the cascade that makes RTL free
-- [pix-styleguide-validation](../pix-styleguide-validation/SKILL.md) - addresses, phone numbers and tax IDs vary by country the same way text varies by language
+- [pix-data-validation](../pix-data-validation/SKILL.md) - addresses, phone numbers and tax IDs vary by country the same way text varies by language
 - [pix-styleguide-javascript](../pix-styleguide-javascript/SKILL.md) - where the formatting calls live
 - [pix-frontend](../pix-frontend/SKILL.md) - framework-level wiring for the locale provider

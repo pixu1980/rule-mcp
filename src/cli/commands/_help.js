@@ -57,7 +57,7 @@ async function serveCommand(opts = {}) {
       null,
       2,
     );
-    console.error(`\npix-galaxy-mcp ${transport === "http" ? "Streamable HTTP" : "SSE"} server listening on ${scheme}://${connectHost}:${port}/${endpoint}\n`);
+    console.error(`\nrule-mcp ${transport === "http" ? "Streamable HTTP" : "SSE"} server listening on ${scheme}://${connectHost}:${port}/${endpoint}\n`);
     console.error(`Config for agent's mcp.json:\n`);
     console.error(configSnippet);
     console.error(``);
@@ -76,7 +76,7 @@ async function serveCommand(opts = {}) {
     // Printed AFTER the handlers exist: "listening" only says the socket is
     // open, and a signal delivered between those two moments killed the
     // process with Node's default disposition instead of the graceful path.
-    console.error("pix-galaxy-mcp ready (signal handlers installed)");
+    console.error("rule-mcp ready (signal handlers installed)");
     await whenShutdown();
   } else {
     const configSnippet = JSON.stringify(
@@ -87,7 +87,7 @@ async function serveCommand(opts = {}) {
       2,
     );
 
-    console.error(`pix-galaxy-mcp starting (STDIO transport)`);
+    console.error(`rule-mcp starting (STDIO transport)`);
     console.error(`Config for agent's mcp.json:\n`);
     console.error(configSnippet);
     console.error(``);

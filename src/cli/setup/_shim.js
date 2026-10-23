@@ -3,7 +3,7 @@
 /**
  * @module cli/setup/shim
  *
- * Finding the global `pix-galaxy-mcp` launcher and deciding whether to trust it.
+ * Finding the global `rule-mcp` launcher and deciding whether to trust it.
  *
  * A shim pins the absolute path of the repo it was created from. Move the
  * project and the shim stays on PATH but crashes on launch, and every agent
@@ -26,7 +26,7 @@ const IS_WINDOWS = platform() === "win32";
 
 /** Absolute path of the shim on PATH, or "" when there is none. */
 export function shimPath() {
-  const lookup = IS_WINDOWS ? "where pix-galaxy-mcp" : "command -v pix-galaxy-mcp";
+  const lookup = IS_WINDOWS ? "where rule-mcp" : "command -v rule-mcp";
 
   return tryExec(lookup, { shell: IS_WINDOWS ? undefined : "/bin/sh" })
     .split("\n", 1)[0]
@@ -35,7 +35,7 @@ export function shimPath() {
 
 /** This checkout's own entrypoint: the only target a shim is trusted to name. */
 export function ownEntrypoint() {
-  return join(getRepoRoot(), "bin", "pix-galaxy-mcp.js");
+  return join(getRepoRoot(), "bin", "rule-mcp.js");
 }
 
 /** A path with its symlinks resolved, or the path itself when it does not exist. */
@@ -77,7 +77,7 @@ export function shimTarget(shim, entrypoint = ownEntrypoint()) {
 /**
  * Whether the shim on PATH launches this checkout.
  *
- * `pix-galaxy-mcp --version` executes whatever PATH yields, and a name is not
+ * `rule-mcp --version` executes whatever PATH yields, and a name is not
  * a proof of origin, so the shim is resolved first and run second.
  *
  * @param {{ path?: string, entrypoint?: string, run?: Function }} [options]
@@ -129,12 +129,12 @@ export function shimCandidates(home = homedir()) {
     join(home, ".npm-global", "bin"),
   ].filter(Boolean);
 
-  return [...new Set(dirs.flatMap((dir) => ["pix-galaxy-mcp", "pix-galaxy-mcpd"].map((name) => join(dir, name))))];
+  return [...new Set(dirs.flatMap((dir) => ["rule-mcp", "rule-mcpd"].map((name) => join(dir, name))))];
 }
 
 /** Linked package entries inside pnpm's per-user global store. */
 export function linkCandidates(home = homedir()) {
   const roots = [join(home, "Library", "pnpm", "global"), join(home, ".local", "share", "pnpm", "global")];
 
-  return roots.filter((root) => existsSync(root)).flatMap((root) => readdirSync(root).map((version) => join(root, version, "node_modules", "pix-galaxy-mcp")));
+  return roots.filter((root) => existsSync(root)).flatMap((root) => readdirSync(root).map((version) => join(root, version, "node_modules", "rule-mcp")));
 }

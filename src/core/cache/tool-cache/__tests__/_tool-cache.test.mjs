@@ -42,6 +42,7 @@ const { registerTool, callTool } = await import("../../../../tools/router/index.
 check("T1 read-only tool gets a key", typeof cacheKey("pix", { prompt: "x" }) === "string");
 check("T1.1 mutation tool pix_tool_apply has no key", cacheKey("pix_tool_apply", {}) === null);
 check("T1.2 pix_tool_fix has no key", cacheKey("pix_tool_fix", {}) === null);
+check("T1.2.1 pix_tool_init has no key: it reads the graph, the hooks and the manifest", cacheKey("pix_tool_init", {}) === null);
 check("T1.3 key stable regardless of arg order", cacheKey("pix", { a: 1, b: 2 }) === cacheKey("pix", { b: 2, a: 1 }));
 
 // ── T2: roundtrip + deep-copy isolation ──

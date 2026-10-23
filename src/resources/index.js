@@ -3,7 +3,7 @@
 /**
  * @module resources/index
  *
- * MCP Resource registry for pix-galaxy-mcp.
+ * MCP Resource registry for rule-mcp.
  * Handles listing and reading pix://* resources.
  *
  * Each resource is a piece of skill content or metadata

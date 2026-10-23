@@ -30,7 +30,7 @@ try {
   // script deliberately advertises that no separate global install is needed.
   assert.equal(
     packageJson.scripts?.["skills:install"],
-    'echo "ℹ️  pnpm skills:install: skills are loaded directly from ./skills - no separate install step is needed."',
+    'echo "ℹ️ pnpm skills:install: skills are loaded directly from ./skills - no separate install step is needed."',
     "package.json must advertise that skills need no separate install step",
   );
 

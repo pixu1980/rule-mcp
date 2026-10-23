@@ -45,14 +45,14 @@ function getSkillMetadata(skillName) {
 }
 
 /**
- * The four skills the target retains that the source does not ship. They are a
+ * The two skills the target retains that the source does not ship. They are a
  * real part of the pix union and route normally; the routing-corpus thresholds
  * were measured on the source's skill set, so the corpus tests opt into the
  * source-commensurate universe (PIX_GALAXY_MCP_SKILL_UNIVERSE=base) to keep the
  * measurement comparable - their extra bodies would otherwise dilute the
  * term-document frequencies (idf) the scorer's numbers are pinned to.
  */
-const TARGET_ONLY_SKILLS = new Set(["pix-frontend-custom-element", "pix-frontend-template-engine", "pix-frontend-vanilla-reactive", "pix-platform-auth"]);
+const TARGET_ONLY_SKILLS = new Set(["pix-frontend-template-engine", "pix-platform-auth"]);
 
 /**
  * Every skill name that resolves, sorted.

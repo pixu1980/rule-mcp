@@ -55,3 +55,13 @@ test("every relative link in docs/ resolves", () => {
 
   assert.deepEqual(dead, [], "a dead link ships a 404");
 });
+
+test("README.md links the five repository governance policies and all resolve locally (OSS-08)", () => {
+  const readme = readFileSync(join(root, "README.md"), "utf8");
+  const requiredPolicies = ["CONTRIBUTING.md", "GOVERNANCE.md", "CODE_OF_CONDUCT.md", "MAINTAINERS.md", "SECURITY.md"];
+
+  for (const policy of requiredPolicies) {
+    assert.ok(readme.includes(`(${policy})`) || readme.includes(`"${policy}"`), `README.md must link ${policy}`);
+    assert.ok(existsSync(join(root, policy)), `${policy} must exist at repository root`);
+  }
+});

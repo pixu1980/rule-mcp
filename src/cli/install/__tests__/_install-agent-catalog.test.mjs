@@ -25,7 +25,7 @@ import { getAllAgents, installAgent, uninstallAgent } from "../index.js";
 import { agentCatalog, agentRows } from "../../setup/_agent-rows.js";
 
 const root = new URL("../../../..", import.meta.url).pathname;
-const entrypoint = join(root, "bin", "pix-galaxy-mcp.js");
+const entrypoint = join(root, "bin", "rule-mcp.js");
 
 console.log("install agent catalog test");
 

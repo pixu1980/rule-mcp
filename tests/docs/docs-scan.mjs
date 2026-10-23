@@ -34,7 +34,7 @@ function scan(dir) {
         // trailing underscore, so `pix_tool_*` is the family wildcard in
         // prose rather than a reference that went stale.
         for (const m of line.matchAll(/\bpix_[a-z0-9_]*[a-z0-9]\b/g)) {
-          if (tools.has(m[0]) || m[0] === "pix-galaxy-mcp" || m[0] === "pix_tool_process_handoff") {
+          if (tools.has(m[0]) || m[0] === "rule-mcp" || m[0] === "pix_tool_process_handoff") {
             continue;
           }
 

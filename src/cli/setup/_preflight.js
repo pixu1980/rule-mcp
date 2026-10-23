@@ -32,7 +32,7 @@ export function detectLocalRepo(root = process.cwd()) {
   }
 
   try {
-    return JSON.parse(readFileSync(manifest, "utf8")).name === "pix-galaxy-mcp";
+    return JSON.parse(readFileSync(manifest, "utf8")).name === "rule-mcp";
   } catch {
     return false;
   }
@@ -58,7 +58,7 @@ export function preflight() {
   const git = tryExecResult("git --version");
   const gitVersion = git.stdout.trim();
   const isLocalRepo = detectLocalRepo();
-  const localBin = join(isLocalRepo ? process.cwd() : getRepoRoot(), "bin", "pix-galaxy-mcp.js");
+  const localBin = join(isLocalRepo ? process.cwd() : getRepoRoot(), "bin", "rule-mcp.js");
   const hasLocalBin = existsSync(localBin);
   const shim = shimPath();
   const shimOk = shimWorks();
@@ -87,7 +87,7 @@ export function preflight() {
       id: "binary",
       label: "Server binary",
       status: hasLocalBin || shimOk ? "ok" : "fail",
-      detail: hasLocalBin ? localBin : shimOk ? shim : "no local bin/pix-galaxy-mcp.js and no working global shim",
+      detail: hasLocalBin ? localBin : shimOk ? shim : "no local bin/rule-mcp.js and no working global shim",
     },
     {
       id: "shim",

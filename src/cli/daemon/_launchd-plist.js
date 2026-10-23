@@ -9,7 +9,7 @@ import { LAUNCH_AGENT_LABEL } from "./_launchd.js";
 /**
  * Generate the LaunchAgent plist XML.
  * Uses Program (wrapper script) instead of ProgramArguments with node directly,
- * so macOS shows "pix-galaxy-mcpd" in Login Items.
+ * so macOS shows "rule-mcpd" in Login Items.
  *
  * @param {{ node: string, script: string, command: string[] }} ep
  * @returns {string} - plist XML content

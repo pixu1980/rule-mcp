@@ -79,7 +79,7 @@ export async function requestHandler(request, res) {
     // to the client to avoid leaking internal state.
     const requestId = randomUUID();
 
-    process.stderr.write(`[pix-galaxy-mcp] [${requestId}] ${request.method} ${request.url}: ${error?.stack ?? error?.message ?? error}\n`);
+    process.stderr.write(`[rule-mcp] [${requestId}] ${request.method} ${request.url}: ${error?.stack ?? error?.message ?? error}\n`);
 
     if (!res.headersSent) {
       res.writeHead(500, { "Content-Type": "application/json" });

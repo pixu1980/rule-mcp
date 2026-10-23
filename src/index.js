@@ -5,21 +5,21 @@
 /**
  * @module index
  *
- * CLI entry point for pix-galaxy-mcp.
+ * CLI entry point for rule-mcp.
  *
  * The actual command tree is built and dispatched by {@link module:cli/program}
  * (commander-based). This module stays thin so the bin shim and any embedding
  * code only need the stable `cli()` export.
  *
  * Usage:
- *   pix-galaxy-mcp serve
- *   pix-galaxy-mcp daemon start|stop|status|logs
- *   pix-galaxy-mcp install --agent <name> [--dry-run] [--force]
- *   pix-galaxy-mcp uninstall --agent <name> [--dry-run]
- *   pix-galaxy-mcp tools list|call <name> --json '{...}'
- *   pix-galaxy-mcp doctor
- *   pix-galaxy-mcp config [env]
- *   pix-galaxy-mcp skills reload
+ *   rule-mcp serve
+ *   rule-mcp daemon start|stop|status|logs
+ *   rule-mcp install --agent <name> [--dry-run] [--force]
+ *   rule-mcp uninstall --agent <name> [--dry-run]
+ *   rule-mcp tools list|call <name> --json '{...}'
+ *   rule-mcp doctor
+ *   rule-mcp config [env]
+ *   rule-mcp skills reload
  */
 
 import { installProcessErrorHandlers } from "./utils/index.js";

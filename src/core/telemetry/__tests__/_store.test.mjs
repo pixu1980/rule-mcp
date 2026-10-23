@@ -50,6 +50,6 @@ const projectStateDir = getProjectPaths(projectDir).dir;
 check("T10 the events file lives in this project's own directory", eventsFile().startsWith(projectStateDir));
 check("T10.1 rollups live beside it", existsSync(projectStateDir) && readdirSync(projectStateDir).some((f) => f.includes("rollup")));
 check("T10.2 that directory is under the home directory", !projectStateDir.startsWith(projectDir));
-check("T10.3 and the project itself is untouched", !existsSync(join(projectDir, ".pix-galaxy-mcp")));
+check("T10.3 and the project itself is untouched", !existsSync(join(projectDir, ".rule-mcp")));
 
 finish();

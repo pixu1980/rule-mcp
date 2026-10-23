@@ -17,7 +17,7 @@ const reservePort = () =>
   });
 
 const port = await reservePort();
-const child = spawn(process.execPath, ["bin/pix-galaxy-mcp.js", "serve", "--transport", "sse", "--port", String(port)], {
+const child = spawn(process.execPath, ["bin/rule-mcp.js", "serve", "--transport", "sse", "--port", String(port)], {
   cwd: root,
   stdio: ["ignore", "ignore", "pipe"],
 });

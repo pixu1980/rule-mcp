@@ -3,7 +3,7 @@
 /**
  * @module cli/cache
  *
- * `pix-galaxy-mcp cache <stats|export|verify|clear>`.
+ * `rule-mcp cache <stats|export|verify|clear>`.
  *
  * Four read surfaces over the deterministic cache, and one of them is the
  * reason the others can be trusted: `verify` recomputes what is stored and says

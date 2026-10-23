@@ -3,7 +3,7 @@
 /**
  * @module cli/uninstall
  *
- * Agent/IDE uninstallation support for pix-galaxy-mcp.
+ * Agent/IDE uninstallation support for rule-mcp.
  * Removes MCP configuration entries from all supported coding agent configs.
  *
  * This is the inverse of the install logic in install.js.
@@ -18,7 +18,7 @@
 import { uninstallAgent } from "./install/index.js";
 
 /**
- * Uninstall pix-galaxy-mcp from one or more agents.
+ * Uninstall rule-mcp from one or more agents.
  * Delegates to the uninstall logic in install.js.
  *
  * @param {{ agent: string, dryRun?: boolean }} opts
@@ -30,7 +30,7 @@ export function uninstallFromAgent({ agent, dryRun = false }) {
   return {
     ok: result.ok,
     dryRun: result.dryRun,
-    note: `Removed pix-galaxy-mcp from ${agent === "all" ? "all detected agents" : agent}.`,
+    note: `Removed rule-mcp from ${agent === "all" ? "all detected agents" : agent}.`,
     agents: Object.keys(result.uninstalled),
     uninstalled: result.uninstalled,
   };

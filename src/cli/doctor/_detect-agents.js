@@ -26,7 +26,7 @@ export function validateAgentConfigs(agents) {
       if (agent.name === "vscode") {
         try {
           const json = JSON.parse(content);
-          const mcpEntry = json.servers?.["pix-galaxy-mcp"];
+          const mcpEntry = json.servers?.["rule-mcp"];
 
           return {
             ...agent,
@@ -44,7 +44,7 @@ export function validateAgentConfigs(agents) {
       if (agent.name === "claude" && agent.configFile.endsWith(".claude.json")) {
         try {
           const json = JSON.parse(content);
-          const mcpEntry = json.mcpServers?.["pix-galaxy-mcp"];
+          const mcpEntry = json.mcpServers?.["rule-mcp"];
 
           return {
             ...agent,
@@ -61,7 +61,7 @@ export function validateAgentConfigs(agents) {
       if (agent.configFile.endsWith("mcp.json")) {
         try {
           const json = JSON.parse(content);
-          const mcpEntry = json.mcpServers?.["pix-galaxy-mcp"];
+          const mcpEntry = json.mcpServers?.["rule-mcp"];
 
           return {
             ...agent,

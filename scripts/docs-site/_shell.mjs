@@ -6,7 +6,7 @@ import { depthPrefix, escapeHtml } from "./_html.mjs";
 import { nav, referenceNav, stripChapterNumber } from "./_nav.mjs";
 
 /** Matches prefs.js's STORAGE_KEY; duplicated because the two run in different worlds (server-side generator vs. static client asset). */
-const STORAGE_KEY = "pix-galaxy-mcp-docs-prefs";
+const STORAGE_KEY = "rule-mcp-docs-prefs";
 
 /**
  * A blocking script, not deferred, that applies a stored theme/contrast/motion
@@ -81,7 +81,7 @@ export function layout({ title, out, body, pages }) {
     '<meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
     '<meta name="color-scheme" content="light dark">',
-    `<title>${escapeHtml(title)} · pix-galaxy-mcp</title>`,
+    `<title>${escapeHtml(title)} · rule-mcp</title>`,
     themeScript(),
     `<link rel="stylesheet" href="${prefix}style.css">`,
     `<script src="${prefix}prefs.js" defer></script>`,
@@ -90,7 +90,7 @@ export function layout({ title, out, body, pages }) {
     `<body data-page="${out === "index.html" ? "home" : "doc"}">`,
     '<a href="#main">Skip to content</a>',
     "<header>",
-    `<p><a href="${prefix}index.html">pix-galaxy-mcp</a></p>`,
+    `<p><a href="${prefix}index.html">rule-mcp</a></p>`,
     '<nav aria-label="Primary"><ul>',
     nav(pages, out),
     "</ul></nav>",

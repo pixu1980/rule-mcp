@@ -6,7 +6,6 @@ import { jsBlankLinesBlocks } from "./_blank-lines-blocks.js";
 import { jsConstTop } from "./_const-top.js";
 import { jsForLoopBraces } from "./_for-loop-braces.js";
 import { jsIfBraces } from "./_if-braces.js";
-import { jsdocRequired } from "./_jsdoc-required.js";
 import { jsNewForBuiltins } from "./_new-for-builtins.js";
 import { jsNoArrayForEach } from "./_no-array-for-each.js";
 import { jsNoBlankLinesInBlocks } from "./_no-blank-lines-in-blocks.js";
@@ -25,7 +24,6 @@ export const GUARDRAILS = [
   jsConstTop,
   jsForLoopBraces,
   jsIfBraces,
-  jsdocRequired,
   jsNewForBuiltins,
   jsNoArrayForEach,
   jsNoBlankLinesInBlocks,

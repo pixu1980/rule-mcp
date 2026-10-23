@@ -75,7 +75,7 @@ export function rolesCommand(subcommand = "list", options = {}) {
     }
 
     default: {
-      print("Usage: pix-galaxy-mcp roles <list|show|new|deprecate> [id] [flags]");
+      print("Usage: rule-mcp roles <list|show|new|deprecate> [id] [flags]");
       process.exitCode = 1;
     }
   }

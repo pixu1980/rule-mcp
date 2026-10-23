@@ -1,11 +1,11 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-  pix-galaxy-mcp uninstaller bootstrap for Windows.
+  rule-mcp uninstaller bootstrap for Windows.
 
 .DESCRIPTION
   The mirror of scripts/install.ps1: check node, resolve the binary, hand
-  over to `pix-galaxy-mcp setup --uninstall`. The removal logic - the scan,
+  over to `rule-mcp setup --uninstall`. The removal logic - the scan,
   the per-group choices, the purge - lives in src/cli/setup/ (ADR 080).
 
   Every path removed lives under the user profile; the project files in the
@@ -30,7 +30,7 @@ $ErrorActionPreference = 'Stop'
 $nodeMin = 20
 
 function Stop-WithMessage([string]$message) {
-  Write-Error "pix-galaxy-mcp: $message"
+  Write-Error "rule-mcp: $message"
   exit 1
 }
 
@@ -45,24 +45,24 @@ if ($nodeMajor -lt $nodeMin) {
 
 $forwarded = @('--uninstall') + ($Arguments | ForEach-Object { if ($_ -eq '--force') { '--no-interactive' } else { $_ } })
 
-$localBin = Join-Path (Split-Path -Parent $PSScriptRoot) 'bin/pix-galaxy-mcp.js'
+$localBin = Join-Path (Split-Path -Parent $PSScriptRoot) 'bin/rule-mcp.js'
 
 $shimWorks = $false
-if (Get-Command pix-galaxy-mcp -ErrorAction SilentlyContinue) {
-  & pix-galaxy-mcp --version *> $null
+if (Get-Command rule-mcp -ErrorAction SilentlyContinue) {
+  & rule-mcp --version *> $null
   $shimWorks = $LASTEXITCODE -eq 0
 }
 
 if (Test-Path $localBin) {
   & node $localBin setup @forwarded
 } elseif ($shimWorks) {
-  & pix-galaxy-mcp setup @forwarded
+  & rule-mcp setup @forwarded
 } elseif (Get-Command pnpm -ErrorAction SilentlyContinue) {
-  & pnpm dlx pix-galaxy-mcp setup @forwarded
+  & pnpm dlx rule-mcp setup @forwarded
 } elseif (Get-Command npx -ErrorAction SilentlyContinue) {
-  & npx --yes pix-galaxy-mcp setup @forwarded
+  & npx --yes rule-mcp setup @forwarded
 } else {
-  Stop-WithMessage 'no pix-galaxy-mcp binary and no pnpm/npx to fetch one'
+  Stop-WithMessage 'no rule-mcp binary and no pnpm/npx to fetch one'
 }
 
 exit $LASTEXITCODE

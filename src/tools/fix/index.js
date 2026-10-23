@@ -19,6 +19,7 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { z } from "zod/v4";
 
 import { fixText } from "../../core/guardrails/fix/index.js";
+import { syncIndex } from "../../core/tokensave/_sync.js";
 import { registerTool } from "../router/index.js";
 
 const FixSchema = z.object({
@@ -33,15 +34,11 @@ const FIXABLE = /\.(?:js|mjs|cjs|jsx|ts|tsx|mts|cts|md|mdx|markdown|txt)$/i;
 
 /** One `git` call whose failure is an empty list, never a thrown tool. */
 function git(args) {
-  let output = "";
-
   try {
-    output = execFileSync("git", args, { encoding: "utf8" });
+    return execFileSync("git", args, { encoding: "utf8" }).split("\n").filter(Boolean);
   } catch {
     return [];
   }
-
-  return output.split("\n").filter(Boolean);
 }
 
 /** The changed files: the working tree diff plus everything untracked. */
@@ -100,6 +97,12 @@ export function registerFixTool() {
       }
 
       const head = `${write ? "Fixed" : "Would fix"} ${touched}/${targets.length} file(s).`;
+
+      // The graph answered the checks that produced these fixes; a write it does
+      // not see makes every later answer older than the code it describes.
+      if (write && touched > 0) {
+        syncIndex(arguments_.path ?? process.cwd());
+      }
 
       return {
         content: [

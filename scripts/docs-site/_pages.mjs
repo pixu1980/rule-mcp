@@ -7,7 +7,7 @@
  *
  * Two rules, and each one is a decision rather than a formatting habit:
  *
- * - **The number is a repository device, not a URL.** `docs/16-surface-map.md`
+ * - **The number is a repository device, not a URL.** `docs/17-surface-map.md`
  *   is a file you find in a sorted directory; `/docs/surface-map.html` is a
  *   page you read. The prefix is stripped at emit time and nowhere else, so the
  *   handbook keeps the ordering the numbering test enforces.
@@ -22,7 +22,7 @@ export const COMPOSED_PAGES = [
   {
     out: "docs/instructions.html",
     title: "Instructions",
-    sources: ["docs/11-instructions.md", "docs/03-agent-instructions.md"],
+    sources: ["docs/12-instructions.md", "docs/03-agent-instructions.md"],
   },
 ];
 
@@ -30,7 +30,7 @@ export const COMPOSED_PAGES = [
 export const MERGED_SOURCES = new Set(COMPOSED_PAGES.flatMap((page) => page.sources));
 
 /**
- * `docs/16-surface-map.md` becomes `docs/surface-map.html`; the root README
+ * `docs/17-surface-map.md` becomes `docs/surface-map.html`; the root README
  * becomes the index.
  *
  * @param {string} src - posix-relative path of a Markdown source
@@ -48,7 +48,7 @@ export function routeOf(src) {
  * Every source path a page can be reached by, mapped to the page it emits.
  *
  * A link to a merged source lands on the page that now carries it, which is why
- * the generated inventories can keep linking `11-instructions.md` and still
+ * the generated inventories can keep linking `12-instructions.md` and still
  * resolve on the site.
  *
  * @param {Array<{ src: string, out: string, sources?: string[] }>} pages

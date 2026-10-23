@@ -36,7 +36,7 @@ const installClaude = ({ entrypoint, dryRun = false, global = false, force = fal
 };
 
 /**
- * Installs pix-galaxy-mcp into Codex.
+ * Installs rule-mcp into Codex.
  * @param {{ entrypoint: string, dryRun?: boolean, global?: boolean }} opts
  * @returns {Array<{ file: string, action: string }>}
  */
@@ -53,7 +53,7 @@ const installCodex = ({ entrypoint, dryRun = false, global = false }) => {
 };
 
 /**
- * Installs pix-galaxy-mcp into Cursor.
+ * Installs rule-mcp into Cursor.
  * @param {{ entrypoint: string, dryRun?: boolean, global?: boolean }} opts
  * @returns {Array<{ file: string, action: string }>}
  */
@@ -84,14 +84,14 @@ const installCursor = ({ entrypoint, dryRun = false, global = false }) => {
 };
 
 /**
- * Installs pix-galaxy-mcp into Copilot.
+ * Installs rule-mcp into Copilot.
  * @param {{ entrypoint: string, dryRun?: boolean, global?: boolean }} opts
  * @returns {Array<{ file: string, action: string }>}
  */
 const installCopilot = ({ entrypoint, dryRun = false, global = false }) => {
   const hostsDir = join(HOME, ".config", "github-copilot");
   const hostsFile = join(hostsDir, "hosts.json");
-  const agentFile = join(HOME, ".copilot", "agents", "pix-galaxy-mcp.agent.md");
+  const agentFile = join(HOME, ".copilot", "agents", "rule-mcp.agent.md");
   const current = readText(hostsFile);
   const json = current.trim() ? parseJson(current) : {};
   json[`copilot-mcp-${serverName}`] = commandConfig(entrypoint, { global });
@@ -100,7 +100,7 @@ const installCopilot = ({ entrypoint, dryRun = false, global = false }) => {
 };
 
 /**
- * Installs pix-galaxy-mcp into Gemini CLI.
+ * Installs rule-mcp into Gemini CLI.
  * @param {{ entrypoint: string, dryRun?: boolean, global?: boolean }} opts
  * @returns {Array<{ file: string, action: string }>}
  */
@@ -121,7 +121,7 @@ const installGemini = ({ entrypoint, dryRun = false, global = false }) => {
 };
 
 /**
- * Installs pix-galaxy-mcp into Pi coding agent.
+ * Installs rule-mcp into Pi coding agent.
  * @param {{ entrypoint: string, dryRun?: boolean, global?: boolean, mode?: string }} opts
  * @returns {Array<{ file: string, action: string }>}
  */

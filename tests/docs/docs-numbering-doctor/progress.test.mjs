@@ -37,7 +37,7 @@ test("progress is reported while the work happens, not only at the end", () => {
 test("the CLI prints its steps while it works, not just a summary", () => {
   const root = seedRepo();
   try {
-    const bin = join(process.cwd(), "bin", "pix-galaxy-mcp.js");
+    const bin = join(process.cwd(), "bin", "rule-mcp.js");
     const out = execFileSync(process.execPath, [bin, "handoff", "doctor", "--dir", root], {
       encoding: "utf8",
       env: { ...process.env, PIX_GALAXY_MCP_NO_AUTOUPDATE: "1" },

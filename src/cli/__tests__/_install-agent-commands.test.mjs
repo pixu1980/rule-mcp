@@ -3,7 +3,7 @@
 /**
  * @module test/install-agent-commands
  *
- * Verifies explicit /pix-galaxy-mcp command installation for supported agents.
+ * Verifies explicit /rule-mcp command installation for supported agents.
  */
 
 import { strict as assert } from "node:assert";
@@ -69,7 +69,7 @@ try {
 
   // Renamed/deleted commands never surface: the installer is registry-driven.
   const stale = [
-    "pix-galaxy-mcp.md",
+    "rule-mcp.md",
     "pix-tdd.md",
     "pix-compression.md",
     "pix-process-compression.md",

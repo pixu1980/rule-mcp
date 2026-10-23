@@ -3,7 +3,7 @@
 /**
  * @module scripts/reports/census/_docs
  *
- * The eight generated inventories, one per topic.
+ * The nine generated inventories, one per topic.
  *
  * They were fewer, larger files until a reader had to scroll past the
  * guardrail table to reach the prompts, and a diff on any surface touched the
@@ -22,15 +22,15 @@ import { actionToolSection, skillToolSection } from "./_sections-tools.mjs";
 
 /** Every generated document, in the order the numbers put them. */
 const INDEX = [
-  ["08-skills.md", "Skills"],
-  ["09-tools.md", "Tools"],
-  ["10-prompts.md", "Prompts"],
-  ["11-instructions.md", "Instructions"],
-  ["12-cli.md", "CLI"],
-  ["13-personas.md", "Personas"],
-  ["14-guardrails.md", "Guardrails"],
-  ["15-resources.md", "Resources"],
-  ["16-surface-map.md", "Surface map"],
+  ["09-skills.md", "Skills"],
+  ["10-tools.md", "Tools"],
+  ["11-prompts.md", "Prompts"],
+  ["12-instructions.md", "Instructions"],
+  ["13-cli.md", "CLI"],
+  ["14-personas.md", "Personas"],
+  ["15-guardrails.md", "Guardrails"],
+  ["16-resources.md", "Resources"],
+  ["17-surface-map.md", "Surface map"],
 ];
 
 /**
@@ -76,13 +76,13 @@ const doc = (file, title, body) => ({
 
 /** Every generated document, with the sections its body is assembled from. */
 export const GENERATED_DOCS = [
-  doc("08-skills.md", "Skills", (data) => skillCatalogSection(data)),
-  doc("09-tools.md", "Tools", (data) => [...actionToolSection(data), ...skillToolSection(data)]),
-  doc("10-prompts.md", "Prompts", (data) => promptSection(data)),
-  doc("11-instructions.md", "Instructions", (data) => [...commandSection(data), ...commandKindsSection(data), ...hookSection()]),
-  doc("12-cli.md", "CLI", () => cliSection()),
-  doc("13-personas.md", "Personas", (data) => personaSection(data)),
-  doc("14-guardrails.md", "Guardrails", (data) => guardrailSection(data)),
-  doc("15-resources.md", "Resources", (data) => resourceSection(data)),
-  doc("16-surface-map.md", "Surface map", (data) => surfaceMapSection(data)),
+  doc("09-skills.md", "Skills", (data) => skillCatalogSection(data)),
+  doc("10-tools.md", "Tools", (data) => [...actionToolSection(data), ...skillToolSection(data)]),
+  doc("11-prompts.md", "Prompts", (data) => promptSection(data)),
+  doc("12-instructions.md", "Instructions", (data) => [...commandSection(data), ...commandKindsSection(data), ...hookSection()]),
+  doc("13-cli.md", "CLI", () => cliSection()),
+  doc("14-personas.md", "Personas", (data) => personaSection(data)),
+  doc("15-guardrails.md", "Guardrails", (data) => guardrailSection(data)),
+  doc("16-resources.md", "Resources", (data) => resourceSection(data)),
+  doc("17-surface-map.md", "Surface map", (data) => surfaceMapSection(data)),
 ];

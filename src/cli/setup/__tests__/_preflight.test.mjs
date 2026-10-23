@@ -40,7 +40,7 @@ test("detectLocalRepo reads the manifest name, and nothing else", () => {
 
   try {
     writeFileSync(join(foreign, "package.json"), JSON.stringify({ name: "something-else" }));
-    writeFileSync(join(local, "package.json"), JSON.stringify({ name: "pix-galaxy-mcp" }));
+    writeFileSync(join(local, "package.json"), JSON.stringify({ name: "rule-mcp" }));
     writeFileSync(join(broken, "package.json"), "{ not json");
 
     assert.equal(detectLocalRepo(bare), false, "no manifest is not the checkout");

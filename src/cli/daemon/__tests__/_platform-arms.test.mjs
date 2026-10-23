@@ -27,8 +27,8 @@ test("darwin installs and removes a LaunchAgent", () => {
   assert.equal(macos.install.service, "launchd");
   assert.match(macos.install.result.action, /^dry-run/, "a dry run writes no plist");
   assert.equal(macos.uninstall.result.action, "not-installed", "there is nothing to remove in a scratch home");
-  assert.ok(macos.serviceFilePath.endsWith("io.github.pix.pix-galaxy-mcp.plist"), `unexpected plist path: ${macos.serviceFilePath}`);
-  assert.equal(macos.serviceName, "io.github.pix.pix-galaxy-mcp", "the label is the service name");
+  assert.ok(macos.serviceFilePath.endsWith("io.github.pix.rule-mcp.plist"), `unexpected plist path: ${macos.serviceFilePath}`);
+  assert.equal(macos.serviceName, "io.github.pix.rule-mcp", "the label is the service name");
   assert.deepEqual(macos.status.detailKeys, ["launchAgent", "process"], "both the agent and the process are reported");
   assert.match(macos.formatted, /Plist: {6}/, "the rendered status names the plist");
 });
@@ -40,8 +40,8 @@ test("linux installs and removes a systemd user unit", () => {
   assert.equal(linux.install.service, "systemd");
   assert.match(linux.install.result.action, /^dry-run/, "a dry run writes no unit");
   assert.equal(linux.uninstall.result.action, "not-installed");
-  assert.ok(linux.serviceFilePath.endsWith("systemd/user/pix-galaxy-mcp.service"), `unexpected unit path: ${linux.serviceFilePath}`);
-  assert.equal(linux.serviceName, "pix-galaxy-mcp", "the unit name is the service name");
+  assert.ok(linux.serviceFilePath.endsWith("systemd/user/rule-mcp.service"), `unexpected unit path: ${linux.serviceFilePath}`);
+  assert.equal(linux.serviceName, "rule-mcp", "the unit name is the service name");
   assert.deepEqual(linux.status.detailKeys, ["process", "systemd"]);
   assert.match(linux.formatted, /Unit: {7}/, "the rendered status names the unit");
 });
@@ -57,7 +57,7 @@ test("win32 installs and removes a Windows service", () => {
   // either, and let the assertion be that it never claims to have removed one.
   assert.match(windows.uninstall.result.action, /^(dry-run|not-installed)/, `unexpected action: ${windows.uninstall.result.action}`);
   assert.equal(windows.serviceFilePath, null, "a Windows service has no file on disk");
-  assert.equal(windows.serviceName, "pix-galaxy-mcp");
+  assert.equal(windows.serviceName, "rule-mcp");
   assert.deepEqual(windows.status.detailKeys, ["process", "windowsService"]);
   assert.match(windows.formatted, /Service: {4}windows-service/, "the rendered status names the service");
 });

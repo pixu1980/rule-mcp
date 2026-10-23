@@ -11,7 +11,7 @@ import { generateSystemdUnit } from "./_systemd-unit.js";
 // ═══════════════════════════════════════════════════════════════════════════
 
 /** The systemd unit name. */
-export const SYSTEMD_UNIT_NAME = "pix-galaxy-mcp";
+export const SYSTEMD_UNIT_NAME = "rule-mcp";
 
 /** Where systemd user units live. */
 export const SYSTEMD_USER_DIR = join(HOME, ".config", "systemd", "user");

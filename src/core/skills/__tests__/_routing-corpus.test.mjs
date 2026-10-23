@@ -28,15 +28,15 @@ process.env.PIX_GALAXY_MCP_NO_AUTOUPDATE = "1";
 // some earlier run cached. This suite asked the same prompts a probe had just
 // asked, and read back answers computed before the code under test existed.
 process.env.PIX_GALAXY_MCP_NO_CACHE = "1";
-// The thresholds were measured on the source skill set; the four target-only
-// skills (custom-element, template-engine, vanilla-reactive, auth) are real
-// routing targets in the union, but their bodies dilute the term-document
+// The thresholds were measured on the source skill set; the two target-only
+// skills (template-engine, auth) are real routing targets in the union, but
+// their bodies dilute the term-document
 // frequencies the pinned scores assume - measure on the source-commensurate
 // universe (note in src/tools/router/index.js TARGET_ONLY_SKILLS).
 process.env.PIX_GALAXY_MCP_SKILL_UNIVERSE = "base";
 
 const { loadAllSkills } = await import("../index.js");
-const { callTool } = await import("../../../tools/router/index.js");
+const { callTool, getSkillNames } = await import("../../../tools/router/index.js");
 const { CORPUS, NONSENSE, PERSONAS, NOT_PERSONAS } = await import("../../../../tests/fixtures/routing-corpus.mjs");
 
 /** Measured at 87% exact and 100% top-or-alt when BM25 landed (ADR 048).
@@ -63,6 +63,13 @@ for (const entry of CORPUS) {
     inAlternatives: alternatives.some((name) => name.includes(entry.expect)),
   });
 }
+
+test("every corpus expectation names a skill that exists", () => {
+  const skillNames = getSkillNames();
+  const unknown = CORPUS.filter((entry) => skillNames.every((name) => !name.includes(entry.expect))).map((entry) => `${entry.expect} (${entry.prompt})`);
+
+  assert.deepEqual(unknown, [], `the corpus expects a skill no skill carries:\n  ${unknown.join("\n  ")}`);
+});
 
 test("the corpus routes to the intended skill", () => {
   const exact = results.filter((result) => result.exact).length;

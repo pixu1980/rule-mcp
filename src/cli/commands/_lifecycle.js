@@ -35,8 +35,8 @@ function installCommand(opts) {
 }
 
 /**
- * Uninstall pix-galaxy-mcp from an agent/IDE.
- * Removes the pix-galaxy-mcp entry from the agent config file.
+ * Uninstall rule-mcp from an agent/IDE.
+ * Removes the rule-mcp entry from the agent config file.
  *
  * @param {{ agent: string, dryRun: boolean }} opts
  */

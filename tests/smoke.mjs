@@ -1,7 +1,7 @@
 /**
  * @module test/smoke
  *
- * Smoke test for pix-galaxy-mcp.
+ * Smoke test for rule-mcp.
  * Verifies that:
  * - The bin entry point exists
  * - package.json has correct structure
@@ -21,19 +21,19 @@ const root = join(__dirname, "..");
 process.env.PIX_GALAXY_MCP_NO_CACHE = "1";
 process.env.PIX_GALAXY_MCP_NO_AUTOUPDATE = "1"; // hermetic: no real git ops in tests
 
-console.log("pix-galaxy-mcp smoke test");
+console.log("rule-mcp smoke test");
 
 let failures = 0;
 
 // 1. Check bin entry point
-const bin = join(root, "bin", "pix-galaxy-mcp.js");
+const bin = join(root, "bin", "rule-mcp.js");
 assert.ok(existsSync(bin), `bin entry point missing: ${bin}`);
-console.log("  ✅ bin/pix-galaxy-mcp.js exists");
+console.log("  ✅ bin/rule-mcp.js exists");
 
 // 2. Check package.json
 const package_ = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
-assert.ok(package_.name === "pix-galaxy-mcp", `Wrong package name: ${package_.name}`);
-assert.ok(package_.bin["pix-galaxy-mcp"], "Missing bin entry");
+assert.ok(package_.name === "rule-mcp", `Wrong package name: ${package_.name}`);
+assert.ok(package_.bin["rule-mcp"], "Missing bin entry");
 assert.ok(package_.dependencies["@modelcontextprotocol/sdk"], "Missing @modelcontextprotocol/sdk dependency");
 assert.ok(package_.dependencies["zod"], "Missing zod dependency");
 console.log("  ✅ package.json valid with SDK + Zod deps");

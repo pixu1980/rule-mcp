@@ -107,5 +107,5 @@ revert: rollback to v1.2.0
 ## See also
 
 - [pix-toolchain-biome](../pix-toolchain-biome/SKILL.md) - Linting & formatting
-- [pix-toolchain-project](../pix-toolchain-project/SKILL.md) - Repo conventions
+- [pix-styleguide-configuration](../pix-styleguide-configuration/SKILL.md) - Repo conventions
 - [pix](../pix/SKILL.md) - Central skill index

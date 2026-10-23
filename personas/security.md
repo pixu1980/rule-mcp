@@ -11,7 +11,7 @@ skills:
   - "input hardening"
 evidenceSkills:
   - "pix-backend-security"
-  - "pix-styleguide-validation"
+  - "pix-data-validation"
 aliases:
   - "security engineer"
   - "ingegnere della sicurezza"

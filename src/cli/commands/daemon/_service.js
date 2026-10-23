@@ -74,7 +74,7 @@ export function actionEnable() {
   // Gated on the name, not the path: a Windows service has a name and no file,
   // so gating on the path made the Windows branch unreachable.
   if (!svcName) {
-    print("No native service for this platform. Try: pix-galaxy-mcp daemon install");
+    print("No native service for this platform. Try: rule-mcp daemon install");
 
     return;
   }
@@ -99,7 +99,7 @@ export function actionDisable() {
 
   // Gated on the name, not the path: see actionEnable.
   if (!svcName) {
-    print("No native service for this platform. Try: pix-galaxy-mcp daemon uninstall");
+    print("No native service for this platform. Try: rule-mcp daemon uninstall");
 
     return;
   }

@@ -1,7 +1,7 @@
 /**
  * @module eslint.config
  *
- * ESLint 10 flat config for pix-galaxy-mcp.
+ * ESLint 10 flat config for rule-mcp.
  *
  * Stack (ADR 028):
  *   - @eslint/js recommended (base correctness)

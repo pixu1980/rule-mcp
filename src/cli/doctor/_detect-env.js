@@ -87,7 +87,7 @@ export function detectModelConfig() {
  * @returns {Array<{ provider: string, configured: boolean, file: string|null }>}
  */
 export function detectStoredModelKeys() {
-  const configDir = join(HOME, ".config", "pix-galaxy-mcp");
+  const configDir = join(HOME, ".config", "rule-mcp");
   const keyFiles = ["openai-key", "anthropic-key", "gemini-key", "xai-key"];
 
   return keyFiles.map((file) => {

@@ -38,7 +38,7 @@ let serverInstance = null;
 export function createServer() {
   const server = new Server(
     {
-      name: "pix-galaxy-mcp",
+      name: "rule-mcp",
       version: package_.version,
     },
     {

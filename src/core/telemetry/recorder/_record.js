@@ -20,7 +20,7 @@ import { clientInfo, currentSession } from "./_session.js";
  *   durationMs?: number,
  *   ok?: boolean,
  *   cacheHit?: boolean,
- *   cacheTier?: "exact"|"normalized"|"miss",
+ *   cacheTier?: "exact"|"normalized"|"similar"|"decision"|"miss",
  *   entry?: "router"|"gateway"|"skill"|"action",
  *   routedSkill?: string,
  *   guardrailFailures?: number,

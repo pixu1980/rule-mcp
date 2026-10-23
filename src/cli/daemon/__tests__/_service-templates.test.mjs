@@ -36,7 +36,7 @@ test("resolveEntrypoint points at this checkout's binary and serves over SSE", (
   const entrypoint = resolveEntrypoint();
 
   assert.equal(entrypoint.node, process.execPath, "the service runs the node that installed it");
-  assert.ok(entrypoint.script.endsWith(join("bin", "pix-galaxy-mcp.js")), `unexpected script path: ${entrypoint.script}`);
+  assert.ok(entrypoint.script.endsWith(join("bin", "rule-mcp.js")), `unexpected script path: ${entrypoint.script}`);
   assert.ok(existsSync(entrypoint.script), "the entrypoint it names must exist");
   assert.deepEqual(entrypoint.command.slice(2), ["serve", "--transport", "sse"], "a service always serves over SSE");
 });
@@ -62,8 +62,8 @@ test("the LaunchAgent plist names the label, the wrapper and the log", () => {
   const plist = generateLaunchAgentPlist(resolveEntrypoint());
 
   assert.match(plist, /^<\?xml version="1\.0" encoding="UTF-8"\?>/, "a plist opens with the XML declaration");
-  assert.match(plist, /<key>Label<\/key>\s*<string>io\.github\.pix\.pix-galaxy-mcp<\/string>/, "the label is the one the adapter looks for");
-  assert.match(plist, /pix-galaxy-mcpd/, "the Program is the wrapper, so Login Items shows the daemon name");
+  assert.match(plist, /<key>Label<\/key>\s*<string>io\.github\.pix\.rule-mcp<\/string>/, "the label is the one the adapter looks for");
+  assert.match(plist, /rule-mcpd/, "the Program is the wrapper, so Login Items shows the daemon name");
   assert.match(plist, /<key>KeepAlive<\/key>\s*<true\/>/, "the agent is restarted when it dies");
   assert.ok(plist.includes(join(state, "daemon.log")), "the log goes to the configured state dir");
   assert.ok(existsSync(state), "generating the plist prepares the state dir");

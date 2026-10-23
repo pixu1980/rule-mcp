@@ -7,8 +7,8 @@ import test from "node:test";
 /**
  * The documented install must not point at the npm registry (OSS-4).
  *
- * The package is not published, so every `pnpm add -g pix-galaxy-mcp`
- * or `npm install -g pix-galaxy-mcp` instruction is a 404. The supported
+ * The package is not published, so every `pnpm add -g rule-mcp`
+ * or `npm install -g rule-mcp` instruction is a 404. The supported
  * route is a clone plus the installer launcher, with exactly one
  * allow-listed compatibility note (fenced by the markers below in
  * docs/01-getting-started.md) stating that a registry install applies
@@ -19,7 +19,7 @@ import test from "node:test";
  */
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
-const CLAIM = /(?:pnpm add -g|npm install -g)\s+pix-galaxy-mcp/u;
+const CLAIM = /(?:pnpm add -g|npm install -g)\s+rule-mcp/u;
 const ALLOW_START = "<!-- install-claims:allow-start -->";
 const ALLOW_END = "<!-- install-claims:allow-end -->";
 const FROZEN = new Set(["audits", "reviews", "plans", "handoff"]);

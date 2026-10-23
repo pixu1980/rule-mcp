@@ -20,6 +20,7 @@ import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileS
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import "../../../../tests/fixtures/git-hermetic.mjs";
 
 // Server code resolves `@src/*` through a hook (ADR 089); a spawned
 // process loads it too, so it registers the hook as every entry point does.
@@ -95,7 +96,7 @@ export function runScenario(clone, scriptBody, environment = {}) {
       PIX_GALAXY_MCP_REPO_ROOT: clone,
       // A scenario runs the persisted-throttle-state path (_state-store.js)
       // for real, so it needs its own home - without this it would read and
-      // write the developer's actual ~/.pix-galaxy-mcp/state.
+      // write the developer's actual ~/.rule-mcp/state.
       PIX_GALAXY_MCP_HOME: mkdtempSync(join(tmpdir(), "pix-sut-home-")),
       PATH: `${stub.dir}:${process.env.PATH}`,
       PIX_GALAXY_MCP_GIT_LOG: stub.log,

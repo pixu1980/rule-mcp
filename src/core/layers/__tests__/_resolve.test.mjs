@@ -51,7 +51,7 @@ test("the bundled skills resolve as the native layer", () => {
 });
 
 test("a project skill is added, and reports its layer", () => {
-  skill(join(projectRoot, ".pix-galaxy-mcp"), "pix-project-rules");
+  skill(join(projectRoot, ".rule-mcp"), "pix-project-rules");
 
   const resolved = resolveSkillDirs({ cwd: projectRoot });
   const entry = resolved.get("pix-project-rules");
@@ -61,7 +61,7 @@ test("a project skill is added, and reports its layer", () => {
 });
 
 test("the user layer overrides the project layer, which overrides native", () => {
-  skill(join(projectRoot, ".pix-galaxy-mcp"), "pix-devops-docker", "description: from the project");
+  skill(join(projectRoot, ".rule-mcp"), "pix-devops-docker", "description: from the project");
 
   assert.equal(resolveSkillDirs({ cwd: projectRoot }).get("pix-devops-docker").layer, "project", "the repo overrides what the server ships");
 
@@ -93,7 +93,7 @@ test("personas resolve through the same layers", () => {
   assert.ok(resolved.size >= 18, `the bundled personas resolve: ${resolved.size}`);
   assert.equal(resolved.get("security").layer, "native");
 
-  persona(join(projectRoot, ".pix-galaxy-mcp"), "security", "Project Security Engineer");
+  persona(join(projectRoot, ".rule-mcp"), "security", "Project Security Engineer");
   assert.equal(resolvePersonaFiles({ cwd: projectRoot }).get("security").layer, "project");
 
   persona(home, "security", "My Security Engineer");

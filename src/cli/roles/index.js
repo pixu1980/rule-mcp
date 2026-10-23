@@ -3,7 +3,7 @@
 /**
  * @module cli/roles
  *
- * `pix-galaxy-mcp roles` - read the merged role catalog and manage the user's
+ * `rule-mcp roles` - read the merged role catalog and manage the user's
  * own layer of it (personas B.5).
  *
  * Three layers answer "which role is this": the embedded catalog, the user's

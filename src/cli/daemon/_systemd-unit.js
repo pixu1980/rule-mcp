@@ -40,8 +40,8 @@ export function generateSystemdUnit(ep) {
   const nodeBinDir = ep.node.replace(/\/node$/, "");
 
   return `[Unit]
-Description=pix-galaxy-mcp MCP Server
-Documentation=https://github.com/pixu1980/pix-galaxy-mcp
+Description=rule-mcp MCP Server
+Documentation=https://github.com/pixu1980/rule-mcp
 After=network.target network-online.target
 Wants=network-online.target
 

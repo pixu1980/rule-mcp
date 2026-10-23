@@ -384,7 +384,7 @@ Three behaviors are deliberate:
   not a conformance level.
 
 The criteria are vendored from the W3C's published WCAG 2.2 data, so the answer
-does not depend on the network. Refresh them with `pix-galaxy-mcp a11y-update`.
+does not depend on the network. Refresh them with `rule-mcp a11y-update`.
 
 ### What the guardrails cover, and what they cannot
 

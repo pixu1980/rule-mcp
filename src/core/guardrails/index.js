@@ -7,3 +7,4 @@ export * from "./_manifest-strip.js";
 export * from "./_scaffold.js";
 export * from "./_util.js";
 export * from "./project/index.js";
+export * from "./semantic/index.js";

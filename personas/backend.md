@@ -12,7 +12,7 @@ skills:
   - "rate limiting and pagination"
 evidenceSkills:
     - "pix-backend-graphql"
-  - "pix-styleguide-validation"
+  - "pix-data-validation"
 aliases:
   - "api-design"
   - "api design engineer"

@@ -137,7 +137,7 @@ Use it heavily for learning. Use it carefully for producing.
 ## Reviewing what comes back
 
 - **Does it do what was asked, and only that?** Unrequested extras are the most
-  common defect (see [pix-process-simplicity](../pix-process-simplicity/SKILL.md)).
+  common defect (see [pix-process-ai](../pix-process-ai/SKILL.md)).
 - **Does every API in it exist?** Confident invention is the failure mode of
   these models. Verify against the evidence, not against how right it sounds.
 - **Did the tests come first, and do they fail without the change?**
@@ -152,8 +152,8 @@ reading often beats three more attempts, and it leaves you knowing something.
 
 ## See also
 
-- [pix-process-ai-sdlc](../pix-process-ai-sdlc/SKILL.md) - where these prompts sit in the lifecycle
+- [pix-process-ai](../pix-process-ai/SKILL.md) - where these prompts sit in the lifecycle
 - `pix_tool_compress` / `/pix-compress` - sole compression engine (ADR 115)
-- [pix-process-simplicity](../pix-process-simplicity/SKILL.md) - the scope contract to hold agents to
+- [pix-process-ai](../pix-process-ai/SKILL.md) - the scope contract to hold agents to
 - [pix-ai-context-engineering](../pix-ai-context-engineering/SKILL.md) - managing the window this prompt lands in
 - [pix-ai-evals](../pix-ai-evals/SKILL.md) - measuring an AI feature rather than trusting it

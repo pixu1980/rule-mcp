@@ -10,8 +10,8 @@ import { normalizeRemoteUrl, resolveAllowedRemotes } from "../index.js";
 // ── URL normalisation ──────────────────────────────────────────────────────
 
 test("scp-style SSH and HTTPS forms of the same repo normalise equally", () => {
-  const ssh = normalizeRemoteUrl("git@github.com:pix/pix-galaxy-mcp.git");
-  const https = normalizeRemoteUrl("https://github.com/pix/pix-galaxy-mcp");
+  const ssh = normalizeRemoteUrl("git@github.com:pix/rule-mcp.git");
+  const https = normalizeRemoteUrl("https://github.com/pix/rule-mcp");
   assert.equal(ssh, https, "the repo's real remote must match the declared one");
 });
 

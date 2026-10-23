@@ -45,7 +45,7 @@ test("a backend framework overrides a frontend route and names the original", as
   const core = await computeGatewayCore({ prompt: "center a div with flexbox", framework: "express", path: "/tmp/x" }, null);
 
   assert.equal(core.effectiveRoute, "pix-backend-express", "express demands the backend domain");
-  assert.equal(core.originalRoute, "pix-frontend-vanilla-reactive", "the overridden route is named");
+  assert.equal(core.originalRoute, "pix-frontend", "the overridden route is named");
   assert.ok(core.evidence.length > 0, "the backend skill evidence is loaded");
 });
 

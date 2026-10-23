@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2025-2026 pixu1980
 // SPDX-License-Identifier: MIT
 /**
- * pix-galaxy-mcp Guardrails Engine
+ * rule-mcp Guardrails Engine
  *
  * Public API for guardrails: getGuardrails, checkCode, getGuardrailsReport.
  * Guardrail definitions live in the sibling catalog modules (imported below,

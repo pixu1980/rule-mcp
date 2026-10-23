@@ -13,3 +13,5 @@ export * from "./_deps.js";
 export * from "./_memory.js";
 export * from "./_ledger.js";
 export * from "./_fallback.js";
+export * from "./_sync.js";
+export * from "./_insights.js";

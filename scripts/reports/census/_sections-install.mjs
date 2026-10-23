@@ -43,7 +43,7 @@ export function agentTargetSection(_data) {
   return [
     `## Install targets (${allAgents.length})`,
     "",
-    "`pix-galaxy-mcp install --agent <name>` and the setup wizard accept exactly",
+    "`rule-mcp install --agent <name>` and the setup wizard accept exactly",
     "these names. A host listed with command files also gets the slash commands in",
     "its own format; the others receive the MCP configuration and reach the same",
     "prompts through the server.",
@@ -61,7 +61,7 @@ export function agentTargetSection(_data) {
       : []),
     "Regenerate with `pnpm census`.",
     "",
-    `Per-host formats and the command surface itself: [\`11-instructions.md\`](11-instructions.md). Slash-command targets: ${COMMAND_TARGETS.length} across ${commands.size} hosts.`,
+    `Per-host formats and the command surface itself: [\`12-instructions.md\`](12-instructions.md). Slash-command targets: ${COMMAND_TARGETS.length} across ${commands.size} hosts.`,
     "",
   ];
 }

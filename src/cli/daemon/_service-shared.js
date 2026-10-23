@@ -12,7 +12,7 @@ export const HOME = homedir();
 /** Absolute path of the CLI entrypoint this service runs. */
 export function resolveEntrypoint() {
   const __dirname = fileURLToPath(new URL(".", import.meta.url));
-  const scriptPath = join(__dirname, "..", "..", "..", "bin", "pix-galaxy-mcp.js");
+  const scriptPath = join(__dirname, "..", "..", "..", "bin", "rule-mcp.js");
   const nodePath = process.execPath;
 
   return {
@@ -25,9 +25,9 @@ export function resolveEntrypoint() {
 /**
  * Path to the wrapper shell script that macOS shows in Login Items.
  * Using a wrapper script instead of calling Node.js directly ensures that
- * macOS displays "pix-galaxy-mcpd" in Login Items rather than "Node.js Foundation".
+ * macOS displays "rule-mcpd" in Login Items rather than "Node.js Foundation".
  */
-export const WRAPPER_SCRIPT_PATH = join(HOME, ".local", "bin", "pix-galaxy-mcpd");
+export const WRAPPER_SCRIPT_PATH = join(HOME, ".local", "bin", "rule-mcpd");
 
 /**
  * Quote a value as a single-quoted shell word.
@@ -47,16 +47,16 @@ export function shQuote(value) {
 /**
  * Generate the wrapper shell script that the LaunchAgent runs.
  * Using a wrapper script instead of calling Node.js directly ensures that
- * macOS displays "pix-galaxy-mcpd" in Login Items rather than "Node.js Foundation".
+ * macOS displays "rule-mcpd" in Login Items rather than "Node.js Foundation".
  *
  * @param {{ node: string, script: string }} ep
  * @returns {string} - shell script content
  */
 export function generateWrapperScript(ep) {
   return `#!/usr/bin/env bash
-# pix-galaxy-mcp daemon wrapper
+# rule-mcp daemon wrapper
 # This wrapper is called by the LaunchAgent so macOS shows
-# "pix-galaxy-mcpd" in Login Items instead of "Node.js Foundation".
+# "rule-mcpd" in Login Items instead of "Node.js Foundation".
 set -euo pipefail
 
 if [[ $# -gt 0 ]]; then

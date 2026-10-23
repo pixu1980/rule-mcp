@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # =============================================================================
-# pix-galaxy-mcp - installer bootstrap
+# rule-mcp - installer bootstrap
 # =============================================================================
 #
 # This script does three things and then gets out of the way:
 #
 #   1. checks that Node is new enough to run the wizard
 #   2. resolves the server binary (repo checkout, global shim, or npx)
-#   3. hands the arguments to `pix-galaxy-mcp setup`
+#   3. hands the arguments to `rule-mcp setup`
 #
 # Everything else - agent detection, the picker, install modes, instruction
 # files, the guard hooks, skills, the daemon service, the health check - lives
@@ -21,7 +21,7 @@
 #   deleted inside the current directory or the repository this runs from.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/pixu1980/pix-galaxy-mcp/v0.1.0-beta/scripts/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/pixu1980/rule-mcp/v0.1.0-beta/scripts/install.sh | bash
 #   ./scripts/install.sh [options]
 #
 # Every option is forwarded verbatim; run `./scripts/install.sh --help` for
@@ -33,7 +33,7 @@ set -euo pipefail
 
 NODE_MIN=20
 
-# Options `pix-galaxy-mcp setup` accepts. The shell runs before node exists,
+# Options `rule-mcp setup` accepts. The shell runs before node exists,
 # so it cannot ask: this table is the contract, kept honest by the
 # install-script-flags test against the `setup` command source.
 KNOWN_SETUP_FLAGS="agent mode uninstall rules no-rules commands no-commands hooks no-hooks skills no-skills minimal no-minimal surface service no-service doctor no-doctor commands-preset commands-families commands-areas commands-skills purge keep-config force dry-run no-wizard no-interactive json help version"
@@ -52,7 +52,7 @@ validate_setup_args() {
       --)
         # Everything past `--` is positional, and `setup` takes none.
         if [ $# -gt 0 ]; then
-          die "unexpected argument '$1' - run 'pix-galaxy-mcp setup --help' for the list"
+          die "unexpected argument '$1' - run 'rule-mcp setup --help' for the list"
         fi
         return 0
         ;;
@@ -68,12 +68,12 @@ validate_setup_args() {
         continue
         ;;
       *)
-        die "unexpected argument '$arg' - run 'pix-galaxy-mcp setup --help' for the list"
+        die "unexpected argument '$arg' - run 'rule-mcp setup --help' for the list"
         ;;
     esac
     case " $KNOWN_SETUP_FLAGS " in
       *" $flag "*) ;;
-      *) die "unknown option '--$flag' - run 'pix-galaxy-mcp setup --help' for the list" ;;
+      *) die "unknown option '--$flag' - run 'rule-mcp setup --help' for the list" ;;
     esac
     case " $VALUE_SETUP_FLAGS " in
       *" $flag "*)
@@ -87,7 +87,7 @@ validate_setup_args() {
 }
 
 die() {
-  echo "pix-galaxy-mcp: $1" >&2
+  echo "rule-mcp: $1" >&2
   exit 1
 }
 
@@ -99,21 +99,21 @@ node_major="$(node -p 'process.versions.node.split(".")[0]')"
 [ "$node_major" -ge "$NODE_MIN" ] || die "Node.js >= ${NODE_MIN} is required (found $(node --version))"
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-local_bin="${script_dir}/../bin/pix-galaxy-mcp.js"
+local_bin="${script_dir}/../bin/rule-mcp.js"
 
 # Prefer the checkout this script came from, then a working global shim, then
 # a one-off fetch. Each candidate is verified by running it: a shim that
 # points at a moved repo stays on PATH and fails only when launched.
 if [ -f "$local_bin" ]; then
   set -- node "$local_bin" setup "$@"
-elif command -v pix-galaxy-mcp >/dev/null 2>&1 && pix-galaxy-mcp --version >/dev/null 2>&1; then
-  set -- pix-galaxy-mcp setup "$@"
+elif command -v rule-mcp >/dev/null 2>&1 && rule-mcp --version >/dev/null 2>&1; then
+  set -- rule-mcp setup "$@"
 elif command -v pnpm >/dev/null 2>&1; then
-  set -- pnpm dlx pix-galaxy-mcp setup "$@"
+  set -- pnpm dlx rule-mcp setup "$@"
 elif command -v npx >/dev/null 2>&1; then
-  set -- npx --yes pix-galaxy-mcp setup "$@"
+  set -- npx --yes rule-mcp setup "$@"
 else
-  die "no pix-galaxy-mcp binary and no pnpm/npx to fetch one"
+  die "no rule-mcp binary and no pnpm/npx to fetch one"
 fi
 
 # `curl ... | bash` leaves stdin holding the script, so the wizard would see

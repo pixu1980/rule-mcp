@@ -15,7 +15,7 @@ import { cell, table } from "./_format.mjs";
 import { cliCommands } from "./_registries.mjs";
 
 /** A markdown anchor for the heading this section writes. */
-const anchor = (name) => `#pix-galaxy-mcp-${name.replaceAll(".", "")}`;
+const anchor = (name) => `#rule-mcp-${name.replaceAll(".", "")}`;
 
 /** An empty cell reads better as a dash than as nothing. */
 const orDash = (value) => (value === undefined || value === null || value === "" ? "-" : cell(String(value)));
@@ -23,11 +23,11 @@ const orDash = (value) => (value === undefined || value === null || value === ""
 /** One command: what it is, how it is typed, what it takes. */
 function commandSection(entry) {
   return [
-    `## pix-galaxy-mcp ${entry.name}`,
+    `## rule-mcp ${entry.name}`,
     "",
     ...(entry.summary ? [entry.summary, ""] : []),
     "```sh",
-    ["pix-galaxy-mcp", entry.name, ...entry.args.map((argument) => argument.name)].join(" "),
+    ["rule-mcp", entry.name, ...entry.args.map((argument) => argument.name)].join(" "),
     "```",
     "",
     ...(entry.args.length === 0
@@ -69,10 +69,10 @@ export function cliSection() {
     "",
     "Every command is listed with the arguments and options it reads, taken from",
     "the commander definitions that parse them. The same definitions answer",
-    "`pix-galaxy-mcp <command> --help`, so nothing here is a promise the binary",
+    "`rule-mcp <command> --help`, so nothing here is a promise the binary",
     "does not keep.",
     "",
-    "`pix-galaxy-mcp` with no command starts the stdio server, which is how an",
+    "`rule-mcp` with no command starts the stdio server, which is how an",
     "agent spawns it. `-h, --help` works on every command; `-v, --version` prints",
     "the package version from anywhere. An error exits 1 and prints to stderr;",
     "`--help` exits 0.",

@@ -5,7 +5,7 @@
  *
  * The clean-command guarantee: EVERY supported agent/IDE either has a declared
  * slash-command target (so `/pix-*` is invoked bare, never as
- * `/mcp.pix-galaxy-mcp.pix-backend` or `/pix-galaxy-mcp:pix-backend`)
+ * `/mcp.rule-mcp.pix-backend` or `/rule-mcp:pix-backend`)
  * or is explicitly listed as having no file-based command surface, with a reason.
  *
  * Verifies:

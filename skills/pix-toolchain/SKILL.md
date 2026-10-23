@@ -1,17 +1,17 @@
 ---
 name: pix-toolchain
 description: >-
-  Use when configuring build tools, linters, or package managers to route to the correct toolchain skill. Covers Vite, Biome, ESLint, pnpm, Husky, and TypeScript.
+  Use when configuring build tools, linters, or package managers to route to the correct toolchain skill. Covers Vite, Rspack, Parcel, Biome, ESLint, pnpm, Turborepo, and Husky.
 tags:
   - "toolchain"
   - "build"
   - "vite"
+  - "rspack"
   - "parcel"
   - "biome"
   - "eslint"
   - "pnpm"
   - "turborepo"
-  - "typescript"
   - "husky"
   - "index"
 frameworks: [all]
@@ -43,12 +43,9 @@ frameworks: [all]
 
 ## Configuration & Hooks
 
-| Skill                                                            | Tool              | Best For                                                                    |
-| ---------------------------------------------------------------- | ----------------- | --------------------------------------------------------------------------- |
-| [pix-toolchain-typescript](../pix-toolchain-typescript/SKILL.md) | TypeScript        | tsconfig, strict mode, path aliases                                         |
-| [pix-toolchain-project](../pix-toolchain-project/SKILL.md)       | Project Config    | .gitignore, .editorconfig, .nvmrc, .env                                     |
-| [pix-toolchain-husky](../pix-toolchain-husky/SKILL.md)           | Husky             | Git hooks, lint-staged, commitlint                                          |
-| [pix-toolchain-commits](../pix-toolchain-commits/SKILL.md)       | Commit Discipline | Atomic Conventional Commits with mandatory scope, commit-msg/pre-push hooks |
+| Skill                                                  | Tool  | Best For                           |
+| ------------------------------------------------------ | ----- | ---------------------------------- |
+| [pix-toolchain-husky](../pix-toolchain-husky/SKILL.md) | Husky | Git hooks, lint-staged, commitlint |
 
 ## Quick Selection Guide
 
@@ -57,10 +54,7 @@ Need a build tool?                      → pix-toolchain-vite (default), pix-to
 Need linting + formatting?              → pix-toolchain-biome (fast, unified) or pix-toolchain-eslint (ESLint 10 + unicorn)
 Need a package manager?                 → pix-toolchain-pnpm
 Need monorepo orchestration?            → pix-toolchain-turborepo
-Need TypeScript config?                 → pix-toolchain-typescript
-Need base project files?                → pix-toolchain-project
 Need Git hooks?                         → pix-toolchain-husky
-Need commit/push discipline (atomic, scope)? → pix-toolchain-commits
 ```
 
 ## Choosing a formatter and a linter: Prettier, Biome, ESLint, dprint, oxfmt

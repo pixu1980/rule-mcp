@@ -1,5 +1,5 @@
 #!/bin/sh
-# pix-galaxy-mcp: enforce type(scope): subject and the DCO sign-off.
+# rule-mcp: enforce type(scope): subject and the DCO sign-off.
 #
 # The rule lives in src/core/commit - this hook only wires it to git, so the
 # hook, the pre-push gate, the CLI and CI cannot drift apart.

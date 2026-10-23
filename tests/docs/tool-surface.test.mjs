@@ -21,7 +21,7 @@ const snapshot = JSON.parse(readFileSync(`${root}tests/fixtures/tool-surface.jso
 
 /** The live surface, read from the binary a client would launch. */
 const liveTools = () => {
-  const out = execFileSync(process.execPath, [`${root}bin/pix-galaxy-mcp.js`, "tools", "list", "--json"], {
+  const out = execFileSync(process.execPath, [`${root}bin/rule-mcp.js`, "tools", "list", "--json"], {
     encoding: "utf8",
     env: { ...process.env, PIX_GALAXY_MCP_NO_AUTOUPDATE: "1", PIX_GALAXY_MCP_NO_TELEMETRY: "1" },
     timeout: 120_000,
@@ -55,11 +55,11 @@ test("the handbook quotes the surface the server serves", () => {
     .map((entry) => entry.name);
   const skillToolNames = new Set(catalog.map((name) => `pix_tool_${name.slice("pix-".length).replaceAll("-", "_")}`));
   const actionTools = liveTools().filter((name) => !skillToolNames.has(name));
-  const handbook = readFileSync(`${root}docs/09-tools.md`, "utf8");
+  const handbook = readFileSync(`${root}docs/10-tools.md`, "utf8");
   const quoted = handbook.match(/## Action tools \((\d+)\)/);
 
   assert.ok(quoted, "the tool reference states its action-tool count");
-  assert.equal(Number(quoted[1]), actionTools.length, "docs/09-tools.md drifted - run `pnpm census`");
+  assert.equal(Number(quoted[1]), actionTools.length, "docs/10-tools.md drifted - run `pnpm census`");
 
   const skillQuoted = handbook.match(/Arguments, the same for all (\d+)/);
 

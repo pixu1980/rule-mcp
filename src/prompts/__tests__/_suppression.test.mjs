@@ -4,8 +4,8 @@
 //
 // When PIX_GALAXY_MCP_NO_PROMPTS=1, the server must hide its MCP prompts so the
 // clean /pix-* user commands don't duplicate them in hosts that namespace
-// prompts (Claude: /pix-galaxy-mcp:pix-handoff (MCP), VS Code:
-// /mcp.pix-galaxy-mcp.pix-handoff).
+// prompts (Claude: /rule-mcp:pix-handoff (MCP), VS Code:
+// /mcp.rule-mcp.pix-handoff).
 //
 // listPrompts() stays pure (always the full registry); only listActivePrompts()
 // honours the suppression flag - exactly how the server's prompt/list handler

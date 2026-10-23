@@ -5,7 +5,7 @@
  * directory, and nothing lives in the project.
  *
  * Project recordings are kept under the central projects root
- * (`~/.pix-galaxy-mcp/projects/<project-slug>`), keyed by repository name and
+ * (`~/.rule-mcp/projects/<project-slug>`), keyed by repository name and
  * checkout digest, so a cache hit rate averaged over every repository answers
  * nothing and a benchmark export belongs next to the code it benchmarked.
  */
