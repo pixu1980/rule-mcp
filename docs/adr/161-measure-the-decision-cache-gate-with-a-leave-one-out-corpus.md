@@ -15,7 +15,7 @@ Use the leave-one-out corpus for the decision-cache measurement. Each group prom
 
 ## Consequences
 
-Laya coverage rose to 53/69 (76.8%) and Julia to 34/69 (49.3%). Laya made 31 predictions and 8 wrong at 0.30, 2 at 0.55, 1 at 0.75; the none choice was 38 of 69, so the model, not the recall, is now the blocker. Julia made 60 predictions and 37 wrong at 0.30, 13 wrong at 0.90. The eight negatives stayed no-candidates (seven) or none. No floor reached zero false replays with ten labels; replay stays off. The next experiment is the candidate prompt/description or the model's none threshold, not another ranker.
+Laya coverage rose to 53/69 (76.8%) and Julia to 34/69 (49.3%). Laya made 31 predictions and 8 wrong at 0.30, 2 at 0.55, 1 at 0.75; the none choice was 38 of 69, so the model, not the recall, is now the blocker. Julia made 60 predictions and 37 wrong at 0.30, 13 wrong at 0.90. The eight negatives stayed no-candidates (seven) or none. No floor reached zero false replays with ten labels; replay stays off. The prompt/description change (ADR 162) then cut Laya's none from 38 to 24 and lifted correct choices from 23 to 33, with wrong choices 8 to 13; no floor.
 
 ## What would end this
 

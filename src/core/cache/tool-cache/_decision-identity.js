@@ -34,10 +34,10 @@ export function depsFingerprint(deps) {
 
 /** A stable candidate description: no hits, no age, no result text. */
 export function describeCandidate({ key, prompt, route, deps }) {
-  const parts = [`prompt: ${truncate(redact(prompt), PROMPT_CHAR_CAP)}`];
+  const parts = [`request: ${truncate(redact(prompt), PROMPT_CHAR_CAP)}`];
 
   if (route) {
-    parts.push(`route: ${truncate(redact(route), ROUTE_CHAR_CAP)}`);
+    parts.push(`skill: ${truncate(redact(route), ROUTE_CHAR_CAP)}`);
   }
 
   if (deps) {
