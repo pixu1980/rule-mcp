@@ -25,7 +25,7 @@ The model is deterministic and loopback-only, but its `confidence` is a score, n
 4. Step 4 kill criterion: the corpus exact rate must exceed 77/95 and top-or-alternative must stay at or above 91/95. If either regresses, the feature ships off and Step 4 is reopened as rejected rather than tuned until it passes.
 5. The catalog experiment is measurement-only: 83 options are never a production option set.
 6. The corpus names only current skills; the structural test is the guard against a retired name returning.
-7. Cache the model's answer under a SHA-256 digest of the model id, the prompt and the questions, with the shortlist folded into the questions. `RULE_MCP_NO_CACHE=1` bypasses it. The audit's determinism is what makes the cache safe; the digest is what makes a model or shortlist change miss it.
+7. Cache the model's answer under a SHA-256 digest of the model id, the prompt and the questions, with the shortlist folded into the questions. `RULE_MCP_NO_CACHE=1` bypasses it, and the cache is consulted before the supervisor so a hit never loads, unloads or swaps a model. The audit's determinism is what makes the cache safe; the digest is what makes a model or shortlist change miss it.
 8. A semantic rule ships as advisory in a new `semantic` family: `semantic-error-message-actionable` extracts the literal error messages, asks one `noul` question about them, reports the model's probability, and never fails a check. No endpoint means the rule is skipped, not failed. Its live precision on the pair corpus is unmeasured; the rule is advisory because of that.
 
 ## Consequences

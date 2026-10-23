@@ -19,22 +19,38 @@ import { createSupervisor } from "./_supervisor.js";
 let cached = null;
 
 /**
+ * The model this prompt would use, or null when the feature is off.
+ *
+ * Reads the same environment as the runtime, so a caller can consult the answer
+ * cache before paying for a supervisor. `auto` selects by the prompt's language;
+ * an explicit id or alias still wins, and a model whose context cannot hold its
+ * shortlist is refused.
+ *
+ * @param {string} prompt
+ * @param {Record<string, string | undefined>} [env]
+ * @returns {object | null}
+ */
+export function resolveRuntimeModel(prompt, env = process.env) {
+  const requested = env.RULE_MCP_DECISION_MODEL;
+  const model = requested === "auto" ? modelForLanguage(detectLanguage(prompt)) : resolveDecisionModel(requested);
+
+  return model && modelFits(model, model.shortlist) ? model : null;
+}
+
+/**
  * The runtime for the configured model, or null when the feature is off.
  *
- * `auto` selects by the prompt's language; an explicit id or alias still wins.
- * A model whose context cannot hold its shortlist is refused, and switching
- * models unloads the previous one first so a single-slot router never carries
- * two models.
+ * Switching models unloads the previous one first so a single-slot router never
+ * carries two models.
  *
  * @param {string} prompt
  * @param {Record<string, string | undefined>} [env]
  * @returns {Promise<{ model: object, supervisor: ReturnType<typeof createSupervisor> } | null>}
  */
 export async function decisionRuntime(prompt, env = process.env) {
-  const requested = env.RULE_MCP_DECISION_MODEL;
-  const model = requested === "auto" ? modelForLanguage(detectLanguage(prompt)) : resolveDecisionModel(requested);
+  const model = resolveRuntimeModel(prompt, env);
 
-  if (!model || !modelFits(model, model.shortlist)) {
+  if (!model) {
     return null;
   }
 

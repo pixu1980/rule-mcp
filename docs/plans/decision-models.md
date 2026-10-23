@@ -81,7 +81,7 @@ Dependencies: WS-0 first and alone, because every later step calls it. WS-1 and 
   - [x] **5.2**: Implement the model registry: id, size, languages, context, per-model threshold, and a shortlist cap it can hold; unknown models fall back to BM25 instead of failing.
   - [x] **5.3**: Choose the model by the language detected from the prompt, with Julia-1 as the multilingual entry and Laya as the English one; do not load both on a single-instance router without measuring the swap cost.
   - [ ] **5.4**: Gate: the Italian slice improves against its recorded baseline and the English slice does not regress; a router with one slot must show the swap cost in the same table.
-    - Note: the auto selection is proven with a fake model (Julia-1 for Italian, Laya for English) and the runtime unloads the previous model before switching. Julia-1 is not installed, so the live Italian slice does not improve; per the kill criterion the harness and registry ship and the Italian routing claim is dropped. The English corpus stays 77/95 exact and 91/95 top-or-alternative with the feature off; the swap cost is not measured.
+    - Note: the auto selection is proven with a fake model (Julia-1 for Italian, Laya for English) and the runtime unloads the previous model before switching. Julia-1 is installed as `ggml-org/Julia-1-GGUF:Q8_0`; the live Italian slice still measures 2/8 exact, 3/8 top-or-alternative and 5/8 `unknown`, so per the kill criterion the harness and registry ship and the Italian routing claim stays dropped. The English corpus stays 77/95 exact and 91/95 top-or-alternative with the feature off. A live run measured 1415 ms for the cold Italian call and 216 ms for the Italian-to-English call, swap included; the third Italian call answered from the decision cache with no router request.
 - [x] **Step 8 - DM-10 (low)**: Persona severity is assigned by the agent and two runs can disagree
   - [x] **8.1**: Measure first: take an existing review's findings, ask the model to score each severity, and record agreement with the human labels; if agreement is not clearly better than the agent's own, close the step as rejected.
     - Note: rejected at measurement. The existing review labels are the agent's own severity assignments, so comparing the model against them is circular unless an independent human-labeled set exists; none does. No normalizer ships and the agent's labels stand.
@@ -93,7 +93,7 @@ Dependencies: WS-0 first and alone, because every later step calls it. WS-1 and 
 ## Debt and live gaps
 
 - Five pre-existing 150-line offenders remain: `src/cli/_init.js` 151, `src/core/__tests__/_prompt-directive.test.mjs` 152, `src/core/guardrails/project/_checks.js` 180, `src/core/self-update/_run.js` 202, `tests/plans/skills-plan.test.mjs` 338. The sixth, `src/tools/skill/_check-tool.js`, was split in Step 7.
-- The live model-on corpus run, the Italian slice with Julia-1 and the severity agreement were not exercised; the recorded and fake runs are in ADR 156 and the review.
+- The live model-on corpus run and the severity agreement were not exercised; the Italian slice with Julia-1 was measured live (2/8 exact, 3/8 top-or-alternative, 5/8 `unknown`) and the decision-cache short-circuit was measured live (a cached Italian prompt after an English swap makes zero router requests). The recorded and fake runs are in ADR 156 and the review.
 - The commit-lint closeout archived this plan while DM-04 and DM-10 were still open; the plan was restored with the 5.4 gate open so it is not archived again.
 
 ## Kill criteria
