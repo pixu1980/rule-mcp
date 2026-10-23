@@ -31,7 +31,7 @@ test("a merged source has no route of its own and lands on its composed page", (
   const outs = collectPages(root).map((page) => page.out);
 
   assert.ok(!outs.includes("docs/agent-instructions.html"), "03 is merged, not published alone");
-  assert.ok(!outs.includes("docs/11-instructions.html"), "the numbered route is gone");
+  assert.ok(!outs.includes("docs/12-instructions.html"), "the numbered route is gone");
   assert.equal(outs.filter((out) => out === "docs/instructions.html").length, 1);
 });
 
@@ -58,6 +58,6 @@ test("reference TOC has the fixed ten entries", () => {
 test("handbook numbered chapters include the surface map", () => {
   const chapters = readdirSync(join(root, "docs")).filter((name) => /^\d\d-.*\.md$/u.test(name));
 
-  assert.ok(chapters.includes("16-surface-map.md"));
-  assert.ok(chapters.length >= 16);
+  assert.ok(chapters.includes("17-surface-map.md"));
+  assert.ok(chapters.length >= 17);
 });

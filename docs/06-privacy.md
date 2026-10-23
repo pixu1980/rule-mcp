@@ -5,7 +5,7 @@
 - **Related**: ADR 019 (persistent local bearer token), ADR 034 (SSE bearer auth),
   ADR 040 (per-invocation self-update with throttle, fire-and-forget), ADR 051
   (token-efficiency pipeline), `docs/02-architecture.md`,
-  `docs/07-engineering-guides.md`
+  `docs/08-engineering-guides.md`
 - **Enforced by**: `tests/core/self-guardrails.test.mjs`, `tests/core/flight-redact.test.mjs`,
   `tests/core/flight-exports-retention.test.mjs`, `tests/cli/uninstall-purge-home.test.mjs`
 

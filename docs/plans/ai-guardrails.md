@@ -128,7 +128,7 @@ Shared files: none: absorbed into the leaf plans named above
 ### Phase 2 - Promotion and documentation
 
 - [ ] Promote the Tier A rules after the corpus gate reports 100%.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 - [ ] Run the gates below and add the changelog entry.
 
 ## Model assignment

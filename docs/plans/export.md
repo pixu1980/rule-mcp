@@ -29,7 +29,7 @@ Branch: feat/export
 Path: docs/plans/export.md
 Depends on: -
 Feeds: `decision-models` (ORDER): it consumes the decision-cache this plan defines; export v1 ships without the runtime hook
-Shared files: `docs/handoff/HANDOFF.md`, `tests/fixtures/census.json`, `docs/02-architecture.md`, `docs/16-surface-map.md`
+Shared files: `docs/handoff/HANDOFF.md`, `tests/fixtures/census.json`, `docs/02-architecture.md`, `docs/17-surface-map.md`
 
 The lines above are this plan's node in the cross-branch graph, verified from
 `docs/plans/plan-of-plans.md` on `feat/evolution`. The workstreams below are the
@@ -125,7 +125,7 @@ never delete.
   - [ ] 7.1 Only existing promotable entries / rules
   - [ ] 7.2 Gate: tool-cache suites unchanged floors
 - [ ] **Step 8 - EX-10 (low)**: Docs / privacy / census
-  - [ ] 8.1 `docs/05-env-variables.md`, `docs/16-surface-map.md`, privacy note on session delete
+  - [ ] 8.1 `docs/05-env-variables.md`, `docs/17-surface-map.md`, privacy note on session delete
   - [ ] 8.2 Point DM plan/review at export decision-cache as source of truth for durable choices
   - [ ] 8.3 Gate: `pnpm census:check`, docs-accuracy, full foundations
 

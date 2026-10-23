@@ -164,7 +164,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Add the four rules with fixtures and a unit test each.
 - [ ] Run the scaffold end-to-end test, the dedupe test and the gitattributes
       test.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 - [ ] Write the ADR for the scaffold ownership move, since it changes a public
       tool mode.
 

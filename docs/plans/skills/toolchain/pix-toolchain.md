@@ -151,7 +151,7 @@ Shared files: skills/pix/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixt
 - [ ] Test that every toolchain child is reachable from the router.
 - [ ] Test that every relative link resolves.
 - [ ] Test that the generated table is current.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 

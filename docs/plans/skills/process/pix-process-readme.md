@@ -170,7 +170,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Build the open source and internal fixtures and run the checklist.
 - [ ] Check every relative link and every command in the samples.
 - [ ] Confirm that each number in the samples has a stated source.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 

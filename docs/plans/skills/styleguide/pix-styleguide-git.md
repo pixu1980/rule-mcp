@@ -171,7 +171,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Run the message fixtures.
 - [ ] Run the hook against the temporary repository.
 - [ ] Compare the documented rule with `_rule.js`.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 

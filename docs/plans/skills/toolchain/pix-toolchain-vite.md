@@ -203,7 +203,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
       produces `dist/`.
 - [ ] Load the reference config in a test so a removed option fails the suite.
 - [ ] Check every option named in the skill against the live Vite docs.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 

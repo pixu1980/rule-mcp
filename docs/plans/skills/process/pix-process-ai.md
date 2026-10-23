@@ -131,7 +131,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Failing corpus cases first for `ai-bidi-controls`, one good and one bad.
 - [ ] Implement `ai-bidi-controls` as blocking, with its fixture.
 - [ ] Add the advisory set from Workstream B one rule at a time, each with its own corpus pair.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ### Phase 3 - The routers
 

@@ -194,7 +194,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Test what `process.env` inlining actually puts in the bundle.
 - [ ] Exercise the dev-server flags (`--host`, `--no-cors`).
 - [ ] Verify the `.env` loading claim against the current documentation.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 

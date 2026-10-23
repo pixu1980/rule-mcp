@@ -158,7 +158,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] The four advisory rules, each with its exception fixture.
 - [ ] Cut the body to about 150 lines and move the template and the settings into `references/`.
 - [ ] Gate: a diff review that finds every removed claim with a destination, and the rule table replacing the final checklist.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census` and update the frontmatter `guardrails:` list.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census` and update the frontmatter `guardrails:` list.
 
 ### Phase 4 - Verification
 

@@ -168,7 +168,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Run the annotated tree fixture.
 - [ ] Run the fix twice and confirm idempotence.
 - [ ] Run the report completeness test.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 

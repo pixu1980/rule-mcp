@@ -180,7 +180,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Build the two-package fixture and run a frozen install.
 - [ ] Run the Docker snippet with `pnpm fetch` and an offline install.
 - [ ] Validate the reference settings against pnpm 12.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 

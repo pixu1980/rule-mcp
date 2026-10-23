@@ -91,7 +91,7 @@ Command files are also registered under `windsurf`, which the installer no longe
 
 Regenerate with `pnpm census`.
 
-Per-host formats and the command surface itself: [`11-instructions.md`](11-instructions.md). Slash-command targets: 13 across 9 hosts.
+Per-host formats and the command surface itself: [`12-instructions.md`](12-instructions.md). Slash-command targets: 13 across 9 hosts.
 
 <!-- census:end:agent-targets -->
 
@@ -101,6 +101,7 @@ The server never calls a model. Any agent that speaks MCP works: Claude, GPT, Ge
 
 ## Next steps
 
+- [Quick start](./07-quick-start.md): the main flows in short examples
 - [Reference overview](./README.md): map of architecture, surface table, and inventories
 - [Architecture](./02-architecture.md): the request path
-- [Surface map](./16-surface-map.md): the Command · Tool · Skill table
+- [Surface map](./17-surface-map.md): the Command · Tool · Skill table

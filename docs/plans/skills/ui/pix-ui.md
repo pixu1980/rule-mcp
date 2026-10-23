@@ -167,7 +167,7 @@ Shared files: skills/pix/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixt
 
 - [ ] Add a UI-bearing skill in a fixture and confirm coverage fires.
 - [ ] Break a relative link in a fixture and confirm the rule fires.
-- [ ] Regenerate `docs/14-guardrails.md` with `pnpm census`.
+- [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
 
 ## Model assignment
 
