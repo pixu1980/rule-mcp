@@ -102,6 +102,7 @@ Dependencies: WS-0 first and alone, because every later step calls it. WS-1 and 
 - The prompt/description change (ADR 162) cut Laya's none from 38 to 24 and lifted correct choices from 23 to 33, but wrong choices rose from 8 to 13; 0.45 precision is 84.2% vs 70.6%, no floor. Julia at 0.90 fell to 31.8%. Replay stays off; the next is the precision/floor (more samples or the route-aware filter).
 - The multilingual model is excluded from the cache gate (ADR 163): Julia made 61 predictions and 37 wrong at 0.30, 13 at 0.90 (31.8%); the short prompt reached 45.8% but no floor. Julia stays on routing; Laya owns the gate; L0/L1 are unchanged; replay off.
 - The corpus widened to 34 groups / 105 leave-one-out prompts / 13 negatives. Laya coverage is 78/105 (74.3%); 66 predictions, 20 wrong at 0.30, 2 at 0.50, 1 at 0.60; no floor. Replay off; the route-aware filter is the next precision experiment.
+- The route-aware hint (ADR 164) was rejected: the BM25 top route does not match the cached post-decision route, so the filter drops the correct seed. Laya coverage fell from 78/105 (74.3%) to 68/105 (64.8%); 58 predictions, 19 wrong at 0.30; no floor. The hint is reverted; the BM25 single-batch gate remains; replay off. The next is the seed expansion or the model.
 - The commit-lint closeout archived this plan while DM-04 and DM-10 were still open; the plan was restored with the 5.4 gate open so it is not archived again.
 
 ## Kill criteria

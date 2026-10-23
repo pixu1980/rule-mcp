@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [164](164-reject-the-route-aware-candidate-filter.md)                                                                   | Reject the route-aware candidate filter                                                                   | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md)                                               | Exclude the multilingual model from the decision-cache gate                                               | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md)                                       | Name the skill and accept paraphrase in the decision-cache question                                       | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md)                                               | Measure the decision-cache gate with a leave-one-out corpus                                               | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
@@ -179,6 +180,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [164](164-reject-the-route-aware-candidate-filter.md)                                                                   | Reject the route-aware candidate filter.                                                                                                                                                                                        | The BM25 route is not the cache route: filtering by it removes correct seeds when the decision layer had overridden the route.                                                                                                  |
 | [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md)                                               | Exclude the multilingual model from the decision-cache gate.                                                                                                                                                                    | The Julia cache gate is off, so its overconfident cache picks can no longer replay or shadow.                                                                                                                                   |
 | [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md)                                       | Describe the cached candidate as request/skill and ask the model to accept a paraphrase when the skill and intent match, choosing none only when no candidate shares the intent.                                                | Laya's none fell from 38 to 24; predictions rose from 31 to 46, correct from 23 to 33, wrong from 8 to 13. The 0.45 precision rose to 84.2% (from 70.6%) but 0.60-0.75 got worse; no floor emerged.                             |
 | [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md)                                               | Use the leave-one-out corpus for the decision-cache measurement.                                                                                                                                                                | Laya coverage rose to 53/69 (76.8%) and Julia to 34/69 (49.3%).                                                                                                                                                                 |
@@ -425,6 +427,27 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [017](017-forms-per-framework-merger-and-distribution.md) forms per framework merger and distribution
 - [011](011-forms-per-framework.md) Forms per Framework - Merger & Distribution
 
+### routing
+
+- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
+- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
+- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
+- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
+- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
+- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
+- [026](026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
+- [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
+- [024](024-skill-routing-parcel-bundler-zero-config-build-tool.md) Skill routing: Parcel bundler zero config build tool
+- [023](023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.md) Skill routing: Husky git hooks pre-commit lint-staged commitlint
+- [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
+- [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
+- [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
+
 ### installer
 
 - [121](121-the-install-reconciles-the-bundled-skills-when-the-step-is-not-selected.md) The install reconciles the bundled skills when the step is not selected
@@ -444,26 +467,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [041](041-lossless-installer-preserve-toolprefix-normalize-rule-blank-lines.md) Lossless installer: preserve toolPrefix and normalize rule blank lines
 - [039](039-fix-vscode-extension-and-derivatives-install-uninstall.md) Fix VS Code extension and derivatives install/uninstall
 - [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
-
-### routing
-
-- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
-- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
-- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
-- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
-- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
-- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
-- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
-- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
-- [075](075-meta-frameworks-get-their-own-namespace-and-a-narrow-dispatcher.md) Meta-frameworks get their own namespace and a narrow dispatcher
-- [027](027-add-rule-toolchain-commits-skill-for-atomic-conventional-commits-with-mandatory-s.md) Add rule-toolchain-commits skill for atomic conventional commits with mandatory scope
-- [026](026-rename-rule-mcp-agents-to-rule-ai-agents-and-add-rule-ai-collector-skill.md) Rename rule-mcp-agents to rule-ai-agents and add rule-ai collector skill
-- [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
-- [024](024-skill-routing-parcel-bundler-zero-config-build-tool.md) Skill routing: Parcel bundler zero config build tool
-- [023](023-skill-routing-husky-git-hooks-pre-commit-lint-staged-commit.md) Skill routing: Husky git hooks pre-commit lint-staged commitlint
-- [022](022-skill-routing-turborepo-monorepo-pipeline-caching-parallel.md) Skill routing: Turborepo monorepo pipeline caching parallel builds
-- [021](021-skill-routing-eslint-flat-config-for-typescript-react-proje.md) Skill routing: ESLint flat config for TypeScript React project
-- [020](020-skill-routing-typescript-tsconfig-strict-mode-configuration.md) Skill routing: TypeScript tsconfig strict mode configuration
 
 ### breaking
 
@@ -613,6 +616,18 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [015](015-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
 - [009](009-toolchain-vite.md) Toolchain Skill Isolation (Vite)
 
+### decision-models
+
+- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
+- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
+- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
+- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
+- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
+
 ### governance
 
 - [154](154-every-plan-carries-a-status-line-a-dependency-graph-and-checkbox-steps.md) Every plan carries a status line, a dependency graph and checkbox steps
@@ -625,6 +640,17 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [079](079-add-the-oss-architect-review-persona.md) Add the OSS Architect review persona
 - [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
 
+### cache
+
+- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
+- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
+- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
+- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
+- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
+- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
+- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
+- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
+
 ### closeout
 
 - [119](119-close-out-audit-ui.md) Close out audit ui
@@ -636,8 +662,9 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
 - [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
 
-### decision-models
+### observability
 
+- [164](164-reject-the-route-aware-candidate-filter.md) Reject the route-aware candidate filter
 - [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
 - [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
 - [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
@@ -645,7 +672,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
 - [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
 - [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
-- [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
 
 ### security
 
@@ -657,26 +683,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [045](045-migrate-repo-tooling-to-eslint-10-flat-config-with-eslint-plugin-unicorn.md) Migrate repo tooling to ESLint 10 flat config with eslint-plugin-unicorn
 - [019](019-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
 - [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
-
-### cache
-
-- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
-- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
-- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
-- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
-- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
-- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
-- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
-
-### observability
-
-- [163](163-exclude-the-multilingual-model-from-the-decision-cache-gate.md) Exclude the multilingual model from the decision-cache gate
-- [162](162-name-the-skill-and-accept-paraphrase-in-the-decision-cache-question.md) Name the skill and accept paraphrase in the decision-cache question
-- [161](161-measure-the-decision-cache-gate-with-a-leave-one-out-corpus.md) Measure the decision-cache gate with a leave-one-out corpus
-- [160](160-rank-decision-cache-candidates-with-bm25.md) Rank decision-cache candidates with BM25
-- [159](159-keep-the-single-batch-decision-cache-shortlist.md) Keep the single-batch decision-cache shortlist
-- [158](158-replay-the-decision-cache-gate-only-behind-a-measured-threshold.md) Replay the decision-cache gate only behind a measured threshold
-- [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
 
 ### process
 
