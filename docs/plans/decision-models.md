@@ -94,6 +94,7 @@ Dependencies: WS-0 first and alone, because every later step calls it. WS-1 and 
 
 - Five pre-existing 150-line offenders remain: `src/cli/_init.js` 151, `src/core/__tests__/_prompt-directive.test.mjs` 152, `src/core/guardrails/project/_checks.js` 180, `src/core/self-update/_run.js` 202, `tests/plans/skills-plan.test.mjs` 338. The sixth, `src/tools/skill/_check-tool.js`, was split in Step 7.
 - The live model-on corpus run and the severity agreement were not exercised; the Italian slice with Julia-1 was measured live (2/8 exact, 3/8 top-or-alternative, 5/8 `unknown`) and the decision-cache short-circuit was measured live (a cached Italian prompt after an English swap makes zero router requests). The recorded and fake runs are in ADR 156 and the review.
+- The L3 decision-cache gate ships shadow-only (`RULE_MCP_DECISION_CACHE_SHADOW=1`): it records would-be replays on `pix_tool` but never replays, and the provisional 0.9 floor is not a measured value. Phase 2 waits for the corpus to show zero false replays.
 - The commit-lint closeout archived this plan while DM-04 and DM-10 were still open; the plan was restored with the 5.4 gate open so it is not archived again.
 
 ## Kill criteria

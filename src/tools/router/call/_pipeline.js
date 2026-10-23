@@ -11,6 +11,7 @@ import { touchActivity } from "@src/core/session/_activity.js";
 import { z } from "zod/v4";
 import { recordCrashed } from "./_telemetry.js";
 import { replayIfCached, replayIfSemanticCached, storeAndFinalize } from "./_stages.js";
+import { observeDecisionShadow } from "@src/core/cache/tool-cache/index.js";
 
 /**
  * Run one tool call end to end: activity, self-update, resume banner, cache
@@ -84,6 +85,10 @@ export async function callTool(name, args) {
     const { arguments: processedArguments, core } = await computeCore(name, tool, validated);
 
     stage = "finalize";
+
+    // Phase 1: record what the L3 gate would replay. The response is already
+    // computed, so the observation is fire-and-forget and can never replay it.
+    void observeDecisionShadow(name, validated);
 
     return withBanner(banner, storeAndFinalize(name, processedArguments, core, startedAt));
   } catch (error) {
