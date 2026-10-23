@@ -12,21 +12,21 @@ generator come from `rule-process`.
 
 Inherited from the platform, meta and frontend interviews, 2026-10-21:
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Sibling plans | Assume the four leaves are executed; this plan describes the state after them |
-| Route table | Waits for the census generator: this router is one of the eleven, and the Quick Selection drift below is the argument for it |
-| Existing guardrails | **Keep**: this router owns `env-gitignore` and `secret-detection`, and the shared router rules join them rather than replace them |
-| Tags | The router keeps `devops`, `index`; the five subject tags (`ci`, `cd`, `docker`, `preview`, `testing`, `observability`, `version`) move to the leaves |
-| Rule set | Six shared router rules plus the two it already owns |
-| Detection | Shared rule set, registered not copied |
-| Fixtures | Shared corpus pairs plus router trees on disk |
-| Flow | Failing test first |
-| Gates | Router coverage, corpora, catalog clean, census, lint and typecheck, plus a routing prompt per leaf |
-| Commits | One per phase |
-| ADR | Two for the whole area: the devops family shape, the rule design |
-| Done | Coverage is complete, the two secret rules still run, and the router rules pass |
+| Question            | Decision                                                                                                                                              |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass  | **Plan only**                                                                                                                                         |
+| Sibling plans       | Assume the four leaves are executed; this plan describes the state after them                                                                         |
+| Route table         | Waits for the census generator: this router is one of the eleven, and the Quick Selection drift below is the argument for it                          |
+| Existing guardrails | **Keep**: this router owns `env-gitignore` and `secret-detection`, and the shared router rules join them rather than replace them                     |
+| Tags                | The router keeps `devops`, `index`; the five subject tags (`ci`, `cd`, `docker`, `preview`, `testing`, `observability`, `version`) move to the leaves |
+| Rule set            | Six shared router rules plus the two it already owns                                                                                                  |
+| Detection           | Shared rule set, registered not copied                                                                                                                |
+| Fixtures            | Shared corpus pairs plus router trees on disk                                                                                                         |
+| Flow                | Failing test first                                                                                                                                    |
+| Gates               | Router coverage, corpora, catalog clean, census, lint and typecheck, plus a routing prompt per leaf                                                   |
+| Commits             | One per phase                                                                                                                                         |
+| ADR                 | Two for the whole area: the devops family shape, the rule design                                                                                      |
+| Done                | Coverage is complete, the two secret rules still run, and the router rules pass                                                                       |
 
 ## Evidence base (measured 2026-10-21)
 
@@ -36,12 +36,12 @@ is the smallest router in the catalog and one of only two that own rules.
 
 ### The table and the Quick Selection disagree
 
-| Skill | Table row | Quick Selection line |
-| ----- | --------- | -------------------- |
-| `rule-devops-docker` | yes | yes |
-| `rule-devops-observability` | yes | yes |
-| `rule-devops-testing` | yes | yes |
-| `rule-devops-deploy-preview` | **no** | **yes** |
+| Skill                       | Table row | Quick Selection line |
+| --------------------------- | --------- | -------------------- |
+| `rule-devops-docker`         | yes       | yes                  |
+| `rule-devops-observability`  | yes       | yes                  |
+| `rule-devops-testing`        | yes       | yes                  |
+| `rule-devops-deploy-preview` | **no**    | **yes**              |
 
 So the router's short list advertises a skill its own table omits, and the gap
 recorded in `ROUTER_GAPS` agrees with the table and not with the prose. Two
@@ -64,23 +64,23 @@ equally. The same pruning `rule-platform`, `rule-meta` and `rule-frontend` neede
 
 ### Reach
 
-| Door | State |
-| ---- | ----- |
-| `rule` dispatcher | listed |
-| Inbound links | the four leaves, the toolchain skills, the backend leaves |
+| Door             | State                                                     |
+| ---------------- | --------------------------------------------------------- |
+| `rule` dispatcher | listed                                                    |
+| Inbound links    | the four leaves, the toolchain skills, the backend leaves |
 
 ## The eight rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `env-gitignore` | A committed `.env` that git does not ignore | B | existing, keep |
-| `secret-detection` | A literal secret in a tracked file | B | existing, keep |
-| `router-dead-link` | A relative link resolving to no `SKILL.md` | B | clean |
-| `router-tool-name` | A tool name the registry does not know | B | clean |
-| `router-child-listed` | A skill under the area with no row | B | **red**: deploy-preview |
-| `router-quick-selection` | A row the Quick Selection cannot reach, or a line with no row | B | **red**: deploy-preview, in the opposite direction |
-| `router-no-stale-name` | A reference to a skill that no longer exists | B | clean |
-| `router-tag-single-owner` | A subject tag claimed by the router and a leaf | B | **red**: seven tags |
+| id                        | Rejects                                                       | Tier | Today                                              |
+| ------------------------- | ------------------------------------------------------------- | ---- | -------------------------------------------------- |
+| `env-gitignore`           | A committed `.env` that git does not ignore                   | B    | existing, keep                                     |
+| `secret-detection`        | A literal secret in a tracked file                            | B    | existing, keep                                     |
+| `router-dead-link`        | A relative link resolving to no `SKILL.md`                    | B    | clean                                              |
+| `router-tool-name`        | A tool name the registry does not know                        | B    | clean                                              |
+| `router-child-listed`     | A skill under the area with no row                            | B    | **red**: deploy-preview                            |
+| `router-quick-selection`  | A row the Quick Selection cannot reach, or a line with no row | B    | **red**: deploy-preview, in the opposite direction |
+| `router-no-stale-name`    | A reference to a skill that no longer exists                  | B    | clean                                              |
+| `router-tag-single-owner` | A subject tag claimed by the router and a leaf                | B    | **red**: seven tags                                |
 
 ## Phase 0 - Decisions
 
@@ -128,13 +128,13 @@ equally. The same pruning `rule-platform`, `rule-meta` and `rule-frontend` neede
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Close the drift | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Close the drift      | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

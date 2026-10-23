@@ -15,16 +15,17 @@ compatibility: Designed for AI coding assistants
 
 ## AI Agent Skills
 
-| Skill                                                                | Core Library                                                                                                 | Use when                                                                                                                                    |
-| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| [rule-ai-evals](../rule-ai-evals/SKILL.md)                             | Error analysis, LLM-as-judge, judge calibration, RAG evals                                                   | Measuring whether an AI feature works                                                                                                       |
-| [rule-ai-context-engineering](../rule-ai-context-engineering/SKILL.md) | The window as a budget, less-beats-more, delegation levels, compaction and handoff, usage limits             | A session is getting expensive, slow or worse                                                                                               |
-| [rule-ai-agent-architecture](../rule-ai-agent-architecture/SKILL.md)   | What happens at the API boundary, the harness over the model, loops against graphs, MCP, tool surface design | Building or reviewing an agent or an MCP server                                                                                             |
-| [rule-ai-prompting](../rule-ai-prompting/SKILL.md)                     | Prompt anatomy, context engineering, learning mode                                                           | Working with an agent, or teaching someone to                                                                                               |
+| Skill                                                                | Core Library                                                                                                 | Use when                                        |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------- |
+| [rule-ai-evals](../rule-ai-evals/SKILL.md)                             | Error analysis, LLM-as-judge, judge calibration, RAG evals                                                   | Measuring whether an AI feature works           |
+| [rule-ai-context-engineering](../rule-ai-context-engineering/SKILL.md) | The window as a budget, less-beats-more, delegation levels, compaction and handoff, usage limits             | A session is getting expensive, slow or worse   |
+| [rule-ai-agent-architecture](../rule-ai-agent-architecture/SKILL.md)   | What happens at the API boundary, the harness over the model, loops against graphs, MCP, tool surface design | Building or reviewing an agent or an MCP server |
+| [rule-ai-prompting](../rule-ai-prompting/SKILL.md)                     | Prompt anatomy, context engineering, learning mode                                                           | Working with an agent, or teaching someone to   |
 
 ## Quick Selection Guide
 
 ```
+
 ```
 
 ## AI features to build that are not another chatbot

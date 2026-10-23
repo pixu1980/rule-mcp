@@ -26,23 +26,23 @@ schema lives in the application.
 
 What it states and nothing checks:
 
-| Statement | Enforced |
-| --------- | -------- |
-| Embed what is read together; reference what grows without bound | **no** |
-| Arrays that grow without a limit are a design error | **no** |
-| Every query pattern gets an index, in the order of the filter | **no** |
-| Transactions cost; use them when a multi-document write must be atomic | **no** |
+| Statement                                                              | Enforced |
+| ---------------------------------------------------------------------- | -------- |
+| Embed what is read together; reference what grows without bound        | **no**   |
+| Arrays that grow without a limit are a design error                    | **no**   |
+| Every query pattern gets an index, in the order of the filter          | **no**   |
+| Transactions cost; use them when a multi-document write must be atomic | **no**   |
 
 ## The six rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `mongodb-no-unbounded-array` | An `$push` into a field with no cap, or a schema comment saying it grows forever | B | n/a |
-| `mongodb-index-matches-query` | A query whose filter is not a prefix of an existing index | B | n/a |
-| `mongodb-embed-vs-reference` | An embedded document read independently at scale, or a reference read always together | B | n/a |
-| `mongodb-operator-injection` | A filter built by string concatenation or from raw user objects | B | n/a |
-| `mongodb-owner-named` | A section delegating validation, pooling or generic migration rules without naming the owner | B | partially red |
-| `mongodb-no-stale-skill-id` | A `rule-...` id with no skill directory | B | clean |
+| id                            | Rejects                                                                                      | Tier | Today         |
+| ----------------------------- | -------------------------------------------------------------------------------------------- | ---- | ------------- |
+| `mongodb-no-unbounded-array`  | An `$push` into a field with no cap, or a schema comment saying it grows forever             | B    | n/a           |
+| `mongodb-index-matches-query` | A query whose filter is not a prefix of an existing index                                    | B    | n/a           |
+| `mongodb-embed-vs-reference`  | An embedded document read independently at scale, or a reference read always together        | B    | n/a           |
+| `mongodb-operator-injection`  | A filter built by string concatenation or from raw user objects                              | B    | n/a           |
+| `mongodb-owner-named`         | A section delegating validation, pooling or generic migration rules without naming the owner | B    | partially red |
+| `mongodb-no-stale-skill-id`   | A `rule-...` id with no skill directory                                                       | B    | clean         |
 
 ## Phases
 
@@ -93,13 +93,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Trim | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Trim                 | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

@@ -29,17 +29,17 @@ key, an eight-row table, a long data-architecture section (lake, warehouse,
 lakehouse, medallion, lambda, kappa, mesh, fabric, vault), a seven-line Quick
 Selection, and two See-also links.
 
-| Fact | State |
-| ---- | ----- |
-| Children | 8: sql, postgresql, mysql, mongodb, sqlite, duckdb, indexed-db, validation |
-| Table rows | 8: complete, no `ROUTER_GAPS` entry for this area |
-| Quick Selection lines | 7: **`rule-data-validation` is unreachable there** |
-| Dispatcher rows | 5 of 8: **sqlite, duckdb and indexed-db are missing** |
-| Own rules | 4, inherited by 7 leaves |
-| Tags | data, database, index, sql, nosql |
-| Tag overlap | `sql` is claimed by 5 skills, `nosql` by 2 including this router |
-| Dangling references | none |
-| Invented rule ids | none |
+| Fact                  | State                                                                      |
+| --------------------- | -------------------------------------------------------------------------- |
+| Children              | 8: sql, postgresql, mysql, mongodb, sqlite, duckdb, indexed-db, validation |
+| Table rows            | 8: complete, no `ROUTER_GAPS` entry for this area                          |
+| Quick Selection lines | 7: **`rule-data-validation` is unreachable there**                          |
+| Dispatcher rows       | 5 of 8: **sqlite, duckdb and indexed-db are missing**                      |
+| Own rules             | 4, inherited by 7 leaves                                                   |
+| Tags                  | data, database, index, sql, nosql                                          |
+| Tag overlap           | `sql` is claimed by 5 skills, `nosql` by 2 including this router           |
+| Dangling references   | none                                                                       |
+| Invented rule ids     | none                                                                       |
 
 ### The architecture section is the best content in the area
 
@@ -59,18 +59,18 @@ in the catalog duplicates it and no rule can check it. It stays.
 
 ## The ten rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `connection-pool` | A new connection per request | B | existing, keep |
-| `migration-safety` | A migration that locks a hot table or cannot roll back | B | existing, keep |
-| `parameterized-queries` | A query built by string concatenation | B | existing, keep |
-| `transaction-safety` | A multi-statement write with no transaction boundary | B | existing, keep |
-| `router-dead-link` | A relative link resolving to no `SKILL.md` | B | clean |
-| `router-tool-name` | A tool name the registry does not know | B | clean |
-| `router-child-listed` | A skill under the area with no row | B | clean: the best-covered router in the catalog |
-| `router-quick-selection` | A row the Quick Selection cannot reach | B | **red**: validation |
-| `router-no-stale-name` | A reference to a skill that no longer exists | B | clean |
-| `router-tag-single-owner` | A subject tag claimed by the router and a leaf | B | **red**: `sql`, `nosql` |
+| id                        | Rejects                                                | Tier | Today                                         |
+| ------------------------- | ------------------------------------------------------ | ---- | --------------------------------------------- |
+| `connection-pool`         | A new connection per request                           | B    | existing, keep                                |
+| `migration-safety`        | A migration that locks a hot table or cannot roll back | B    | existing, keep                                |
+| `parameterized-queries`   | A query built by string concatenation                  | B    | existing, keep                                |
+| `transaction-safety`      | A multi-statement write with no transaction boundary   | B    | existing, keep                                |
+| `router-dead-link`        | A relative link resolving to no `SKILL.md`             | B    | clean                                         |
+| `router-tool-name`        | A tool name the registry does not know                 | B    | clean                                         |
+| `router-child-listed`     | A skill under the area with no row                     | B    | clean: the best-covered router in the catalog |
+| `router-quick-selection`  | A row the Quick Selection cannot reach                 | B    | **red**: validation                           |
+| `router-no-stale-name`    | A reference to a skill that no longer exists           | B    | clean                                         |
+| `router-tag-single-owner` | A subject tag claimed by the router and a leaf         | B    | **red**: `sql`, `nosql`                       |
 
 ## Phases
 
@@ -124,13 +124,13 @@ Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fix
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Finish the area | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Finish the area      | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

@@ -148,7 +148,7 @@ test("every plan carries a status from the closed vocabulary", () => {
       continue;
     }
 
-    const value = line[1].replaceAll("`", "").trim().split(/[\s,.]/, 1)[0];
+    const value = line[1].split(/[\s,.]/, 1)[0].replaceAll("`", "");
 
     if (!STATUSES.has(value)) {
       offenders.push(`${path}: "${value}"`);

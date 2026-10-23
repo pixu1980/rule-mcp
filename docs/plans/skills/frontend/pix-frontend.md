@@ -13,21 +13,21 @@ route-table generator come from `rule-process`.
 
 Inherited from the platform and meta interviews, 2026-10-21:
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Sibling plans | Assume the seven leaves are executed; this plan describes the state after them |
-| Route table | Waits for the census generator planned in `rule-process`; this router is one of the eleven |
-| Cross-area rows | A frontend router may **point** at the meta-framework dispatcher; it may not carry the four meta rows as its own |
-| Tags | The router keeps `frontend`, `ui`, `index`; the six framework subjects move to the leaves that own them |
-| Rule set | The six router rules from `rule-process`, plus one this router needs: no cross-area rows |
-| Detection | Shared rule set, registered not copied |
-| Fixtures | Shared corpus pairs plus router trees on disk |
-| Flow | Failing test first |
-| Gates | Router coverage, corpora, catalog clean, census, lint and typecheck, plus a routing prompt per leaf |
-| Commits | One per phase |
-| ADR | Two: the frontend family shape (shared with the leaves), the rule design |
-| Done | Coverage is complete and the rule set passes |
+| Question           | Decision                                                                                                         |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass | **Plan only**                                                                                                    |
+| Sibling plans      | Assume the seven leaves are executed; this plan describes the state after them                                   |
+| Route table        | Waits for the census generator planned in `rule-process`; this router is one of the eleven                        |
+| Cross-area rows    | A frontend router may **point** at the meta-framework dispatcher; it may not carry the four meta rows as its own |
+| Tags               | The router keeps `frontend`, `ui`, `index`; the six framework subjects move to the leaves that own them          |
+| Rule set           | The six router rules from `rule-process`, plus one this router needs: no cross-area rows                          |
+| Detection          | Shared rule set, registered not copied                                                                           |
+| Fixtures           | Shared corpus pairs plus router trees on disk                                                                    |
+| Flow               | Failing test first                                                                                               |
+| Gates              | Router coverage, corpora, catalog clean, census, lint and typecheck, plus a routing prompt per leaf              |
+| Commits            | One per phase                                                                                                    |
+| ADR                | Two: the frontend family shape (shared with the leaves), the rule design                                         |
+| Done               | Coverage is complete and the rule set passes                                                                     |
 
 ## Evidence base (measured 2026-10-21)
 
@@ -36,15 +36,15 @@ table, a cross-framework rules section, a cross-cutting table, a
 meta-framework table, an "over-engineering" section, a Quick Selection of
 eleven lines, and three See-also links.
 
-| Fact | State |
-| ---- | ----- |
-| Children after ADR 152 | 7: angular, react, solidjs, svelte, template-engine, vue, workers |
-| Table rows | 10: the six UI frameworks, workers, and the four meta-frameworks |
-| Missing child | **`rule-frontend-template-engine`**, the last entry in `ROUTER_GAPS` |
-| Dispatcher row | present |
-| Tags | frontend, ui, react, vue, angular, svelte, solidjs, astro, index |
-| Tag overlap | each of `react`, `vue`, `angular`, `svelte`, `solidjs`, `astro` is claimed by exactly 2 skills: this router and its leaf |
-| Guardrails | none |
+| Fact                   | State                                                                                                                    |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Children after ADR 152 | 7: angular, react, solidjs, svelte, template-engine, vue, workers                                                        |
+| Table rows             | 10: the six UI frameworks, workers, and the four meta-frameworks                                                         |
+| Missing child          | **`rule-frontend-template-engine`**, the last entry in `ROUTER_GAPS`                                                      |
+| Dispatcher row         | present                                                                                                                  |
+| Tags                   | frontend, ui, react, vue, angular, svelte, solidjs, astro, index                                                         |
+| Tag overlap            | each of `react`, `vue`, `angular`, `svelte`, `solidjs`, `astro` is claimed by exactly 2 skills: this router and its leaf |
+| Guardrails             | none                                                                                                                     |
 
 ### Four rows that belong to another area
 
@@ -67,22 +67,22 @@ instead of copying six lines each.
 
 ### Reach
 
-| Door | State |
-| ---- | ----- |
-| `rule` dispatcher | listed |
-| Inbound links | the largest hub in the area: every frontend leaf, the ui skills, `rule-platform-web` |
+| Door             | State                                                                               |
+| ---------------- | ----------------------------------------------------------------------------------- |
+| `rule` dispatcher | listed                                                                              |
+| Inbound links    | the largest hub in the area: every frontend leaf, the ui skills, `rule-platform-web` |
 
 ## The seven rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `router-dead-link` | A relative link resolving to no `SKILL.md` | B | clean |
-| `router-tool-name` | A tool name the registry does not know | B | clean |
-| `router-child-listed` | A skill under the area with no row | B | **red**: `rule-frontend-template-engine` |
-| `router-quick-selection` | A row the Quick Selection cannot reach | B | **red**: template-engine, and the meta rows are reachable twice |
-| `router-no-stale-name` | A reference to a skill that no longer exists | B | clean after ADR 152 |
-| `router-tag-single-owner` | A subject tag claimed by the router and a leaf | B | **red**: six tags |
-| `frontend-no-cross-area-rows` | A row for a skill another area owns | B | **red**: four meta rows |
+| id                            | Rejects                                        | Tier | Today                                                           |
+| ----------------------------- | ---------------------------------------------- | ---- | --------------------------------------------------------------- |
+| `router-dead-link`            | A relative link resolving to no `SKILL.md`     | B    | clean                                                           |
+| `router-tool-name`            | A tool name the registry does not know         | B    | clean                                                           |
+| `router-child-listed`         | A skill under the area with no row             | B    | **red**: `rule-frontend-template-engine`                         |
+| `router-quick-selection`      | A row the Quick Selection cannot reach         | B    | **red**: template-engine, and the meta rows are reachable twice |
+| `router-no-stale-name`        | A reference to a skill that no longer exists   | B    | clean after ADR 152                                             |
+| `router-tag-single-owner`     | A subject tag claimed by the router and a leaf | B    | **red**: six tags                                               |
+| `frontend-no-cross-area-rows` | A row for a skill another area owns            | B    | **red**: four meta rows                                         |
 
 ## Phase 0 - Decisions
 
@@ -130,13 +130,13 @@ instead of copying six lines each.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Open the last door | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Open the last door   | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

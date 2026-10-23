@@ -131,11 +131,11 @@ Shared files: none: absorbed into the leaf plans named above
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions and scaffolding | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Shared rules in rule-meta | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 2 - Promotion and documentation | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
+| Step                                  | Class      | Model                   | Why                            |
+| ------------------------------------- | ---------- | ----------------------- | ------------------------------ |
+| Phase 0 - Decisions and scaffolding   | `T1-plan`  | `gemini-4-argon` (high) | planning and prose that argues |
+| Phase 1 - Shared rules in rule-meta    | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 2 - Promotion and documentation | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

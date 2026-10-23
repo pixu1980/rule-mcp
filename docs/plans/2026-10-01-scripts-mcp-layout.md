@@ -18,30 +18,30 @@ Status: `planned` (not executed)
 
 ## Package names (fixed)
 
-| Path | `package.json` `name` | Role |
-| --- | --- | --- |
-| repo root | `rule-mcp-workspace` (`private: true`) | Facade: `bin/`, top-level scripts, `files`/publish orchestration |
-| `packages/mcp` | **`rule-mcp`** | MCP server implementation (what agents run) |
-| `packages/shared` | **`rule-mcp-shared`** | Helpers usable by root, mcp, docs, scripts |
-| `packages/docs` | **`rule-mcp-docs`** | Static site builder over `docs/` markdown |
-| `../nyx` | `nyx-gateway` | Sibling decision engine (unchanged git) |
+| Path              | `package.json` `name`                  | Role                                                             |
+| ----------------- | -------------------------------------- | ---------------------------------------------------------------- |
+| repo root         | `rule-mcp-workspace` (`private: true`) | Facade: `bin/`, top-level scripts, `files`/publish orchestration |
+| `packages/mcp`    | **`rule-mcp`**                         | MCP server implementation (what agents run)                      |
+| `packages/shared` | **`rule-mcp-shared`**                  | Helpers usable by root, mcp, docs, scripts                       |
+| `packages/docs`   | **`rule-mcp-docs`**                    | Static site builder over `docs/` markdown                        |
+| `../nyx`          | `nyx-gateway`                          | Sibling decision engine (unchanged git)                          |
 
 Root cannot keep the name `rule-mcp` if `packages/mcp` owns that name — otherwise pnpm has two packages with the same identity. The **published/installable product name** remains `rule-mcp` on `packages/mcp` (root bin depends on it / re-exports entry).
 
 ## Fixed layout decisions
 
-| Choice | Value |
-| --- | --- |
-| Workspace members | `packages/*` + `../nyx` |
-| Nyx import | `nyx-gateway/mcp` |
-| MCP deps | `"rule-mcp-shared": "workspace:*"`, `"nyx-gateway": "workspace:*"` |
-| Docs deps | `marked` (+ workspace shared only if needed; today docs-site needs neither) |
-| Alias | `@mcp/*` → `packages/mcp/`; shared via package imports `rule-mcp-shared` / `rule-mcp-shared/…` |
-| `tests/` | → `scripts/__tests__/` |
-| Case-study apps | → `docs/case-studies/` |
-| Launcher | `scripts/case-studies/` |
-| Markdown `docs/**` | stays content tree (not the docs package) |
-| `personas/` / `skills/` / root `prompts/` | stay at repo root |
+| Choice                                    | Value                                                                                          |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Workspace members                         | `packages/*` + `../nyx`                                                                        |
+| Nyx import                                | `nyx-gateway/mcp`                                                                              |
+| MCP deps                                  | `"rule-mcp-shared": "workspace:*"`, `"nyx-gateway": "workspace:*"`                             |
+| Docs deps                                 | `marked` (+ workspace shared only if needed; today docs-site needs neither)                    |
+| Alias                                     | `@mcp/*` → `packages/mcp/`; shared via package imports `rule-mcp-shared` / `rule-mcp-shared/…` |
+| `tests/`                                  | → `scripts/__tests__/`                                                                         |
+| Case-study apps                           | → `docs/case-studies/`                                                                         |
+| Launcher                                  | `scripts/case-studies/`                                                                        |
+| Markdown `docs/**`                        | stays content tree (not the docs package)                                                      |
+| `personas/` / `skills/` / root `prompts/` | stay at repo root                                                                              |
 
 ---
 
@@ -70,16 +70,16 @@ After the move, `packages/mcp` depends on `rule-mcp-shared` and imports sandbox/
 
 ### OUT (stay in `packages/mcp`)
 
-| Module | Why it stays in mcp |
-| --- | --- |
-| `core/text` (compression, fingerprint, en-english, …) | Couples to `core/telemetry` and `core/bm25`; not a leaf helper. Scripts that use it import mcp. Extract later only with a split that removes those edges. |
-| `core/commit`, `core/git` | Repo governance / git CLI domain |
-| `core/file-tree` | Project layout rules for this product |
-| `core/bm25`, `core/skills`, `core/guardrails` | Skill/search/product engine |
-| `core/nyx` | Thin adapter specific to loading `nyx-gateway` inside mcp |
-| `core/tokensave`, `core/telemetry`, `core/session`, `core/cache`, … | Server runtime |
-| `cli/`, `tools/`, `server/`, `transport/`, `prompts/`, `resources/` | MCP product surface |
-| Skill guardrail “SDK” | ADR 089: injection, not a shared package dependency |
+| Module                                                              | Why it stays in mcp                                                                                                                                       |
+| ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `core/text` (compression, fingerprint, en-english, …)               | Couples to `core/telemetry` and `core/bm25`; not a leaf helper. Scripts that use it import mcp. Extract later only with a split that removes those edges. |
+| `core/commit`, `core/git`                                           | Repo governance / git CLI domain                                                                                                                          |
+| `core/file-tree`                                                    | Project layout rules for this product                                                                                                                     |
+| `core/bm25`, `core/skills`, `core/guardrails`                       | Skill/search/product engine                                                                                                                               |
+| `core/nyx`                                                          | Thin adapter specific to loading `nyx-gateway` inside mcp                                                                                                 |
+| `core/tokensave`, `core/telemetry`, `core/session`, `core/cache`, … | Server runtime                                                                                                                                            |
+| `cli/`, `tools/`, `server/`, `transport/`, `prompts/`, `resources/` | MCP product surface                                                                                                                                       |
+| Skill guardrail “SDK”                                               | ADR 089: injection, not a shared package dependency                                                                                                       |
 
 ### Explicit non-goals for shared growth
 
@@ -210,8 +210,8 @@ node findable from `docs/plans/plan-of-plans.md` on `feat/evolution`.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
+| Step           | Class     | Model                | Why                                               |
+| -------------- | --------- | -------------------- | ------------------------------------------------- |
 | the whole plan | `T5-bulk` | `minimax-m3.1-flash` | a layout move across many files, checked by gates |
 
 Plan default: `T5-bulk` - `minimax-m3.1-flash`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.

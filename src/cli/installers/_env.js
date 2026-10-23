@@ -101,7 +101,7 @@ const commandConfig = (entrypoint, options = {}) => {
       config.directTools = true;
       config.lifecycle = "keep-alive";
       // Bare per-server tool naming: tools become `rule-tool-*` and prompts
-      // `/rule-*` instead of the `mcp__pix_galaxy_mcp__*` prefix form.
+      // `/rule-*` instead of the `mcp__rule_mcp__*` prefix form.
       config.toolPrefix = "none";
     }
 
@@ -123,7 +123,7 @@ const commandConfig = (entrypoint, options = {}) => {
     config.directTools = true;
     config.lifecycle = "keep-alive";
     // Same clean naming as the daemon branch: bare `rule-tool-*` tools and
-    // `/rule-*` prompts instead of `mcp__pix_galaxy_mcp__*`.
+    // `/rule-*` prompts instead of `mcp__rule_mcp__*`.
     config.toolPrefix = "none";
   }
 

@@ -25,12 +25,12 @@ validation).
 
 ## The four rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `graphql-no-n-plus-one` | A resolver that queries per parent item with no batching | B | n/a |
-| `graphql-authz-at-boundary` | Authorization inside field logic rather than at the entry point | B | n/a |
-| `graphql-query-complexity-limit` | A schema served with no depth or complexity cap | B | n/a |
-| `graphql-owner-named` | A section delegating auth, validation or pooling without naming the owner | B | partially red |
+| id                               | Rejects                                                                   | Tier | Today         |
+| -------------------------------- | ------------------------------------------------------------------------- | ---- | ------------- |
+| `graphql-no-n-plus-one`          | A resolver that queries per parent item with no batching                  | B    | n/a           |
+| `graphql-authz-at-boundary`      | Authorization inside field logic rather than at the entry point           | B    | n/a           |
+| `graphql-query-complexity-limit` | A schema served with no depth or complexity cap                           | B    | n/a           |
+| `graphql-owner-named`            | A section delegating auth, validation or pooling without naming the owner | B    | partially red |
 
 ## Phases
 
@@ -78,13 +78,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Shape | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Shape                | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

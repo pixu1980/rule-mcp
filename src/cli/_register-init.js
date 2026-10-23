@@ -15,9 +15,7 @@
 export function registerInitCommand(program) {
   program
     .command("init")
-    .description(
-      "Prepare a project: recorder directory, git hooks, tokensave and the dependency pin report",
-    )
+    .description("Prepare a project: recorder directory, git hooks, tokensave and the dependency pin report")
     .option("-d, --dir <path>", "project root (default: the current directory)")
     .option("--no-tokensave", "skip tokensave init")
     .allowExcessArguments(false)

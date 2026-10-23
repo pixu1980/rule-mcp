@@ -82,8 +82,8 @@ answers `ask`, never `deny`: these are judgment calls with a human in the
 room, and a hard block on a false positive costs more than the prompt it
 saves.
 
-| Event              | Matcher                  | Command                              | What it says while it runs                             | Timeout |
-| ------------------ | ------------------------ | ------------------------------------ | ------------------------------------------------------ | ------- |
+| Event              | Matcher                  | Command                        | What it says while it runs                             | Timeout |
+| ------------------ | ------------------------ | ------------------------------ | ------------------------------------------------------ | ------- |
 | `PreToolUse`       | `Bash`                   | `rule-mcp guard bash`          | rule guard: migration and commit checks                 | 60s     |
 | `PreToolUse`       | `Write\|Edit\|MultiEdit` | `rule-mcp guard structure`     | rule guard: structural change, once per task            | 60s     |
 | `PostToolUse`      | `Write\|Edit\|MultiEdit` | `rule-mcp guard write`         | rule guard: language and guardrails on the written file | 60s     |

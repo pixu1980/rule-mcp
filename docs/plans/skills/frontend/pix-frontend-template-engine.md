@@ -11,21 +11,21 @@ Area: frontend, leaf. Sibling plans: `rule-frontend-workers`,
 
 Inherited from the platform, meta and workers interviews, 2026-10-21:
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Identity | The one leaf in the area that ships runnable code: the procedure stays, the assets become served references, and the install step is checked |
-| Assets | `assets/` and `REFERENCE.md` move under `references/` and get served; the 8 test files join the suite that runs skill-local tests |
-| Shared owners | `rule-styleguide-html` owns markup rules; `rule-frontend-custom-element` is gone (ADR 152), so the engine is the only template path left |
-| Reach | Fixed here: the last `ROUTER_GAPS` entry for the frontend area |
-| Rule set | Six rules, all Tier B (advisory) |
-| Detection | Both: section and table parsing, plus injected `fileList` |
-| Fixtures | Shared corpus pairs plus skill trees on disk |
-| Flow | Failing test first |
-| Gates | Skill suite, corpora, catalog clean, census, lint and typecheck, plus the asset checks |
-| Commits | One per phase |
-| ADR | Two for the whole area: the frontend family shape, the rule design |
-| Done | The gap entry is gone, the assets are served and checked, and the rules pass |
+| Question           | Decision                                                                                                                                     |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass | **Plan only**                                                                                                                                |
+| Identity           | The one leaf in the area that ships runnable code: the procedure stays, the assets become served references, and the install step is checked |
+| Assets             | `assets/` and `REFERENCE.md` move under `references/` and get served; the 8 test files join the suite that runs skill-local tests            |
+| Shared owners      | `rule-styleguide-html` owns markup rules; `rule-frontend-custom-element` is gone (ADR 152), so the engine is the only template path left       |
+| Reach              | Fixed here: the last `ROUTER_GAPS` entry for the frontend area                                                                               |
+| Rule set           | Six rules, all Tier B (advisory)                                                                                                             |
+| Detection          | Both: section and table parsing, plus injected `fileList`                                                                                    |
+| Fixtures           | Shared corpus pairs plus skill trees on disk                                                                                                 |
+| Flow               | Failing test first                                                                                                                           |
+| Gates              | Skill suite, corpora, catalog clean, census, lint and typecheck, plus the asset checks                                                       |
+| Commits            | One per phase                                                                                                                                |
+| ADR                | Two for the whole area: the frontend family shape, the rule design                                                                           |
+| Done               | The gap entry is gone, the assets are served and checked, and the rules pass                                                                 |
 
 ## Evidence base (measured 2026-10-21)
 
@@ -52,13 +52,13 @@ the frontend side.
 
 ### The shipped code is unchecked in the same way the workers examples were
 
-| Check | State |
-| ----- | ----- |
-| Asset tests run in CI | **no**: the `skills` suite globs them, but that suite is not part of `all` (the same finding as `rule-frontend-workers`) |
-| Linted | **no**: `pnpm lint` covers `bin/ src/ tests/` |
-| Guardrails | **no**: the self-guardrails test scans `src/` |
-| Served | **no**: `serveResource` reads `SKILL.md` only, so `REFERENCE.md`, the engine and the four examples are unreachable through the rule surface |
-| Installer script verified | **no**: `scripts/install-template-engine.mjs` is named in the body and referenced by no test |
+| Check                     | State                                                                                                                                      |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Asset tests run in CI     | **no**: the `skills` suite globs them, but that suite is not part of `all` (the same finding as `rule-frontend-workers`)                    |
+| Linted                    | **no**: `pnpm lint` covers `bin/ src/ tests/`                                                                                              |
+| Guardrails                | **no**: the self-guardrails test scans `src/`                                                                                              |
+| Served                    | **no**: `serveResource` reads `SKILL.md` only, so `REFERENCE.md`, the engine and the four examples are unreachable through the rule surface |
+| Installer script verified | **no**: `scripts/install-template-engine.mjs` is named in the body and referenced by no test                                               |
 
 The eight asset test files do pass when run by hand (102 tests, verified while
 retiring the custom-element skill), which is the point: they pass and nothing
@@ -79,24 +79,24 @@ criteria. Around 140 lines, with every asset behind a served reference.
 
 `references/` receives:
 
-| Reference | From today |
-| --------- | ---------- |
-| `REFERENCE.md` | moved as-is |
-| `assets/template-engine/` | engine, filters, renderer and its 8 test files |
-| `assets/tagged-runtime/` | the browser-safe runtime |
-| `assets/examples/` | the four example projects |
-| `scripts/install-template-engine.mjs` | the installer, byte for byte |
+| Reference                             | From today                                     |
+| ------------------------------------- | ---------------------------------------------- |
+| `REFERENCE.md`                        | moved as-is                                    |
+| `assets/template-engine/`             | engine, filters, renderer and its 8 test files |
+| `assets/tagged-runtime/`              | the browser-safe runtime                       |
+| `assets/examples/`                    | the four example projects                      |
+| `scripts/install-template-engine.mjs` | the installer, byte for byte                   |
 
 ## The six rules
 
-| id | Rejects | Reads | Tier | Today |
-| -- | ------- | ----- | ---- | ----- |
-| `engine-assets-served` | An asset no surface reaches and the body does not declare | `context.fileList` | B | **red**: `REFERENCE.md`, engine, examples |
-| `engine-assets-tested` | A shipped engine asset with no test in the suite | `context.fileList` | B | **red**: the suite never runs in CI |
-| `engine-listed-in-area` | A frontend leaf missing from the `rule-frontend` table | `code` | B | **red**: the last gap entry |
-| `engine-installer-verified` | An installer script named in the body with no test or dry-run check | `code` + `context.fileList` | B | **red** |
-| `engine-owner-named` | A delegated section naming no owner | `code` | B | partially red |
-| `engine-no-stale-skill-id` | A `rule-...` id with no skill directory | `code` + `context.fileList` | B | clean |
+| id                          | Rejects                                                             | Reads                       | Tier | Today                                     |
+| --------------------------- | ------------------------------------------------------------------- | --------------------------- | ---- | ----------------------------------------- |
+| `engine-assets-served`      | An asset no surface reaches and the body does not declare           | `context.fileList`          | B    | **red**: `REFERENCE.md`, engine, examples |
+| `engine-assets-tested`      | A shipped engine asset with no test in the suite                    | `context.fileList`          | B    | **red**: the suite never runs in CI       |
+| `engine-listed-in-area`     | A frontend leaf missing from the `rule-frontend` table               | `code`                      | B    | **red**: the last gap entry               |
+| `engine-installer-verified` | An installer script named in the body with no test or dry-run check | `code` + `context.fileList` | B    | **red**                                   |
+| `engine-owner-named`        | A delegated section naming no owner                                 | `code`                      | B    | partially red                             |
+| `engine-no-stale-skill-id`  | A `rule-...` id with no skill directory                              | `code` + `context.fileList` | B    | clean                                     |
 
 ## Phase 0 - Decisions
 
@@ -156,15 +156,15 @@ criteria. Around 140 lines, with every asset behind a served reference.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Check the shipped code | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
-| Phase 4 - Serve, then trim | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 5 - Open the door | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 6 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                             | Class       | Model                     | Why                            |
+| -------------------------------- | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions              | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red)   | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules              | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Check the shipped code | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
+| Phase 4 - Serve, then trim       | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 5 - Open the door          | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 6 - Verification           | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T5-bulk` - `minimax-m3.1-flash`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

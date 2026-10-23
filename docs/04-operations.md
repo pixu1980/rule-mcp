@@ -222,28 +222,28 @@ git push
 
 Users can install using these methods:
 
-| Method               | Command                                                           |
-| -------------------- | ----------------------------------------------------------------- |
-| **Clone + launcher** | `git clone` + `./scripts/install.sh`                              |
-| **pnpx**             | `pnpx rule-mcp serve`                                       |
-| **Homebrew**         | `brew install pixu1980/tap/rule-mcp`                        |
-| **Docker**           | `docker pull ghcr.io/pixu1980/rule-mcp`                     |
-| **Winget**           | `winget install pixu1980.rule-mcp`                          |
+| Method               | Command                                               |
+| -------------------- | ----------------------------------------------------- |
+| **Clone + launcher** | `git clone` + `./scripts/install.sh`                  |
+| **pnpx**             | `pnpx rule-mcp serve`                                 |
+| **Homebrew**         | `brew install pixu1980/tap/rule-mcp`                  |
+| **Docker**           | `docker pull ghcr.io/pixu1980/rule-mcp`               |
+| **Winget**           | `winget install pixu1980.rule-mcp`                    |
 | **Scoop**            | `scoop bucket add rule-mcp && scoop install rule-mcp` |
-| **GitHub Release**   | Direct `.tgz` download                                            |
+| **GitHub Release**   | Direct `.tgz` download                                |
 
 #### Agent command artifacts
 
 `install --agent <name>` installs MCP config plus host-native reusable entry point where verified:
 
-| Agent              | Artifact                                    | Invocation                                             |
-| ------------------ | ------------------------------------------- | ------------------------------------------------------ |
-| Pi                 | `~/.pi/agent/prompts/rule-mcp.md`     | `/rule-mcp`                                      |
-| Claude Code        | `~/.claude/commands/rule-mcp.md`      | `/rule-mcp`                                      |
-| Gemini CLI         | `~/.gemini/commands/rule-mcp.toml`    | `/rule-mcp`                                      |
-| Cursor             | `.cursor/commands/rule-mcp.md`        | `/rule-mcp`                                      |
+| Agent              | Artifact                              | Invocation                                             |
+| ------------------ | ------------------------------------- | ------------------------------------------------------ |
+| Pi                 | `~/.pi/agent/prompts/rule-mcp.md`     | `/rule-mcp`                                            |
+| Claude Code        | `~/.claude/commands/rule-mcp.md`      | `/rule-mcp`                                            |
+| Gemini CLI         | `~/.gemini/commands/rule-mcp.toml`    | `/rule-mcp`                                            |
+| Cursor             | `.cursor/commands/rule-mcp.md`        | `/rule-mcp`                                            |
 | GitHub Copilot CLI | `~/.copilot/agents/rule-mcp.agent.md` | `/agent` selection                                     |
-| Codex CLI          | `~/.agents/skills/rule/`                     | Skill workflow; no stable exact custom command assumed |
+| Codex CLI          | `~/.agents/skills/rule/`               | Skill workflow; no stable exact custom command assumed |
 
 Uninstall removes same artifact. Universal command body forces routing, evidence lookup, test-first implementation, blocking `rule_tool_check`, real test reporting, and ADR capture.
 
@@ -488,10 +488,10 @@ rule-mcp daemon logs
 
 ### General debugging
 
-| Symptom                             | Likely cause           | Fix                                                |
-| ----------------------------------- | ---------------------- | -------------------------------------------------- |
-| `command not found: rule-mcp` | Not installed globally | `git clone` + `./scripts/install.sh`               |
-| `Cannot find module`                | Node.js < 20           | Upgrade to Node.js 20+                             |
-| `ECONNREFUSED` on port 37999        | Daemon not running     | `rule-mcp daemon start`                      |
-| Tools return 0 results              | Skills not loaded      | `rule-mcp skills reload`                     |
-| `ZodError` in tool output           | Invalid arguments      | Check tool schema with `rule-mcp tools list` |
+| Symptom                       | Likely cause           | Fix                                          |
+| ----------------------------- | ---------------------- | -------------------------------------------- |
+| `command not found: rule-mcp` | Not installed globally | `git clone` + `./scripts/install.sh`         |
+| `Cannot find module`          | Node.js < 20           | Upgrade to Node.js 20+                       |
+| `ECONNREFUSED` on port 37999  | Daemon not running     | `rule-mcp daemon start`                      |
+| Tools return 0 results        | Skills not loaded      | `rule-mcp skills reload`                     |
+| `ZodError` in tool output     | Invalid arguments      | Check tool schema with `rule-mcp tools list` |

@@ -18,11 +18,7 @@ export function installNextSteps({ mode, dryRun }) {
     return ["Nothing was written. Run the wizard again without dry run to apply it.", "rule-mcp setup"];
   }
 
-  const lines = [
-    "Restart your coding agent so it picks up the new MCP entry.",
-    "rule-mcp doctor - re-run the health check",
-    "rule-mcp config - print the mcp.json snippet",
-  ];
+  const lines = ["Restart your coding agent so it picks up the new MCP entry.", "rule-mcp doctor - re-run the health check", "rule-mcp config - print the mcp.json snippet"];
 
   if (mode === "daemon") {
     lines.push(

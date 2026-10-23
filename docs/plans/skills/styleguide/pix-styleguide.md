@@ -188,13 +188,13 @@ Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fix
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions and scaffolding | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - The table and the metadata | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 2 - The scaffolding move | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 3 - The owner map and the contract | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - The router rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
+| Step                                     | Class       | Model                   | Why                            |
+| ---------------------------------------- | ----------- | ----------------------- | ------------------------------ |
+| Phase 0 - Decisions and scaffolding      | `T1-plan`   | `gemini-4-argon` (high) | planning and prose that argues |
+| Phase 1 - The table and the metadata     | `T7-author` | `qwen3.8-max`           | skill bodies and references    |
+| Phase 2 - The scaffolding move           | `T5-bulk`   | `minimax-m3.1-flash`    | mechanical edits at scale      |
+| Phase 3 - The owner map and the contract | `T7-author` | `qwen3.8-max`           | skill bodies and references    |
+| Phase 4 - The router rules               | `T3-rules`  | `kimi-k2.7-code`        | small deterministic code       |
 
 Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

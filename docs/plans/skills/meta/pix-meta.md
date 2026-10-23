@@ -12,21 +12,21 @@ the same two were adopted by `rule-platform`.
 
 Inherited from the platform interviews, 2026-10-21:
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Sibling plans | Assume the four leaves are executed; this plan describes the state after them |
-| Route table | Waits for the census generator planned in `rule-process`; no hand-written table survives it |
-| Reach | The dispatcher row for `rule-meta` is added here: the family is listed but its door is not |
-| Rule set | The six router rules from `rule-process`, plus `router-no-unsupported-platform` |
-| Tags | The dispatcher keeps `meta`, `meta-framework`, `dispatcher`; the framework subjects (`ssr`, `ssg`, `islands`, `routing`) belong to the leaves |
-| Detection | Shared rule set, registered not copied |
-| Fixtures | Shared corpus pairs plus router trees on disk |
-| Flow | Failing test first |
-| Gates | Router coverage, corpora, catalog clean, census, lint and typecheck, plus a routing prompt per leaf |
-| Commits | One per phase |
-| ADR | Two for the whole area: the meta family shape, the rule design |
-| Done | Full coverage and green rules |
+| Question           | Decision                                                                                                                                      |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass | **Plan only**                                                                                                                                 |
+| Sibling plans      | Assume the four leaves are executed; this plan describes the state after them                                                                 |
+| Route table        | Waits for the census generator planned in `rule-process`; no hand-written table survives it                                                    |
+| Reach              | The dispatcher row for `rule-meta` is added here: the family is listed but its door is not                                                     |
+| Rule set           | The six router rules from `rule-process`, plus `router-no-unsupported-platform`                                                                |
+| Tags               | The dispatcher keeps `meta`, `meta-framework`, `dispatcher`; the framework subjects (`ssr`, `ssg`, `islands`, `routing`) belong to the leaves |
+| Detection          | Shared rule set, registered not copied                                                                                                        |
+| Fixtures           | Shared corpus pairs plus router trees on disk                                                                                                 |
+| Flow               | Failing test first                                                                                                                            |
+| Gates              | Router coverage, corpora, catalog clean, census, lint and typecheck, plus a routing prompt per leaf                                           |
+| Commits            | One per phase                                                                                                                                 |
+| ADR                | Two for the whole area: the meta family shape, the rule design                                                                                |
+| Done               | Full coverage and green rules                                                                                                                 |
 
 ## Evidence base (measured 2026-10-21)
 
@@ -34,15 +34,15 @@ Inherited from the platform interviews, 2026-10-21:
 paragraph, the four-row set table, a five-step dispatch contract, a "choosing
 between them" section, an MCP tools table, and four See-also links.
 
-| Fact | State |
-| ---- | ----- |
-| Children | 4, and the table lists all 4: no entry in `ROUTER_GAPS` |
-| `rule` dispatcher row | **missing**: `rule-meta/SKILL.md` appears zero times, while its four children are listed |
+| Fact                    | State                                                                                                                         |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Children                | 4, and the table lists all 4: no entry in `ROUTER_GAPS`                                                                       |
+| `rule` dispatcher row    | **missing**: `rule-meta/SKILL.md` appears zero times, while its four children are listed                                       |
 | Dispatcher routing tree | line 46 already says "meta-framework → `rule-meta-*` + base framework skill", so the family is known and the door is not built |
-| Tags | meta, meta-framework, dispatcher, ssr, ssg, islands, routing |
-| Tag overlap | `ssr`, `ssg`, `islands`, `routing` are the leaves' subjects; the same problem `rule-platform` and `rule-method` had |
-| Guardrails | none |
-| See also | `rule`, `rule-frontend`, `rule-platform-web`, `rule-styleguide`: already correct |
+| Tags                    | meta, meta-framework, dispatcher, ssr, ssg, islands, routing                                                                  |
+| Tag overlap             | `ssr`, `ssg`, `islands`, `routing` are the leaves' subjects; the same problem `rule-platform` and `rule-method` had             |
+| Guardrails              | none                                                                                                                          |
+| See also                | `rule`, `rule-frontend`, `rule-platform-web`, `rule-styleguide`: already correct                                                  |
 
 This is the best-behaved router in the catalog: complete coverage, a real
 dispatch contract, and a See-also block that names the right owners. Its
@@ -58,15 +58,15 @@ routing corpus in Phase 4 is the closest thing to a test.
 
 ## The seven rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `router-dead-link` | A relative link resolving to no `SKILL.md` | B | clean |
-| `router-tool-name` | A tool name the registry does not know | B | clean: all five `rule_tool_meta*` names resolve |
-| `router-child-listed` | A skill under the area with no row | B | clean |
-| `router-quick-selection` | A row the dispatch contract cannot reach | B | clean |
-| `router-no-stale-name` | A reference to a skill that no longer exists | B | clean |
-| `router-tag-single-owner` | A subject tag claimed by the dispatcher and a leaf | B | **red**: four tags |
-| `router-no-unsupported-platform` | A framework named in the table or tags with no skill serving it | B | clean: all four exist |
+| id                               | Rejects                                                         | Tier | Today                                          |
+| -------------------------------- | --------------------------------------------------------------- | ---- | ---------------------------------------------- |
+| `router-dead-link`               | A relative link resolving to no `SKILL.md`                      | B    | clean                                          |
+| `router-tool-name`               | A tool name the registry does not know                          | B    | clean: all five `rule_tool_meta*` names resolve |
+| `router-child-listed`            | A skill under the area with no row                              | B    | clean                                          |
+| `router-quick-selection`         | A row the dispatch contract cannot reach                        | B    | clean                                          |
+| `router-no-stale-name`           | A reference to a skill that no longer exists                    | B    | clean                                          |
+| `router-tag-single-owner`        | A subject tag claimed by the dispatcher and a leaf              | B    | **red**: four tags                             |
+| `router-no-unsupported-platform` | A framework named in the table or tags with no skill serving it | B    | clean: all four exist                          |
 
 ## Phase 0 - Decisions
 
@@ -112,13 +112,13 @@ routing corpus in Phase 4 is the closest thing to a test.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Build the door | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Build the door       | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

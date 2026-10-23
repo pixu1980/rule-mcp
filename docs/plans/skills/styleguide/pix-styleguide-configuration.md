@@ -172,12 +172,12 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions and scaffolding | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Dedupe (done) | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 2 - Ownership and content | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 3 - Guardrails and verification | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
+| Step                                  | Class       | Model                   | Why                            |
+| ------------------------------------- | ----------- | ----------------------- | ------------------------------ |
+| Phase 0 - Decisions and scaffolding   | `T1-plan`   | `gemini-4-argon` (high) | planning and prose that argues |
+| Phase 1 - Dedupe (done)               | `T7-author` | `qwen3.8-max`           | skill bodies and references    |
+| Phase 2 - Ownership and content       | `T7-author` | `qwen3.8-max`           | skill bodies and references    |
+| Phase 3 - Guardrails and verification | `T3-rules`  | `kimi-k2.7-code`        | small deterministic code       |
 
 Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

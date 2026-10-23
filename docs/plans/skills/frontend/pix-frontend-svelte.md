@@ -11,34 +11,34 @@ same series), `rule-frontend-workers`, the remaining framework leaves, and
 
 Inherited from the platform, meta and workers interviews, 2026-10-21:
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Identity | Thin body plus served references: the Svelte 5 patterns stay, the shared rules become pointers, the playbook moves out |
-| Existing guardrails | **Extend, do not replace**: the skill owns `svelte-no-class-directive`, the plan adds five rules around it |
-| Aux files | The 10 files under `checklists/`, `knowledge/`, `prompts/` and `templates/` move into `references/` and get served |
-| Scaffold block | Fixed here and in the six other affected skills, one catalog-level item |
-| Shared owners | `rule-styleguide-*` own markup, CSS, a11y; `rule-platform-web` owns budgets; `rule-frontend` owns the framework choice |
-| Rule set | Six rules including the existing one, all Tier B (advisory) |
-| Detection | Both: section and table parsing, plus injected `fileList` |
-| Fixtures | Shared corpus pairs plus skill trees on disk |
-| Flow | Failing test first |
-| Gates | Skill suite, corpora, catalog clean, census, lint and typecheck, plus the scaffold check |
-| Commits | One per phase |
-| ADR | Two for the whole area: the frontend family shape, the rule design |
-| Done | The invented rule ids are gone, the aux files are served, the rules pass |
+| Question            | Decision                                                                                                               |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass  | **Plan only**                                                                                                          |
+| Identity            | Thin body plus served references: the Svelte 5 patterns stay, the shared rules become pointers, the playbook moves out |
+| Existing guardrails | **Extend, do not replace**: the skill owns `svelte-no-class-directive`, the plan adds five rules around it             |
+| Aux files           | The 10 files under `checklists/`, `knowledge/`, `prompts/` and `templates/` move into `references/` and get served     |
+| Scaffold block      | Fixed here and in the six other affected skills, one catalog-level item                                                |
+| Shared owners       | `rule-styleguide-*` own markup, CSS, a11y; `rule-platform-web` owns budgets; `rule-frontend` owns the framework choice    |
+| Rule set            | Six rules including the existing one, all Tier B (advisory)                                                            |
+| Detection           | Both: section and table parsing, plus injected `fileList`                                                              |
+| Fixtures            | Shared corpus pairs plus skill trees on disk                                                                           |
+| Flow                | Failing test first                                                                                                     |
+| Gates               | Skill suite, corpora, catalog clean, census, lint and typecheck, plus the scaffold check                               |
+| Commits             | One per phase                                                                                                          |
+| ADR                 | Two for the whole area: the frontend family shape, the rule design                                                     |
+| Done                | The invented rule ids are gone, the aux files are served, the rules pass                                               |
 
 ## Evidence base (measured 2026-10-21)
 
 `skills/rule-frontend-svelte/SKILL.md` is **509 lines**, with a `guardrails/`
 folder that exports exactly one rule, and 10 auxiliary files.
 
-| Folder | Files | Lines |
-| ------ | ----- | ----- |
-| `checklists/` | 2 | 69 |
-| `knowledge/` | 1 | 304 |
-| `prompts/` | 4 | 103 |
-| `templates/` | 3 | 87 |
+| Folder        | Files | Lines |
+| ------------- | ----- | ----- |
+| `checklists/` | 2     | 69    |
+| `knowledge/`  | 1     | 304   |
+| `prompts/`    | 4     | 103   |
+| `templates/`  | 3     | 87    |
 
 ### The Guardrails section names eleven rules that do not exist
 
@@ -92,11 +92,11 @@ fixed here; recorded so the umbrella plan can name it.
 
 ### Reach
 
-| Door | State |
-| ---- | ----- |
-| `rule-frontend` area router | listed |
-| `rule` dispatcher | listed |
-| Inbound links | 3 skills: `rule-frontend`, `rule-platform-web`, `rule-ui` |
+| Door                       | State                                                  |
+| -------------------------- | ------------------------------------------------------ |
+| `rule-frontend` area router | listed                                                 |
+| `rule` dispatcher           | listed                                                 |
+| Inbound links              | 3 skills: `rule-frontend`, `rule-platform-web`, `rule-ui` |
 
 ## Target shape
 
@@ -109,14 +109,14 @@ playbook, and the four folders moved as-is.
 
 ## The six rules
 
-| id | Rejects | Reads | Tier | Today |
-| -- | ------- | ----- | ---- | ----- |
-| `svelte-no-class-directive` | `class:name` directives (the plain `class=` attribute is caught by `data-part-naming`) | `code` | B | existing, keep |
-| `svelte-guardrail-ids-real` | A rule id named in the body that no guardrails folder exports | `code` + `context.ruleIds` | B | **red**: 11 invented ids |
-| `svelte-scaffold-terminated` | A `## Project Scaffolding` block the parser cannot close | `code` | B | **red**: 325 lines |
-| `svelte-aux-served` | A companion file no surface reaches and the body does not declare | `context.fileList` | B | **red**: 10 files |
-| `svelte-no-stale-file-ref` | A reference to a file that does not exist | `code` + `context.fileList` | B | **red**: three references |
-| `svelte-no-duplicate-core-rules` | A restatement of the shared markup and CSS rules | `code` | B | **red**: five lines |
+| id                               | Rejects                                                                                | Reads                       | Tier | Today                     |
+| -------------------------------- | -------------------------------------------------------------------------------------- | --------------------------- | ---- | ------------------------- |
+| `svelte-no-class-directive`      | `class:name` directives (the plain `class=` attribute is caught by `data-part-naming`) | `code`                      | B    | existing, keep            |
+| `svelte-guardrail-ids-real`      | A rule id named in the body that no guardrails folder exports                          | `code` + `context.ruleIds`  | B    | **red**: 11 invented ids  |
+| `svelte-scaffold-terminated`     | A `## Project Scaffolding` block the parser cannot close                               | `code`                      | B    | **red**: 325 lines        |
+| `svelte-aux-served`              | A companion file no surface reaches and the body does not declare                      | `context.fileList`          | B    | **red**: 10 files         |
+| `svelte-no-stale-file-ref`       | A reference to a file that does not exist                                              | `code` + `context.fileList` | B    | **red**: three references |
+| `svelte-no-duplicate-core-rules` | A restatement of the shared markup and CSS rules                                       | `code`                      | B    | **red**: five lines       |
 
 ## Phase 0 - Decisions
 
@@ -168,14 +168,14 @@ playbook, and the four folders moved as-is.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Fix the Guardrails section | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 4 - Split and serve | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 5 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                                 | Class       | Model                     | Why                            |
+| ------------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions                  | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red)       | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules                  | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Fix the Guardrails section | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 4 - Split and serve            | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 5 - Verification               | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

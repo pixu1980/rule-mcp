@@ -10,34 +10,34 @@ series), the other framework leaves, and `rule-frontend` (the area router).
 
 Inherited from the platform, meta and workers interviews, 2026-10-21:
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Identity | Thin body plus served references: the Vue-specific patterns stay, the shared rules become pointers, the performance playbook moves out |
-| Existing guardrails | **Extend, do not replace**: this skill already owns `vue-no-class-binding`, and the plan adds five rules around it |
-| Aux files | The 10 files under `checklists/`, `knowledge/`, `prompts/` and `templates/` move into `references/` and get served |
-| Scaffold block | Fixed here and in the six other affected skills, as one catalog-level item |
-| Shared owners | `rule-styleguide-*` own markup, CSS, a11y; `rule-frontend` owns the framework choice; `rule-platform-web` owns budgets |
-| Rule set | Six rules including the existing one, all Tier B (advisory) |
-| Detection | Both: section and table parsing, plus injected `fileList` |
-| Fixtures | Shared corpus pairs plus skill trees on disk |
-| Flow | Failing test first |
-| Gates | Skill suite, corpora, catalog clean, census, lint and typecheck, plus the scaffold check |
-| Commits | One per phase |
-| ADR | Two for the whole area: the frontend family shape, the rule design |
-| Done | The scaffold block is terminated, the aux files are served, and the rules pass |
+| Question            | Decision                                                                                                                               |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass  | **Plan only**                                                                                                                          |
+| Identity            | Thin body plus served references: the Vue-specific patterns stay, the shared rules become pointers, the performance playbook moves out |
+| Existing guardrails | **Extend, do not replace**: this skill already owns `vue-no-class-binding`, and the plan adds five rules around it                     |
+| Aux files           | The 10 files under `checklists/`, `knowledge/`, `prompts/` and `templates/` move into `references/` and get served                     |
+| Scaffold block      | Fixed here and in the six other affected skills, as one catalog-level item                                                             |
+| Shared owners       | `rule-styleguide-*` own markup, CSS, a11y; `rule-frontend` owns the framework choice; `rule-platform-web` owns budgets                    |
+| Rule set            | Six rules including the existing one, all Tier B (advisory)                                                                            |
+| Detection           | Both: section and table parsing, plus injected `fileList`                                                                              |
+| Fixtures            | Shared corpus pairs plus skill trees on disk                                                                                           |
+| Flow                | Failing test first                                                                                                                     |
+| Gates               | Skill suite, corpora, catalog clean, census, lint and typecheck, plus the scaffold check                                               |
+| Commits             | One per phase                                                                                                                          |
+| ADR                 | Two for the whole area: the frontend family shape, the rule design                                                                     |
+| Done                | The scaffold block is terminated, the aux files are served, and the rules pass                                                         |
 
 ## Evidence base (measured 2026-10-21)
 
 `skills/rule-frontend-vue/SKILL.md` is **508 lines**, with a `guardrails/` folder
 that exports exactly one rule, and 10 auxiliary files under four folders.
 
-| Folder | Files | Lines | Destination |
-| ------ | ----- | ----- | ----------- |
-| `checklists/` | 2 | 90 | `references/` |
-| `knowledge/` | 1 | 245 | `references/` |
-| `prompts/` | 4 | 113 | `references/` |
-| `templates/` | 3 | 115 | `references/` |
+| Folder        | Files | Lines | Destination   |
+| ------------- | ----- | ----- | ------------- |
+| `checklists/` | 2     | 90    | `references/` |
+| `knowledge/`  | 1     | 245   | `references/` |
+| `prompts/`    | 4     | 113   | `references/` |
+| `templates/`  | 3     | 115   | `references/` |
 
 ### The scaffold block returns 315 lines
 
@@ -49,14 +49,14 @@ start, is never found, and the slice runs to the end of the file.
 Measured across the catalog: **7 skills** have this shape, and the parser
 returns between 231 and 466 lines for each:
 
-| Skill | Lines returned |
-| ----- | -------------: |
-| `rule-frontend-vue` | 315 |
-| `rule-frontend-react` | 466 |
-| `rule-frontend-angular` | 327 |
-| `rule-frontend-svelte` | 325 |
-| `rule-frontend-solidjs` | 335 |
-| `rule-meta-astro` | 347 |
+| Skill                  | Lines returned |
+| ---------------------- | -------------: |
+| `rule-frontend-vue`     |            315 |
+| `rule-frontend-react`   |            466 |
+| `rule-frontend-angular` |            327 |
+| `rule-frontend-svelte`  |            325 |
+| `rule-frontend-solidjs` |            335 |
+| `rule-meta-astro`       |            347 |
 
 This is one parser-contract bug with seven victims, not seven mistakes. The
 fix belongs in a shared phase, and the rule below is what keeps it fixed.
@@ -82,11 +82,11 @@ reads one file. 10 files, 563 lines, unreachable through the rule surface.
 
 ### Reach
 
-| Door | State |
-| ---- | ----- |
-| `rule-frontend` area router | listed |
-| `rule` dispatcher | listed |
-| Inbound links | 9 links from other skills |
+| Door                       | State                     |
+| -------------------------- | ------------------------- |
+| `rule-frontend` area router | listed                    |
+| `rule` dispatcher           | listed                    |
+| Inbound links              | 9 links from other skills |
 
 Reach is fine here: this leaf has doors. What it lacks is a consumer for its
 companion files.
@@ -102,14 +102,14 @@ playbook, and the four folders moved as-is.
 
 ## The six rules
 
-| id | Rejects | Reads | Tier | Today |
-| -- | ------- | ----- | ---- | ----- |
-| `vue-no-class-binding` | `:class` or `v-bind:class` | `code` | B | existing, keep |
-| `vue-no-duplicate-core-rules` | A restatement of the markup and CSS rules | `code` | B | **red**: seven lines |
-| `vue-scaffold-terminated` | A `## Project Scaffolding` block the parser cannot close | `code` | B | **red**: 315 lines returned |
-| `vue-aux-served` | A companion file no surface reaches and the body does not declare | `context.fileList` | B | **red**: 10 files |
-| `vue-owner-named` | A delegated section naming no owner | `code` | B | partially red |
-| `vue-no-stale-skill-id` | A `rule-...` id with no skill directory | `code` + `context.fileList` | B | clean |
+| id                            | Rejects                                                           | Reads                       | Tier | Today                       |
+| ----------------------------- | ----------------------------------------------------------------- | --------------------------- | ---- | --------------------------- |
+| `vue-no-class-binding`        | `:class` or `v-bind:class`                                        | `code`                      | B    | existing, keep              |
+| `vue-no-duplicate-core-rules` | A restatement of the markup and CSS rules                         | `code`                      | B    | **red**: seven lines        |
+| `vue-scaffold-terminated`     | A `## Project Scaffolding` block the parser cannot close          | `code`                      | B    | **red**: 315 lines returned |
+| `vue-aux-served`              | A companion file no surface reaches and the body does not declare | `context.fileList`          | B    | **red**: 10 files           |
+| `vue-owner-named`             | A delegated section naming no owner                               | `code`                      | B    | partially red               |
+| `vue-no-stale-skill-id`       | A `rule-...` id with no skill directory                            | `code` + `context.fileList` | B    | clean                       |
 
 ## Phase 0 - Decisions
 
@@ -164,14 +164,14 @@ playbook, and the four folders moved as-is.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Fix the scaffold contract, catalog-wide | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Split and serve | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 5 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                                              | Class       | Model                     | Why                            |
+| ------------------------------------------------- | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions                               | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red)                    | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules                               | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Fix the scaffold contract, catalog-wide | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 4 - Split and serve                         | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 5 - Verification                            | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

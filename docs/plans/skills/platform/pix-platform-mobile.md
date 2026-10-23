@@ -24,28 +24,28 @@ Three facts, all measured, and none of them a demand study:
 
 So the platform is promised, half-accounted for in testing, and unowned. The
 earlier "12 skills mention Expo" figure was wrong: most of those hits are the
-word *Export*. The honest signal is two testing exceptions and a dangling
+word _Export_. The honest signal is two testing exceptions and a dangling
 reference.
 
 ## Scope decisions (inherited from the `rule-platform` interview)
 
-| Question | Decision |
-| -------- | -------- |
-| Why now | `rule-platform` cannot stop promising mobile without either removing the claim or opening this plan; the owner chose both |
-| Stack | Expo and React Native are the supported stack; Capacitor is watched, not covered |
-| Testing | The existing `jest` exception is the norm here, and this skill owns the rule it is cited as |
-| Web rules | The rule web rules still apply to the renderer; they are linked, not restated |
-| Detection | `FRAMEWORK_SKILL_MAP` gains `expo` and `react-native` when this skill exists |
+| Question  | Decision                                                                                                                 |
+| --------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Why now   | `rule-platform` cannot stop promising mobile without either removing the claim or opening this plan; the owner chose both |
+| Stack     | Expo and React Native are the supported stack; Capacitor is watched, not covered                                         |
+| Testing   | The existing `jest` exception is the norm here, and this skill owns the rule it is cited as                              |
+| Web rules | The rule web rules still apply to the renderer; they are linked, not restated                                             |
+| Detection | `FRAMEWORK_SKILL_MAP` gains `expo` and `react-native` when this skill exists                                             |
 
 ## Evidence base (measured 2026-10-21)
 
-| Fact | State |
-| ---- | ----- |
-| Skills mentioning Expo or React Native in a real sense | 2 (`rule-devops-testing`, `rule-process-tdd`) |
-| Dangling references | 1: `See \`expo\` rule` in `rule-process-tdd:85` |
-| Mobile content anywhere in the catalog | none: no file tree, no navigation, no native module guidance |
-| Detector entries | none for `expo`, `react-native` or `capacitor` |
-| Router promise | `rule-platform` description plus two tags, removed by its own plan until this skill lands |
+| Fact                                                   | State                                                                                    |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| Skills mentioning Expo or React Native in a real sense | 2 (`rule-devops-testing`, `rule-process-tdd`)                                              |
+| Dangling references                                    | 1: `See \`expo\` rule`in`rule-process-tdd:85`                                             |
+| Mobile content anywhere in the catalog                 | none: no file tree, no navigation, no native module guidance                             |
+| Detector entries                                       | none for `expo`, `react-native` or `capacitor`                                           |
+| Router promise                                         | `rule-platform` description plus two tags, removed by its own plan until this skill lands |
 
 ## What this skill will own
 
@@ -65,12 +65,12 @@ reference.
 
 ## The rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `mobile-test-runner` | A test setup that uses Vitest in an Expo or React Native project | B | n/a, the skill does not exist yet |
-| `mobile-no-web-only-api` | A browser-only API used without a native guard | B | n/a |
-| `mobile-owner-named` | A delegated section naming no owner | B | n/a |
-| `mobile-no-stale-skill-id` | A `rule-...` id with no skill directory | B | n/a |
+| id                         | Rejects                                                          | Tier | Today                             |
+| -------------------------- | ---------------------------------------------------------------- | ---- | --------------------------------- |
+| `mobile-test-runner`       | A test setup that uses Vitest in an Expo or React Native project | B    | n/a, the skill does not exist yet |
+| `mobile-no-web-only-api`   | A browser-only API used without a native guard                   | B    | n/a                               |
+| `mobile-owner-named`       | A delegated section naming no owner                              | B    | n/a                               |
+| `mobile-no-stale-skill-id` | A `rule-...` id with no skill directory                           | B    | n/a                               |
 
 The `expo` rule `rule-process-tdd` cites becomes `mobile-test-runner`, and that
 skill's line is updated to name it. That is the one edit outside this skill.
@@ -128,13 +128,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The skill | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 3 - Wire it in | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The skill            | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 3 - Wire it in           | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T4-tests` - `deepseek-v4.1-flash`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

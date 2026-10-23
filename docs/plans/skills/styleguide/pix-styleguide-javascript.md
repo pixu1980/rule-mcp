@@ -37,7 +37,7 @@ Problems found:
 | ----------------------------- | --------------------------------------------------------------------------------------------------- |
 | testing duplicated            | the Playwright and axe-core section restates `rule-styleguide-a11y`, which owns `a11y-test-required` |
 | idioms duplicated             | the unicorn idiom table restates `rule-toolchain-eslint`                                             |
-| DOM duplicated                | the custom element section restated a skill removed in ADR 152                     |
+| DOM duplicated                | the custom element section restated a skill removed in ADR 152                                      |
 | JSDoc has no clear owner      | it sits here while `rule-styleguide-comments` owns comment hygiene                                   |
 | 17 guardrails, all formatting | nothing checks the semantic rules a reader would expect                                             |
 | missing runtime topics        | modules, error handling, iterators, `structuredClone`, `AbortController`, memory                    |
@@ -50,7 +50,7 @@ Problems found:
 | Boundaries              | The skill owns runtime JS and language rules only                                     |
 | Testing                 | Removed; linked to `rule-styleguide-a11y`                                              |
 | Idioms table            | Reduced to a link to `rule-toolchain-eslint`                                           |
-| DOM and custom elements | Removed; the skill it linked was itself removed in ADR 152                           |
+| DOM and custom elements | Removed; the skill it linked was itself removed in ADR 152                            |
 | JSDoc                   | Moves to `rule-styleguide-comments` as part of the runtime-only boundary               |
 | Missing topics          | Modules, errors, iterators, `structuredClone`, `AbortController`, memory              |
 | Async                   | Expanded, and its claims verified against MDN and TC39                                |
@@ -167,12 +167,12 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions and scaffolding | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Remove the duplication | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 2 - Content | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 3 - Guardrails and verification | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
+| Step                                  | Class       | Model                   | Why                            |
+| ------------------------------------- | ----------- | ----------------------- | ------------------------------ |
+| Phase 0 - Decisions and scaffolding   | `T1-plan`   | `gemini-4-argon` (high) | planning and prose that argues |
+| Phase 1 - Remove the duplication      | `T7-author` | `qwen3.8-max`           | skill bodies and references    |
+| Phase 2 - Content                     | `T7-author` | `qwen3.8-max`           | skill bodies and references    |
+| Phase 3 - Guardrails and verification | `T3-rules`  | `kimi-k2.7-code`        | small deterministic code       |
 
 Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

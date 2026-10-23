@@ -11,21 +11,21 @@ Area: frontend, framework leaf. Sibling plans: `rule-frontend-vue` and
 
 Inherited from the platform, meta and workers interviews, 2026-10-21:
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Identity | Thin body plus served references: the SolidJS patterns stay, the shared rules become pointers, the playbook moves out |
-| Rule set | **Create**: this leaf owns no guardrail and declares no `guardrails:` key, so the plan builds a set with one framework rule at its centre |
-| Aux files | The 10 files under `checklists/`, `knowledge/`, `prompts/` and `templates/` move into `references/` and get served |
-| Scaffold block | Fixed here and in the six other affected skills, one catalog-level item |
-| Shared owners | `rule-styleguide-*` own markup, CSS, a11y; `rule-platform-web` owns budgets; `rule-frontend` owns the framework choice |
-| Detection | Both: section and table parsing, plus injected `fileList` |
-| Fixtures | Shared corpus pairs plus skill trees on disk |
-| Flow | Failing test first |
-| Gates | Skill suite, corpora, catalog clean, census, lint and typecheck, plus the scaffold and rule-id checks |
-| Commits | One per phase |
-| ADR | Two for the whole area: the frontend family shape, the rule design |
-| Done | The framework rule exists, the near-miss ids are fixed, the rules pass |
+| Question           | Decision                                                                                                                                  |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass | **Plan only**                                                                                                                             |
+| Identity           | Thin body plus served references: the SolidJS patterns stay, the shared rules become pointers, the playbook moves out                     |
+| Rule set           | **Create**: this leaf owns no guardrail and declares no `guardrails:` key, so the plan builds a set with one framework rule at its centre |
+| Aux files          | The 10 files under `checklists/`, `knowledge/`, `prompts/` and `templates/` move into `references/` and get served                        |
+| Scaffold block     | Fixed here and in the six other affected skills, one catalog-level item                                                                   |
+| Shared owners      | `rule-styleguide-*` own markup, CSS, a11y; `rule-platform-web` owns budgets; `rule-frontend` owns the framework choice                       |
+| Detection          | Both: section and table parsing, plus injected `fileList`                                                                                 |
+| Fixtures           | Shared corpus pairs plus skill trees on disk                                                                                              |
+| Flow               | Failing test first                                                                                                                        |
+| Gates              | Skill suite, corpora, catalog clean, census, lint and typecheck, plus the scaffold and rule-id checks                                     |
+| Commits            | One per phase                                                                                                                             |
+| ADR                | Two for the whole area: the frontend family shape, the rule design                                                                        |
+| Done               | The framework rule exists, the near-miss ids are fixed, the rules pass                                                                    |
 
 ## Evidence base (measured 2026-10-21)
 
@@ -33,29 +33,29 @@ Inherited from the platform, meta and workers interviews, 2026-10-21:
 `guardrails/` folder and no `guardrails:` frontmatter key**: it is the only
 frontend framework leaf with zero rules.
 
-| Folder | Files | Lines |
-| ------ | ----- | ----- |
-| `checklists/` | 2 | 72 |
-| `knowledge/` | 1 | 224 |
-| `prompts/` | 4 | 109 |
-| `templates/` | 3 | 96 |
+| Folder        | Files | Lines |
+| ------------- | ----- | ----- |
+| `checklists/` | 2     | 72    |
+| `knowledge/`  | 1     | 224   |
+| `prompts/`    | 4     | 109   |
+| `templates/`  | 3     | 96    |
 
 ### Two of the seven rule ids it names do not exist
 
 The Guardrails section lists seven ids. Checked one by one against the exported
 sets:
 
-| Named in the body | Exists | Real id |
-| ----------------- | ------ | ------- |
-| `no-css-classes` | yes | - |
-| `no-inline-styles` | yes | - |
-| `semantic-html` | yes | - |
-| `external-css` | yes | - |
-| `jsdoc-required` | yes | - |
-| `css-comments-required` | yes | - |
-| `a11y-test-required` | yes | - |
-| `barrel-file` | **no** | `barrel-file-tree` |
-| `data-part` | **no** | `data-part-naming` |
+| Named in the body       | Exists | Real id            |
+| ----------------------- | ------ | ------------------ |
+| `no-css-classes`        | yes    | -                  |
+| `no-inline-styles`      | yes    | -                  |
+| `semantic-html`         | yes    | -                  |
+| `external-css`          | yes    | -                  |
+| `jsdoc-required`        | yes    | -                  |
+| `css-comments-required` | yes    | -                  |
+| `a11y-test-required`    | yes    | -                  |
+| `barrel-file`           | **no** | `barrel-file-tree` |
+| `data-part`             | **no** | `data-part-naming` |
 
 Nine names, two of them truncated near-misses. A reader who tries to run
 `barrel-file` or `data-part` finds no rule, and nothing in the suite notices.
@@ -88,11 +88,11 @@ leaf exists to own.
 
 ### Reach
 
-| Door | State |
-| ---- | ----- |
-| `rule-frontend` area router | listed |
-| `rule` dispatcher | listed |
-| Inbound links | 2 in the area router, plus the templates |
+| Door                       | State                                    |
+| -------------------------- | ---------------------------------------- |
+| `rule-frontend` area router | listed                                   |
+| `rule` dispatcher           | listed                                   |
+| Inbound links              | 2 in the area router, plus the templates |
 
 ## Target shape
 
@@ -105,14 +105,14 @@ playbook, and the four folders moved as-is.
 
 ## The six rules
 
-| id | Rejects | Reads | Tier | Today |
-| -- | ------- | ----- | ---- | ----- |
-| `solidjs-no-props-destructuring` | `function C({ a, b })` or `const { a } = props` in a component | `code` | B | n/a: no rules exist |
-| `solidjs-guardrail-ids-real` | A rule id named in the body that no guardrails folder exports | `code` + `context.ruleIds` | B | **red**: 2 of 9 |
-| `solidjs-scaffold-terminated` | A `## Project Scaffolding` block the parser cannot close | `code` | B | **red**: 335 lines |
-| `solidjs-aux-served` | A companion file no surface reaches and the body does not declare | `context.fileList` | B | **red**: 10 files |
-| `solidjs-no-stale-file-ref` | A reference to a file that does not exist | `code` + `context.fileList` | B | **red**: three references |
-| `solidjs-no-duplicate-core-rules` | A restatement of the shared markup and CSS rules | `code` | B | **red**: six lines |
+| id                                | Rejects                                                           | Reads                       | Tier | Today                     |
+| --------------------------------- | ----------------------------------------------------------------- | --------------------------- | ---- | ------------------------- |
+| `solidjs-no-props-destructuring`  | `function C({ a, b })` or `const { a } = props` in a component    | `code`                      | B    | n/a: no rules exist       |
+| `solidjs-guardrail-ids-real`      | A rule id named in the body that no guardrails folder exports     | `code` + `context.ruleIds`  | B    | **red**: 2 of 9           |
+| `solidjs-scaffold-terminated`     | A `## Project Scaffolding` block the parser cannot close          | `code`                      | B    | **red**: 335 lines        |
+| `solidjs-aux-served`              | A companion file no surface reaches and the body does not declare | `context.fileList`          | B    | **red**: 10 files         |
+| `solidjs-no-stale-file-ref`       | A reference to a file that does not exist                         | `code` + `context.fileList` | B    | **red**: three references |
+| `solidjs-no-duplicate-core-rules` | A restatement of the shared markup and CSS rules                  | `code`                      | B    | **red**: six lines        |
 
 ## Phase 0 - Decisions
 
@@ -161,14 +161,14 @@ playbook, and the four folders moved as-is.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Fix the body's rule ids and links | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 4 - Split and serve | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 5 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                                        | Class       | Model                     | Why                            |
+| ------------------------------------------- | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions                         | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red)              | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules                         | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Fix the body's rule ids and links | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 4 - Split and serve                   | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 5 - Verification                      | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

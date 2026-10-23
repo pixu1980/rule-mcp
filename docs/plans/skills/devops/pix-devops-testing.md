@@ -11,20 +11,20 @@ Area: devops, leaf. Sibling plans: `rule-devops-observability`,
 
 Inherited from the platform, meta and frontend interviews, 2026-10-21:
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Identity | It stays the catalog's test owner, and it gains the rules it has never had: this is the skill with the widest "See also" traffic and zero enforcement |
-| Runner policy | `testing-single-runner` becomes a rule, with the Expo/React Native exception pointing at the mobile rule that owns it |
-| CI claims | A claim about what runs in CI is checked against a suite that runs: the repository does not run its `skills` suite today, and this skill is where that statement belongs |
-| Rule set | Six rules, all Tier B (advisory) |
-| Detection | Both: section and table parsing, plus injected `fileList` and config filename |
-| Fixtures | Shared corpus pairs plus skill trees on disk |
-| Flow | Failing test first |
-| Gates | Skill suite, corpora, catalog clean, census, lint and typecheck |
-| Commits | One per phase |
-| ADR | Two for the whole area: the devops family shape, the rule design |
-| Done | The runner policy and the coverage claim are enforceable and the rules pass |
+| Question           | Decision                                                                                                                                                                 |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Scope of this pass | **Plan only**                                                                                                                                                            |
+| Identity           | It stays the catalog's test owner, and it gains the rules it has never had: this is the skill with the widest "See also" traffic and zero enforcement                    |
+| Runner policy      | `testing-single-runner` becomes a rule, with the Expo/React Native exception pointing at the mobile rule that owns it                                                    |
+| CI claims          | A claim about what runs in CI is checked against a suite that runs: the repository does not run its `skills` suite today, and this skill is where that statement belongs |
+| Rule set           | Six rules, all Tier B (advisory)                                                                                                                                         |
+| Detection          | Both: section and table parsing, plus injected `fileList` and config filename                                                                                            |
+| Fixtures           | Shared corpus pairs plus skill trees on disk                                                                                                                             |
+| Flow               | Failing test first                                                                                                                                                       |
+| Gates              | Skill suite, corpora, catalog clean, census, lint and typecheck                                                                                                          |
+| Commits            | One per phase                                                                                                                                                            |
+| ADR                | Two for the whole area: the devops family shape, the rule design                                                                                                         |
+| Done               | The runner policy and the coverage claim are enforceable and the rules pass                                                                                              |
 
 ## Evidence base (measured 2026-10-21)
 
@@ -37,13 +37,13 @@ exception. It enforces nothing.
 
 ### What it claims, and whether anything checks it
 
-| Claim in the body | Enforced |
-| ----------------- | -------- |
-| "Vitest is the runner, and the only one. Jest, Mocha and Jasmine are not alternatives" (bold, twice) | **no** |
-| "Coverage thresholds are mandatory in local config and in CI" | **no** |
-| "This skill owns coverage enforcement" (line 224) | **no** |
-| The Expo/React Native `jest-expo` exception | **no**, and it names no rule to follow |
-| Threshold numbers appear in two config blocks (lines 56 and 88) | two places, both unchecked |
+| Claim in the body                                                                                    | Enforced                               |
+| ---------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| "Vitest is the runner, and the only one. Jest, Mocha and Jasmine are not alternatives" (bold, twice) | **no**                                 |
+| "Coverage thresholds are mandatory in local config and in CI"                                        | **no**                                 |
+| "This skill owns coverage enforcement" (line 224)                                                    | **no**                                 |
+| The Expo/React Native `jest-expo` exception                                                          | **no**, and it names no rule to follow |
+| Threshold numbers appear in two config blocks (lines 56 and 88)                                      | two places, both unchecked             |
 
 ### The exception it states is the one `rule-process-tdd` cites wrongly
 
@@ -61,14 +61,14 @@ class of mistake as a rule with no fixture: a claim with nothing behind it.
 
 ## The six rules
 
-| id | Rejects | Reads | Tier | Today |
-| -- | ------- | ----- | ---- | ----- |
-| `testing-single-runner` | `jest`, `mocha` or `jasmine` in a config that is not the Expo exception | `code` + `context.fileName` | B | n/a: no rules exist |
-| `testing-expo-exception-linked` | The Expo exception stated without naming the rule that owns it | `code` | B | **red**: names no rule |
-| `testing-coverage-thresholds` | A `vitest.config` with no threshold block | `code` + `context.fileName` | B | n/a |
-| `testing-thresholds-single-source` | The numbers restated outside the config section | `code` | B | **red**: two config blocks |
-| `testing-owner-named` | A delegated section naming no owner | `code` | B | partially red |
-| `testing-no-stale-skill-id` | A `rule-...` id with no skill directory | `code` + `context.fileList` | B | clean |
+| id                                 | Rejects                                                                 | Reads                       | Tier | Today                      |
+| ---------------------------------- | ----------------------------------------------------------------------- | --------------------------- | ---- | -------------------------- |
+| `testing-single-runner`            | `jest`, `mocha` or `jasmine` in a config that is not the Expo exception | `code` + `context.fileName` | B    | n/a: no rules exist        |
+| `testing-expo-exception-linked`    | The Expo exception stated without naming the rule that owns it          | `code`                      | B    | **red**: names no rule     |
+| `testing-coverage-thresholds`      | A `vitest.config` with no threshold block                               | `code` + `context.fileName` | B    | n/a                        |
+| `testing-thresholds-single-source` | The numbers restated outside the config section                         | `code`                      | B    | **red**: two config blocks |
+| `testing-owner-named`              | A delegated section naming no owner                                     | `code`                      | B    | partially red              |
+| `testing-no-stale-skill-id`        | A `rule-...` id with no skill directory                                  | `code` + `context.fileList` | B    | clean                      |
 
 ## Phase 0 - Decisions
 
@@ -111,13 +111,13 @@ class of mistake as a rule with no fixture: a claim with nothing behind it.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Fix the claims | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Fix the claims       | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

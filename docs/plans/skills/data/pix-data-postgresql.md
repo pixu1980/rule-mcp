@@ -20,12 +20,12 @@ concatenated query. The leaf adds only PostgreSQL-specific rules.
 
 What it states and nothing checks:
 
-| Statement in the body | Enforced |
-| --------------------- | -------- |
-| "Foreign-key indexing rule" - every FK gets an index | **no** |
-| JSONB is for shape-shifting data, not for relational modelling | **no** |
-| Timestamp and identifier choices (identity over serial) | **no** |
-| Partitioning needs a key chosen before the first row | **no** |
+| Statement in the body                                          | Enforced |
+| -------------------------------------------------------------- | -------- |
+| "Foreign-key indexing rule" - every FK gets an index           | **no**   |
+| JSONB is for shape-shifting data, not for relational modelling | **no**   |
+| Timestamp and identifier choices (identity over serial)        | **no**   |
+| Partitioning needs a key chosen before the first row           | **no**   |
 
 The first is the one worth encoding: an unindexed foreign key is the most common
 performance mistake in a PostgreSQL schema, it is stated in bold in this leaf,
@@ -33,14 +33,14 @@ and `migration-safety` does not look for it.
 
 ## The six rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `postgresql-index-foreign-key` | A `REFERENCES` column with no index in the same migration | B | n/a |
-| `postgresql-no-serial` | `serial` / `bigserial` where `identity` is available | B | n/a |
-| `postgresql-jsonb-not-relational` | A JSONB column replacing a table with more than one row per record | B | n/a |
-| `postgresql-partition-key-first` | A `PARTITION BY` added after the table has data | B | n/a |
-| `postgresql-owner-named` | A section delegating generic SQL, migrations or pooling without naming the owner | B | partially red |
-| `postgresql-no-stale-skill-id` | A `rule-...` id with no skill directory | B | clean |
+| id                                | Rejects                                                                          | Tier | Today         |
+| --------------------------------- | -------------------------------------------------------------------------------- | ---- | ------------- |
+| `postgresql-index-foreign-key`    | A `REFERENCES` column with no index in the same migration                        | B    | n/a           |
+| `postgresql-no-serial`            | `serial` / `bigserial` where `identity` is available                             | B    | n/a           |
+| `postgresql-jsonb-not-relational` | A JSONB column replacing a table with more than one row per record               | B    | n/a           |
+| `postgresql-partition-key-first`  | A `PARTITION BY` added after the table has data                                  | B    | n/a           |
+| `postgresql-owner-named`          | A section delegating generic SQL, migrations or pooling without naming the owner | B    | partially red |
+| `postgresql-no-stale-skill-id`    | A `rule-...` id with no skill directory                                           | B    | clean         |
 
 ## Phases
 
@@ -90,13 +90,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Trim | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Trim                 | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

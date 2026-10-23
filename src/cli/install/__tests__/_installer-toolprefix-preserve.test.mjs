@@ -4,11 +4,11 @@
  * Regression: reinstalling must not drop per-server user keys from the pi
  * MCP config. Previously upsertJsonServer replaced the whole server entry,
  * silently wiping the user's `toolPrefix: "none"` - which is what made the
- * `/mcp__pix_galaxy_mcp__*` command prefixes come back after uninstall+install.
+ * `/mcp__rule_mcp__*` command prefixes come back after uninstall+install.
  *
  * Also asserts that fresh pi installs now default to `toolPrefix: "none"`,
  * i.e. bare `rule-tool-*` tools and `/rule-*` prompts instead of the
- * `mcp__pix_galaxy_mcp__*` form.
+ * `mcp__rule_mcp__*` form.
  */
 import { strict as assert } from "node:assert";
 import { fileURLToPath } from "node:url";

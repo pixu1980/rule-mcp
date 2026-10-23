@@ -8,21 +8,21 @@ Area: platform. Sibling plans: `rule-platform-web` (same thin-umbrella model),
 
 ## Scope decisions (owner, 2026-10-21)
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Identity | A thin umbrella that delegates: keep the package/API surface, hand the rest to its owner |
-| Publishing | `rule-process-npm-release` owns it. The section here becomes one link |
-| Changelog | `rule-process-changelog` owns it. The format block here becomes one link |
-| Router row | Corrected here, in Phase 5: the platform router and the dispatcher both describe this skill as the publishing path |
-| Rule set | Six rules, all Tier B (advisory) |
-| Detection | Both: section parsing plus injected `fileList` |
-| Fixtures | Shared corpus pairs plus skill trees on disk |
-| Flow | Failing test first |
-| Gates | Skill suite, corpora, catalog clean, owner coherence, census, lint and typecheck |
-| Commits | One per phase |
-| ADR | Two: the boundary, the rule design |
-| Done | Contradictions resolved and rules green |
+| Question           | Decision                                                                                                           |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| Scope of this pass | **Plan only**                                                                                                      |
+| Identity           | A thin umbrella that delegates: keep the package/API surface, hand the rest to its owner                           |
+| Publishing         | `rule-process-npm-release` owns it. The section here becomes one link                                               |
+| Changelog          | `rule-process-changelog` owns it. The format block here becomes one link                                            |
+| Router row         | Corrected here, in Phase 5: the platform router and the dispatcher both describe this skill as the publishing path |
+| Rule set           | Six rules, all Tier B (advisory)                                                                                   |
+| Detection          | Both: section parsing plus injected `fileList`                                                                     |
+| Fixtures           | Shared corpus pairs plus skill trees on disk                                                                       |
+| Flow               | Failing test first                                                                                                 |
+| Gates              | Skill suite, corpora, catalog clean, owner coherence, census, lint and typecheck                                   |
+| Commits            | One per phase                                                                                                      |
+| ADR                | Two: the boundary, the rule design                                                                                 |
+| Done               | Contradictions resolved and rules green                                                                            |
 
 ## Evidence base (measured 2026-10-21)
 
@@ -36,19 +36,19 @@ also.
 
 ### What the body contains, and who owns each part
 
-| Section | Owner today |
-| ------- | ----------- |
-| Core Rules (8 items) | `rule-styleguide-*`, `rule-toolchain-pnpm`, `rule-process-tdd` |
-| Tree-Shaking and Bundle Size | **nobody else: keep** (library-specific) |
-| File Tree Convention | `rule-styleguide-file-tree` |
-| Package.json Structure, sub-path exports | **split**: the exports map is library-shaped, the pnpm fields are not |
-| Monorepo Integration | `rule-toolchain-pnpm` (workspaces) with a library-specific consumer note |
-| Public API Contract, barrel, deprecation | **nobody else: keep** |
-| Build (dual ESM/CJS) | **nobody else: keep** |
-| Testing | `rule-process-tdd` |
-| Publishing | `rule-process-npm-release` |
-| Changelog Format | `rule-process-changelog` |
-| Quick Reference | derived from the above |
+| Section                                  | Owner today                                                             |
+| ---------------------------------------- | ----------------------------------------------------------------------- |
+| Core Rules (8 items)                     | `rule-styleguide-*`, `rule-toolchain-pnpm`, `rule-process-tdd`             |
+| Tree-Shaking and Bundle Size             | **nobody else: keep** (library-specific)                                |
+| File Tree Convention                     | `rule-styleguide-file-tree`                                              |
+| Package.json Structure, sub-path exports | **split**: the exports map is library-shaped, the pnpm fields are not   |
+| Monorepo Integration                     | `rule-toolchain-pnpm` (workspaces) with a library-specific consumer note |
+| Public API Contract, barrel, deprecation | **nobody else: keep**                                                   |
+| Build (dual ESM/CJS)                     | **nobody else: keep**                                                   |
+| Testing                                  | `rule-process-tdd`                                                       |
+| Publishing                               | `rule-process-npm-release`                                               |
+| Changelog Format                         | `rule-process-changelog`                                                 |
+| Quick Reference                          | derived from the above                                                  |
 
 Kept content: the public API contract, dual ESM/CJS build, the exports map,
 tree-shaking, and the monorepo consumer note. Everything else is a pointer.
@@ -71,25 +71,25 @@ tree-shaking, and the monorepo consumer note. Everything else is a pointer.
 
 Three places point here and two of them route the wrong question:
 
-| Where | Says |
-| ----- | ---- |
-| `rule-platform` table | "npm package" |
-| `rule-platform` Quick Selection | "Need to publish an npm package? → `rule-platform-library`" |
-| `rule` dispatcher | "Reusable library/package development ... pnpm package structure, public API design" |
-| `rule-process-npm-release` See also | "Package structure and public API design for the thing being published" |
+| Where                              | Says                                                                                 |
+| ---------------------------------- | ------------------------------------------------------------------------------------ |
+| `rule-platform` table               | "npm package"                                                                        |
+| `rule-platform` Quick Selection     | "Need to publish an npm package? → `rule-platform-library`"                           |
+| `rule` dispatcher                   | "Reusable library/package development ... pnpm package structure, public API design" |
+| `rule-process-npm-release` See also | "Package structure and public API design for the thing being published"              |
 
 The last line is the correct boundary, and the neighbour already states it.
 
 ## The six rules
 
-| id | Rejects | Reads | Tier | Today |
-| -- | ------- | ----- | ---- | ----- |
-| `library-no-local-publish` | A local publish step in a skill whose release is owned elsewhere | `code` | B | red: four `pnpm publish` lines |
-| `library-changelog-generated` | Instructions to hand-write or hand-format `CHANGELOG.md` | `code` | B | red: the format block |
-| `library-owner-named` | A delegated section that names no owner | `code` | B | red: 0 of 6 owners mentioned |
-| `library-no-stale-skill-id` | A `rule-...` id in prose with no skill directory | `code` + `context.fileList` | B | clean: 2 of 2 resolve |
-| `library-no-duplicate-file-tree` | A second copy of the one-barrel-per-folder convention | `code` | B | red: the File Tree Convention section |
-| `library-semver-language` | Semver or deprecation vocabulary that disagrees with the release owner | `code` | B | clean today; the risk is the trim introducing a synonym |
+| id                               | Rejects                                                                | Reads                       | Tier | Today                                                   |
+| -------------------------------- | ---------------------------------------------------------------------- | --------------------------- | ---- | ------------------------------------------------------- |
+| `library-no-local-publish`       | A local publish step in a skill whose release is owned elsewhere       | `code`                      | B    | red: four `pnpm publish` lines                          |
+| `library-changelog-generated`    | Instructions to hand-write or hand-format `CHANGELOG.md`               | `code`                      | B    | red: the format block                                   |
+| `library-owner-named`            | A delegated section that names no owner                                | `code`                      | B    | red: 0 of 6 owners mentioned                            |
+| `library-no-stale-skill-id`      | A `rule-...` id in prose with no skill directory                        | `code` + `context.fileList` | B    | clean: 2 of 2 resolve                                   |
+| `library-no-duplicate-file-tree` | A second copy of the one-barrel-per-folder convention                  | `code`                      | B    | red: the File Tree Convention section                   |
+| `library-semver-language`        | Semver or deprecation vocabulary that disagrees with the release owner | `code`                      | B    | clean today; the risk is the trim introducing a synonym |
 
 ## Phase 0 - Decisions
 
@@ -162,15 +162,15 @@ The last line is the correct boundary, and the neighbour already states it.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Resolve the contradictions | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Keep the library-specific core | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 5 - Router and reach | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 6 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                                     | Class       | Model                     | Why                            |
+| ---------------------------------------- | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions                      | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red)           | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules                      | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Resolve the contradictions     | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 4 - Keep the library-specific core | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 5 - Router and reach               | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 6 - Verification                   | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

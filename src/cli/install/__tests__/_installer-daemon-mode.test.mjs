@@ -18,10 +18,9 @@ const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", i
 
 const fakeHome = mkdtempSync(join(tmpdir(), "rule-daemon-install-"));
 const installModule = new URL("../index.js", import.meta.url).href;
-const source = [
-  `import { mcpServerConfig } from ${JSON.stringify(installModule)};`,
-  'console.log(JSON.stringify(mcpServerConfig("/tmp/rule-mcp.js", { mode: "daemon" })));',
-].join(" ");
+const source = [`import { mcpServerConfig } from ${JSON.stringify(installModule)};`, 'console.log(JSON.stringify(mcpServerConfig("/tmp/rule-mcp.js", { mode: "daemon" })));'].join(
+  " ",
+);
 const output = execFileSync(process.execPath, ["--import", ALIAS_HOOK, "--input-type=module", "--eval", source], {
   env: { ...process.env, HOME: fakeHome },
   encoding: "utf8",

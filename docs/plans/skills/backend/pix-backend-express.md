@@ -9,8 +9,8 @@ router's six rules through `inherits: [rule-backend]`.
 ## Evidence base (measured 2026-10-21)
 
 Sections: application structure, middleware pipeline, error handling, performance
-tuning, request validation, graceful shutdown, file tree convention *from
-rule-backend*, layered architecture.
+tuning, request validation, graceful shutdown, file tree convention _from
+rule-backend_, layered architecture.
 
 ### The section that says where it comes from
 
@@ -20,11 +20,11 @@ other leaves should copy instead of restating the layout.
 
 ### What it states and nothing checks
 
-| Statement | Enforced |
-| --------- | -------- |
-| Async handler errors must reach the error middleware | **no** |
-| The four-argument error handler is registered last | **no** |
-| Shutdown drains connections before the process exits | **no** |
+| Statement                                            | Enforced                              |
+| ---------------------------------------------------- | ------------------------------------- |
+| Async handler errors must reach the error middleware | **no**                                |
+| The four-argument error handler is registered last   | **no**                                |
+| Shutdown drains connections before the process exits | **no**                                |
 | Layered architecture: routes, services, repositories | duplicate of the router's own section |
 
 Express 5 forwards rejected promises; Express 4 does not, and a handler that
@@ -33,13 +33,13 @@ most common Express bug, it is stated in the body, and no rule checks it.
 
 ## The five rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `express-async-errors-forwarded` | An async handler with no wrapper, on Express 4 | B | n/a |
-| `express-error-middleware-last` | An error handler registered before routes, or with three arguments | B | n/a |
-| `express-graceful-shutdown` | No SIGTERM handler, or one that exits before the server closes | B | n/a |
-| `express-no-sync-fs-in-handler` | `readFileSync` and friends inside a request path | B | n/a |
-| `express-owner-named` | A section delegating validation, pooling or layout without naming the owner | B | partially red |
+| id                               | Rejects                                                                     | Tier | Today         |
+| -------------------------------- | --------------------------------------------------------------------------- | ---- | ------------- |
+| `express-async-errors-forwarded` | An async handler with no wrapper, on Express 4                              | B    | n/a           |
+| `express-error-middleware-last`  | An error handler registered before routes, or with three arguments          | B    | n/a           |
+| `express-graceful-shutdown`      | No SIGTERM handler, or one that exits before the server closes              | B    | n/a           |
+| `express-no-sync-fs-in-handler`  | `readFileSync` and friends inside a request path                            | B    | n/a           |
+| `express-owner-named`            | A section delegating validation, pooling or layout without naming the owner | B    | partially red |
 
 ## Phases
 
@@ -88,13 +88,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Shape | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Shape                | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

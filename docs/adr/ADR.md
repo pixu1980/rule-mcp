@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [169](169-rename-the-server-to-rulemcp.md)                                                                              | Rename the server to RuleMCP                                                                              | 2026-10-23 | accepted   | architecture, naming, release, migration                                            |
 | [168](168-insert-a-quick-start-chapter-and-shift-the-handbook-numbering.md)                                             | Insert a quick-start chapter and shift the handbook numbering                                             | 2026-10-23 | accepted   | docs, handbook, process                                                             |
 | [167](167-set-the-decision-cache-replay-floor-to-0-70.md)                                                               | Set the decision-cache replay floor to 0.70                                                               | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
 | [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md)                                                      | Keep the third corpus slice and leave the replay off                                                      | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
@@ -184,6 +185,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [169](169-rename-the-server-to-rulemcp.md)                                                                              | Rename the project identity to RuleMCP: the package and binary are `rule-mcp`, the GitHub repository is `pixu1980/rule-mcp`, and the npm package is `rule-mcp`. Keep the `RULE_MCP_*` environment prefix, the `rule-*`...  | The old GitHub URL redirects to the new repository.                                                                                                                                                                             |
 | [168](168-insert-a-quick-start-chapter-and-shift-the-handbook-numbering.md)                                             | Create docs/07-quick-start.md as the shallow entry and shift the existing chapters 07-16 to 08-17. The engineering guides become chapter 08 and keep their depth; the generated inventories become chapters 09-17, so the...    | A reader gets a short, practical entry before the deep guide, and the sequence stays gapless from 01 to 17. The generated documents still occupy the tail, so the numbering test keeps its invariant.                           |
 | [167](167-set-the-decision-cache-replay-floor-to-0-70.md)                                                               | Adopt the symmetric gate instruction, drop queryHash from the state and deps/id from the candidate descriptions, add the asymmetric hub guard, and set SHADOW_THRESHOLD to 0.7, the measured floor.                             | The final corpus run measured 113 labeled predictions, 100 eligible, 13 guarded, 10 would replay at 0.70 and zero false replays; the report recommends 0.70 with 10 predictions and 0 wrong.                                    |
 | [166](166-keep-the-third-corpus-slice-and-leave-the-replay-off.md)                                                      | Keep the third slice for its recall, and leave the replay off.                                                                                                                                                                  | The corpus is the best recall so far at 85.1%, but the floor still does not exist: the model's probability distribution puts too few predictions above 0.60 and one wrong at 0.55. Replay stays off.                            |
@@ -439,6 +441,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### architecture
 
+- [169](169-rename-the-server-to-rulemcp.md) Rename the server to RuleMCP
 - [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
 - [124](124-make-the-tool-call-host-a-list-so-invocation-hosts-coexist.md) Make the tool-call host a list so invocation hosts coexist
 - [112](112-extend-the-file-size-cap-to-the-shipped-skill-trees.md) Extend the file-size cap to the shipped skill trees
@@ -547,6 +550,21 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
 - [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
 
+### release
+
+- [169](169-rename-the-server-to-rulemcp.md) Rename the server to RuleMCP
+- [135](135-codify-stage-0-oss-governance-signing-support-and-licensing-policies.md) Codify Stage 0 OSS governance, signing, support, and licensing policies
+- [133](133-first-release-is-v0-1-0-then-semver-from-commits.md) First release is v0.1.0, then SemVer from commits
+- [131](131-an-update-moves-a-git-clone-install-to-the-newest-release-tag-unasked.md) An update moves a git-clone install to the newest release tag, unasked
+- [130](130-this-server-releases-itself-with-pnpm-release-and-the-push-is-the-release.md) This server releases itself with pnpm release, and the push is the release
+- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
+- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
+- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
+- [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md) Reset the project version to 0.1.0, first release will be v0.1.0
+- [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
+- [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
+- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+
 ### testing
 
 - [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
@@ -617,20 +635,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [055](055-restructure-the-command-surface-rule-router-rule-area-compression-implicit-rule-process.md) Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
 - [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 - [052](052-pre-packaged-mcp-prompt-registry-26-prompts-strict-schemas-commit-scope-closer.md) Pre-packaged MCP prompt registry (26 prompts, strict schemas, commit-scope closer)
-
-### release
-
-- [135](135-codify-stage-0-oss-governance-signing-support-and-licensing-policies.md) Codify Stage 0 OSS governance, signing, support, and licensing policies
-- [133](133-first-release-is-v0-1-0-then-semver-from-commits.md) First release is v0.1.0, then SemVer from commits
-- [131](131-an-update-moves-a-git-clone-install-to-the-newest-release-tag-unasked.md) An update moves a git-clone install to the newest release tag, unasked
-- [130](130-this-server-releases-itself-with-pnpm-release-and-the-push-is-the-release.md) This server releases itself with pnpm release, and the push is the release
-- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
-- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
-- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
-- [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md) Reset the project version to 0.1.0, first release will be v0.1.0
-- [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
-- [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
-- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
 
 ### cli
 
@@ -772,6 +776,15 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
 - [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
 
+### naming
+
+- [169](169-rename-the-server-to-rulemcp.md) Rename the server to RuleMCP
+- [148](148-merge-simplicity-english-and-fingerprint-into-rule-process-ai.md) Merge simplicity, English and fingerprint into rule-process-ai
+- [132](132-rename-rule-tool-plan-docs-to-rule-tool-impersonation.md) Rename rule_tool_plan_docs to rule_tool_impersonation
+- [084](084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.md) Keep the name with a written posture, no npm placeholder yet
+- [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
+- [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
+
 ### tool
 
 - [025](025-skill-routing-pnpm-package-manager-workspace-monorepo-setup.md) Skill routing: pnpm package manager workspace monorepo setup
@@ -813,14 +826,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
 - [019](019-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
 - [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
-
-### naming
-
-- [148](148-merge-simplicity-english-and-fingerprint-into-rule-process-ai.md) Merge simplicity, English and fingerprint into rule-process-ai
-- [132](132-rename-rule-tool-plan-docs-to-rule-tool-impersonation.md) Rename rule_tool_plan_docs to rule_tool_impersonation
-- [084](084-keep-the-name-with-a-written-posture-no-npm-placeholder-yet.md) Keep the name with a written posture, no npm placeholder yet
-- [007](007-thematic-skill-taxonomy-rename.md) thematic skill taxonomy rename
-- [001](001-thematic-skill-rename.md) Thematic Skill Taxonomy Rename
 
 ### taxonomy
 

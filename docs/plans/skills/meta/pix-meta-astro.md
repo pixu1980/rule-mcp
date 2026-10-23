@@ -11,21 +11,21 @@ Area: meta, leaf, and the largest skill in the area. Sibling plans:
 
 Inherited from the platform interviews, 2026-10-21:
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Identity | Thin body plus served `references/`: the islands model stays in the body, the rest moves out |
-| Aux files | The 10 files under `checklists/`, `knowledge/`, `prompts/` and `templates/` move into `references/` **and get served**, exactly as planned for `rule-platform-desktop` |
-| Shared owners | `rule-frontend` and `rule-styleguide-*` own markup, CSS and components; `rule-platform-web` owns deployment and budgets; `rule-styleguide-a11y` owns the a11y test requirement |
-| Reach | Fixed here: the leaf links the dispatcher, the dispatcher lists the leaf |
-| Rule set | Six rules, all Tier B (advisory) |
-| Detection | Both: section and table parsing, plus injected `fileList` |
-| Fixtures | Shared corpus pairs plus skill trees on disk |
-| Flow | Failing test first |
-| Gates | Skill suite, corpora, catalog clean, census, lint and typecheck, plus the scaffold parser check below |
-| Commits | One per phase |
-| ADR | Two for the whole area: the meta family shape, the rule design |
-| Done | The leaf owns what it claims, the scaffold block is terminated, and the rules pass |
+| Question           | Decision                                                                                                                                                                   |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass | **Plan only**                                                                                                                                                              |
+| Identity           | Thin body plus served `references/`: the islands model stays in the body, the rest moves out                                                                               |
+| Aux files          | The 10 files under `checklists/`, `knowledge/`, `prompts/` and `templates/` move into `references/` **and get served**, exactly as planned for `rule-platform-desktop`      |
+| Shared owners      | `rule-frontend` and `rule-styleguide-*` own markup, CSS and components; `rule-platform-web` owns deployment and budgets; `rule-styleguide-a11y` owns the a11y test requirement |
+| Reach              | Fixed here: the leaf links the dispatcher, the dispatcher lists the leaf                                                                                                   |
+| Rule set           | Six rules, all Tier B (advisory)                                                                                                                                           |
+| Detection          | Both: section and table parsing, plus injected `fileList`                                                                                                                  |
+| Fixtures           | Shared corpus pairs plus skill trees on disk                                                                                                                               |
+| Flow               | Failing test first                                                                                                                                                         |
+| Gates              | Skill suite, corpora, catalog clean, census, lint and typecheck, plus the scaffold parser check below                                                                      |
+| Commits            | One per phase                                                                                                                                                              |
+| ADR                | Two for the whole area: the meta family shape, the rule design                                                                                                             |
+| Done               | The leaf owns what it claims, the scaffold block is terminated, and the rules pass                                                                                         |
 
 ## Evidence base (measured 2026-10-21)
 
@@ -38,7 +38,7 @@ Inherited from the platform interviews, 2026-10-21:
    `src/core/scaffold/_parser.js` takes `## Project Scaffolding` as the start
    and `## Guardrails` as the end. In this file `## Guardrails` sits at line 167
    and `## Project Scaffolding` at line 178, so the end marker is searched
-   *after* the start, is not found, and the slice runs to the end of the file.
+   _after_ the start, is not found, and the slice runs to the end of the file.
    Verified by running the parser: the "scaffold section" is 347 lines and ends
    on the See-also link. A tool asked for the scaffold hands back the entire
    performance playbook.
@@ -54,12 +54,12 @@ Inherited from the platform interviews, 2026-10-21:
 
 ### The auxiliary files
 
-| Folder | Files | Lines | Destination |
-| ------ | ----- | ----- | ----------- |
-| `checklists/` | 2 | 77 | `references/` |
-| `knowledge/` | 1 | 314 | `references/` |
-| `prompts/` | 4 | 107 | `references/` |
-| `templates/` | 3 | 96 | `references/` |
+| Folder        | Files | Lines | Destination   |
+| ------------- | ----- | ----- | ------------- |
+| `checklists/` | 2     | 77    | `references/` |
+| `knowledge/`  | 1     | 314   | `references/` |
+| `prompts/`    | 4     | 107   | `references/` |
+| `templates/`  | 3     | 96    | `references/` |
 
 No tool reads them: `src/resources/_read.js` serves a skill by reading
 `SKILL.md`, and `readSkill()` reads one file. That is the same finding as
@@ -68,11 +68,11 @@ No tool reads them: `src/resources/_read.js` serves a skill by reading
 
 ### Reach
 
-| Door | State |
-| ---- | ----- |
-| `rule` dispatcher | listed |
-| `rule-meta` dispatcher | the leaf does not link it, and `rule-meta` is itself missing from `rule` |
-| See also | `rule`, `rule-frontend`, `rule-styleguide`: no meta router, no deployment owner |
+| Door                  | State                                                                        |
+| --------------------- | ---------------------------------------------------------------------------- |
+| `rule` dispatcher      | listed                                                                       |
+| `rule-meta` dispatcher | the leaf does not link it, and `rule-meta` is itself missing from `rule`       |
+| See also              | `rule`, `rule-frontend`, `rule-styleguide`: no meta router, no deployment owner |
 
 ## Target shape
 
@@ -82,24 +82,24 @@ Around 160 lines.
 
 `references/` receives:
 
-| Reference | From today's body |
-| --------- | ----------------- |
-| `file-tree.md` | the file tree convention |
-| `css.md` | CSS in Astro, scoped `<style>`, external CSS |
-| `barrel.md` | the barrel pattern |
+| Reference        | From today's body                                                      |
+| ---------------- | ---------------------------------------------------------------------- |
+| `file-tree.md`   | the file tree convention                                               |
+| `css.md`         | CSS in Astro, scoped `<style>`, external CSS                           |
+| `barrel.md`      | the barrel pattern                                                     |
 | `performance.md` | the performance section plus `knowledge/astro-performance-playbook.md` |
-| `review.md` | `checklists/`, `prompts/`, `templates/` moved as-is |
+| `review.md`      | `checklists/`, `prompts/`, `templates/` moved as-is                    |
 
 ## The six rules
 
-| id | Rejects | Reads | Tier | Today |
-| -- | ------- | ----- | ---- | ----- |
-| `meta-no-duplicate-core-rules` | A restatement of the markup and CSS rules | `code` | B | **red**: six lines |
-| `meta-router-linked` | A meta leaf that does not link `rule-meta` | `code` | B | red: four leaves |
-| `meta-owner-named` | A delegated section naming no owner | `code` | B | red: the file tree, CSS and a11y sections |
-| `meta-no-stale-file-ref` | A reference to a file that does not exist | `code` + `context.fileList` | B | **red**: three references |
-| `meta-no-stale-skill-id` | A `rule-...` id with no skill directory | `code` + `context.fileList` | B | clean |
-| `meta-scaffold-terminated` | A `## Project Scaffolding` block the parser cannot close | `code` | B | **red**: 347 lines returned |
+| id                             | Rejects                                                  | Reads                       | Tier | Today                                     |
+| ------------------------------ | -------------------------------------------------------- | --------------------------- | ---- | ----------------------------------------- |
+| `meta-no-duplicate-core-rules` | A restatement of the markup and CSS rules                | `code`                      | B    | **red**: six lines                        |
+| `meta-router-linked`           | A meta leaf that does not link `rule-meta`                | `code`                      | B    | red: four leaves                          |
+| `meta-owner-named`             | A delegated section naming no owner                      | `code`                      | B    | red: the file tree, CSS and a11y sections |
+| `meta-no-stale-file-ref`       | A reference to a file that does not exist                | `code` + `context.fileList` | B    | **red**: three references                 |
+| `meta-no-stale-skill-id`       | A `rule-...` id with no skill directory                   | `code` + `context.fileList` | B    | clean                                     |
+| `meta-scaffold-terminated`     | A `## Project Scaffolding` block the parser cannot close | `code`                      | B    | **red**: 347 lines returned               |
 
 ## Phase 0 - Decisions
 
@@ -153,14 +153,14 @@ Around 160 lines.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Fix the scaffold contract | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Split the body and serve the references | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 5 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                                              | Class       | Model                     | Why                            |
+| ------------------------------------------------- | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions                               | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red)                    | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules                               | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Fix the scaffold contract               | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 4 - Split the body and serve the references | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 5 - Verification                            | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

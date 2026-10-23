@@ -9,21 +9,21 @@ copied from).
 
 ## Scope decisions (owner, 2026-10-21)
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only.** Rules, tool fixes and content land in a later pass |
-| Skill shape | Align the body to what the tool really does **and** restructure it around the workflow: when to write an ADR, how to write it, how it gets superseded |
-| Tool gaps | All three are in scope for the implementation pass: expose `endsWhen`, expose `--alternatives`, validate the supersede link |
+| Question               | Decision                                                                                                                                                                          |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass     | **Plan only.** Rules, tool fixes and content land in a later pass                                                                                                                 |
+| Skill shape            | Align the body to what the tool really does **and** restructure it around the workflow: when to write an ADR, how to write it, how it gets superseded                             |
+| Tool gaps              | All three are in scope for the implementation pass: expose `endsWhen`, expose `--alternatives`, validate the supersede link                                                       |
 | Conventions to declare | `What would end this` is mandatory; the author is a person or a team, never the server name; three-digit numbering; explicit supersede in both directions; English title and slug |
-| Rule set | Six rules: naming, status vocabulary, author line, ends-when, derived index, English |
-| Tier | All Tier B (advisory) |
-| Detection | Parsed header fields for status and author, text patterns for slug and sections, injected `fileList` for the index check |
-| Fixtures | Both: entries in `tests/fixtures/guardrail-corpus.mjs` and versioned ADR trees on disk |
-| Rule home | Like `rule-process-ai`: rule files in `skills/rule-process-adr/guardrails/`, cases in the shared corpus |
-| Flow | Failing test first, then the rule |
-| Gates | Skill suite, tool suite, corpora, clean repository ADRs, census, lint and typecheck |
-| Commits | One per phase |
-| ADR | Two records: the ADR conventions, the guardrail design. Written in the implementation pass, not now |
+| Rule set               | Six rules: naming, status vocabulary, author line, ends-when, derived index, English                                                                                              |
+| Tier                   | All Tier B (advisory)                                                                                                                                                             |
+| Detection              | Parsed header fields for status and author, text patterns for slug and sections, injected `fileList` for the index check                                                          |
+| Fixtures               | Both: entries in `tests/fixtures/guardrail-corpus.mjs` and versioned ADR trees on disk                                                                                            |
+| Rule home              | Like `rule-process-ai`: rule files in `skills/rule-process-adr/guardrails/`, cases in the shared corpus                                                                             |
+| Flow                   | Failing test first, then the rule                                                                                                                                                 |
+| Gates                  | Skill suite, tool suite, corpora, clean repository ADRs, census, lint and typecheck                                                                                               |
+| Commits                | One per phase                                                                                                                                                                     |
+| ADR                    | Two records: the ADR conventions, the guardrail design. Written in the implementation pass, not now                                                                               |
 
 ## Evidence base (measured 2026-10-21)
 
@@ -34,12 +34,12 @@ project records and enforces none of it.
 
 ### The body is stale in four places
 
-| Where | What it says | What the code does |
-| ----- | ------------ | ------------------ |
-| Template | `- **Author**: rule-mcp` | `adrAuthor()` stamps `Name <email>` from the git identity, and falls back to `rule-mcp` only when git has no `user.name` |
-| Example call | `"title": "Usare PostgreSQL"` with Italian context lines | The tool refuses non-English input: `adrEnglishOffenses` returns `isError: true` and lists the offenses |
-| Template | `## Consequences` with `### Positive` / `### Negative` | `generateAdr` writes one flat Consequences paragraph, then a `## What would end this` section |
-| Template | No `## What would end this` | Every generated ADR carries it (line 34 of `_body.js`) |
+| Where        | What it says                                             | What the code does                                                                                                       |
+| ------------ | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Template     | `- **Author**: rule-mcp`                                 | `adrAuthor()` stamps `Name <email>` from the git identity, and falls back to `rule-mcp` only when git has no `user.name` |
+| Example call | `"title": "Usare PostgreSQL"` with Italian context lines | The tool refuses non-English input: `adrEnglishOffenses` returns `isError: true` and lists the offenses                  |
+| Template     | `## Consequences` with `### Positive` / `### Negative`   | `generateAdr` writes one flat Consequences paragraph, then a `## What would end this` section                            |
+| Template     | No `## What would end this`                              | Every generated ADR carries it (line 34 of `_body.js`)                                                                   |
 
 ### Three real gaps in the tooling
 
@@ -54,14 +54,14 @@ project records and enforces none of it.
 
 ### What the six rules would say about the 150 ADRs on disk today
 
-| Rule | State of the corpus |
-| ---- | ------------------- |
-| `adr-file-naming` | clean: 150 of 150 match `^[0-9]{3}-[a-z0-9-]+\.md$` |
-| `adr-author-line` | clean: no ADR names the server as author |
-| `adr-english` | clean by construction: the tool refuses non-English input |
-| `adr-ends-when` | **56 violations**: every record from ADR 091 on carries the section; all 56 gaps sit at ADR 090 or below |
+| Rule                    | State of the corpus                                                                                                       |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `adr-file-naming`       | clean: 150 of 150 match `^[0-9]{3}-[a-z0-9-]+\.md$`                                                                       |
+| `adr-author-line`       | clean: no ADR names the server as author                                                                                  |
+| `adr-english`           | clean by construction: the tool refuses non-English input                                                                 |
+| `adr-ends-when`         | **56 violations**: every record from ADR 091 on carries the section; all 56 gaps sit at ADR 090 or below                  |
 | `adr-status-vocabulary` | **~13 non-canonical values** (`superseded (area siblings; ...)` and similar) plus **7 `superseded` records with no link** |
-| `adr-index-derived` | unknown: the index is regenerated on every write, so a mismatch means somebody edited `ADR.md` by hand |
+| `adr-index-derived`     | unknown: the index is regenerated on every write, so a mismatch means somebody edited `ADR.md` by hand                    |
 
 Two of the six rules are therefore red on the repository the day they land. The
 gate "the 150 existing ADRs stay clean" cannot be met by retrofitting history:
@@ -83,14 +83,14 @@ list **only shrinks**. The same shape applies here:
 
 ## The six rules
 
-| id | Rejects | Reads | Tier | Legacy list |
-| -- | ------- | ----- | ---- | ----------- |
-| `adr-file-naming` | A file not matching `NNN-kebab-slug.md` with three digits and an English slug | `context.fileList` | B | none, corpus is clean |
-| `adr-status-vocabulary` | A status outside `proposed / accepted / deprecated / superseded`, or `superseded` with no `by [NNN]` reference | parsed header | B | numbers 039, 079, 080, 085, 087, 097, 106 plus the ~13 variants |
-| `adr-author-line` | A missing `Author`, or one naming the serving tool (`rule-mcp`, `rule`, `agent`, `claude`) | parsed header | B | none, corpus is clean |
-| `adr-ends-when` | A missing `## What would end this`, or the generated placeholder kept verbatim | `code` | B | the 56 ADRs numbered 090 and below |
-| `adr-index-derived` | An ADR on disk missing from `docs/adr/ADR.md`, or an index row naming a file that does not exist | `context.fileList` + index rows | B | none: the index is regenerated on write |
-| `adr-english` | Non-English title, slug or prose, so the tool's blocking gate also exists as a checkable rule | `code` | B | none, the tool already refuses these |
+| id                      | Rejects                                                                                                        | Reads                           | Tier | Legacy list                                                     |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------- | ---- | --------------------------------------------------------------- |
+| `adr-file-naming`       | A file not matching `NNN-kebab-slug.md` with three digits and an English slug                                  | `context.fileList`              | B    | none, corpus is clean                                           |
+| `adr-status-vocabulary` | A status outside `proposed / accepted / deprecated / superseded`, or `superseded` with no `by [NNN]` reference | parsed header                   | B    | numbers 039, 079, 080, 085, 087, 097, 106 plus the ~13 variants |
+| `adr-author-line`       | A missing `Author`, or one naming the serving tool (`rule-mcp`, `rule`, `agent`, `claude`)                      | parsed header                   | B    | none, corpus is clean                                           |
+| `adr-ends-when`         | A missing `## What would end this`, or the generated placeholder kept verbatim                                 | `code`                          | B    | the 56 ADRs numbered 090 and below                              |
+| `adr-index-derived`     | An ADR on disk missing from `docs/adr/ADR.md`, or an index row naming a file that does not exist               | `context.fileList` + index rows | B    | none: the index is regenerated on write                         |
+| `adr-english`           | Non-English title, slug or prose, so the tool's blocking gate also exists as a checkable rule                  | `code`                          | B    | none, the tool already refuses these                            |
 
 The English rule duplicates a check that already runs inside the tool. That is
 deliberate: the tool refuses writes, the rule explains a file that arrived some
@@ -162,14 +162,14 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Close the tool gaps | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Align the skill body | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 5 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Close the tool gaps  | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 4 - Align the skill body | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 5 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

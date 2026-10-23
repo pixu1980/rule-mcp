@@ -49,7 +49,6 @@ test("an empty change set asks nothing of the graph", () => {
   assert.equal(called, false);
 });
 
-
 test("runtime normalizes the server snapshot", () => {
   const runtime = runtimeSnapshot("/tmp/x", {
     probe: available,

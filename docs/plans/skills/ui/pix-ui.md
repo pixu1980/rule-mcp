@@ -89,12 +89,12 @@ skill):
 
 The router cites the standard, it does not restate it:
 
-| Standard                               | Owner of the rule                                              |
-| -------------------------------------- | -------------------------------------------------------------- |
-| WCAG 2.2 and ARIA APG                  | `rule-styleguide-a11y`                                          |
-| W3C DTCG Design Tokens                 | `rule-ui-design-system`                                         |
+| Standard                               | Owner of the rule                                   |
+| -------------------------------------- | --------------------------------------------------- |
+| WCAG 2.2 and ARIA APG                  | `rule-styleguide-a11y`                               |
+| W3C DTCG Design Tokens                 | `rule-ui-design-system`                              |
 | Open UI and Custom Elements Everywhere | removed with ADR 152: neither skill exists any more |
-| MDN, `<dialog>` and Popover            | `rule-styleguide-html`                                          |
+| MDN, `<dialog>` and Popover            | `rule-styleguide-html`                               |
 
 ## Proposed guardrails
 
@@ -173,13 +173,13 @@ Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fix
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions and scaffolding | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Content | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 2 - Generated table | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 3 - Guardrails and tests | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                                | Class       | Model                     | Why                            |
+| ----------------------------------- | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions and scaffolding | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Content                   | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 2 - Generated table           | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 3 - Guardrails and tests      | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 4 - Verification              | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

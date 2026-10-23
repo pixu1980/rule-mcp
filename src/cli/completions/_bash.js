@@ -8,7 +8,7 @@ export function generateBash() {
 # Source this file or add to ~/.bashrc:
 #   source <(rule-mcp completions --shell bash)
 
-_pix_galaxy_mcp() {
+_rule_mcp() {
   local cur prev words cword
   _init_completion || return
 
@@ -68,6 +68,6 @@ _pix_galaxy_mcp() {
   esac
 }
 
-complete -F _pix_galaxy_mcp rule-mcp
+complete -F _rule_mcp rule-mcp
 `;
 }

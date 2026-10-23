@@ -78,12 +78,13 @@ const installEmacs = ({ entrypoint, dryRun, global }) => {
   const initFile = join(emacsDir, "init.el");
   const config = commandConfig(entrypoint, { global, agentName: "emacs" });
   const isPi = false; // Emacs is never pi.dev
-  const emacsConfig = `;; rule-mcp\n(setq mcp-servers '((\n  "${serverName}" . (\n    (command . "${config.command}")\n    (args . ${JSON.stringify(config.args)})${isPi ? '\n    (directTools . t)\n    (lifecycle . "keep-alive")' : ""}))))\n`;
+  const emacsMarker = ";; rule-mcp";
+  const emacsConfig = `${emacsMarker}\n(setq mcp-servers '((\n  "${serverName}" . (\n    (command . "${config.command}")\n    (args . ${JSON.stringify(config.args)})${isPi ? '\n    (directTools . t)\n    (lifecycle . "keep-alive")' : ""}))))\n`;
 
   return [
     writeText({
       file: initFile,
-      content: readText(initFile).includes("rule") ? readText(initFile) : `${readText(initFile).trimEnd()}\n\n${emacsConfig}`,
+      content: readText(initFile).includes(emacsMarker) ? readText(initFile) : `${readText(initFile).trimEnd()}\n\n${emacsConfig}`,
       dryRun,
     }),
   ];

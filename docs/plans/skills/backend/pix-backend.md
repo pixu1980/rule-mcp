@@ -30,16 +30,16 @@ an API and architecture section, "Six ideas that replace memorizing
 architectures", "Structuring a backend: the layouts, and when each stops paying",
 a Quick Reference, and See also.
 
-| Fact | State |
-| ---- | ----- |
-| Children | 8: express, fastify, nestjs, hono, graphql, node, security, workers |
-| Table rows | 12: the 8 children plus **4 rows for `rule-data-*` skills** |
-| Quick Selection | none: this router uses a Quick Reference instead |
-| Dispatcher rows | 8 of 9: **`rule-backend-workers` is missing** |
-| Own rules | 6, inherited by 8 leaves |
-| Tags | backend, api, server, umbrella, index |
-| Cross-area rows | 4 data rows, which also restate dependency versions |
-| Version claims | "PostgreSQL 16+", "MySQL 8+ / MariaDB 11+" and "MongoDB 7+" appear here **and** in `rule-data` |
+| Fact            | State                                                                                         |
+| --------------- | --------------------------------------------------------------------------------------------- |
+| Children        | 8: express, fastify, nestjs, hono, graphql, node, security, workers                           |
+| Table rows      | 12: the 8 children plus **4 rows for `rule-data-*` skills**                                    |
+| Quick Selection | none: this router uses a Quick Reference instead                                              |
+| Dispatcher rows | 8 of 9: **`rule-backend-workers` is missing**                                                  |
+| Own rules       | 6, inherited by 8 leaves                                                                      |
+| Tags            | backend, api, server, umbrella, index                                                         |
+| Cross-area rows | 4 data rows, which also restate dependency versions                                           |
+| Version claims  | "PostgreSQL 16+", "MySQL 8+ / MariaDB 11+" and "MongoDB 7+" appear here **and** in `rule-data` |
 
 ### The six ideas and the layouts are the content
 
@@ -60,21 +60,21 @@ the catalog covers them, and no rule can check them. They stay.
 
 ## The twelve rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `cors-explicit` | A wildcard CORS origin with credentials | B | existing, keep |
-| `error-exposure` | A stack trace or internal message returned to the client | B | existing, keep |
-| `helmet-headers` | A server with no security headers | B | existing, keep |
-| `input-validation` | A handler using the raw body without a schema | B | existing, keep |
-| `rate-limiting` | A public endpoint with no limiter | B | existing, keep |
-| `sql-injection` | A query built by concatenation | B | existing, keep |
-| `router-dead-link` | A relative link resolving to no `SKILL.md` | B | clean |
-| `router-tool-name` | A tool name the registry does not know | B | clean |
-| `router-child-listed` | A skill under the area with no row | B | clean |
-| `router-quick-selection` | A row no short list reaches | B | n/a: no Quick Selection here |
-| `router-no-stale-name` | A reference to a skill that no longer exists | B | clean |
-| `router-tag-single-owner` | A subject tag claimed by the router and a leaf | B | clean |
-| `backend-no-cross-area-rows` | A row for a skill another area owns | B | **red**: 4 data rows |
+| id                           | Rejects                                                  | Tier | Today                        |
+| ---------------------------- | -------------------------------------------------------- | ---- | ---------------------------- |
+| `cors-explicit`              | A wildcard CORS origin with credentials                  | B    | existing, keep               |
+| `error-exposure`             | A stack trace or internal message returned to the client | B    | existing, keep               |
+| `helmet-headers`             | A server with no security headers                        | B    | existing, keep               |
+| `input-validation`           | A handler using the raw body without a schema            | B    | existing, keep               |
+| `rate-limiting`              | A public endpoint with no limiter                        | B    | existing, keep               |
+| `sql-injection`              | A query built by concatenation                           | B    | existing, keep               |
+| `router-dead-link`           | A relative link resolving to no `SKILL.md`               | B    | clean                        |
+| `router-tool-name`           | A tool name the registry does not know                   | B    | clean                        |
+| `router-child-listed`        | A skill under the area with no row                       | B    | clean                        |
+| `router-quick-selection`     | A row no short list reaches                              | B    | n/a: no Quick Selection here |
+| `router-no-stale-name`       | A reference to a skill that no longer exists             | B    | clean                        |
+| `router-tag-single-owner`    | A subject tag claimed by the router and a leaf           | B    | clean                        |
+| `backend-no-cross-area-rows` | A row for a skill another area owns                      | B    | **red**: 4 data rows         |
 
 ## Phases
 
@@ -127,13 +127,13 @@ Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fix
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Finish the area | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Finish the area      | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

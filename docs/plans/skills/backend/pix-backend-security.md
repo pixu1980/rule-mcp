@@ -45,13 +45,13 @@ level down. The rules exist; the prose should point at them.
 
 ## The five rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `security-verify-not-parse` | A token decoded and trusted with no signature check | B | n/a |
-| `security-authz-per-route` | A route with authentication but no authorization decision | B | n/a |
-| `security-session-revoked` | A logout that clears the cookie and leaves the session record | B | n/a |
-| `security-rate-limit-auth` | An authentication endpoint with no limiter (inherited rule covers the generic case) | B | n/a |
-| `security-owner-named` | A section that keeps the auth strategy instead of pointing at `rule-platform-auth` | B | **red** |
+| id                          | Rejects                                                                             | Tier | Today   |
+| --------------------------- | ----------------------------------------------------------------------------------- | ---- | ------- |
+| `security-verify-not-parse` | A token decoded and trusted with no signature check                                 | B    | n/a     |
+| `security-authz-per-route`  | A route with authentication but no authorization decision                           | B    | n/a     |
+| `security-session-revoked`  | A logout that clears the cookie and leaves the session record                       | B    | n/a     |
+| `security-rate-limit-auth`  | An authentication endpoint with no limiter (inherited rule covers the generic case) | B    | n/a     |
+| `security-owner-named`      | A section that keeps the auth strategy instead of pointing at `rule-platform-auth`   | B    | **red** |
 
 ## Phases
 
@@ -104,13 +104,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Apply the boundary | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Apply the boundary   | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

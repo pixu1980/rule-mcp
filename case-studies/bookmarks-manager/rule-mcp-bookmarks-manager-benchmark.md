@@ -24,7 +24,7 @@
 | Input tokens "uncached" cumulato (REALE)                |                                    178 |                          255.496 |                              119.602 |
 | **Cache write** (REALE, token messi in cache)           |                         **275.803** ✅ |                             0 ❌ |                                 0 ❌ |
 | Cache read cumulato (N × context, **informativo solo**) |                                19.14 M |                          13.84 M |                              13.11 M |
-| Tool call rule-mcp                                |                                     23 |                           **30** |                                   10 |
+| Tool call rule-mcp                                      |                                     23 |                           **30** |                                   10 |
 | Test passati al primo colpo (sui 6 definiti)            |                                 ✅ 6/6 |              ✅ 6/6 (dopo 1 fix) |                     ❌ 0 (zero test) |
 | ADR generati                                            |                                  **7** |                                6 |                                    3 |
 | Handoff consegnato                                      |         ✅ `docs/handoff/2026-07-11-…` |             ✅ `docs/handoff.md` |                 ✅ `docs/handoff.md` |

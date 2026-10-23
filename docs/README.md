@@ -1,6 +1,6 @@
 # Reference
 
-Public reference for rule-mcp: how the server is shaped, what it exposes,
+Public reference for RuleMCP: how the server is shaped, what it exposes,
 and how to configure it.
 
 ## Contents
@@ -33,3 +33,4 @@ installer writes for it.
 - [Operations](./04-operations.md): released modes, daemon and service, troubleshooting
 - [Privacy](./06-privacy.md): what is recorded, where it lives, and how to erase it
 - [Engineering guides](./08-engineering-guides.md): worked examples, measured numbers, contributor guidance
+- [Migration to RuleMCP](./migrations/rule-mcp-rename.md): upgrade from the pre-rename package

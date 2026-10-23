@@ -8,13 +8,13 @@ plan together with ADR 149 (superseded by 150) and ADR 150.
 
 ## Target surface
 
-| Skill | Home | Role |
-| ----- | ---- | ---- |
-| `rule-method` | router, new | Chooses between the four frameworks; owns the cross-framework rules |
-| `rule-method-bmad` | `rule-process-bmad`, renamed | BMAD: tracks, phases, agents, install |
-| `rule-method-spec-kit` | new | GitHub Spec Kit: constitution, specify, plan, tasks, implement, converge |
-| `rule-method-openspec` | new | OpenSpec: delta specs, brownfield, minimal ceremony |
-| `rule-method-gsd` | new | GSD / Ralph loops / Task Master: unattended and iterative loops |
+| Skill                 | Home                        | Role                                                                     |
+| --------------------- | --------------------------- | ------------------------------------------------------------------------ |
+| `rule-method`          | router, new                 | Chooses between the four frameworks; owns the cross-framework rules      |
+| `rule-method-bmad`     | `rule-process-bmad`, renamed | BMAD: tracks, phases, agents, install                                    |
+| `rule-method-spec-kit` | new                         | GitHub Spec Kit: constitution, specify, plan, tasks, implement, converge |
+| `rule-method-openspec` | new                         | OpenSpec: delta specs, brownfield, minimal ceremony                      |
+| `rule-method-gsd`      | new                         | GSD / Ralph loops / Task Master: unattended and iterative loops          |
 
 `rule-process` keeps its other children (adr, code-review, changelog,
 npm-release, readme, tdd, ai) and gains one line pointing methodology questions
@@ -24,29 +24,29 @@ at `rule-method`.
 
 Interview, 2026-10-21:
 
-| Question | Decision |
-| -------- | -------- |
-| Where we restart | Plan rewritten from scratch, in place at this path |
-| Skill body | `SKILL.md` stays structurally unchanged - no cut to 120-150 lines, no `references/` split in this pass |
-| Corrections that are not a cut | The stale expansion and the stale install block **are** corrected; rule `bmad-expansion-current` is otherwise red on our own tree |
-| Neighbors | All four boundaries in scope (`rule-process`, `rule-process-ai`, `rule-process-adr`, `rule-process-code-review`) |
-| Rule set | Five rules: `bmad-single-framework`, `bmad-output-not-in-src`, `bmad-expansion-current` plus `bmad-install-stale` and `bmad-dual-scaffold` |
-| Tier | All Tier B (advisory). Nothing blocking in this pass |
-| Detection | Filesystem markers, limited text scan, skill frontmatter |
-| Fixtures | Synthetic trees in the tests **and** versioned trees on disk |
-| Flow | Failing test first, then the rule |
-| Gates | Rule suite, corpus suites, `rule_tool_check`, census, lint + typecheck |
-| Commits | One per phase, Conventional Commits with a scope |
-| ADR | Two: the family policy, the guardrail design |
-| Done | Rules green, content corrected, routers updated, gates run |
+| Question                       | Decision                                                                                                                                   |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Where we restart               | Plan rewritten from scratch, in place at this path                                                                                         |
+| Skill body                     | `SKILL.md` stays structurally unchanged - no cut to 120-150 lines, no `references/` split in this pass                                     |
+| Corrections that are not a cut | The stale expansion and the stale install block **are** corrected; rule `bmad-expansion-current` is otherwise red on our own tree          |
+| Neighbors                      | All four boundaries in scope (`rule-process`, `rule-process-ai`, `rule-process-adr`, `rule-process-code-review`)                               |
+| Rule set                       | Five rules: `bmad-single-framework`, `bmad-output-not-in-src`, `bmad-expansion-current` plus `bmad-install-stale` and `bmad-dual-scaffold` |
+| Tier                           | All Tier B (advisory). Nothing blocking in this pass                                                                                       |
+| Detection                      | Filesystem markers, limited text scan, skill frontmatter                                                                                   |
+| Fixtures                       | Synthetic trees in the tests **and** versioned trees on disk                                                                               |
+| Flow                           | Failing test first, then the rule                                                                                                          |
+| Gates                          | Rule suite, corpus suites, `rule_tool_check`, census, lint + typecheck                                                                      |
+| Commits                        | One per phase, Conventional Commits with a scope                                                                                           |
+| ADR                            | Two: the family policy, the guardrail design                                                                                               |
+| Done                           | Rules green, content corrected, routers updated, gates run                                                                                 |
 
 Directive, same day, revising the two rows below:
 
-| Question | Decision |
-| -------- | -------- |
+| Question         | Decision                                                                                                                                        |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | Framework skills | Create `rule-method-spec-kit`, `rule-method-openspec`, `rule-method-gsd` and a `rule-method` router - one skill per framework, not a single chooser |
-| Naming | The whole family is `rule-method-*`; `rule-process-bmad` is renamed `rule-method-bmad`. No `rule-process-*` methodology skill survives |
-| Rule home | Refined by the split: rules that name a framework path live in that framework's skill; rules that compare frameworks live in `rule-method` |
+| Naming           | The whole family is `rule-method-*`; `rule-process-bmad` is renamed `rule-method-bmad`. No `rule-process-*` methodology skill survives              |
+| Rule home        | Refined by the split: rules that name a framework path live in that framework's skill; rules that compare frameworks live in `rule-method`       |
 
 The rule-home refinement is the one interview answer this plan changes. It
 follows from the family split: `bmad-single-framework` compares `_bmad/`
@@ -113,13 +113,13 @@ nothing else.
 
 ## The five rules
 
-| id | Home | Rejects | Reads | Tier |
-| -- | ---- | ------- | ----- | ---- |
-| `method-single-framework` | `rule-method` | `_bmad/` or `.specify/` or `openspec/` markers for two frameworks with no `FRAMEWORK.md` naming the active one | `context.fileList` | B |
-| `method-output-not-in-src` | `rule-method` | `_bmad-output/`, `.specify/` or `openspec/changes/` artifacts committed under `src/` or `skills/` | `context.fileList` | B |
-| `bmad-expansion-current` | `rule-method-bmad` | Prose expanding BMAD as "Build More Architect Dreams" | `code` | B |
-| `bmad-install-stale` | `rule-method-bmad` | A BMAD install instruction with no channel (stable vs preview), or the retired `npm i -g bmad-method` | `code` | B |
-| `bmad-dual-scaffold` | `rule-method-bmad` | Two `_bmad/` roots in one tree, or two manifests recording different method versions | `context.fileList` | B |
+| id                         | Home              | Rejects                                                                                                        | Reads              | Tier |
+| -------------------------- | ----------------- | -------------------------------------------------------------------------------------------------------------- | ------------------ | ---- |
+| `method-single-framework`  | `rule-method`      | `_bmad/` or `.specify/` or `openspec/` markers for two frameworks with no `FRAMEWORK.md` naming the active one | `context.fileList` | B    |
+| `method-output-not-in-src` | `rule-method`      | `_bmad-output/`, `.specify/` or `openspec/changes/` artifacts committed under `src/` or `skills/`              | `context.fileList` | B    |
+| `bmad-expansion-current`   | `rule-method-bmad` | Prose expanding BMAD as "Build More Architect Dreams"                                                          | `code`             | B    |
+| `bmad-install-stale`       | `rule-method-bmad` | A BMAD install instruction with no channel (stable vs preview), or the retired `npm i -g bmad-method`          | `code`             | B    |
+| `bmad-dual-scaffold`       | `rule-method-bmad` | Two `_bmad/` roots in one tree, or two manifests recording different method versions                           | `context.fileList` | B    |
 
 The three new framework leaves ship with no rules of their own: they inherit
 the router's two cross-framework rules. A leaf earns its own rule only when a
@@ -177,7 +177,7 @@ Produces: `rule-method`
 - [ ] Census regenerates `skills/rule/SKILL.md`, `docs/09-skills.md`,
       `docs/17-surface-map.md`; README counts move from 85 to 89 skills.
 - [ ] `git mv docs/plans/skills/process/rule-process-bmad.md
-      docs/plans/skills/method/rule-method.md`: the plan follows its skill into
+docs/plans/skills/method/rule-method.md`: the plan follows its skill into
       the new area.
 - [ ] Index rows: `rule-method`, `rule-method-bmad`, `rule-method-spec-kit`,
       `rule-method-openspec`, `rule-method-gsd` in `docs/plans/skills/README.md`
@@ -246,16 +246,16 @@ Produces: `rule-method`
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Lock the decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Structure before content (pure moves) | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 2 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 3 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 4 - Correct what the rules measure | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 5 - Router and neighbors | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 6 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
-| Phase 7 - Deferred (not this pass) | `T7-author` | `qwen3.8-max` | skill bodies and references |
+| Step                                            | Class       | Model                     | Why                            |
+| ----------------------------------------------- | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Lock the decisions                    | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Structure before content (pure moves) | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 2 - Fixtures first (red)                  | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 3 - The rules                             | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 4 - Correct what the rules measure        | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 5 - Router and neighbors                  | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 6 - Verification                          | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
+| Phase 7 - Deferred (not this pass)              | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
 
 Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

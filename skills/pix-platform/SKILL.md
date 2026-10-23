@@ -18,11 +18,11 @@ frameworks: [all]
 
 ## Available Skills
 
-| Skill                                                    | Platform           | Best For                                                    |
-| -------------------------------------------------------- | ------------------ | ----------------------------------------------------------- |
-| [rule-platform-desktop](../rule-platform-desktop/SKILL.md) | Desktop (Electron) | Cross-platform desktop apps, IPC, native APIs               |
-| [rule-platform-library](../rule-platform-library/SKILL.md) | npm package        | Library authoring, dual CJS/ESM, public API                 |
-| [rule-platform-web](../rule-platform-web/SKILL.md)         | Web platform       | PWA, service workers, offline, performance budgets          |
+| Skill                                                    | Platform           | Best For                                           |
+| -------------------------------------------------------- | ------------------ | -------------------------------------------------- |
+| [rule-platform-desktop](../rule-platform-desktop/SKILL.md) | Desktop (Electron) | Cross-platform desktop apps, IPC, native APIs      |
+| [rule-platform-library](../rule-platform-library/SKILL.md) | npm package        | Library authoring, dual CJS/ESM, public API        |
+| [rule-platform-web](../rule-platform-web/SKILL.md)         | Web platform       | PWA, service workers, offline, performance budgets |
 
 ## Quick Selection Guide
 

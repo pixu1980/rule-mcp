@@ -44,12 +44,9 @@ function linkingFiles() {
         .map((name) => join(personasRoot, name))
     : [];
 
-  return [
-    ...skillFiles(),
-    ...personas,
-    join(root, "docs", "plans", "skills", "README.md"),
-    join(root, "docs", "plans", "skills", "DEPENDENCIES.md"),
-  ].filter((path) => existsSync(path));
+  return [...skillFiles(), ...personas, join(root, "docs", "plans", "skills", "README.md"), join(root, "docs", "plans", "skills", "DEPENDENCIES.md")].filter((path) =>
+    existsSync(path),
+  );
 }
 
 test("a retired skill has no directory", () => {

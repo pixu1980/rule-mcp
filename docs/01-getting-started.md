@@ -1,10 +1,10 @@
 # Getting Started
 
-Install rule-mcp once, wire your agent, and route the first request in under five minutes.
+Install RuleMCP once, wire your agent, and route the first request in under five minutes.
 
 ## What it is
 
-**rule-mcp** is an [MCP](https://modelcontextprotocol.io) server for the rule skill catalog. It:
+**RuleMCP** is an [MCP](https://modelcontextprotocol.io) server for the rule skill catalog. It:
 
 1. **Routes** free-text requests to the matching skill (or area hub).
 2. **Serves** skills as MCP tools, resources, and prompts, no LLM inside the server.

@@ -21,11 +21,11 @@ journal modes and transaction control, indexing, FTS, JSON, performance.
 
 What it states and nothing checks:
 
-| Statement | Enforced |
-| --------- | -------- |
-| WAL is the default journal mode, and the comparison table says why | **no** |
-| `PRAGMA foreign_keys = ON` per connection: SQLite does not do it for you | **no** |
-| Set `busy_timeout`, or a concurrent write becomes an error | **no** |
+| Statement                                                                  | Enforced                         |
+| -------------------------------------------------------------------------- | -------------------------------- |
+| WAL is the default journal mode, and the comparison table says why         | **no**                           |
+| `PRAGMA foreign_keys = ON` per connection: SQLite does not do it for you   | **no**                           |
+| Set `busy_timeout`, or a concurrent write becomes an error                 | **no**                           |
 | Migration-safe schema changes use the rebuild pattern, not `ALTER` guesses | **partly** by `migration-safety` |
 
 The second is the classic SQLite trap: foreign keys are declared, respected by
@@ -33,13 +33,13 @@ the planner, and **off at runtime** unless the pragma runs on every connection.
 
 ## The five rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `sqlite-foreign-keys-on` | A connection opened with no `PRAGMA foreign_keys = ON` | B | n/a |
-| `sqlite-busy-timeout` | A connection with no busy timeout or a zero one | B | n/a |
-| `sqlite-wal-mode` | A write-heavy setup left on the default rollback journal | B | n/a |
-| `sqlite-version-single-source` | The same version stated in the title and in the router | B | **red** |
-| `sqlite-owner-named` | A section delegating generic SQL, pooling or migrations without naming the owner | B | partially red |
+| id                             | Rejects                                                                          | Tier | Today         |
+| ------------------------------ | -------------------------------------------------------------------------------- | ---- | ------------- |
+| `sqlite-foreign-keys-on`       | A connection opened with no `PRAGMA foreign_keys = ON`                           | B    | n/a           |
+| `sqlite-busy-timeout`          | A connection with no busy timeout or a zero one                                  | B    | n/a           |
+| `sqlite-wal-mode`              | A write-heavy setup left on the default rollback journal                         | B    | n/a           |
+| `sqlite-version-single-source` | The same version stated in the title and in the router                           | B    | **red**       |
+| `sqlite-owner-named`           | A section delegating generic SQL, pooling or migrations without naming the owner | B    | partially red |
 
 ## Phases
 
@@ -88,13 +88,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Doors and versions | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Doors and versions   | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

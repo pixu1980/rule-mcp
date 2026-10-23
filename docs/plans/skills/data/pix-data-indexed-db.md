@@ -23,26 +23,26 @@ File System Access API.
 
 What it states and nothing checks:
 
-| Statement | Enforced |
-| --------- | -------- |
-| Schema changes go through `onupgradeneeded`, never an ad-hoc `deleteDatabase` | **no** |
-| Compound indexes exist for the queries you actually run | **no** |
-| A transaction is scoped and short: no `await` on a network call inside it | **no** |
-| Quota is finite: handle `QuotaExceededError` | **no** |
+| Statement                                                                     | Enforced |
+| ----------------------------------------------------------------------------- | -------- |
+| Schema changes go through `onupgradeneeded`, never an ad-hoc `deleteDatabase` | **no**   |
+| Compound indexes exist for the queries you actually run                       | **no**   |
+| A transaction is scoped and short: no `await` on a network call inside it     | **no**   |
+| Quota is finite: handle `QuotaExceededError`                                  | **no**   |
 
 The third is the classic IndexedDB bug: an awaited non-IDB promise inside a
 transaction lets the transaction auto-commit, and the next request throws.
 
 ## The six rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `idb-versioned-schema` | A store or index created outside `onupgradeneeded` | B | n/a |
-| `idb-no-await-in-transaction` | An awaited non-IDB call inside an open transaction | B | n/a |
-| `idb-quota-handled` | A write path with no `QuotaExceededError` branch | B | n/a |
-| `idb-compound-index` | A multi-key query with no compound index behind it | B | n/a |
-| `idb-owner-named` | A section delegating persistence policy or worker usage without naming the owner | B | partially red |
-| `idb-no-stale-skill-id` | A `rule-...` id with no skill directory | B | clean |
+| id                            | Rejects                                                                          | Tier | Today         |
+| ----------------------------- | -------------------------------------------------------------------------------- | ---- | ------------- |
+| `idb-versioned-schema`        | A store or index created outside `onupgradeneeded`                               | B    | n/a           |
+| `idb-no-await-in-transaction` | An awaited non-IDB call inside an open transaction                               | B    | n/a           |
+| `idb-quota-handled`           | A write path with no `QuotaExceededError` branch                                 | B    | n/a           |
+| `idb-compound-index`          | A multi-key query with no compound index behind it                               | B    | n/a           |
+| `idb-owner-named`             | A section delegating persistence policy or worker usage without naming the owner | B    | partially red |
+| `idb-no-stale-skill-id`       | A `rule-...` id with no skill directory                                           | B    | clean         |
 
 ## Phases
 
@@ -95,13 +95,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Doors and title | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Doors and title      | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

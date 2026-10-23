@@ -10,47 +10,47 @@ Area: meta, leaf. Sibling plans: `rule-meta-remix`, `rule-meta-next`,
 
 Inherited from the platform interviews, 2026-10-21:
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Identity | Thin leaf that delegates: Nitro, auto-imports and rendering modes stay, everything another skill owns becomes a pointer |
-| Shared owners | `rule-frontend-vue` owns the component model; `rule-styleguide-*` own markup, CSS and a11y; `rule-platform-web` owns deployment targets; `rule-toolchain-*` own the build |
-| Reach | Fixed here: the leaf links the dispatcher, the dispatcher lists the leaf |
-| Rule set | Six rules, all Tier B (advisory) |
-| Detection | Both: section and table parsing, plus injected `fileList` |
-| Fixtures | Shared corpus pairs plus skill trees on disk |
-| Flow | Failing test first |
-| Gates | Skill suite, corpora, catalog clean, census, lint and typecheck |
-| Commits | One per phase |
-| ADR | Two for the whole area: the meta family shape, the rule design |
-| Done | The leaf owns what it claims and the rules pass |
+| Question           | Decision                                                                                                                                                              |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass | **Plan only**                                                                                                                                                         |
+| Identity           | Thin leaf that delegates: Nitro, auto-imports and rendering modes stay, everything another skill owns becomes a pointer                                               |
+| Shared owners      | `rule-frontend-vue` owns the component model; `rule-styleguide-*` own markup, CSS and a11y; `rule-platform-web` owns deployment targets; `rule-toolchain-*` own the build |
+| Reach              | Fixed here: the leaf links the dispatcher, the dispatcher lists the leaf                                                                                              |
+| Rule set           | Six rules, all Tier B (advisory)                                                                                                                                      |
+| Detection          | Both: section and table parsing, plus injected `fileList`                                                                                                             |
+| Fixtures           | Shared corpus pairs plus skill trees on disk                                                                                                                          |
+| Flow               | Failing test first                                                                                                                                                    |
+| Gates              | Skill suite, corpora, catalog clean, census, lint and typecheck                                                                                                       |
+| Commits            | One per phase                                                                                                                                                         |
+| ADR                | Two for the whole area: the meta family shape, the rule design                                                                                                        |
+| Done               | The leaf owns what it claims and the rules pass                                                                                                                       |
 
 ## Evidence base (measured 2026-10-21)
 
 `skills/rule-meta-nuxt/SKILL.md` is **177 lines**, no `guardrails/`, no
 `references/`, no auxiliary folders.
 
-| Section | Lines | Owner today |
-| ------- | ----- | ----------- |
-| When to use | 5 | **keep** |
-| Core Rules | 4 | clean: a pointer at `rule-frontend-vue` and `rule-styleguide` |
-| File Tree Convention | ~30 | `rule-styleguide-file-tree`, with Nuxt's `pages/`, `server/` and `composables/` shape kept |
-| Routing | ~20 | **keep**: file-based routes with typed params |
-| SSR / SSG / Hybrid | ~15 | **keep**: rendering modes are the framework's own answer |
-| Server Routes (Nitro) | ~12 | **keep** |
-| Auto-Imports | ~12 | **keep**: the property that makes Nuxt feel different |
-| Modules | ~9 | **keep**, with a rule about how many is too many |
-| Data Fetching | ~15 | **keep**: `useAsyncData` and `useFetch` semantics |
-| Deployment | ~10 | `rule-platform-web` and `rule-devops` own the targets |
-| Quick Reference | ~17 | derived |
+| Section               | Lines | Owner today                                                                               |
+| --------------------- | ----- | ----------------------------------------------------------------------------------------- |
+| When to use           | 5     | **keep**                                                                                  |
+| Core Rules            | 4     | clean: a pointer at `rule-frontend-vue` and `rule-styleguide`                               |
+| File Tree Convention  | ~30   | `rule-styleguide-file-tree`, with Nuxt's `pages/`, `server/` and `composables/` shape kept |
+| Routing               | ~20   | **keep**: file-based routes with typed params                                             |
+| SSR / SSG / Hybrid    | ~15   | **keep**: rendering modes are the framework's own answer                                  |
+| Server Routes (Nitro) | ~12   | **keep**                                                                                  |
+| Auto-Imports          | ~12   | **keep**: the property that makes Nuxt feel different                                     |
+| Modules               | ~9    | **keep**, with a rule about how many is too many                                          |
+| Data Fetching         | ~15   | **keep**: `useAsyncData` and `useFetch` semantics                                         |
+| Deployment            | ~10   | `rule-platform-web` and `rule-devops` own the targets                                       |
+| Quick Reference       | ~17   | derived                                                                                   |
 
 ### Reach
 
-| Door | State |
-| ---- | ----- |
-| `rule` dispatcher | listed |
-| `rule-meta` dispatcher | the leaf does not link it, and `rule-meta` is itself missing from `rule` |
-| See also | `rule`, `rule-frontend`, `rule-styleguide`: no meta router, no deployment owner |
+| Door                  | State                                                                        |
+| --------------------- | ---------------------------------------------------------------------------- |
+| `rule` dispatcher      | listed                                                                       |
+| `rule-meta` dispatcher | the leaf does not link it, and `rule-meta` is itself missing from `rule`       |
+| See also              | `rule`, `rule-frontend`, `rule-styleguide`: no meta router, no deployment owner |
 
 ### One checked non-defect
 
@@ -67,14 +67,14 @@ and deployment to pointers; land around 130 lines.
 
 ## The six rules
 
-| id | Rejects | Reads | Tier | Today |
-| -- | ------- | ----- | ---- | ----- |
-| `meta-no-duplicate-core-rules` | A restatement of the markup and CSS rules | `code` | B | clean |
-| `meta-router-linked` | A meta leaf that does not link `rule-meta` | `code` | B | red: four leaves |
-| `meta-owner-named` | A delegated section naming no owner | `code` | B | red: deployment, file tree |
-| `meta-no-stale-file-ref` | A reference to a file that does not exist | `code` + `context.fileList` | B | clean |
-| `meta-no-stale-skill-id` | A `rule-...` id with no skill directory | `code` + `context.fileList` | B | clean |
-| `meta-scaffold-terminated` | A `## Project Scaffolding` block the parser cannot close | `code` | B | n/a: no scaffold block |
+| id                             | Rejects                                                  | Reads                       | Tier | Today                      |
+| ------------------------------ | -------------------------------------------------------- | --------------------------- | ---- | -------------------------- |
+| `meta-no-duplicate-core-rules` | A restatement of the markup and CSS rules                | `code`                      | B    | clean                      |
+| `meta-router-linked`           | A meta leaf that does not link `rule-meta`                | `code`                      | B    | red: four leaves           |
+| `meta-owner-named`             | A delegated section naming no owner                      | `code`                      | B    | red: deployment, file tree |
+| `meta-no-stale-file-ref`       | A reference to a file that does not exist                | `code` + `context.fileList` | B    | clean                      |
+| `meta-no-stale-skill-id`       | A `rule-...` id with no skill directory                   | `code` + `context.fileList` | B    | clean                      |
+| `meta-scaffold-terminated`     | A `## Project Scaffolding` block the parser cannot close | `code`                      | B    | n/a: no scaffold block     |
 
 ## Phase 0 - Decisions
 
@@ -114,13 +114,13 @@ and deployment to pointers; land around 130 lines.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Trim and wire | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Trim and wire        | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

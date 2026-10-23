@@ -10,21 +10,21 @@ plans: `rule-platform-auth`, `rule-platform-library`, `rule-platform-web`,
 
 ## Scope decisions (owner, 2026-10-21)
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Sibling plans | Assume `auth`, `library` and `desktop` are executed; this plan describes the state after them and owns no rename of its own |
-| Route table | Waits for the census generator planned in `rule-process`; no hand-written table survives the generator |
-| Mobile | Remove the promise **and** open the plan for `rule-platform-mobile` in this pass |
-| Rule set | The six router rules from `rule-process`, plus one this router needs: no platform is promised without a skill that serves it |
-| Tags | Only the area's own subject: `platform` and `index`. The detail tags live in the leaves |
-| Detection | Shared rule set; a rule that needs a child's rule set refers to it rather than copying it |
-| Fixtures | Shared corpus pairs plus router trees on disk |
-| Flow | Failing test first |
-| Gates | Router coverage, corpora, catalog clean, census, lint and typecheck, and a routing prompt per leaf |
-| Commits | One per phase |
-| ADR | Two: the area closure, the rule design |
-| Done | Full coverage and green rules |
+| Question           | Decision                                                                                                                    |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass | **Plan only**                                                                                                               |
+| Sibling plans      | Assume `auth`, `library` and `desktop` are executed; this plan describes the state after them and owns no rename of its own |
+| Route table        | Waits for the census generator planned in `rule-process`; no hand-written table survives the generator                       |
+| Mobile             | Remove the promise **and** open the plan for `rule-platform-mobile` in this pass                                             |
+| Rule set           | The six router rules from `rule-process`, plus one this router needs: no platform is promised without a skill that serves it |
+| Tags               | Only the area's own subject: `platform` and `index`. The detail tags live in the leaves                                     |
+| Detection          | Shared rule set; a rule that needs a child's rule set refers to it rather than copying it                                   |
+| Fixtures           | Shared corpus pairs plus router trees on disk                                                                               |
+| Flow               | Failing test first                                                                                                          |
+| Gates              | Router coverage, corpora, catalog clean, census, lint and typecheck, and a routing prompt per leaf                          |
+| Commits            | One per phase                                                                                                               |
+| ADR                | Two: the area closure, the rule design                                                                                      |
+| Done               | Full coverage and green rules                                                                                               |
 
 ## Evidence base (measured 2026-10-21)
 
@@ -32,20 +32,20 @@ plans: `rule-platform-auth`, `rule-platform-library`, `rule-platform-web`,
 a three-line Quick Selection, and three See-also links. It is the smallest
 router in the repository.
 
-| Fact | State |
-| ---- | ----- |
-| Children | 4: `rule-platform-auth`, `rule-platform-desktop`, `rule-platform-library`, `rule-platform-web` |
-| Rows in the table | 3: auth is missing, recorded in `ROUTER_GAPS` |
-| Quick Selection lines | 3: auth unreachable, and publishing routes to `library` |
-| Description | "Covers desktop, mobile (Expo), library authoring, and web conventions" |
-| Tags | platform, desktop, electron, mobile, expo, library, web, index |
-| Detector | `FRAMEWORK_SKILL_MAP` has no mobile or expo entry |
-| Guardrails | none |
+| Fact                  | State                                                                                      |
+| --------------------- | ------------------------------------------------------------------------------------------ |
+| Children              | 4: `rule-platform-auth`, `rule-platform-desktop`, `rule-platform-library`, `rule-platform-web` |
+| Rows in the table     | 3: auth is missing, recorded in `ROUTER_GAPS`                                              |
+| Quick Selection lines | 3: auth unreachable, and publishing routes to `library`                                    |
+| Description           | "Covers desktop, mobile (Expo), library authoring, and web conventions"                    |
+| Tags                  | platform, desktop, electron, mobile, expo, library, web, index                             |
+| Detector              | `FRAMEWORK_SKILL_MAP` has no mobile or expo entry                                          |
+| Guardrails            | none                                                                                       |
 
 ### The mobile promise, measured honestly
 
 The earlier count of "Expo appears in 12 skills" was wrong: most hits are the
-word *Export*. The real mentions are **two**, both in testing skills, both
+word _Export_. The real mentions are **two**, both in testing skills, both
 saying the same thing:
 
 - `rule-devops-testing`: "One exception: Expo and React Native. That stack uses
@@ -68,15 +68,15 @@ The owner's call here: the router keeps `platform` and `index` and nothing else.
 
 ## The seven rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `router-dead-link` | A relative link resolving to no `SKILL.md` | B | clean |
-| `router-tool-name` | A tool name the registry does not know | B | clean here |
-| `router-child-listed` | A skill under the area with no row | B | red: `rule-platform-auth` |
-| `router-quick-selection` | A row the Quick Selection cannot reach | B | red: auth, and publishing points at the wrong leaf |
-| `router-no-stale-name` | A reference to a skill that no longer exists | B | clean after the `rule-platform-agent` retirement |
-| `router-tag-single-owner` | A detail tag claimed by the router and its leaf | B | red: four tags |
-| `router-no-unsupported-platform` | A platform named in the description or tags with no skill serving it | B | red: mobile, Expo |
+| id                               | Rejects                                                              | Tier | Today                                              |
+| -------------------------------- | -------------------------------------------------------------------- | ---- | -------------------------------------------------- |
+| `router-dead-link`               | A relative link resolving to no `SKILL.md`                           | B    | clean                                              |
+| `router-tool-name`               | A tool name the registry does not know                               | B    | clean here                                         |
+| `router-child-listed`            | A skill under the area with no row                                   | B    | red: `rule-platform-auth`                           |
+| `router-quick-selection`         | A row the Quick Selection cannot reach                               | B    | red: auth, and publishing points at the wrong leaf |
+| `router-no-stale-name`           | A reference to a skill that no longer exists                         | B    | clean after the `rule-platform-agent` retirement    |
+| `router-tag-single-owner`        | A detail tag claimed by the router and its leaf                      | B    | red: four tags                                     |
+| `router-no-unsupported-platform` | A platform named in the description or tags with no skill serving it | B    | red: mobile, Expo                                  |
 
 The first six come from `rule-process` and are shared, not copied: this router
 registers the same rule objects. The seventh is new and belongs to any router
@@ -138,14 +138,14 @@ that advertises a platform.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Open the mobile plan | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 4 - Finish the door | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 5 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Open the mobile plan | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 4 - Finish the door      | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 5 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T1-plan` - `gemini-4-argon` (high). Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

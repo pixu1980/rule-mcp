@@ -19,14 +19,14 @@ agent spawns it. `-h, --help` works on every command; `-v, --version` prints
 the package version from anywhere. An error exits 1 and prints to stderr;
 `--help` exits 0.
 
-| Command                                            | Options | What it does                                                                              |
-| -------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------- |
+| Command                                      | Options | What it does                                                                              |
+| -------------------------------------------- | ------- | ----------------------------------------------------------------------------------------- |
 | [`help`](#rule-mcp-help)                     | 0       | Show the full usage guide                                                                 |
 | [`serve`](#rule-mcp-serve)                   | 4       | Start the MCP server (STDIO by default)                                                   |
 | [`up`](#rule-mcp-up)                         | 1       | Same as "serve --transport sse" (on-demand HTTP daemon)                                   |
 | [`daemon`](#rule-mcp-daemon)                 | 1       | Manage the MCP daemon (process and native platform services)                              |
-| [`install`](#rule-mcp-install)               | 26      | Install rule-mcp into an agent/IDE (edits mcp.json)                                 |
-| [`uninstall`](#rule-mcp-uninstall)           | 7       | Remove rule-mcp from an agent/IDE                                                   |
+| [`install`](#rule-mcp-install)               | 26      | Install rule-mcp into an agent/IDE (edits mcp.json)                                       |
+| [`uninstall`](#rule-mcp-uninstall)           | 7       | Remove rule-mcp from an agent/IDE                                                         |
 | [`setup`](#rule-mcp-setup)                   | 29      | Full-screen install/uninstall wizard (falls back to flags when piped)                     |
 | [`tools`](#rule-mcp-tools)                   | 1       | List or call MCP tools directly                                                           |
 | [`config`](#rule-mcp-config)                 | 5       | Print the mcp.json snippet, or manage RULE_MCP_* env vars with `config env`                    |

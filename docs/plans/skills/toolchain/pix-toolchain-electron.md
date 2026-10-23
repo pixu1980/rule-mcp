@@ -17,15 +17,15 @@ plugins that do not exist (`rule-platform-desktop/electron`, `/tauri`,
 `/neutralino`). Its plan (`rule-platform-desktop`, phase 4) turns the first two
 into real skills. The material to move:
 
-| Section in `rule-platform-desktop` | Lines | Destination |
-| --------------------------------- | ----: | ----------- |
-| Main process patterns, IPC modules, barrel | ~70 | body |
-| Preload and context bridge, renderer mocking | ~45 | body |
-| Native APIs (fs, child process, shell, windows, PDF) | ~65 | `references/native-apis.md` |
-| Packaging with electron-builder, targets, CSP | ~60 | `references/packaging.md` |
-| Auto-update (electron-updater), code signing, notarization | ~130 | `references/signing.md` |
-| CI release workflow, crash reporting, debugging | ~90 | `references/ci.md` |
-| Performance playbook and checklists (aux tree) | 580 | `references/` |
+| Section in `rule-platform-desktop`                          | Lines | Destination                 |
+| ---------------------------------------------------------- | ----: | --------------------------- |
+| Main process patterns, IPC modules, barrel                 |   ~70 | body                        |
+| Preload and context bridge, renderer mocking               |   ~45 | body                        |
+| Native APIs (fs, child process, shell, windows, PDF)       |   ~65 | `references/native-apis.md` |
+| Packaging with electron-builder, targets, CSP              |   ~60 | `references/packaging.md`   |
+| Auto-update (electron-updater), code signing, notarization |  ~130 | `references/signing.md`     |
+| CI release workflow, crash reporting, debugging            |   ~90 | `references/ci.md`          |
+| Performance playbook and checklists (aux tree)             |   580 | `references/`               |
 
 Electron is also the framework with the real signatures worth a rule: node
 integration left on in the renderer, `webSecurity` disabled, a preload exposing
@@ -33,13 +33,13 @@ integration left on in the renderer, `webSecurity` disabled, a preload exposing
 
 ## The five rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `electron-no-node-integration` | `nodeIntegration: true` in the renderer | B | n/a |
-| `electron-web-security-on` | `webSecurity: false` or a relaxed CSP | B | n/a |
-| `electron-preload-minimal` | A preload that exposes `ipcRenderer` or a whole module to the page | B | n/a |
-| `electron-update-signed` | An update path that does not verify a signature | B | n/a |
-| `electron-owner-named` | A section delegating packaging, signing or CI without naming the owner | B | n/a |
+| id                             | Rejects                                                                | Tier | Today |
+| ------------------------------ | ---------------------------------------------------------------------- | ---- | ----- |
+| `electron-no-node-integration` | `nodeIntegration: true` in the renderer                                | B    | n/a   |
+| `electron-web-security-on`     | `webSecurity: false` or a relaxed CSP                                  | B    | n/a   |
+| `electron-preload-minimal`     | A preload that exposes `ipcRenderer` or a whole module to the page     | B    | n/a   |
+| `electron-update-signed`       | An update path that does not verify a signature                        | B    | n/a   |
+| `electron-owner-named`         | A section delegating packaging, signing or CI without naming the owner | B    | n/a   |
 
 ## Phases
 
@@ -97,14 +97,14 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - The skill | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Wire it in | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 5 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - The skill            | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 4 - Wire it in           | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 5 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

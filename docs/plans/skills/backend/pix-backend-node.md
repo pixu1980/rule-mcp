@@ -37,21 +37,21 @@ leaf must agree**, and today the only thing connecting them is prose.
 
 ### Reach
 
-| Door | State |
-| ---- | ----- |
-| `rule-backend` area router | listed |
-| `rule` dispatcher | listed |
-| Inbound links | the area router, `rule-platform`, the GraphQL leaf |
+| Door                      | State                                             |
+| ------------------------- | ------------------------------------------------- |
+| `rule-backend` area router | listed                                            |
+| `rule` dispatcher          | listed                                            |
+| Inbound links             | the area router, `rule-platform`, the GraphQL leaf |
 
 ## The five rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `node-scaffold-matches-framework-rules` | A generated Express bootstrap that breaks `express-*` rules | B | n/a |
-| `node-assets-served` | A shipped template script no surface reaches and the body does not declare | B | **red**: two files |
-| `node-assets-run` | A template script with no test or dry run | B | **red** |
-| `node-env-validated-at-boot` | `process.env.X` read at use site instead of validated once at startup | B | n/a |
-| `node-owner-named` | A section delegating tests, containers or observability without naming the owner | B | partially red |
+| id                                      | Rejects                                                                          | Tier | Today              |
+| --------------------------------------- | -------------------------------------------------------------------------------- | ---- | ------------------ |
+| `node-scaffold-matches-framework-rules` | A generated Express bootstrap that breaks `express-*` rules                      | B    | n/a                |
+| `node-assets-served`                    | A shipped template script no surface reaches and the body does not declare       | B    | **red**: two files |
+| `node-assets-run`                       | A template script with no test or dry run                                        | B    | **red**            |
+| `node-env-validated-at-boot`            | `process.env.X` read at use site instead of validated once at startup            | B    | n/a                |
+| `node-owner-named`                      | A section delegating tests, containers or observability without naming the owner | B    | partially red      |
 
 ## Phases
 
@@ -103,13 +103,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Make the scaffold checkable | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                                  | Class       | Model                     | Why                            |
+| ------------------------------------- | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions                   | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red)        | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules                   | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Make the scaffold checkable | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 4 - Verification                | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

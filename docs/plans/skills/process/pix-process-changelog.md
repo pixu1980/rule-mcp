@@ -47,29 +47,29 @@ Read and measured in this session:
 
 Problems found:
 
-| Problem | Detail |
-| ------- | ------ |
-| skill disagrees with ADR 127 | the skill says never gate on freshness; this repository gates byte-identity with `--check` once tags define the release boundary, and skips only when there are no tags |
-| the hook is a second source | a 7-line `commit-msg` script is pasted in the skill while `src/core/commit` and `rule-styleguide-git` own the real hook; the two will drift |
-| zero skill guardrails | twelve checkable claims sit in prose while the author's own tests already enforce several of them outside the skill family |
-| quick selection omits it | the area router table lists changelog; the quick-selection guide does not, so routing by glance misses it |
-| KaC extension is undeclared | `Documentation` is not a Keep a Changelog section; Deprecated and Security are missing; the skill claims KaC without naming the house delta |
-| platform-library contradicts | library skill still says hand-write CHANGELOG / use changesets, which fights "generate from commits" |
-| formatter ignore is unchecked | the skill requires CHANGELOG on the formatter ignore list; this repository has no matching ignore entry for it under prettier/biome configs searched |
-| the checklist is a second source | seven items restate the body and will drift the moment either side moves |
+| Problem                          | Detail                                                                                                                                                                  |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| skill disagrees with ADR 127     | the skill says never gate on freshness; this repository gates byte-identity with `--check` once tags define the release boundary, and skips only when there are no tags |
+| the hook is a second source      | a 7-line `commit-msg` script is pasted in the skill while `src/core/commit` and `rule-styleguide-git` own the real hook; the two will drift                              |
+| zero skill guardrails            | twelve checkable claims sit in prose while the author's own tests already enforce several of them outside the skill family                                              |
+| quick selection omits it         | the area router table lists changelog; the quick-selection guide does not, so routing by glance misses it                                                               |
+| KaC extension is undeclared      | `Documentation` is not a Keep a Changelog section; Deprecated and Security are missing; the skill claims KaC without naming the house delta                             |
+| platform-library contradicts     | library skill still says hand-write CHANGELOG / use changesets, which fights "generate from commits"                                                                    |
+| formatter ignore is unchecked    | the skill requires CHANGELOG on the formatter ignore list; this repository has no matching ignore entry for it under prettier/biome configs searched                    |
+| the checklist is a second source | seven items restate the body and will drift the moment either side moves                                                                                                |
 
 ## Decisions
 
-| Question | Decision |
-| -------- | -------- |
-| Freshness gate | Align the skill with ADR 127: **shape always**; **byte-identity `--check` when tags exist**; skip when the clone has no tags. The skill's "never gate freshness" paragraph is rewritten, not kept |
-| Hook ownership | Delete the inline hook script. Point at `rule-styleguide-git` and at `rule-mcp commit-lint` / `src/core/commit`. One sentence: a documented hook that is not installed is not a hook |
-| KaC mapping | Keep `Documentation` for `docs` as a **documented house extension**. Add an explicit "delta from Keep a Changelog" note. Do not invent Deprecated/Security entries from commit types that do not exist in the Conventional Commit set this project uses |
-| Boundary | This skill owns generation policy, type→section mapping, entry shape, and when CI may check. `rule-styleguide-git` owns the commit rule. `rule-process-npm-release` owns the publish workflow. `rule-platform-library` links here for libraries that generate; changesets stay an acknowledged monorepo alternative, not the default advice |
-| Shape of the body | Cut to about 120 lines. Move the shallow-clone checkout snippet and the long conflict essay into `references/ci-and-checkout.md` |
-| Guardrails | Five rules (table below): two blocking, three advisory |
-| Router | Add a quick-selection line for changelog |
-| Delivery | Plan only |
+| Question          | Decision                                                                                                                                                                                                                                                                                                                                 |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Freshness gate    | Align the skill with ADR 127: **shape always**; **byte-identity `--check` when tags exist**; skip when the clone has no tags. The skill's "never gate freshness" paragraph is rewritten, not kept                                                                                                                                        |
+| Hook ownership    | Delete the inline hook script. Point at `rule-styleguide-git` and at `rule-mcp commit-lint` / `src/core/commit`. One sentence: a documented hook that is not installed is not a hook                                                                                                                                                      |
+| KaC mapping       | Keep `Documentation` for `docs` as a **documented house extension**. Add an explicit "delta from Keep a Changelog" note. Do not invent Deprecated/Security entries from commit types that do not exist in the Conventional Commit set this project uses                                                                                  |
+| Boundary          | This skill owns generation policy, type→section mapping, entry shape, and when CI may check. `rule-styleguide-git` owns the commit rule. `rule-process-npm-release` owns the publish workflow. `rule-platform-library` links here for libraries that generate; changesets stay an acknowledged monorepo alternative, not the default advice |
+| Shape of the body | Cut to about 120 lines. Move the shallow-clone checkout snippet and the long conflict essay into `references/ci-and-checkout.md`                                                                                                                                                                                                         |
+| Guardrails        | Five rules (table below): two blocking, three advisory                                                                                                                                                                                                                                                                                   |
+| Router            | Add a quick-selection line for changelog                                                                                                                                                                                                                                                                                                 |
+| Delivery          | Plan only                                                                                                                                                                                                                                                                                                                                |
 
 ## Workstream A - Align the skill with the generator and ADR 127
 
@@ -89,24 +89,24 @@ import in a skill-side fixture) fails when they diverge.
 
 ## Workstream B - Cut the body, keep the claims
 
-| Section of today's file | Goes to |
-| ----------------------- | ------- |
-| Inline `commit-msg` shell script | deleted; link to `rule-styleguide-git` |
-| Long pre-commit conflict essay | `references/ci-and-checkout.md` (keep a three-line summary in the body) |
-| checkout `fetch-depth: 0` YAML | same reference |
-| Seven-item checklist | the rule table (what a rule enforces) plus the two items a rule cannot see (installed hook; human confirms release cadence) |
+| Section of today's file          | Goes to                                                                                                                     |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Inline `commit-msg` shell script | deleted; link to `rule-styleguide-git`                                                                                       |
+| Long pre-commit conflict essay   | `references/ci-and-checkout.md` (keep a three-line summary in the body)                                                     |
+| checkout `fetch-depth: 0` YAML   | same reference                                                                                                              |
+| Seven-item checklist             | the rule table (what a rule enforces) plus the two items a rule cannot see (installed hook; human confirms release cadence) |
 
 Target: about 120 lines, no claim without a home.
 
 ## Workstream C - The five rules
 
-| Rule id | Rejects | Tier | Prior art |
-| ------- | ------- | ---- | --------- |
-| `changelog-header-generated` | a `CHANGELOG.md` whose opening lines are not the generated preamble (or a documented consumer equivalent marker) | A | `CHANGELOG_PREAMBLE`, `tests/docs/changelog-header.test.mjs` |
-| `changelog-entry-shape` | an entry line under a release heading that is not `- **scope**: subject (\`hash\`)` or the BREAKING form | A | `_render.mjs`, `tests/docs/changelog.test.mjs` |
-| `changelog-omitted-types-stated` | a generated-style changelog that never says which Conventional Commit types are left out | B | preamble paragraph in this repo |
-| `changelog-formatter-ignored` | prettier/biome (when present) that would format `CHANGELOG.md` | B | skill checklist item 6; currently unmet here |
-| `changelog-release-fetch-depth` | a release (or changelog-check) workflow whose checkout lacks `fetch-depth: 0` when it reads git history | A | `.github/workflows/ci.yml` / `release.yml` |
+| Rule id                          | Rejects                                                                                                          | Tier | Prior art                                                    |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---- | ------------------------------------------------------------ |
+| `changelog-header-generated`     | a `CHANGELOG.md` whose opening lines are not the generated preamble (or a documented consumer equivalent marker) | A    | `CHANGELOG_PREAMBLE`, `tests/docs/changelog-header.test.mjs` |
+| `changelog-entry-shape`          | an entry line under a release heading that is not `- **scope**: subject (\`hash\`)` or the BREAKING form         | A    | `_render.mjs`, `tests/docs/changelog.test.mjs`               |
+| `changelog-omitted-types-stated` | a generated-style changelog that never says which Conventional Commit types are left out                         | B    | preamble paragraph in this repo                              |
+| `changelog-formatter-ignored`    | prettier/biome (when present) that would format `CHANGELOG.md`                                                   | B    | skill checklist item 6; currently unmet here                 |
+| `changelog-release-fetch-depth`  | a release (or changelog-check) workflow whose checkout lacks `fetch-depth: 0` when it reads git history          | A    | `.github/workflows/ci.yml` / `release.yml`                   |
 
 False-positive notes the fixtures must carry: a hand-written CHANGELOG that
 explicitly opts out of generation (marker or frontmatter) skips the generated
@@ -138,13 +138,13 @@ touches git history does not need depth zero.
 Blocking first for the two that make a wrong release note; advisory for the
 rest.
 
-| Rule id | Rejects | Tier | Source |
-| ------- | ------- | ---- | ------ |
-| `changelog-header-generated` | missing generated preamble / marker | A | This skill; repo preamble |
-| `changelog-entry-shape` | free-prose bullets under a release heading | A | This skill; `_render.mjs` |
-| `changelog-release-fetch-depth` | shallow checkout on a history-reading release/check job | A | This skill; CI/release workflows |
-| `changelog-omitted-types-stated` | silent drop of chore/ci/test/… | B | This skill |
-| `changelog-formatter-ignored` | formatter mutates the generated file | B | This skill |
+| Rule id                          | Rejects                                                 | Tier | Source                           |
+| -------------------------------- | ------------------------------------------------------- | ---- | -------------------------------- |
+| `changelog-header-generated`     | missing generated preamble / marker                     | A    | This skill; repo preamble        |
+| `changelog-entry-shape`          | free-prose bullets under a release heading              | A    | This skill; `_render.mjs`        |
+| `changelog-release-fetch-depth`  | shallow checkout on a history-reading release/check job | A    | This skill; CI/release workflows |
+| `changelog-omitted-types-stated` | silent drop of chore/ci/test/…                          | B    | This skill                       |
+| `changelog-formatter-ignored`    | formatter mutates the generated file                    | B    | This skill                       |
 
 ## Phases
 
@@ -195,13 +195,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Evaluation and decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Align prose and references | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 2 - Boundaries | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 3 - Guardrails | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                                 | Class       | Model                     | Why                            |
+| ------------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Evaluation and decisions   | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Align prose and references | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 2 - Boundaries                 | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 3 - Guardrails                 | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 4 - Verification               | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

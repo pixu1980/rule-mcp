@@ -10,20 +10,20 @@ Area: devops, leaf. Sibling plans: `rule-devops-testing`, `rule-devops-docker`,
 
 Inherited from the platform, meta and frontend interviews, 2026-10-21:
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Identity | Keep the skill as it is: this is the leaf that already documents its own contradictions, and it is the only one in the area that does |
-| Rule set | **Create**: the leaf owns no guardrail. The rules encode the three statements it makes most strongly |
-| Agent tracing | The agent section stays here; it is the reason the skill is cited from the AI area |
-| Rule set size | Six rules, all Tier B (advisory) |
-| Detection | Both: section and table parsing, plus injected `fileList` |
-| Fixtures | Shared corpus pairs plus skill trees on disk |
-| Flow | Failing test first |
-| Gates | Skill suite, corpora, catalog clean, census, lint and typecheck |
-| Commits | One per phase |
-| ADR | Two for the whole area: the devops family shape, the rule design |
-| Done | The three strongest statements are enforceable and the rules pass |
+| Question           | Decision                                                                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass | **Plan only**                                                                                                                         |
+| Identity           | Keep the skill as it is: this is the leaf that already documents its own contradictions, and it is the only one in the area that does |
+| Rule set           | **Create**: the leaf owns no guardrail. The rules encode the three statements it makes most strongly                                  |
+| Agent tracing      | The agent section stays here; it is the reason the skill is cited from the AI area                                                    |
+| Rule set size      | Six rules, all Tier B (advisory)                                                                                                      |
+| Detection          | Both: section and table parsing, plus injected `fileList`                                                                             |
+| Fixtures           | Shared corpus pairs plus skill trees on disk                                                                                          |
+| Flow               | Failing test first                                                                                                                    |
+| Gates              | Skill suite, corpora, catalog clean, census, lint and typecheck                                                                       |
+| Commits            | One per phase                                                                                                                         |
+| ADR                | Two for the whole area: the devops family shape, the rule design                                                                      |
+| Done               | The three strongest statements are enforceable and the rules pass                                                                     |
 
 ## Evidence base (measured 2026-10-21)
 
@@ -63,14 +63,14 @@ keeps it stated.
 
 ## The six rules
 
-| id | Rejects | Reads | Tier | Today |
-| -- | ------- | ----- | ---- | ----- |
-| `observability-redaction-at-emission` | Logging or tracing code that sends a payload without masking at the emission point | `code` | B | n/a: no rules exist |
-| `observability-behavior-versions` | A trace record carrying no prompt, model, tool-schema or index version | `code` | B | n/a |
-| `observability-no-pii-logged` | `console.log` or a structured log call with a whole request or user object | `code` | B | n/a |
-| `observability-slo-defined` | An alert rule with no service objective behind it | `code` | B | n/a |
-| `observability-owner-named` | A section that delegates telemetry, evaluation or harness work without naming the owner | `code` | B | partially red |
-| `observability-no-stale-skill-id` | A `rule-...` id with no skill directory | `code` + `context.fileList` | B | clean |
+| id                                    | Rejects                                                                                 | Reads                       | Tier | Today               |
+| ------------------------------------- | --------------------------------------------------------------------------------------- | --------------------------- | ---- | ------------------- |
+| `observability-redaction-at-emission` | Logging or tracing code that sends a payload without masking at the emission point      | `code`                      | B    | n/a: no rules exist |
+| `observability-behavior-versions`     | A trace record carrying no prompt, model, tool-schema or index version                  | `code`                      | B    | n/a                 |
+| `observability-no-pii-logged`         | `console.log` or a structured log call with a whole request or user object              | `code`                      | B    | n/a                 |
+| `observability-slo-defined`           | An alert rule with no service objective behind it                                       | `code`                      | B    | n/a                 |
+| `observability-owner-named`           | A section that delegates telemetry, evaluation or harness work without naming the owner | `code`                      | B    | partially red       |
+| `observability-no-stale-skill-id`     | A `rule-...` id with no skill directory                                                  | `code` + `context.fileList` | B    | clean               |
 
 ## Phase 0 - Decisions
 
@@ -110,13 +110,13 @@ keeps it stated.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Keep the contradiction section and cite it | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                                                 | Class       | Model                     | Why                            |
+| ---------------------------------------------------- | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions                                  | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red)                       | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules                                  | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Keep the contradiction section and cite it | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 4 - Verification                               | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

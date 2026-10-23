@@ -18,25 +18,25 @@ adds MySQL-specific rules.
 
 What it states and nothing checks:
 
-| Statement | Enforced |
-| --------- | -------- |
-| InnoDB only; MyISAM is not an option | **no** |
-| `utf8mb4` everywhere, never `utf8`/`utf8mb3` | **no** |
-| Every FK gets an index (named section) | **no** |
-| `my.cnf` values are a starting point, not a copy-paste answer | **no** |
+| Statement                                                     | Enforced |
+| ------------------------------------------------------------- | -------- |
+| InnoDB only; MyISAM is not an option                          | **no**   |
+| `utf8mb4` everywhere, never `utf8`/`utf8mb3`                  | **no**   |
+| Every FK gets an index (named section)                        | **no**   |
+| `my.cnf` values are a starting point, not a copy-paste answer | **no**   |
 
 The first two are one-line regexes and are the two most common MySQL mistakes in
 generated schemas.
 
 ## The five rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `mysql-innodb-only` | `ENGINE=MyISAM` or a storage engine other than InnoDB | B | n/a |
-| `mysql-utf8mb4` | `utf8`, `utf8mb3` or a charset-less `CREATE TABLE` | B | n/a |
-| `mysql-index-foreign-key` | A `FOREIGN KEY` with no index in the same migration | B | n/a |
-| `mysql-owner-named` | A section delegating generic SQL, pooling or migrations without naming the owner | B | partially red |
-| `mysql-no-stale-skill-id` | A `rule-...` id with no skill directory | B | clean |
+| id                        | Rejects                                                                          | Tier | Today         |
+| ------------------------- | -------------------------------------------------------------------------------- | ---- | ------------- |
+| `mysql-innodb-only`       | `ENGINE=MyISAM` or a storage engine other than InnoDB                            | B    | n/a           |
+| `mysql-utf8mb4`           | `utf8`, `utf8mb3` or a charset-less `CREATE TABLE`                               | B    | n/a           |
+| `mysql-index-foreign-key` | A `FOREIGN KEY` with no index in the same migration                              | B    | n/a           |
+| `mysql-owner-named`       | A section delegating generic SQL, pooling or migrations without naming the owner | B    | partially red |
+| `mysql-no-stale-skill-id` | A `rule-...` id with no skill directory                                           | B    | clean         |
 
 ## Phases
 
@@ -86,13 +86,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Trim | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Trim                 | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

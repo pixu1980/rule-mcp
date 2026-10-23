@@ -274,15 +274,15 @@ Shared files: none: absorbed into the leaf plans named above
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions and scaffolding | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fix the six existing rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 2 - Shared security rules in rule-backend | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Runtime rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 4 - GraphQL rules in rule-backend-graphql | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 5 - Framework rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 6 - Promotion and documentation | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
+| Step                                           | Class      | Model                   | Why                            |
+| ---------------------------------------------- | ---------- | ----------------------- | ------------------------------ |
+| Phase 0 - Decisions and scaffolding            | `T1-plan`  | `gemini-4-argon` (high) | planning and prose that argues |
+| Phase 1 - Fix the six existing rules           | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 2 - Shared security rules in rule-backend | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 3 - Runtime rules                        | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 4 - GraphQL rules in rule-backend-graphql | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 5 - Framework rules                      | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 6 - Promotion and documentation          | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

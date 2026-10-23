@@ -34,14 +34,14 @@ Two measured defects:
 
 ## The six rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `sql-no-select-star` | `SELECT *` in application code, as opposed to an ad-hoc query | B | n/a |
-| `sql-migration-reversible` | A migration with no down path or no locking consideration | B | n/a |
-| `sql-index-foreign-key` | A foreign key with no index behind it | B | partly covered by `migration-safety` |
-| `sql-version-single-source` | The same dependency version stated in the title and in the router | B | **red**: SQLite and DuckDB |
-| `sql-owner-named` | A section delegating dialect specifics or the safety rules without naming the owner | B | partially red |
-| `sql-no-stale-skill-id` | A `rule-...` id with no skill directory | B | clean |
+| id                          | Rejects                                                                             | Tier | Today                                |
+| --------------------------- | ----------------------------------------------------------------------------------- | ---- | ------------------------------------ |
+| `sql-no-select-star`        | `SELECT *` in application code, as opposed to an ad-hoc query                       | B    | n/a                                  |
+| `sql-migration-reversible`  | A migration with no down path or no locking consideration                           | B    | n/a                                  |
+| `sql-index-foreign-key`     | A foreign key with no index behind it                                               | B    | partly covered by `migration-safety` |
+| `sql-version-single-source` | The same dependency version stated in the title and in the router                   | B    | **red**: SQLite and DuckDB           |
+| `sql-owner-named`           | A section delegating dialect specifics or the safety rules without naming the owner | B    | partially red                        |
+| `sql-no-stale-skill-id`     | A `rule-...` id with no skill directory                                              | B    | clean                                |
 
 ## Phases
 
@@ -94,13 +94,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Trim | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Trim                 | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

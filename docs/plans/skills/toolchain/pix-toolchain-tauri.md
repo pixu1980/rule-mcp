@@ -14,12 +14,12 @@ Siblings: `rule-toolchain-electron`, the eight build tool leaves, `rule-toolchai
 `rule-platform-desktop` documents Tauri in four places, all of them reachable only
 by reading 808 lines:
 
-| Section | Content |
-| ------- | ------- |
-| Tauri Patterns | IPC with Rust commands, frontend invocation, `tauri.conf.json` |
-| Auto-Update | the built-in updater and its plugin config |
-| Code Signing | the signing path shared with the desktop build |
-| Protocol Handling | deep links in `tauri.conf.json` |
+| Section           | Content                                                        |
+| ----------------- | -------------------------------------------------------------- |
+| Tauri Patterns    | IPC with Rust commands, frontend invocation, `tauri.conf.json` |
+| Auto-Update       | the built-in updater and its plugin config                     |
+| Code Signing      | the signing path shared with the desktop build                 |
+| Protocol Handling | deep links in `tauri.conf.json`                                |
 
 The same file advertises `rule-platform-desktop/tauri` as a skill plugin, and no
 such plugin, skill or directory exists. This plan is that plugin, named in the
@@ -27,12 +27,12 @@ area the owner chose.
 
 ## The four rules
 
-| id | Rejects | Tier | Today |
-| -- | ------- | ---- | ----- |
-| `tauri-command-allowlisted` | A Rust command reachable without an explicit allowlist entry | B | n/a |
-| `tauri-csp-configured` | A `tauri.conf.json` with no CSP | B | n/a |
-| `tauri-update-signed` | An updater configured without signature verification | B | n/a |
-| `tauri-owner-named` | A section delegating packaging, signing or CI without naming the owner | B | n/a |
+| id                          | Rejects                                                                | Tier | Today |
+| --------------------------- | ---------------------------------------------------------------------- | ---- | ----- |
+| `tauri-command-allowlisted` | A Rust command reachable without an explicit allowlist entry           | B    | n/a   |
+| `tauri-csp-configured`      | A `tauri.conf.json` with no CSP                                        | B    | n/a   |
+| `tauri-update-signed`       | An updater configured without signature verification                   | B    | n/a   |
+| `tauri-owner-named`         | A section delegating packaging, signing or CI without naming the owner | B    | n/a   |
 
 ## Phases
 
@@ -86,14 +86,14 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - The skill | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Wire it in | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 5 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - The skill            | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 4 - Wire it in           | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 5 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

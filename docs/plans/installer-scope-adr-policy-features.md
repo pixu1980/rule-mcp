@@ -309,8 +309,8 @@ Shared files: none: outside the skills graph
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
+| Step           | Class      | Model            | Why                                                      |
+| -------------- | ---------- | ---------------- | -------------------------------------------------------- |
 | the whole plan | `T3-rules` | `kimi-k2.7-code` | installer and ADR-policy code paths: small precise edits |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.

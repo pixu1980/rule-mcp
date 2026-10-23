@@ -8,35 +8,35 @@ Area: platform. Sibling plans: `rule-platform-web`, `rule-platform-library`
 
 ## Scope decisions (owner, 2026-10-21)
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Identity | `SKILL.md` becomes a thin navigable umbrella; the deep material moves to `references/` |
-| Aux files | Move into `references/` **and serve them**: unserved files are the bug, not their size |
-| Ghost plugins | Become real skills: `rule-toolchain-electron` and `rule-toolchain-tauri` |
-| Similar libraries | The owner asked which other candidates are worth evaluating; Phase 0 carries the measured shortlist and waits for a verdict |
-| Core rules | Collapse to one pointer line at the markup and CSS owners |
-| Rule set | Six rules, all Tier B (advisory) |
-| Detection | Both: section and table parsing, plus injected `fileList` |
-| Fixtures | Shared corpus pairs plus skill trees on disk |
-| Flow | Failing test first |
-| Gates | Skill suite, corpora, catalog clean, detector intact, census, lint and typecheck |
-| Commits | One per phase |
-| ADR | Two: the skill shape and the plugin decision, plus the rule design |
-| Done | Ghost plugins resolved and rules green |
+| Question           | Decision                                                                                                                    |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass | **Plan only**                                                                                                               |
+| Identity           | `SKILL.md` becomes a thin navigable umbrella; the deep material moves to `references/`                                      |
+| Aux files          | Move into `references/` **and serve them**: unserved files are the bug, not their size                                      |
+| Ghost plugins      | Become real skills: `rule-toolchain-electron` and `rule-toolchain-tauri`                                                      |
+| Similar libraries  | The owner asked which other candidates are worth evaluating; Phase 0 carries the measured shortlist and waits for a verdict |
+| Core rules         | Collapse to one pointer line at the markup and CSS owners                                                                   |
+| Rule set           | Six rules, all Tier B (advisory)                                                                                            |
+| Detection          | Both: section and table parsing, plus injected `fileList`                                                                   |
+| Fixtures           | Shared corpus pairs plus skill trees on disk                                                                                |
+| Flow               | Failing test first                                                                                                          |
+| Gates              | Skill suite, corpora, catalog clean, detector intact, census, lint and typecheck                                            |
+| Commits            | One per phase                                                                                                               |
+| ADR                | Two: the skill shape and the plugin decision, plus the rule design                                                          |
+| Done               | Ghost plugins resolved and rules green                                                                                      |
 
 ## Evidence base (measured 2026-10-21)
 
 `skills/rule-platform-desktop/SKILL.md` is **808 lines**, the largest skill in
 the catalog, and the only one with a full auxiliary tree:
 
-| Folder | Files | Lines |
-| ------ | ----- | ----- |
-| `checklists/` | 2 | 78 |
-| `knowledge/` | 1 | 301 |
-| `prompts/` | 4 | 103 |
-| `templates/` | 3 | 98 |
-| **total** | **10** | **580** |
+| Folder        | Files  | Lines   |
+| ------------- | ------ | ------- |
+| `checklists/` | 2      | 78      |
+| `knowledge/`  | 1      | 301     |
+| `prompts/`    | 4      | 103     |
+| `templates/`  | 3      | 98      |
+| **total**     | **10** | **580** |
 
 ### Nothing serves them
 
@@ -64,16 +64,16 @@ a consumer is.
 
 ### Demand, measured across the catalog
 
-| Candidate | Skills mentioning it | Verdict this plan proposes |
-| --------- | -------------------: | -------------------------- |
-| Electron | 5 | skill: already the depth here, now named |
-| Tauri | 1 | skill: the owner asked for it; content already exists |
-| Neutralinojs | 1 (this skill only) | no skill: no demand beyond the roadmap line |
-| Wails, NW.js | 0 | no skill: no demand at all |
-| Expo / React Native | 12 / 5 | **`rule-platform-mobile` is the real gap** |
-| Capacitor | 0 | no skill yet; watch |
-| Vitest / Playwright | 9 / 13 | owned by `rule-devops-testing`; no split |
-| webpack / esbuild / Bun | 6 / 5 / 7 | build-tool candidates, none urgent |
+| Candidate               | Skills mentioning it | Verdict this plan proposes                            |
+| ----------------------- | -------------------: | ----------------------------------------------------- |
+| Electron                |                    5 | skill: already the depth here, now named              |
+| Tauri                   |                    1 | skill: the owner asked for it; content already exists |
+| Neutralinojs            |  1 (this skill only) | no skill: no demand beyond the roadmap line           |
+| Wails, NW.js            |                    0 | no skill: no demand at all                            |
+| Expo / React Native     |               12 / 5 | **`rule-platform-mobile` is the real gap**             |
+| Capacitor               |                    0 | no skill yet; watch                                   |
+| Vitest / Playwright     |               9 / 13 | owned by `rule-devops-testing`; no split               |
+| webpack / esbuild / Bun |            6 / 5 / 7 | build-tool candidates, none urgent                    |
 
 The shortlist is deliberately short: the catalog already carries 84 skills and
 the landscape research that shaped the `rule-method` plan warned against adding
@@ -98,18 +98,18 @@ renderer), the security guards, and a pointer per `references/` file.
 
 `references/` receives, from the body and from the four folders:
 
-| Reference | Content today |
-| --------- | ------------- |
-| `main-process.md` | thin entry point, IPC handler modules, barrel |
-| `preload.md` | context bridge rules, renderer mocking |
-| `native-apis.md` | fs, child process, shell, window management, PDF |
-| `packaging.md` | Forge vs builder, package.json skeleton, targets, CSP |
-| `auto-update.md` | the dependency chain, electron-updater, Tauri updater |
-| `signing.md` | macOS sign and notarize, Windows SmartScreen, distribution |
-| `ci.md` | the release workflow, secrets |
-| `tauri.md` | Rust commands, config, deep links |
-| `knowledge/` content | the performance playbook (301 lines) |
-| `checklists/`, `prompts/`, `templates/` | moved as-is, then served |
+| Reference                               | Content today                                              |
+| --------------------------------------- | ---------------------------------------------------------- |
+| `main-process.md`                       | thin entry point, IPC handler modules, barrel              |
+| `preload.md`                            | context bridge rules, renderer mocking                     |
+| `native-apis.md`                        | fs, child process, shell, window management, PDF           |
+| `packaging.md`                          | Forge vs builder, package.json skeleton, targets, CSP      |
+| `auto-update.md`                        | the dependency chain, electron-updater, Tauri updater      |
+| `signing.md`                            | macOS sign and notarize, Windows SmartScreen, distribution |
+| `ci.md`                                 | the release workflow, secrets                              |
+| `tauri.md`                              | Rust commands, config, deep links                          |
+| `knowledge/` content                    | the performance playbook (301 lines)                       |
+| `checklists/`, `prompts/`, `templates/` | moved as-is, then served                                   |
 
 ## Serving the auxiliary files
 
@@ -125,14 +125,14 @@ docs-accuracy test move with it:
 
 ## The six rules
 
-| id | Rejects | Reads | Tier | Today |
-| -- | ------- | ----- | ---- | ----- |
-| `desktop-no-ghost-plugin` | A plugin path (`rule-x/y`) with no matching skill or folder | `code` + `context.fileList` | B | red: three rows |
-| `desktop-aux-served` | An auxiliary file no surface reaches and the body does not declare | `context.fileList` | B | red: 10 files |
-| `desktop-no-duplicate-core-rules` | A restatement of the markup and CSS rules | `code` | B | red: nine rules |
-| `desktop-owner-named` | A delegating section naming no owner | `code` | B | partially red |
-| `desktop-no-stale-skill-id` | A `rule-...` id with no skill directory | `code` + `context.fileList` | B | clean |
-| `desktop-platform-matrix` | A target matrix that disagrees with the framework table | `code` (tables) | B | red once the plugin column changes |
+| id                                | Rejects                                                            | Reads                       | Tier | Today                              |
+| --------------------------------- | ------------------------------------------------------------------ | --------------------------- | ---- | ---------------------------------- |
+| `desktop-no-ghost-plugin`         | A plugin path (`rule-x/y`) with no matching skill or folder         | `code` + `context.fileList` | B    | red: three rows                    |
+| `desktop-aux-served`              | An auxiliary file no surface reaches and the body does not declare | `context.fileList`          | B    | red: 10 files                      |
+| `desktop-no-duplicate-core-rules` | A restatement of the markup and CSS rules                          | `code`                      | B    | red: nine rules                    |
+| `desktop-owner-named`             | A delegating section naming no owner                               | `code`                      | B    | partially red                      |
+| `desktop-no-stale-skill-id`       | A `rule-...` id with no skill directory                             | `code` + `context.fileList` | B    | clean                              |
+| `desktop-platform-matrix`         | A target matrix that disagrees with the framework table            | `code` (tables)             | B    | red once the plugin column changes |
 
 ## Phase 0 - Decisions and the shortlist
 
@@ -197,15 +197,15 @@ docs-accuracy test move with it:
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions and the shortlist | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - References and the served surface | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 4 - Real plugin skills | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 5 - Neighbours | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 6 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                                        | Class       | Model                     | Why                            |
+| ------------------------------------------- | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions and the shortlist       | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red)              | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules                         | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - References and the served surface | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 4 - Real plugin skills                | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 5 - Neighbours                        | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 6 - Verification                      | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

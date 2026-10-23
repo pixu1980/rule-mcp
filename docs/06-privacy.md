@@ -26,17 +26,17 @@ All paths resolve under the runtime home `~/.rule-mcp/`
 relocates mutable state). One per-project directory is recorded for the current
 project (`<slug>` below).
 
-| Data category                                                                       | Where                                                     | Retention                                      | Kill switch                                 |
-| ----------------------------------------------------------------------------------- | --------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------- |
+| Data category                                                                       | Where                                               | Retention                                      | Kill switch                                 |
+| ----------------------------------------------------------------------------------- | --------------------------------------------------- | ---------------------------------------------- | ------------------------------------------- |
 | Tool call metadata (tool name, timestamps, latency, byte/token counts, error flags) | `~/.rule-mcp/projects/<slug>/telemetry.jsonl`       | 7 days raw, then rolled up to daily aggregates | `RULE_MCP_NO_TELEMETRY=1`             |
-| Prompt text, verbatim (only while `prompts` are enabled)                            | same file, `prompt` field                                 | same 7 days                                    | `RULE_MCP_NO_PROMPTS=1`               |
-| File paths passed to tools                                                          | same file, `path` field (clear text locally)              | same 7 days                                    | `RULE_MCP_NO_TELEMETRY=1`             |
+| Prompt text, verbatim (only while `prompts` are enabled)                            | same file, `prompt` field                           | same 7 days                                    | `RULE_MCP_NO_PROMPTS=1`               |
+| File paths passed to tools                                                          | same file, `path` field (clear text locally)        | same 7 days                                    | `RULE_MCP_NO_TELEMETRY=1`             |
 | Daily rollups (counts only)                                                         | `~/.rule-mcp/projects/<slug>/telemetry-rollup.json` | kept until deleted                             | `RULE_MCP_NO_TELEMETRY=1`             |
 | Per-project id                                                                      | `~/.rule-mcp/projects/<slug>/project-id`            | kept until deleted                             | `RULE_MCP_NO_TELEMETRY=1`             |
 | Agent-declared usage (sidecar)                                                      | `~/.rule-mcp/projects/<slug>/usage.json`            | kept until deleted                             | don't write it (sidecar opt-in)             |
 | Exported recordings                                                                 | `~/.rule-mcp/projects/<slug>/exports/*.flight`      | newest 10, or everything within 90 days        | do not export                               |
 | Bearer token for SSE/HTTP                                                           | `~/.rule-mcp/state/sse-token` (mode 0600, dir 0700) | until deleted                                  | n/a - required for authenticated transports |
-| Failed-auth audit lines                                                             | stderr of the server process                              | wherever your process manager keeps stderr     | n/a - security logging                      |
+| Failed-auth audit lines                                                             | stderr of the server process                        | wherever your process manager keeps stderr     | n/a - security logging                      |
 
 A recording never enters a repository: it is written under the runtime home,
 filed per project (ADR 082), so there is nothing in a checkout to ignore and

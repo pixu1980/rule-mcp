@@ -10,21 +10,21 @@ served-references surface this plan needs), `rule-platform-web`,
 
 ## Scope decisions (owner, 2026-10-21)
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Identity | Thin body plus `references/`: the body keeps the choice and the matrix, the flows and patterns move out |
-| Boundary | This skill owns **strategy and protocols**; `rule-backend-security` owns the **lifecycle** |
-| Reach | All three fixes land here: the router row, the dispatcher row, and the router description that never names auth |
-| Dated claims | Both: a year-stamped claim needs a named source, and the skill records when it was last reviewed |
-| Rule set | Six rules, all Tier B (advisory) |
-| Detection | Both: section and table parsing, plus injected `fileList` |
-| Fixtures | Shared corpus pairs plus skill trees on disk |
-| Flow | Failing test first |
-| Gates | Skill suite, corpora, catalog clean, router coverage, census, lint and typecheck |
-| Commits | One per phase |
-| ADR | Two: the auth/security boundary, the rule design |
-| Done | The doors are open and the rules pass |
+| Question           | Decision                                                                                                        |
+| ------------------ | --------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass | **Plan only**                                                                                                   |
+| Identity           | Thin body plus `references/`: the body keeps the choice and the matrix, the flows and patterns move out         |
+| Boundary           | This skill owns **strategy and protocols**; `rule-backend-security` owns the **lifecycle**                       |
+| Reach              | All three fixes land here: the router row, the dispatcher row, and the router description that never names auth |
+| Dated claims       | Both: a year-stamped claim needs a named source, and the skill records when it was last reviewed                |
+| Rule set           | Six rules, all Tier B (advisory)                                                                                |
+| Detection          | Both: section and table parsing, plus injected `fileList`                                                       |
+| Fixtures           | Shared corpus pairs plus skill trees on disk                                                                    |
+| Flow               | Failing test first                                                                                              |
+| Gates              | Skill suite, corpora, catalog clean, router coverage, census, lint and typecheck                                |
+| Commits            | One per phase                                                                                                   |
+| ADR                | Two: the auth/security boundary, the rule design                                                                |
+| Done               | The doors are open and the rules pass                                                                           |
 
 ## Cross-plan dependencies
 
@@ -46,13 +46,13 @@ served-references surface this plan needs), `rule-platform-web`,
 
 ### It has no doors at all
 
-| Door | State |
-| ---- | ----- |
-| `rule-platform` router table | missing: recorded in `scripts/data/router-gaps.data.mjs` |
-| `rule` dispatcher table | missing: one of the 22 unlisted skills |
-| `rule-platform` description | does not mention auth: "Covers desktop, mobile (Expo), library authoring, and web conventions" |
-| `rule-platform` Quick Selection | no line reaches auth |
-| Inbound links | one skill mentions it in passing; the only other hits are generated docs |
+| Door                           | State                                                                                          |
+| ------------------------------ | ---------------------------------------------------------------------------------------------- |
+| `rule-platform` router table    | missing: recorded in `scripts/data/router-gaps.data.mjs`                                       |
+| `rule` dispatcher table         | missing: one of the 22 unlisted skills                                                         |
+| `rule-platform` description     | does not mention auth: "Covers desktop, mobile (Expo), library authoring, and web conventions" |
+| `rule-platform` Quick Selection | no line reaches auth                                                                           |
+| Inbound links                  | one skill mentions it in passing; the only other hits are generated docs                       |
 
 A 675-line skill that no reader can reach from either index is the strongest
 single finding in this plan series. It was written well and never wired.
@@ -65,13 +65,13 @@ remembered devices, step-up auth, and CSRF", and carries the
 `authentication` tag. This skill covers sessions, JWT, token storage, CSRF and
 cookie flags too. Measured overlap:
 
-| Topic | In `rule-platform-auth` | In `rule-backend-security` |
-| ----- | ---------------------- | ------------------------- |
-| JWT | comparison, revocation, hygiene | "a JWT is trustworthy because it decoded" |
-| CSRF | double-submit pattern | named in the description |
-| `HttpOnly` / `SameSite` | session and token storage rules | session assumptions |
-| OAuth | full flows | mentioned, not owned |
-| Argon2, passkeys | only here | absent |
+| Topic                   | In `rule-platform-auth`          | In `rule-backend-security`                 |
+| ----------------------- | ------------------------------- | ----------------------------------------- |
+| JWT                     | comparison, revocation, hygiene | "a JWT is trustworthy because it decoded" |
+| CSRF                    | double-submit pattern           | named in the description                  |
+| `HttpOnly` / `SameSite` | session and token storage rules | session assumptions                       |
+| OAuth                   | full flows                      | mentioned, not owned                      |
+| Argon2, passkeys        | only here                       | absent                                    |
 
 The owner's split: strategy and protocols here, lifecycle and infrastructure
 there. Both skills lose a paragraph and gain a link.
@@ -101,26 +101,26 @@ decision matrix by archetype, the guards, the pointers. Roughly 200 lines.
 
 `references/` receives the implementation material:
 
-| Reference | From today's body |
-| --------- | ----------------- |
-| `sessions.md` | implementation pattern, session ID rules, trade-offs, Argon2 |
-| `jwt.md` | revocation, implementation pattern, token storage rules |
-| `oauth-oidc.md` | the standard, when it is overkill, authorization code + PKCE |
-| `passkeys.md` | why, state of support, enrollment, authentication, recovery |
-| `providers.md` | build vs buy, the common hybrid architecture |
-| `csrf.md` | the double-submit pattern for SPAs |
-| `ux-failures.md` | the failure modes backend logs miss |
+| Reference        | From today's body                                            |
+| ---------------- | ------------------------------------------------------------ |
+| `sessions.md`    | implementation pattern, session ID rules, trade-offs, Argon2 |
+| `jwt.md`         | revocation, implementation pattern, token storage rules      |
+| `oauth-oidc.md`  | the standard, when it is overkill, authorization code + PKCE |
+| `passkeys.md`    | why, state of support, enrollment, authentication, recovery  |
+| `providers.md`   | build vs buy, the common hybrid architecture                 |
+| `csrf.md`        | the double-submit pattern for SPAs                           |
+| `ux-failures.md` | the failure modes backend logs miss                          |
 
 ## The six rules
 
-| id | Rejects | Reads | Tier | Today |
-| -- | ------- | ----- | ---- | ----- |
-| `auth-reachable` | A skill that no area router table lists | `code` + `context.fileList` | B | red: this skill |
-| `auth-no-duplicate-security-rules` | JWT, CSRF or cookie-flag rules restated outside the owner decided in ADR | `code` | B | red: both skills |
-| `auth-owner-named` | A delegated section naming no owner | `code` | B | red: no link to `rule-backend-security` today |
-| `auth-no-stale-skill-id` | A `rule-...` id with no skill directory | `code` + `context.fileList` | B | clean |
-| `auth-dated-claims` | A year in the text with no source named nearby | `code` | B | red: two claims |
-| `auth-matrix-single-source` | The archetype matrix restated in a reference or a second table | `code` (tables) | B | clean; the split creates the risk |
+| id                                 | Rejects                                                                  | Reads                       | Tier | Today                                        |
+| ---------------------------------- | ------------------------------------------------------------------------ | --------------------------- | ---- | -------------------------------------------- |
+| `auth-reachable`                   | A skill that no area router table lists                                  | `code` + `context.fileList` | B    | red: this skill                              |
+| `auth-no-duplicate-security-rules` | JWT, CSRF or cookie-flag rules restated outside the owner decided in ADR | `code`                      | B    | red: both skills                             |
+| `auth-owner-named`                 | A delegated section naming no owner                                      | `code`                      | B    | red: no link to `rule-backend-security` today |
+| `auth-no-stale-skill-id`           | A `rule-...` id with no skill directory                                   | `code` + `context.fileList` | B    | clean                                        |
+| `auth-dated-claims`                | A year in the text with no source named nearby                           | `code`                      | B    | red: two claims                              |
+| `auth-matrix-single-source`        | The archetype matrix restated in a reference or a second table           | `code` (tables)             | B    | clean; the split creates the risk            |
 
 ## Phase 0 - Decisions
 
@@ -181,15 +181,15 @@ decision matrix by archetype, the guards, the pointers. Roughly 200 lines.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Split the body | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Resolve the boundary | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 5 - Open the doors | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 6 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                           | Class       | Model                     | Why                            |
+| ------------------------------ | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions            | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red) | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules            | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Split the body       | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Resolve the boundary | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 5 - Open the doors       | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 6 - Verification         | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T5-bulk` - `minimax-m3.1-flash`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

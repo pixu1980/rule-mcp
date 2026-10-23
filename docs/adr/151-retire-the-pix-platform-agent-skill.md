@@ -11,7 +11,7 @@ rule-platform-agent scaffolded AI-agent projects in a framework-agnostic way: st
 
 ## Decision
 
-Delete skills/rule-platform-agent and every live trace of it: the two router rows, the three dispatcher references, the rule-ai table row and quick-selection line, the cross-reference in rule-ai-agent-architecture, the auth persona's evidence list, and the plan index row. Regenerate the census documents and the snapshot. Keep the historical records untouched: ADR 026 and CHANGELOG.md are history, and rewriting them would make the record lie. Add src/core/skills/__tests__/_retired-skills.test.mjs as the tombstone: a retired id may have no directory, no link from any SKILL.md, persona or plan index, and no minted tool.
+Delete skills/rule-platform-agent and every live trace of it: the two router rows, the three dispatcher references, the rule-ai table row and quick-selection line, the cross-reference in rule-ai-agent-architecture, the auth persona's evidence list, and the plan index row. Regenerate the census documents and the snapshot. Keep the historical records untouched: ADR 026 and CHANGELOG.md are history, and rewriting them would make the record lie. Add src/core/skills/**tests**/_retired-skills.test.mjs as the tombstone: a retired id may have no directory, no link from any SKILL.md, persona or plan index, and no minted tool.
 
 ## Consequences
 

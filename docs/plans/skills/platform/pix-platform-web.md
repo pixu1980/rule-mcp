@@ -8,20 +8,20 @@ plans: `rule-process-adr` and `rule-process` (same guardrail shape).
 
 ## Scope decisions (owner, 2026-10-21)
 
-| Question | Decision |
-| -------- | -------- |
-| Scope of this pass | **Plan only** |
-| Identity | A thin umbrella that delegates: the skill drops to roughly 80 lines, keeps only what nobody else owns, and points at the owner for the rest |
-| Framework chooser | `rule-frontend` owns the choice; `rule-platform-web` links it and stops keeping a second copy |
-| Scaffold block | Moves into the template catalog; the skill stops carrying a project template in prose |
-| Rule set | Six rules, all Tier B (advisory) |
-| Detection | Both: section and table parsing, plus injected `fileList` |
-| Fixtures | Shared corpus pairs plus skill trees on disk |
-| Flow | Failing test first |
-| Gates | Skill suite, corpora, whole catalog clean, census, lint and typecheck, neighbour links |
-| Commits | One per phase |
-| ADR | Two: the umbrella boundary, the rule design |
-| Done | The identity is decided and the rules pass |
+| Question           | Decision                                                                                                                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass | **Plan only**                                                                                                                               |
+| Identity           | A thin umbrella that delegates: the skill drops to roughly 80 lines, keeps only what nobody else owns, and points at the owner for the rest |
+| Framework chooser  | `rule-frontend` owns the choice; `rule-platform-web` links it and stops keeping a second copy                                                 |
+| Scaffold block     | Moves into the template catalog; the skill stops carrying a project template in prose                                                       |
+| Rule set           | Six rules, all Tier B (advisory)                                                                                                            |
+| Detection          | Both: section and table parsing, plus injected `fileList`                                                                                   |
+| Fixtures           | Shared corpus pairs plus skill trees on disk                                                                                                |
+| Flow               | Failing test first                                                                                                                          |
+| Gates              | Skill suite, corpora, whole catalog clean, census, lint and typecheck, neighbour links                                                      |
+| Commits            | One per phase                                                                                                                               |
+| ADR                | Two: the umbrella boundary, the rule design                                                                                                 |
+| Done               | The identity is decided and the rules pass                                                                                                  |
 
 ## Evidence base (measured 2026-10-21)
 
@@ -31,25 +31,25 @@ end.
 
 ### What the body actually contains, and who owns each part
 
-| Section | Lines | Real owner today |
-| ------- | ----- | ---------------- |
-| Core Rules (9 rules) | 9 | `rule-styleguide-css`, `rule-styleguide-html`, `rule-styleguide-file-tree` |
-| Framework Selection (6 rows) | ~9 | `rule-frontend` |
-| File Tree Convention | ~25 | `rule-styleguide-file-tree` |
-| Progressive Enhancement and PWA | ~7 | **nobody else: keep** |
-| Code Splitting | ~7 | `rule-toolchain-vite` |
-| Environment Configuration | ~8 | `rule-styleguide-configuration` |
-| Error Handling | ~6 | `rule-backend` (response shape) and `rule-devops-observability` |
-| Performance Budgets | ~10 | **nobody else: keep** |
-| Security (CSP, headers) | ~6 | `rule-frontend-*` security sections, `rule-devops-docker` |
-| SEO and Social | ~7 | **nobody else: keep** |
-| Build and Deploy | ~7 | `rule-devops`, `rule-toolchain-*` |
-| Accessibility | ~11 | `rule-styleguide-a11y` |
-| Internationalization | ~9 | `rule-styleguide-i18n` |
-| Browser APIs instead of a dependency | ~65 | `rule-styleguide-baseline` links here as the owner |
-| Design System and CSS | ~15 | `rule-ui-design-system`, `rule-styleguide-css` |
-| Quick Reference | ~20 | derived from the sections above |
-| Scaffold block | 28 | the template catalog |
+| Section                              | Lines | Real owner today                                                        |
+| ------------------------------------ | ----- | ----------------------------------------------------------------------- |
+| Core Rules (9 rules)                 | 9     | `rule-styleguide-css`, `rule-styleguide-html`, `rule-styleguide-file-tree` |
+| Framework Selection (6 rows)         | ~9    | `rule-frontend`                                                          |
+| File Tree Convention                 | ~25   | `rule-styleguide-file-tree`                                              |
+| Progressive Enhancement and PWA      | ~7    | **nobody else: keep**                                                   |
+| Code Splitting                       | ~7    | `rule-toolchain-vite`                                                    |
+| Environment Configuration            | ~8    | `rule-styleguide-configuration`                                          |
+| Error Handling                       | ~6    | `rule-backend` (response shape) and `rule-devops-observability`           |
+| Performance Budgets                  | ~10   | **nobody else: keep**                                                   |
+| Security (CSP, headers)              | ~6    | `rule-frontend-*` security sections, `rule-devops-docker`                 |
+| SEO and Social                       | ~7    | **nobody else: keep**                                                   |
+| Build and Deploy                     | ~7    | `rule-devops`, `rule-toolchain-*`                                         |
+| Accessibility                        | ~11   | `rule-styleguide-a11y`                                                   |
+| Internationalization                 | ~9    | `rule-styleguide-i18n`                                                   |
+| Browser APIs instead of a dependency | ~65   | `rule-styleguide-baseline` links here as the owner                       |
+| Design System and CSS                | ~15   | `rule-ui-design-system`, `rule-styleguide-css`                            |
+| Quick Reference                      | ~20   | derived from the sections above                                         |
+| Scaffold block                       | 28    | the template catalog                                                    |
 
 Two sections are genuinely unique to this skill: the performance budgets table
 and the PWA/offline rules. The browser-API catalog is the third, and
@@ -105,14 +105,14 @@ framework table becomes a pointer at `rule-frontend`.
 
 ## The six rules
 
-| id | Rejects | Reads | Tier | Today |
-| -- | ------- | ----- | ---- | ----- |
-| `platform-no-second-chooser` | A framework-selection table outside `rule-frontend` | `code` (tables) | B | red: this skill holds one |
-| `platform-scaffold-heading` | A scaffold block whose heading the parser cannot read | `code` (headings) | B | red here and in `rule-frontend-react` |
-| `platform-no-stale-skill-id` | An `rule-...` id in prose that matches no skill directory | `code` + `context.fileList` | B | clean: 7 of 7 ids resolve |
-| `platform-owner-named` | A delegating section that names no owner | `code` | B | red: the 281 lines name owners in five places and nowhere else |
-| `platform-budget-single-source` | The performance numbers restated outside the budget table | `code` | B | clean today; the duplication risk arrives with the trim |
-| `platform-no-duplicate-core-rules` | A restatement of the zero-classes, zero-inline, flex-first or semantic-HTML rules | `code` | B | red: ten skills carry the same four lines |
+| id                                 | Rejects                                                                           | Reads                       | Tier | Today                                                          |
+| ---------------------------------- | --------------------------------------------------------------------------------- | --------------------------- | ---- | -------------------------------------------------------------- |
+| `platform-no-second-chooser`       | A framework-selection table outside `rule-frontend`                                | `code` (tables)             | B    | red: this skill holds one                                      |
+| `platform-scaffold-heading`        | A scaffold block whose heading the parser cannot read                             | `code` (headings)           | B    | red here and in `rule-frontend-react`                           |
+| `platform-no-stale-skill-id`       | An `rule-...` id in prose that matches no skill directory                          | `code` + `context.fileList` | B    | clean: 7 of 7 ids resolve                                      |
+| `platform-owner-named`             | A delegating section that names no owner                                          | `code`                      | B    | red: the 281 lines name owners in five places and nowhere else |
+| `platform-budget-single-source`    | The performance numbers restated outside the budget table                         | `code`                      | B    | clean today; the duplication risk arrives with the trim        |
+| `platform-no-duplicate-core-rules` | A restatement of the zero-classes, zero-inline, flex-first or semantic-HTML rules | `code`                      | B    | red: ten skills carry the same four lines                      |
 
 ## Phase 0 - Decisions
 
@@ -176,15 +176,15 @@ framework table becomes a pointer at `rule-frontend`.
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step | Class | Model | Why |
-| ---- | ----- | ----- | --- |
-| Phase 0 - Decisions | `T1-plan` | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fixtures first (red) | `T4-tests` | `deepseek-v4.1-flash` | test writing at the cheap end |
-| Phase 2 - The rules | `T3-rules` | `kimi-k2.7-code` | small deterministic code |
-| Phase 3 - Trim to the umbrella | `T5-bulk` | `minimax-m3.1-flash` | mechanical edits at scale |
-| Phase 4 - Give the scaffold block a home | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 5 - Neighbours | `T7-author` | `qwen3.8-max` | skill bodies and references |
-| Phase 6 - Verification | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops |
+| Step                                     | Class       | Model                     | Why                            |
+| ---------------------------------------- | ----------- | ------------------------- | ------------------------------ |
+| Phase 0 - Decisions                      | `T1-plan`   | `gemini-4-argon` (high)   | planning and prose that argues |
+| Phase 1 - Fixtures first (red)           | `T4-tests`  | `deepseek-v4.1-flash`     | test writing at the cheap end  |
+| Phase 2 - The rules                      | `T3-rules`  | `kimi-k2.7-code`          | small deterministic code       |
+| Phase 3 - Trim to the umbrella           | `T5-bulk`   | `minimax-m3.1-flash`      | mechanical edits at scale      |
+| Phase 4 - Give the scaffold block a home | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 5 - Neighbours                     | `T7-author` | `qwen3.8-max`             | skill bodies and references    |
+| Phase 6 - Verification                   | `T8-verify` | `gemini-3.8-flash` (high) | fast verification loops        |
 
 Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

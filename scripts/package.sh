@@ -26,7 +26,7 @@ pnpm pack 2>/dev/null || echo "  pnpm pack skipped (use 'pnpm publish' directly)
 echo "--- Homebrew formula ---"
 SHASUM=$(shasum -a 256 "${NAME}-${VERSION}.tgz" 2>/dev/null | cut -d' ' -f1 || echo "unknown")
 cat > "${NAME}.rb" << FORMULA
-class PixGalaxyMcp < Formula
+class RuleMcp < Formula
   desc "MCP server for the rule-* skill ecosystem"
   homepage "https://github.com/pixu1980/rule-mcp"
   url "https://github.com/pixu1980/rule-mcp/releases/download/v${VERSION}/${NAME}-${VERSION}.tgz"
