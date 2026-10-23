@@ -34,7 +34,7 @@ test("every entry carries a size, a context, its languages and a shortlist cap",
 
 test("the language picks the model and a context that cannot hold the cap is refused", () => {
   assert.equal(modelForLanguage("en").id, "ggml-org/Laya-GGUF");
-  assert.equal(modelForLanguage("it").id, "julia-1");
+  assert.equal(modelForLanguage("it").id, "ggml-org/Julia-1-GGUF:Q8_0");
   assert.equal(modelForLanguage("fr"), null);
   assert.equal(modelFits(resolveDecisionModel("laya"), 6), true);
   assert.equal(modelFits({ shortlist: 6, context: 64 }, 6), false);
