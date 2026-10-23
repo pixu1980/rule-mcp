@@ -67,4 +67,4 @@ export const PROBES = [
 export const CONTROL_STATE = PROBES[0].state;
 
 /** The models this audit looks for in the router, by id prefix. */
-export const TARGETS = ["ggml-org/Laya-GGUF", "APUS-OpenJev"];
+export const TARGETS = ["ggml-org/Laya-GGUF:Q8_0", "APUS-OpenJev"];

@@ -96,7 +96,7 @@ test("a cached decision short-circuits before the runtime switches models", asyn
 
       assert.equal(again.skill, italian.skill);
       assert.equal(again.confidence, italian.confidence);
-      assert.deepEqual(models, ["ggml-org/Julia-1-GGUF:Q8_0", "ggml-org/Laya-GGUF"]);
+      assert.deepEqual(models, ["ggml-org/Julia-1-GGUF:Q8_0", "ggml-org/Laya-GGUF:Q8_0"]);
       assert.equal(requests.length, before, "a cached decision must not touch the router");
       assert.equal(english.skill, "rule-frontend-react");
     });
@@ -116,7 +116,7 @@ test("RULE_MCP_NO_CACHE=1 disables the decision short-circuit", async () => {
       await applyDecision({ prompt: ENGLISH, top, primaryRoute });
       await applyDecision({ prompt: ITALIAN, top, primaryRoute });
 
-      assert.deepEqual(models, ["ggml-org/Julia-1-GGUF:Q8_0", "ggml-org/Laya-GGUF", "ggml-org/Julia-1-GGUF:Q8_0"]);
+      assert.deepEqual(models, ["ggml-org/Julia-1-GGUF:Q8_0", "ggml-org/Laya-GGUF:Q8_0", "ggml-org/Julia-1-GGUF:Q8_0"]);
     });
   } finally {
     if (previous === undefined) {

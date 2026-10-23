@@ -14,8 +14,8 @@
 
 /** The models a caller may name by id or alias. */
 export const DECISION_MODELS = Object.freeze({
-  "ggml-org/Laya-GGUF": Object.freeze({
-    id: "ggml-org/Laya-GGUF",
+  "ggml-org/Laya-GGUF:Q8_0": Object.freeze({
+    id: "ggml-org/Laya-GGUF:Q8_0",
     alias: "laya",
     size: 421_000_000,
     context: 8192,
