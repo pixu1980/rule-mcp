@@ -14,5 +14,5 @@
  * file across roughly 260 files rather than a few untested modules, so the
  * floor rises a point at a time.
  */
-export const BRANCH_FLOOR = 91;
+export const BRANCH_FLOOR = 92;
 export const BRANCH_TARGET = 95;
