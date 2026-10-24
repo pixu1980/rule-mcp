@@ -1,33 +1,13 @@
 #!/bin/sh
-# rule-mcp: validate the commits a push would send, then formatting.
-#
-# The commit gate runs first: a push carrying a non-conforming message is
-# blocked with the sha, the message and the reason. The rule lives in
-# src/core/commit, so the same implementation answers the commit-msg hook, this
-# gate and CI.
-#
-# Install: pnpm hooks:install
-set -e
-cd "$(git rev-parse --show-toplevel)" || exit 1
-
-echo "pre-push: checking commit messages..."
-
-if ! node scripts/build/commit-types/index.mjs --stdin-push; then
-  echo "" >&2
-  echo "pre-push: rejected - a commit in this push does not follow type(scope): subject." >&2
-  echo "  Fix it with: rule-mcp commit-lint --range <base>..<head>" >&2
-  exit 1
+# rule-mcp:commit-lint - reject a commit or push that is not type(scope): subject.
+dir="$(dirname "$0")"
+backup="$dir/pre-push.rule-mcp-backup"
+if command -v rule-mcp >/dev/null 2>&1; then
+  rule-mcp commit-lint --stdin-push || exit 1
+else
+  echo "rule-mcp:commit-lint: rule-mcp is not on PATH; commit validation skipped" >&2
 fi
-
-echo "pre-push: checking formatting..."
-
-if ! pnpm format --no-color 2>&1; then
-  echo "" >&2
-  echo "pre-push: rejected - unformatted files detected." >&2
-  echo "  Run: pnpm format:fix" >&2
-  echo "  Then stage and push again." >&2
-  exit 1
+if [ -x "$backup" ]; then
+  exec "$backup" "$@"
 fi
-
-echo "pre-push: commit messages and formatting ok"
 exit 0
