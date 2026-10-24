@@ -23,9 +23,13 @@ test("a router answer with a route and no alternatives names that route", () => 
 });
 
 test("alternatives without a route are skipped", () => {
-  const digests = dependenciesOf("pix_tool", {}, {
-    content: [{ text: JSON.stringify({ alternatives: [{ route: "rule-styleguide-css" }, {}, null] }) }],
-  });
+  const digests = dependenciesOf(
+    "pix_tool",
+    {},
+    {
+      content: [{ text: JSON.stringify({ alternatives: [{ route: "rule-styleguide-css" }, {}, null] }) }],
+    },
+  );
 
   assert.equal(typeof digests, "object");
 });

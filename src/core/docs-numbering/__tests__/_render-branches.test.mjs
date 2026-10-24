@@ -39,10 +39,9 @@ test("an index-only repair names the file and can suppress the fix hint", () => 
   assert.match(behind, /docs\/adr\/ADR\.md/u);
   assert.match(behind, /Run with --fix/u);
 
-  const ordered = renderRenumberPlan(
-    plan({ indexUnordered: true, handoffIndexUnordered: true, authors: [{ file: "x", current: "", author: "Ada" }], projectDir: process.cwd() }),
-    { fix: true },
-  );
+  const ordered = renderRenumberPlan(plan({ indexUnordered: true, handoffIndexUnordered: true, authors: [{ file: "x", current: "", author: "Ada" }], projectDir: process.cwd() }), {
+    fix: true,
+  });
 
   assert.match(ordered, /runs out of order/u);
   assert.match(ordered, /docs\/handoff\/HANDOFF\.md/u);

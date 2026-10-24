@@ -11,10 +11,7 @@ const cache = { key: () => "k", read: () => null, write: () => {} };
 test("the shortlist guards cover a non-array, an empty list and the cap", () => {
   assert.throws(() => buildChoiceQuestion("rule"), /at least one option/u);
   assert.throws(() => buildChoiceQuestion([]), /at least one option/u);
-  assert.throws(
-    () => buildChoiceQuestion(Array.from({ length: 7 }, (_, index) => ({ skill: `s${index}` }))),
-    /caps at six/u,
-  );
+  assert.throws(() => buildChoiceQuestion(Array.from({ length: 7 }, (_, index) => ({ skill: `s${index}` }))), /caps at six/u);
 });
 
 test("a missing probability distribution is zero, not a guess", () => {
