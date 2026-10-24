@@ -15,7 +15,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const skip = process.platform === "win32" ? "a POSIX shell is needed to fake the tokensave CLI" : false;
+const skip = process.platform === "win32" && "a POSIX shell is needed to fake the tokensave CLI";
 
 const home = mkdtempSync(join(tmpdir(), "rule-stats-ledger-"));
 const originalCwd = process.cwd();

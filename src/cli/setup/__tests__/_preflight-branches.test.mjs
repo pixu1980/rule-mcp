@@ -90,6 +90,28 @@ test("a working shim answers the binary and shim checks", { skip: process.platfo
   }
 });
 
+test("a working shim stands in for a checkout that has no local bin", { skip: process.platform === "win32" }, () => {
+  const root = mkdtempSync(join(tmpdir(), "rule-preflight-elsewhere-"));
+  const bin = join(root, "shim-bin");
+  const saved = process.cwd();
+
+  try {
+    // The repo root override makes the checkout a directory with no bin/, so
+    // the binary row has to fall back to the shim for its detail.
+    const path = fakeShim(bin, `#!/bin/sh\n# ${join(root, "bin", "rule-mcp.js")}\necho 9.9.9\n`);
+    process.chdir(root);
+
+    const { checks } = withEnv({ PATH: bin, RULE_MCP_REPO_ROOT: root }, preflight);
+    const binary = check(checks, "binary");
+
+    assert.equal(binary.status, "ok");
+    assert.equal(binary.detail, path, "the shim is named when there is no local bin");
+  } finally {
+    process.chdir(saved);
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("a shim that launches something else warns instead of passing", { skip: process.platform === "win32" }, () => {
   const dir = mkdtempSync(join(tmpdir(), "rule-preflight-stale-"));
 
@@ -99,7 +121,7 @@ test("a shim that launches something else warns instead of passing", { skip: pro
 
     assert.equal(shim.status, "warn", "present but untrusted is a warning, not a pass");
     assert.match(shim.detail, /present but does not launch/, `the detail says why: ${shim.detail}`);
-    assert.match(shim.detail, new RegExp(path.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&")), "and names the launcher");
+    assert.ok(shim.detail.includes(path), "and names the launcher");
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

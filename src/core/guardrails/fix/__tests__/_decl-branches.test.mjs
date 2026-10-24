@@ -7,7 +7,7 @@ import { test } from "node:test";
 import { CONTINUES, DECL } from "../_decl.js";
 
 test("every continuation shape continues the declaration", () => {
-  for (const line of ["", "   ", "}", "const a = {", "const a = (", "return"]) {
+  for (const line of ["", " ".repeat(3), "}", "const a = {", "const a = (", "return"]) {
     assert.equal(CONTINUES(line), true, `${JSON.stringify(line)} continues`);
   }
 });

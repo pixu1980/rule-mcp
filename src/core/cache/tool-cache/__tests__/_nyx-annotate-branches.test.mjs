@@ -20,7 +20,7 @@ test("a tool without a prompt field and a missing args object both read as no pr
 
 test("a non-string or blank prompt is not a prompt", () => {
   assert.equal(promptOf("pix_tool", { prompt: 42 }), null);
-  assert.equal(promptOf("pix_tool", { prompt: "   " }), null);
+  assert.equal(promptOf("pix_tool", { prompt: " ".repeat(3) }), null);
   assert.equal(promptOf("pix_tool", { prompt: "hello" }), "hello");
 });
 
