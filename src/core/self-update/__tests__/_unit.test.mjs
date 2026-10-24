@@ -1,5 +1,3 @@
-
-
 // URL normalization and allowlist resolution - the pure half of the remote pin.
 import test from "node:test";
 import assert from "node:assert/strict";

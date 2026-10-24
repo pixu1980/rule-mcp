@@ -1,5 +1,3 @@
-
-
 /**
  * Removing what the skills step copied: the catalog and the generated persona
  * skills, never a user's own directory.
