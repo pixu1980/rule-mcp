@@ -88,3 +88,11 @@ test("applySquash refuses the base branch", () => {
   assert.match(result.reason, /no feature commits/u);
   remove(root);
 });
+
+test("applySquash treats a missing message as empty", () => {
+  const root = feature();
+  const result = applySquash(root, { confirm: true });
+  assert.equal(result.applied, false);
+  assert.match(result.reason, /type\(scope\)/u);
+  remove(root);
+});
