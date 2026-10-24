@@ -55,8 +55,9 @@ test("agentCommandsCommand removes the files and validates its options", () => {
 });
 
 test("printCommandTargets renders tables and json", () => {
-  const listed = out(() => printCommandTargets({}));
-  assert.ok(listed.includes("agent	") || listed.includes("\t"), "the tab table renders");
+  // An explicit agent keeps the table independent of what this host has installed.
+  const listed = out(() => printCommandTargets({ agent: "claude" }));
+  assert.ok(listed.includes("\t"), "the tab table renders");
 
   const json = out(() => printCommandTargets({ json: true }));
   assert.match(json, /^\[/, "the json output opens an array");
