@@ -8,6 +8,9 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [172](172-retire-closed-plans-into-adrs-and-one-handoff.md)                                                             | Retire closed plans into ADRs and one handoff                                                             | 2026-10-24 | accepted   | plans, process, governance, docs                                                    |
+| [171](171-retire-the-plan-graph-audit-reference-into-an-adr-and-a-handoff.md)                                           | Retire the plan-graph audit reference into an ADR and a handoff                                           | 2026-10-24 | accepted   | plans, audit, governance                                                            |
+| [170](170-retire-the-plan-of-plans-into-an-adr-and-a-handoff.md)                                                        | Retire the plan-of-plans into an ADR and a handoff                                                        | 2026-10-24 | accepted   | plans, orchestration, release, governance                                           |
 | [169](169-rename-the-server-to-rulemcp.md)                                                                              | Rename the server to RuleMCP                                                                              | 2026-10-23 | accepted   | architecture, naming, release, migration                                            |
 | [168](168-insert-a-quick-start-chapter-and-shift-the-handbook-numbering.md)                                             | Insert a quick-start chapter and shift the handbook numbering                                             | 2026-10-23 | accepted   | docs, handbook, process                                                             |
 | [167](167-set-the-decision-cache-replay-floor-to-0-70.md)                                                               | Set the decision-cache replay floor to 0.70                                                               | 2026-10-23 | accepted   | decision-models, cache, routing, observability                                      |
@@ -185,6 +188,9 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [172](172-retire-closed-plans-into-adrs-and-one-handoff.md)                                                             | Turn each closed plan into an ADR: 170 for the plan-of-plans, 171 for the reference.                                                                                                                                            | The closed decisions are durable ADRs; the open roadmap stays in place with 1,490 open items (146 non-skill, 1,336 skill, 8 reference follow-ups), indexed by handoff 27. The plan-of-plans and reference paths disappear...    |
+| [171](171-retire-the-plan-graph-audit-reference-into-an-adr-and-a-handoff.md)                                           | Record the audit and the eight follow-ups in this ADR and in handoff 27, then delete the reference file.                                                                                                                        | The audit's open items live in handoff 27 instead of a second plan file; the plan-graph review remains the evidence.                                                                                                            |
+| [170](170-retire-the-plan-of-plans-into-an-adr-and-a-handoff.md)                                                        | Record the plan-of-plans's implemented outcome in this ADR and delete the plan file.                                                                                                                                            | The level-0 plan no longer exists as a file; this ADR and handoff 27 are the source for its outcome and the open roadmap.                                                                                                       |
 | [169](169-rename-the-server-to-rulemcp.md)                                                                              | Rename the project identity to RuleMCP: the package and binary are `rule-mcp`, the GitHub repository is `pixu1980/rule-mcp`, and the npm package is `rule-mcp`. Keep the `RULE_MCP_*` environment prefix, the `rule-*`...  | The old GitHub URL redirects to the new repository.                                                                                                                                                                             |
 | [168](168-insert-a-quick-start-chapter-and-shift-the-handbook-numbering.md)                                             | Create docs/07-quick-start.md as the shallow entry and shift the existing chapters 07-16 to 08-17. The engineering guides become chapter 08 and keep their depth; the generated inventories become chapters 09-17, so the...    | A reader gets a short, practical entry before the deep guide, and the sequence stays gapless from 01 to 17. The generated documents still occupy the tail, so the numbering test keeps its invariant.                           |
 | [167](167-set-the-decision-cache-replay-floor-to-0-70.md)                                                               | Adopt the symmetric gate instruction, drop queryHash from the state and deps/id from the candidate descriptions, add the asymmetric hub guard, and set SHADOW_THRESHOLD to 0.7, the measured floor.                             | The final corpus run measured 113 labeled predictions, 100 eligible, 13 guarded, 10 would replay at 0.70 and zero false replays; the report recommends 0.70 with 10 predictions and 0 wrong.                                    |
@@ -503,6 +509,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### docs
 
+- [172](172-retire-closed-plans-into-adrs-and-one-handoff.md) Retire closed plans into ADRs and one handoff
 - [168](168-insert-a-quick-start-chapter-and-shift-the-handbook-numbering.md) Insert a quick-start chapter and shift the handbook numbering
 - [128](128-consolidate-the-feature-adrs-and-handoffs-into-one-commit-at-the-close-squash.md) Consolidate the feature ADRs and handoffs into one commit at the close squash
 - [119](119-close-out-audit-ui.md) Close out audit ui
@@ -535,6 +542,22 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [054](054-split-review-personas-into-per-operation-commands-plan-audit-review.md) Split review personas into per-operation commands (plan/audit/review)
 - [028](028-clean-rule-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-* commands via user commands + prompt suppression, not a plugin
 
+### release
+
+- [170](170-retire-the-plan-of-plans-into-an-adr-and-a-handoff.md) Retire the plan-of-plans into an ADR and a handoff
+- [169](169-rename-the-server-to-rulemcp.md) Rename the server to RuleMCP
+- [135](135-codify-stage-0-oss-governance-signing-support-and-licensing-policies.md) Codify Stage 0 OSS governance, signing, support, and licensing policies
+- [133](133-first-release-is-v0-1-0-then-semver-from-commits.md) First release is v0.1.0, then SemVer from commits
+- [131](131-an-update-moves-a-git-clone-install-to-the-newest-release-tag-unasked.md) An update moves a git-clone install to the newest release tag, unasked
+- [130](130-this-server-releases-itself-with-pnpm-release-and-the-push-is-the-release.md) This server releases itself with pnpm release, and the push is the release
+- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
+- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
+- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
+- [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md) Reset the project version to 0.1.0, first release will be v0.1.0
+- [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
+- [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
+- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+
 ### decision-models
 
 - [167](167-set-the-decision-cache-replay-floor-to-0-70.md) Set the decision-cache replay floor to 0.70
@@ -550,20 +573,20 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [157](157-shadow-the-decision-cache-gate-before-replaying.md) Shadow the decision-cache gate before replaying
 - [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
 
-### release
+### governance
 
-- [169](169-rename-the-server-to-rulemcp.md) Rename the server to RuleMCP
+- [172](172-retire-closed-plans-into-adrs-and-one-handoff.md) Retire closed plans into ADRs and one handoff
+- [171](171-retire-the-plan-graph-audit-reference-into-an-adr-and-a-handoff.md) Retire the plan-graph audit reference into an ADR and a handoff
+- [170](170-retire-the-plan-of-plans-into-an-adr-and-a-handoff.md) Retire the plan-of-plans into an ADR and a handoff
+- [154](154-every-plan-carries-a-status-line-a-dependency-graph-and-checkbox-steps.md) Every plan carries a status line, a dependency graph and checkbox steps
+- [153](153-orchestrate-the-plan-catalogue-with-a-staged-dependency-graph.md) Orchestrate the plan catalogue with a staged dependency graph
+- [147](147-never-install-commit-hooks-into-a-machine-wide-core-hookspath.md) Never install commit hooks into a machine-wide core.hooksPath
 - [135](135-codify-stage-0-oss-governance-signing-support-and-licensing-policies.md) Codify Stage 0 OSS governance, signing, support, and licensing policies
-- [133](133-first-release-is-v0-1-0-then-semver-from-commits.md) First release is v0.1.0, then SemVer from commits
-- [131](131-an-update-moves-a-git-clone-install-to-the-newest-release-tag-unasked.md) An update moves a git-clone install to the newest release tag, unasked
-- [130](130-this-server-releases-itself-with-pnpm-release-and-the-push-is-the-release.md) This server releases itself with pnpm release, and the push is the release
-- [127](127-derive-the-next-version-and-the-changelog-from-the-commit-rule.md) Derive the next version and the changelog from the commit rule
-- [113](113-rename-the-command-surface-under-process-and-persona-namespaces.md) Rename the command surface under process and persona namespaces
-- [097](097-the-release-target-is-v0-1-0-beta-and-the-version-tooling-accepts-a-prerelease.md) The release target is v0.1.0-beta, and the version tooling accepts a prerelease
-- [085](085-reset-the-project-version-to-0-1-0-first-release-will-be-v0-1-0.md) Reset the project version to 0.1.0, first release will be v0.1.0
-- [082](082-release-artifacts-are-github-tarballs-not-registry-packages.md) Release artifacts are GitHub tarballs, not registry packages
-- [081](081-mcp-registry-identity-is-the-github-owner-not-a-claimed-brand.md) MCP registry identity is the GitHub owner, not a claimed brand
-- [048](048-v100-release-and-docs-accuracy-guard.md) v1.0.0 release and the docs-accuracy guard
+- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
+- [093](093-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md) Add an Open Source Steward persona for governance, contributors and donors
+- [083](083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.md) Governance is an explicit BDFL with a path to co-maintainers
+- [079](079-add-the-oss-architect-review-persona.md) Add the OSS Architect review persona
+- [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
 
 ### testing
 
@@ -675,17 +698,17 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [015](015-toolchain-skill-isolation-vite.md) toolchain skill isolation vite
 - [009](009-toolchain-vite.md) Toolchain Skill Isolation (Vite)
 
-### governance
+### process
 
-- [154](154-every-plan-carries-a-status-line-a-dependency-graph-and-checkbox-steps.md) Every plan carries a status line, a dependency graph and checkbox steps
+- [172](172-retire-closed-plans-into-adrs-and-one-handoff.md) Retire closed plans into ADRs and one handoff
+- [168](168-insert-a-quick-start-chapter-and-shift-the-handbook-numbering.md) Insert a quick-start chapter and shift the handbook numbering
 - [153](153-orchestrate-the-plan-catalogue-with-a-staged-dependency-graph.md) Orchestrate the plan catalogue with a staged dependency graph
-- [147](147-never-install-commit-hooks-into-a-machine-wide-core-hookspath.md) Never install commit hooks into a machine-wide core.hooksPath
-- [135](135-codify-stage-0-oss-governance-signing-support-and-licensing-policies.md) Codify Stage 0 OSS governance, signing, support, and licensing policies
+- [149](149-choose-one-sdd-framework-per-repository-instead-of-peer-methodology-skills.md) Choose one SDD framework per repository instead of peer methodology skills
+- [148](148-merge-simplicity-english-and-fingerprint-into-rule-process-ai.md) Merge simplicity, English and fingerprint into rule-process-ai
+- [145](145-move-the-readme-skill-from-styleguide-to-process.md) Move the README skill from styleguide to process
+- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
 - [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
-- [093](093-add-an-open-source-steward-persona-for-governance-contributors-and-donors.md) Add an Open Source Steward persona for governance, contributors and donors
-- [083](083-governance-is-an-explicit-bdfl-with-a-path-to-co-maintainers.md) Governance is an explicit BDFL with a path to co-maintainers
-- [079](079-add-the-oss-architect-review-persona.md) Add the OSS Architect review persona
-- [066](066-remove-externally-derived-skills-from-the-served-knowledge-base.md) Remove externally derived skills from the served knowledge base
+- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
 
 ### closeout
 
@@ -698,17 +721,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [099](099-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
 - [095](095-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
 
-### process
-
-- [168](168-insert-a-quick-start-chapter-and-shift-the-handbook-numbering.md) Insert a quick-start chapter and shift the handbook numbering
-- [153](153-orchestrate-the-plan-catalogue-with-a-staged-dependency-graph.md) Orchestrate the plan catalogue with a staged dependency graph
-- [149](149-choose-one-sdd-framework-per-repository-instead-of-peer-methodology-skills.md) Choose one SDD framework per repository instead of peer methodology skills
-- [148](148-merge-simplicity-english-and-fingerprint-into-rule-process-ai.md) Merge simplicity, English and fingerprint into rule-process-ai
-- [145](145-move-the-readme-skill-from-styleguide-to-process.md) Move the README skill from styleguide to process
-- [103](103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
-- [098](098-develop-merges-into-main-by-area-and-stays-as-an-integration-branch.md) develop merges into main by area, and stays as an integration branch
-- [087](087-session-close-archives-completed-audits-reviews-and-plans.md) Session close archives completed audits, reviews and plans
-
 ### security
 
 - [156](156-keep-bm25-and-gate-a-local-decision-model-as-a-second-opinion.md) Keep BM25 and gate a local decision model as a second opinion
@@ -719,6 +731,16 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [045](045-migrate-repo-tooling-to-eslint-10-flat-config-with-eslint-plugin-unicorn.md) Migrate repo tooling to ESLint 10 flat config with eslint-plugin-unicorn
 - [019](019-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
 - [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+
+### plans
+
+- [172](172-retire-closed-plans-into-adrs-and-one-handoff.md) Retire closed plans into ADRs and one handoff
+- [171](171-retire-the-plan-graph-audit-reference-into-an-adr-and-a-handoff.md) Retire the plan-graph audit reference into an ADR and a handoff
+- [170](170-retire-the-plan-of-plans-into-an-adr-and-a-handoff.md) Retire the plan-of-plans into an ADR and a handoff
+- [154](154-every-plan-carries-a-status-line-a-dependency-graph-and-checkbox-steps.md) Every plan carries a status line, a dependency graph and checkbox steps
+- [153](153-orchestrate-the-plan-catalogue-with-a-staged-dependency-graph.md) Orchestrate the plan catalogue with a staged dependency graph
+- [060](060-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
+- [059](059-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
 
 ### quality-gate
 
@@ -864,13 +886,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [092](092-surface-selection-amends-the-install-stack-freeze-with-an-additive-loader-filter.md) Surface selection amends the install stack freeze with an additive loader filter
 - [091](091-install-uninstall-rework-keeps-current-stack-steps-and-contents-only.md) Install/uninstall rework keeps current stack, steps and contents only
 
-### plans
-
-- [154](154-every-plan-carries-a-status-line-a-dependency-graph-and-checkbox-steps.md) Every plan carries a status line, a dependency graph and checkbox steps
-- [153](153-orchestrate-the-plan-catalogue-with-a-staged-dependency-graph.md) Orchestrate the plan catalogue with a staged dependency graph
-- [060](060-plans-carry-nested-sub-steps-and-an-exhaustiveness-mandate.md) Plans carry nested sub-steps and an exhaustiveness mandate
-- [059](059-persona-plans-are-checklists-with-marks-that-survive-the-sync.md) Persona plans are checklists with marks that survive the sync
-
 ### ratchet
 
 - [069](069-coverage-wave-four-holds-the-floor-at-90-and-fixes-the-daemon-status-platform-de.md) Coverage wave four holds the floor at 90 and fixes the daemon status platform defect
@@ -911,6 +926,12 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [137](137-give-the-ai-area-its-first-source-cited-guardrail-family.md) Give the AI area its first source-cited guardrail family
 - [033](033-registry-driven-clean-slash-commands-for-every-agent-and-ide.md) Registry-driven clean slash commands for every agent and IDE
 - [018](018-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
+
+### audit
+
+- [171](171-retire-the-plan-graph-audit-reference-into-an-adr-and-a-handoff.md) Retire the plan-graph audit reference into an ADR and a handoff
+- [119](119-close-out-audit-ui.md) Close out audit ui
+- [111](111-close-out-audit-security.md) Close out audit security
 
 ### code-graph
 
