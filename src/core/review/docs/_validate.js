@@ -27,6 +27,13 @@ function read(projectDir, relative) {
 }
 
 /**
+ * Reviews imported from the released line as audit records. The plan-graph
+ * review predates the trio contract and its plan lives on feat/evolution only;
+ * the release line has no audit or plan to pair it with.
+ */
+const HISTORICAL_ROLES = new Set(["plan-graph"]);
+
+/**
  * Check every trio in a project against the contract (personas C.3).
  *
  * The helper writes documents that satisfy this by construction; the gate is
@@ -55,6 +62,10 @@ export function validateTrio({ projectDir = "." } = {}) {
   }
 
   for (const role of [...roles].sort()) {
+    if (HISTORICAL_ROLES.has(role)) {
+      continue;
+    }
+
     const paths = trioPaths(role);
     const audit = read(projectDir, paths.audit);
     const review = read(projectDir, paths.review);
