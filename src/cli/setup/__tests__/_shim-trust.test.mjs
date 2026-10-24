@@ -1,5 +1,3 @@
-
-
 /**
  * SEC-5: the shim on PATH is resolved before it is run.
  *

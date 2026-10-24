@@ -1,5 +1,3 @@
-
-
 /** The outbound validators: result shape, output cap, and the anti-invention router check. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

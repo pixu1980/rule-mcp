@@ -1,5 +1,3 @@
-
-
 // Invariant 2: the home directory cannot add, rename, or shadow a tool.
 import test from "node:test";
 import assert from "node:assert/strict";

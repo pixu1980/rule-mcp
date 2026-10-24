@@ -1,12 +1,10 @@
-
-
 /**
  * @module core/commit/rule
  *
  * The one Conventional Commit rule.
  *
  * The subject every commit gate accepts is defined here and nowhere else: the
- * `commit-msg` hook, the `pre-push` hook, the CLI, `/rule-mcp-git`, the handoff
+ * `commit-msg` hook, the `pre-push` hook, the CLI, `/rule-git`, the handoff
  * commits and CI all reach this module, so a rule change lands in one place and
  * cannot drift between them.
  *

@@ -1,5 +1,3 @@
-
-
 /** No placeholder install host may survive outside frozen evidence (OSS-16). */
 import { strict as assert } from "node:assert";
 import { readFileSync, readdirSync, statSync } from "node:fs";

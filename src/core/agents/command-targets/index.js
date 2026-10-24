@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/agents/command-targets
  *
@@ -7,7 +5,7 @@
  *
  * Every MCP host namespaces the prompts a server exposes, and none of them let a
  * server drop that prefix:
- *   - Claude Code -> `/rule-mcp:rule-mcp-backend (MCP)`
+ *   - Claude Code -> `/rule:rule-mcp-backend (MCP)`
  *   - VS Code (Copilot Chat) -> `/mcp.rule-mcp.rule-mcp-backend`
  * The only surface that yields a bare `/rule-mcp-backend` is the host's own
  * command/prompt FILES. This module is the single registry of those file

@@ -57,18 +57,18 @@ Prompt
 
 ## MCP tools
 
-| Tool                                             | Role        | Use when                                                                                                                                 |
-| ------------------------------------------------ | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `rule-mcp`                                       | Router      | Route a prompt to the correct rule-mcp skill. Returns structured routing with relevant sections.                                         |
-| `rule_tool_search`                               | Search      | Semantic search across ALL rule-mcp skills using BM25 ranking. Returns scored, relevant sections.                                        |
-| `rule_tool_check`                                | Guardrails  | Run blocking guardrail checks against any rule-mcp skill. Pass `previousPassed` while iterating; finalize only when all checks pass.     |
-| `rule_tool_styleguide`                           | Scaffold    | `mode=scaffold` generates project scaffolding files: one with `file=<name>`, or all of them.                                             |
-| `rule_tool_detect`                               | Detection   | Detect project framework, TypeScript usage, and build tool from package.json.                                                            |
-| `rule_tool_process_adr`                          | ADR         | Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.                            |
-| `/rule-mcp-area-styleguide` (request: file-tree) | Check + fix | Report the file tree with `rule_tool_check` and apply the mechanical guardrail fixes with `rule_tool_fix` (ADR 117: hub slash only).     |
-| `rule_tool_handoff`                              | Handoff     | Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly. |
-| `rulemcp://templates`                            | Templates   | Component and test templates, served as resources.                                                                                       |
-| `rule_tool_fix`                                  | Fix         | Apply the deterministic guardrail fixes of every skill (blank lines, braces, ASCII typography, American spelling).                       |
+| Tool                                         | Role        | Use when                                                                                                                                 |
+| -------------------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `rule-mcp`                                   | Router      | Route a prompt to the correct rule-mcp skill. Returns structured routing with relevant sections.                                         |
+| `rule_tool_search`                           | Search      | Semantic search across ALL rule-mcp skills using BM25 ranking. Returns scored, relevant sections.                                        |
+| `rule_tool_check`                            | Guardrails  | Run blocking guardrail checks against any rule-mcp skill. Pass `previousPassed` while iterating; finalize only when all checks pass.     |
+| `rule_tool_styleguide`                       | Scaffold    | `mode=scaffold` generates project scaffolding files: one with `file=<name>`, or all of them.                                             |
+| `rule_tool_detect`                           | Detection   | Detect project framework, TypeScript usage, and build tool from package.json.                                                            |
+| `rule_tool_process_adr`                      | ADR         | Save an Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.                            |
+| `/rule-area-styleguide` (request: file-tree) | Check + fix | Report the file tree with `rule_tool_check` and apply the mechanical guardrail fixes with `rule_tool_fix` (ADR 117: hub slash only).     |
+| `rule_tool_handoff`                          | Handoff     | Generate a compressed LLM handoff summary from ADR logs and project context. Paste the output into a new chat to resume work seamlessly. |
+| `rulemcp://templates`                        | Templates   | Component and test templates, served as resources.                                                                                       |
+| `rule_tool_fix`                              | Fix         | Apply the deterministic guardrail fixes of every skill (blank lines, braces, ASCII typography, American spelling).                       |
 
 ### Skill tool naming
 
@@ -179,7 +179,7 @@ Write ADRs/docs, follow BMAD, feature workflow, and handoff.
 | [rule-mcp-process-bmad](../rule-mcp-process-bmad/SKILL.md)               | `rule_tool_process_bmad`        | all        | BMAD Method (Build More Architect Dreams) - AI-driven development framework for structured software delivery through...                   |
 | [rule-mcp-process-code-review](../rule-mcp-process-code-review/SKILL.md) | `rule_tool_process_code_review` | all        | Prepare and conduct risk-based PR/MR reviews with explicit quality, safety, and follow-up gates.                                          |
 | [rule-mcp-process-readme](../rule-mcp-process-readme/SKILL.md)           | `rule_tool_process_readme`      | all        | Write or rewrite a project README: the opening block, the facts, the example, getting started, and the license and contribution sections. |
-| `rule_tool_handoff` / `/rule-mcp-handoff`                                | `rule_tool_handoff`             | all        | Generate a compressed LLM handoff summary from ADR logs and project context. Enables cross-chat recovery, model-switc...                  |
+| `rule_tool_handoff` / `/rule-handoff`                                    | `rule_tool_handoff`             | all        | Generate a compressed LLM handoff summary from ADR logs and project context. Enables cross-chat recovery, model-switc...                  |
 
 ### Styleguide
 
@@ -224,21 +224,21 @@ Design and route visible interface work while preserving rule-mcp implementation
 
 ## Recommended dispatch bundles
 
-| Task                     | Primary                                                       | Secondary                                                   | Deterministic tools                                         |
-| ------------------------ | ------------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- |
-| Unknown project          | `rule-mcp`                                                    | `rule-mcp-process-adr`                                      | `rule_tool_detect`, `rule_tool_search`                      |
-| AI agent app             | `rule-mcp-ai`                                                 | `rule-mcp-ai-agent-architecture`, `rule-mcp-devops-testing` | `rule_tool_check`, `rule_tool_process_adr`                  |
-| New web UI               | `rule-mcp-ui` + `rule-mcp-ui-design-system` + framework skill | `rule-mcp-styleguide`, `rule-mcp-platform-web`              | `rulemcp://templates`, `rule_tool_check`                    |
-| React/Vite app           | `rule-mcp-frontend-react`                                     | `rule-mcp-toolchain-vite`, `rule-mcp-styleguide`            | `rule_tool_styleguide` (scaffold), `rule_tool_check`        |
-| Backend API              | `rule-mcp-backend-node`                                       | `rule-mcp-backend-security`                                 | `rule_tool_check`, `rule_tool_process_adr`                  |
-| Database work            | database skill                                                | `rule-mcp-data`                                             | `rule_tool_search`, `rule_tool_check`                       |
-| Docker/CI/tests          | `rule-mcp-devops` focused skill                               | platform skill                                              | `rule_tool_detect`, `/rule-mcp-area-styleguide` (file-tree) |
-| GraphQL API              | `rule-mcp-backend-graphql`                                    | runtime skill, `rule-mcp-backend-security`                  | `rule_tool_search`, `rule_tool_check`                       |
-| Production observability | `rule-mcp-devops-observability`                               | runtime and platform skill                                  | `rule_tool_check`, `rule_tool_process_adr`                  |
-| Code review              | `rule-mcp-process-code-review`                                | feature workflow, relevant domain skill                     | `rule_tool_check`                                           |
-| Commit/push              | `rule-mcp-styleguide-git`                                     | `rule-mcp-toolchain-husky`                                  | `rule_tool_check`                                           |
-| Docs/ADR                 | `rule-mcp-styleguide-markdown`                                | `rule-mcp-process-adr`                                      | `rule_tool_process_adr`, `rule_tool_handoff`                |
-| File-tree cleanup        | `rule-mcp-styleguide-naming`                                  | `rule-mcp-styleguide-configuration`                         | `/rule-mcp-area-styleguide` (file-tree), `rule_tool_check`  |
+| Task                     | Primary                                                       | Secondary                                                   | Deterministic tools                                     |
+| ------------------------ | ------------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------- |
+| Unknown project          | `rule-mcp`                                                    | `rule-mcp-process-adr`                                      | `rule_tool_detect`, `rule_tool_search`                  |
+| AI agent app             | `rule-mcp-ai`                                                 | `rule-mcp-ai-agent-architecture`, `rule-mcp-devops-testing` | `rule_tool_check`, `rule_tool_process_adr`              |
+| New web UI               | `rule-mcp-ui` + `rule-mcp-ui-design-system` + framework skill | `rule-mcp-styleguide`, `rule-mcp-platform-web`              | `rulemcp://templates`, `rule_tool_check`                |
+| React/Vite app           | `rule-mcp-frontend-react`                                     | `rule-mcp-toolchain-vite`, `rule-mcp-styleguide`            | `rule_tool_styleguide` (scaffold), `rule_tool_check`    |
+| Backend API              | `rule-mcp-backend-node`                                       | `rule-mcp-backend-security`                                 | `rule_tool_check`, `rule_tool_process_adr`              |
+| Database work            | database skill                                                | `rule-mcp-data`                                             | `rule_tool_search`, `rule_tool_check`                   |
+| Docker/CI/tests          | `rule-mcp-devops` focused skill                               | platform skill                                              | `rule_tool_detect`, `/rule-area-styleguide` (file-tree) |
+| GraphQL API              | `rule-mcp-backend-graphql`                                    | runtime skill, `rule-mcp-backend-security`                  | `rule_tool_search`, `rule_tool_check`                   |
+| Production observability | `rule-mcp-devops-observability`                               | runtime and platform skill                                  | `rule_tool_check`, `rule_tool_process_adr`              |
+| Code review              | `rule-mcp-process-code-review`                                | feature workflow, relevant domain skill                     | `rule_tool_check`                                       |
+| Commit/push              | `rule-mcp-styleguide-git`                                     | `rule-mcp-toolchain-husky`                                  | `rule_tool_check`                                       |
+| Docs/ADR                 | `rule-mcp-styleguide-markdown`                                | `rule-mcp-process-adr`                                      | `rule_tool_process_adr`, `rule_tool_handoff`            |
+| File-tree cleanup        | `rule-mcp-styleguide-naming`                                  | `rule-mcp-styleguide-configuration`                         | `/rule-area-styleguide` (file-tree), `rule_tool_check`  |
 
 ## Operational sequence
 
@@ -248,7 +248,7 @@ Design and route visible interface work while preserving rule-mcp implementation
 4. Generate deterministic artifacts with the `rulemcp://templates` resource or `rule_tool_styleguide mode=scaffold`.
 5. Validate with `rule_tool_check`; pass `previousPassed` on subsequent iterations.
 6. Record major decisions with `rule_tool_process_adr`.
-7. Use `/rule-mcp-area-styleguide` with file-tree in the request (or `rule_tool_styleguide_file_tree`) for file-tree convention fixes and `rule_tool_handoff` before context switches.
+7. Use `/rule-area-styleguide` with file-tree in the request (or `rule_tool_styleguide_file_tree`) for file-tree convention fixes and `rule_tool_handoff` before context switches.
 
 ## Conventions (rules -> skills merge)
 

@@ -1,5 +1,3 @@
-
-
 /** Summarize the L3 decision-cache shadow records: precision, floor sweep, latency. */
 import { readShadows, summarizeShadows } from "../../../src/core/cache/tool-cache/_decision-shadow.js";
 

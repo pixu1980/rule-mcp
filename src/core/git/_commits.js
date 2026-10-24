@@ -1,5 +1,3 @@
-
-
 /** @module core/git/commits - commit metadata and topological merge detection. */
 
 import { git, gitLines } from "./_run.js";

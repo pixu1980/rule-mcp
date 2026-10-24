@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the history audit's anomaly lines. */
 import assert from "node:assert/strict";
 import { writeFileSync } from "node:fs";

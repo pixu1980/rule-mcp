@@ -1,5 +1,3 @@
-
-
 import { STOPWORDS } from "./_stopwords.data.js";
 
 /** How much the prompt names one of the skill's tags. */

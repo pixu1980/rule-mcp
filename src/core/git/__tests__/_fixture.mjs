@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/core/git/fixture
  *
@@ -38,7 +36,7 @@ export function run(cwd, ...args) {
  * @returns {string} the repository root
  */
 export function makeRepo({ branch = "main", seed = true } = {}) {
-  const root = mkdtempSync(join(tmpdir(), "rule-mcp-git-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-git-"));
 
   run(root, "init", `--initial-branch=${branch}`, "-q");
   run(root, "config", "user.email", "fixture@example.com");
@@ -87,7 +85,7 @@ export function write(root, file, body) {
  * @returns {string} the bare remote path
  */
 export function addRemote(root, branch = "main") {
-  const remote = mkdtempSync(join(tmpdir(), "rule-mcp-git-remote-"));
+  const remote = mkdtempSync(join(tmpdir(), "rule-git-remote-"));
   run(remote, "init", "--bare", "-q");
   run(root, "remote", "add", "origin", remote);
   run(root, "push", "-q", "origin", branch);

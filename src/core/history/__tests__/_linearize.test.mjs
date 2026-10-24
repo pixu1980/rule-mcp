@@ -1,5 +1,3 @@
-
-
 /** WS4.4/WS4.5/WS4.6 - removing merge commits, and rolling back when the tree would change. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

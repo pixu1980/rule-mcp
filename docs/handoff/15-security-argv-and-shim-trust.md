@@ -70,8 +70,8 @@ the documentation site is built, only undeployed.
 
 Two tests fail, neither from this work:
 `src/cli/install/__tests__/_installer-stdio-path.test.mjs` hardcodes the checkout
-at `~/Projects/rule-mcp` and the global shim at
-`~/Library/pnpm/bin/rule-mcp`, while this machine has them elsewhere; and
+at `~/Projects/rule` and the global shim at
+`~/Library/pnpm/bin/rule`, while this machine has them elsewhere; and
 `src/cli/commands/__tests__/_daemon.test.mjs` binds a fixed port, so it loses a
 race when the whole suite runs in parallel. It passes alone and in the
 `installer` suite.

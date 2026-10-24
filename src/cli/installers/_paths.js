@@ -1,5 +1,3 @@
-
-
 /**
  * Filesystem and path helpers shared by every installer: resolve, read,
  * atomic-write, remove, backup, plus the home/constants the writers use.
@@ -24,7 +22,7 @@ const IS_LINUX = platform() === "linux";
 
 const HOME = homedir();
 
-const COMMAND_TEMPLATE_PATH = fileURLToPath(new URL("../../../prompts/rule-mcp.md", import.meta.url));
+const COMMAND_TEMPLATE_PATH = fileURLToPath(new URL("../../../prompts/rule.md", import.meta.url));
 
 const readText = (file) => (existsSync(file) ? readFileSync(file, "utf8") : "");
 
@@ -103,7 +101,7 @@ const backupFile = (file) => {
 const resolveGlobalBinary = () => {
   // Check common pnpm/Homebrew locations (fast path, no shell overhead).
   const HOME = homedir();
-  const candidates = [join(HOME, "Library", "pnpm", "bin", "rule-mcp"), "/opt/homebrew/bin/rule-mcp", "/usr/local/bin/rule-mcp"];
+  const candidates = [join(HOME, "Library", "pnpm", "bin", "rule-mcp"), "/opt/homebrew/bin/rule", "/usr/local/bin/rule"];
 
   for (const candidate of candidates) {
     if (existsSync(candidate)) {

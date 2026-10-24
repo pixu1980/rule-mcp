@@ -1,5 +1,3 @@
-
-
 /** The router pipeline runs the L3 gate in shadow: it observes, it never replays. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync } from "node:fs";

@@ -1,5 +1,3 @@
-
-
 /** The opt-in L3 gate: observe what the decision model would replay, never replay it yet. */
 import { evaluateDecision } from "./_decision-evaluate.js";
 import { shadowEnabled, shadowThreshold } from "./_decision-gate-env.js";

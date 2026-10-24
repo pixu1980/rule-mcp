@@ -1,5 +1,3 @@
-
-
 /**
  * Install the rules the skills own, for a test that drives the engine directly.
  *

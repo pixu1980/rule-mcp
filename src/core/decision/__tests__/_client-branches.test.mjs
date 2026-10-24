@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the decision client's error, model and fallback arms. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

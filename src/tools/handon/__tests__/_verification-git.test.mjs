@@ -1,5 +1,3 @@
-
-
 /** handon verify bucketing and the handoff git reads. */
 import { strict as assert } from "node:assert";
 import "node:child_process";
@@ -68,7 +66,7 @@ test("verify answers unverified without a git repository", () => {
 });
 
 test("getGitDiff reports files, staged and unstaged, without a repo", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-mcp-gitdiff-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-gitdiff-"));
   git(root, "init", "-q");
   git(root, "config", "user.email", "t@t.t");
   git(root, "config", "user.name", "t");

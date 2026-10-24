@@ -1,5 +1,3 @@
-
-
 /** An error the caller can attribute to the decision layer, not to a bug. */
 export class DecisionClientError extends Error {
   /**

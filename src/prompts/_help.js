@@ -1,5 +1,3 @@
-
-
 /** The generic `/rule-mcp-* help` machinery: trigger tokens, examples, the usage block. */
 import { PROMPT_EXAMPLES } from "./_defs.data.js";
 import { parsePersonaCommand } from "../core/review/roles/index.js";
@@ -9,7 +7,7 @@ export const HELP_TOKENS = new Set(["help", "--help", "-h"]);
 
 /**
  * Invocation examples for the help block. Area/workflow prompts carry
- * hand-written examples; a persona prompt (`/rule-mcp-persona-<role>`) gets one
+ * hand-written examples; a persona prompt (`/rule-persona-<role>`) gets one
  * generated set showing how the request slots into the command and how naming
  * a review or a plan deepens the run.
  *
@@ -29,7 +27,7 @@ export function promptExamples(name) {
     return [];
   }
 
-  return [`/${name} help`, `/${name} the /rule-mcp-handoff commit flow`, `/${name} review the new checkout page`, `/${name} plan the SSE daemon auth fix`];
+  return [`/${name} help`, `/${name} the /rule-handoff commit flow`, `/${name} review the new checkout page`, `/${name} plan the SSE daemon auth fix`];
 }
 
 /**

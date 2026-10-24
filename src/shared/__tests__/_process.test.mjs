@@ -1,5 +1,3 @@
-
-
 /**
  * SEC-6: a command that died and a command that printed nothing are two results.
  *

@@ -1,5 +1,3 @@
-
-
 /** @module core/telemetry/recorder/record */
 
 import { pushEvent } from "./_buffer.js";

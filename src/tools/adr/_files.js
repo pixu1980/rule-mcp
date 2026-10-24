@@ -1,5 +1,3 @@
-
-
 /** ADR files on disk: directory, numbering, slugs, filenames, the existing set. */
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";

@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/guardrails/project/checks
  *

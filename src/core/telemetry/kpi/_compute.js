@@ -1,5 +1,3 @@
-
-
 /** @module core/telemetry/kpi/compute */
 
 import { percentile } from "../stats/_percentile.js";

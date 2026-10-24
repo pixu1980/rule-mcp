@@ -1,5 +1,3 @@
-
-
 /** The author stamped on new ADRs, from the git identity. */
 import { execFileSync } from "node:child_process";
 

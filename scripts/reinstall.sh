@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-
-
 #
 # Reinstall this checkout from scratch: purge node_modules (and optionally the
 # lockfile), install again, and refresh the global rule-mcp bin.

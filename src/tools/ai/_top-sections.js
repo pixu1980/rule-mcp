@@ -1,5 +1,3 @@
-
-
 import { readSkill, getSkillMetadata } from "../router/index.js";
 import { extractSections } from "./_extract-sections.js";
 import { scoreSectionWord } from "./_score-section-word.js";

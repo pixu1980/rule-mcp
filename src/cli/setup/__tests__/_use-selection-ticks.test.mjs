@@ -1,5 +1,3 @@
-
-
 /**
  * Ticking and submitting: the half of the list bindings that decides an answer.
  *

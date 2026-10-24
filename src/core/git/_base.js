@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/git/base - which branch a feature was born from.
  *

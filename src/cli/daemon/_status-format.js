@@ -1,5 +1,3 @@
-
-
 /** Render the daemon status block for the CLI. */
 import { getRuntimePaths } from "../paths/index.js";
 import { checkDaemonService } from "./_service-status.js";

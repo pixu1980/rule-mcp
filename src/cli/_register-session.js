@@ -1,5 +1,3 @@
-
-
 /**
  * Session command registrars: adr, skills, fix, handon.
  *

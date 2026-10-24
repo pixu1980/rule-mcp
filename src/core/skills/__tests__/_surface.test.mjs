@@ -1,5 +1,3 @@
-
-
 /**
  * The server surface selection: which skill tools a filtered server keeps.
  *

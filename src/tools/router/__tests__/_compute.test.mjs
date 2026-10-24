@@ -1,5 +1,3 @@
-
-
 /** recomputeCore and the routing-saving estimate, over a throwaway tool. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

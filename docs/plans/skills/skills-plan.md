@@ -67,7 +67,7 @@ allowing Stage 0 contracts.
 ```
 Depends on: rule-mcp-process#2 (CONTRACT), rule-mcp-frontend-workers (HARD)
 Feeds: rule-mcp-frontend (HARD)
-Shared files: skills/rule-mcp/SKILL.md, tests/fixtures/guardrail-corpus.mjs
+Shared files: skills/rule/SKILL.md, tests/fixtures/guardrail-corpus.mjs
 ```
 
 **Checkbox contract** - `- [ ]` while open, `- [x]` when closed, lowercase x, no
@@ -92,7 +92,7 @@ other marker form. The test normalizes `[X]` rather than rejecting it.
 
 | File                                                | Written by                                                           | Serialization                                                                                        |
 | --------------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `skills/rule-mcp/SKILL.md` (dispatcher)             | every plan that opens a door, plus `rule-mcp-process` (regeneration) | one plan at a time; regenerate once at the end of a stage                                            |
+| `skills/rule/SKILL.md` (dispatcher)                 | every plan that opens a door, plus `rule-mcp-process` (regeneration) | one plan at a time; regenerate once at the end of a stage                                            |
 | `scripts/data/router-gaps.data.mjs`                 | 5 router plans and the leaf plans that delete their own entry        | one plan at a time                                                                                   |
 | `docs/adr/ADR.md` + ADR numbering                   | every plan (2 ADRs each)                                             | allocation is global: a merged commit takes the next free numbers; a rebase that collides re-numbers |
 | `tests/fixtures/census.json` + the 6 generated docs | every plan that changes a skill, a rule or a count                   | regenerate at the end of each stage, never mid-plan                                                  |

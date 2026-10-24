@@ -1,5 +1,3 @@
-
-
 /** purge drops expired and timestamp-less events and keeps the fresh ones. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

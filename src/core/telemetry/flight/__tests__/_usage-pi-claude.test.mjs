@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/flight-recorder/usage-pi-claude
  *

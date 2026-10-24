@@ -1,5 +1,3 @@
-
-
 /**
  * Moving the cursor: the half of the list bindings that changes no answer.
  *

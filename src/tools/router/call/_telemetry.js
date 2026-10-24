@@ -1,5 +1,3 @@
-
-
 /** The three recorded shapes of one tool call, folded into one place. */
 import { argsBytes, estimateTokens, guardrailRulesOf, textBytes } from "../_helpers.js";
 import { entryPathOf, routedSkillOf } from "../_entry.js";

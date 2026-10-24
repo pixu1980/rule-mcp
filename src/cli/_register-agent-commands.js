@@ -1,5 +1,3 @@
-
-
 /** @module cli/register-agent-commands - the agent slash-command registrar */
 
 import { Option } from "commander";

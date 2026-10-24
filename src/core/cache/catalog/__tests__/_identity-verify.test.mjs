@@ -1,5 +1,3 @@
-
-
 /** The cached core is identity-free, and verify recomputes without counting as use. */
 import test, { beforeEach } from "node:test";
 import assert from "node:assert/strict";

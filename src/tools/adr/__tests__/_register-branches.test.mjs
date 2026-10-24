@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the ADR tool's nullish defaults. */
 import assert from "node:assert/strict";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";

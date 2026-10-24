@@ -1,5 +1,3 @@
-
-
 // test/docker-hardening.test.mjs
 //
 // Audit finding 07 - the container image and its compose file contradicted the

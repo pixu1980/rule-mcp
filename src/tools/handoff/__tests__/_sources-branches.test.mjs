@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the handoff sources: default status and non-markdown context. */
 import assert from "node:assert/strict";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";

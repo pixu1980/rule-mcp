@@ -1,5 +1,3 @@
-
-
 /**
  * Publish a checksum for every script an install runs.
  *

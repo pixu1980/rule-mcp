@@ -1,5 +1,3 @@
-
-
 /**
  * A flag the narrow install cannot honor says so.
  *

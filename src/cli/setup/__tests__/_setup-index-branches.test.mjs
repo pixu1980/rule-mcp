@@ -1,5 +1,3 @@
-
-
 /**
  * Branch coverage for runSetup: blocked preflight, plain dry-run, uninstall,
  * settleExit on failures, wizard runtime notes, and the interactive mount path.

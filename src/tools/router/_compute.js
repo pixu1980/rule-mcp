@@ -1,5 +1,3 @@
-
-
 /** Core computation with cache write-through: shared computeCore and the public recomputeCore. */
 
 import { _beforeHooks, _postHooks, _tools } from "./_hooks.js";

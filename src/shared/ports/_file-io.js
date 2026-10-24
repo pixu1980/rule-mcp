@@ -1,5 +1,3 @@
-
-
 /** @module shared/ports/file-io - one gzipped JSON file, written atomically */
 import { mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";

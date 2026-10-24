@@ -1,5 +1,3 @@
-
-
 /** The deterministic guards a model pick can never override. */
 
 /** The hard guards: arguments, echo, freshness and a cached error. */

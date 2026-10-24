@@ -1,5 +1,3 @@
-
-
 /** @module core/enforcement/preprocess - the inbound half of the tool-call contract */
 
 import { assertSafeValue, MAX_ARGUMENT_BYTES, normalizeArguments } from "./_input.js";

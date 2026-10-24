@@ -1,5 +1,3 @@
-
-
 /** Test double for setup/_plain.js used by _setup-index-branches.test.mjs. */
 
 const control = () => globalThis.__ruleSetupBranches;

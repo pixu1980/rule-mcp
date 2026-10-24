@@ -1,5 +1,3 @@
-
-
 /** Resolve one prompt by name: help, persona, workflow, area or task. */
 import { HANDOFF_USAGE } from "./_handoff-options.js";
 import { operationForPrompt, roleById, parsePersonaCommand } from "../core/review/roles/index.js";
@@ -30,7 +28,7 @@ export function getPrompt(name, args = {}) {
   if (primaryValue !== undefined && HELP_TOKENS.has(String(primaryValue).trim().toLowerCase())) {
     // Help is returned as a ready-made assistant message: the client displays it
     // immediately instead of asking the model to generate it (no reasoning, no tokens).
-    const helpText = name === "rule-mcp-handoff" ? HANDOFF_USAGE : buildHelpMessage(name, def, promptExamples(name));
+    const helpText = name === "rule-handoff" ? HANDOFF_USAGE : buildHelpMessage(name, def, promptExamples(name));
 
     return {
       name,
@@ -57,7 +55,7 @@ export function getPrompt(name, args = {}) {
     }
   }
 
-  if (name === "rule-mcp-handoff") {
+  if (name === "rule-handoff") {
     return handoffPrompt(args, user);
   }
 

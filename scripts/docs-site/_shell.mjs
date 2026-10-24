@@ -1,5 +1,3 @@
-
-
 /** @module scripts/docs-site/shell - one semantic document shell for every page */
 
 import { depthPrefix, escapeHtml } from "./_html.mjs";

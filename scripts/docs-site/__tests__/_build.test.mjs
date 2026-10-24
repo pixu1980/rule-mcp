@@ -1,5 +1,3 @@
-
-
 /** The emitted HTML: link targets, the shell, and a page composed of two sources. */
 import { strict as assert } from "node:assert";
 import { existsSync, mkdtempSync, readFileSync } from "node:fs";

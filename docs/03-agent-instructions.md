@@ -49,13 +49,13 @@ nothing, so resuming twice from the same handoff works twice.
 3. Treat repository/tool evidence as source of truth. Never invent APIs, files, dependencies, tools, requirements, or successful checks.
 4. If evidence missing, call `rule_tool_search`; if still absent, state uncertainty.
 5. Write failing tests before implementation changes.
-6. Use `/rule-mcp-area-styleguide` (name leaves like file-tree in the request) for templates and project tree work (ADR 115/117).
+6. Use `/rule-area-styleguide` (name leaves like file-tree in the request) for templates and project tree work (ADR 115/117).
 7. Run `rule_tool_check`. Failed guardrails are blocking; fix and rerun until all pass.
 8. Run project tests/typecheck and report only commands actually executed.
 9. Record structural decisions with `rule_tool_process_adr` (disabled by default, enable with `RULE_MCP_AUTO_ADR=1`).
 10. Before writing files, run `rule_tool_gateway` to get a receipt; use `rule_tool_apply` with the receipt for writes.
 11. After `rule_tool_apply` writes files, Prettier + blank-line fixer + block-spacing fixer run automatically as post-processing.
-12. Compress prose / preprocess prompts with `rule_tool_compress` / `/rule-mcp-compress`. Close/resume sessions with `/rule-mcp-handoff` and `/rule-mcp-handon`.
+12. Compress prose / preprocess prompts with `rule_tool_compress` / `/rule-compress`. Close/resume sessions with `/rule-handoff` and `/rule-handon`.
 
 ## Advisory boundaries
 
@@ -74,11 +74,11 @@ See `src/core/enforcement.js` for details.
 
 ## Reusable entry points
 
-Every agent receives the same **registry-driven** clean command set - the `/rule-mcp` router pinned first, then one `/rule-mcp-*` command per MCP prompt in alphabetical order (`/rule-mcp-a11y-audit` ... `/rule-mcp-update`). Regenerate or list it with `rule-mcp agent-commands`.
+Every agent receives the same **registry-driven** clean command set - the `/rule` router pinned first, then one `/rule-mcp-*` command per MCP prompt in alphabetical order (`/rule-mcp-a11y-audit` ... `/rule-update`). Regenerate or list it with `rule-mcp agent-commands`.
 
-- Pi, Claude Code, Gemini CLI, Cursor, Windsurf, Cline: `/rule-mcp <request>` plus the full `/rule-mcp-*` set.
-- Claude Code: the clean `/rule-mcp-*` commands replace the MCP prompts - the install sets `RULE_MCP_NO_PROMPTS=1`, so the prefixed `/rule-mcp:... (MCP)` duplicates are hidden.
-- `/rule-mcp-handoff` also commits pending work as atomic, scoped conventional commits (plus one separate `docs(adr):`/`docs(handoff):` commit for pending decision docs), writes the generated handoff to `docs/handoff/<NN>-<slug>.md` and commits it alone as `chore(handoff): ...`, and never pushes.
+- Pi, Claude Code, Gemini CLI, Cursor, Windsurf, Cline: `/rule <request>` plus the full `/rule-mcp-*` set.
+- Claude Code: the clean `/rule-mcp-*` commands replace the MCP prompts - the install sets `RULE_MCP_NO_PROMPTS=1`, so the prefixed `/rule:... (MCP)` duplicates are hidden.
+- `/rule-handoff` also commits pending work as atomic, scoped conventional commits (plus one separate `docs(adr):`/`docs(handoff):` commit for pending decision docs), writes the generated handoff to `docs/handoff/<NN>-<slug>.md` and commits it alone as `chore(handoff): ...`, and never pushes.
 - GitHub Copilot CLI: `/agent`, select `rule-mcp`.
 - Codex CLI: invoke globally installed `rule-mcp` skill; exact custom prompt support varies by version.
 

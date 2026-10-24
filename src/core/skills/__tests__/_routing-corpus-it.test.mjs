@@ -1,5 +1,3 @@
-
-
 /** The Italian slice's baseline: the number Step 5 must improve on. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

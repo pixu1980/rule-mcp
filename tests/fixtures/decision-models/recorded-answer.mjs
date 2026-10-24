@@ -1,5 +1,3 @@
-
-
 /**
  * @module tests/fixtures/decision-models/recorded-answer
  *

@@ -1,5 +1,3 @@
-
-
 /** The next workstream each open plan proposes, and how handon reports it. */
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -48,7 +46,7 @@ const BACKLOG = ["# Backlog", "", "A queue with no checkboxes at all.", "", "## 
 
 /** A project whose plans cover every case: two open, one finished, one queue. */
 function seededPlans() {
-  const root = mkdtempSync(join(tmpdir(), "rule-mcp-handon-plans-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-handon-plans-"));
 
   write(root, "docs/plans/alpha.md", ALPHA);
   write(root, "docs/plans/zeta.md", ZETA);
@@ -117,7 +115,7 @@ test("handon reports the proposal as pending confirmation", () => {
 });
 
 test("a project with no plans renders no proposal section", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-mcp-handon-noplans-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-handon-noplans-"));
 
   try {
     git(root, "init", "--initial-branch=main", "-q");

@@ -1,5 +1,3 @@
-
-
 /** @module tools/a11y/earl - the EARL JSON-LD assertions */
 
 /** JSON-LD context for the EARL output. */

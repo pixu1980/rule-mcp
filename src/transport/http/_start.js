@@ -1,5 +1,3 @@
-
-
 /** @module transport/http/start */
 
 import http from "node:http";

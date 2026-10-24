@@ -1,5 +1,3 @@
-
-
 /**
  * The two TokenSave sections of a handoff, and their silence.
  *

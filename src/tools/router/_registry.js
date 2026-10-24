@@ -1,5 +1,3 @@
-
-
 /** The tool registry: state, registration, retention and generation. */
 import { IS_MINIMAL_TOOLS, MINIMAL_ALLOWLIST } from "../../core/skills/_minimal.js";
 

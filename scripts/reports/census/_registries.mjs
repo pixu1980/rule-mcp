@@ -1,5 +1,3 @@
-
-
 /**
  * @module scripts/reports/census/_registries
  *
@@ -40,7 +38,7 @@ const guardrails = await import("../../../src/core/guardrails/index.js");
 
 /**
  * The role a persona name addresses, or nothing when the name is not one.
- * Canonical form: `rule-mcp-persona-<role>` (ADR 120).
+ * Canonical form: `rule-persona-<role>` (ADR 120).
  *
  * @param {string} name
  * @returns {{role: string} | undefined}

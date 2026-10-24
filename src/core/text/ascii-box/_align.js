@@ -1,5 +1,3 @@
-
-
 /** @module core/text/ascii-box/align - pad every frame line of a box to one width */
 
 import { FILL_SET, findBoxes, isFrameLine, openingCharacter, TOP_SET } from "./_frames.js";

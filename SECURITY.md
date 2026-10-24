@@ -49,7 +49,7 @@ report publishes the vulnerability before a fix exists.
 
 Report privately through the GitHub advisory form:
 
-https://github.com/pixu1980/rule-mcp/security/advisories/new
+https://github.com/pixu1980/rule/security/advisories/new
 
 What happens next:
 

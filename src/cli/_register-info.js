@@ -1,5 +1,3 @@
-
-
 /**
  * Info command registrars: help, tools, stats, cache, roles, guard, update.
  *

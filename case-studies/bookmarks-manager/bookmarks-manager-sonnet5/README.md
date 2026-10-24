@@ -3,7 +3,7 @@
 Paste a link, get it saved instantly with its title, Open Graph preview
 image, favicon and a short text excerpt, no manual tagging required.
 
-A pnpm-workspace monorepo built to the [rule-mcp](https://github.com/rule-mcp)
+A pnpm-workspace monorepo built to the [rule-mcp](https://github.com/rule)
 skill set: zero-CSS-class React frontend (element + `data-part` selectors
 only, `adoptedStyleSheets`, WCAG 2.2 AA), and a layered Express/TypeScript
 API that scrapes a submitted URL behind an SSRF guard.

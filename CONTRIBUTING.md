@@ -16,7 +16,7 @@ bans it, so the version is not pinned there.
 ## Setup
 
 ```bash
-git clone https://github.com/pixu1980/rule-mcp.git
+git clone https://github.com/pixu1980/rule.git
 cd rule-mcp
 pnpm install
 ```

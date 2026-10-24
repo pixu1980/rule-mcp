@@ -1,5 +1,3 @@
-
-
 import { join } from "node:path";
 
 import { FAMILIES, documentsIn } from "./_families.js";

@@ -1,5 +1,3 @@
-
-
 /**
  * In-memory receipt store (cleared on server restart).
  * Maps receipt token -> { codeHash, binding, skillName, allPass, expiresAt }

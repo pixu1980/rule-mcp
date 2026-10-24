@@ -1,5 +1,3 @@
-
-
 /**
  * The numbers this server reports about itself are a product surface. They
  * changed meaning twice in one week upstream (reminder cadence, compressionRatio

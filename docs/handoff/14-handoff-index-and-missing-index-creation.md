@@ -83,8 +83,8 @@ and format fixes it required, so the branch does not ship a red gate.
 
 The one failing test is `src/cli/install/__tests__/_installer-stdio-path.test.mjs`.
 It fails on this machine and not because of this branch: it hardcodes the
-checkout at `~/Projects/rule-mcp` and looks for the global shim at
-`~/Library/pnpm/bin/rule-mcp`, while the actual shim lives one directory
+checkout at `~/Projects/rule` and looks for the global shim at
+`~/Library/pnpm/bin/rule`, while the actual shim lives one directory
 deeper and the checkout is elsewhere. `src/cli/install/` was not touched here.
 
 ## ADR Reference

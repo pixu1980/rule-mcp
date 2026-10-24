@@ -1,5 +1,3 @@
-
-
 /** @module tools/apply/tool - the rule_tool_apply registration and handler */
 
 import { mkdirSync } from "node:fs";

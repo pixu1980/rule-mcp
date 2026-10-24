@@ -1,5 +1,3 @@
-
-
 /** The css-flex-first guardrail itself: what an unjustified grid costs. */
 import { GUARDRAIL_ID, getGuardrails, checkCode, run } from "./_flex.fixture.mjs";
 import { GUARDRAILS } from "../index.js";

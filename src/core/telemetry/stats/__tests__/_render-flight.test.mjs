@@ -1,5 +1,3 @@
-
-
 /** The flight renderer and the a11y report evaluator. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

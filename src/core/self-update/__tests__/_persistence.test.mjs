@@ -1,5 +1,3 @@
-
-
 /** ARCH-9 cont'd: the throttle window survives a restart instead of resetting to zero. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync } from "node:fs";

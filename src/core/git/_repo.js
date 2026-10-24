@@ -1,5 +1,3 @@
-
-
 /** @module core/git/repo - repository identity, ancestry and divergence. */
 
 import { git, gitOk } from "./_run.js";

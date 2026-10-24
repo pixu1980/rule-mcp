@@ -1,5 +1,3 @@
-
-
 /** @module tools/fix/auto-fix - mode=fix: scan and auto-correct */
 
 import { autoFixFileTree } from "../../core/file-tree/index.js";

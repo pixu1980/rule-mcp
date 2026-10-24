@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/tool-surface-budget.test
  *

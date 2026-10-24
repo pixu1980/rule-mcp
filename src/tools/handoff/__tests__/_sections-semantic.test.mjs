@@ -1,5 +1,3 @@
-
-
 /**
  * The semantic section is the one part of the handoff that only exists when a
  * code graph does, so every arm is a question about absence: no graph, a graph

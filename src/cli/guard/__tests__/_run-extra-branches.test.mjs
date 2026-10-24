@@ -1,5 +1,3 @@
-
-
 /** Extra branch coverage for runGuard: nullish tool_input/command and fail-open catches. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

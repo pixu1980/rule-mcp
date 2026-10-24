@@ -1,5 +1,3 @@
-
-
 /** @module cli/roles/command - the roles CLI dispatcher */
 
 import { renderList, renderRole, unknownRole } from "./_render.js";

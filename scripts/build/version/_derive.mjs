@@ -1,5 +1,3 @@
-
-
 /**
  * @module scripts/build/version/derive
  *

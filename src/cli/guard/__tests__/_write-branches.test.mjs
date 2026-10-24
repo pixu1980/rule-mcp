@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the write guard: locale skip, compose fallback, report arms. */
 import assert from "node:assert/strict";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
@@ -41,7 +39,6 @@ test("non-checkable paths and missing files report nothing", async () => {
 test("a clean file reports nothing", async () => {
   const dir = mkdtempSync(join(tmpdir(), "rule-mcp-write-branches-"));
   const file = join(dir, "clean.js");
-
   try {
     assert.deepEqual(await writeGuardrailReport({ file_path: file }), { report: "" });
   } finally {

@@ -1,5 +1,3 @@
-
-
 /**
  * The tasks every install runs, exercised the way the review screen sees them.
  *

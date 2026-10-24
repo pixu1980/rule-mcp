@@ -1,5 +1,3 @@
-
-
 /** Input schema of the ADR tool. */
 import { z } from "zod/v4";
 

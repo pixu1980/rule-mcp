@@ -1,5 +1,3 @@
-
-
 /** @module core/session/snapshot/classify - what counts as source, test, barrel, ignored */
 
 /** Directories that are never source, however large they are. */

@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for shim lookup, configured bin dir, and trust fallbacks. */
 import assert from "node:assert/strict";
 import { chmodSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

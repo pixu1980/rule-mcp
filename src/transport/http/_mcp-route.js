@@ -1,5 +1,3 @@
-
-
 /** @module transport/http/mcp-route - POST /mcp: initialize or relay one JSON-RPC message */
 
 import { randomUUID } from "node:crypto";

@@ -9,7 +9,7 @@
 
 Every MCP host namespaces the prompts a server exposes, and none of them let the server drop the prefix:
 
-- Claude Code -> `/rule-mcp:rule-mcp-backend (MCP)`
+- Claude Code -> `/rule:rule-mcp-backend (MCP)`
 - VS Code (Copilot Chat) -> `/mcp.rule-mcp.rule-mcp-backend`
 
 Only the host's own command/prompt **files** are invoked bare (`/rule-mcp-backend`). ADR 028 solved this for Claude Code and Pi with user-level command files plus `RULE_MCP_NO_PROMPTS=1`, but the knowledge of _which directory, which format, which host_ was spread across three places: the per-agent installers (`src/cli/install.js`), a hand-maintained installer script (`scripts/install-agent-commands.sh`) and a hand-maintained path list in `scripts/uninstall.sh`.

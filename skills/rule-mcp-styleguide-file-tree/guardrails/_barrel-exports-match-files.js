@@ -1,5 +1,3 @@
-
-
 /** @module core/guardrails/file-tree/barrel-exports-match-files */
 
 export const barrelExportsMatchFiles = {

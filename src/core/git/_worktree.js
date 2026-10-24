@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/git/worktree - the working tree and the pre-rewrite gate.
  *

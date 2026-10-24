@@ -1,5 +1,3 @@
-
-
 /**
  * Every `rulemcp://` URI the reader answers, and the one it refuses.
  *
@@ -71,7 +69,7 @@ test("rulemcp://a11y points at the guide and styleguide/persona surfaces", async
 
   assert.equal(content.mimeType, "text/markdown");
   assert.match(content.text, /Playwright \+ axe-core/, "it names the tooling");
-  assert.match(content.text, /rule-mcp-styleguide-a11y|rule-mcp-persona-a11y|rule-mcp-area-styleguide/, "and the a11y surface (ADR 115)");
+  assert.match(content.text, /rule-mcp-styleguide-a11y|rule-persona-a11y|rule-area-styleguide/, "and the a11y surface (ADR 115)");
 });
 
 test("the a11y test templates serve as plain text", async () => {

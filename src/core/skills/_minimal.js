@@ -1,5 +1,3 @@
-
-
 /** @module core/skills/minimal - the reduced tool surface for tool-count-limited clients */
 
 /**

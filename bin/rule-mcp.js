@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
-
-
 /**
- * @module bin/rule-mcp
+ * @module bin/rule
  *
  * CLI entry point for rule-mcp.
  * Delegates to the cli() function in src/index.js.

@@ -1,5 +1,3 @@
-
-
 /** ADR 128 - the close squash consolidates the feature's ADRs and handoffs. */
 import { strict as assert } from "node:assert";
 import { existsSync, readFileSync } from "node:fs";

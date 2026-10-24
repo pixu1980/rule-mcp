@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for squash: skip consolidation, refusals, dirty tree and the applied path. */
 import assert from "node:assert/strict";
 import { writeFileSync } from "node:fs";

@@ -1,5 +1,3 @@
-
-
 /** Guardrail `no-placeholder-implementation`: No placeholder or unfinished implementation */
 export const noPlaceholderImplementation = {
   id: "ai-no-placeholder-implementation",

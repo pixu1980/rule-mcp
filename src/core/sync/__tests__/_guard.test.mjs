@@ -1,5 +1,3 @@
-
-
 /** WS2.2 - the event-driven guard: throttled checks, one notice per divergence. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

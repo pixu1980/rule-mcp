@@ -5,10 +5,10 @@
   "type": "module",
   "license": "MIT",
   "author": "pixu1980",
-  "homepage": "https://github.com/pixu1980/rule-mcp",
-  "repository": "github:pixu1980/rule-mcp",
+  "homepage": "https://github.com/pixu1980/rule",
+  "repository": "github:pixu1980/rule",
   "bugs": {
-    "url": "https://github.com/pixu1980/rule-mcp/issues"
+    "url": "https://github.com/pixu1980/rule/issues"
   },
   "private": false,
   "publishConfig": {
@@ -30,17 +30,16 @@
     "prepare": "node scripts/install/git-hooks/index.mjs",
     "hooks:install": "node scripts/install/git-hooks/index.mjs",
     "hooks:check": "node scripts/install/git-hooks/index.mjs --check",
-    "setup": "node ./bin/rule-mcp.js setup",
+    "setup": "bash ./scripts/reinstall.sh && node ./bin/rule-mcp.js setup",
     "setup:uninstall": "node ./bin/rule-mcp.js setup --uninstall",
     "tools": "node ./bin/rule-mcp.js tools list",
     "mcp:install": "bash ./scripts/install.sh --force",
     "mcp:install:ps1": "pwsh ./scripts/install.ps1",
-    "reinstall": "bash ./scripts/reinstall.sh",
     "mcp:uninstall": "bash ./scripts/uninstall.sh --force",
     "post-process": "node --import ./scripts/alias-hook.mjs scripts/fix/post-process/index.mjs",
     "post-process:fix": "node --import ./scripts/alias-hook.mjs scripts/fix/post-process/index.mjs --fix --no-dry-run",
     "mcp:uninstall:ps1": "pwsh ./scripts/uninstall.ps1",
-    "skills:install": "echo \"ℹ️ pnpm skills:install: skills are loaded directly from ./skills - no separate install step is needed.\"",
+    "skills:install": "echo \"\u2139\ufe0f pnpm skills:install: skills are loaded directly from ./skills - no separate install step is needed.\"",
     "test": "node --import ./scripts/alias-hook.mjs ./tests/smoke.mjs",
     "test:coverage": "node --import ./scripts/alias-hook.mjs scripts/reports/coverage/index.mjs",
     "test:foundations": "node --import ./scripts/alias-hook.mjs scripts/ci/run-tests/index.mjs foundations",

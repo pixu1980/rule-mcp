@@ -1,5 +1,3 @@
-
-
 // Invariant 1: the tool surface is exactly ./skills - every tool traces back to it.
 import test from "node:test";
 import assert from "node:assert/strict";

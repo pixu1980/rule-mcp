@@ -1,5 +1,3 @@
-
-
 /**
  * Help and serve: the usage text command and the STDIO/HTTP/SSE server entry.
  *

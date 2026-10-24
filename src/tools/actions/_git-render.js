@@ -1,5 +1,3 @@
-
-
 /** @module tools/actions/git-render - the rule_tool_git audit and reword text. */
 
 /**

@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/project-snapshot
  *

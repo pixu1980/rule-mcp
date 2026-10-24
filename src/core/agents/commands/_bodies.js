@@ -1,5 +1,3 @@
-
-
 /** @module core/agents/commands/bodies - the router, check and area command bodies */
 
 import { CHECK_INTENT_KEYWORDS_LIST } from "./_check-intent.js";
@@ -26,7 +24,7 @@ function checkModeSteps(skillClause) {
 }
 
 /**
- * The router command's description + body (mirrors prompts/rule-mcp.md).
+ * The router command's description + body (mirrors prompts/rule.md).
  * Kept inline so the generator has no filesystem dependency.
  */
 export const ROUTER = {
@@ -103,7 +101,7 @@ export function areaBody(description, { skill, members = [] } = {}) {
 }
 
 /**
- * Body for the general `/rule-mcp-check` command (auto-detects area from context).
+ * Body for the general `/rule-check` command (auto-detects area from context).
  * Kept as an explicit workflow; area siblings were folded into parents (ADR 116).
  */
 export const generalCheckBody = [
@@ -126,7 +124,7 @@ export const generalCheckBody = [
 ].join("\n");
 
 /**
- * Body for the general `/rule-mcp-fix` command: apply the deterministic guardrails
+ * Body for the general `/rule-fix` command: apply the deterministic guardrails
  * every skill owns, then hand the rest to the check. The split matters - the
  * machine settles the mechanical findings and the model spends its turns on the
  * ones that need judgment.

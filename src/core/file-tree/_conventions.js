@@ -1,5 +1,3 @@
-
-
 import { extname } from "node:path";
 
 /** Directories to ignore during scan. */

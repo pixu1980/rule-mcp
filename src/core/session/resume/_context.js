@@ -1,5 +1,3 @@
-
-
 /** @module core/session/resume/context - the verified handon block a resumed session receives */
 
 import { compressSurfaceText } from "@src/core/text/_compression.js";

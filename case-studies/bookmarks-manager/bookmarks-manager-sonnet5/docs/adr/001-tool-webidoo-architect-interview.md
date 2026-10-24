@@ -8,7 +8,7 @@
 ## Context
 
 Tool: rule_tool_architect
-Args: {"mode":"interview","target":"/Users/emilianopisu/Projects/work/rule-mcp/poc/bookmarks-manager/bookmarks-sonnet5"}
+Args: {"mode":"interview","target":"/Users/emilianopisu/Projects/work/rule/poc/bookmarks-manager/bookmarks-sonnet5"}
 
 ## Decision
 

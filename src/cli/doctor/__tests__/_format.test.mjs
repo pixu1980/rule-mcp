@@ -1,5 +1,3 @@
-
-
 /** formatDoctorTerminal and its helpers: every branch renders, nothing stays dark. */
 import { strict as assert } from "node:assert";
 import test from "node:test";
@@ -53,8 +51,8 @@ const minimal = {
   daemon: {
     running: true,
     pid: 4242,
-    pidFile: "/tmp/rule-mcp.pid",
-    logFile: "/tmp/rule-mcp.log",
+    pidFile: "/tmp/rule.pid",
+    logFile: "/tmp/rule.log",
     nativeService: { service: "rule-mcpd", platform: "macos", installed: true, loaded: true, running: true, pid: 4243 },
   },
   models: { totalConfigured: 3 },

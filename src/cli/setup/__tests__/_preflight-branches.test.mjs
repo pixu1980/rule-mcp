@@ -1,5 +1,3 @@
-
-
 /**
  * Branch coverage for preflight: the node floor's failure arm and the working
  * shim's two rows.

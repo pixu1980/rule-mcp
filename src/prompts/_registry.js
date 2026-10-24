@@ -1,5 +1,3 @@
-
-
 /** The prompt registry: static definitions plus generated persona prompts. */
 import { activeRoles, personaCommandName } from "../core/review/roles/index.js";
 import { PROMPT_DEFS } from "./_defs.data.js";
@@ -18,7 +16,7 @@ export function listPrompts() {
 }
 
 /**
- * One prompt per active review persona: `rule-mcp-persona-<role>` - 19 persona
+ * One prompt per active review persona: `rule-persona-<role>` - 19 persona
  * commands for the 19 active roles (ADR 120). The depth of the run (audit,
  * audit+review, audit+review+plan) is read from the request, not from the
  * command name; see `core/review/roles/operation-intent`.

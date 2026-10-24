@@ -20,7 +20,7 @@ const seed = (dir, name) => {
 
 test("the copied names are the catalog plus the generated persona skills", () => {
   assert.ok(catalogSkillNames().includes("rule-mcp-data-sqlite"), "a catalog skill is a copied name");
-  assert.ok(personaSkillNames().includes("rule-mcp-persona-security"), "a generated persona skill is a copied name");
+  assert.ok(personaSkillNames().includes("rule-persona-security"), "a generated persona skill is a copied name");
 });
 
 test("removeInstalledSkills removes the catalog and persona dirs, leaves a user skill", () => {
@@ -69,15 +69,15 @@ test("removeInstalledSkills also removes the persona shapes an earlier release w
   const dir = mkdtempSync(join(tmpdir(), "rule-mcp-skills-rm-"));
 
   try {
-    seed(dir, "rule-mcp-persona-security-audit");
-    seed(dir, "rule-mcp-persona-security");
+    seed(dir, "rule-persona-security-audit");
+    seed(dir, "rule-persona-security");
     seed(dir, "rule-mcp-plan-security");
     seed(dir, "caveman");
 
     const removed = removeInstalledSkills(dir);
 
-    assert.ok(removed.includes("rule-mcp-persona-security-audit"), "the per-operation persona skill is removed");
-    assert.ok(removed.includes("rule-mcp-persona-security"), "the current persona skill is removed");
+    assert.ok(removed.includes("rule-persona-security-audit"), "the per-operation persona skill is removed");
+    assert.ok(removed.includes("rule-persona-security"), "the current persona skill is removed");
     assert.ok(removed.includes("rule-mcp-plan-security"), "the pre-persona shape is removed");
     assert.ok(!removed.includes("caveman"), "a user skill still survives");
   } finally {

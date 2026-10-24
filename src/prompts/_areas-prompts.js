@@ -1,11 +1,9 @@
-
-
 /**
  * @module prompts/areas-prompts
  *
  * One MCP/slash prompt per area hub, built from the area mapping.
  *
- * The hub skill owns its area's command: `/rule-mcp-area-frontend` IS `rule-mcp-frontend`.
+ * The hub skill owns its area's command: `/rule-area-frontend` IS `rule-mcp-frontend`.
  * Leaf skills keep their tools; the hub routes to them from free text (ADR 117).
  */
 
@@ -51,7 +49,7 @@ export function listAreaPrompts() {
     const members = [...entry.members].sort((a, b) => a.localeCompare(b));
 
     prompts.push({
-      name: `rule-mcp-area-${area}`,
+      name: `rule-area-${area}`,
       skill: entry.hub,
       area,
       members,

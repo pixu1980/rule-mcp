@@ -1,5 +1,3 @@
-
-
 /**
  * Behavior of the emitted docs site: the keyboard path, reflow at 320px, the
  * motion budget, console cleanliness and target size.

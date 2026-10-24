@@ -1,5 +1,3 @@
-
-
 /** Render the project graph report the check tool returns. */
 export function renderProject(project) {
   const lines = ["# Project guardrails", "", project.summary, ""];

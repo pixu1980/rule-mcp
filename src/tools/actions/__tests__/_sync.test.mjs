@@ -1,5 +1,3 @@
-
-
 /** WS2 - the rule_tool_sync contract: read-only by default, confirmed to act. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync } from "node:fs";

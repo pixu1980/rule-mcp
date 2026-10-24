@@ -1,5 +1,3 @@
-
-
 /**
  * The `--minimal` / `--no-minimal` tri-state for the install path.
  *

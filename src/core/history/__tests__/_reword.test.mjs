@@ -1,5 +1,3 @@
-
-
 /** WS4.2 - rewording commit messages, validated and behind the gate. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

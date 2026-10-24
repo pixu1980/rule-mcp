@@ -1,5 +1,3 @@
-
-
 /** @module core/agents/commands/render - one command to one file, per format */
 
 import { compressText } from "../../text/_compression.js";

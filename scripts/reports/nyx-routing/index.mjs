@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-
-
 /**
  * @module scripts/reports/nyx-routing
  *
@@ -17,7 +15,7 @@
  * `ensemble`) when the adapter is on. The script is self-contained so the
  * baseline runs even when Nyx is not installed.
  *
- * @see docs/integration/rule-mcp.md
+ * @see docs/integration/rule.md
  */
 
 process.env.RULE_MCP_NO_TELEMETRY ??= "1";

@@ -1,5 +1,3 @@
-
-
 /**
  * Regression: Node's child_process.spawn does not expand a leading `~`.
  * MCP stdio configurations must therefore contain concrete absolute paths.

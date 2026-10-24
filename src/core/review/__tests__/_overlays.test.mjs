@@ -1,5 +1,3 @@
-
-
 /** Role validation and the user overlay layer, on a scratch config dir. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";

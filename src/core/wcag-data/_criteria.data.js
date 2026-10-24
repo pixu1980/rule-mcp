@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/wcag-data/criteria
  *

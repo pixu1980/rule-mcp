@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the optional-step catalog rows. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

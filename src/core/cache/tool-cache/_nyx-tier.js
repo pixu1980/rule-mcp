@@ -1,5 +1,3 @@
-
-
 /**
  * The Nyx similarity tier (L2): embedding similarity gated by decision labels.
  *

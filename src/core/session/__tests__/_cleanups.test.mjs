@@ -1,5 +1,3 @@
-
-
 /** Cleanup registration, signals and exits: the lifecycle state machine itself. */
 import test from "node:test";
 import assert from "node:assert/strict";

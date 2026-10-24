@@ -1,5 +1,3 @@
-
-
 /** Nyx adapter without embed: the similarity tier must treat it as a miss. */
 export function createMcpAdapter() {
   return {

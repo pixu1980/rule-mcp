@@ -1,5 +1,3 @@
-
-
 /** WS1.2 - base-branch detection, explicit configuration first. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

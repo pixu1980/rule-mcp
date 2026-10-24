@@ -1,5 +1,3 @@
-
-
 /**
  * ARCH-2: loadAllSkills is three named phases, not one function.
  *

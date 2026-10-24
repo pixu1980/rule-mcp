@@ -1,5 +1,3 @@
-
-
 /** @module scripts/docs-site/html - the two primitives every rendered page needs */
 
 /**

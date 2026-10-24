@@ -1,5 +1,3 @@
-
-
 /**
  * A probe component for the list hook, and the reader that parses its frame.
  *

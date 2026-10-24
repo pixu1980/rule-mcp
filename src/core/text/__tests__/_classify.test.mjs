@@ -1,5 +1,3 @@
-
-
 /**
  * classifyText and its two content heuristics: what the compressor may touch
  * and what it must leave alone.

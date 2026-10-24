@@ -1,5 +1,3 @@
-
-
 /**
  * The Windows service arms, run on a machine that has no `sc.exe`.
  *

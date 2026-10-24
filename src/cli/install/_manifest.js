@@ -1,5 +1,3 @@
-
-
 /** @module cli/install/manifest - the record of what was installed, for uninstall */
 
 import { mkdirSync, writeFileSync } from "node:fs";

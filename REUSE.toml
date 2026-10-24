@@ -5,7 +5,7 @@
 version = 1
 SPDX-PackageName = "rule-mcp"
 SPDX-PackageSupplier = "pixu1980 <pisuemiliano.1980@gmail.com>"
-SPDX-PackageDownloadLocation = "https://github.com/pixu1980/rule-mcp"
+SPDX-PackageDownloadLocation = "https://github.com/pixu1980/rule"
 
 [[annotations]]
 path = "**"

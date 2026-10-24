@@ -1,5 +1,3 @@
-
-
 /**
  * @module scripts/docs-site/pages
  *

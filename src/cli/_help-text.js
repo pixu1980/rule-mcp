@@ -1,5 +1,3 @@
-
-
 // Auto-extracted from src/cli/commands/index.js - help/usage text.
 
 /**

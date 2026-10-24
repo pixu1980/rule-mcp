@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-
-
 /**
  * @module scripts/audits/decision-cache/corpus
  *

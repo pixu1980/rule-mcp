@@ -1,5 +1,3 @@
-
-
 /**
  * @module scripts/docs-site/build - render Markdown to static HTML.
  *

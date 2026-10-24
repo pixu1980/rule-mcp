@@ -15,7 +15,7 @@ Rename the role id `design-system` to `ui` and its title to UI/UX Lead. Widen it
 
 ## Consequences
 
-The active role set stays at 19; only the id and title change. The three commands per role become `/rule-mcp-persona-ui-plan`, `/rule-mcp-persona-ui-audit` and `/rule-mcp-persona-ui-review`. Evidence skills grow from four to thirteen, so the persona reaches every frontend skill and the a11y styleguide. Aliases, the persona catalog in `personas/`, the registry test and `docs/13-personas.md` follow. Any citation of the old `design-system` id is stale.
+The active role set stays at 19; only the id and title change. The three commands per role become `/rule-persona-ui-plan`, `/rule-persona-ui-audit` and `/rule-persona-ui-review`. Evidence skills grow from four to thirteen, so the persona reaches every frontend skill and the a11y styleguide. Aliases, the persona catalog in `personas/`, the registry test and `docs/13-personas.md` follow. Any citation of the old `design-system` id is stale.
 
 ## What would end this
 

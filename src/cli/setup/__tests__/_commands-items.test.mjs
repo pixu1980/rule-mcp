@@ -1,5 +1,3 @@
-
-
 /**
  * The rows the commands step offers, built from the resolved catalog.
  *
@@ -87,7 +85,7 @@ test("skill rows are grouped under a heading per area", () => {
 
   for (const item of rows) {
     assert.ok(
-      item.detail.some((line) => line.startsWith("Writes /rule-mcp-area-")),
+      item.detail.some((line) => line.startsWith("Writes /rule-area-")),
       `${item.id} says which command it writes: ${JSON.stringify(item.detail)}`,
     );
   }

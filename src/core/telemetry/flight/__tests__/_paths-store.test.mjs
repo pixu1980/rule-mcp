@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/flight-recorder/paths-store
  *

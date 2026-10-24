@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/directive
  *
@@ -17,7 +15,7 @@
  * One canonical wording, one grep. Anything that repeats these rules imports
  * them from this module instead of paraphrasing.
  *
- * Flight guidance (`rule-mcp-area-process-flight`) rides along: full block on
+ * Flight guidance (`rule-area-process-flight`) rides along: full block on
  * SessionStart, a short fragment on every UserPromptSubmit. Opt out of flight
  * alone with RULE_MCP_NO_FLIGHT=1 (ADR 114).
  *

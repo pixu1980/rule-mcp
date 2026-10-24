@@ -1,5 +1,3 @@
-
-
 /** The agent transcript registry and the usage reads over it. */
 import { homedir } from "node:os";
 import { USAGE_WINDOW_SLACK_MS } from "./_window.js";

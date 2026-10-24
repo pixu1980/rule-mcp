@@ -1,5 +1,3 @@
-
-
 /** callTool's two heavy stages, split out so the orchestrator stays a thin sequence. */
 import { finalize, guardrailRulesOf } from "../_helpers.js";
 import { cacheLookup, cacheLookupDecision, cacheLookupSemantic, cacheStore } from "@src/core/cache/tool-cache/index.js";

@@ -1,10 +1,8 @@
-
-
 /**
  * @module core/review/roles/operation-intent
  *
  * How deep a persona run goes, decided from the request the user typed after
- * `/rule-mcp-persona-<role>`. The command was split three ways per role (57 commands
+ * `/rule-persona-<role>`. The command was split three ways per role (57 commands
  * for 19 roles); folding it back into one command moves the choice into the
  * argument, the same move ADR 116 made for the check siblings.
  *
@@ -114,7 +112,7 @@ function hasKeyword(text, wanted) {
 }
 
 /**
- * The operation a `/rule-mcp-persona-<role>` request asks for.
+ * The operation a `/rule-persona-<role>` request asks for.
  *
  * Plan wins over review when a request names both: the deepest explicit ask is
  * the one that also produces the documents below it.

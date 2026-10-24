@@ -1,5 +1,3 @@
-
-
 /**
  * @module tools/a11y
  *

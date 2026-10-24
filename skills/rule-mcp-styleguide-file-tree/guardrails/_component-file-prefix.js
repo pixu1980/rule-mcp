@@ -1,5 +1,3 @@
-
-
 /** @module core/guardrails/file-tree/component-file-prefix */
 
 export const componentFilePrefix = {

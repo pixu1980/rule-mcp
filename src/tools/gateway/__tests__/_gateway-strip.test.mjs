@@ -1,5 +1,3 @@
-
-
 /**
  * The write path strips forbidden manifest fields before it checks and mints.
  *

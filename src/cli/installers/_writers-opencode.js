@@ -1,5 +1,3 @@
-
-
 /**
  * opencode's JSON dialect: the server lives under `mcp`, `command` is one
  * array that already holds the arguments, and environment variables live

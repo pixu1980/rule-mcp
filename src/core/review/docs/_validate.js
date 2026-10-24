@@ -1,5 +1,3 @@
-
-
 /** @module core/review/docs/validate */
 
 import { existsSync, readdirSync, readFileSync } from "node:fs";

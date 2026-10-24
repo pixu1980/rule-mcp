@@ -1,5 +1,3 @@
-
-
 /**
  * Branch coverage for the selection widgets: the windowed slice, the note
  * without a chosen color, a heading with no id, and the detail panel with no

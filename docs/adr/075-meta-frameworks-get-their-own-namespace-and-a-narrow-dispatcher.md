@@ -7,11 +7,11 @@
 
 ## Context
 
-The four meta-framework skills were named rule-mcp-frontend-meta-astro, next, nuxt and remix, which put them inside the frontend area where they compete with eleven component skills for the same routing prompts. A meta-framework is not a component library: it owns rendering, routing and data loading, and the component skill still applies under it. The user asked for the rule-mcp-meta-* namespace and a hub dispatcher. The name was occupied: the rule-mcp-area-meta prompt was the dispatcher and action toolset area, shown as rule-mcp-meta in the census.
+The four meta-framework skills were named rule-mcp-frontend-meta-astro, next, nuxt and remix, which put them inside the frontend area where they compete with eleven component skills for the same routing prompts. A meta-framework is not a component library: it owns rendering, routing and data loading, and the component skill still applies under it. The user asked for the rule-mcp-meta-* namespace and a hub dispatcher. The name was occupied: the rule-area-meta prompt was the dispatcher and action toolset area, shown as rule-mcp-meta in the census.
 
 ## Decision
 
-Rename the four skills to rule-mcp-meta-astro, next, nuxt and remix, rename the occupying prompt to rule-mcp-area-toolset (which is what it always described), and add skills/rule-mcp-meta as a hub with a code-registered rule_tool_meta beside it. The dispatcher is deliberately narrow: it matches a named framework first and a framework-owned concept second (islands for Astro, server actions for Next, Nitro for Nuxt, loaders for Remix), and refuses rather than guessing. The router's own corpus and thresholds are measured over the whole skill set, so a second general router would mean re-measuring all of it for no gain. Like rule-mcp, the hub registers no per-skill tool and is not BM25-indexed: a dispatcher's own directory dilutes the document frequency of every common term.
+Rename the four skills to rule-mcp-meta-astro, next, nuxt and remix, rename the occupying prompt to rule-area-toolset (which is what it always described), and add skills/rule-mcp-meta as a hub with a code-registered rule_tool_meta beside it. The dispatcher is deliberately narrow: it matches a named framework first and a framework-owned concept second (islands for Astro, server actions for Next, Nitro for Nuxt, loaders for Remix), and refuses rather than guessing. The router's own corpus and thresholds are measured over the whole skill set, so a second general router would mean re-measuring all of it for no gain. Like rule-mcp, the hub registers no per-skill tool and is not BM25-indexed: a dispatcher's own directory dilutes the document frequency of every common term.
 
 ## Consequences
 

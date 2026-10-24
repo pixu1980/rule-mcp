@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the decision-cache protocol's redaction, state and parse arms. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

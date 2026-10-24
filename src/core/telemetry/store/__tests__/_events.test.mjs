@@ -1,5 +1,3 @@
-
-
 /**
  * The events log: every defensive return the writers and reader take, on a
  * hermetic RULE_MCP_HOME per scenario.

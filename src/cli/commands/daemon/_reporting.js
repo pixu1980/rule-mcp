@@ -1,5 +1,3 @@
-
-
 /** The daemon reporting arms: status and logs. */
 import { existsSync, readFileSync } from "node:fs";
 import { formatDaemonStatus } from "../../daemon/index.js";

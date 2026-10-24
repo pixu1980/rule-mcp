@@ -1,5 +1,3 @@
-
-
 /** Which skills an answer depends on, per entry path. */
 import test from "node:test";
 import assert from "node:assert/strict";

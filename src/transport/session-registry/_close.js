@@ -1,5 +1,3 @@
-
-
 /** Closing sessions: one id, and everything on shutdown. */
 /**
  * Close one session's transport and server, then forget it. Never throws.

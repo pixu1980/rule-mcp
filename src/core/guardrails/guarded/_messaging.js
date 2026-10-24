@@ -1,5 +1,3 @@
-
-
 /** Worker lifecycle: spawn, pending map, aborted-shaped answers. */
 import { existsSync } from "node:fs";
 import { Worker } from "node:worker_threads";

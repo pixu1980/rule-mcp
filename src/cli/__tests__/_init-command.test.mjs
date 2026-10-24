@@ -1,7 +1,5 @@
-
-
 /**
- * `rule-mcp init`: the shell path `/rule-mcp-init` names, and the same work.
+ * `rule-mcp init`: the shell path `/rule-init` names, and the same work.
  *
  * A project pointed at by `--dir` is prepared without touching this checkout:
  * the recorder directory is created under the state dir, the git governance is

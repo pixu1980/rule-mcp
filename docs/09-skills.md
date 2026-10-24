@@ -13,7 +13,7 @@ The catalog. A skill is the source of truth for its topic; the tool that
 serves it carries no rules of its own, and the guardrails it is checked
 against are in [`15-guardrails.md`](15-guardrails.md).
 
-The router's own directory, `skills/rule-mcp/`, mints no skill tool, which is why
+The router's own directory, `skills/rule/`, mints no skill tool, which is why
 the catalog is 81 and the directory count is 82.
 
 | Area        | Skills | Covers |

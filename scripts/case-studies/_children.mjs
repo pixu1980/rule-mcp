@@ -1,5 +1,3 @@
-
-
 /** @module scripts/case-studies/children - spawning, labeling and stopping the fleet. */
 
 import { spawn } from "node:child_process";

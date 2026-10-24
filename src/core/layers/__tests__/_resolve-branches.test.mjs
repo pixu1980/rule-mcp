@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for layer resolution: unreadable skills and persona id mismatch. */
 import assert from "node:assert/strict";
 import { chmodSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

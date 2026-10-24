@@ -1,5 +1,3 @@
-
-
 /**
  * generateSelfSignedCert failures that depend on what openssl does: a missing
  * binary, a failing key step and a failing certificate step. PATH points at a

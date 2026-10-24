@@ -1,5 +1,3 @@
-
-
 /** The still-open items a handoff hands to the next session. */
 
 import { fencedLines } from "./_shapes.js";

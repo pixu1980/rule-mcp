@@ -1,5 +1,3 @@
-
-
 /**
  * The English-only + American-spelling mandate (hardening request: "always
  * English, always US spelling, on every prompt and every generated file").

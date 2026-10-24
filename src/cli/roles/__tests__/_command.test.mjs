@@ -1,5 +1,3 @@
-
-
 /** rolesCommand's four subcommands and their error branches, none of which had a test before. */
 import { strict as assert } from "node:assert";
 import { existsSync, mkdtempSync, readFileSync } from "node:fs";

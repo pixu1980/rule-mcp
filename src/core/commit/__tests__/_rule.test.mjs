@@ -1,5 +1,3 @@
-
-
 /** WS3 - the one Conventional Commit rule. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/self-update/_semver
  *

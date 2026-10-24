@@ -11,7 +11,7 @@
 | `RULE_MCP_UPDATE_REMOTE`                | Git remote(s) this install may take code from, replacing the repository declared in `server.json`. Required for forks and sandboxes: an unrecognized remote is refused before any fetch.                                                                                                                                                                             | `server.json` `repository.url`      | comma-separated URLs or paths                       |
 | `RULE_MCP_UPDATE_REQUIRE_SIGNATURE`     | Require a valid signature on the upstream commit (`git verify-commit`) before merging. Off by default because most repositories do not sign.                                                                                                                                                                                                                         | unset                               | `1` = require signature                             |
 | `RULE_MCP_NO_PROMPT_DIRECTIVE`          | Silence the SessionStart/UserPromptSubmit directive (rule-mcp-first, no subagents, compression, mantra, flight) injected by the harness hooks.                                                                                                                                                                                                                       | unset                               | `1` = disable                                       |
-| `RULE_MCP_NO_FLIGHT`                    | Suppress only the `rule-mcp-area-process-flight` block/fragment on SessionStart and UserPromptSubmit. The rest of the session directive still injects.                                                                                                                                                                                                               | unset                               | `1` = disable                                       |
+| `RULE_MCP_NO_FLIGHT`                    | Suppress only the `rule-area-process-flight` block/fragment on SessionStart and UserPromptSubmit. The rest of the session directive still injects.                                                                                                                                                                                                                   | unset                               | `1` = disable                                       |
 | `RULE_MCP_NO_RESUME_HANDON`             | Stop the verified handoff from being injected when a session is resumed: the SessionStart hook (`source: "resume"`) and the first tool call whose prompt is a bare resume request. Nothing is injected when `docs/handoff/` holds no handoff.                                                                                                                        | unset                               | `1` = disable                                       |
 | `RULE_MCP_NO_COMPRESSION`               | Disable text compression of tool results (filler and leading articles are stripped from prose; code, JSON, URLs and headings are never touched).                                                                                                                                                                                                                     | unset                               | `1` = disable                                       |
 | `RULE_MCP_COMPRESSION_LEVEL`            | Compression intensity. `off` is the alias of `RULE_MCP_NO_COMPRESSION=1`; `lite` drops filler, hedging and pleasantries and keeps whole sentences; `full` adds leading articles, phrase rewrites and short synonyms; `ultra` adds the abbreviation map, conjunction stripping and arrow causality. An unknown value falls back to `full` with one warning on stderr. | `full`                              | `off`, `lite`, `full`, `ultra`                      |
@@ -62,7 +62,7 @@
 Set these variables via:
 
 ```bash
-# CLI (persisted to ~/.config/rule-mcp/env.json)
+# CLI (persisted to ~/.config/rule/env.json)
 rule-mcp config env --set RULE_MCP_MINIMAL_TOOLS=1
 
 # Interactive mode
@@ -74,7 +74,7 @@ export RULE_MCP_MINIMAL_TOOLS=1
 
 ## Persistence
 
-Variables set via `rule-mcp config env` are saved to `~/.config/rule-mcp/env.json`
+Variables set via `rule-mcp config env` are saved to `~/.config/rule/env.json`
 and automatically injected into the MCP stdio configuration on install/update.
 
 Environment variables set in your shell profile override the persisted config.
@@ -140,10 +140,10 @@ paid on every connect. `bin/rule-mcp.js` calls
 `module.enableCompileCache()` before it loads the application graph, and the
 installer writes a cache directory into the generated agent config.
 
-| Variable                     | Description                                                                                                                              | Default                           |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
-| `NODE_COMPILE_CACHE`         | Directory for the compiled code cache. The installer sets it for every agent spawn; unset, Node picks its own location.                  | `~/.cache/rule-mcp/compile-cache` |
-| `NODE_DISABLE_COMPILE_CACHE` | `1` turns the cache off, including the one the bin enables. The test runner sets it so no suite result depends on a cache another wrote. | unset                             |
+| Variable                     | Description                                                                                                                              | Default                       |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `NODE_COMPILE_CACHE`         | Directory for the compiled code cache. The installer sets it for every agent spawn; unset, Node picks its own location.                  | `~/.cache/rule/compile-cache` |
+| `NODE_DISABLE_COMPILE_CACHE` | `1` turns the cache off, including the one the bin enables. The test runner sets it so no suite result depends on a cache another wrote. | unset                         |
 
 Measured with `pnpm report:startup`: the cache takes 2-6% off a warm start.
 The larger win came from what the entry point no longer loads - `--help` went

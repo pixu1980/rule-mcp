@@ -19,7 +19,7 @@ Added automatic global CLI registration on `pnpm install` postinstall hook to en
 
 ### Known Issue: Skill naming in Claude Code App macOS
 
-**Problem:** Skills appear as `/rule-mcp:rule-mcp-handoff` instead of `/rule-mcp-handoff` in Claude App macOS, though Claude CLI shows correct shorthand `/rule-mcp-handoff`.
+**Problem:** Skills appear as `/rule:rule-handoff` instead of `/rule-handoff` in Claude App macOS, though Claude CLI shows correct shorthand `/rule-handoff`.
 
 **Root cause:** Unknown - likely in skill registration during setup wizard or MCP server configuration.
 

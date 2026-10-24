@@ -1,5 +1,3 @@
-
-
 /** CLI command barrel: one module per command family. */
 export * from "./_help.js";
 export * from "./daemon/index.js";

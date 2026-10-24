@@ -1,5 +1,3 @@
-
-
 /** @module core/sync/config - sync guard policy. */
 
 /**

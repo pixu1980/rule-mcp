@@ -1,5 +1,3 @@
-
-
 /** SSE streams must not inherit a short HTTP idle timeout. */
 import { strict as assert } from "node:assert";
 import { readFileSync } from "node:fs";

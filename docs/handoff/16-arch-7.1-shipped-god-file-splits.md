@@ -33,7 +33,7 @@ date: 2026-09-21
 
 ## Known failure
 
-`src/cli/install/__tests__/_installer-stdio-path.test.mjs` expects the checkout path `~/Projects/rule-mcp` and fails when a global binary is present. It predates ARCH-7.1 and was not changed.
+`src/cli/install/__tests__/_installer-stdio-path.test.mjs` expects the checkout path `~/Projects/rule` and fails when a global binary is present. It predates ARCH-7.1 and was not changed.
 
 ## Next work
 

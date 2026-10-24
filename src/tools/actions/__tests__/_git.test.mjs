@@ -1,5 +1,3 @@
-
-
 /** WS4 - the rule_tool_git contract: read-only audit, --force never bypasses confirm. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync } from "node:fs";
@@ -10,7 +8,7 @@ import { before, test } from "node:test";
 process.env.RULE_MCP_NO_CACHE = "1";
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-git-tool-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-git-tool-"));
 
 const { callTool } = await import("../../router/index.js");
 const { registerGitTool } = await import("../_git.js");

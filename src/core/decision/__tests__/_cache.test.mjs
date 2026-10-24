@@ -1,5 +1,3 @@
-
-
 /** The decision cache: one digest, one answer, and the no-cache escape. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

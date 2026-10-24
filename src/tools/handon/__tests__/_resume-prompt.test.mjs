@@ -1,5 +1,3 @@
-
-
 /** The resume prompt: the block the handoff wrote for the next session, read back. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync } from "node:fs";
@@ -75,7 +73,7 @@ test("a quoted prompt is not the handoff's own open work", () => {
 });
 
 test("the report closes with the prompt the handoff wrote", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-mcp-handon-prompt-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-handon-prompt-"));
   mkdirSync(join(root, "docs", "handoff"), { recursive: true });
   mkdirSync(join(root, "docs", "adr"), { recursive: true });
   git(root, "init", "-q");

@@ -1,5 +1,3 @@
-
-
 /** @module core/telemetry/store/paths */
 
 import { mkdirSync } from "node:fs";

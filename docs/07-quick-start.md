@@ -7,7 +7,7 @@ is the shallow entry.
 ## 1. Install and init
 
 ```bash
-git clone https://github.com/pixu1980/rule-mcp.git
+git clone https://github.com/pixu1980/rule.git
 cd rule-mcp
 pnpm install
 ./scripts/install.sh
@@ -39,7 +39,7 @@ rule_tool_check({ "skill": "rule-mcp-frontend-react", "code": "<the generated co
 ```
 
 Failed guardrails are blocking. `mode: "project"` runs the graph checks
-(cycles, dead symbols, unused imports). The `/rule-mcp-check` command is the same
+(cycles, dead symbols, unused imports). The `/rule-check` command is the same
 workflow when the agent exposes slash commands.
 
 ## 4. Fix
@@ -77,7 +77,7 @@ rule_tool_audit({ "role": "security" })
 rule_tool_review({ "role": "security", "topic": "the diff" })
 ```
 
-The slash command is `/rule-mcp-persona-security`; the request selects the
+The slash command is `/rule-persona-security`; the request selects the
 operation. `rule-mcp roles list` shows the registry, and `roles new` adds
 a role.
 

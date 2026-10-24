@@ -84,7 +84,7 @@ Detect project framework, TypeScript usage, and build tool from package.json.
 
 ### rule_tool_compress
 
-Sole compression engine (ADR 115): preprocess enriched prompts/contexts and postprocess model prose. Strip filler and leading articles, replace typographic characters with ASCII, convert British spelling to American. Code, inline spans, URLs and JSON are never touched. Prefer /rule-mcp-compress.
+Sole compression engine (ADR 115): preprocess enriched prompts/contexts and postprocess model prose. Strip filler and leading articles, replace typographic characters with ASCII, convert British spelling to American. Code, inline spans, URLs and JSON are never touched. Prefer /rule-compress.
 
 | Parameter  | Type                                     | Required | Default  | Description                                                                                                                       |
 | ---------- | ---------------------------------------- | -------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |

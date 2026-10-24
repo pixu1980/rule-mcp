@@ -1,5 +1,3 @@
-
-
 /** @module scripts/data/wcag/render - the generated _criteria.data.js source text */
 
 /** Render the module. Sorted by criterion number so the diff is readable. */

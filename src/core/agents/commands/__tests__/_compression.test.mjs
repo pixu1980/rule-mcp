@@ -1,5 +1,3 @@
-
-
 /**
  * Phase 4b (plan: execution-plan.md), write-time compression of agent command
  * files.
@@ -45,7 +43,7 @@ test("rendered command files compress at write time; frontmatter and placeholder
 });
 
 test("the canonical renderer is untouched; the opt-out restores the raw bodies", () => {
-  const command = listAgentCommands().find((c) => c.name === "rule-mcp-handoff");
+  const command = listAgentCommands().find((c) => c.name === "rule-handoff");
   const canonical = renderAgentCommand(command, "workflow");
 
   assert.ok(canonical.includes("$ARGUMENTS") || !canonical.includes("$ARGUMENTS"), "canonical renderer still returns its body");
@@ -54,7 +52,7 @@ test("the canonical renderer is untouched; the opt-out restores the raw bodies",
   try {
     const files = renderAgentCommandFiles("workflow");
     const raw = renderAgentCommand(command, "workflow");
-    assert.equal(files.find((f) => f.name === "rule-mcp-handoff").content, raw, "NO_COMPRESSION restores the raw write-time bodies");
+    assert.equal(files.find((f) => f.name === "rule-handoff").content, raw, "NO_COMPRESSION restores the raw write-time bodies");
   } finally {
     delete process.env.RULE_MCP_NO_COMPRESSION;
   }

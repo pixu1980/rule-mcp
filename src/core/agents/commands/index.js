@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/agents/commands
  *
@@ -17,7 +15,7 @@
  * Why clean commands at all: Claude Code exposes MCP prompts as
  * `/<server>:<prompt> (MCP)` - the server prefix cannot be dropped client-side.
  * User-level command files (`~/.claude/commands/*.md`) are invoked bare
- * (`/rule-mcp-handoff`), so the installer ships these AND suppresses the server's
+ * (`/rule-handoff`), so the installer ships these AND suppresses the server's
  * prompts for Claude (RULE_MCP_NO_PROMPTS=1) to avoid duplicate entries.
  *
  * @see module:prompts/index - listPrompts (the source registry)

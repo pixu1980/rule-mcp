@@ -99,19 +99,6 @@ jobs:
       - name: Coverage over the full suite (fails under the branch floor)
         run: pnpm test:coverage
 
-  license:
-    name: License headers
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
-        with:
-          node-version: "22"
-      - name: Every source file carries an SPDX header
-        run: node scripts/reports/license-headers/index.mjs --check
-
   commit-lint:
     name: Commit lint
     runs-on: ubuntu-latest

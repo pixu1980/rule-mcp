@@ -1,5 +1,3 @@
-
-
 /** The CSS extraction helpers: file names, fences, sheets, bare stylesheets. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

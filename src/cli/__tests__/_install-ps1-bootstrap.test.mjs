@@ -1,5 +1,3 @@
-
-
 /**
  * The Windows bootstraps carry the same contract as the POSIX pair.
  *

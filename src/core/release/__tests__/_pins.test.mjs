@@ -1,5 +1,3 @@
-
-
 /** Plan §20 - only exact x.y.z dependency specifiers are accepted. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";

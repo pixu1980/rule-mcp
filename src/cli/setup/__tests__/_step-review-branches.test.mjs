@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the review screen: danger, dry-run toggle and overflow. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

@@ -1,5 +1,3 @@
-
-
 /**
  * Persona catalog contract: every persona lives as one markdown file in
  * `./personas/` (frontmatter + a lenses bullet list in the body, same format

@@ -1,5 +1,3 @@
-
-
 /**
  * @module scripts/reports/census/_gather
  *

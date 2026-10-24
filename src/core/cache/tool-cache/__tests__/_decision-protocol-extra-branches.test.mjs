@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the decision protocol's empty values and answer shapes. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

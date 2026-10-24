@@ -1,5 +1,3 @@
-
-
 /** Regression: installed-agent detection must look at VS Code's global config. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
@@ -25,7 +23,7 @@ const output = execFileSync(
     "--eval",
     [
       `import { installAgent, detectInstalledAgents } from ${JSON.stringify(installModule)};`,
-      'installAgent({ agent: "vscode", entrypoint: "/tmp/rule-mcp.js" });',
+      'installAgent({ agent: "vscode", entrypoint: "/tmp/rule.js" });',
       'console.log(JSON.stringify(detectInstalledAgents().find(({ name }) => name === "vscode")));',
     ].join(" "),
   ],

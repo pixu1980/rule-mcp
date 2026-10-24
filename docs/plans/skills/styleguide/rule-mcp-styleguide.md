@@ -147,7 +147,7 @@ Depends on: `rule-mcp-styleguide-a11y` (HARD), `rule-mcp-styleguide-baseline` (H
 
 Feeds:,
 
-Shared files: skills/rule-mcp/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
+Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions and scaffolding
 

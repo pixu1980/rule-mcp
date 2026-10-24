@@ -1,5 +1,3 @@
-
-
 /** @module core/review/docs/render */
 
 import { REVIEW_COLUMNS, table } from "./_table.js";

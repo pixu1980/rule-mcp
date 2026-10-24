@@ -1,5 +1,3 @@
-
-
 /** Basic same-origin view transitions between docs pages (vanilla JS). */
 
 function reduceMotion() {

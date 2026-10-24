@@ -1,5 +1,3 @@
-
-
 /** rule_tool_plan: registered, answers per role, applies overrides, resolves aliases. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
@@ -77,7 +75,7 @@ test("an aliased id is reachable by the tool but has no generated surface", asyn
   // `simplicity-staff-eng` -> simplicity): no generated surface exists under
   // the old name, but the tool must still answer with the owning role.
   const names = new Set(listPrompts().map((prompt) => prompt.name));
-  for (const aliased of ["rule-mcp-persona-api-design", "rule-mcp-persona-simplicity-staff-eng"]) {
+  for (const aliased of ["rule-persona-api-design", "rule-persona-simplicity-staff-eng"]) {
     assert.equal(names.has(aliased), false, "aliased ids stay out of the surfaces");
   }
   const result = await callTool("rule_tool_plan", { role: "api-design" });

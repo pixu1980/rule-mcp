@@ -1,5 +1,3 @@
-
-
 /** @module core/telemetry/recorder/event */
 
 import { promptsEnabled } from "./_flags.js";

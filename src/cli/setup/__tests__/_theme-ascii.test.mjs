@@ -1,5 +1,3 @@
-
-
 /** The ASCII arm: NO_UNICODE=1 forces the fallback glyphs and border. */
 
 // The glyph set is chosen at module load, so this file sets the flag before

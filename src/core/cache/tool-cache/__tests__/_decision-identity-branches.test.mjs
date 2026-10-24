@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the cache-call identity helpers. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

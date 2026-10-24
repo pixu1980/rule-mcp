@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/plans/skills-plan
  *

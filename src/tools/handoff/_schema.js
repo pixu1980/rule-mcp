@@ -1,5 +1,3 @@
-
-
 /** Input schema of the handoff tool. */
 import { z } from "zod/v4";
 

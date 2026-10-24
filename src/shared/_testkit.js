@@ -1,5 +1,3 @@
-
-
 /** Test-only fixtures duplicated across suites before this file existed; import directly, not through index.js. */
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";

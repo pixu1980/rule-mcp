@@ -1,5 +1,3 @@
-
-
 /**
  * The resource arms that answer from a custom skill layer rather than the
  * bundled catalog: a project skill listed as a plugin, and an empty override

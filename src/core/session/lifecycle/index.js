@@ -1,5 +1,3 @@
-
-
 /**
  * One shutdown path, and it always ends in an exit.
  *

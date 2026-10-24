@@ -7,10 +7,10 @@
 
 ## Context
 
-The recurring session-start failure `spawn .../pnpm/bin/rule-mcp ENOENT` had a
+The recurring session-start failure `spawn .../pnpm/bin/rule ENOENT` had a
 reproducible cause: every test that shells out to `install.sh`/`uninstall.sh` spread
 `process.env` into the child, so the developer's real `PNPM_HOME` leaked in.
-`uninstall.sh` Phase 7 deletes `$PNPM_HOME/bin/rule-mcp` and `install.sh`'s
+`uninstall.sh` Phase 7 deletes `$PNPM_HOME/bin/rule` and `install.sh`'s
 `ensure_global_shim` writes there - running the installer suite silently deleted the real
 shim (and once repointed it at a temp checkout). Separately, `package.json` declared two
 bin names for the same entrypoint - `rule-mcp` and `rule-mcpd` - and nothing

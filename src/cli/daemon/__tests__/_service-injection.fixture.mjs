@@ -1,5 +1,3 @@
-
-
 /**
  * Drive the three daemon adapters against a HOME whose name carries shell
  * metacharacters, with stubbed service binaries that record their argv.

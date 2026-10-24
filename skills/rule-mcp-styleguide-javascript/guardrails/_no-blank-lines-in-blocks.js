@@ -1,5 +1,3 @@
-
-
 /** Guardrail `js-no-blank-lines-in-blocks`: No blank line immediately after { or before } */
 
 export const jsNoBlankLinesInBlocks = {

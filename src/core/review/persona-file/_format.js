@@ -1,5 +1,3 @@
-
-
 /** @module core/review/persona-file/format */
 
 import { quote } from "./_quote.js";

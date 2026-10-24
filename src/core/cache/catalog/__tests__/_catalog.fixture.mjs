@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/cache-catalog/fixture.test
  *

@@ -1,5 +1,3 @@
-
-
 /**
  * The flat scanner must report exactly what the recursive scanner reports:
  * same issues, same stats. The TokenSave path is forced with an injected probe

@@ -1,5 +1,3 @@
-
-
 /** rule_tool_fix: the deterministic guardrail passes, previewed then applied. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -15,7 +13,7 @@ registerFixTool();
 const text = (result) => result.content.map((part) => part.text).join("\n");
 
 test("lint previews the deterministic changes without writing", async () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-fix-tool-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-fix-tool-"));
   const file = join(dir, "demo.js");
   const before = "export function value() {\n  const x = 1;\n  return x;\n}\n";
   writeFileSync(file, before);
@@ -31,7 +29,7 @@ test("lint previews the deterministic changes without writing", async () => {
 });
 
 test("fix applies the passes and leaves a compliant file alone", async () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-fix-tool-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-fix-tool-"));
   const file = join(dir, "demo.js");
   writeFileSync(file, "export function value() {\n  const x = 1;\n  return x;\n}\n");
 
@@ -50,7 +48,7 @@ test("fix applies the passes and leaves a compliant file alone", async () => {
 });
 
 test("a prose file loses its typographic characters", async () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-fix-tool-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-fix-tool-"));
   const file = join(dir, "doc.md");
   writeFileSync(file, "A \u201Cquoted\u201D word and a color.\n");
 

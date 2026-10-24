@@ -1,5 +1,3 @@
-
-
 /** @module core/review/docs/plan-ids */
 
 import { splitRow } from "./_table.js";

@@ -1,5 +1,3 @@
-
-
 /** Promotion to the shared catalog: hit threshold, priming, the promotable set. */
 import { cacheEnabled } from "./_config.js";
 import { cacheKey, stableStringify } from "./_keys.js";

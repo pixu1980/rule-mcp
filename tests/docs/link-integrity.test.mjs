@@ -1,5 +1,3 @@
-
-
 /** Every relative link in docs/ must resolve - the site cannot ship dead links. */
 import { strict as assert } from "node:assert";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";

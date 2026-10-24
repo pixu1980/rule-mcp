@@ -9,7 +9,7 @@ registry, so a stale copy fails the build instead of misleading a reader.
 
 ## Agent slash commands (41)
 
-The router `/rule-mcp` is pinned first; the rest follow in
+The router `/rule` is pinned first; the rest follow in
 locale-alphabetical order. The same set is written for every agent and IDE,
 in that host's own format (ADR 034).
 
@@ -54,21 +54,21 @@ which agents are installed and where their homes are.
 
 ### The kinds (41 commands)
 
-| Kind       | Count | What it is for                                                       |
-| ---------- | ----- | -------------------------------------------------------------------- |
-| `router`   | 1     | Routes a free-text request to the skill that answers it              |
-| `area`     | 11    | Area hub: free text routes to leaf skills/tools (ADR 117)            |
-| `workflow` | 3     | Runs a named workflow (e.g. /rule-mcp-check auto-detects guardrails) |
-| `session`  | 7     | Carries a session across a context boundary                          |
-| `persona`  | 19    | Runs one review role at one operation, and writes its documents      |
+| Kind       | Count | What it is for                                                   |
+| ---------- | ----- | ---------------------------------------------------------------- |
+| `router`   | 1     | Routes a free-text request to the skill that answers it          |
+| `area`     | 11    | Area hub: free text routes to leaf skills/tools (ADR 117)        |
+| `workflow` | 3     | Runs a named workflow (e.g. /rule-check auto-detects guardrails) |
+| `session`  | 7     | Carries a session across a context boundary                      |
+| `persona`  | 19    | Runs one review role at one operation, and writes its documents  |
 
-**router**: `/rule-mcp`
+**router**: `/rule`
 
-**area**: `/rule-mcp-area-ai`, `/rule-mcp-area-backend`, `/rule-mcp-area-data`, `/rule-mcp-area-devops`, `/rule-mcp-area-frontend`, `/rule-mcp-area-meta`, `/rule-mcp-area-platform`, `/rule-mcp-area-process`, `/rule-mcp-area-styleguide`, `/rule-mcp-area-toolchain`, `/rule-mcp-area-ui`
+**area**: `/rule-area-ai`, `/rule-area-backend`, `/rule-area-data`, `/rule-area-devops`, `/rule-area-frontend`, `/rule-area-meta`, `/rule-area-platform`, `/rule-area-process`, `/rule-area-styleguide`, `/rule-area-toolchain`, `/rule-area-ui`
 
-**workflow**: `/rule-mcp-check`, `/rule-mcp-fix`, `/rule-mcp-git`
+**workflow**: `/rule-check`, `/rule-fix`, `/rule-git`
 
-**session**: `/rule-mcp-compress`, `/rule-mcp-handoff`, `/rule-mcp-handon`, `/rule-mcp-init`, `/rule-mcp-stats`, `/rule-mcp-update`, `/rule-mcp-usage`
+**session**: `/rule-compress`, `/rule-handoff`, `/rule-handon`, `/rule-init`, `/rule-stats`, `/rule-update`, `/rule-usage`
 
 The 19 persona commands are one per role and operation
 ([`14-personas.md`](14-personas.md)).

@@ -1,5 +1,3 @@
-
-
 /** The prompt registry: names, order, coverage, strict schemas. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

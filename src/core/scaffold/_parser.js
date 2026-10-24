@@ -1,5 +1,3 @@
-
-
 // Auto-extracted - scaffold-section parsing shared by skill tools.
 import { errorResult, textResult } from "../../shared/index.js";
 

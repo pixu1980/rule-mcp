@@ -1,5 +1,3 @@
-
-
 /** @module cli/paths/repo - the shipped skills, the repo root and the install type */
 
 import { existsSync } from "node:fs";

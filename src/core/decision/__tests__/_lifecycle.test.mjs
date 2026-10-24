@@ -1,5 +1,3 @@
-
-
 /** Shutdown releases the model, and a stopped router fails instead of hanging. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

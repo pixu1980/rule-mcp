@@ -1,5 +1,3 @@
-
-
 /** Guardrail `js-single-line-method`: Class method bodies must be multi-line */
 
 export const jsSingleLineMethod = {

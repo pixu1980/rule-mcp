@@ -1,5 +1,3 @@
-
-
 /**
  * Personas resolve through the same three layers as skills (ADR 089), and the
  * machine owner has the last word: native, then project, then user.
@@ -10,8 +8,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-mcp-persona-home-"));
-const project = mkdtempSync(join(tmpdir(), "rule-mcp-persona-project-"));
+const home = mkdtempSync(join(tmpdir(), "rule-persona-home-"));
+const project = mkdtempSync(join(tmpdir(), "rule-persona-project-"));
 
 process.env.RULE_MCP_HOME = home;
 mkdirSync(join(project, ".git"), { recursive: true });

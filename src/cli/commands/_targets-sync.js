@@ -1,5 +1,3 @@
-
-
 /** @module cli/commands/targets-sync - write the command files into every resolved target */
 
 import { renderAgentCommandFiles } from "../../core/agents/commands/index.js";
@@ -30,7 +28,7 @@ function stalePersonaFiles(entries) {
       return false;
     }
 
-    return entry.replace(COMMAND_SUFFIX, "").startsWith("rule-mcp-persona-") && !current.has(entry.replace(COMMAND_SUFFIX, ""));
+    return entry.replace(COMMAND_SUFFIX, "").startsWith("rule-persona-") && !current.has(entry.replace(COMMAND_SUFFIX, ""));
   });
 }
 
@@ -61,7 +59,7 @@ export function syncCommandTargets(opts) {
     // Remove sweeps the whole `rule-mcp` namespace in the target dir, so names that
     // left the registry (a rename, a deletion) are purged too instead of
     // lingering as stale commands next to the new set. The separator matters:
-    // the root command is `rule-mcp.md`, not `rule-mcp-something.md`, and a bare `rule-mcp-`
+    // the root command is `rule.md`, not `rule-mcp-something.md`, and a bare `rule-mcp-`
     // prefix left it behind on every uninstall.
     if (opts.remove) {
       // A detected agent does not always have its command directory yet -
@@ -74,7 +72,7 @@ export function syncCommandTargets(opts) {
       }
 
       const stale = readdirSync(dir)
-        .filter((entry) => /^rule-mcp[-.]/.test(entry))
+        .filter((entry) => /^rule[-.]/.test(entry))
         .filter((entry) => entry.endsWith(".md") || entry.endsWith(".toml") || entry.endsWith(".prompt.md"));
 
       for (const entry of stale) {
@@ -86,7 +84,7 @@ export function syncCommandTargets(opts) {
       }
 
       files += stale.length;
-      print(`  ${opts.dryRun ? "[dry-run] " : ""}${label}: removed ${stale.length} rule-mcp* command file(s) → ${dir}`);
+      print(`  ${opts.dryRun ? "[dry-run] " : ""}${label}: removed ${stale.length} rule* command file(s) → ${dir}`);
       continue;
     }
 

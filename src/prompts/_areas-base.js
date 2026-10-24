@@ -1,5 +1,3 @@
-
-
 /**
  * @module prompts/areas-base
  *
@@ -46,7 +44,7 @@ export function areaCommandName(skillName) {
     return null;
   }
 
-  return `rule-mcp-area-${parsed.area}`;
+  return `rule-area-${parsed.area}`;
 }
 
 /**

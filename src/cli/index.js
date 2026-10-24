@@ -1,5 +1,3 @@
-
-
 /** src/cli: the command surface - entrypoints, the commander program, and the TUI. */
 export * from "./_help-text.js";
 export * from "./_init.js";

@@ -1,5 +1,3 @@
-
-
 /** Theme + a11y preferences for the docs site (vanilla JS). */
 
 const STORAGE_KEY = "rule-mcp-docs-prefs";

@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/skills-install/personas
  *
@@ -54,7 +52,7 @@ const skillContent = (role) => {
 
 /**
  * Remove persona skill dirs that no longer name a role: the per-operation
- * `rule-mcp-persona-<role>-<operation>` dirs, and the older
+ * `rule-persona-<role>-<operation>` dirs, and the older
  * `rule-mcp-{plan|audit|review}-*` names that predate them (ADR 120, ADR 116).
  *
  * @param {string} targetDir
@@ -71,7 +69,7 @@ function purgeLegacyPersonaSkills(targetDir, dryRun) {
 
   for (const entry of readdirSync(targetDir)) {
     const oldShape = /^rule-mcp-(plan|audit|review)-/.test(entry);
-    const stalePersona = entry.startsWith("rule-mcp-persona-") && !current.has(entry);
+    const stalePersona = entry.startsWith("rule-persona-") && !current.has(entry);
 
     if (!oldShape && !stalePersona) {
       continue;

@@ -1,5 +1,3 @@
-
-
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { adrAuthor } from "../../tools/adr/index.js";

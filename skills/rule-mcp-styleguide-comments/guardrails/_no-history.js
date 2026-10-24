@@ -1,5 +1,3 @@
-
-
 /** Guardrail `js-comment-no-history`: Comments say what the code does, never what it used to do */
 export const jsCommentNoHistory = {
   id: "js-comment-no-history",

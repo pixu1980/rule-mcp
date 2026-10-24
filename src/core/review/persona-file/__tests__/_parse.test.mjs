@@ -1,5 +1,3 @@
-
-
 /** parsePersonaFile: nullable fields, comments, blanks and frameless bodies. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

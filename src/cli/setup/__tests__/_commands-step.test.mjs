@@ -1,5 +1,3 @@
-
-
 /**
  * The commands step: the rows it shows, and where answering it goes.
  *

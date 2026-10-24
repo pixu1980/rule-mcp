@@ -1,5 +1,3 @@
-
-
 /** IDE config, model key and environment detection in a sandboxed home. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

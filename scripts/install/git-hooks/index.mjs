@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-
-
 /**
  * @module scripts/install/git-hooks
  *

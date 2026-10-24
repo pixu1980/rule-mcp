@@ -1,5 +1,3 @@
-
-
 /** A load reports success only once the router reports the settled state. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

@@ -1,5 +1,3 @@
-
-
 /** The cleanups run at shutdown, newest first. */
 import { killTrackedChildren } from "./_children.js";
 import { currentShutdown, drainWaiters, setShuttingDown } from "./_state.js";

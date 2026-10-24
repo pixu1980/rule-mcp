@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-
-
 /**
  * @module scripts/reports/nyx-similarity
  *
@@ -26,7 +24,7 @@
  *   node --import ./scripts/alias-hook.mjs scripts/reports/nyx-similarity/index.mjs
  *   node --import ./scripts/alias-hook.mjs scripts/reports/nyx-similarity/index.mjs --json
  *
- * @see docs/integration/rule-mcp.md
+ * @see docs/integration/rule.md
  */
 
 process.env.RULE_MCP_NO_TELEMETRY ??= "1";

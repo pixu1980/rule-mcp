@@ -1,5 +1,3 @@
-
-
 /** Read pi transcripts for one project window. */
 import { join } from "node:path";
 import { inWindow, emptyUsage } from "./_window.js";

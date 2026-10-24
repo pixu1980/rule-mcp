@@ -1,5 +1,3 @@
-
-
 /**
  * reinstall.sh: purge, install, refresh the global bin - in that order.
  *
@@ -80,8 +78,10 @@ test("reinstall.sh refuses a directory that is not a checkout", () => {
   rmSync(dir, { recursive: true, force: true });
 });
 
-test("package.json exposes the same script as `pnpm reinstall`", () => {
+test("package.json exposes the setup script that reinstalls and runs the wizard", () => {
   const manifest = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
 
-  assert.match(manifest.scripts?.reinstall ?? "", /scripts\/reinstall\.sh/, "pnpm reinstall invokes the shell script");
+  assert.match(manifest.scripts?.setup ?? "", /scripts\/reinstall\.sh/, "pnpm setup invokes the shell script");
+  assert.match(manifest.scripts?.setup ?? "", /rule-mcp\.js setup/, "and then the wizard");
+  assert.equal(manifest.scripts?.reinstall, undefined, "the old name is gone");
 });

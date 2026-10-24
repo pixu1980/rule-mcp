@@ -1,5 +1,3 @@
-
-
 /**
  * The rows the surface step offers, and the line the review screen shows for
  * the answer.

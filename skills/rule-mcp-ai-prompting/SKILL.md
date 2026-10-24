@@ -153,7 +153,7 @@ reading often beats three more attempts, and it leaves you knowing something.
 ## See also
 
 - [rule-mcp-process-ai](../rule-mcp-process-ai/SKILL.md) - where these prompts sit in the lifecycle
-- `rule_tool_compress` / `/rule-mcp-compress` - sole compression engine (ADR 115)
+- `rule_tool_compress` / `/rule-compress` - sole compression engine (ADR 115)
 - [rule-mcp-process-ai](../rule-mcp-process-ai/SKILL.md) - the scope contract to hold agents to
 - [rule-mcp-ai-context-engineering](../rule-mcp-ai-context-engineering/SKILL.md) - managing the window this prompt lands in
 - [rule-mcp-ai-evals](../rule-mcp-ai-evals/SKILL.md) - measuring an AI feature rather than trusting it

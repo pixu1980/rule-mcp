@@ -1,5 +1,3 @@
-
-
 /** Project detection: framework, typescript, build tool, tokensave probe. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";

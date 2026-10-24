@@ -15,27 +15,27 @@ Claude Code installs clean `/rule-mcp-*` commands instead and suppresses these
 
 ### Reusable
 
-| Prompt                      | Arguments | Description                                                                                                                                                                   |
-| --------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/rule-mcp-area-ai`         | <request> | ai work: route free text to the right ai leaf skills/tools                                                                                                                    |
-| `/rule-mcp-area-backend`    | <request> | backend work: route free text to the right backend leaf skills/tools                                                                                                          |
-| `/rule-mcp-area-data`       | <request> | data work: route free text to the right data leaf skills/tools                                                                                                                |
-| `/rule-mcp-area-devops`     | <request> | devops work: route free text to the right devops leaf skills/tools                                                                                                            |
-| `/rule-mcp-area-frontend`   | <request> | frontend work: route free text to the right frontend leaf skills/tools                                                                                                        |
-| `/rule-mcp-area-meta`       | <request> | meta work: route free text to the right meta leaf skills/tools                                                                                                                |
-| `/rule-mcp-area-platform`   | <request> | platform work: route free text to the right platform leaf skills/tools                                                                                                        |
-| `/rule-mcp-area-process`    | <request> | process work: route free text to the right process leaf skills/tools                                                                                                          |
-| `/rule-mcp-area-styleguide` | <request> | styleguide work: route free text to the right styleguide leaf skills/tools                                                                                                    |
-| `/rule-mcp-area-toolchain`  | <request> | toolchain work: route free text to the right toolchain leaf skills/tools                                                                                                      |
-| `/rule-mcp-area-ui`         | <request> | ui work: route free text to the right ui leaf skills/tools                                                                                                                    |
-| `/rule-mcp-compress`        | [options] | Run rule_tool_compress: sole engine for prompt/context preprocessing and prose postprocessing                                                                                 |
-| `/rule-mcp-git`             | [options] | Audit the feature history and normalize it: Conventional Commit violations, merge commits, and (with --force) merge-commit removal - every rewrite behind a confirmation gate |
-| `/rule-mcp-handoff`         | [options] | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first.                     |
-| `/rule-mcp-handon`          | [options] | Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream                                                   |
-| `/rule-mcp-init`            | [options] | Prepare a project end to end: git hooks, recorder directory, tokensave, dependency pins, then scaffold the missing config and toolchain                                       |
-| `/rule-mcp-stats`           | [options] | Read local telemetry via rule_tool_stats: calls, cache hits, tokens, latency                                                                                                  |
-| `/rule-mcp-update`          | [options] | Apply an available server update explicitly, and report what changed                                                                                                          |
-| `/rule-mcp-usage`           | [options] | Declare a usage sidecar via rule_tool_usage when no transcript is available                                                                                                   |
+| Prompt                  | Arguments | Description                                                                                                                                                                   |
+| ----------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/rule-area-ai`         | <request> | ai work: route free text to the right ai leaf skills/tools                                                                                                                    |
+| `/rule-area-backend`    | <request> | backend work: route free text to the right backend leaf skills/tools                                                                                                          |
+| `/rule-area-data`       | <request> | data work: route free text to the right data leaf skills/tools                                                                                                                |
+| `/rule-area-devops`     | <request> | devops work: route free text to the right devops leaf skills/tools                                                                                                            |
+| `/rule-area-frontend`   | <request> | frontend work: route free text to the right frontend leaf skills/tools                                                                                                        |
+| `/rule-area-meta`       | <request> | meta work: route free text to the right meta leaf skills/tools                                                                                                                |
+| `/rule-area-platform`   | <request> | platform work: route free text to the right platform leaf skills/tools                                                                                                        |
+| `/rule-area-process`    | <request> | process work: route free text to the right process leaf skills/tools                                                                                                          |
+| `/rule-area-styleguide` | <request> | styleguide work: route free text to the right styleguide leaf skills/tools                                                                                                    |
+| `/rule-area-toolchain`  | <request> | toolchain work: route free text to the right toolchain leaf skills/tools                                                                                                      |
+| `/rule-area-ui`         | <request> | ui work: route free text to the right ui leaf skills/tools                                                                                                                    |
+| `/rule-compress`        | [options] | Run rule_tool_compress: sole engine for prompt/context preprocessing and prose postprocessing                                                                                 |
+| `/rule-git`             | [options] | Audit the feature history and normalize it: Conventional Commit violations, merge commits, and (with --force) merge-commit removal - every rewrite behind a confirmation gate |
+| `/rule-handoff`         | [options] | Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first.                     |
+| `/rule-handon`          | [options] | Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream                                                   |
+| `/rule-init`            | [options] | Prepare a project end to end: git hooks, recorder directory, tokensave, dependency pins, then scaffold the missing config and toolchain                                       |
+| `/rule-stats`           | [options] | Read local telemetry via rule_tool_stats: calls, cache hits, tokens, latency                                                                                                  |
+| `/rule-update`          | [options] | Apply an available server update explicitly, and report what changed                                                                                                          |
+| `/rule-usage`           | [options] | Declare a usage sidecar via rule_tool_usage when no transcript is available                                                                                                   |
 
 ### Persona, one per role
 
@@ -44,27 +44,27 @@ review runs the audit and the review, naming a plan runs the audit, the review a
 and anything else runs the audit alone. Each takes an optional free-text `topic` naming the
 focus for the run.
 
-| Role           | Command                          |
-| -------------- | -------------------------------- |
-| `a11y`         | `/rule-mcp-persona-a11y`         |
-| `ai`           | `/rule-mcp-persona-ai`           |
-| `architect`    | `/rule-mcp-persona-architect`    |
-| `auth`         | `/rule-mcp-persona-auth`         |
-| `backend`      | `/rule-mcp-persona-backend`      |
-| `data`         | `/rule-mcp-persona-data`         |
-| `devops`       | `/rule-mcp-persona-devops`       |
-| `devx`         | `/rule-mcp-persona-devx`         |
-| `docs`         | `/rule-mcp-persona-docs`         |
-| `frontend`     | `/rule-mcp-persona-frontend`     |
-| `i18n`         | `/rule-mcp-persona-i18n`         |
-| `oss`          | `/rule-mcp-persona-oss`          |
-| `performance`  | `/rule-mcp-persona-performance`  |
-| `privacy`      | `/rule-mcp-persona-privacy`      |
-| `qa`           | `/rule-mcp-persona-qa`           |
-| `security`     | `/rule-mcp-persona-security`     |
-| `simplicity`   | `/rule-mcp-persona-simplicity`   |
-| `supply-chain` | `/rule-mcp-persona-supply-chain` |
-| `ui`           | `/rule-mcp-persona-ui`           |
+| Role           | Command                      |
+| -------------- | ---------------------------- |
+| `a11y`         | `/rule-persona-a11y`         |
+| `ai`           | `/rule-persona-ai`           |
+| `architect`    | `/rule-persona-architect`    |
+| `auth`         | `/rule-persona-auth`         |
+| `backend`      | `/rule-persona-backend`      |
+| `data`         | `/rule-persona-data`         |
+| `devops`       | `/rule-persona-devops`       |
+| `devx`         | `/rule-persona-devx`         |
+| `docs`         | `/rule-persona-docs`         |
+| `frontend`     | `/rule-persona-frontend`     |
+| `i18n`         | `/rule-persona-i18n`         |
+| `oss`          | `/rule-persona-oss`          |
+| `performance`  | `/rule-persona-performance`  |
+| `privacy`      | `/rule-persona-privacy`      |
+| `qa`           | `/rule-persona-qa`           |
+| `security`     | `/rule-persona-security`     |
+| `simplicity`   | `/rule-persona-simplicity`   |
+| `supply-chain` | `/rule-persona-supply-chain` |
+| `ui`           | `/rule-persona-ui`           |
 
 ## The rest of the census
 

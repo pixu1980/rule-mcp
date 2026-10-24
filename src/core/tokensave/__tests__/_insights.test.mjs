@@ -1,5 +1,3 @@
-
-
 /**
  * The reporting reads: normalized, silent without a graph, and never a throw.
  *

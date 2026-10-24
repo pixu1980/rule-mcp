@@ -1,5 +1,3 @@
-
-
 // End to end against real sandboxed repositories: the pin enforced by runSelfUpdate.
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -20,7 +18,7 @@ test("an upstream on the allowed remote fast-forwards", () => {
 test("a repointed remote is refused instead of executed", () => {
   const { base, clone } = makeClonePair();
   try {
-    const result = runUpdateIn(clone, { RULE_MCP_UPDATE_REMOTE: "https://github.com/rule-mcp/other" });
+    const result = runUpdateIn(clone, { RULE_MCP_UPDATE_REMOTE: "https://github.com/rule/other" });
     assert.equal(result.updated, false, "an unrecognized remote must never be merged");
     assert.equal(result.reason, "remote-not-allowed");
   } finally {

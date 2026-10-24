@@ -1,5 +1,3 @@
-
-
 /** Regression: doctor validates VS Code's `servers` schema, not mcpServers. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
@@ -27,7 +25,7 @@ const output = execFileSync(
     [
       `import { installAgent } from ${JSON.stringify(installModule)};`,
       `import { runDoctor } from ${JSON.stringify(doctorModule)};`,
-      'installAgent({ agent: "vscode", entrypoint: "/tmp/rule-mcp.js", mode: "daemon" });',
+      'installAgent({ agent: "vscode", entrypoint: "/tmp/rule.js", mode: "daemon" });',
       'runDoctor().then((r) => console.log(JSON.stringify(r.agents.find(({ name }) => name === "vscode"))));',
     ].join(" "),
   ],

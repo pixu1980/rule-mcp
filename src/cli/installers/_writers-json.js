@@ -1,5 +1,3 @@
-
-
 /**
  * JSON writers: upsert/remove the MCP server entry in per-agent JSON configs
  * and the VS Code variants (settings.json server blocks).

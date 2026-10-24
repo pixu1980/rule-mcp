@@ -1,5 +1,3 @@
-
-
 /** Persists the last self-update check across restarts, through the shared file-store port. */
 import { join } from "node:path";
 import { getRuntimePaths } from "../../cli/paths/index.js";

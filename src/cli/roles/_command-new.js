@@ -1,5 +1,3 @@
-
-
 /** @module cli/roles/command-new - the `roles new` subcommand */
 
 import { existsSync } from "node:fs";

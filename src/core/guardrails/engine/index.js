@@ -1,5 +1,3 @@
-
-
 /**
  * rule-mcp Guardrails Engine
  *

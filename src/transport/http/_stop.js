@@ -1,5 +1,3 @@
-
-
 /** @module transport/http/stop */
 
 import { getHttpServer, setHttpServer, transports } from "./_state.js";

@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the manifest provider's fallbacks. */
 import assert from "node:assert/strict";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";

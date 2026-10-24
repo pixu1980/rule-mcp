@@ -1,5 +1,3 @@
-
-
 /** The corpus measurer counts the same ruler the routing corpus test asserts. */
 import { strict as assert } from "node:assert";
 import { readFileSync } from "node:fs";

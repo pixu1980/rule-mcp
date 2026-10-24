@@ -1,5 +1,3 @@
-
-
 /** The handoff format ladder: brief, minimal, close-session and the budget degrade. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
@@ -11,7 +9,7 @@ import { buildHandoff } from "../_build.js";
 import { adrLines, contextLines, headerLines, identityLines } from "../_sections-core.js";
 import { footerLines, gitLogLines, workingTreeLines } from "../_sections-repo.js";
 
-const project = mkdtempSync(join(tmpdir(), "rule-mcp-handoff-fmt-"));
+const project = mkdtempSync(join(tmpdir(), "rule-handoff-fmt-"));
 
 test.before(() => {
   mkdirSync(join(project, "docs", "adr"), { recursive: true });

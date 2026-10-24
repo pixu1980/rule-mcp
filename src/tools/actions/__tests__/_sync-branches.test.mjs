@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the sync renderer: dirty tree, conflicts, and the base note. */
 import assert from "node:assert/strict";
 import { mkdtempSync, writeFileSync } from "node:fs";

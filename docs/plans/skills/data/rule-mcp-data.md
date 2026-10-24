@@ -82,7 +82,7 @@ Depends on: `rule-mcp-data-duckdb` (HARD), `rule-mcp-data-indexed-db` (HARD), `r
 
 Feeds:,
 
-Shared files: skills/rule-mcp/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
+Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 

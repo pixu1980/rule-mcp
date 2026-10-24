@@ -1,5 +1,3 @@
-
-
 /** Idle memory release: heap handed back, reloaded from disk, no timer armed. */
 import test from "node:test";
 import assert from "node:assert/strict";

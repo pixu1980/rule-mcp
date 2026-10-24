@@ -1,10 +1,8 @@
-
-
 /**
  * @module tools/actions/git
  *
- * `rule_tool_git`: the `/rule-mcp-git` backend, and the squash behind
- * `/rule-mcp-handoff --close-feature --squash`.
+ * `rule_tool_git`: the `/rule-git` backend, and the squash behind
+ * `/rule-handoff --close-feature --squash`.
  *
  * Actions:
  *   - `audit` (default): read-only report - base, range, violations, merges.
@@ -14,7 +12,7 @@
  *     proposes.
  *
  * Every destructive action needs `force: true` to be proposed at all - the
- * `/rule-mcp-git --force` flag, or the explicit `--close-feature --squash` intent -
+ * `/rule-git --force` flag, or the explicit `--close-feature --squash` intent -
  * and `confirm: true` to run. `force` never substitutes for the confirmation.
  *
  * @see module:core/history

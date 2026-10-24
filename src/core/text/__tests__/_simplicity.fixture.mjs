@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/simplicity/fixture.test
  *

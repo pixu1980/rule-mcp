@@ -1,5 +1,3 @@
-
-
 /** PERF-3: the deterministic guard - one case per invariant validate.py owns. */
 import { strict as assert } from "node:assert";
 import { spawnSync } from "node:child_process";

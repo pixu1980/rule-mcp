@@ -1,5 +1,3 @@
-
-
 /** @module tools/skill/skill-tool */
 
 import { z } from "zod/v4";

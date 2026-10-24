@@ -1,5 +1,3 @@
-
-
 /**
  * Child entry for the starved-environment shim test.
  *

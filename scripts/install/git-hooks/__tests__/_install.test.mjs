@@ -1,5 +1,3 @@
-
-
 /**
  * The hook installer: what it writes, where it refuses to write, and what it
  * leaves alone.

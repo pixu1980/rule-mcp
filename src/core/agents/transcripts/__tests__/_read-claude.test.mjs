@@ -1,5 +1,3 @@
-
-
 /** The Claude Code reader: human turns, tool results, usage blocks, the window. */
 import test from "node:test";
 import assert from "node:assert/strict";

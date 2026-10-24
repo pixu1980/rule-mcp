@@ -146,7 +146,7 @@ Run `rule_tool_compress` to apply the passes to arbitrary prose before writing i
 
 ## See also
 
-- `rule_tool_compress` / `/rule-mcp-compress` - compression pass (ADR 115)
+- `rule_tool_compress` / `/rule-compress` - compression pass (ADR 115)
 - [rule-mcp-styleguide-markdown](../../rule-mcp-styleguide-markdown/SKILL.md) - the document structure this writes into
 - [rule-mcp-styleguide-naming](../../rule-mcp-styleguide-naming/SKILL.md) - naming, where code wins over prose style
 - [rule-mcp-styleguide-git](../../rule-mcp-styleguide-git/SKILL.md) - commit messages follow these rules too

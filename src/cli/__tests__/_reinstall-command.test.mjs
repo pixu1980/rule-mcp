@@ -1,5 +1,3 @@
-
-
 /**
  * The `reinstall` command: one shell script behind the CLI.
  *

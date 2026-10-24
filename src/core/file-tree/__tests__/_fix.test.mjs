@@ -1,5 +1,3 @@
-
-
 /** autoFixFileTree end to end: rename, create barrels, populate barrels. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
@@ -11,7 +9,7 @@ import { autoFixFileTree } from "../_fix.js";
 
 /** Build a scratch project from a { relativePath: contents } map. */
 function project(files) {
-  const root = mkdtempSync(join(tmpdir(), "rule-mcp-fix-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-fix-"));
 
   for (const [relative, contents] of Object.entries(files)) {
     const file = join(root, relative);

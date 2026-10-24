@@ -1,5 +1,3 @@
-
-
 /** WS7 - the changelog --check gate detects drift from a fresh generation. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for shadow IO catch arms and summarizeShadows edge rows. */
 import assert from "node:assert/strict";
 import { chmodSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

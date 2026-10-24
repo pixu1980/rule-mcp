@@ -1,5 +1,3 @@
-
-
 /** WS1.4 - working-tree state and the history-rewrite safety gate. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";

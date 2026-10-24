@@ -1,5 +1,3 @@
-
-
 /** WS3 - lint a message, a range and a push. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

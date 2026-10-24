@@ -1,5 +1,3 @@
-
-
 /** The JSON writer helpers: upsert/remove across agents and the VS Code variants. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

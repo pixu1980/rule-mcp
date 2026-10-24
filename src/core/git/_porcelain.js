@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/git/porcelain - parsing `git status --porcelain`.
  *

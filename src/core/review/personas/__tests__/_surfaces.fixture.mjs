@@ -1,5 +1,3 @@
-
-
 /**
  * Personas plan B.1-B.3: the surfaces, all generated from the registry.
  *
@@ -8,7 +6,7 @@
  * entry point at once - that is the whole reason the registry exists.
  *
  * Naming note: the prompt and the agent command share the name
- * `rule-mcp-persona-<role>` (ADR 120). The agent-command generator derives its set
+ * `rule-persona-<role>` (ADR 120). The agent-command generator derives its set
  * from the prompt registry, so two names for one role would be exactly the
  * drift ADR 028 removed.
  */

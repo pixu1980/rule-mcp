@@ -1,5 +1,3 @@
-
-
 /** Linux systemd adapter: the user unit, install, uninstall, the lifecycle verbs, check. */
 import { writeFileSync, mkdirSync, existsSync, rmSync } from "node:fs";
 import { join } from "node:path";

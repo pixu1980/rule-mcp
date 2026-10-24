@@ -1,5 +1,3 @@
-
-
 /**
  * The surface map and the code agree, in both directions.
  *

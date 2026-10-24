@@ -1,5 +1,3 @@
-
-
 /**
  * T7-T13: every skip reason and merge decision runSelfUpdate can return, on
  * real sandboxed repositories. engine.test.mjs owns the happy path and the
@@ -124,7 +122,7 @@ import "../../../../tests/fixtures/git-hermetic.mjs";
 // ── T15: a skills-only update reloads the skill catalog when enabled ──
 {
   const { clone, seed, base, upstream } = makeClonePair();
-  pushUpstreamChange(seed, { "skills/rule-mcp/SKILL.md": "v2\n" });
+  pushUpstreamChange(seed, { "skills/rule/SKILL.md": "v2\n" });
   const r = runUpdateIn(clone, { RULE_MCP_UPDATE_REMOTE: upstream }, true);
   assert.equal(r.updated, true, "skills change still fast-forwards with reload enabled");
   assert.equal(r.changedSkills, true, "skills change classified");

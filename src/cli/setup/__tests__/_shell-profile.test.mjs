@@ -1,5 +1,3 @@
-
-
 /**
  * An uninstall may only delete lines this installer wrote. The shell version
  * deleted every `export OPENAI_API_KEY=...` it found; that must not come back.

@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/release/pins
  *
@@ -8,8 +6,8 @@
  * The house rule is `"name": "x.y.z"`: a range (`^`, `~`, `>`, `*`) lets npm
  * pull a newer sub-dependency in without anyone deciding to, which is how a
  * build breaks on a dependency nobody chose to change. This reports the
- * specifiers that break the rule, deterministically, so `/rule-mcp-init` can name
- * them and `/rule-mcp-handoff` can refuse to call the tree clean while one exists.
+ * specifiers that break the rule, deterministically, so `/rule-init` can name
+ * them and `/rule-handoff` can refuse to call the tree clean while one exists.
  *
  * Protocol and path specifiers are not ranges and are never reported:
  * `workspace:`, `file:`, `link:`, `npm:` aliases and `catalog:` all name a

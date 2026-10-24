@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/agent-transcripts.test
  *

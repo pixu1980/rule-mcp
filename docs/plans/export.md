@@ -96,7 +96,7 @@ never delete.
 - [ ] **Step 1 - EX-03 (high)**: Idempotent telemetry merge
   - [ ] 1.1 Failing tests: two exports -> stats unchanged on second run
   - [ ] 1.2 Merge transcript-derived fields into MCP telemetry store with digests
-  - [ ] 1.3 `/rule-mcp-stats` / `rule_tool_stats` read the merged truth
+  - [ ] 1.3 `/rule-stats` / `rule_tool_stats` read the merged truth
   - [ ] 1.4 Gate: stats suites + new merge suite
 - [ ] **Step 2 - EX-07 (medium)**: Flight emit in the pipeline
   - [ ] 2.1 Document and test `keep` vs drain when invoked from `/rule-mcp-export`
@@ -146,7 +146,7 @@ never delete.
 /rule-mcp-export cleanup      # distill + confirm + hard delete outside keep-set
 /rule-mcp-keep                # confirm one decision into decision-cache
 /rule-mcp-adr                 # ADR via rule_tool_process_adr, then keep offer
-/rule-mcp-stats               # unchanged reader; must reflect merged telemetry
+/rule-stats               # unchanged reader; must reflect merged telemetry
 ```
 
 ## Out of scope

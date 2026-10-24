@@ -1,5 +1,3 @@
-
-
 /** @module core/guardrails/engine/registry - which rule families apply to which skill */
 
 import { SCAFFOLD_GUARDRAILS } from "../_scaffold.js";

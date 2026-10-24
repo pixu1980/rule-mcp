@@ -1,5 +1,3 @@
-
-
 /**
  * computeKpi's remaining shapes: empty inputs, absent usage, non-numeric
  * timestamps, cost-per-1k spreads, core-token ratios and the reminder gap.

@@ -11,7 +11,7 @@ OSS-3: server.json claimed the io.github.rule-mcp namespace while the GitHub own
 
 ## Decision
 
-server.json name is io.github.pixu1980/rule-mcp, derived from repository.url. Registry publication itself is deferred: no authenticated publish happens in this session; revisit once the release pipeline (Step 6) ships signed tarballs.
+server.json name is io.github.pixu1980/rule, derived from repository.url. Registry publication itself is deferred: no authenticated publish happens in this session; revisit once the release pipeline (Step 6) ships signed tarballs.
 
 ## Consequences
 

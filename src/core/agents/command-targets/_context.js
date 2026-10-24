@@ -1,5 +1,3 @@
-
-
 /** @module core/agents/command-targets/context - injectable filesystem/platform resolution */
 
 import { existsSync, readdirSync } from "node:fs";

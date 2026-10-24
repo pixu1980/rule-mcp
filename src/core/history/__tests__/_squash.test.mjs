@@ -1,5 +1,3 @@
-
-
 /** WS6 - closing a feature as one commit, behind the gate and the tree invariant. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the renumber report's clean, author and index-only arms. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

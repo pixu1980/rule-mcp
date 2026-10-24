@@ -1,5 +1,3 @@
-
-
 /**
  * The commands step's drill-down, driven by keystrokes.
  *

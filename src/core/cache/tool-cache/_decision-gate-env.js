@@ -1,5 +1,3 @@
-
-
 /** The decision-cache gate switches: opt-in shadow, opt-in replay, and the floor. */
 import { cacheEnabled } from "./_config.js";
 import { SHADOW_THRESHOLD } from "./_decision-protocol.js";

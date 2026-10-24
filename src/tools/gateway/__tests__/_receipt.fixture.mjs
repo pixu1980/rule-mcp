@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/gateway-cache-receipt.test
  *

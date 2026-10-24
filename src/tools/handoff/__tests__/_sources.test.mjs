@@ -1,5 +1,3 @@
-
-
 /** The handoff sources: ADR parsing edge shapes and context formats. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
@@ -9,7 +7,7 @@ import { test } from "node:test";
 
 import { readAdrs, readContextValues, readProjectIdentity } from "../_sources.js";
 
-const project = mkdtempSync(join(tmpdir(), "rule-mcp-handoff-src-"));
+const project = mkdtempSync(join(tmpdir(), "rule-handoff-src-"));
 
 test.before(() => {
   mkdirSync(join(project, "docs", "adr"), { recursive: true });
@@ -47,7 +45,7 @@ test("readAdrs parses hyphen titles, markdown status links and two-line decision
 });
 
 test("readAdrs skips non-ADR names, unreadable entries, and missing dates", () => {
-  const edge = mkdtempSync(join(tmpdir(), "rule-mcp-handoff-adr-edge-"));
+  const edge = mkdtempSync(join(tmpdir(), "rule-handoff-adr-edge-"));
   mkdirSync(join(edge, "docs", "adr"), { recursive: true });
   writeFileSync(join(edge, "docs/adr/ADR.md"), "# The index, not an ADR\n");
   writeFileSync(join(edge, "docs/adr/020-no-date.md"), "# 020: No Date Here\n\n- **Status**: accepted\n");
@@ -59,7 +57,7 @@ test("readAdrs skips non-ADR names, unreadable entries, and missing dates", () =
 
   assert.deepEqual(readAdrs(join(edge, "nowhere")), [], "a missing adr dir reads empty");
 
-  const flat = mkdtempSync(join(tmpdir(), "rule-mcp-handoff-adr-flat-"));
+  const flat = mkdtempSync(join(tmpdir(), "rule-handoff-adr-flat-"));
   mkdirSync(join(flat, "docs"), { recursive: true });
   writeFileSync(join(flat, "docs/adr"), "a file where the dir should be");
   assert.deepEqual(readAdrs(flat), [], "an unreadable adr dir reads empty");
@@ -71,12 +69,12 @@ test("readAdrs skips non-ADR names, unreadable entries, and missing dates", () =
 test("readProjectIdentity reads package.json and survives its absence or corruption", () => {
   assert.deepEqual(readProjectIdentity(join(project, "no", "pkg")), {}, "a missing package.json reads empty");
 
-  const broken = mkdtempSync(join(tmpdir(), "rule-mcp-handoff-pkg-broken-"));
+  const broken = mkdtempSync(join(tmpdir(), "rule-handoff-pkg-broken-"));
   writeFileSync(join(broken, "package.json"), "{not json");
   assert.deepEqual(readProjectIdentity(broken), {}, "a malformed package.json reads empty");
   rmSync(broken, { recursive: true, force: true });
 
-  const bare = mkdtempSync(join(tmpdir(), "rule-mcp-handoff-pkg-bare-"));
+  const bare = mkdtempSync(join(tmpdir(), "rule-handoff-pkg-bare-"));
   writeFileSync(join(bare, "package.json"), "{}");
   assert.deepEqual(readProjectIdentity(bare), { name: "", description: "", version: "" }, "missing fields fall back to empty strings");
 

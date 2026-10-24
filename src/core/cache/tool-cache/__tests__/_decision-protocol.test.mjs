@@ -1,5 +1,3 @@
-
-
 /** The deterministic decision-cache protocol: redact, state, question, parse, guard. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

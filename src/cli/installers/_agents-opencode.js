@@ -1,5 +1,3 @@
-
-
 /**
  * opencode's agent module: install, uninstall, and the sweep of the
  * `mcp.json` an older installer wrote.

@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/prompts/fixture
  *
@@ -17,14 +15,14 @@ console.log("prompts registry test");
 
 // ── Expected registry ────────────────────────────────────────────
 
-export const WORKFLOW_PROMPTS = ["rule-mcp-handoff"];
+export const WORKFLOW_PROMPTS = ["rule-handoff"];
 
 // The area prompts are derived from the resolved skill catalog, one per area hub
 // (ADR 117), so the fixture asks the catalog rather than freezing a list that
 // a new hub would silently contradict.
 export const AREA_PROMPTS = listAreaPrompts().map((prompt) => prompt.name);
 
-export const ONE_SHOT_PROMPTS = ["rule-mcp-compress", "rule-mcp-git", "rule-mcp-handon", "rule-mcp-init", "rule-mcp-stats", "rule-mcp-update", "rule-mcp-usage"];
+export const ONE_SHOT_PROMPTS = ["rule-compress", "rule-git", "rule-handon", "rule-init", "rule-stats", "rule-update", "rule-usage"];
 
 export const EXPECTED = [...WORKFLOW_PROMPTS, ...AREA_PROMPTS];
 

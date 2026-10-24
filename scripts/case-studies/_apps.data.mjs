@@ -1,5 +1,3 @@
-
-
 /**
  * @module scripts/case-studies/apps
  *

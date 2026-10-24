@@ -1,5 +1,3 @@
-
-
 /**
  * `handoff doctor`, driven through commander in this process: the plan that
  * repairs nothing, an index rebuilt for one family and not the other, and the
@@ -128,7 +126,7 @@ test("an ADR that names a tool has its author named when the plan is applied", a
     const { output } = await doctor(["--dir", root, "--fix"]);
 
     assert.match(output, /author\(s\) named/u, "the tool author is replaced by the person the commit records");
-    assert.doesNotMatch(output, /rule-mcp\n?$/u, "the tool name does not survive as the author line");
+    assert.doesNotMatch(output, /rule\n?$/u, "the tool name does not survive as the author line");
   } finally {
     remove(root);
   }

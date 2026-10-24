@@ -1,5 +1,3 @@
-
-
 /** Project sources a handoff reads: the ADR log, .context values, package identity. */
 import { existsSync, readFileSync } from "node:fs";
 import { basename, join } from "node:path";

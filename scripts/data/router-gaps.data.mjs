@@ -1,5 +1,3 @@
-
-
 /**
  * @module scripts/data/router-gaps
  *

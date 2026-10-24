@@ -1,5 +1,3 @@
-
-
 /**
  * The uninstall wizard rendered into a fake terminal.
  *

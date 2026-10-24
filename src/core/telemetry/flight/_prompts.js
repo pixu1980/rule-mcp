@@ -1,5 +1,3 @@
-
-
 /** @module core/telemetry/flight/prompts */
 
 /**

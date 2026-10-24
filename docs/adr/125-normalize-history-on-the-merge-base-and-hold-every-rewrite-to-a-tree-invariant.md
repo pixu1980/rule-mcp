@@ -11,7 +11,7 @@ WS4 removes merge commits from a feature branch while preserving exactly what th
 
 ## Decision
 
-Linearization runs `git rebase <merge-base>`: replaying the feature commits onto the fork point drops the merges and leaves the final tree exactly as it was. Every rewrite - reword (via `git filter-branch --msg-filter`) and linearize - captures `HEAD^{tree}` before and re-reads it after, and if the two differ the branch is rolled back with `git reset --hard <original>` and the rewrite is refused. A conflict aborts and rolls back the same way, and the conflicted files are reported, never resolved. Destructive proposals require `force: true` (the `/rule-mcp-git --force` flag); execution always requires `confirm: true`, and `force` never substitutes for it.
+Linearization runs `git rebase <merge-base>`: replaying the feature commits onto the fork point drops the merges and leaves the final tree exactly as it was. Every rewrite - reword (via `git filter-branch --msg-filter`) and linearize - captures `HEAD^{tree}` before and re-reads it after, and if the two differ the branch is rolled back with `git reset --hard <original>` and the rewrite is refused. A conflict aborts and rolls back the same way, and the conflicted files are reported, never resolved. Destructive proposals require `force: true` (the `/rule-git --force` flag); execution always requires `confirm: true`, and `force` never substitutes for it.
 
 ## Consequences
 

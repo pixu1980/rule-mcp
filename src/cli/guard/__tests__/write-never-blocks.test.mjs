@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/guard/__tests__/write-never-blocks
  *

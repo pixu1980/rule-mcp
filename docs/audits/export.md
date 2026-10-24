@@ -37,8 +37,8 @@ session list/map, nor delete APIs.
   the event log unless `keep: true`
 - Flight already pulls agent usage into the envelope (usage suites for
   pi/claude/codex/opencode)
-- `/rule-mcp-stats` -> `rule_tool_stats` (KPI: calls, cache hits, tokens, latency)
-- `/rule-mcp-usage` -> sidecar when no transcript
+- `/rule-stats` -> `rule_tool_stats` (KPI: calls, cache hits, tokens, latency)
+- `/rule-usage` -> sidecar when no transcript
 
 ### Caches
 
@@ -58,7 +58,7 @@ session list/map, nor delete APIs.
 
 Wizard/installers cover many hosts; transcript **usage** coverage is the four
 above. Installed-manifest at
-`~/.local/share/rule-mcp/installed.md` is the install truth; export v1
+`~/.local/share/rule/installed.md` is the install truth; export v1
 still gates on transcript capability, not merely "MCP installed".
 
 ## Gaps (for the plan)

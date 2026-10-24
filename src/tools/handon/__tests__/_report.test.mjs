@@ -1,5 +1,3 @@
-
-
 /** The report itself: shape, size, read-only behavior and file selection. */
 import test from "node:test";
 import assert from "node:assert/strict";

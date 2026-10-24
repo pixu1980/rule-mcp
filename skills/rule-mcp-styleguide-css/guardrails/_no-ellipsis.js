@@ -1,5 +1,3 @@
-
-
 /** Guardrail `css-no-ellipsis`: Prose wraps, it is never truncated */
 export const cssNoEllipsis = {
   id: "css-no-ellipsis",

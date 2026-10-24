@@ -1,5 +1,3 @@
-
-
 /** @module scripts/fix/self-guardrails/split-one-liners - js-for-loop-braces, js-single-line-method, js-if-braces */
 
 export function apply(text) {

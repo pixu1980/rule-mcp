@@ -1,5 +1,3 @@
-
-
 /**
  * detectFrameworkSkill: the hint wins, the path is the fallback, and the
  * domain is derived from the skill the framework maps to.

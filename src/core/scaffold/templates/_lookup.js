@@ -1,5 +1,3 @@
-
-
 /** @module core/scaffold/templates/lookup */
 
 import { COMPONENT_TEMPLATES } from "../_template-data.data.js";

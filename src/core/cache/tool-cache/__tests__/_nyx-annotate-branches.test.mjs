@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for prompt extraction and the annotation batch. */
 import assert from "node:assert/strict";
 import { mkdtempSync } from "node:fs";

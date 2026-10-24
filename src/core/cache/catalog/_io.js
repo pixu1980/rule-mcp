@@ -1,5 +1,3 @@
-
-
 /** @module core/cache/catalog/io - where the committed catalog lives, read and written */
 
 import { existsSync, readFileSync, writeFileSync } from "node:fs";

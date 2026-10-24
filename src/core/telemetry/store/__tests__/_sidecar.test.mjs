@@ -1,5 +1,3 @@
-
-
 /** The usage sidecar: bad input, missing and corrupt files, and the round trip. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, writeFileSync } from "node:fs";

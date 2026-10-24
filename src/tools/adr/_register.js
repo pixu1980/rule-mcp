@@ -1,5 +1,3 @@
-
-
 /** Register the rule_tool_process_adr MCP tool. */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";

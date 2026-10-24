@@ -1,5 +1,3 @@
-
-
 /**
  * @module scripts/build-version/hashes - keep the distribution manifests on
  * the release: version fields, tarball URLs and hashes, recomputed from a

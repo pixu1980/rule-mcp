@@ -1,5 +1,3 @@
-
-
 /** The local JSONL record of what the decision-cache gate would replay. */
 import { appendFileSync, existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
 import { dirname, join } from "node:path";

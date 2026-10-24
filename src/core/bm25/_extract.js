@@ -1,5 +1,3 @@
-
-
 /** Document section extraction with heading boost. */
 
 function extractSections(content) {

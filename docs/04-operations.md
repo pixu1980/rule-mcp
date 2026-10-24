@@ -134,7 +134,7 @@ rule-mcp tools call rule-mcp --json '{"prompt": "List available community skills
 ### 1. Repository Setup
 
 ```bash
-cd /Users/emilianopisu/Projects/ai/rule-mcp
+cd /Users/emilianopisu/Projects/ai/rule
 
 # Initialize git
 git init
@@ -142,7 +142,7 @@ git add -A
 git commit -m "feat: initial release v0.1.0"
 
 # Add remote
-git remote add origin https://github.com/pixu1980/rule-mcp
+git remote add origin https://github.com/pixu1980/rule
 
 # Push
 git branch -M main
@@ -201,7 +201,7 @@ The release pipeline (`.github/workflows/release.yml`) runs automatically:
 
 ### 5. Homebrew Tap Configuration
 
-To enable `brew install pixu1980/tap/rule-mcp`:
+To enable `brew install pixu1980/tap/rule`:
 
 ```bash
 # Create the tap repo
@@ -211,7 +211,7 @@ To enable `brew install pixu1980/tap/rule-mcp`:
 git clone https://github.com/pixu1980/homebrew-tap
 cp rule-mcp.rb homebrew-tap/Formula/
 cd homebrew-tap
-git add Formula/rule-mcp.rb
+git add Formula/rule.rb
 git commit -m "feat: add rule-mcp v0.1.0"
 git push
 ```
@@ -226,8 +226,8 @@ Users can install using these methods:
 | -------------------- | ----------------------------------------------------- |
 | **Clone + launcher** | `git clone` + `./scripts/install.sh`                  |
 | **pnpx**             | `pnpx rule-mcp serve`                                 |
-| **Homebrew**         | `brew install pixu1980/tap/rule-mcp`                  |
-| **Docker**           | `docker pull ghcr.io/pixu1980/rule-mcp`               |
+| **Homebrew**         | `brew install pixu1980/tap/rule`                      |
+| **Docker**           | `docker pull ghcr.io/pixu1980/rule`                   |
 | **Winget**           | `winget install pixu1980.rule-mcp`                    |
 | **Scoop**            | `scoop bucket add rule-mcp && scoop install rule-mcp` |
 | **GitHub Release**   | Direct `.tgz` download                                |
@@ -238,12 +238,12 @@ Users can install using these methods:
 
 | Agent              | Artifact                              | Invocation                                             |
 | ------------------ | ------------------------------------- | ------------------------------------------------------ |
-| Pi                 | `~/.pi/agent/prompts/rule-mcp.md`     | `/rule-mcp`                                            |
-| Claude Code        | `~/.claude/commands/rule-mcp.md`      | `/rule-mcp`                                            |
-| Gemini CLI         | `~/.gemini/commands/rule-mcp.toml`    | `/rule-mcp`                                            |
-| Cursor             | `.cursor/commands/rule-mcp.md`        | `/rule-mcp`                                            |
+| Pi                 | `~/.pi/agent/prompts/rule.md`         | `/rule`                                                |
+| Claude Code        | `~/.claude/commands/rule.md`          | `/rule`                                                |
+| Gemini CLI         | `~/.gemini/commands/rule.toml`        | `/rule`                                                |
+| Cursor             | `.cursor/commands/rule.md`            | `/rule`                                                |
 | GitHub Copilot CLI | `~/.copilot/agents/rule-mcp.agent.md` | `/agent` selection                                     |
-| Codex CLI          | `~/.agents/skills/rule-mcp/`          | Skill workflow; no stable exact custom command assumed |
+| Codex CLI          | `~/.agents/skills/rule/`              | Skill workflow; no stable exact custom command assumed |
 
 Uninstall removes same artifact. Universal command body forces routing, evidence lookup, test-first implementation, blocking `rule_tool_check`, real test reporting, and ADR capture.
 
@@ -253,14 +253,14 @@ Uninstall removes same artifact. Universal command body forces routing, evidence
 
 ```bash
 # Test the clone install
-git clone https://github.com/pixu1980/rule-mcp.git
+git clone https://github.com/pixu1980/rule.git
 cd rule-mcp
 ./scripts/install.sh
 rule-mcp doctor
 rule-mcp install --agent all
 
 # Test Docker
-docker pull ghcr.io/pixu1980/rule-mcp
+docker pull ghcr.io/pixu1980/rule
 docker compose up -d
 curl http://localhost:37999/health
 
@@ -270,8 +270,8 @@ rule-mcp tools call rule_tool_detect --json '{}'
 rule-mcp tools call rule-mcp --json '{"prompt": "React button"}'
 
 # Verify a release tarball (every GitHub Release attaches both files)
-curl -fsSLO https://github.com/pixu1980/rule-mcp/releases/download/<tag>/rule-mcp-<version>.tgz
-curl -fsSLO https://github.com/pixu1980/rule-mcp/releases/download/<tag>/SHA256SUMS
+curl -fsSLO https://github.com/pixu1980/rule/releases/download/<tag>/rule-mcp-<version>.tgz
+curl -fsSLO https://github.com/pixu1980/rule/releases/download/<tag>/SHA256SUMS
 shasum -a 256 -c SHA256SUMS
 ```
 
@@ -319,8 +319,8 @@ Everything else is already configured in existing workflows:
 - CI: `.github/workflows/ci.yml`
 - Release: `.github/workflows/release.yml`
 - Docker: `Dockerfile` + `docker-compose.yml`
-- Winget: `.github/winget/rule-mcp.rule-mcp.yaml`
-- Scoop: `.github/scoop/rule-mcp.json`
+- Winget: `.github/winget/rule.rule-mcp.yaml`
+- Scoop: `.github/scoop/rule.json`
 - Server manifest: `server.json`
 - Changelog: `CHANGELOG.md`
 

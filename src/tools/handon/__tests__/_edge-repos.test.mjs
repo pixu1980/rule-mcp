@@ -1,5 +1,3 @@
-
-
 /** Repositories the verifier must not invent facts about. */
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -10,7 +8,7 @@ import { git, handon, write } from "./_handon.fixture.mjs";
 import "../../../../tests/fixtures/git-hermetic.mjs";
 
 test("no handoff directory is a clear message, not an invented summary", () => {
-  const empty = mkdtempSync(join(tmpdir(), "rule-mcp-handon-empty-"));
+  const empty = mkdtempSync(join(tmpdir(), "rule-handon-empty-"));
   const result = handon({ projectDir: empty });
   assert.equal(result.source, undefined);
   assert.ok(result.text.includes("No handoff"), "it says there is nothing to resume from");
@@ -19,7 +17,7 @@ test("no handoff directory is a clear message, not an invented summary", () => {
 });
 
 test("a repository with no git history still reports the handoff", () => {
-  const bare = mkdtempSync(join(tmpdir(), "rule-mcp-handon-nogit-"));
+  const bare = mkdtempSync(join(tmpdir(), "rule-handon-nogit-"));
   write(bare, "docs/handoff/01-x.md", "# Handoff 01: x\n\n**Branch:** `main`\n\n- [ ] finish it\n");
   const result = handon({ projectDir: bare });
   assert.equal(result.source, "docs/handoff/01-x.md");
@@ -33,7 +31,7 @@ test("a path git never tracked is not reported as deleted", () => {
   // acceptance is recorded. The directory is gitignored, so the file is absent
   // from a fresh clone and calling it deleted invents a fact - the same failure
   // the glob case fixed, from the other direction.
-  const root = mkdtempSync(join(tmpdir(), "rule-mcp-handon-ignored-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-handon-ignored-"));
   mkdirSync(join(root, "docs", "handoff"), { recursive: true });
   git(root, "init", "-q");
   git(root, "config", "user.email", "fixture@example.com");

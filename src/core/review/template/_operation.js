@@ -1,5 +1,3 @@
-
-
 /** @module core/review/template/operation */
 
 /** The operations a persona run can be asked to do, in surface order. */

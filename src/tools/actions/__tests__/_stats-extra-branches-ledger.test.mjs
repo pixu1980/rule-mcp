@@ -1,5 +1,3 @@
-
-
 /**
  * The shapes `rule_tool_stats` reads from a machine that is not this one: a
  * ledger entry with no figures, a graph with no recorded timestamp, a server
@@ -17,7 +15,7 @@ import { test } from "node:test";
 
 const skip = process.platform === "win32" && "a POSIX shell is needed to fake the tokensave CLI";
 
-const home = mkdtempSync(join(tmpdir(), "rule-mcp-stats-ledger-"));
+const home = mkdtempSync(join(tmpdir(), "rule-stats-ledger-"));
 const originalCwd = process.cwd();
 
 process.env.RULE_MCP_HOME = home;

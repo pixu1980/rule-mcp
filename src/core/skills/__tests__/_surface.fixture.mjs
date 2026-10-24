@@ -1,5 +1,3 @@
-
-
 // test/skill-surface-embedded-only fixture
 //
 // The tool surface of this server is defined by ./skills in THIS repository and

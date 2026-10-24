@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the lifecycle: state normalization, retry, timeout and unload. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

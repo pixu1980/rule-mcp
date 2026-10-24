@@ -1,5 +1,3 @@
-
-
 /** withTimeout and trySafe on raw promises and non-Error throws. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

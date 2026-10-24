@@ -1,5 +1,3 @@
-
-
 /** The committed file: byte-identical export, read-back, floor semantics, priming. */
 import test, { beforeEach } from "node:test";
 import assert from "node:assert/strict";

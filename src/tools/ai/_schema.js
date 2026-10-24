@@ -1,5 +1,3 @@
-
-
 import { z } from "zod/v4";
 
 /** Input schema of the rule-mcp routing tool. */

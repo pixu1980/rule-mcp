@@ -1,5 +1,3 @@
-
-
 /** Shim path questions that do not touch the machine: candidates and trust. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

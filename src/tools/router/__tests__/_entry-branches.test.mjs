@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for entry resolution and routed-skill attribution. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

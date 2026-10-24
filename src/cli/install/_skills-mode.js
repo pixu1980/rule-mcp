@@ -1,5 +1,3 @@
-
-
 /** @module cli/install/skills-mode - the install that configures no server */
 
 /**

@@ -1,19 +1,17 @@
-
-
 /**
  * uninstall --purge must delete the runtime home ~/.rule-mcp/ (state,
  * projects, data, config, the layout src/cli/paths/index.js defines), and install
  * must recreate it on the next run.
  *
  * Regression: `./scripts/uninstall.sh --purge` only removed
- * ~/.config/rule-mcp/ and left ~/.rule-mcp/ (with the daemon SSE
+ * ~/.config/rule/ and left ~/.rule-mcp/ (with the daemon SSE
  * token, telemetry, caches and per-project recordings) behind. Reinstalling
  * then started from stale state, and the "purge" promise, remove everything,
  * was silently broken.
  *
  * Contract guarded here, through the bootstrap that forwards to the wizard
  * (ADR 090): `uninstall.sh --purge` removes ~/.rule-mcp/ along with
- * ~/.config/rule-mcp/, and --keep-config keeps the configuration while
+ * ~/.config/rule/, and --keep-config keeps the configuration while
  * still taking the runtime home.
  */
 import { execFileSync } from "node:child_process";
@@ -42,7 +40,7 @@ export function minimalPath() {
   return [dirname(process.execPath), "/usr/bin", "/bin", "/usr/sbin", "/sbin"].join(":");
 }
 
-/** Create a fake HOME with ~/.rule-mcp and ~/.config/rule-mcp. */
+/** Create a fake HOME with ~/.rule-mcp and ~/.config/rule. */
 export function seedHome() {
   const home = mkdtempSync(join(tmpdir(), "rule-mcp-purge-home-"));
   for (const dir of ["state", "projects", "data", "config"]) {

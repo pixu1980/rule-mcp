@@ -1,5 +1,3 @@
-
-
 /**
  * The wizard asks which commands to write, and the flags answer the same way.
  *

@@ -1,5 +1,3 @@
-
-
 /** @module core/review/roles/catalog */
 
 import { existsSync, readdirSync, readFileSync } from "node:fs";

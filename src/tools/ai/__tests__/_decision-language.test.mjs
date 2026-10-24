@@ -1,5 +1,3 @@
-
-
 /** `auto` reads the prompt's language and asks the model that covers it. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

@@ -1,5 +1,3 @@
-
-
 /** Daemon process lifecycle: log rotation, detached start, graceful stop. */
 import { spawn } from "node:child_process";
 import { closeSync, existsSync, mkdirSync, openSync, readFileSync, writeFileSync, rmSync, statSync, renameSync } from "node:fs";

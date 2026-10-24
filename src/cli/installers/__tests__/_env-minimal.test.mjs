@@ -1,5 +1,3 @@
-
-
 /**
  * The installed server config mirrors an explicit minimal choice.
  *

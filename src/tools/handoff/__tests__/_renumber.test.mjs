@@ -1,5 +1,3 @@
-
-
 /**
  * Automatic renumbering: a close-session handoff plans and applies it, a plain
  * handoff (and a dry run) leaves the files where they are.

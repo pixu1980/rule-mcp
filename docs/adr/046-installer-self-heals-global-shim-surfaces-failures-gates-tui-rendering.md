@@ -12,9 +12,9 @@ result of `command -v rule-mcp` without verifying the binary could actually
 launch. That trust broke in a real scenario:
 
 1. `pnpm link --global .` had created a cmd-shim that pins the repo's absolute
-   path (`# cmd-shim-target=…/rule-mcp/bin/rule-mcp.js`).
-2. The repo moved from `…/Projects/pixu1980/rule-mcp` to
-   `…/Projects/pixu1980/ai/rule-mcp`. The shim stayed on `PATH` but crashed
+   path (`# cmd-shim-target=…/rule/bin/rule-mcp.js`).
+2. The repo moved from `…/Projects/pixu1980/rule` to
+   `…/Projects/pixu1980/ai/rule`. The shim stayed on `PATH` but crashed
    on launch (`Error: Cannot find module …`).
 3. `run_cli install --agent pi … --json >/dev/null 2>&1` swallowed both streams,
    so the failure looked exactly like a successful-but-skipped install. The pi

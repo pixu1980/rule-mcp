@@ -1,5 +1,3 @@
-
-
 /**
  * Branch coverage for getAvailableSkills empty-catalog, missing SKILL.md, and
  * frontmatter fallbacks. Uses a temp embedded catalog via registerHooks so the

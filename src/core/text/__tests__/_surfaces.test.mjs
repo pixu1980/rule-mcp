@@ -1,5 +1,3 @@
-
-
 /**
  * Phase 3 (plan: execution-plan.md), the compression-surface manifest, pinned.
  *

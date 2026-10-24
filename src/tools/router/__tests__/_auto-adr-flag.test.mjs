@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/auto-adr-flag.test
  *

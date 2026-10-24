@@ -1,5 +1,3 @@
-
-
 /** checkDaemonService and formatDaemonStatus on the macos arm, in a fake home. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";

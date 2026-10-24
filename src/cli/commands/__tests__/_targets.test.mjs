@@ -1,5 +1,3 @@
-
-
 /** agent-commands targets: write/skip/remove cycles and target printing. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, readdirSync, rmSync } from "node:fs";

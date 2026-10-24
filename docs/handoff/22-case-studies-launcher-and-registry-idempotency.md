@@ -25,9 +25,9 @@ Surface unchanged this session: 107 tools, 40 commands, 37 prompts, 89 skills.
 | #   | Status   | Title                                                             | Tags                              | Decision                                                                                                            |
 | --- | -------- | ----------------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | 123 | accepted | Start the six case-study apps with one port-allocating command    | tooling, case-studies, dev-server | `pnpm case-studies` allocates ports per app, exports them as env vars, starts six in parallel, kills all on Ctrl-C. |
-| 122 | accepted | The fix tool and command apply the deterministic guardrails...    | tools, commands, guardrails       | `rule_tool_fix` applies the deterministic guardrail fixes; `/rule-mcp-fix` mirrors it.                              |
+| 122 | accepted | The fix tool and command apply the deterministic guardrails...    | tools, commands, guardrails       | `rule_tool_fix` applies the deterministic guardrail fixes; `/rule-fix` mirrors it.                                  |
 | 121 | accepted | The install reconciles the bundled skills when the step is not... | installer, skills, commands       | Declining the skills step removes what an earlier install copied; `skills uninstall` is a real action.              |
-| 120 | accepted | Fold the per-operation persona commands into one per role...      | commands, personas, prompts       | One `/rule-mcp-persona-<role>`; the depth is read from the request; old names deleted.                              |
+| 120 | accepted | Fold the per-operation persona commands into one per role...      | commands, personas, prompts       | One `/rule-persona-<role>`; the depth is read from the request; old names deleted.                                  |
 | 117 | accepted | Area slash commands are collectors only...                        | commands, prompts, areas          | Slash and MCP area prompts emit only hub collectors; leaves route from free text.                                   |
 
 Full log: `docs/adr/ADR.md` (123 entries).
@@ -40,7 +40,7 @@ Full log: `docs/adr/ADR.md` (123 entries).
 ed68537c fix(router): make tool registration idempotent by name
 47490808 chore(handoff): add session handoff 21-fix-tool-and-nomenclature-alignment
 73d18476 docs(handoff): refresh the root handoff summary
-66188b2d chore(census): map the rule-mcp-fix command to rule_tool_fix
+66188b2d chore(census): map the rule-fix command to rule_tool_fix
 a9333f14 docs(adr): record 122 and regenerate the census for the fix tool
 ```
 

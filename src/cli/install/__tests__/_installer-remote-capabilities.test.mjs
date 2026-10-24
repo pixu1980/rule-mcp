@@ -1,5 +1,3 @@
-
-
 /**
  * Regression: remote mode must never silently fall back to stdio for an agent
  * whose HTTP/SSE configuration schema has not been verified.
@@ -24,7 +22,7 @@ const output = execFileSync(
     ALIAS_HOOK,
     "--input-type=module",
     "--eval",
-    `import { installAgent } from ${JSON.stringify(installModule)}; console.log(JSON.stringify(installAgent({ agent: "claude", entrypoint: "/tmp/rule-mcp.js", mode: "daemon" })));`,
+    `import { installAgent } from ${JSON.stringify(installModule)}; console.log(JSON.stringify(installAgent({ agent: "claude", entrypoint: "/tmp/rule.js", mode: "daemon" })));`,
   ],
   { env: { ...process.env, HOME: fakeHome }, encoding: "utf8" },
 );

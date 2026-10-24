@@ -1,5 +1,3 @@
-
-
 /** The PowerShell fallback that creates the Windows service when sc.exe cannot. */
 import { execFileSync } from "node:child_process";
 

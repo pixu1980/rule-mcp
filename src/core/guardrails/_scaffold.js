@@ -1,5 +1,3 @@
-
-
 const SCAFFOLD_CHECK = (fileName, label, checkFunction) => ({
   id: `scaffold-${fileName.replace(/^[.]/, "")}`,
   label: `${fileName} present`,

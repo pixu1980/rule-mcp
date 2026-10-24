@@ -1,5 +1,3 @@
-
-
 /** Regression: global VS Code uninstall must not create a workspace config. */
 import { strict as assert } from "node:assert";
 import { fileURLToPath } from "node:url";

@@ -1,5 +1,3 @@
-
-
 /** Shared command runtime helpers: entry point, console printers, JSON parse, safe exec. */
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";

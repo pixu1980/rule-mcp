@@ -1,5 +1,3 @@
-
-
 /**
  * getGuardrailsReport: the ruleset a skill will actually be checked against.
  *

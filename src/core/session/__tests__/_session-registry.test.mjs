@@ -1,5 +1,3 @@
-
-
 /** The capped, evictable session registry and its unref sweeper. */
 import test from "node:test";
 import assert from "node:assert/strict";

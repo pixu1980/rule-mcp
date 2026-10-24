@@ -1,5 +1,3 @@
-
-
 /** Scan docs/ for roadmaps, changelogs and key documents. */
 import { existsSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";

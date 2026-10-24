@@ -1,5 +1,3 @@
-
-
 /**
  * Nyx adapter double for the similarity-tier miss branches: skip without embedding,
  * skip without stored prompt, replay then miss on cacheGet, and throw into the catch.

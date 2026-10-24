@@ -1,5 +1,3 @@
-
-
 /**
  * PERF-1 and PERF-2: the invariants every level has to hold, whatever the
  * tables say.

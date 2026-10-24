@@ -1,5 +1,3 @@
-
-
 /** @module test/check-intent */
 
 import { strict as assert } from "node:assert";

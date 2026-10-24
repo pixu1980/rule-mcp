@@ -1,5 +1,3 @@
-
-
 /** @module transport/sse/stop */
 
 import { getHttpServer, sessions, setHttpServer } from "./_state.js";

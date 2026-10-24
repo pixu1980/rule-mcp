@@ -1,5 +1,3 @@
-
-
 /** @module tools/apply/render - the rule_tool_apply result envelope */
 
 /**

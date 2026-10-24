@@ -1,5 +1,3 @@
-
-
 /** L2: similarity plus equal labels, and only for allow-listed prompt tools. */
 import test from "node:test";
 import assert from "node:assert/strict";

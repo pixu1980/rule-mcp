@@ -1,5 +1,3 @@
-
-
 /** The installed MCP SDK version, straight from its package.json. */
 import { readFileSync } from "node:fs";
 

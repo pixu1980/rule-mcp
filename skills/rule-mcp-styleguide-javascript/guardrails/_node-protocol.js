@@ -1,5 +1,3 @@
-
-
 /** Guardrail `js-node-protocol`: node: protocol for Node builtins */
 
 export const jsNodeProtocol = {

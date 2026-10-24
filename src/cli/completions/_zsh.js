@@ -1,5 +1,3 @@
-
-
 /** @module cli/completions/zsh */
 
 export function generateZsh() {

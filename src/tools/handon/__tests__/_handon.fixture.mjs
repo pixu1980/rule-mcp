@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/handon/fixture
  *
@@ -21,7 +19,7 @@ process.env.RULE_MCP_NO_TELEMETRY = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 // Every scripted repository is a project, and a project gets a recording under
 // the home directory. homedir() reads HOME, so this keeps them in a temp one.
-process.env.HOME = mkdtempSync(join(tmpdir(), "rule-mcp-handon-home-"));
+process.env.HOME = mkdtempSync(join(tmpdir(), "rule-handon-home-"));
 
 export const { handon } = await import("../index.js");
 
@@ -57,7 +55,7 @@ export function snapshot(root) {
  * @returns {{ root: string, base: string, handoff: string }}
  */
 export function scriptedRepository() {
-  const root = mkdtempSync(join(tmpdir(), "rule-mcp-handon-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-handon-"));
   git(root, "init", "--initial-branch=main", "-q");
   git(root, "config", "user.email", "fixture@example.com");
   git(root, "config", "user.name", "Fixture");

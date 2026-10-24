@@ -1,9 +1,7 @@
-
-
 /**
  * @module test/install-agent-commands
  *
- * Verifies explicit /rule-mcp command installation for supported agents.
+ * Verifies explicit /rule command installation for supported agents.
  */
 
 import { strict as assert } from "node:assert";
@@ -43,14 +41,14 @@ try {
   assert.equal(result.status, 0, result.stderr || result.stdout);
 
   const commandFiles = [
-    join(home, ".pi", "agent", "prompts", "rule-mcp.md"),
-    join(home, ".claude", "commands", "rule-mcp.md"),
-    join(home, ".gemini", "commands", "rule-mcp.toml"),
-    join(home, ".codeium", "windsurf", "global_workflows", "rule-mcp.md"),
-    join(home, ".cline", "data", "workflows", "rule-mcp.md"),
-    join(project, ".cursor", "commands", "rule-mcp.md"),
-    join(project, ".windsurf", "workflows", "rule-mcp.md"),
-    join(project, ".clinerules", "workflows", "rule-mcp.md"),
+    join(home, ".pi", "agent", "prompts", "rule.md"),
+    join(home, ".claude", "commands", "rule.md"),
+    join(home, ".gemini", "commands", "rule.toml"),
+    join(home, ".codeium", "windsurf", "global_workflows", "rule.md"),
+    join(home, ".cline", "data", "workflows", "rule.md"),
+    join(project, ".cursor", "commands", "rule.md"),
+    join(project, ".windsurf", "workflows", "rule.md"),
+    join(project, ".clinerules", "workflows", "rule.md"),
   ];
 
   for (const file of commandFiles) {
@@ -60,32 +58,32 @@ try {
   }
 
   // The full registry set lands, not just the router: an area command, a
-  // one-shot, rule-mcp-check, and a persona command. ADR 116: no area *-check siblings.
+  // one-shot, rule-check, and a persona command. ADR 116: no area *-check siblings.
   const piPrompts = join(home, ".pi", "agent", "prompts");
-  for (const expected of ["rule-mcp-area-frontend.md", "rule-mcp-check.md", "rule-mcp-persona-security.md", "rule-mcp-handoff.md"]) {
+  for (const expected of ["rule-area-frontend.md", "rule-check.md", "rule-persona-security.md", "rule-handoff.md"]) {
     assert.ok(existsSync(join(piPrompts, expected)), `missing registry command: ${expected}`);
   }
-  assert.ok(!existsSync(join(piPrompts, "rule-mcp-area-frontend-check.md")), "area check siblings are not installed");
+  assert.ok(!existsSync(join(piPrompts, "rule-area-frontend-check.md")), "area check siblings are not installed");
 
   // Renamed/deleted commands never surface: the installer is registry-driven.
   const legacyRouter = ["p", "i", "x", ".md"].join("");
   const stale = [
     legacyRouter,
     "rule-mcp-tdd.md",
-    "rule-mcp-compression.md",
+    "rule-compression.md",
     "rule-mcp-process-compression.md",
     "rule-mcp-flight.md",
     "rule-mcp-process-flight.md",
-    "rule-mcp-area-process-handoff.md",
-    "rule-mcp-area-process-handoff-check.md",
-    "rule-mcp-area-process-compression.md",
-    "rule-mcp-area-process-compression-check.md",
-    "rule-mcp-area-process-flight.md",
+    "rule-area-process-handoff.md",
+    "rule-area-process-handoff-check.md",
+    "rule-area-process-compression.md",
+    "rule-area-process-compression-check.md",
+    "rule-area-process-flight.md",
     "rule-mcp-adr.md",
     "rule-mcp-process-check.md",
-    "rule-mcp-area-frontend-check.md",
-    "rule-mcp-area-frontend-react.md",
-    "rule-mcp-area-toolchain-rspack.md",
+    "rule-area-frontend-check.md",
+    "rule-area-frontend-react.md",
+    "rule-area-toolchain-rspack.md",
     "rule-mcp-audit-security.md",
     "rule-mcp-plan-security.md",
     "rule-mcp-review-security.md",
@@ -129,9 +127,9 @@ try {
 
   const written = readdirSync(join(chainHome, ".claude", "commands"));
 
-  assert.ok(written.includes("rule-mcp.md"), "the router command is not optional");
-  assert.ok(written.includes("rule-mcp-area-frontend.md"), "minimal keeps the area hubs");
-  assert.ok(!written.includes("rule-mcp-area-frontend-react.md"), `minimal writes no command per skill: ${written.length} files`);
+  assert.ok(written.includes("rule.md"), "the router command is not optional");
+  assert.ok(written.includes("rule-area-frontend.md"), "minimal keeps the area hubs");
+  assert.ok(!written.includes("rule-area-frontend-react.md"), `minimal writes no command per skill: ${written.length} files`);
 
   console.log(`  ✅ install.sh --commands-preset minimal wrote ${written.length} command files`);
 } finally {

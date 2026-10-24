@@ -9,7 +9,7 @@ A pnpm-workspace monorepo implementing a bookmarks manager:
 - **`frontend/`**, React 18 + Vite + TypeScript SPA. Paste-a-link composer
   ("mega-search" pattern), staggered card grid with skeleton loading state,
   empty state, accessible toast/live-region feedback. Zero CSS classes,
-  every rule targets an element tag or `[data-part]`/`[data-*]` attribute,
+  every rule-mcp targets an element tag or `[data-part]`/`[data-*]` attribute,
   loaded via `adoptedStyleSheets` (see `hooks/useAdoptedStylesheet.ts`).
   Full design-system token layer in `src/styles/tokens.css`.
 - **`backend/`**, Express 4 + TypeScript API. `POST /api/v1/bookmarks`

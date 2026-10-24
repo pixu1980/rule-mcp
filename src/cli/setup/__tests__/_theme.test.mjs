@@ -1,5 +1,3 @@
-
-
 /** statusStyle maps every status, supportsUnicode reads the terminal. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

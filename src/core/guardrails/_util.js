@@ -1,5 +1,3 @@
-
-
 // ─── CSS extraction helpers ───
 /**
  * Helpers shared by the CSS guardrails (extraction + stylesheet detection).

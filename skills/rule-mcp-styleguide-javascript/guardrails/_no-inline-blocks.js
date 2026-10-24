@@ -1,5 +1,3 @@
-
-
 /** Guardrail `js-no-inline-blocks`: Blocks must be multi-line (no inline { code }) */
 export const jsNoInlineBlocks = {
   id: "js-no-inline-blocks",

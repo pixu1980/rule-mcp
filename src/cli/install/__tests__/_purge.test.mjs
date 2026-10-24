@@ -1,5 +1,3 @@
-
-
 /**
  * Behavioral: `uninstall.sh --purge` and `--keep-config` against a fake HOME.
  *
@@ -23,7 +21,7 @@ test("--purge takes the runtime home and the configuration with it", () => {
 
     assert.match(output, /Purge state and config/, "the plan must name the step that deletes them");
     assert.ok(!existsSync(join(home, ".rule-mcp")), "--purge must delete ~/.rule-mcp/");
-    assert.ok(!existsSync(join(home, ".config", "rule-mcp")), "--purge must also delete ~/.config/rule-mcp/");
+    assert.ok(!existsSync(join(home, ".config", "rule-mcp")), "--purge must also delete ~/.config/rule/");
   } finally {
     rmSync(home, { recursive: true, force: true });
   }
@@ -36,7 +34,7 @@ test("--keep-config keeps both directories, token and all", () => {
     runUninstall(home, ["--keep-config"]);
 
     assert.ok(existsSync(join(home, ".rule-mcp")), "--keep-config must keep the runtime home");
-    assert.ok(existsSync(join(home, ".config", "rule-mcp")), "--keep-config must keep ~/.config/rule-mcp/");
+    assert.ok(existsSync(join(home, ".config", "rule-mcp")), "--keep-config must keep ~/.config/rule/");
     assert.ok(existsSync(join(home, ".rule-mcp", "state", "sse-token")), "--keep-config must keep the SSE token untouched");
   } finally {
     rmSync(home, { recursive: true, force: true });

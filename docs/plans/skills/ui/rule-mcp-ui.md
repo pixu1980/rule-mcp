@@ -130,7 +130,7 @@ Depends on: `rule-mcp-ui-design-system` (HARD), `rule-mcp-process#2` (CONTRACT),
 
 Feeds:,
 
-Shared files: skills/rule-mcp/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
+Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions and scaffolding
 

@@ -1,5 +1,3 @@
-
-
 /**
  * Installer registry: maps agent id -> install/uninstall implementation and
  * the deprecated-name redirect table.

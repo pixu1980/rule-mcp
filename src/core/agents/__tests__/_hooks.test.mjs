@@ -1,5 +1,3 @@
-
-
 /** Cache promotion and the agent hook registry: entries, merge, removal. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync } from "node:fs";

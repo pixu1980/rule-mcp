@@ -1,5 +1,3 @@
-
-
 /** @module core/scaffold/templates/multi-file */
 
 import { COMPONENT_TEMPLATES, toPascal, toKebab, interpolate } from "../_template-data.data.js";

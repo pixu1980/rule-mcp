@@ -1,5 +1,3 @@
-
-
 /** Guardrail `js-blank-line-between-methods`: Blank line between class methods */
 
 export const jsBlankLineBetweenMethods = {

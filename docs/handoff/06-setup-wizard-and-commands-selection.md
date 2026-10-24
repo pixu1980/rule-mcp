@@ -44,7 +44,7 @@ Preflight > Agents > Mode > Extras > Commands > Review > Install > Done
   node block advertised `rule_tool_component`, `rule_tool_check`, `rule_tool_search`,
   `rule_tool_scaffold`, `rule_tool_process_adr` - none registered. Both blocks now live in
   `src/cli/installers/_instruction.data.js`.
-- `--purge` now takes `~/.config/rule-mcp/` (env switches, stored model
+- `--purge` now takes `~/.config/rule/` (env switches, stored model
   keys), which the node path had been leaving behind. `--keep-config` keeps
   everything, as the shell did.
 - The plain runner prints each task's `detail`, so a piped install states what

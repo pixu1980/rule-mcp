@@ -1,5 +1,3 @@
-
-
 /** detectLocalRepo on missing, foreign and broken manifests, plus a starved preflight. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

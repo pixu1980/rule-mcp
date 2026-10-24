@@ -1,5 +1,3 @@
-
-
 /** Doctor barrel: detection, formatting and the report run. */
 export * from "./_detect-agents.js";
 export * from "./_detect-env.js";

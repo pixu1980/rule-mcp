@@ -1,5 +1,3 @@
-
-
 /** @module test/operation-intent - whole-token depth intent for a persona run */
 
 import { strict as assert } from "node:assert";

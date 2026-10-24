@@ -1,5 +1,3 @@
-
-
 /** rule_tool reports the model's distribution and gates the override on it. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/install-agent-catalog
  *
@@ -84,7 +82,7 @@ assert.ok(
   `devin skills must land under the documented skills dir: ${skillFiles[0]}`,
 );
 // The router is `rule_tool` with no suffix; every other command is rule-mcp-<area>.
-assert.match(skillFiles[0], /rule-mcp(?:-[\w-]+)?\/SKILL\.md$/, "each command is its own directory containing SKILL.md");
+assert.match(skillFiles[0], /rule(?:-[\w-]+)?\/SKILL\.md$/, "each command is its own directory containing SKILL.md");
 console.log("  ✅ devin installs to its documented config path, branded (formerly Windsurf)");
 
 // ── 3. Windsurf is gone from the catalog; naming it redirects to Devin ─────

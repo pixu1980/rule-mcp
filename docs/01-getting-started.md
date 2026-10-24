@@ -26,7 +26,7 @@ Identical behavior behind any model. Everything runs on your machine.
 The package is not on the npm registry yet. Install from a clone:
 
 ```bash
-git clone https://github.com/pixu1980/rule-mcp.git
+git clone https://github.com/pixu1980/rule.git
 cd rule-mcp
 pnpm install
 ./scripts/install.sh

@@ -8,10 +8,10 @@
 
 The command surface spoke with two check names for one job: the MCP prompt
 registry carried `/rule-mcp-process-check`, the agent command surface carried
-`/rule-mcp-check`, and `/rule-mcp-adr` duplicated the process-adr skill. A single generic
+`/rule-check`, and `/rule-mcp-adr` duplicated the process-adr skill. A single generic
 check also gave no way to ask for one area's guardrails. This session removed
 `/rule-mcp-adr` and `/rule-mcp-process-check` from the MCP registry, added a check command
-per area prompt (91 of them) and a general `/rule-mcp-check` that auto-detects the
+per area prompt (91 of them) and a general `/rule-check` that auto-detects the
 area, and renamed the `design-system` persona to the wider `ui` (UI/UX Lead).
 Two ADRs record both decisions.
 
@@ -19,11 +19,11 @@ Two ADRs record both decisions.
 
 ### 1. Check commands (`src/core/agents/commands/`)
 
-- `_names.js`: added `CHECK_COMMAND = "rule-mcp-check"`; `commandNames()` now derives
+- `_names.js`: added `CHECK_COMMAND = "rule-check"`; `commandNames()` now derives
   one `<area>-check` name per area prompt and sorts them with the rest, after the
   pinned router.
 - `_definitions.js`: `commandDefinition` resolves a `-check` suffix back to its
-  area prompt and returns a guardrail-validation definition; `rule-mcp-check` returns
+  area prompt and returns a guardrail-validation definition; `rule-check` returns
   the general auto-detecting definition.
 - `_bodies.js`: added `checkBody(area, skill)` and `generalCheckBody`.
 - `src/prompts/_defs.data.js`: removed the `rule-mcp-adr` and `rule-mcp-process-check`
@@ -44,9 +44,9 @@ Two ADRs record both decisions.
   `_registry.test.mjs`, `_agent-commands-generator.test.mjs` follow the new
   counts: prompts 155 to 153, one-shot prompts 6 to 4, agent commands
   156 to 246.
-- `src/cli/install/__tests__/_selection.test.mjs` expects `rule-mcp-check` in the
+- `src/cli/install/__tests__/_selection.test.mjs` expects `rule-check` in the
   tasks family; `src/cli/__tests__/_install-agent-commands.test.mjs` expects
-  `rule-mcp-area-frontend-check.md` present and `rule-mcp-process-check.md` stale.
+  `rule-area-frontend-check.md` present and `rule-mcp-process-check.md` stale.
 
 ### 4. Docs, census and ADRs
 
@@ -70,7 +70,7 @@ Two ADRs record both decisions.
 
 - The new commands were verified through the registry and the installer tests,
   not against a live client. A real install (opencode, Claude Code) and a check
-  that `/rule-mcp-area-<area>-check` and `/rule-mcp-check` appear is still worth doing.
+  that `/rule-area-<area>-check` and `/rule-check` appear is still worth doing.
 - The census hook staged `docs/13-personas.md` into the `feat(commands)` commit
   rather than the `refactor(personas)` commit: the hook regenerates all census
   files at once from the working tree, so they cannot be split by commit.
@@ -99,5 +99,5 @@ Resume work on rule-mcp. Run `rule_tool_process_handon` first: it checks which c
 The ADR log and the context snapshot capture what has been decided; do not re-ask answered questions.
 Every commit is `type(scope): subject`; the commit-msg hook rejects a scope-less message.
 This handoff is `docs/handoff/13-check-commands-and-ui-persona.md`.
-First step: install against a live client (opencode or Claude Code) and confirm `/rule-mcp-area-<area>-check` and `/rule-mcp-check` are written and listed, then pick the next workstream from the open plan boxes in `docs/plans/`.
+First step: install against a live client (opencode or Claude Code) and confirm `/rule-area-<area>-check` and `/rule-check` are written and listed, then pick the next workstream from the open plan boxes in `docs/plans/`.
 ```

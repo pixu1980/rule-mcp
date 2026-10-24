@@ -1,5 +1,3 @@
-
-
 /** @module shared/ports/file - a store that keeps its entries and writes them to a file */
 
 import { readJson, writeJson } from "./_file-io.js";

@@ -10,16 +10,16 @@ import test from "node:test";
  * Scoop, winget and the Homebrew template named three different GitHub
  * owners, pinned 0.1.0 while the repo said 1.0.0, carried literal
  * PLACEHOLDER hashes and pointed at a tag that does not exist. Every
- * manifest must resolve to github.com/pixu1980/rule-mcp, carry
+ * manifest must resolve to github.com/pixu1980/rule, carry
  * the package.json version, and contain no PLACEHOLDER.
  */
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const read = (file) => readFileSync(join(root, file), "utf8");
 const version = JSON.parse(read("package.json")).version;
-const OWNER = "github.com/pixu1980/rule-mcp";
-const STALE_OWNER = /github\.com\/rule-mcp([/'"]|$)/u;
-const SQUAT_OWNER = /github\.com\/rule-mcp\//u;
+const OWNER = "github.com/pixu1980/rule";
+const STALE_OWNER = /github\.com\/rule([/'"]|$)/u;
+const SQUAT_OWNER = /github\.com\/rule\//u;
 
 function assertOwnerAndFresh(file, text) {
   assert.ok(text.includes(OWNER), `${file} must resolve to ${OWNER}`);

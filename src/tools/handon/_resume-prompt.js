@@ -1,5 +1,3 @@
-
-
 /**
  * @module tools/handon/resume-prompt
  *

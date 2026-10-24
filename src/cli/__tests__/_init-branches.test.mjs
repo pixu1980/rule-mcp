@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the init report: tokensave outcomes, governance and recorder failures. */
 import assert from "node:assert/strict";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
@@ -11,7 +9,7 @@ import { initProject, renderInit } from "../_init.js";
 import { getProjectPaths } from "../paths/index.js";
 import { makeRepo, remove } from "../../core/git/__tests__/_fixture.mjs";
 
-const temp = () => mkdtempSync(join(tmpdir(), "rule-mcp-init-branches-"));
+const temp = () => mkdtempSync(join(tmpdir(), "rule-init-branches-"));
 const clean = (dir) => rmSync(dir, { recursive: true, force: true });
 
 test("initProject reports the plain project", () => {

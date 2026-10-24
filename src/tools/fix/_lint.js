@@ -1,5 +1,3 @@
-
-
 /** @module tools/fix/lint - mode=lint: scan and report */
 
 import { scanFileTree } from "../../core/file-tree/index.js";

@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the declaration continuation predicate. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

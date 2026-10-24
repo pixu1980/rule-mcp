@@ -1,5 +1,3 @@
-
-
 /**
  * PERF-6: the floors each level has to clear, measured rather than claimed.
  *

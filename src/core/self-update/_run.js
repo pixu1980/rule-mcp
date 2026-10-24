@@ -1,5 +1,3 @@
-
-
 /** One self-update pass: gates, fetch, release-or-merge, the structured result. */
 import { git } from "./_git.js";
 import { reloadSkills as reloadSkillCatalog } from "@src/core/skills/_reload-port.js";

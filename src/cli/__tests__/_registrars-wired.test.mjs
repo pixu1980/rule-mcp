@@ -1,5 +1,3 @@
-
-
 /**
  * Every registrar written is a registrar wired, and every CLI command the
  * prompts name exists.

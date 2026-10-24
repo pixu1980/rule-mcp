@@ -1,5 +1,3 @@
-
-
 /** @module cli/roles/render - the list and detail views */
 
 import { color } from "../index.js";

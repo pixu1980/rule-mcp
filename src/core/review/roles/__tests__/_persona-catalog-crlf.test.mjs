@@ -1,5 +1,3 @@
-
-
 /** A Windows checkout with CRLF endings loads the whole persona catalog. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";

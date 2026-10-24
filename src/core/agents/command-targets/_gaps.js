@@ -1,5 +1,3 @@
-
-
 /** @module core/agents/command-targets/gaps */
 
 /**

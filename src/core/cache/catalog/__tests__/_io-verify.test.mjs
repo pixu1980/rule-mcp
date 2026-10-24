@@ -1,5 +1,3 @@
-
-
 /** verifyCache skips entries that cannot be checked: tool-less, unrunnable, repeated, stale. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

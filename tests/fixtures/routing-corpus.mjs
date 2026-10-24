@@ -49,8 +49,8 @@ export const CORPUS = [
   { prompt: "agent loop or a graph for orchestration", expect: "ai-agent-architecture", area: "ai" },
 
   // ── Session boundaries (ADR 115): handoff/handon are tool+slash only ──
-  // (`rule_tool_handoff` / `/rule-mcp-handoff`, `rule_tool_handon` / `/rule-mcp-handon`).
-  // Compression is likewise tool-only (`rule_tool_compress` / `/rule-mcp-compress`).
+  // (`rule_tool_handoff` / `/rule-handoff`, `rule_tool_handon` / `/rule-handon`).
+  // Compression is likewise tool-only (`rule_tool_compress` / `/rule-compress`).
   // No skill-route corpus rows: BM25 cannot target a removed skill.
 
   // ── Internationalization: the skill R0 added ──
@@ -89,7 +89,7 @@ export const CORPUS = [
 
   // ── Process and AI: added in P2 and P4 ──
   { prompt: "should I extract this into a helper function", expect: "process-ai", area: "process" },
-  // Compression is tool-only after ADR 115 (rule_tool_compress / /rule-mcp-compress), not a skill route.
+  // Compression is tool-only after ADR 115 (rule_tool_compress / /rule-compress), not a skill route.
 
   {
     prompt: "remove em dashes and use american english spelling",

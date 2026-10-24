@@ -1,5 +1,3 @@
-
-
 /** WS3 - the commit-lint gate's three inputs. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";

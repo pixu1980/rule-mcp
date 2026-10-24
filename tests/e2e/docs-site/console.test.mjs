@@ -1,5 +1,3 @@
-
-
 /**
  * Runtime health of the emitted docs site: a clean console, and controls large
  * enough to hit.

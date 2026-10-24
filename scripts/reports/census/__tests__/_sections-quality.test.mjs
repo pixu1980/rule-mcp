@@ -1,5 +1,3 @@
-
-
 /**
  * The census renders documents nobody edits, so a missing field must become a
  * dash and not the word `undefined`. Every arm here is one such field: a role

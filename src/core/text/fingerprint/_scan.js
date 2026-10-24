@@ -1,5 +1,3 @@
-
-
 /** @module core/text/fingerprint/scan - find the fingerprints without changing anything */
 
 import { DASH_RE, ISE_RE, OGUE_RE, OUR_RE, RE_RE, TYPOGRAPHIC_RE, WORD_RE } from "./_patterns.js";

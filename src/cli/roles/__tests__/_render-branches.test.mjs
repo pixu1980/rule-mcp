@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the role views: problems, deprecation and missing lists. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

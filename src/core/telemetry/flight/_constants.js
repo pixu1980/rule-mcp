@@ -1,5 +1,3 @@
-
-
 /** @module core/telemetry/flight/constants */
 
 /** The `.flight` envelope version this writer produces. */

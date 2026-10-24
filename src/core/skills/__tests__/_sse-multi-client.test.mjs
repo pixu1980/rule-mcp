@@ -1,5 +1,3 @@
-
-
 /**
  * Regression: a shared daemon must keep more than one authenticated MCP client
  * alive. Selecting Pi and VS Code must not make each new connection evict the

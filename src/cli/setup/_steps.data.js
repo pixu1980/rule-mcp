@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/setup/steps.data
  *

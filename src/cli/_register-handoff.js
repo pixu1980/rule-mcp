@@ -1,5 +1,3 @@
-
-
 /** The handoff command registrar. */
 
 /** Register the `handoff` command. */

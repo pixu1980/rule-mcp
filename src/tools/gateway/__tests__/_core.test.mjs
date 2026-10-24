@@ -1,5 +1,3 @@
-
-
 /**
  * computeGatewayCore's routing decisions: backend override, no-override
  * frontend, unknown-route fallback, multi-file verdicts and the code-only unit.

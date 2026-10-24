@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for validateAgentConfigs: vscode/claude/mcp.json arms. */
 import assert from "node:assert/strict";
 import { chmodSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

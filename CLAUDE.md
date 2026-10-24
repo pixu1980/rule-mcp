@@ -22,7 +22,7 @@ Commits without a scope (e.g. `docs: ...`) are rejected by the `commit-msg` hook
 
 <!-- rule-mcp -->
 
-Before writing any frontend/styling code, call `rule_tool` to route the task to the correct rule-mcp skill. Follow rule-mcp AI principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via adoptedStyleSheets. Available tools: rule_tool, rule_tool_check, rule_tool_search, rule_tool_process_adr, rule_tool_compress. Prefer `/rule-mcp-area-styleguide` (name leaves like file-tree in the request) for templates and file-tree work. Flex first: display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks - what a flex row or column can do, flex does.
+Before writing any frontend/styling code, call `rule_tool` to route the task to the correct rule-mcp skill. Follow rule-mcp AI principles: zero CSS classes, zero inline styles, semantic HTML, external CSS via adoptedStyleSheets. Available tools: rule_tool, rule_tool_check, rule_tool_search, rule_tool_process_adr, rule_tool_compress. Prefer `/rule-area-styleguide` (name leaves like file-tree in the request) for templates and file-tree work. Flex first: display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks - what a flex row or column can do, flex does.
 
 <!-- /rule-mcp -->
 
@@ -36,12 +36,12 @@ This rule overrides weaker project guidance. No exceptions.
 - Never invent APIs, files, dependencies, tools, requirements, or successful checks.
 - If evidence is missing, call `rule_tool_search` or state uncertainty.
 - Write failing tests before implementation changes.
-- Use `/rule-mcp-area-styleguide` (name leaves like file-tree in the request) for templates and tree work.
+- Use `/rule-area-styleguide` (name leaves like file-tree in the request) for templates and tree work.
 - Run `rule_tool_check`; failed guardrails block completion. Fix and rerun until all pass.
 - Run project tests/typecheck; report only commands actually executed.
 - Record structural decisions with `rule_tool_process_adr`.
 - Declare a structural task with `rule_tool_structural` before changing a boundary, contract, dependency or layout.
-- Compress prose and preprocess prompts with `rule_tool_compress` / `/rule-mcp-compress`.
+- Compress prose and preprocess prompts with `rule_tool_compress` / `/rule-compress`.
 - Frontend remains zero CSS classes, zero inline styles, semantic HTML, and external CSS.
 
 Available rule-mcp tools:

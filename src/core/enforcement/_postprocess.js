@@ -1,5 +1,3 @@
-
-
 /** @module core/enforcement/postprocess - the outbound half: validation and stamps */
 
 import { randomUUID } from "node:crypto";

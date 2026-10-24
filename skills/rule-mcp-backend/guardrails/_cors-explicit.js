@@ -1,5 +1,3 @@
-
-
 /** @module core/guardrails/backend/cors-explicit */
 
 export const corsExplicit = {

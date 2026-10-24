@@ -1,5 +1,3 @@
-
-
 /**
  * Accessibility of the emitted docs site, measured in Chromium.
  *

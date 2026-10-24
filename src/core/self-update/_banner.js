@@ -1,5 +1,3 @@
-
-
 /** Render the update banner from one run result. */
 
 /**

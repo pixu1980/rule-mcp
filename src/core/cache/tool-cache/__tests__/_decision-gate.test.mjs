@@ -1,5 +1,3 @@
-
-
 /** The L3 gate: deterministic candidates, a scripted model, and shadow records. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync } from "node:fs";

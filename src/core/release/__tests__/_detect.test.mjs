@@ -1,6 +1,4 @@
-
-
-/** WS7.1 - /rule-mcp-init reports the release tooling a project already has. */
+/** WS7.1 - /rule-init reports the release tooling a project already has. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";

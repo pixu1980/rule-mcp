@@ -1,5 +1,3 @@
-
-
 /** The entry store: get/set with per-entry freshness, clear, release, enumerate. */
 import { MAX_MEMORY_ENTRIES } from "./_state.js";
 import { cacheEnabled } from "./_config.js";

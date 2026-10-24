@@ -1,5 +1,3 @@
-
-
 /** List the handoff documents a project carries. */
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";

@@ -1,5 +1,3 @@
-
-
 /** @module core/text/fingerprint/patterns - the regexes, built from the dictionaries */
 
 import { OUR_STEMS, ISE_STEMS, RE_STEMS, OGUE_STEMS, WORDS } from "../_fingerprint.data.js";

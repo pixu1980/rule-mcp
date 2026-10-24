@@ -52,7 +52,7 @@ area router in the repository (`rule-mcp-styleguide` is 247 lines, `rule-mcp-bac
 Eight skills live under the area; the table lists seven. The missing one is
 `rule-mcp-process-tdd`, recorded in `scripts/data/router-gaps.data.mjs` together
 with five other area gaps. The table links two tools among the skills
-(`/rule-mcp-compress`, `rule_tool_handoff`), which is the house style for this
+(`/rule-compress`, `rule_tool_handoff`), which is the house style for this
 router.
 
 Quick Selection covers five of the eight children: `rule-mcp-process-changelog` and
@@ -61,14 +61,14 @@ Quick Selection covers five of the eight children: `rule-mcp-process-changelog` 
 ### Nothing generates a route table today
 
 `pnpm census` writes the docs blocks by marker and the snapshot at
-`tests/fixtures/census.json`. It does not write `skills/rule-mcp/SKILL.md` and it
+`tests/fixtures/census.json`. It does not write `skills/rule/SKILL.md` and it
 does not write any area router. Both tables are hand-written, and both have
 drifted:
 
-| Surface                               | Rows written | Skills that exist | Missing                    |
-| ------------------------------------- | ------------ | ----------------- | -------------------------- |
-| `skills/rule-mcp/SKILL.md` dispatcher | 64           | 84                | **22**, listed below       |
-| `skills/rule-mcp-process/SKILL.md`    | 7            | 8                 | 1 (`rule-mcp-process-tdd`) |
+| Surface                            | Rows written | Skills that exist | Missing                    |
+| ---------------------------------- | ------------ | ----------------- | -------------------------- |
+| `skills/rule/SKILL.md` dispatcher  | 64           | 84                | **22**, listed below       |
+| `skills/rule-mcp-process/SKILL.md` | 7            | 8                 | 1 (`rule-mcp-process-tdd`) |
 
 The 22 skills missing from the dispatcher: `rule-mcp-ai-agent-architecture`,
 `rule-mcp-ai-context-engineering`, `rule-mcp-ai-evals`, `rule-mcp-ai-prompting`,
@@ -218,7 +218,7 @@ Depends on: `rule-mcp-process-adr` (HARD), `rule-mcp-process-ai` (HARD), `rule-m
 
 Feeds:,
 
-Shared files: skills/rule-mcp/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
+Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ## Open notes
 

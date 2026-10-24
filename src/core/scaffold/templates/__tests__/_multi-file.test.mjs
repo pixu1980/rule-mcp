@@ -1,5 +1,3 @@
-
-
 /**
  * generateMultiFile: the file tree each framework gets, and when it gets none.
  *

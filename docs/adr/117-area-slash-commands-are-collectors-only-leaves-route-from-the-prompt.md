@@ -7,19 +7,19 @@
 
 ## Context
 
-After ADR 115-116 every skill still minted a slash `/rule-mcp-area-<area>-<member>` beside the hub `/rule-mcp-area-<area>`. That ~80 leaf commands duplicated the skill catalog on the agent command bar. Callers already write free text on the hub (`/rule-mcp-area-toolchain set up rspack pnpm eslint husky`); the leaf slash names add no routing the hub cannot do via `rule_tool` and the member `rule_tool_*` tools.
+After ADR 115-116 every skill still minted a slash `/rule-area-<area>-<member>` beside the hub `/rule-area-<area>`. That ~80 leaf commands duplicated the skill catalog on the agent command bar. Callers already write free text on the hub (`/rule-area-toolchain set up rspack pnpm eslint husky`); the leaf slash names add no routing the hub cannot do via `rule_tool` and the member `rule_tool_*` tools.
 
 ## Decision
 
-1. **Slash and MCP area prompts**: emit only hub collectors (`/rule-mcp-area-ai`, `/rule-mcp-area-backend`, ...). Drop every `/rule-mcp-area-<area>-*` member prompt/command. No aliases.
+1. **Slash and MCP area prompts**: emit only hub collectors (`/rule-area-ai`, `/rule-area-backend`, ...). Drop every `/rule-area-<area>-*` member prompt/command. No aliases.
 2. **Tools and skills unchanged**: every leaf skill and `rule_tool_<leaf>` remains registered and callable.
 3. Hub prompt/body instructs: parse `$ARGUMENTS`, call `rule_tool` (and/or the named leaf `rule_tool_*`) for each topic the request names (e.g. rspack -> `rule_tool_toolchain_rspack`), load that skill evidence, then implement/check as today. Check-intent keywords (ADR 116) still flip the hub into guardrail-only mode against the routed skill(s).
-4. `areaCommandName(skill)` for a member returns the hub command `rule-mcp-area-<area>` so docs and helpers point at the collector.
+4. `areaCommandName(skill)` for a member returns the hub command `rule-area-<area>` so docs and helpers point at the collector.
 5. Install presets: area family is always hubs; `full` no longer writes one slash per skill. Personas and session/tasks unchanged.
 
 ## Consequences
 
-Agent slash and MCP area-prompt counts fall by one per leaf skill (~78). Install sync purges stale `rule-mcp-area-*-<member>.*` files. Callers of `/rule-mcp-area-frontend-react` switch to `/rule-mcp-area-frontend` with "react" (or equivalent) in the request, or call `rule_tool_frontend_react` directly. ADR 115's slash side of the 1:1 triple becomes hub-only; the tool↔skill 1:1 stays.
+Agent slash and MCP area-prompt counts fall by one per leaf skill (~78). Install sync purges stale `rule-area-*-<member>.*` files. Callers of `/rule-area-frontend-react` switch to `/rule-area-frontend` with "react" (or equivalent) in the request, or call `rule_tool_frontend_react` directly. ADR 115's slash side of the 1:1 triple becomes hub-only; the tool↔skill 1:1 stays.
 
 ## What would end this
 

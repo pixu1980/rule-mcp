@@ -1,5 +1,3 @@
-
-
 /** The daemon process arms: start and stop, native-first with a process fallback. */
 import { checkDaemonService, detectPlatform, startDaemonProcess, startDaemonService, stopDaemonProcess, stopDaemonService } from "../../daemon/index.js";
 import { print } from "../_shared.js";

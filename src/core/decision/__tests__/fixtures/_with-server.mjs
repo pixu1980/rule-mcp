@@ -1,5 +1,3 @@
-
-
 /** Start a decision client bound to a scripted server, and close both. */
 
 import { createDecisionClient } from "../../_client.js";

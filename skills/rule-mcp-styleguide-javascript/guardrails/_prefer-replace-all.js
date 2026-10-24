@@ -1,5 +1,3 @@
-
-
 /** Guardrail `js-prefer-replace-all`: replaceAll over replace with /g regex */
 
 export const jsPreferReplaceAll = {

@@ -7,7 +7,7 @@
 
 ## Context
 
-The install wizard builds one `agent-commands --sync` argv for every selected agent and joins the names with commas (`commandSyncArgs` in `src/cli/setup/_task-extras.js`). `resolveCommandTargets` compared that raw string against each target's `agent` field, so any install with two or more selected agents resolved zero targets and wrote no command files at all. Only the per-agent installer's single router file (`rule-mcp.md`) landed, which is why a multi-agent install showed no `/rule-mcp-*` commands in any agent. The 156-file sync worked only when exactly one agent was named.
+The install wizard builds one `agent-commands --sync` argv for every selected agent and joins the names with commas (`commandSyncArgs` in `src/cli/setup/_task-extras.js`). `resolveCommandTargets` compared that raw string against each target's `agent` field, so any install with two or more selected agents resolved zero targets and wrote no command files at all. Only the per-agent installer's single router file (`rule.md`) landed, which is why a multi-agent install showed no `/rule-mcp-*` commands in any agent. The 156-file sync worked only when exactly one agent was named.
 
 ## Decision
 

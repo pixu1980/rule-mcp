@@ -1,5 +1,3 @@
-
-
 /** Guardrail checks the engine runs on barrels and component file names. */
 import { passResult } from "../../shared/index.js";
 import { isBarrelFile } from "./_conventions.js";

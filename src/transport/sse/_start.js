@@ -1,5 +1,3 @@
-
-
 /** @module transport/sse/start */
 
 import http from "node:http";

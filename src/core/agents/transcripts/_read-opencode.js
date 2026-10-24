@@ -1,5 +1,3 @@
-
-
 /** Read opencode transcripts for one project window. */
 import { dirname, join } from "node:path";
 import { inWindow, emptyUsage } from "./_window.js";

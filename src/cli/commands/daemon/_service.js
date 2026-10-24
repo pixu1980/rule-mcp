@@ -1,5 +1,3 @@
-
-
 /** The daemon service arms: install, uninstall, enable, disable. */
 import { disableDaemonService, enableDaemonService, installDaemonService, uninstallDaemonService, detectPlatform } from "../../daemon/index.js";
 import { getServiceFilePath, getServiceName } from "../../daemon/index.js";

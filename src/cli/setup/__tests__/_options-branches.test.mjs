@@ -1,5 +1,3 @@
-
-
 /**
  * Branch coverage for the option helpers: the four reasons a terminal cannot
  * host the wizard, and the agent flag's two meanings.

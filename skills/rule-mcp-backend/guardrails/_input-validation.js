@@ -1,5 +1,3 @@
-
-
 /** @module core/guardrails/backend/input-validation */
 
 export const inputValidation = {

@@ -1,11 +1,9 @@
-
-
 // test/prompt-suppression.test.mjs
 //
 // When RULE_MCP_NO_PROMPTS=1, the server must hide its MCP prompts so the
 // clean /rule-mcp-* user commands don't duplicate them in hosts that namespace
-// prompts (Claude: /rule-mcp:rule-mcp-handoff (MCP), VS Code:
-// /mcp.rule-mcp.rule-mcp-handoff).
+// prompts (Claude: /rule:rule-handoff (MCP), VS Code:
+// /mcp.rule-mcp.rule-handoff).
 //
 // listPrompts() stays pure (always the full registry); only listActivePrompts()
 // honors the suppression flag - exactly how the server's prompt/list handler

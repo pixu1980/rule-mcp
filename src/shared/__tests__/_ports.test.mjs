@@ -1,5 +1,3 @@
-
-
 /**
  * ARCH-5: the store port is four operations and no surprises.
  *

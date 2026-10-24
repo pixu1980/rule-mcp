@@ -1,5 +1,3 @@
-
-
 /** The leave-one-out corpus shape: unique prompts, peer/history seeds, real negatives. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

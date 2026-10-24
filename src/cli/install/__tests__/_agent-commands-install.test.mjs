@@ -1,5 +1,3 @@
-
-
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync } from "node:fs";
@@ -26,16 +24,16 @@ execFileSync(
     ALIAS_HOOK,
     "--input-type=module",
     "--eval",
-    `import { installAgent } from ${JSON.stringify(installModule)}; for (const agent of ["pi", "claude", "gemini", "cursor", "copilot"]) installAgent({ agent, entrypoint: "/tmp/rule-mcp.js" });`,
+    `import { installAgent } from ${JSON.stringify(installModule)}; for (const agent of ["pi", "claude", "gemini", "cursor", "copilot"]) installAgent({ agent, entrypoint: "/tmp/rule.js" });`,
   ],
   { cwd: fakeProject, env: { ...process.env, HOME: fakeHome, PI_CODING_AGENT_DIR: piDir } },
 );
 
 const expectations = [
-  [join(piDir, "prompts", "rule-mcp.md"), "$ARGUMENTS", "Pi slash command"],
-  [join(fakeHome, ".claude", "commands", "rule-mcp.md"), "$ARGUMENTS", "Claude command"],
-  [join(fakeHome, ".gemini", "commands", "rule-mcp.toml"), "{{args}}", "Gemini custom command"],
-  [join(fakeProject, ".cursor", "commands", "rule-mcp.md"), "$ARGUMENTS", "Cursor project command"],
+  [join(piDir, "prompts", "rule.md"), "$ARGUMENTS", "Pi slash command"],
+  [join(fakeHome, ".claude", "commands", "rule.md"), "$ARGUMENTS", "Claude command"],
+  [join(fakeHome, ".gemini", "commands", "rule.toml"), "{{args}}", "Gemini custom command"],
+  [join(fakeProject, ".cursor", "commands", "rule.md"), "$ARGUMENTS", "Cursor project command"],
   [join(fakeHome, ".copilot", "agents", "rule-mcp.agent.md"), "rule-mcp", "Copilot custom agent"],
 ];
 

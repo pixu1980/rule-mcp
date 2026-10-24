@@ -1,5 +1,3 @@
-
-
 /** @module tools/a11y/evaluate - validate the outcomes and settle the claim */
 
 import { EARL_OUTCOMES, WCAG_VERSION, criteriaForLevel, criterion } from "../../core/wcag-data/index.js";

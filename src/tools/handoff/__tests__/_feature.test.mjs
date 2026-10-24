@@ -1,5 +1,3 @@
-
-
 /** WS5 - the handoff carries the feature commit range. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

@@ -1,5 +1,3 @@
-
-
 /** @module core/agents/command-targets/resolve */
 
 import { defaultContext } from "./_context.js";

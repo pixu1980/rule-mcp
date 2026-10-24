@@ -1,5 +1,3 @@
-
-
 /** WS1.3 - the one feature commit range: merge-base(base, HEAD)..HEAD. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

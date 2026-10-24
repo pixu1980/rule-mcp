@@ -1,5 +1,3 @@
-
-
 /** @module server/completions - the completion/complete request handler */
 
 import { CompleteRequestSchema } from "@modelcontextprotocol/sdk/types.js";
@@ -20,8 +18,8 @@ export function registerCompletionHandler(server) {
       };
 
       // Every rule-mcp-* prompt takes a single free-form primary argument, so
-      // only rule-mcp-handoff (fixed token vocabulary) needs argument completions.
-      if (promptName === "rule-mcp-handoff" && argument.name === "options") {
+      // only rule-handoff (fixed token vocabulary) needs argument completions.
+      if (promptName === "rule-handoff" && argument.name === "options") {
         // Token-aware completion: complete the last token of a space-separated list.
         const value = argument.value ?? "";
         const last = value.split(/\s+/).pop() ?? "";

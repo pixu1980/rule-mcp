@@ -1,5 +1,3 @@
-
-
 /**
  * ARCH-3: the tool surface is a contract, not a derivation.
  *

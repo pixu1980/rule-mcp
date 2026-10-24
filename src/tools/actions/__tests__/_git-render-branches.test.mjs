@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the git action renderers: every verdict shape. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

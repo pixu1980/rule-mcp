@@ -1,5 +1,3 @@
-
-
 /** install/uninstall agent dispatch: redirects, sweeps, unsupported and remote modes. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync } from "node:fs";

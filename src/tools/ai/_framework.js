@@ -1,5 +1,3 @@
-
-
 import { detectProject, getFrameworkSuggestion } from "../../core/detector/index.js";
 
 /**

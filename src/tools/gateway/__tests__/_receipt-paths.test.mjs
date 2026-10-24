@@ -1,5 +1,3 @@
-
-
 // test/gateway-receipt-paths.test.mjs
 //
 // Audit finding 02 - the gateway receipt proved "these bytes passed the

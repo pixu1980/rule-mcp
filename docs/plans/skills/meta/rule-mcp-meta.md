@@ -140,7 +140,7 @@ Depends on: `rule-mcp-meta-astro` (HARD), `rule-mcp-meta-next` (HARD), `rule-mcp
 
 Feeds:,
 
-Shared files: skills/rule-mcp/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
+Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ## Open notes
 

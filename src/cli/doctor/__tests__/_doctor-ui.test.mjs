@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/doctor-ui
  *
@@ -38,7 +36,7 @@ const report = {
   models: { totalConfigured: 1 },
   stateDir: "/home/.rule-mcp/state",
   dataDir: "/home/.rule-mcp/data",
-  configDir: "/home/.config/rule-mcp",
+  configDir: "/home/.config/rule",
   daemon: {
     running: true,
     pid: 123,

@@ -1,5 +1,3 @@
-
-
 /** @module core/guardrails/engine/report - the ruleset rendered as text */
 
 import { getGuardrails, skillChain } from "./_registry.js";

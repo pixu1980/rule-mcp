@@ -1,5 +1,3 @@
-
-
 /** The hub/leaf ambiguity, recorded through the real gate path. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync } from "node:fs";

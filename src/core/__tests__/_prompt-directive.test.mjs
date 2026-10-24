@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/prompt-directive.test
  *
@@ -35,12 +33,12 @@ console.log("=== Per-prompt directive ===\n");
 import { MANTRA, NO_SUBAGENTS, directiveEnabled, promptDirective, sessionDirective } from "../index.js";
 import { HOOK_MARKER, hasHooks, hookEntries, withHooks, withoutHooks } from "../agents/_hooks.js";
 
-const LAUNCHER = { command: "/usr/local/bin/rule-mcp", args: [] };
+const LAUNCHER = { command: "/usr/local/bin/rule", args: [] };
 const EVENTS = ["PreToolUse", "PostToolUse", "SessionStart", "UserPromptSubmit"];
 
 // ── T1: one canonical wording, reused verbatim everywhere ──
 check("T1 the no-subagent rule names the cost", /subagent/i.test(NO_SUBAGENTS) && /token/i.test(NO_SUBAGENTS));
-check("T1.1 it names the replacements", /rule-mcp/i.test(NO_SUBAGENTS) && /tokensave/i.test(NO_SUBAGENTS));
+check("T1.1 it names the replacements", /rule/i.test(NO_SUBAGENTS) && /tokensave/i.test(NO_SUBAGENTS));
 check("T1.2 the mantra is the agreed sentence", MANTRA === "Every token saved is a token earned.");
 
 // ── T2: the session directive carries all four rules ──
@@ -50,13 +48,13 @@ check("T2.1 no subagents, verbatim", session.includes(NO_SUBAGENTS));
 check("T2.2 compression output", /compression/i.test(session));
 check("T2.3 the mantra closes it", session.includes(MANTRA));
 check("T2.4 plain ASCII only", /^[ -~\n]*$/.test(session));
-check("T2.5 flight rides along under rule-mcp-area-process-flight", /rule-mcp-area-process-flight/.test(session) && /telemetry/i.test(session));
+check("T2.5 flight rides along under rule-area-process-flight", /rule-area-process-flight/.test(session) && /telemetry/i.test(session));
 
 // ── T3: the per-prompt line is one short line, or it is not worth sending ──
 const line = promptDirective();
 check("T3 a single line", !line.includes("\n"));
 check("T3.1 short enough to ride on every prompt", line.length <= 120);
-check("T3.2 it still names all three rules", /rule-mcp/i.test(line) && /compression/i.test(line) && /subagent/i.test(line) && /token/i.test(line));
+check("T3.2 it still names all three rules", /rule/i.test(line) && /compression/i.test(line) && /subagent/i.test(line) && /token/i.test(line));
 check("T3.3 it re-anchors flight when costing", /flight/i.test(line));
 
 // ── T4: one opt-out, honored by both forms ──

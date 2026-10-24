@@ -29,7 +29,7 @@ One unrelated test that was already failing at HEAD was fixed in its own commit.
 - `src/tools/handoff/_closeout.js`: `closeoutLines` takes the heading level, so
   the handoff keeps `###` and the resume report can use `##`.
 - CLI: `rule-mcp handoff --no-archive`.
-- `/rule-mcp-handoff` vocabulary: the `no-archive` token, plus the usage block and
+- `/rule-handoff` vocabulary: the `no-archive` token, plus the usage block and
   the prompt's resolved-argument list.
 - `src/prompts/_handoff-prompt.js`: because the run now writes to the tree, the
   workflow gained an explicit step that stages the archive and commits it as one
@@ -51,7 +51,7 @@ One unrelated test that was already failing at HEAD was fixed in its own commit.
   `## Next from the plans` with the wording that this is a proposal to confirm.
 - `src/tools/handon/_register.js`: `closeout` parameter, description updated,
   and the `readOnlyHint: true` annotation dropped because the tool writes now.
-- CLI: `rule-mcp handon --no-archive`; `/rule-mcp-handon` prompt tells the
+- CLI: `rule-mcp handon --no-archive`; `/rule-handon` prompt tells the
   agent to commit the sweep as one `docs(adr): ...` and to ask the user which
   workstream to start.
 - Tests: `_closeout-sweep.test.mjs`, `_plans.test.mjs`.
@@ -113,7 +113,7 @@ regenerate `docs/adr/ADR.md`.
 ### Skill display name in Claude Code App for macOS
 
 Carried over from handoffs 09 and 10, still unverified. The CLI shows the clean
-`/rule-mcp-handoff`; the app may still show `/rule-mcp:rule-mcp-handoff`. The prompt
+`/rule-handoff`; the app may still show `/rule:rule-handoff`. The prompt
 suppression fix in the previous session addresses the MCP-prompt path; the app
 path was never checked. Look at `src/cli/setup/_task-extras.js`,
 `src/cli/setup/_commands-items.js` and `~/.claude/mcp.json`.

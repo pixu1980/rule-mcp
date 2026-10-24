@@ -1,5 +1,3 @@
-
-
 /** The opt-in L3 replay returns the chosen cached core before compute; off it computes. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync } from "node:fs";

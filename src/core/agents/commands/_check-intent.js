@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/agents/commands/check-intent
  *

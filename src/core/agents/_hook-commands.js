@@ -1,5 +1,3 @@
-
-
 /** @module core/agents/hook-commands - the marker and the command classifiers */
 
 /** Marks our entries so merge and uninstall can find them without touching others. */

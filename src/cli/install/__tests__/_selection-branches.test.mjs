@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for selection presets, unknown values and hubs-only. */
 import assert from "node:assert/strict";
 import { test } from "node:test";
@@ -19,8 +17,8 @@ test("hubs-only drops leaf area commands but keeps the hub", () => {
 
   assert.deepEqual(problems, []);
   assert.ok(commands.includes(ROUTER_COMMAND));
-  assert.ok(commands.some((name) => name.startsWith("rule-mcp-area-")));
-  assert.ok(commands.every((name) => name === ROUTER_COMMAND || name.startsWith("rule-mcp-area-")));
+  assert.ok(commands.some((name) => name.startsWith("rule-area-")));
+  assert.ok(commands.every((name) => name === ROUTER_COMMAND || name.startsWith("rule-area-")));
 });
 
 test("a skill filter keeps matching leaves when hubsOnly is off", () => {
@@ -31,7 +29,7 @@ test("a skill filter keeps matching leaves when hubsOnly is off", () => {
   });
 
   assert.ok(commands.includes(ROUTER_COMMAND));
-  assert.ok(commands.some((name) => name.includes("frontend") || name.startsWith("rule-mcp-area-")));
+  assert.ok(commands.some((name) => name.includes("frontend") || name.startsWith("rule-area-")));
 });
 
 test("an unknown area and skill are reported", () => {

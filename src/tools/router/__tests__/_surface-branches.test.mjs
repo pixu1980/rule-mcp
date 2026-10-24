@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the surface normalization and the schema fallback. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

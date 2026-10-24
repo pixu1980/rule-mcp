@@ -1,5 +1,3 @@
-
-
 /** The hook path: SessionStart source decides, the handoff is verified, the opt-out works. */
 import { rmSync } from "node:fs";
 import { join } from "node:path";

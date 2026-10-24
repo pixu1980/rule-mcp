@@ -1,5 +1,3 @@
-
-
 /**
  * @module scripts/audits/decision-models/models
  *

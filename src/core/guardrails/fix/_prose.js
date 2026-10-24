@@ -1,5 +1,3 @@
-
-
 /** @module core/fix/prose - the deterministic prose passes: fingerprint and boxes */
 
 import { alignAsciiBoxes, stripFingerprint } from "../../text/index.js";

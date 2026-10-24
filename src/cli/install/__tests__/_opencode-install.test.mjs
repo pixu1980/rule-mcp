@@ -1,5 +1,3 @@
-
-
 /**
  * opencode reads `~/.config/opencode/opencode.json`, where an MCP server is
  * `{ type: "local", command: [...] }` under `mcp`. The generic installer wrote
@@ -46,7 +44,7 @@ writeFileSync(
         tokensave: { type: "local", command: ["tokensave", "serve"] },
         // The hand-edit that stopped opencode from loading its config: a
         // `command` string with `args` beside it is not schema-valid.
-        "rule-mcp": { type: "local", command: "/old/bin/rule-mcp", args: ["serve"] },
+        "rule-mcp": { type: "local", command: "/old/bin/rule", args: ["serve"] },
       },
     },
     null,

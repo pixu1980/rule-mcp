@@ -1,5 +1,3 @@
-
-
 /** The emacs, generic and devin installers writing into a sandboxed home. */
 import { strict as assert } from "node:assert";
 import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";

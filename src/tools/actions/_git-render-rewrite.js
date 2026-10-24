@@ -1,5 +1,3 @@
-
-
 /** @module tools/actions/git-render-rewrite - the rule_tool_git squash and linearize text. */
 
 /**

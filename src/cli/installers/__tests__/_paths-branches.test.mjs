@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the installer path helpers' quiet catch arms. */
 import assert from "node:assert/strict";
 import { chmodSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";

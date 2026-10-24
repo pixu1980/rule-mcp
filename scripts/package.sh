@@ -28,8 +28,8 @@ SHASUM=$(shasum -a 256 "${NAME}-${VERSION}.tgz" 2>/dev/null | cut -d' ' -f1 || e
 cat > "${NAME}.rb" << FORMULA
 class RuleMcp < Formula
   desc "MCP server for the rule-mcp-* skill ecosystem"
-  homepage "https://github.com/pixu1980/rule-mcp"
-  url "https://github.com/pixu1980/rule-mcp/releases/download/v${VERSION}/${NAME}-${VERSION}.tgz"
+  homepage "https://github.com/pixu1980/rule"
+  url "https://github.com/pixu1980/rule/releases/download/v${VERSION}/${NAME}-${VERSION}.tgz"
   sha256 "${SHASUM}"
   license "MIT"
 
@@ -41,7 +41,7 @@ class RuleMcp < Formula
   end
 
   test do
-    system "#{bin}/rule-mcp", "doctor"
+    system "#{bin}/rule", "doctor"
   end
 end
 FORMULA

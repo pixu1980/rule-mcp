@@ -1,5 +1,3 @@
-
-
 /** Every skill directory: frontmatter, cross-references, resolvable links, no embedded docs. */
 import { strict as assert } from "node:assert";
 import { existsSync, readFileSync } from "node:fs";

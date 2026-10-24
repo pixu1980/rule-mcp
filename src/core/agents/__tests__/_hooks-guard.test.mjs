@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/hooks-guard.test
  *
@@ -32,7 +30,7 @@ import { fileURLToPath } from "node:url";
 import { HOOK_MARKER, hasHooks, hookEntries, isCommitCommand, isMigrationCommand, withHooks, withoutHooks } from "../_hooks.js";
 import { decide, skillForPath } from "../../../cli/guard/index.js";
 
-const LAUNCHER = { command: "/usr/local/bin/rule-mcp", args: [] };
+const LAUNCHER = { command: "/usr/local/bin/rule", args: [] };
 const BIN = fileURLToPath(new URL("../../../../bin/rule-mcp.js", import.meta.url));
 
 // ── T1: which commands are the point of no return ──

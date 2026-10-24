@@ -85,7 +85,7 @@ for (const sub of forbidden ? sourceDirectories : []) {
 // Root-level checks
 assert.ok(existsSync(join(root, "skills", "rule-mcp", "SKILL.md")), "router skill must be named rule-mcp");
 
-const promptTemplate = join(root, "prompts", "rule-mcp.md");
+const promptTemplate = join(root, "prompts", "rule.md");
 assert.ok(existsSync(promptTemplate), "Pi prompt template must exist");
 const prompt = readFileSync(promptTemplate, "utf8");
 assert.ok(prompt.includes("$ARGUMENTS"), "Pi prompt template must forward command arguments");

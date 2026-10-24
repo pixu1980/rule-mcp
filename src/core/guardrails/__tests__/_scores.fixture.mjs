@@ -1,5 +1,3 @@
-
-
 /**
  * Hardening 4.5: precision and recall, per rule, on a labeled corpus.
  *

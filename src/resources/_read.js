@@ -1,5 +1,3 @@
-
-
 /** @module resources/read - serve one rulemcp:// body; `./_serve.js` is the way out callers use */
 
 import { readFileSync, readdirSync } from "node:fs";
@@ -72,8 +70,8 @@ export async function serveResource(uri) {
           uri,
           mimeType: "text/markdown",
           text:
-            "For a11y testing with Playwright + axe-core, see rule-mcp-styleguide-a11y and /rule-mcp-persona-a11y.\n\n" +
-            "Use `/rule-mcp-area-styleguide` (and related styleguide skills) for templates and config generation.",
+            "For a11y testing with Playwright + axe-core, see rule-mcp-styleguide-a11y and /rule-persona-a11y.\n\n" +
+            "Use `/rule-area-styleguide` (and related styleguide skills) for templates and config generation.",
         },
       ],
     };

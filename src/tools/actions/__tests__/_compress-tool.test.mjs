@@ -1,5 +1,3 @@
-
-
 /**
  * PERF-1.3 and PERF-3.4: what `rule_tool_compress` refuses, and what it guards.
  *

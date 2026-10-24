@@ -1,5 +1,3 @@
-
-
 /**
  * Regression: VS Code installs are user-global by default. Daemon installs
  * must use VS Code's HTTP MCP schema and migrate only this server's earlier
@@ -52,7 +50,7 @@ execFileSync(
     ALIAS_HOOK,
     "--input-type=module",
     "--eval",
-    `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "vscode", entrypoint: "/tmp/rule-mcp.js", mode: "daemon" });`,
+    `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "vscode", entrypoint: "/tmp/rule.js", mode: "daemon" });`,
   ],
   { cwd: fakeProject, env: { ...process.env, HOME: fakeHome } },
 );

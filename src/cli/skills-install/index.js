@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/skills-install
  *

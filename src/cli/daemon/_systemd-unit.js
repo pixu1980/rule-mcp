@@ -1,5 +1,3 @@
-
-
 /** The systemd user unit template. */
 import { mkdirSync } from "node:fs";
 import { getRuntimePaths } from "../paths/index.js";
@@ -41,7 +39,7 @@ export function generateSystemdUnit(ep) {
 
   return `[Unit]
 Description=rule-mcp MCP Server
-Documentation=https://github.com/pixu1980/rule-mcp
+Documentation=https://github.com/pixu1980/rule
 After=network.target network-online.target
 Wants=network-online.target
 

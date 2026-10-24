@@ -1,5 +1,3 @@
-
-
 /** @module core/enforcement/reminder - the model-visible workflow contract on a session cadence */
 
 import { FLEX_FIRST } from "../directive/index.js";

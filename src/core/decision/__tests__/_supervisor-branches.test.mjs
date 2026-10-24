@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the supervisor guards, the open breaker and shutdown. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

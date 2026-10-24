@@ -1,5 +1,3 @@
-
-
 /**
  * Text contrast of the emitted docs site, in both themes.
  *

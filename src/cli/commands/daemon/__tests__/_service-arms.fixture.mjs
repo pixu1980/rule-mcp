@@ -1,5 +1,3 @@
-
-
 /**
  * Run the daemon service CLI arms under a forced platform and print what they
  * printed, one JSON object on stdout.

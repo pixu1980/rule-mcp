@@ -1,5 +1,3 @@
-
-
 /** Windows service adapter: the sc.exe command, install, uninstall, check. */
 import { execFileSync } from "node:child_process";
 import { installViaPowerShell } from "./_windows-powershell.js";

@@ -1,5 +1,3 @@
-
-
 /** Git plumbing: the shared git read, and whether git knows a file. */
 
 import { git } from "../../core/git/index.js";

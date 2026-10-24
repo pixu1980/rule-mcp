@@ -1,5 +1,3 @@
-
-
 /** Reporting: entry-path classification, per-tier aggregates, the rendered report. */
 import test from "node:test";
 import assert from "node:assert/strict";

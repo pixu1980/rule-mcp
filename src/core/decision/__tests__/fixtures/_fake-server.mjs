@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/decision/__tests__/fixtures/fake-server
  *

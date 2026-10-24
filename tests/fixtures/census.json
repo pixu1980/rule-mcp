@@ -5,45 +5,45 @@
       "file": "01-getting-started.md",
       "kind": "block",
       "marker": "agent-targets",
-      "sha256": "b7f15f6f6b24acdd3a36ed3cddb8fb486d07c94ecfc672c09e2bab624fb91c13"
+      "sha256": "17ab16156d4a6e1ceaa4526da4ade35b293d7fef906e52ed93f3a330d8424513"
     },
     {
       "file": "02-architecture.md",
       "kind": "block",
       "marker": "surface-counts",
-      "sha256": "ff6bf09b033e18462182429f73a68c20639ff5b8fc9c697afb79535c0873e9e4"
+      "sha256": "73a26355c47c34a4b662befebf20d0512cacbeb63ee886211753dcdacbb27365"
     },
     {
       "file": "05-env-variables.md",
       "kind": "block",
       "marker": "env-registry",
-      "sha256": "66fce3e488942f133939694b018be0f5c471ea2d628b241d84ff598682ffcafb"
+      "sha256": "cd495f992ac8b4da1f7ddbd72339244815ec843a856498e86387af3a0aafe439"
     },
     {
       "file": "08-engineering-guides.md",
       "kind": "block",
       "marker": "command-surface",
-      "sha256": "022e79e7b86fb86fbb89f1f48278a8319ad41c8d766b8bded09d61a7497b7e28"
+      "sha256": "e4a761e294bc98444fa9ecc805efe7b7afcdb9ea611cf262d5bc807601ebb824"
     },
     {
       "file": "09-skills.md",
       "kind": "document",
-      "sha256": "1bf218ada09ae494c9730def1c9e979832e69f67a15db67b9616b3c22eea155c"
+      "sha256": "46450e6e0632d9cdf76a1fe2c98b9d0991b5b657cb1af090488587e0872210a1"
     },
     {
       "file": "10-tools.md",
       "kind": "document",
-      "sha256": "c98a5a2cc70ad13e5bef5cb55511df01caca835f42c8367ef377121653a521bf"
+      "sha256": "2437bd2f586e57c8d3591a544821859f60435eb907d0e79c544f5ba32a4575c8"
     },
     {
       "file": "11-prompts.md",
       "kind": "document",
-      "sha256": "404c73ac7c3f2ae0b7997cb74b8886026761429573e7a652da6ff0f21c83d372"
+      "sha256": "8ac6bba7cd4684db1c850c063db763fd072201bcb5923f0eadee66c18166327e"
     },
     {
       "file": "12-instructions.md",
       "kind": "document",
-      "sha256": "8cdd33f940e7b24f997dddb79fe683b795a717adb778b2cd11dde7529736a0de"
+      "sha256": "7fe59930bc2c0a657a30491a11cb8b1412ff3518f93a81ff3d41ecb296f0fdb9"
     },
     {
       "file": "13-cli.md",
@@ -68,7 +68,7 @@
     {
       "file": "17-surface-map.md",
       "kind": "document",
-      "sha256": "f24134fef223f12783bf20cd563f2a297b62918d5e20562b8aca82d847667671"
+      "sha256": "e8a220750c2c77c9276f7c24b8523809022dbc8c9114d1fd47b5af0abf986cfa"
     }
   ]
 }

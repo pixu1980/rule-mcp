@@ -1,5 +1,3 @@
-
-
 /** Branch coverage: similarity tier with an adapter that has no embed method. */
 import assert from "node:assert/strict";
 import { mkdtempSync, rmSync } from "node:fs";

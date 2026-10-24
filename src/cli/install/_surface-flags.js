@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/install/surface-flags - the server surface a set of flags asks for
  *

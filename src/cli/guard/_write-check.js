@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/guard/_write-check
  *

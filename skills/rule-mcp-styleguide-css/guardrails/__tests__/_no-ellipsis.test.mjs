@@ -1,5 +1,3 @@
-
-
 /** The css-no-ellipsis guardrail: prose wraps, it is never truncated. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

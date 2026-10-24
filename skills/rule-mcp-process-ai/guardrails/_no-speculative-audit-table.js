@@ -1,5 +1,3 @@
-
-
 /** Guardrail `no-speculative-audit-table`: No audit/history table without a consumer */
 export const noSpeculativeAuditTable = {
   id: "ai-no-speculative-audit-table",

@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/git/range - the one feature commit range.
  *

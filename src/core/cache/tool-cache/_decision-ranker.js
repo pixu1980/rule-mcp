@@ -1,5 +1,3 @@
-
-
 /** BM25 ranking for decision-cache candidates. */
 import { bm25Score } from "../../bm25/_score.js";
 import { tokenize } from "../../bm25/_terms.js";

@@ -1,5 +1,3 @@
-
-
 /**
  * The flags and the wizard have to describe one selection, not two.
  *

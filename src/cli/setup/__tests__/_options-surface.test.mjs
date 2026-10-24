@@ -1,5 +1,3 @@
-
-
 /**
  * The surface answer rides the setup options next to `minimal`.
  *

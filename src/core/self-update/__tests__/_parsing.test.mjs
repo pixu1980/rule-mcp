@@ -1,5 +1,3 @@
-
-
 /** S3: interval env parsing - 0 checks every call, invalid and negative fall back to the default. */
 import { strict as assert } from "node:assert";
 import { rmSync } from "node:fs";

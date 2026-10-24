@@ -1,5 +1,3 @@
-
-
 /** @module core/telemetry/store/retention */
 
 import { rmSync } from "node:fs";

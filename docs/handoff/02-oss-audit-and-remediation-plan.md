@@ -25,8 +25,8 @@ hand on top of it.
 ## The four critical findings
 
 1. **OSS-1** - three packaging manifests name three different GitHub owners.
-   scoop says `github.com/rule-mcp`, winget says owner `rule-mcp` with `github.com/rule-mcp`,
-   Homebrew says `github.com/rule-mcp`. All three pin `0.1.0`, two carry a
+   scoop says `github.com/rule`, winget says owner `rule-mcp` with `github.com/rule`,
+   Homebrew says `github.com/rule`. All three pin `0.1.0`, two carry a
    literal `PLACEHOLDER` hash, and all three point at a `v0.1.0` tag that does
    not exist. The owner is `pixu1980`.
 2. **OSS-2** - `SECURITY.md` routes vulnerability reports to a public issue. No
@@ -56,7 +56,7 @@ cannot work even against a registry.
 | D6  | Explicit BDFL with a documented path to co-maintainers                    | Step 16 writes the model down and adds `CODEOWNERS`                                                        |
 | D7  | Contributor Covenant 3.0                                                  | Step 14 adopts the text verbatim                                                                           |
 | D8  | Funding is GitHub Sponsors                                                | Step 25 adds `FUNDING.yml` and the policy text                                                             |
-| D9  | MCP registry identity is the GitHub owner, not a claimed brand            | Step 3 rewrites `server.json` to `io.github.pixu1980/rule-mcp`                                             |
+| D9  | MCP registry identity is the GitHub owner, not a claimed brand            | Step 3 rewrites `server.json` to `io.github.pixu1980/rule`                                                 |
 
 ## Bugs the work surfaced
 

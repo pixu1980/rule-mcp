@@ -1,5 +1,3 @@
-
-
 /** @module tools/apply/target - which destinations inside the root a write may name */
 
 import { existsSync } from "node:fs";

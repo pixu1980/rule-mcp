@@ -1,5 +1,3 @@
-
-
 /** Guardrail `js-new-for-builtins`: new required for Map/Set/Date/Array/WeakMap/WeakSet */
 
 export const jsNewForBuiltins = {

@@ -1,5 +1,3 @@
-
-
 /**
  * src/cli/setup: the install and uninstall wizard.
  *

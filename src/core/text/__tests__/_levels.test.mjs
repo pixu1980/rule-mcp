@@ -1,5 +1,3 @@
-
-
 /**
  * PERF-1 and PERF-2: the vocabulary tables and the levels that gate them.
  *

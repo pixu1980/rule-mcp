@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/comment-history.test
  *

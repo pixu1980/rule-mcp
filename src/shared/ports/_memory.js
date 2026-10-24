@@ -1,5 +1,3 @@
-
-
 /** @module shared/ports/memory - a store that lives in this process */
 
 /**

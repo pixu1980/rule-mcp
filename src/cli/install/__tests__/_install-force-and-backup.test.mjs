@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/install-force-and-backup
  *
@@ -51,7 +49,7 @@ const install = (options = {}) => installAgent({ agent: "claude", entrypoint, ..
 
 install();
 const commandsDir = join(home, ".claude", "commands");
-const sampleCommand = join(commandsDir, "rule-mcp.md");
+const sampleCommand = join(commandsDir, "rule.md");
 check("T1 the first install writes the command set", existsSync(sampleCommand));
 
 const MINE = "# my own version\n";

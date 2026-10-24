@@ -1,5 +1,3 @@
-
-
 /** @module core/fix/js-style - the deterministic JavaScript style passes */
 
 import { apply as blankBeforeReturn } from "./_blank-before-return.js";

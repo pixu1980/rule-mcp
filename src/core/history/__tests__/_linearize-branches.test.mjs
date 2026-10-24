@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for linearization's refusals: no merges, detached HEAD and a dirty tree. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

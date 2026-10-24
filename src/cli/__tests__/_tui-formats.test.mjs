@@ -1,5 +1,3 @@
-
-
 /** The install/uninstall/tools/skills terminal views: every result shape renders, no branch left dark. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

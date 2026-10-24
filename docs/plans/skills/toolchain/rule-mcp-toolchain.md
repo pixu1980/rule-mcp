@@ -120,7 +120,7 @@ Depends on: `bundler-family` (HARD), `rule-mcp-toolchain-biome` (HARD), `rule-mc
 
 Feeds:,
 
-Shared files: skills/rule-mcp/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
+Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions and scaffolding
 

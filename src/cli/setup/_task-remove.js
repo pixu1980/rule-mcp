@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/setup/task-remove
  *
@@ -132,7 +130,7 @@ export const profilesTask = () => ({
 export const purgeTask = (ids) => ({
   id: "purge",
   title: "Purge state and config",
-  detail: "delete ~/.rule-mcp, ~/.config/rule-mcp and the compiled-code cache",
+  detail: "delete ~/.rule-mcp, ~/.config/rule and the compiled-code cache",
   run: ({ dryRun }) => {
     const results = purgeRuntimeDirs({ dryRun, ids });
 

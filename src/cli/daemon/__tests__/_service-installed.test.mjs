@@ -1,5 +1,3 @@
-
-
 /** The installed arms: plist/unit fixtures drive the native paths on macOS and Linux. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

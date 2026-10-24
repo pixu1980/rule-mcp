@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for reword: proposals, refusals and the applied path. */
 import assert from "node:assert/strict";
 import { writeFileSync } from "node:fs";

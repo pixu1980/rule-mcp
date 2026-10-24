@@ -8,8 +8,8 @@
 
 Closed two defects in the install surface and added one dev convenience command.
 First, MCP prompt suppression was configured but never honored on the wire, so
-Claude Code kept showing `/rule-mcp:rule-mcp-handoff` instead of the clean
-`/rule-mcp-handoff`. Second, a multi-agent install resolved zero command targets and
+Claude Code kept showing `/rule:rule-handoff` instead of the clean
+`/rule-handoff`. Second, a multi-agent install resolved zero command targets and
 wrote no `/rule-mcp-*` files at all. Third, `reinstall` became one shell script
 behind three entry points.
 
@@ -31,7 +31,7 @@ behind three entry points.
 - Root cause: the wizard joins selected agents with commas into one
   `agent-commands --sync` argv, but `resolveCommandTargets` compared that raw
   string against each target's `agent` field. Two or more selected agents
-  therefore matched no targets; only the per-agent router file (`rule-mcp.md`) landed.
+  therefore matched no targets; only the per-agent router file (`rule.md`) landed.
   The 156-file sync worked only with exactly one agent named.
 - `src/core/agents/command-targets/_resolve.js` now parses `options.agent` as a
   comma-separated list (arrays accepted too) and filters through a Set (`3b9b9da5`).
@@ -83,7 +83,7 @@ through `_register.js` and `src/tools/handoff/_closeout.js`, then backfill the
 ### Skill display name in Claude Code App for macOS
 
 Carried over from handoff 09 and still unresolved. The CLI shows the clean
-`/rule-mcp-handoff`, the app may still show `/rule-mcp:rule-mcp-handoff`. The
+`/rule-handoff`, the app may still show `/rule:rule-handoff`. The
 prompt-suppression fix in this session addresses the MCP-prompt path; the app
 path was not verified. Investigate `src/cli/setup/_task-extras.js`,
 `src/cli/setup/_commands-items.js` and `~/.claude/mcp.json`.

@@ -1,5 +1,3 @@
-
-
 /** Session-registry policy constants. */
 
 /** Default idle ceiling: a session nobody has touched in an hour is gone. */

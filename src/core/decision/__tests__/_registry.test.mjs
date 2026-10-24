@@ -1,5 +1,3 @@
-
-
 /** The registry names the model, its threshold and its languages. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

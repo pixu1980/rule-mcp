@@ -1,5 +1,3 @@
-
-
 /** The auto-ADR hook: log significant tool calls as lightweight ADR entries. */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";

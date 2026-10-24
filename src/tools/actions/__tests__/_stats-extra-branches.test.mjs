@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the stats rollups, the event window and the ledger fallbacks. */
 import assert from "node:assert/strict";
 import { chmodSync, mkdtempSync, writeFileSync } from "node:fs";
@@ -7,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const state = mkdtempSync(join(tmpdir(), "rule-mcp-stats-extra-"));
+const state = mkdtempSync(join(tmpdir(), "rule-stats-extra-"));
 process.env.RULE_MCP_STATE_DIR = state;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 process.env.RULE_MCP_NO_CACHE = "1";
@@ -41,7 +39,7 @@ test("rollups with missing fields count as zero", async () => {
 });
 
 test("the ledger defaults every missing field and prints the finite dollar figure", { skip: process.platform === "win32" }, async () => {
-  const bin = mkdtempSync(join(tmpdir(), "rule-mcp-stats-bin-"));
+  const bin = mkdtempSync(join(tmpdir(), "rule-stats-bin-"));
   const fake = join(bin, "tokensave");
 
   writeFileSync(fake, "#!/bin/sh\nprintf '%s' '{}'\n");

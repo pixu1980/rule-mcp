@@ -1,5 +1,3 @@
-
-
 /** BM25 scoring paths on a hand-built index: misses, covers, per-skill rollup. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

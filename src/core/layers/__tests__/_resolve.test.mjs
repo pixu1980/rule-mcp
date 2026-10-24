@@ -1,5 +1,3 @@
-
-
 /**
  * Layer resolution over real directories (ADR 089): which copy of a skill or a
  * persona answers, and which layer it came from.

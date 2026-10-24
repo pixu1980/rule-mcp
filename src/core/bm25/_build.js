@@ -1,5 +1,3 @@
-
-
 /** Index construction over the skills catalog. */
 
 import { getSkillsDirs as getSkillsDirectories } from "../../cli/paths/index.js";

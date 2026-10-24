@@ -51,7 +51,7 @@ async function scrapeUrl(url: string): Promise<ScrapedMetadata> {
       signal: controller.signal,
       headers: {
         "User-Agent":
-          "Mozilla/5.0 (compatible; BookmarksManager/1.0; +https://github.com/rule-mcp)",
+          "Mozilla/5.0 (compatible; BookmarksManager/1.0; +https://github.com/rule)",
         Accept: "text/html,application/xhtml+xml",
       },
     });

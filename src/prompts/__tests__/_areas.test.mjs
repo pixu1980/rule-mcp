@@ -1,5 +1,3 @@
-
-
 /**
  * The area prompts, derived from the resolved skill catalog.
  *
@@ -20,9 +18,9 @@ test("an area is the segment after the rule-mcp prefix", () => {
 });
 
 test("every skill routes through its area hub command (ADR 117)", () => {
-  assert.equal(areaCommandName("rule-mcp-frontend"), "rule-mcp-area-frontend");
-  assert.equal(areaCommandName("rule-mcp-frontend-react"), "rule-mcp-area-frontend");
-  assert.equal(areaCommandName("rule-mcp-styleguide-a11y"), "rule-mcp-area-styleguide");
+  assert.equal(areaCommandName("rule-mcp-frontend"), "rule-area-frontend");
+  assert.equal(areaCommandName("rule-mcp-frontend-react"), "rule-area-frontend");
+  assert.equal(areaCommandName("rule-mcp-styleguide-a11y"), "rule-area-styleguide");
   assert.equal(skillToolName("rule-mcp-frontend-react"), "rule_tool_frontend_react");
 });
 
@@ -58,11 +56,11 @@ test("one prompt per area hub only (ADR 117)", () => {
   const prompts = listAreaPrompts();
   const names = new Set(prompts.map((prompt) => prompt.name));
 
-  assert.ok(names.has("rule-mcp-area-frontend"), "the hub prompt");
-  assert.ok(!names.has("rule-mcp-area-frontend-react"), "no member slash/prompt");
+  assert.ok(names.has("rule-area-frontend"), "the hub prompt");
+  assert.ok(!names.has("rule-area-frontend-react"), "no member slash/prompt");
   assert.equal(names.size, prompts.length, "no name is minted twice");
   assert.equal(
-    prompts.every((p) => /^rule-mcp-area-[a-z]+$/.test(p.name)),
+    prompts.every((p) => /^rule-area-[a-z]+$/.test(p.name)),
     true,
     "every area prompt is a single-segment hub",
   );
@@ -75,7 +73,7 @@ test("one prompt per area hub only (ADR 117)", () => {
 });
 
 test("the hub prompt routes leaves from free text and names tools", () => {
-  const { text, members } = listAreaPrompts().find((prompt) => prompt.name === "rule-mcp-area-frontend");
+  const { text, members } = listAreaPrompts().find((prompt) => prompt.name === "rule-area-frontend");
 
   assert.match(text, /frontend area/, "it says which area it is");
   assert.match(text, /rule-mcp-frontend-react/, "and lists the skills it can reach for");

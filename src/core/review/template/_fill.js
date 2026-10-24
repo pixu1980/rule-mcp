@@ -1,5 +1,3 @@
-
-
 /** @module core/review/template/fill */
 
 import { templateLines } from "./_lines.js";

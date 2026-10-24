@@ -1,5 +1,3 @@
-
-
 /** WS1.1 - repository state and commit metadata read from git. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

@@ -20,7 +20,7 @@ const ADVISORY_PATH = "/security/advisories/new";
 test("SECURITY.md names the private advisory channel first", () => {
   const policy = readFileSync(join(root, "SECURITY.md"), "utf8");
 
-  assert.ok(policy.includes(`github.com/pixu1980/rule-mcp${ADVISORY_PATH}`), "the reporting section must link the private GitHub advisory form");
+  assert.ok(policy.includes(`github.com/pixu1980/rule${ADVISORY_PATH}`), "the reporting section must link the private GitHub advisory form");
   assert.ok(policy.includes("3 business days"), "the policy must promise an acknowledgment SLA");
   assert.ok(/90-day/i.test(policy), "the policy must state the coordinated-disclosure window");
 });

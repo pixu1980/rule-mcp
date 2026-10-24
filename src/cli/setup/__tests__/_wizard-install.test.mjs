@@ -1,5 +1,3 @@
-
-
 /**
  * The install wizard rendered into a fake terminal, driven by keystrokes.
  *
@@ -21,7 +19,7 @@ test("the install wizard opens on preflight inside its frame", async () => {
 
   const frame = stdout.lastFrame;
 
-  assert.match(frame, /rule-mcp/, "the title bar must render");
+  assert.match(frame, /rule/, "the title bar must render");
   assert.match(frame, /Preflight/, "the step rail must render");
   assert.match(frame, /Node\.js/, "the Node check must render");
   assert.match(frame, /enter/, "the key bar must render");

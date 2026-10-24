@@ -1,5 +1,3 @@
-
-
 /**
  * The argv one `agent-commands --sync` run gets, and the sentence the plan
  * shows for it.

@@ -1,5 +1,3 @@
-
-
 /**
  * SEC-7: one owner per platform command.
  *

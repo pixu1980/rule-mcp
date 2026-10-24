@@ -12,7 +12,7 @@ if [[ ! -d "${SOURCE_DIR}" ]]; then
 fi
 
 mkdir -p "${TARGET_DIR}"
-rm -rf "${TARGET_DIR}/rule-mcp"
+rm -rf "${TARGET_DIR}/rule"
 installed=0
 
 for skill_dir in "${SOURCE_DIR}"/*; do

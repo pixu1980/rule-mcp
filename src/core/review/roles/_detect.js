@@ -1,5 +1,3 @@
-
-
 /** @module core/review/roles/detect */
 
 import { activeRoles } from "./_query.js";

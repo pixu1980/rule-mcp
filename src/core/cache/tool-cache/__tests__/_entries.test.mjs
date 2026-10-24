@@ -1,5 +1,3 @@
-
-
 /** The entry store: freshness eviction, replication, and persistence failure. */
 import { strict as assert } from "node:assert";
 import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";

@@ -1,5 +1,3 @@
-
-
 /** The optional tasks answer without side effects: dry runs and skips. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync } from "node:fs";

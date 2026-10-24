@@ -1,5 +1,3 @@
-
-
 /** @module cli/skills-install/uninstall - remove the skills the installer copied */
 
 import { existsSync, readdirSync, rmSync, statSync } from "node:fs";
@@ -28,14 +26,14 @@ export function installedSkillNames() {
  * Whether a directory name belongs to the server. Every skill the installer
  * copies lives in the `rule-mcp-` namespace, so a `rule-mcp-` directory in one of the
  * install targets is the installer's, including a name an earlier release wrote
- * and a later one renamed away (`rule-mcp-process-compression`, persona
- * `rule-mcp-persona-<role>-<operation>`).
+ * and a later one renamed away (`rule-mcp-process-compression`), plus the
+ * generated persona skills (`rule-persona-<role>` and the older per-operation shape).
  *
  * @param {string} name
  * @returns {boolean}
  */
 export function isInstallerOwned(name) {
-  return name === "rule-mcp" || (typeof name === "string" && name.startsWith("rule-mcp-"));
+  return name === "rule-mcp" || (typeof name === "string" && (name.startsWith("rule-mcp-") || name.startsWith("rule-persona-")));
 }
 
 /**

@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the shortlist guards and the missing-field normalization. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

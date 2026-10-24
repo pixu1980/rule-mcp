@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the explainer's fall-through arms. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

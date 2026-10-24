@@ -1,5 +1,3 @@
-
-
 /**
  * Branch coverage for the skills install/list commands: the batch path with
  * only recopied skills, the interactive path answering nothing, everything, or

@@ -1,5 +1,3 @@
-
-
 /** @module core/review/persona-file/quote */
 
 /** Strip one layer of matching quotes and unescape what the writer escaped. */

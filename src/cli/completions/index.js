@@ -1,5 +1,3 @@
-
-
 import { generateBash } from "./_bash.js";
 import { generateFish } from "./_fish.js";
 import { generateZsh } from "./_zsh.js";
@@ -19,7 +17,7 @@ import { generateZsh } from "./_zsh.js";
  * Install:
  *   rule-mcp completions --shell zsh > ~/.zsh/completions/_rule-mcp
  *   rule-mcp completions --shell bash | source   # or add to .bashrc
- *   rule-mcp completions --shell fish > ~/.config/fish/completions/rule-mcp.fish
+ *   rule-mcp completions --shell fish > ~/.config/fish/completions/rule.fish
  */
 
 export function generateCompletions(shell = "zsh") {

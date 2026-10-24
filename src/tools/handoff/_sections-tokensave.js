@@ -1,5 +1,3 @@
-
-
 /**
  * Handoff sections that quote TokenSave instead of re-deriving their content.
  *

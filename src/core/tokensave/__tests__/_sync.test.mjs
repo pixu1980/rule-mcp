@@ -1,5 +1,3 @@
-
-
 /**
  * After rule-mcp writes, the graph is stale until TokenSave is told.
  *

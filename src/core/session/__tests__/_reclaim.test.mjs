@@ -1,5 +1,3 @@
-
-
 /** Telemetry retention/drain and the idle-reclaim policy. */
 import { strict as assert } from "node:assert";
 import { existsSync, mkdtempSync, rmSync } from "node:fs";

@@ -1,5 +1,3 @@
-
-
 /** TypeScript and manifest-policy helpers consulted by the quality checks. */
 export { TS_EXTENSION, TS_SYNTAX, isTypeScriptFile as isTypeScript } from "../../../shared/index.js";
 

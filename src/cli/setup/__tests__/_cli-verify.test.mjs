@@ -1,5 +1,3 @@
-
-
 /**
  * The install's own proof: the CLI on PATH answers `--version`, `tools list`
  * and `doctor`, and any one of them failing is a broken install.
@@ -14,11 +12,11 @@ test("verifyGlobalCli reports a missing shim", () => {
 });
 
 test("verifyGlobalCli reports a shim that does not answer", () => {
-  assert.equal(verifyGlobalCli({ skip: false, path: "/bin/rule-mcp", works: () => false }).status, "broken");
+  assert.equal(verifyGlobalCli({ skip: false, path: "/bin/rule", works: () => false }).status, "broken");
 });
 
 test("verifyGlobalCli reports a broken tools list", () => {
-  const result = verifyGlobalCli({ skip: false, path: "/bin/rule-mcp", works: () => true, exec: () => "" });
+  const result = verifyGlobalCli({ skip: false, path: "/bin/rule", works: () => true, exec: () => "" });
 
   assert.equal(result.status, "broken");
   assert.match(result.reason, /tools list/);
@@ -31,7 +29,7 @@ test("verifyGlobalCli passes when the CLI answers", () => {
 
     return command.includes("tools") ? "107 tools" : "doctor ok";
   };
-  const result = verifyGlobalCli({ skip: false, path: "/bin/rule-mcp", works: () => true, exec });
+  const result = verifyGlobalCli({ skip: false, path: "/bin/rule", works: () => true, exec });
 
   assert.equal(result.status, "ok");
   assert.deepEqual(calls, ["rule-mcp tools list", "rule-mcp doctor"]);

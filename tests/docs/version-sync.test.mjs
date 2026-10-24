@@ -49,7 +49,7 @@ test("the manifest carries the source-link fields", () => {
   const manifest = JSON.parse(read("package.json"));
 
   assert.equal(manifest.author, "pixu1980", "author must name the copyright holder");
-  assert.equal(manifest.repository, "github:pixu1980/rule-mcp", "repository must point at the source");
-  assert.equal(manifest.bugs?.url, "https://github.com/pixu1980/rule-mcp/issues", "bugs must point at the tracker");
-  assert.equal(manifest.homepage, "https://github.com/pixu1980/rule-mcp", "homepage must point at the repo");
+  assert.equal(manifest.repository, "github:pixu1980/rule", "repository must point at the source");
+  assert.equal(manifest.bugs?.url, "https://github.com/pixu1980/rule/issues", "bugs must point at the tracker");
+  assert.equal(manifest.homepage, "https://github.com/pixu1980/rule", "homepage must point at the repo");
 });

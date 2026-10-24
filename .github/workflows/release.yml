@@ -79,7 +79,7 @@ jobs:
         run: |
           rm -rf /tmp/rule-mcp-verify && mkdir -p /tmp/rule-mcp-verify && cd /tmp/rule-mcp-verify
           npm install "$GITHUB_WORKSPACE/dist/rule-mcp-"*.tgz
-          ./node_modules/.bin/rule-mcp --version
+          ./node_modules/.bin/rule --version
 
   release:
     runs-on: ubuntu-latest

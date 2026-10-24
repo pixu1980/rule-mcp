@@ -1,5 +1,3 @@
-
-
 /**
  * @module tests/docs/census-generated
  *

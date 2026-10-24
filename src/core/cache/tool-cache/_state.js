@@ -1,5 +1,3 @@
-
-
 /** Cache state: the entry store, the denylist and the normalizable fields. */
 import { createMemoryStore } from "../../../shared/ports/index.js";
 

@@ -1,5 +1,3 @@
-
-
 /** Handoff barrel: build the session handoff, the generated index, renumber, register the tool. */
 export * from "./_build.js";
 export * from "./_handoff-index.js";

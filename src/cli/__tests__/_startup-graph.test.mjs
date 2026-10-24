@@ -1,5 +1,3 @@
-
-
 /**
  * PERF-8: what a `--help` is allowed to load.
  *

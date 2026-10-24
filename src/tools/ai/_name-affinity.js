@@ -1,5 +1,3 @@
-
-
 import { STOPWORDS } from "./_stopwords.data.js";
 
 /** Suffixes that make a word a different form of the same word. */

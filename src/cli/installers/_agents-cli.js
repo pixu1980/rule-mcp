@@ -1,5 +1,3 @@
-
-
 /**
  * Installers for CLI-focused agents: Claude, Codex, Cursor, Copilot, Gemini, Pi.
  * @module cli/installers/agents-cli
@@ -12,11 +10,11 @@ import { commandConfig } from "./_env.js";
 import { parseJson, toJson, upsertJsonServer } from "./_writers-json.js";
 import { commandTemplate, geminiCommand, copilotAgent, appendInstruction, upsertTomlBlock } from "./_writers-text.js";
 
-/** Install into Claude Code only (~/.claude/commands/rule-mcp.md, never other agents). */
+/** Install into Claude Code only (~/.claude/commands/rule.md, never other agents). */
 const installClaude = ({ entrypoint, dryRun = false, global = false, force = false }) => {
   const file = join(HOME, ".claude.json");
   const mdFile = join(HOME, ".claude", "CLAUDE.md");
-  const commandFile = join(HOME, ".claude", "commands", "rule-mcp.md");
+  const commandFile = join(HOME, ".claude", "commands", "rule.md");
 
   return [
     // The config is an upsert where a merge can go wrong, so the pre-write
@@ -60,7 +58,7 @@ const installCodex = ({ entrypoint, dryRun = false, global = false }) => {
 const installCursor = ({ entrypoint, dryRun = false, global = false }) => {
   const files = [];
   const cursorGlobal = join(HOME, ".cursor", "mcp.json");
-  const cursorCommand = join(process.cwd(), ".cursor", "commands", "rule-mcp.md");
+  const cursorCommand = join(process.cwd(), ".cursor", "commands", "rule.md");
   files.push(
     writeText({
       file: cursorGlobal,
@@ -89,6 +87,9 @@ const installCursor = ({ entrypoint, dryRun = false, global = false }) => {
  * @returns {Array<{ file: string, action: string }>}
  */
 const installCopilot = ({ entrypoint, dryRun = false, global = false }) => {
+  // The Copilot CLI reads ~/.copilot/mcp-config.json; hosts.json belongs to the
+  // older GitHub Copilot extension and is kept in sync for that surface.
+  const mcpFile = join(HOME, ".copilot", "mcp-config.json");
   const hostsDir = join(HOME, ".config", "github-copilot");
   const hostsFile = join(hostsDir, "hosts.json");
   const agentFile = join(HOME, ".copilot", "agents", "rule-mcp.agent.md");
@@ -96,7 +97,11 @@ const installCopilot = ({ entrypoint, dryRun = false, global = false }) => {
   const json = current.trim() ? parseJson(current) : {};
   json[`copilot-mcp-${serverName}`] = commandConfig(entrypoint, { global });
 
-  return [writeText({ file: hostsFile, content: toJson(json), dryRun }), writeText({ file: agentFile, content: copilotAgent(), dryRun })];
+  return [
+    writeText({ file: mcpFile, content: upsertJsonServer(readText(mcpFile), commandConfig(entrypoint, { global })), dryRun }),
+    writeText({ file: hostsFile, content: toJson(json), dryRun }),
+    writeText({ file: agentFile, content: copilotAgent(), dryRun }),
+  ];
 };
 
 /**
@@ -107,7 +112,7 @@ const installCopilot = ({ entrypoint, dryRun = false, global = false }) => {
 const installGemini = ({ entrypoint, dryRun = false, global = false }) => {
   const file = join(HOME, ".gemini", "settings.json");
   const mdFile = join(HOME, ".gemini", "GEMINI.md");
-  const commandFile = join(HOME, ".gemini", "commands", "rule-mcp.toml");
+  const commandFile = join(HOME, ".gemini", "commands", "rule.toml");
 
   return [
     writeText({
@@ -129,7 +134,7 @@ const installPi = ({ entrypoint, dryRun = false, global = false, mode = "stdio" 
   // Pi uses $PI_CODING_AGENT_DIR/mcp.json or ~/.pi/agent/mcp.json
   const piDir = process.env.PI_CODING_AGENT_DIR ? join(process.env.PI_CODING_AGENT_DIR) : join(HOME, ".pi", "agent");
   const file = join(piDir, "mcp.json");
-  const promptFile = join(piDir, "prompts", "rule-mcp.md");
+  const promptFile = join(piDir, "prompts", "rule.md");
 
   return [
     writeText({

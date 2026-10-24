@@ -1,5 +1,3 @@
-
-
 /** logLines shows the running task, else the last finished one, else nothing. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

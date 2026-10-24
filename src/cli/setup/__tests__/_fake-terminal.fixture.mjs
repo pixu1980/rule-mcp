@@ -1,5 +1,3 @@
-
-
 /**
  * A stdin/stdout pair Ink will render into without a real terminal.
  *

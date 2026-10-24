@@ -1,5 +1,3 @@
-
-
 /**
  * @module cli/commands/commit
  *

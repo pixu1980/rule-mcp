@@ -1,5 +1,3 @@
-
-
 /** @module cli/roles/command-deprecate - the `roles deprecate` subcommand */
 
 import { roleById } from "../../core/review/roles/index.js";

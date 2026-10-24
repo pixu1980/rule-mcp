@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/compression.test
  *

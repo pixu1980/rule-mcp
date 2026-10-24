@@ -1,5 +1,3 @@
-
-
 /** Verify one claimed reference: a branch against the trunks, an ADR against the files. */
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync } from "node:fs";

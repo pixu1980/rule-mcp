@@ -1,18 +1,18 @@
 # Migrating to RuleMCP
 
 The server formerly published as `rule-mcp` is now **RuleMCP**. The
-GitHub repository is `pixu1980/rule-mcp`, the package and binary are `rule-mcp`,
+GitHub repository is `pixu1980/rule`, the package and binary are `rule-mcp`,
 and the product name is RuleMCP. The decision is recorded in
 [ADR 169](../adr/169-rename-the-server-to-rulemcp.md).
 
 ## What changed
 
 - The GitHub repository moved from `pixu1980/rule-mcp` to
-  `pixu1980/rule-mcp`; GitHub keeps the old URL as a redirect.
+  `pixu1980/rule`; GitHub keeps the old URL as a redirect.
 - The npm package and the binary are `rule-mcp`. The old `rule-mcp`
   package was never published to npm.
 - MCP client configs use `"command": "rule-mcp"` instead of the old command.
-- The `server.json` registry identifier is `io.github.pixu1980/rule-mcp`.
+- The `server.json` registry identifier is `io.github.pixu1980/rule`.
 
 Do not install the npm package `rule-mcp`: it is an unrelated third-party
 package, not this server. The `rule-mcp-server` npm name is also unrelated.

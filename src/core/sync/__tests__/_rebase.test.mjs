@@ -1,5 +1,3 @@
-
-
 /** WS2.3/WS2.4 - propose, confirm, rebase, verify, and never resolve a conflict. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

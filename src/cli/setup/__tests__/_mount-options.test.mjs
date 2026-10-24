@@ -1,5 +1,3 @@
-
-
 /**
  * The wizard's Ink options: interactive mode is forced and incremental
  * rendering is on, which is what stops the full-frame repaint from flickering

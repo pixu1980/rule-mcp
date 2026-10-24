@@ -1,5 +1,3 @@
-
-
 import { existsSync, readdirSync } from "node:fs";
 import { basename, join } from "node:path";
 

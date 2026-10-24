@@ -362,7 +362,7 @@ Reporting `inapplicable` where you mean `untested` is how a claim becomes wrong.
 
 ### Building the report
 
-The a11y persona (`/rule-mcp-persona-a11y`) turns per-criterion outcomes into a
+The a11y persona (`/rule-persona-a11y`) turns per-criterion outcomes into a
 WCAG-EM structured report. The report carries the shape below.
 
 ```

@@ -6,16 +6,16 @@ PackageLocale: en-US
 Publisher: pixu1980
 PublisherUrl: https://github.com/pixu1980
 PackageName: rule-mcp
-PackageUrl: https://github.com/pixu1980/rule-mcp
+PackageUrl: https://github.com/pixu1980/rule
 License: MIT
-LicenseUrl: https://github.com/pixu1980/rule-mcp/blob/main/LICENSE
+LicenseUrl: https://github.com/pixu1980/rule/blob/main/LICENSE
 ShortDescription: MCP server for the rule-mcp-* skill ecosystem
 Description: Serves styleguides, component templates, framework best practices, and design system patterns directly to your coding agent.
 Moniker: rule-mcp
 Installers:
   - Architecture: x64
     InstallerType: portable
-    InstallerUrl: https://github.com/pixu1980/rule-mcp/releases/download/v0.1.0/rule-mcp-0.1.0.tgz
+    InstallerUrl: https://github.com/pixu1980/rule/releases/download/v0.1.0/rule-mcp-0.1.0.tgz
     InstallerSha256: 5791843651c731ea8ad2adaef111b2c58ee6d422c328637c796f79df6ed5a12c
     Commands:
       - rule-mcp

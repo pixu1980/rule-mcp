@@ -1,4 +1,4 @@
-# 001: Framework detection for /Users/emilianopisu/Projects/work/rule-mcp/poc/phonebook-ds4-flash
+# 001: Framework detection for /Users/emilianopisu/Projects/work/rule/poc/phonebook-ds4-flash
 
 - **Date**: 2026-07-11 13:06:03
 - **Status**: accepted
@@ -7,7 +7,7 @@
 
 ## Context
 
-Path: /Users/emilianopisu/Projects/work/rule-mcp/poc/phonebook-ds4-flash
+Path: /Users/emilianopisu/Projects/work/rule/poc/phonebook-ds4-flash
 Detected framework: vanilla
 
 ## Decision

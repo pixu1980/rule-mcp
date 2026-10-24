@@ -1,5 +1,3 @@
-
-
 /** The follow-up tools a routed skill suggests calling next. */
 export function skillNextTools(skillName) {
   const suggestions = [];

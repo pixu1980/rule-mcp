@@ -1,5 +1,3 @@
-
-
 /** The corpus claims: measurable savings, data left alone, substance intact, idempotent. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

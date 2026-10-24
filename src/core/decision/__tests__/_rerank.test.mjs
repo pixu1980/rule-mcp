@@ -1,5 +1,3 @@
-
-
 /** The shortlist cap and the answer shape the reranker reads. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

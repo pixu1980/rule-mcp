@@ -1,9 +1,7 @@
-
-
 /**
  * @module core/history
  *
- * Auditing and normalizing the feature history behind `/rule-mcp-git`.
+ * Auditing and normalizing the feature history behind `/rule-git`.
  *
  * The audit is read-only and reports what git sees: the base branch, the merge
  * base, the range, the Conventional Commit violations and the merge commits.

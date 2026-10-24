@@ -1,5 +1,3 @@
-
-
 /** opencode's JSON dialect: the mcp block, the command array, the instruction list. */
 import { strict as assert } from "node:assert";
 import test from "node:test";
@@ -17,8 +15,8 @@ test("upsertOpencode creates the mcp block in opencode's own shape", () => {
 });
 
 test("upsertOpencode joins command and args into the command array, without an args key", () => {
-  const out = parseJson(upsertOpencode("", { command: "/bin/rule-mcp", args: ["serve"], type: "stdio" }));
-  assert.deepEqual(out.mcp[SERVER].command, ["/bin/rule-mcp", "serve"]);
+  const out = parseJson(upsertOpencode("", { command: "/bin/rule", args: ["serve"], type: "stdio" }));
+  assert.deepEqual(out.mcp[SERVER].command, ["/bin/rule", "serve"]);
   assert.equal(out.mcp[SERVER].args, undefined, "opencode has no separate args key");
   assert.equal(out.mcp[SERVER].type, "local", "the mcpServers type is replaced by opencode's");
 });

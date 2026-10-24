@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for gateway core JSON defaults and multi-file checks. */
 import assert from "node:assert/strict";
 import { mkdtempSync } from "node:fs";

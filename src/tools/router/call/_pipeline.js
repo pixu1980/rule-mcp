@@ -1,5 +1,3 @@
-
-
 /** Tool invocation: hooks, cache read-through, banner, telemetry. */
 import { _tools } from "../_hooks.js";
 import { withBanner } from "../_helpers.js";

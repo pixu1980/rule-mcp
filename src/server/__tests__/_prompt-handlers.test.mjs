@@ -1,5 +1,3 @@
-
-
 /** The prompts handlers list the registry and reject bad gets, against a stub server. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

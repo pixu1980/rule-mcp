@@ -1,10 +1,8 @@
-
-
 /**
  * @module tools/handoff/feature
  *
  * The feature commit range a handoff reports, so the document carries the same
- * boundary `/rule-mcp-git` and the feature close use. Null when there is no feature
+ * boundary `/rule-git` and the feature close use. Null when there is no feature
  * range to report (no base branch, or the branch is standing on its base).
  */
 

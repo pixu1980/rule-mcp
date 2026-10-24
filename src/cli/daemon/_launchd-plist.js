@@ -1,5 +1,3 @@
-
-
 /** The LaunchAgent plist template. */
 import { mkdirSync } from "node:fs";
 import { getRuntimePaths } from "../paths/index.js";

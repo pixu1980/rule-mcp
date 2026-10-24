@@ -1,5 +1,3 @@
-
-
 /**
  * @module server/prompt-handlers - the prompts/list and prompts/get handlers
  *

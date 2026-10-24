@@ -1,5 +1,3 @@
-
-
 /** The decision cache short-circuits before the runtime switches models. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

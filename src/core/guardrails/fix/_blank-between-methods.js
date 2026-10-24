@@ -1,5 +1,3 @@
-
-
 /** @module scripts/fix/self-guardrails/blank-between-methods - js-blank-line-between-methods */
 
 export function apply(text) {

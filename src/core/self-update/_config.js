@@ -1,5 +1,3 @@
-
-
 /** Update policy: enablement, cadence, remote allowlist, manual hints. */
 import { readFileSync } from "node:fs";
 

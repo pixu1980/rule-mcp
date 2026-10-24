@@ -1,5 +1,3 @@
-
-
 /** CLI registrar arms: doctor, skills, agent-commands and legacy names, in subprocesses. */
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";

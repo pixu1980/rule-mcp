@@ -1,5 +1,3 @@
-
-
 /** The language detector chooses the model; it never guesses a language it cannot see. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

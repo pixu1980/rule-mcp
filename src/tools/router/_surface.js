@@ -1,5 +1,3 @@
-
-
 /** Registered-tool inventory: mutation classification, annotations, declared and public tool lists. */
 
 import { compressText } from "../../core/text/_compression.js";

@@ -1,5 +1,3 @@
-
-
 /** Guardrail `js-array-flat-map`: prefer flatMap over map().flat() */
 
 export const jsArrayFlatMap = {

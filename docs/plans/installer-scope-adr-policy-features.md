@@ -5,7 +5,7 @@ Notes:`planned` Notes:`planned`. Outside the skills graph: this plan covers repo
 
 A sibling project shipped this set of installer and documentation changes on 2026-10-18. This plan
 replays it here, adapted to this repository's names (`rule-mcp`, `RULE_MCP_*`,
-`rule_tool_process_adr`, `/rule-mcp-handoff`, `~/.rule-mcp/`). A port is a merge, not a copy: diff each
+`rule_tool_process_adr`, `/rule-handoff`, `~/.rule-mcp/`). A port is a merge, not a copy: diff each
 subsystem first and keep what this repository already does better.
 
 Rules for every step: tests first, Conventional Commits with a scope, never push, run the full
@@ -134,7 +134,7 @@ One table, read by install, uninstall and detection, so the three cannot disagre
    `.gitattributes` gets `docs/adr/ADR.md merge=<driver>` and `docs/handoff/HANDOFF.md merge=<driver>`.
 5. `src/core/git-hooks/`: plan -> apply -> remove for those hooks and the driver, idempotent (a
    second run is all "preserve"), private variant (`.git/info/attributes`) for local installs.
-6. `/rule-mcp-handoff`: run `handoff land --commit` before writing ADRs, then pass `moment: "handoff"`.
+6. `/rule-handoff`: run `handoff land --commit` before writing ADRs, then pass `moment: "handoff"`.
 7. Watch out: a squash gives every pending ADR the same add commit, so the landing order becomes
    alphabetical. Regenerate the index after a squash (`handoff doctor --fix`).
 8. Commit: `feat(adr): number pending ADRs when they land on the trunk`.
@@ -144,7 +144,7 @@ One table, read by install, uninstall and detection, so the three cannot disagre
 1. `src/core/runtime/features/_catalog.data.js`: each feature a list of levels (default first),
    each level the env keys it writes (`null` removes the key):
    - `adr`: on, off (`NO_ADR`). Off removes `rule_tool_process_adr`, `rule_tool_handoff`,
-     `rule_tool_handon`, `/rule-mcp-handoff`, `/rule-mcp-handon`, the rule line and the numbering hooks.
+     `rule_tool_handon`, `/rule-handoff`, `/rule-handon`, the rule line and the numbering hooks.
    - `telemetry`: full, anonymous (no prompt text, machine id or client name), off.
    - `update`: auto, notify, off.
    - `tokensave`: on, autotrack (also `tokensave branch add`), off.
@@ -209,7 +209,7 @@ One table, read by install, uninstall and detection, so the three cannot disagre
    `setup --refresh-projects` and `setup --uninstall` walk it.
 7. `rule-mcp project add [path] [--project-config] [--agent]` copies the last recorded
    project's configuration; `project remove [path]` takes back every config and forgets it.
-   `/rule-mcp-init` adds its own project when the install is per project.
+   `/rule-init` adds its own project when the install is per project.
 8. Each project also gets the numbering hooks and merge driver from step 5.
 9. Wizard: a Scope step (global / project), a project list with the cwd offered, `p` to type a
    path, then a Project config step (shared / local).
@@ -289,7 +289,7 @@ rule-mcp setup --scope project --project /tmp/try --project-config shared --dry-
 rule-mcp handoff doctor
 ```
 
-Then `/rule-mcp-handoff close-feature` and hand the person the close command. Never push.
+Then `/rule-handoff close-feature` and hand the person the close command. Never push.
 
 ## Dependency graph
 

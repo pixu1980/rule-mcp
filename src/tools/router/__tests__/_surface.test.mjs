@@ -1,5 +1,3 @@
-
-
 /** The tool surface: annotations, declared and list views, schema conversion. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

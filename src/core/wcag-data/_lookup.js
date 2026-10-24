@@ -1,5 +1,3 @@
-
-
 import { CRITERIA } from "./_criteria.data.js";
 
 /**

@@ -1,5 +1,3 @@
-
-
 /** @module cli/paths/runtime - the package, the port, the host, the state dirs */
 
 import { readFileSync } from "node:fs";

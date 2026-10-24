@@ -1,5 +1,3 @@
-
-
 /**
  * Lifecycle command registrars: install and uninstall.
  *

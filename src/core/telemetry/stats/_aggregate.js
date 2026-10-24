@@ -1,5 +1,3 @@
-
-
 /** @module core/telemetry/stats/aggregate */
 
 import { percentile } from "./_percentile.js";

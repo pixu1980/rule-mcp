@@ -1,5 +1,3 @@
-
-
 /**
  * Branch coverage for the optional tasks' failure and non-dry-run arms: a
  * command sync the CLI rejects, a skills install that succeeds or cannot

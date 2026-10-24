@@ -1,5 +1,3 @@
-
-
 /** Shared constants: where handoffs and ADRs live, trunk names, scan windows, holding verdicts. */
 
 /** Where handoffs live, relative to the project root. */

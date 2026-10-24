@@ -1,5 +1,3 @@
-
-
 /**
  * @module core/layers/inherit
  *

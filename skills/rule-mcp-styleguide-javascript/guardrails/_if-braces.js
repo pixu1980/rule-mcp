@@ -1,5 +1,3 @@
-
-
 /** Guardrail `js-if-braces`: if/else always use braces */
 
 export const jsIfBraces = {

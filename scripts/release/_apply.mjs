@@ -1,5 +1,3 @@
-
-
 /**
  * @module scripts/release/_apply
  *

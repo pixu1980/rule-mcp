@@ -1,5 +1,3 @@
-
-
 /** Compose the doctor report for the terminal. */
 import { agentsSection, automationSection, daemonSection, modelsSection, pathsSection, systemSection, toolsSection } from "./_sections.js";
 

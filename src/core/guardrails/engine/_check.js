@@ -1,5 +1,3 @@
-
-
 /** @module core/guardrails/engine/check - run every applicable rule over one body of code */
 
 import { getGuardrails } from "./_registry.js";

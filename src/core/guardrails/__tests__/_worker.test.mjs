@@ -1,5 +1,3 @@
-
-
 /**
  * Hardening 1.2 (F-S1): server paths run checkCode in a worker thread with a
  * hard timeout. A runaway pattern is terminated and reported instead of

@@ -1,5 +1,3 @@
-
-
 /**
  * Regression: reinstalling must not drop per-server user keys from the pi
  * MCP config. Previously upsertJsonServer replaced the whole server entry,
@@ -32,7 +30,7 @@ const installForPi = (home, piDir) =>
       ALIAS_HOOK,
       "--input-type=module",
       "--eval",
-      `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "pi", entrypoint: "/tmp/rule-mcp.js" });`,
+      `import { installAgent } from ${JSON.stringify(installModule)}; installAgent({ agent: "pi", entrypoint: "/tmp/rule.js" });`,
     ],
     { cwd: root, env: { ...process.env, HOME: home, PI_CODING_AGENT_DIR: piDir } },
   );
@@ -49,7 +47,7 @@ writeFileSync(
     {
       mcpServers: {
         "rule-mcp": {
-          command: "/old/bin/rule-mcp",
+          command: "/old/bin/rule",
           args: ["serve"],
           type: "stdio",
           toolPrefix: "none",

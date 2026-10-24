@@ -1,5 +1,3 @@
-
-
 /** generateComponentFiles: one folder per framework, barrel plus component. */
 import { strict as assert } from "node:assert";
 import { join } from "node:path";

@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/skills/retired-skills
  *

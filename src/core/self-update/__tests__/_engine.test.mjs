@@ -1,5 +1,3 @@
-
-
 /** T1-T4: fast-forward + classification, dirty-tree guard, and the opt-out, on real repos. */
 import { strict as assert } from "node:assert";
 import { rmSync, writeFileSync } from "node:fs";
@@ -12,7 +10,7 @@ console.log("self-update engine test: pull and guards");
 // ── T1: skills-only upstream change -> fast-forwarded, classified as skills ──
 {
   const { clone, seed, base, upstream } = makeClonePair();
-  pushUpstreamChange(seed, { "skills/rule-mcp/SKILL.md": "v2\n" });
+  pushUpstreamChange(seed, { "skills/rule/SKILL.md": "v2\n" });
   const r = runUpdateIn(clone, { RULE_MCP_UPDATE_REMOTE: upstream });
   assert.equal(r.updated, true, "should fast-forward a skills-only change");
   assert.equal(r.changedSkills, true, "skills change detected");
@@ -35,7 +33,7 @@ console.log("self-update engine test: pull and guards");
 // ── T3: dirty working tree is never touched ──
 {
   const { clone, seed, base, upstream } = makeClonePair();
-  pushUpstreamChange(seed, { "skills/rule-mcp/SKILL.md": "v2\n" });
+  pushUpstreamChange(seed, { "skills/rule/SKILL.md": "v2\n" });
   writeFileSync(join(clone, "skills", "rule-mcp", "SKILL.md"), "local edit\n");
   const r = runUpdateIn(clone, { RULE_MCP_UPDATE_REMOTE: upstream });
   assert.equal(r.updated, false, "must not update a dirty tree");
@@ -47,7 +45,7 @@ console.log("self-update engine test: pull and guards");
 // ── T4: opt-out env disables the update ──
 {
   const { clone, seed, base, upstream } = makeClonePair();
-  pushUpstreamChange(seed, { "skills/rule-mcp/SKILL.md": "v2\n" });
+  pushUpstreamChange(seed, { "skills/rule/SKILL.md": "v2\n" });
   const r = runUpdateIn(clone, { RULE_MCP_NO_AUTOUPDATE: "1", RULE_MCP_UPDATE_REMOTE: upstream });
   assert.equal(r.skipped, true, "opt-out skips");
   assert.equal(r.reason, "disabled", "reports disabled");

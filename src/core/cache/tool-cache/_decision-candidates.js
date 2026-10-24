@@ -1,5 +1,3 @@
-
-
 /** Deterministic cache candidates: eligibility, dedupe and BM25 ranking. */
 import { depsFingerprint, describeCandidate, nonPromptArgs, routeOf } from "./_decision-identity.js";
 import { rankCandidates } from "./_decision-ranker.js";

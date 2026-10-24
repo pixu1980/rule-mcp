@@ -1,5 +1,3 @@
-
-
 /** @module scripts/case-studies/ports - free-port probing, claiming and waiting. */
 
 import { createConnection } from "node:net";

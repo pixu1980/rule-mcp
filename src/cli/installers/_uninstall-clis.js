@@ -1,5 +1,3 @@
-
-
 /**
  * Uninstallers: per-agent removal implementations and the uninstaller map.
  * @module cli/installers/uninstall
@@ -16,7 +14,7 @@ import { removeInstruction, removeTomlBlock } from "./_writers-text.js";
 const uninstallClaude = ({ dryRun }) => {
   const file = join(HOME, ".claude.json");
   const mdFile = join(HOME, ".claude", "CLAUDE.md");
-  const commandFile = join(HOME, ".claude", "commands", "rule-mcp.md");
+  const commandFile = join(HOME, ".claude", "commands", "rule.md");
 
   if (!dryRun) {
     removeFile(commandFile);
@@ -39,7 +37,7 @@ const uninstallCodex = ({ dryRun }) => {
 
 const uninstallCursor = ({ dryRun }) => {
   const cursorGlobal = join(HOME, ".cursor", "mcp.json");
-  const commandFile = join(process.cwd(), ".cursor", "commands", "rule-mcp.md");
+  const commandFile = join(process.cwd(), ".cursor", "commands", "rule.md");
 
   if (!dryRun) {
     removeFile(commandFile);
@@ -51,8 +49,13 @@ const uninstallCursor = ({ dryRun }) => {
 /** Remove Copilot entries only. */
 
 const uninstallCopilot = ({ dryRun }) => {
+  const mcpFile = join(HOME, ".copilot", "mcp-config.json");
   const hostsFile = join(HOME, ".config", "github-copilot", "hosts.json");
   const agentFile = join(HOME, ".copilot", "agents", "rule-mcp.agent.md");
+
+  if (!dryRun && existsSync(mcpFile)) {
+    writeText({ file: mcpFile, content: removeJsonServer(readText(mcpFile)), dryRun });
+  }
 
   if (!dryRun && existsSync(hostsFile)) {
     const current = readText(hostsFile);
@@ -73,7 +76,7 @@ const uninstallCopilot = ({ dryRun }) => {
 const uninstallGemini = ({ dryRun }) => {
   const file = join(HOME, ".gemini", "settings.json");
   const mdFile = join(HOME, ".gemini", "GEMINI.md");
-  const commandFile = join(HOME, ".gemini", "commands", "rule-mcp.toml");
+  const commandFile = join(HOME, ".gemini", "commands", "rule.toml");
 
   if (!dryRun) {
     removeFile(commandFile);
@@ -87,7 +90,7 @@ const uninstallGemini = ({ dryRun }) => {
 const uninstallPi = ({ dryRun }) => {
   const piDir = process.env.PI_CODING_AGENT_DIR ? join(process.env.PI_CODING_AGENT_DIR) : join(HOME, ".pi", "agent");
   const file = join(piDir, "mcp.json");
-  const promptFile = join(piDir, "prompts", "rule-mcp.md");
+  const promptFile = join(piDir, "prompts", "rule.md");
 
   if (!dryRun) {
     removeFile(promptFile);

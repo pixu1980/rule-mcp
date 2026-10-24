@@ -1,5 +1,3 @@
-
-
 /** WS3.1 - idempotent git governance: detect, install, integrate, preserve. */
 import { strict as assert } from "node:assert";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";

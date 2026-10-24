@@ -1,5 +1,3 @@
-
-
 /** Hook registry (before/post/after) plus the tool registry's public surface. */
 import { resetTools } from "./_registry.js";
 

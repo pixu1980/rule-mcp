@@ -1,5 +1,3 @@
-
-
 /** @module cli/cache/helpers - shared output and the recompute closure */
 
 export const print = (value) => process.stdout.write(`${value}\n`);

@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the disabled and archived telemetry arms. */
 import assert from "node:assert/strict";
 import { mkdtempSync, writeFileSync } from "node:fs";
@@ -9,7 +7,7 @@ import { test } from "node:test";
 
 import { getProjectPaths } from "../../../cli/paths/index.js";
 
-const state = mkdtempSync(join(tmpdir(), "rule-mcp-stats-branches-"));
+const state = mkdtempSync(join(tmpdir(), "rule-stats-branches-"));
 process.env.RULE_MCP_STATE_DIR = state;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 

@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/code-signature.test
  *

@@ -1,5 +1,3 @@
-
-
 /** Guardrail `barrel-file-tree`: Barrel pattern (index.js) */
 export const barrelFileTree = {
   id: "barrel-file-tree",

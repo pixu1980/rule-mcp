@@ -1,5 +1,3 @@
-
-
 /** @module scripts/ci/run-tests/expand - a suite's globs to the files one node --test run gets */
 import { globSync, existsSync } from "node:fs";
 

@@ -1,5 +1,3 @@
-
-
 /** The cache replay tiers: exact, normalized, freshness and backfill. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync } from "node:fs";

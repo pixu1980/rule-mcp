@@ -1,5 +1,3 @@
-
-
 /**
  * PERF-5: the surfaces that used to leave uncompressed.
  *
@@ -64,7 +62,7 @@ test("a prompt body is compressed and booked as its own source", async () => {
   registerPromptHandlers({ setRequestHandler: (schema, handler) => handlers.set(schema.shape?.method?.value ?? handlers.size, handler) });
 
   const get = [...handlers.values()].at(-1);
-  const name = listPrompts().find((prompt) => prompt.name.startsWith("rule-mcp-area-")).name;
+  const name = listPrompts().find((prompt) => prompt.name.startsWith("rule-area-")).name;
   const before = getPrompt(name, {}).messages[0].content.text;
   const after = (await get({ params: { name } })).messages[0].content.text;
 

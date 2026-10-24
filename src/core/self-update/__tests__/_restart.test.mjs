@@ -1,5 +1,3 @@
-
-
 /** T5-T6: banner and restart decisions, including the client-safe daemon default. */
 import { strict as assert } from "node:assert";
 

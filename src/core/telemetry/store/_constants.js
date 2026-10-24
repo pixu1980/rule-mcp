@@ -1,5 +1,3 @@
-
-
 /** @module core/telemetry/store/constants */
 
 /** Raw events are kept this long, then dropped. Aggregates outlive them. */

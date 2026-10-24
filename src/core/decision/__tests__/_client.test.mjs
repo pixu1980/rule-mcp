@@ -1,5 +1,3 @@
-
-
 /* eslint-disable unicorn/prefer-https -- the client is loopback HTTP, and the refusal tests name remote HTTP hosts */
 /** The decision client refuses every host but loopback, and never retries. */
 import { strict as assert } from "node:assert";

@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/project-init.test
  *
@@ -26,13 +24,13 @@ import { test } from "node:test";
 
 // `init` records the project it initializes, and homedir() reads HOME, so the
 // recording lands in a temporary home instead of the person's own.
-process.env.HOME = mkdtempSync(join(tmpdir(), "rule-mcp-init-home-"));
+process.env.HOME = mkdtempSync(join(tmpdir(), "rule-init-home-"));
 
 const { GIT_HOOK_MARKER, HOOKED_GIT_EVENTS, gitHooksDir, uninstallGitHooks } = await import("../../core/index.js");
 const { initProject } = await import("../index.js");
 const { getProjectPaths } = await import("../paths/index.js");
 
-const workspace = () => realpathSync(mkdtempSync(join(tmpdir(), "rule-mcp-init-")));
+const workspace = () => realpathSync(mkdtempSync(join(tmpdir(), "rule-init-")));
 
 test("the hooks directory is git's own, so a removal reaches the file git reads", () => {
   const dir = gitHooksDir();

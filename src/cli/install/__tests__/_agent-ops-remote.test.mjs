@@ -1,5 +1,3 @@
-
-
 /**
  * Which agent may be written in which mode, and what a deprecated name does.
  *

@@ -1,5 +1,3 @@
-
-
 /** Guardrail `no-future-use-code`: No code kept for an imagined future */
 export const noFutureUseCode = {
   id: "no-future-use-code",

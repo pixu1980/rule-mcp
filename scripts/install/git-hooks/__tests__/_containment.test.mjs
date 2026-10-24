@@ -1,5 +1,3 @@
-
-
 /**
  * The containment rule the hook installer enforces, with the platform as an
  * argument.

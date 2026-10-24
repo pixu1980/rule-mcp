@@ -1,5 +1,3 @@
-
-
 /** Skill file access: read SKILL.md, metadata, target-only set, name listing and plugin detection. */
 
 import { readFileSync } from "node:fs";

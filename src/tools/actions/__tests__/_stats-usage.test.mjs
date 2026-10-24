@@ -1,5 +1,3 @@
-
-
 /**
  * rule_tool_stats and rule_tool_usage, driven through the router in a scratch
  * state directory: every scope, the flight-file arm, the disabled arm, and the
@@ -11,7 +9,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const state = mkdtempSync(join(tmpdir(), "rule-mcp-stats-"));
+const state = mkdtempSync(join(tmpdir(), "rule-stats-"));
 
 process.env.RULE_MCP_STATE_DIR = state;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";

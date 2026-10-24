@@ -1,5 +1,3 @@
-
-
 /**
  * Minimal Nyx adapter double for the cache-tier tests: no model, no network.
  * The tests point RULE_MCP_NYX_MODULE at this file.

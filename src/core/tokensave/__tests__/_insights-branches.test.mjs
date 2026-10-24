@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the TokenSave reporting reads: every empty and fallback shape. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

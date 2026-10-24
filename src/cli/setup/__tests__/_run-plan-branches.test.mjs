@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for runPlan: abort, throw, and missing outcome fields. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

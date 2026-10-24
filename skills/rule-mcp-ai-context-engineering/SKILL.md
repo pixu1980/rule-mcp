@@ -133,7 +133,7 @@ The rule: **compaction for length, handoff for a boundary, fresh for a new
 phase.** And a handoff is written in the present tense, so it stops being true
 without saying so - read it back with something that verifies its claims rather
 than trusting them. See
-`rule_tool_handoff` / `/rule-mcp-handoff`.
+`rule_tool_handoff` / `/rule-handoff`.
 
 ## Techniques that survive contact
 
@@ -190,6 +190,6 @@ start fresh more often, index instead of reading, then improve the prompts.
 
 - [rule-mcp-ai-prompting](../rule-mcp-ai-prompting/SKILL.md) - what to write, once the window is right
 - [rule-mcp-ai-agent-architecture](../rule-mcp-ai-agent-architecture/SKILL.md) - the loop that fills the window
-- `rule_tool_handoff` / `/rule-mcp-handoff` - writing a boundary down, and reading it back verified
-- `rule_tool_compress` / `/rule-mcp-compress` - compressing output without losing substance
+- `rule_tool_handoff` / `/rule-handoff` - writing a boundary down, and reading it back verified
+- `rule_tool_compress` / `/rule-compress` - compressing output without losing substance
 - [rule-mcp-ai-evals](../rule-mcp-ai-evals/SKILL.md) - measuring whether any of this helped

@@ -1,5 +1,3 @@
-
-
 /**
  * Phase 2b (plan: execution-plan.md), tools/list descriptions.
  *

@@ -1,5 +1,3 @@
-
-
 /**
  * @module prompts/index
  *
@@ -7,7 +5,7 @@
  * Provides reusable prompt templates that guide agents through rule-mcp AI
  * workflow phases: one-shot workflow prompts (orchestrate multiple tools),
  * area prompts (one per area hub; ADR 117), and persona prompts. Flight costing is not a
- * prompt: it injects via the session directive as `rule-mcp-area-process-flight`
+ * prompt: it injects via the session directive as `rule-area-process-flight`
  * (ADR 114).
  *
  * Every prompt:

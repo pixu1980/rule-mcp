@@ -1,5 +1,3 @@
-
-
 /** Detect IDE configs, model configuration, stored keys, environment info. */
 import { existsSync, readdirSync } from "node:fs";
 import { platform, arch } from "node:os";

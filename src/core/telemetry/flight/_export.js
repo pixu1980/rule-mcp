@@ -1,5 +1,3 @@
-
-
 /** @module core/telemetry/flight/export */
 
 import { mkdirSync, writeFileSync } from "node:fs";

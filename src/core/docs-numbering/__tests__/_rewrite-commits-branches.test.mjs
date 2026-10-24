@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for rewriteCommitReferences empty and dirty refusals. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

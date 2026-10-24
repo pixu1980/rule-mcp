@@ -1,5 +1,3 @@
-
-
 /**
  * Personas plan A.3: one role fills the template the same way every time.
  */

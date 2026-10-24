@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the install tasks' run arms. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

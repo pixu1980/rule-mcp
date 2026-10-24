@@ -1,5 +1,3 @@
-
-
 /**
  * Hardening 4.3: does text compression actually save anything?
  *

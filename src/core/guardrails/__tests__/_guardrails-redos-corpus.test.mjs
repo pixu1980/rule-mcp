@@ -1,5 +1,3 @@
-
-
 /**
  * Hardening 1.1 (F-S1): every guardrail stays linear on adversarial input.
  *

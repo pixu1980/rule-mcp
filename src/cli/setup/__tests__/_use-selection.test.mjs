@@ -1,5 +1,3 @@
-
-
 /**
  * Where the cursor starts, and which rows a tick may land on.
  *

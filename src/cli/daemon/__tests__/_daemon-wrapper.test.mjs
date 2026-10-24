@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/daemon-wrapper.test
  *
@@ -15,11 +13,11 @@ console.log("rule-mcp daemon wrapper test");
 
 const script = generateWrapperScript({
   node: "/usr/local/bin/node",
-  script: "/opt/rule-mcp/bin/rule-mcp.js",
+  script: "/opt/rule/bin/rule-mcp.js",
 });
 
 assert.ok(script.includes("if [[ $# -gt 0 ]]; then"), "wrapper must branch when CLI args are provided");
-assert.ok(script.includes("exec '/usr/local/bin/node' '/opt/rule-mcp/bin/rule-mcp.js' \"$@\""), "wrapper must forward CLI args, each path single-quoted");
+assert.ok(script.includes("exec '/usr/local/bin/node' '/opt/rule/bin/rule-mcp.js' \"$@\""), "wrapper must forward CLI args, each path single-quoted");
 assert.ok(script.includes("serve --transport sse"), "wrapper must still default to SSE daemon with no args");
 assert.ok(script.indexOf('"$@"') < script.indexOf("serve --transport sse"), "arg forwarding must happen before daemon fallback");
 

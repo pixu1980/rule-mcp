@@ -1,5 +1,3 @@
-
-
 /** End to end: rephrased prompts served from cache, tiers reported, aggregates rendered. */
 import test from "node:test";
 import assert from "node:assert/strict";

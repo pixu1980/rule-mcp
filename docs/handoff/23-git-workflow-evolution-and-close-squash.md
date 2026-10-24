@@ -19,7 +19,7 @@ feature's ADRs and handoffs as their own commits.
 - `58a17859` feat(git): the shared git foundation (WS1)
 - `9b1a7cca` feat(commit): the one Conventional Commit rule and init git governance (WS3)
 - `a369c236` feat(sync): the base-branch guard and the confirmed rebase (WS2)
-- `eaa98508` feat(git): `/rule-mcp-git` audit, reword and linearize (WS4)
+- `eaa98508` feat(git): `/rule-git` audit, reword and linearize (WS4)
 - `2a344c7e` feat(handoff): feature close and the range in the handoff (WS5 + WS6)
 - `4b448c08` feat(release): derive the next version and gate the changelog (WS7 + WS8 + WS9)
 - `42be49f7` feat(init): exact dependency pins (plan section 20)
@@ -42,7 +42,7 @@ feature's ADRs and handoffs as their own commits.
 - `src/core/sync/` - the branch-sync guard and `rule_tool_sync` (confirmed rebase only).
 - `src/core/history/` - audit, reword, linearize, squash, and the document consolidation.
 - `src/core/release/` - release-tooling detection and the exact-pin check.
-- `rule_tool_git`, `/rule-mcp-git`, `/rule-mcp-handoff --close-feature --squash`.
+- `rule_tool_git`, `/rule-git`, `/rule-handoff --close-feature --squash`.
 - `scripts/build/version/index.mjs --next` / `--apply-next`; `scripts/build/changelog/index.mjs --check`; a CI `release-preview` job.
 
 ## Verification

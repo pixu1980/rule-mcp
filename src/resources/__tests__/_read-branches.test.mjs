@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the remaining resource arms. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

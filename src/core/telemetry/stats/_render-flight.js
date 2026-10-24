@@ -1,5 +1,3 @@
-
-
 /** @module core/telemetry/stats/render-flight */
 
 import { clock, countTable, num, pct, table, usd } from "./_format.js";

@@ -1,5 +1,3 @@
-
-
 /**
  * The persistent tier: a corrupt cache file is non-fatal.
  */

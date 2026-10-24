@@ -1,5 +1,3 @@
-
-
 /**
  * The two rules that decide what a committed catalog may carry, and in what
  * order.

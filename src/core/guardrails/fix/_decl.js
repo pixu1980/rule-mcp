@@ -1,5 +1,3 @@
-
-
 /** @module scripts/fix/self-guardrails/decl - what counts as a declaration line */
 
 /** Is this line a declaration opener we can still extend? */

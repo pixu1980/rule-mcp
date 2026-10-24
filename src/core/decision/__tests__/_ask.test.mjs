@@ -1,5 +1,3 @@
-
-
 /** The breaker fails fast without a socket and closes on the next successful probe. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

@@ -12,7 +12,7 @@ ADR 113 renamed `/rule-mcp-flight` to `/rule-mcp-process-flight` and kept it as 
 ## Decision
 
 1. Drop `/rule-mcp-process-flight` (and any `rule-mcp-flight` leftover) from the MCP prompt registry and from agent command install. It is not listed, not aliased, and not an area skill.
-2. Keep the conceptual id `rule-mcp-area-process-flight` under the process namespace for docs and the injected heading only.
+2. Keep the conceptual id `rule-area-process-flight` under the process namespace for docs and the injected heading only.
 3. Inject flight automatically with the harness directive: SessionStart carries the full block (export / show / prune / `rule_tool_stats`, read KPIs, propose only what the recorder supports); UserPromptSubmit re-anchors with `flight when costing.` on every prompt.
 4. Opt out with `RULE_MCP_NO_FLIGHT=1` without silencing the rest of the session directive. `RULE_MCP_NO_PROMPT_DIRECTIVE=1` still silences the whole inject, flight included.
 
@@ -28,4 +28,4 @@ Evidence that the per-prompt fragment costs more tokens than the sessions it sav
 
 1. Keep `/rule-mcp-process-flight` as an optional slash beside the inject (two truths; slash stays forgotten)
 1. Fold flight only into the workflow reminder on tool results (too late: the model already chose what to do)
-1. Add a `rule-mcp-process-flight` skill and `/rule-mcp-area-process-flight` area command (exposes a surface the user asked not to list)
+1. Add a `rule-mcp-process-flight` skill and `/rule-area-process-flight` area command (exposes a surface the user asked not to list)

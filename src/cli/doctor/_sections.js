@@ -1,5 +1,3 @@
-
-
 /** Render the doctor report sections for the terminal. */
 import { banner, color, section } from "../index.js";
 import { WRAPPER_SCRIPT_PATH } from "../daemon/index.js";

@@ -1,10 +1,8 @@
 #!/usr/bin/env node
-
-
 /**
  * One-shot style fixer for the repo's own guardrail rules (self-guardrails,
  * F-A1 discipline). The passes themselves live in `src/core/fix/` so this
- * script, the `rule_tool_fix` tool and the `/rule-mcp-fix` command all run the same
+ * script, the `rule_tool_fix` tool and the `/rule-fix` command all run the same
  * code:
  *
  *  - js-blank-line-before-return: blank line before `return` unless first-in-block/continuation

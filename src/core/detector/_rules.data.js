@@ -1,5 +1,3 @@
-
-
 /** @module core/detector/rules.data - the framework, build-tool and skill tables */
 
 /**

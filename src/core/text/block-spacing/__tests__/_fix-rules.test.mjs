@@ -1,5 +1,3 @@
-
-
 /** The fixer's positional rules: shifting sibling blocks, end blocks, `};`. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";

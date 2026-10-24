@@ -1,5 +1,3 @@
-
-
 /** @module core/agents/commands/definitions */
 
 import { listPrompts } from "@src/prompts/index.js";
@@ -48,15 +46,15 @@ export function commandDefinition(name) {
   const argumentHint = primary ? (primary.required ? `<${primary.name}>` : `[${primary.name}]`) : "<request>";
   const persona = personaTarget(name);
   const sessionBodies = {
-    "rule-mcp-handoff": HANDOFF_BODY,
-    "rule-mcp-handon": HANDON_BODY,
-    "rule-mcp-compress": COMPRESS_BODY,
-    "rule-mcp-stats": STATS_BODY,
-    "rule-mcp-usage": USAGE_BODY,
-    "rule-mcp-init": INIT_BODY,
-    "rule-mcp-git": GIT_BODY,
+    "rule-handoff": HANDOFF_BODY,
+    "rule-handon": HANDON_BODY,
+    "rule-compress": COMPRESS_BODY,
+    "rule-stats": STATS_BODY,
+    "rule-usage": USAGE_BODY,
+    "rule-init": INIT_BODY,
+    "rule-git": GIT_BODY,
   };
-  const area = name.startsWith("rule-mcp-area-") ? listAreaPrompts().find((p) => p.name === name) : null;
+  const area = name.startsWith("rule-area-") ? listAreaPrompts().find((p) => p.name === name) : null;
   const body = persona ? personaBody(persona) : (sessionBodies[name] ?? areaBody(prompt.description, { skill: area?.skill, members: area?.members ?? [] }));
 
   return { name, description: prompt.description, argumentHint, body };

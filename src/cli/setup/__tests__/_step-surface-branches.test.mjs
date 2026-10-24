@@ -1,5 +1,3 @@
-
-
 /**
  * Branch coverage for the surface step's two drill-down stages.
  *

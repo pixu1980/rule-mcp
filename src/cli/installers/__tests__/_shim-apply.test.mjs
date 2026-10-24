@@ -1,5 +1,3 @@
-
-
 /**
  * The global launcher: probed, healed, and removed.
  *

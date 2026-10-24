@@ -21,7 +21,7 @@
 #   deleted inside the current directory or the repository this runs from.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/pixu1980/rule-mcp/v0.1.0-beta/scripts/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/pixu1980/rule/v0.1.0-beta/scripts/install.sh | bash
 #   ./scripts/install.sh [options]
 #
 # Every option is forwarded verbatim; run `./scripts/install.sh --help` for

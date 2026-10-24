@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-
-
 /**
  * Glob-based test runner: `node scripts/ci/run-tests/index.mjs <suite>`.
  *

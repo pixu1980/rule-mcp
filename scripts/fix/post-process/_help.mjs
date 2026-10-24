@@ -1,5 +1,3 @@
-
-
 /** @module scripts/fix/post-process/help - the --help text */
 
 export function printHelp() {

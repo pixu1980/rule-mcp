@@ -1,11 +1,9 @@
-
-
 /**
  * @module prompts/handoff-options
  *
- * Compact slash-command vocabulary for `/rule-mcp-handoff`.
+ * Compact slash-command vocabulary for `/rule-handoff`.
  *
- * `/rule-mcp-handoff` accepts a single free-form `options` string of
+ * `/rule-handoff` accepts a single free-form `options` string of
  * space-separated tokens. This module translates that vocabulary into the
  * concrete arguments of the `rule_tool_handoff` tool, so the prompt
  * handler can tell the model exactly which values to pass - no ambiguity.
@@ -26,7 +24,7 @@ import { DEFAULTS } from "./_handoff-options.data.js";
 export { HANDOFF_COMPLETIONS, HANDOFF_FORMATS, HANDOFF_MODES, HANDOFF_USAGE } from "./_handoff-options.data.js";
 
 /**
- * Translate a `/rule-mcp-handoff` options string into concrete tool arguments.
+ * Translate a `/rule-handoff` options string into concrete tool arguments.
  * Unknown tokens are ignored (the tool's zod schema validates the rest).
  *
  * @param {string} [raw] - space-separated token list (may be undefined/empty)

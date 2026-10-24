@@ -1,5 +1,3 @@
-
-
 /** Shape tests for inline code spans: branch, path, command. */
 import { TRUNKS } from "./_constants.js";
 

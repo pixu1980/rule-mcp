@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/self-update-throttle
  *
@@ -65,8 +63,8 @@ const REAL_GIT = process.env.PATH.split(":")
  * then delegates to the real git. Returns the directory to prepend to PATH.
  */
 export function makeGitStub() {
-  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-gitstub-"));
-  const log = join(mkdtempSync(join(tmpdir(), "rule-mcp-gitlog-")), "git.log");
+  const dir = mkdtempSync(join(tmpdir(), "rule-gitstub-"));
+  const log = join(mkdtempSync(join(tmpdir(), "rule-gitlog-")), "git.log");
   const stub = String.raw`#!/bin/sh
 printf '%s\n' "$1" >> "$RULE_MCP_GIT_LOG"
 if [ -n "$RULE_MCP_GIT_SLEEP" ]; then sleep "$RULE_MCP_GIT_SLEEP"; fi

@@ -1,5 +1,3 @@
-
-
 /** The flight-report tail sections: usage, project, productivity, routing. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

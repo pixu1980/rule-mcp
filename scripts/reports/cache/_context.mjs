@@ -1,5 +1,3 @@
-
-
 /** @module scripts/reports/cache/context - flags, scratch state dir and the lazily imported runtime */
 
 import { mkdtempSync, rmSync } from "node:fs";

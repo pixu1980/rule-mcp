@@ -1,5 +1,3 @@
-
-
 /** @module core/telemetry/recorder/constants */
 
 /** One day, in milliseconds. */

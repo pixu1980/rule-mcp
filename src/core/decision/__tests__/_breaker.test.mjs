@@ -1,5 +1,3 @@
-
-
 /** The breaker opens after the threshold, grants one probe, and closes on success. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

@@ -1,5 +1,3 @@
-
-
 /** The shadow report: false-replay accounting, a threshold sweep and the JSONL record. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync } from "node:fs";

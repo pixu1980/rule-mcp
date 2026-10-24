@@ -1,5 +1,3 @@
-
-
 /**
  * Regression: installAgent must pass the selected transport mode to each
  * agent-specific installer instead of silently writing stdio configuration.
@@ -18,7 +16,7 @@ const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", i
 const fakeHome = mkdtempSync(join(tmpdir(), "rule-mcp-mode-propagation-"));
 const piDir = join(fakeHome, ".pi", "agent");
 const installModule = new URL("../index.js", import.meta.url).href;
-const source = [`import { installAgent } from ${JSON.stringify(installModule)};`, 'installAgent({ agent: "pi", entrypoint: "/tmp/rule-mcp.js", mode: "daemon" });'].join(" ");
+const source = [`import { installAgent } from ${JSON.stringify(installModule)};`, 'installAgent({ agent: "pi", entrypoint: "/tmp/rule.js", mode: "daemon" });'].join(" ");
 execFileSync(process.execPath, ["--import", ALIAS_HOOK, "--input-type=module", "--eval", source], {
   env: { ...process.env, HOME: fakeHome, PI_CODING_AGENT_DIR: piDir },
 });

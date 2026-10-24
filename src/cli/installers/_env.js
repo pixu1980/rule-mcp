@@ -1,5 +1,3 @@
-
-
 /**
  * RULE_MCP_* environment configuration: where it lives on disk, the opt-out
  * defaults, and the mcpServerConfig builders that merge env + CLI args.

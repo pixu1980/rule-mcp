@@ -1,5 +1,3 @@
-
-
 /** @module core/telemetry/store/rollup */
 
 import { existsSync, readFileSync, writeFileSync } from "node:fs";

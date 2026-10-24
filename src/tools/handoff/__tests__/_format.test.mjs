@@ -1,5 +1,3 @@
-
-
 /** Handoff formatting helpers and the export-retention policy. */
 import { strict as assert } from "node:assert";
 import { mkdtempSync, rmSync, writeFileSync, utimesSync } from "node:fs";

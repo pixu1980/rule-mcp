@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/manifest-guardrails.test
  *

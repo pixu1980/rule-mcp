@@ -36,14 +36,14 @@ The flow graph below is the same path an agent takes, top to bottom.
 
 ## Surfaces
 
-| Surface        | Role                                                                                        |
-| -------------- | ------------------------------------------------------------------------------------------- |
-| Slash commands | Same set installed into each agent/IDE (`/rule-mcp`, `/rule-mcp-area-*`, personas, session) |
-| MCP tools      | Action tools + one tool per catalog skill                                                   |
-| MCP prompts    | Workflow, area, and persona prompts                                                         |
-| MCP resources  | `rulemcp://` indexes and summaries                                                          |
-| Guardrails     | Deterministic checks by family / framework                                                  |
-| CLI            | Install, doctor, serve, setup, tools                                                        |
+| Surface        | Role                                                                                |
+| -------------- | ----------------------------------------------------------------------------------- |
+| Slash commands | Same set installed into each agent/IDE (`/rule`, `/rule-area-*`, personas, session) |
+| MCP tools      | Action tools + one tool per catalog skill                                           |
+| MCP prompts    | Workflow, area, and persona prompts                                                 |
+| MCP resources  | `rulemcp://` indexes and summaries                                                  |
+| Guardrails     | Deterministic checks by family / framework                                          |
+| CLI            | Install, doctor, serve, setup, tools                                                |
 
 Live counts and the Command - Tool - Skill table: [Surface map](./17-surface-map.md). Full inventories: [09-17](./README.md).
 
@@ -80,7 +80,7 @@ Live counts and the Command - Tool - Skill table: [Surface map](./17-surface-map
 | Agent/IDE command targets | 13    | `src/core/agents/command-targets/index.js`    |
 | CLI commands              | 25    | `src/cli/_program.js`                         |
 | Hook events               | 4     | `src/core/agents/_hooks.js`                   |
-| Architecture decisions    | 174   | [`docs/adr/ADR.md`](adr/ADR.md)               |
+| Architecture decisions    | 175   | [`docs/adr/ADR.md`](adr/ADR.md)               |
 
 Regenerate with `pnpm census`. The inventories themselves are
 [`09-skills.md`](09-skills.md) through [`16-resources.md`](16-resources.md).

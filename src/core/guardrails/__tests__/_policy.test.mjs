@@ -1,5 +1,3 @@
-
-
 /** T3-T6: corepack, file gating, the repo obeys its own rule, and .npmrc save-exact. */
 import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";

@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the done screen: failures, dry-run and quit. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

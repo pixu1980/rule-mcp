@@ -7,7 +7,7 @@ version: "3.9"
 services:
   mcp:
     build: .
-    image: ghcr.io/rule-mcp/rule-mcp:latest
+    image: ghcr.io/rule/rule:latest
     container_name: rule-mcp
     # Loopback-only publication. An unqualified "37999:37999" binds the host's
     # 0.0.0.0 and puts the MCP server on the LAN, where the bearer token is the

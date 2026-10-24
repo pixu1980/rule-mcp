@@ -1,5 +1,3 @@
-
-
 import { MULTILINGUAL_ALIASES } from "./_aliases.data.js";
 
 /** Expand prompt with matching multilingual aliases. */

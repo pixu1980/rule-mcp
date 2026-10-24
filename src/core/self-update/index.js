@@ -1,5 +1,3 @@
-
-
 /** Self-update barrel: policy, the run, the banner, the scheduler. */
 import { registerCallHost } from "../../tools/router/call/_host.js";
 import { consumeUpdateBanner, maybeSelfUpdate } from "./_schedule.js";

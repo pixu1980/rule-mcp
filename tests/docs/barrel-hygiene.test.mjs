@@ -1,5 +1,3 @@
-
-
 /**
  * ARCH-6: every src directory that holds code has an index.js barrel, and the
  * six core helpers plus six action tools live behind those barrels instead of

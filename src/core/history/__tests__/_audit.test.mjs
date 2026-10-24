@@ -1,5 +1,3 @@
-
-
 /** WS4.1/WS4.3 - the read-only feature-history audit. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

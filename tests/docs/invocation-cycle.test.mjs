@@ -1,5 +1,3 @@
-
-
 /**
  * ARCH-1: the invocation path must stay acyclic.
  *

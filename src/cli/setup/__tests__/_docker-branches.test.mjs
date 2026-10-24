@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for Docker blockers and compose-up outcomes. */
 import assert from "node:assert/strict";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";

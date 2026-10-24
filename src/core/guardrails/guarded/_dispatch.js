@@ -1,5 +1,3 @@
-
-
 /** checkCodeGuarded: the race between the worker's answer and the budget. */
 import { checkCode } from "../engine/index.js";
 import { defaultTimeoutMs, guardedEnabled } from "./_policy.js";

@@ -1,5 +1,3 @@
-
-
 /** The route model: which public sources become pages, and what the menus list. */
 import { strict as assert } from "node:assert";
 import { readdirSync } from "node:fs";

@@ -1,5 +1,3 @@
-
-
 /**
  * @module scripts/docs-site/serve - preview the built site locally.
  *

@@ -1,5 +1,3 @@
-
-
 /**
  * @module scripts/install/git-hooks/shim - the hook shim text.
  *

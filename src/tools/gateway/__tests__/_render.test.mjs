@@ -1,5 +1,3 @@
-
-
 /**
  * renderGatewayReply: every reply shape - truncated evidence, pass/fail
  * verdicts, content vs files receipts, next-tool dedupe - driven by crafted

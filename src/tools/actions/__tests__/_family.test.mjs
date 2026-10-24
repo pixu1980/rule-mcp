@@ -1,5 +1,3 @@
-
-
 /**
  * ARCH-6.2: the action family registers through one function, not six siblings.
  */

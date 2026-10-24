@@ -1,5 +1,3 @@
-
-
 /** @module core/cache/catalog/build - which entries earn promotion, and the export shape */
 
 import { pkg as package_ } from "@src/cli/paths/index.js";

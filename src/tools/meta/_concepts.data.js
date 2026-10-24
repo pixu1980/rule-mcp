@@ -1,5 +1,3 @@
-
-
 /**
  * @module tools/meta/concepts.data
  *

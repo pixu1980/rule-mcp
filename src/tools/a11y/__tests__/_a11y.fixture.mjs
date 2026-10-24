@@ -1,5 +1,3 @@
-
-
 /**
  * @module test/a11y-wcag/fixture
  *

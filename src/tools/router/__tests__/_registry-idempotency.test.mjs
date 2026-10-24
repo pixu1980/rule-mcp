@@ -1,5 +1,3 @@
-
-
 /**
  * Registration idempotency: a tool name is the MCP wire contract and must be
  * unique. The startup path registers the core tools from two entry points in

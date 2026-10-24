@@ -1,5 +1,3 @@
-
-
 /** WS2.1 - how far the base branch moved since the fork point. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

@@ -1,5 +1,3 @@
-
-
 /**
  * stripForbiddenManifestFields: the repair the guardrail cannot perform.
  *

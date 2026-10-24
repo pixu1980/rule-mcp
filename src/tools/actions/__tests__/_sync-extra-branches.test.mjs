@@ -1,5 +1,3 @@
-
-
 /**
  * The sync verdicts the happy path never produces: a directory that is not a
  * repository at all, an empty project path, and a rebase that git stopped on a

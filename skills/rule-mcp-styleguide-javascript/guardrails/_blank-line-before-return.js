@@ -1,5 +1,3 @@
-
-
 /** Guardrail `js-blank-line-before-return`: Blank line before return statements */
 
 export const jsBlankLineBeforeReturn = {

@@ -1,5 +1,3 @@
-
-
 /**
  * The `setup` entry carries the surface answers like every other flag.
  *

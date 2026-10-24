@@ -1,5 +1,3 @@
-
-
 /**
  * The two blind spots ADR 071 named as follow-ups.
  *

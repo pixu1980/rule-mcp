@@ -1,5 +1,3 @@
-
-
 /** @module prompts/handoff-options.data - modes, formats, completions, usage and defaults */
 
 /** Handoff mode values accepted by the underlying tool. */
@@ -29,8 +27,8 @@ export const HANDOFF_COMPLETIONS = [
   "help",
 ];
 
-/** The usage block returned for `/rule-mcp-handoff help` and used in docs. */
-export const HANDOFF_USAGE = `Usage: /rule-mcp-handoff [options]
+/** The usage block returned for `/rule-handoff help` and used in docs. */
+export const HANDOFF_USAGE = `Usage: /rule-handoff [options]
 Options (space-separated, all optional):
   handoff | close-session   mode (default: handoff)
   close-feature             close the feature: squash commits, ADRs and handoffs into one commit (confirmation required)
@@ -47,14 +45,14 @@ Options (space-separated, all optional):
   help                      show this usage list
 
 Examples:
-  /rule-mcp-handoff                         # all defaults -> quick handoff
-  /rule-mcp-handoff close-session           # full session close
-  /rule-mcp-handoff no-compress minimal     # verbose, compressed one-line JSON
-  /rule-mcp-handoff no-compress brief       # verbose brief format
-  /rule-mcp-handoff no-diff                 # handoff without the diff
-  /rule-mcp-handoff close-session no-diff no-log  # close without diff/log
-  /rule-mcp-handoff no-compress max=2000    # verbose, token-capped
-  /rule-mcp-handoff close-feature           # hand off, then close the whole feature as one commit`;
+  /rule-handoff                         # all defaults -> quick handoff
+  /rule-handoff close-session           # full session close
+  /rule-handoff no-compress minimal     # verbose, compressed one-line JSON
+  /rule-handoff no-compress brief       # verbose brief format
+  /rule-handoff no-diff                 # handoff without the diff
+  /rule-handoff close-session no-diff no-log  # close without diff/log
+  /rule-handoff no-compress max=2000    # verbose, token-capped
+  /rule-handoff close-feature           # hand off, then close the whole feature as one commit`;
 
 /** Default parsed values - identical to the tool's own defaults. */
 export const DEFAULTS = Object.freeze({

@@ -1,5 +1,3 @@
-
-
 /** The resume prompt section: the paste-ready block rides with the handoff it belongs to. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";

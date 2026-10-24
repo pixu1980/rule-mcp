@@ -1,5 +1,3 @@
-
-
 /** Guardrail `js-no-array-for-each`: for...of over Array.forEach() */
 
 export const jsNoArrayForEach = {

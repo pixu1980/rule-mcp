@@ -1,9 +1,7 @@
-
-
 /**
  * The runtime home is created by an install and taken by a purge.
  *
- * Regression: `uninstall --purge` removed `~/.config/rule-mcp/` and left
+ * Regression: `uninstall --purge` removed `~/.config/rule/` and left
  * `~/.rule-mcp/` - the daemon token, the telemetry, the caches and the
  * per-project recordings - behind. Reinstalling then started from stale state,
  * and the promise the word "purge" makes was silently broken.

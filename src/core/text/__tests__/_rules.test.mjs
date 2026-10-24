@@ -1,5 +1,3 @@
-
-
 /** The simplicity guardrail family: each rule fires on its counterexample and only there. */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";

@@ -1,5 +1,3 @@
-
-
 /** Handoff sections from project state: header, identity, the ADR log, the context snapshot. */
 import { compressValue, priorityScore } from "./_format.js";
 

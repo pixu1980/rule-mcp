@@ -1,5 +1,3 @@
-
-
 /**
  * SEC-1: no adapter hands a path to a shell.
  *

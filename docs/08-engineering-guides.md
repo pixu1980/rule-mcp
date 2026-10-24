@@ -98,7 +98,7 @@ commit - the docs follow the code instead of being remembered.
   like, and that is the corpus the level table describes. Guard violations
   are 0 at every level on all four, which is the number that has to stay 0.
 
-  The rules are ported from the `rule_tool_compress` / `/rule-mcp-compress` (ADR 115)
+  The rules are ported from the `rule_tool_compress` / `/rule-compress` (ADR 115)
   skill and its `caveman-compress` companion: the vocabulary tables, the
   classification guards and `validate.py`'s structural validator. The LLM
   compression step is deliberately not ported - an LLM in the output path
@@ -205,19 +205,19 @@ Measured on 2026-09-15, `develop`:
 
 ### The command surface today (41)
 
-| Kind       | Count | Example                  | Reach for it when                                                    |
-| ---------- | ----- | ------------------------ | -------------------------------------------------------------------- |
-| `router`   | 1     | `/rule-mcp`              | Routes a free-text request to the skill that answers it              |
-| `area`     | 11    | `/rule-mcp-area-ai`      | Area hub: free text routes to leaf skills/tools (ADR 117)            |
-| `workflow` | 3     | `/rule-mcp-check`        | Runs a named workflow (e.g. /rule-mcp-check auto-detects guardrails) |
-| `session`  | 7     | `/rule-mcp-compress`     | Carries a session across a context boundary                          |
-| `persona`  | 19    | `/rule-mcp-persona-a11y` | Runs one review role at one operation, and writes its documents      |
+| Kind       | Count | Example              | Reach for it when                                                |
+| ---------- | ----- | -------------------- | ---------------------------------------------------------------- |
+| `router`   | 1     | `/rule`              | Routes a free-text request to the skill that answers it          |
+| `area`     | 11    | `/rule-area-ai`      | Area hub: free text routes to leaf skills/tools (ADR 117)        |
+| `workflow` | 3     | `/rule-check`        | Runs a named workflow (e.g. /rule-check auto-detects guardrails) |
+| `session`  | 7     | `/rule-compress`     | Carries a session across a context boundary                      |
+| `persona`  | 19    | `/rule-persona-a11y` | Runs one review role at one operation, and writes its documents  |
 
-**Areas**: `/rule-mcp-area-ai`, `/rule-mcp-area-backend`, `/rule-mcp-area-data`, `/rule-mcp-area-devops`, `/rule-mcp-area-frontend`, `/rule-mcp-area-meta`, `/rule-mcp-area-platform`, `/rule-mcp-area-process`, `/rule-mcp-area-styleguide`, `/rule-mcp-area-toolchain`, `/rule-mcp-area-ui`
+**Areas**: `/rule-area-ai`, `/rule-area-backend`, `/rule-area-data`, `/rule-area-devops`, `/rule-area-frontend`, `/rule-area-meta`, `/rule-area-platform`, `/rule-area-process`, `/rule-area-styleguide`, `/rule-area-toolchain`, `/rule-area-ui`
 
-**Workflows**: `/rule-mcp-check`, `/rule-mcp-fix`, `/rule-mcp-git`
+**Workflows**: `/rule-check`, `/rule-fix`, `/rule-git`
 
-**Sessions**: `/rule-mcp-compress`, `/rule-mcp-handoff`, `/rule-mcp-handon`, `/rule-mcp-init`, `/rule-mcp-stats`, `/rule-mcp-update`, `/rule-mcp-usage`
+**Sessions**: `/rule-compress`, `/rule-handoff`, `/rule-handon`, `/rule-init`, `/rule-stats`, `/rule-update`, `/rule-usage`
 
 Every command, with its description and its install target, is in
 [`12-instructions.md`](12-instructions.md). Regenerate this block with `pnpm census`.

@@ -1,5 +1,3 @@
-
-
 /**
  * @module tests/e2e/docs-site/_site
  *

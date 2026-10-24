@@ -1,5 +1,3 @@
-
-
 /** Deterministic decision-cache protocol: redact, state, question, parse and decide. */
 import { createHash } from "node:crypto";
 

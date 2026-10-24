@@ -1,5 +1,3 @@
-
-
 /** The external-css guardrail: every framework path and the no-CSS pass. */
 import { strict as assert } from "node:assert";
 import test from "node:test";

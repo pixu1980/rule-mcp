@@ -1,5 +1,3 @@
-
-
 /** Branch coverage for the blank-line block fixer. */
 import assert from "node:assert/strict";
 import { test } from "node:test";

@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-
-
 /**
  * @module index
  *

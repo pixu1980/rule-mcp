@@ -1,5 +1,3 @@
-
-
 /**
  * The persistent tier: a cache file from another namespace is ignored.
  */

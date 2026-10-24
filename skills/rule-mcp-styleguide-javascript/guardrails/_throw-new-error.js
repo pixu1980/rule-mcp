@@ -1,5 +1,3 @@
-
-
 /** Guardrail `js-throw-new-error`: throw requires new for error constructors */
 
 export const jsThrowNewError = {

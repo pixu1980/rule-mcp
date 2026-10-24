@@ -1,5 +1,3 @@
-
-
 /**
  * Branch coverage for the core install tasks: an unwritable shim directory, a
  * skipped shim with no path, a removal with nothing and with one entry to

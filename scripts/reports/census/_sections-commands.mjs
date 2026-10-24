@@ -1,5 +1,3 @@
-
-
 /**
  * @module scripts/reports/census/_sections-commands
  *
@@ -16,7 +14,7 @@ import { table } from "./_format.mjs";
 import { ROUTER_COMMAND, parsePersonaName } from "./_registries.mjs";
 
 /** The commands that carry a session across a context boundary. */
-const SESSION = new Set(["rule-mcp-compress", "rule-mcp-handoff", "rule-mcp-handon", "rule-mcp-init", "rule-mcp-stats", "rule-mcp-update", "rule-mcp-usage"]);
+const SESSION = new Set(["rule-compress", "rule-handoff", "rule-handon", "rule-init", "rule-stats", "rule-update", "rule-usage"]);
 
 /**
  * Every command, in its kind.
@@ -34,7 +32,7 @@ export function commandKinds(data) {
       kinds.persona.push(name);
     } else if (SESSION.has(name)) {
       kinds.session.push(name);
-    } else if (name.startsWith("rule-mcp-area-")) {
+    } else if (name.startsWith("rule-area-")) {
       kinds.area.push(name);
     } else {
       kinds.workflow.push(name);
@@ -44,7 +42,7 @@ export function commandKinds(data) {
   return [
     { kind: "router", what: "Routes a free-text request to the skill that answers it", commands: kinds.router },
     { kind: "area", what: "Area hub: free text routes to leaf skills/tools (ADR 117)", commands: kinds.area },
-    { kind: "workflow", what: "Runs a named workflow (e.g. /rule-mcp-check auto-detects guardrails)", commands: kinds.workflow },
+    { kind: "workflow", what: "Runs a named workflow (e.g. /rule-check auto-detects guardrails)", commands: kinds.workflow },
     { kind: "session", what: "Carries a session across a context boundary", commands: kinds.session },
     { kind: "persona", what: "Runs one review role at one operation, and writes its documents", commands: kinds.persona },
   ];
