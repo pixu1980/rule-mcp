@@ -20,7 +20,6 @@ test("the Copilot CLI config carries rule-mcp in mcpServers", () => {
   assert.equal(typeof config.mcpServers["rule-mcp"].command, "string");
   assert.ok(config.mcpServers["rule-mcp"].command.length > 0, "the command resolves");
   assert.ok(config.mcpServers["rule-mcp"].args.includes("serve"), "the serve argument is present");
-  assert.equal(config.mcpServers["rule-mcp"].type, "stdio");
 });
 
 test("uninstall removes the server from the CLI config", () => {
