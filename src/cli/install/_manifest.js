@@ -104,6 +104,7 @@ export function writeInstalledManifest(agents, entrypoint, global, mode) {
   // The human-readable manifest beside the JSON one: the test and the doctor
   // both read the transport line, and an older release wrote only this file.
   const dataDir = join(process.env.XDG_DATA_HOME ?? join(homedir(), ".local", "share"), "rule-mcp");
+
   mkdirSync(dataDir, { recursive: true });
   writeFileSync(
     join(dataDir, "installed.md"),
