@@ -1,6 +1,7 @@
 /** The install manifest: what this machine has, so the uninstall can remove it. */
 
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { homedir } from "node:os";
 import { join } from "node:path";
 
 import { getRuntimePaths } from "../paths/index.js";
@@ -99,6 +100,15 @@ export function writeInstalledManifest(agents, entrypoint, global, mode) {
   for (const agent of list) {
     recordInstall({ agent, mode, dimensions: { entrypoint, global } });
   }
+
+  // The human-readable manifest beside the JSON one: the test and the doctor
+  // both read the transport line, and an older release wrote only this file.
+  const dataDir = join(process.env.XDG_DATA_HOME ?? join(homedir(), ".local", "share"), "rule-mcp");
+  mkdirSync(dataDir, { recursive: true });
+  writeFileSync(
+    join(dataDir, "installed.md"),
+    ["# rule-mcp", "", `- Transport: ${mode ?? "stdio"}`, `- Entrypoint: ${entrypoint ?? ""}`, `- Agents: ${list.join(", ")}`, ""].join("\n"),
+  );
 
   return manifestPath();
 }
