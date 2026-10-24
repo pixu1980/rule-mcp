@@ -10,18 +10,50 @@ import { INSTRUCTION_BLOCKS, INSTRUCTION_MARKER, RULES_MARKER, closingMarker } f
 /** The sentinels an install owns, and an uninstall sweeps. */
 const INSTRUCTION_MARKERS = [INSTRUCTION_MARKER, RULES_MARKER];
 
+const dropOrphanServerLines = (current, blockName) => {
+  const marker = `[${blockName}]`;
+  const at = current.indexOf(marker);
+
+  if (at === -1) {
+    return current;
+  }
+
+  const head = current.slice(0, at);
+  const tail = current.slice(at);
+  const kept = [];
+
+  for (const line of head.split("\n")) {
+    if (/^\s*args\s*=.*rule-mcp/u.test(line)) {
+      if (kept.length > 0 && /^\s*command\s*=/u.test(kept.at(-1))) {
+        kept.pop();
+      }
+
+      continue;
+    }
+
+    if (/^\s*command\s*=.*rule-mcp/u.test(line)) {
+      continue;
+    }
+
+    kept.push(line);
+  }
+
+  return kept.join("\n") + tail;
+};
+
 const upsertTomlBlock = (current, blockName, block) => {
   const escapedName = blockName.replaceAll(".", String.raw`\.`);
-  const re = new RegExp(String.raw`\n?\[${escapedName}\][\s\S]*?(?=\n\[[^\]]+\]|$)`, "m");
+  const re = new RegExp(String.raw`\n?\[${escapedName}\][\s\S]*?(?=\n\[[^\]]+\]|$)`, "");
   const nb = `[${blockName}]\n${block.trim()}\n`;
+  const base = dropOrphanServerLines(current, blockName);
 
-  return re.test(current) ? current.replace(re, `\n${nb}`) : `${current.trimEnd()}\n\n${nb}`;
+  return re.test(base) ? base.replace(re, `\n${nb}`) : `${base.trimEnd()}\n\n${nb}`;
 };
 
 /** Remove a TOML block by name. */
 
 const removeTomlBlock = (current, blockName) => {
-  const re = new RegExp(String.raw`\n?\[${blockName.replaceAll(".", String.raw`\.`)}\][\s\S]*?(?=\n\[[^\]]+\]|$)`, "m");
+  const re = new RegExp(String.raw`\n?\[${blockName.replaceAll(".", String.raw`\.`)}\][\s\S]*?(?=\n\[[^\]]+\]|$)`, "");
 
   return re.test(current) ? current.replace(re, "") : current;
 };
