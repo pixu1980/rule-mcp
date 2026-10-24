@@ -32,7 +32,7 @@ const result = spawnSync(
     "--include",
     "bin/**",
     "--exclude",
-    "src/**/__tests__/**",
+    "**/__tests__/**",
     "--check-coverage",
     "--branches",
     String(BRANCH_FLOOR),
@@ -48,7 +48,7 @@ const result = spawnSync(
     "scripts/ci/run-tests/index.mjs",
     "all",
   ],
-  { cwd: root, stdio: "inherit" },
+  { cwd: root, stdio: "inherit", env: { ...process.env, RULE_MCP_COVERAGE: "1" } },
 );
 
 if (result.status === 0) {
