@@ -8,7 +8,7 @@ import { createDecisionClient, DecisionClientError } from "../_client.js";
 import { startFakeServer } from "./fixtures/_fake-server.mjs";
 
 test("createDecisionClient refuses an invalid timeout and a missing fetch", () => {
-  for (const timeoutMs of [0, -1, Number.NaN]) {
+  for (const timeoutMs of [0, -1, NaN]) {
     assert.throws(
       () => createDecisionClient({ timeoutMs }),
       (error) => error instanceof DecisionClientError && /positive number/u.test(error.message),

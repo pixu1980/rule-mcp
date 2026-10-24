@@ -13,7 +13,7 @@ test("a blank line is inserted before an opener after a statement", () => {
 });
 
 test("scaffolding and comments do not get a leading blank", () => {
-  assert.doesNotMatch(apply("function f() {\n  if (x) {\n    y();\n  }\n}").text, /\n\n  if/u);
+  assert.doesNotMatch(apply("function f() {\n  if (x) {\n    y();\n  }\n}").text, /\n\n {2}if/u);
   assert.doesNotMatch(apply("// c\nif (x) {}").text, /\n\nif/u);
 });
 

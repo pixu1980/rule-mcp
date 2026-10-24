@@ -13,16 +13,16 @@ test("renderSquash: applied wins and reports document and tree outcomes", () => 
     verification: { commits: 2, documentsConsolidated: true, changed: ["a.md"], treeUnchanged: true, workingTree: "clean" },
   });
   assert.match(consolidated, /consolidated \(1 path\(s\)\)/u);
-  assert.match(consolidated, /Final tree:      unchanged/u);
+  assert.match(consolidated, /Final tree: {6}unchanged/u);
 
   const plain = renderSquash({
     applied: true,
     message: "feat(x): y",
     verification: { commits: 1, documentsConsolidated: false, changed: [], treeUnchanged: false, workingTree: "dirty" },
   });
-  assert.match(plain, /Documents:       unchanged/u);
+  assert.match(plain, /Documents: {7}unchanged/u);
   assert.match(plain, /code unchanged, documents consolidated/u);
-  assert.match(plain, /Working tree:    dirty/u);
+  assert.match(plain, /Working tree: {4}dirty/u);
 });
 test("renderSquash: the proposal covers range, commits, documents and safety", () => {
   const full = renderSquash({
@@ -49,7 +49,7 @@ test("renderSquash: the proposal covers range, commits, documents and safety", (
   assert.match(full, /Feature commits: 2/u);
   assert.match(full, /no - bad/u);
   assert.match(full, /Commits being squashed/u);
-  assert.match(full, /ADR:     docs\/adr\/1.md -> docs\/adr\/2.md/u);
+  assert.match(full, /ADR: {5}docs\/adr\/1.md -> docs\/adr\/2.md/u);
   assert.match(full, /Handoff: h1 -> h2/u);
   assert.match(full, /Cited but outside/u);
   assert.match(full, /Working tree NOT safe - dirty/u);
@@ -61,9 +61,9 @@ test("renderSquash: a sparse proposal keeps the empty branches", () => {
     proposal: { range: {}, commits: [], documents: { actionable: false }, safe: true },
     verdict: {},
   });
-  assert.match(sparse, /Base branch:     \(none\)/u);
+  assert.match(sparse, /Base branch: {5}\(none\)/u);
   assert.match(sparse, /Feature commits: 0/u);
-  assert.match(sparse, /Message valid:   no - not provided/u);
+  assert.match(sparse, /Message valid: {3}no - not provided/u);
   assert.doesNotMatch(sparse, /Documents folded/u);
   assert.doesNotMatch(sparse, /NOT safe/u);
 
@@ -74,10 +74,10 @@ test("renderSquash: a sparse proposal keeps the empty branches", () => {
 test("renderLinearize: applied, conflicts and output", () => {
   const applied = renderLinearize({ applied: true, verification: { commits: 1, merges: 2, treeUnchanged: true } });
   assert.match(applied, /Merge commits removed/u);
-  assert.match(applied, /Final tree:      unchanged/u);
+  assert.match(applied, /Final tree: {6}unchanged/u);
 
   const changed = renderLinearize({ applied: true, verification: { commits: 1, merges: 1, treeUnchanged: false } });
-  assert.match(changed, /Final tree:      CHANGED/u);
+  assert.match(changed, /Final tree: {6}CHANGED/u);
 
   const conflict = renderLinearize({ applied: false, reason: "r", conflicted: true, conflicts: ["a"], output: "git said" });
   assert.match(conflict, /Conflicts/u);
@@ -112,7 +112,7 @@ test("renderAudit: range, violations, merges, anomalies and force", () => {
   assert.match(full, /force=true/u);
 
   const sparse = renderAudit({ range: {}, violations: [], merges: [], safe: true, reasons: [], anomalies: [] }, false);
-  assert.match(sparse, /Base branch:       \(none\)/u);
+  assert.match(sparse, /Base branch: {7}\(none\)/u);
   assert.match(sparse, /CC violations:\s+0/u);
   assert.match(sparse, /safe to rewrite/u);
   assert.doesNotMatch(sparse, /Anomalies/u);
@@ -121,7 +121,7 @@ test("renderAudit: range, violations, merges, anomalies and force", () => {
 test("renderReword: applied, entries and output", () => {
   const applied = renderReword({ applied: true, verification: { commits: 1, violations: 0, treeUnchanged: true } });
   assert.match(applied, /Reword applied/u);
-  assert.match(applied, /Final tree:      unchanged/u);
+  assert.match(applied, /Final tree: {6}unchanged/u);
 
   const changed = renderReword({ applied: true, verification: { commits: 1, violations: 1, treeUnchanged: false } });
   assert.match(changed, /CHANGED/u);

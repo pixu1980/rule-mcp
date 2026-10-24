@@ -8,7 +8,7 @@ import { buildGateQuestion, buildGateState, decideShadow, parseGateAnswer, promp
 
 test("redact strips home paths and credentials", () => {
   assert.equal(redact("/Users/alice/project"), "~/project");
-  assert.match(redact("C:\\Users\\alice\\project"), /^~/u);
+  assert.match(redact(String.raw`C:\Users\alice\project`), /^~/u);
   assert.match(redact("sk-abcdefghijkl"), /\[redacted\]/u);
   assert.match(redact("password=hunter2"), /password=\[redacted\]/u);
 });

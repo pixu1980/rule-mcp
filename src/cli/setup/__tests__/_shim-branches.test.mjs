@@ -67,8 +67,11 @@ test("globalBinDir uses pnpm's configured directory when PNPM_HOME is absent", (
       "/configured/bin",
     );
   } finally {
-    if (savedHome === undefined) delete process.env.PNPM_HOME;
-    else process.env.PNPM_HOME = savedHome;
+    if (savedHome === undefined) {
+      delete process.env.PNPM_HOME;
+    } else {
+      process.env.PNPM_HOME = savedHome;
+    }
     rmSync(dir, { recursive: true, force: true });
   }
 });
@@ -81,7 +84,10 @@ test("shimCandidates keeps PNPM_HOME first and has no duplicates", () => {
     assert.equal(candidates[0], "/x/pnpm/bin/rule-mcp");
     assert.equal(new Set(candidates).size, candidates.length);
   } finally {
-    if (saved === undefined) delete process.env.PNPM_HOME;
-    else process.env.PNPM_HOME = saved;
+    if (saved === undefined) {
+      delete process.env.PNPM_HOME;
+    } else {
+      process.env.PNPM_HOME = saved;
+    }
   }
 });

@@ -52,7 +52,7 @@ test("initProject covers every tokensave outcome", () => {
       },
       "failed: boom",
     ],
-    [{ tokensaveBinary: () => undefined }, "not installed"],
+    [{ tokensaveBinary: () => {} }, "not installed"],
   ];
   for (const [options, expected] of cases) {
     const dir = temp();
@@ -93,7 +93,7 @@ test("initProject reports a recorder directory that cannot be created", () => {
 
 test("renderInit covers the governance and extras branches", () => {
   const none = renderInit({ projectDir: "/p", dir: "/d", created: true, tokensave: "existing", governance: { mechanism: "none", hooks: {}, actions: [] } });
-  assert.match(none, /Git:          no git repository/u);
+  assert.match(none, /Git: {10}no git repository/u);
   const hooks = renderInit({
     projectDir: "/p",
     dir: "/d",

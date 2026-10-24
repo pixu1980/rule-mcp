@@ -52,9 +52,9 @@ test("a clean file reports nothing", async () => {
 test("adviseWrite combines the language report with the guardrail report", async () => {
   const dir = mkdtempSync(join(tmpdir(), "rule-write-branches-"));
   const file = join(dir, "bad.js");
-  writeFileSync(file, "// colour and \u201cquotes\u201d\nconst x = 1;\n");
+  writeFileSync(file, "// colour and \u201Cquotes\u201D\nconst x = 1;\n");
   try {
-    const result = await adviseWrite({ file_path: file, content: "// colour and \u201cquotes\u201d\nconst x = 1;\n" });
+    const result = await adviseWrite({ file_path: file, content: "// colour and \u201Cquotes\u201D\nconst x = 1;\n" });
 
     assert.match(result.advice, /British|em\/en dash|curly quote/u);
   } finally {

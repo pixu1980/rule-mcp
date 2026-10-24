@@ -12,12 +12,12 @@
 
 ### Open plans (96 files, 1,490 open items)
 
-| Group                   | Files | Open boxes |
-| ----------------------- | ----: | ---------: |
-| Non-skill plans         |    10 |        146 |
-| Skill plans             |    86 |      1,336 |
-| Reference follow-ups    |     - |          8 |
-| **Total**               |    96 | **1,490** |
+| Group                | Files | Open boxes |
+| -------------------- | ----: | ---------: |
+| Non-skill plans      |    10 |        146 |
+| Skill plans          |    86 |      1,336 |
+| Reference follow-ups |     - |          8 |
+| **Total**            |    96 |  **1,490** |
 
 Non-skill plans: `export.md` (39), `devops-guardrails.md` (24), `backend-guardrails.md` (23), `data-guardrails.md` (14), `frontend-guardrails.md` (13), `ai-guardrails.md` (10), `meta-guardrails.md` (10), `2026-10-01-scripts-mcp-layout.md` (10), `decision-models.md` (2), `installer-scope-adr-policy-features.md` (1).
 

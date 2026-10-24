@@ -79,10 +79,7 @@ test("no numbered junk file names (js-1.js, parts-2.js, ...)", () => {
   assert.deepEqual(junk, [], `rename these to say what they contain: ${junk.join(", ")}`);
 });
 
-test(
-  "files outside the ratchet respect the 150-line cap",
-  { skip: process.env.RULE_MCP_COVERAGE === "1" ? "the coverage gate measures branches, not file sizes" : false },
-  () => {
+test("files outside the ratchet respect the 150-line cap", { skip: process.env.RULE_MCP_COVERAGE === "1" && "the coverage gate measures branches, not file sizes" }, () => {
   const over = files
     .filter((file) => !FILE_SIZE_RATCHET.has(file))
     .map((file) => [file, lineCount(file)])
