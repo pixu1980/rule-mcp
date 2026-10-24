@@ -8,6 +8,7 @@ them by `handoff doctor`, so editing it by hand is work the next run throws away
 
 | #                                                                  | Title                                                                     | Date       | Branch                    |
 | ------------------------------------------------------------------ | ------------------------------------------------------------------------- | ---------- | ------------------------- |
+| [27](27-plans-retirement-index-of-all-plans.md)                    | Plans retirement - index of all plans                                     | 2026-10-24 | feat/evolution            |
 | [26](26-main-and-nyx-commit-split.md)                              | Main and Nyx commit split                                                 | 2026-10-12 | feat/nyx                  |
 | [25](25-merge-into-pix-process-ai.md)                              | Merge of three skills into pix-process-ai                                 | 2026-10-21 | feat/guardrails-evolution |
 | [24](24-export-session-distill-plan.md)                            | Export session distill plan                                               | 2026-10-21 | feat/export               |
