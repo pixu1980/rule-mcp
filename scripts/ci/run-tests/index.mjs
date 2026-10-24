@@ -28,6 +28,13 @@ process.env.RULE_MCP_NO_SYNC_GUARD = "1";
 
 const name = process.argv[2];
 const suite = SUITES[name];
+const shardArg = process.argv.find((arg) => arg.startsWith("--shard="))?.slice("--shard=".length) ?? process.env.RULE_MCP_SHARD;
+const shard = shardArg ? shardArg.split("/").map(Number) : null;
+
+if (shard && (shard.length !== 2 || !Number.isInteger(shard[0]) || !Number.isInteger(shard[1]) || shard[0] < 1 || shard[0] > shard[1])) {
+  console.error(`Invalid shard "${shardArg}": expected 1/N with 1 <= 1 <= N`);
+  process.exit(2);
+}
 
 if (!suite) {
   console.error(`Unknown suite "${name ?? ""}". Known: ${Object.keys(SUITES).join(", ")}`);
@@ -52,7 +59,14 @@ function run(command, args) {
   }
 }
 
+const [index, total] = shard ?? [1, 1];
+const isFirstShard = index === 1;
+
 for (const step of new Set(steps)) {
+  if (!isFirstShard) {
+    continue;
+  }
+
   console.log(`\n== ${step} ==`);
   run(process.execPath, [...ALIAS_HOOK, step]);
 }
@@ -62,13 +76,17 @@ if (globs.length > 0 && files.length === 0) {
   process.exit(1);
 }
 
-if (files.length > 0) {
-  console.log(`\n== node --test (${files.length} files) ==`);
-  run(process.execPath, [...ALIAS_HOOK, "--test", ...files]);
+const selected = shard ? files.filter((_, position) => position % total === index - 1) : files;
+
+if (selected.length > 0) {
+  console.log(`\n== node --test (${selected.length}/${files.length} files${shard ? `, shard ${index}/${total}` : ""}) ==`);
+  run(process.execPath, [...ALIAS_HOOK, "--test", ...selected]);
 }
 
-for (const [command, ...args] of shell) {
-  run(command, args);
+if (isFirstShard) {
+  for (const [command, ...args] of shell) {
+    run(command, args);
+  }
 }
 
 console.log(`\n${name}: ok`);
