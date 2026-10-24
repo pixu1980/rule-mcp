@@ -33,20 +33,20 @@ export function rankSkills({ skills, promptWords, promptDomain, isReduction, ran
     let finalScore = rawScore;
 
     // Commit/push prompts deterministically route to the commits discipline skill.
-    if (promptDomain === "git" && skillName === "rule-styleguide-git") {
+    if (promptDomain === "git" && skillName === "rule-mcp-styleguide-git") {
       finalScore = Math.max(rawScore * 2, 25);
     }
 
     // A scope challenge routes to the simplicity skill; on a plain build
     // request it stays an alternative (finalScore halved).
-    if (skillName === "rule-process-ai") {
+    if (skillName === "rule-mcp-process-ai") {
       finalScore = isReduction ? Math.max(rawScore * 2, 30) : rawScore * 0.5;
     }
 
     if (detectedFramework && applyFrameworkBias) {
       if (skillName === detectedSkillName) {
         finalScore = Math.max(rawScore * 2, 20);
-      } else if (["rule-styleguide", "rule-frontend", "rule-platform-web", "rule-ui-design-system", "rule-ai"].includes(skillName)) {
+      } else if (["rule-mcp-styleguide", "rule-mcp-frontend", "rule-mcp-platform-web", "rule-mcp-ui-design-system", "rule-mcp-ai"].includes(skillName)) {
         finalScore *= 1.15;
       } else {
         finalScore *= 0.85;

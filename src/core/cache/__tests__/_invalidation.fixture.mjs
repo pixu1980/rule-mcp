@@ -23,7 +23,7 @@ import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-export const stateDir = mkdtempSync(join(tmpdir(), "rule-invalidation-"));
+export const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-invalidation-"));
 process.env.RULE_MCP_STATE_DIR = stateDir;
 delete process.env.RULE_MCP_NO_CACHE;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
@@ -36,4 +36,4 @@ export const { loadAllSkills } = await import("../../skills/index.js");
 await loadAllSkills(true);
 
 export const result = (text) => ({ content: [{ type: "text", text }] });
-export const REAL_SKILL = "rule-frontend-react";
+export const REAL_SKILL = "rule-mcp-frontend-react";

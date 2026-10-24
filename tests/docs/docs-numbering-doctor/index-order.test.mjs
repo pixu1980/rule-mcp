@@ -38,7 +38,7 @@ test("a matching index is left alone", () => {
 });
 
 test("an index missing a row is stale even when its rows are in order", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-doctor-missing-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-missing-"));
 
   try {
     mkdirSync(join(root, "docs", "adr"), { recursive: true });

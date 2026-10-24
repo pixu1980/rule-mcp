@@ -1,7 +1,7 @@
 {
   "count": 102,
   "tools": [
-    "pix_tool",
+    "rule_tool",
     "rule_tool_ai",
     "rule_tool_ai_agent_architecture",
     "rule_tool_ai_context_engineering",

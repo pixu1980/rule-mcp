@@ -9,7 +9,7 @@ import { test } from "node:test";
 
 import { snapshotProject } from "../index.js";
 
-const project = mkdtempSync(join(tmpdir(), "rule-proj-"));
+const project = mkdtempSync(join(tmpdir(), "rule-mcp-proj-"));
 
 test.before(() => {
   mkdirSync(join(project, "src", "Button"), { recursive: true });
@@ -48,7 +48,7 @@ test("snapshotProject counts files, lines, components, adrs and tests", () => {
 });
 
 test("snapshotProject skips non-files, counts empty sources as zero lines, and survives a non-directory", () => {
-  const edge = mkdtempSync(join(tmpdir(), "rule-proj-edge-"));
+  const edge = mkdtempSync(join(tmpdir(), "rule-mcp-proj-edge-"));
 
   try {
     writeFileSync(join(edge, "real.js"), "export const a = 1;\n");
@@ -81,7 +81,7 @@ test("tokensaveStats reports the db file and bytes from the meta", () => {
 });
 
 test("a project without tokensave or installations reports absent zeros", () => {
-  const bare = mkdtempSync(join(tmpdir(), "rule-proj-bare-"));
+  const bare = mkdtempSync(join(tmpdir(), "rule-mcp-proj-bare-"));
   writeFileSync(join(bare, "a.js"), "x\n");
   const snap = snapshotProject(bare);
 
@@ -92,7 +92,7 @@ test("a project without tokensave or installations reports absent zeros", () => 
 });
 
 test("a plain file that looks like a directory is walked past", () => {
-  const weird = mkdtempSync(join(tmpdir(), "rule-proj-weird-"));
+  const weird = mkdtempSync(join(tmpdir(), "rule-mcp-proj-weird-"));
   writeFileSync(join(weird, "blocker"), "a file, not a dir", "utf8");
   mkdirSync(join(weird, "sub", "barrels"), { recursive: true });
   writeFileSync(join(weird, "sub", "barrels", "index.js"), "//\n");

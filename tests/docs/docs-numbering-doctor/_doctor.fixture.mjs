@@ -26,7 +26,7 @@ export const git = (args, cwd) => execFileSync("git", args, { cwd, encoding: "ut
 
 /** A repo whose branches produced two 069s and two 02 handoffs. */
 export function seedRepo() {
-  const root = mkdtempSync(join(tmpdir(), "rule-doctor-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-"));
   git(["init", "--quiet", "--initial-branch=main"], root);
   git(["config", "user.email", "t@example.com"], root);
   git(["config", "user.name", "T"], root);
@@ -54,7 +54,7 @@ export function seedRepo() {
 
 /** A repo with unique numbers and an index whose rows are in append order. */
 export function seedScrambledIndex() {
-  const root = mkdtempSync(join(tmpdir(), "rule-doctor-index-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-index-"));
   git(["init", "--quiet", "--initial-branch=main"], root);
   git(["config", "user.email", "t@example.com"], root);
   git(["config", "user.name", "T"], root);
@@ -101,7 +101,7 @@ export function seedScrambledIndex() {
  * from the files, and read every shape they were written in.
  */
 export function seedHandoffs() {
-  const root = mkdtempSync(join(tmpdir(), "rule-doctor-handoffs-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-handoffs-"));
   git(["init", "--quiet", "--initial-branch=main"], root);
   git(["config", "user.email", "t@example.com"], root);
   git(["config", "user.name", "T"], root);
@@ -125,7 +125,7 @@ export function seedHandoffs() {
  * deleted: 002 and 005 are gone, so the sequence runs 001, 003, 004, 006.
  */
 export function seedGappedRepo() {
-  const root = mkdtempSync(join(tmpdir(), "rule-doctor-gaps-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-gaps-"));
   git(["init", "--quiet", "--initial-branch=main"], root);
   git(["config", "user.email", "t@example.com"], root);
   git(["config", "user.name", "T"], root);

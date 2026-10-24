@@ -16,19 +16,19 @@ import { applyDecision } from "./_decision.js";
 import { SCOPE_CONTRACT, STYLING_CONTRACT, STYLING_ROUTES } from "./_contracts.js";
 
 /**
- * Register the rule routing tool.
- * Routes a user prompt to the correct rule skill based on keyword scoring.
+ * Register the rule-mcp routing tool.
+ * Routes a user prompt to the correct rule-mcp skill based on keyword scoring.
  * Returns structured JSON with route, confidence, sections, next_tools.
  */
 export function registerAiTool() {
   registerTool({
-    name: "pix_tool",
+    name: "rule_tool",
     entry: "router",
-    description: "Route a prompt to the correct rule skill. Returns structured routing with relevant sections.",
+    description: "Route a prompt to the correct rule-mcp skill. Returns structured routing with relevant sections.",
     zodSchema: GalaxySchema,
     handler: async (arguments_) => {
       const allSkills = getSkillNames();
-      const skills = allSkills.filter((skillName) => skillName !== "rule" && skillName !== "rule-meta");
+      const skills = allSkills.filter((skillName) => skillName !== "rule-mcp" && skillName !== "rule-mcp-meta");
       const prompt = expandPrompt((arguments_.prompt || "").trim());
 
       if (!prompt) {

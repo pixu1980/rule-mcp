@@ -1,4 +1,4 @@
-# Bookmarks Manager — Session Handoff
+# Bookmarks Manager, Session Handoff
 
 ## Project Identity
 
@@ -21,7 +21,7 @@
 ### Frontend (`client/`)
 
 - React 19 + Vite 6, TypeScript strict mode
-- rule-compliant: zero CSS classes, data-part selectors, adoptedStyleSheets, barrel pattern
+- rule-mcp-compliant: zero CSS classes, data-part selectors, adoptedStyleSheets, barrel pattern
 - Accessibility: WCAG 2.2 AA, semantic HTML, aria attributes, keyboard navigation
 - Components: SearchBar (mega-search), BookmarkCard, EmptyState, LoadingState, Header, NotFound
 - react-hook-form + Zod for URL validation
@@ -29,29 +29,29 @@
 
 ### Design System (`client/src/design-system.css`)
 
-- Typography: Chivo (display) + Inter (body), proportional scale (0.75–3rem)
-- Spacing: 4px–96px grid
-- Radii: 4px–24px + full
+- Typography: Chivo (display) + Inter (body), proportional scale (0.75-3rem)
+- Spacing: 4px-96px grid
+- Radii: 4px-24px + full
 - Elevation: 5-level shadow system
 - Dark theme with oklch color space
 - Focus rings, transitions, prefers-reduced-motion
 
 ## Key Files
 
-- `server/src/app.ts` — Express app factory
-- `server/src/server.ts` — HTTP listener + graceful shutdown
-- `server/src/modules/bookmarks/bookmarks.service.ts` — Scraping + CRUD
-- `client/src/main.tsx` — App entry with BrowserRouter
-- `client/src/design-system.css` — All design tokens
-- `client/src/components/SearchBar/_SearchBar.tsx` — Mega-search with react-hook-form
-- `client/src/components/BookmarkCard/_BookmarkCard.tsx` — Card with OG image, metadata, delete
-- `client/src/hooks/useBookmarks.ts` — State management hook
+- `server/src/app.ts`, Express app factory
+- `server/src/server.ts`, HTTP listener + graceful shutdown
+- `server/src/modules/bookmarks/bookmarks.service.ts`, Scraping + CRUD
+- `client/src/main.tsx`, App entry with BrowserRouter
+- `client/src/design-system.css`, All design tokens
+- `client/src/components/SearchBar/_SearchBar.tsx`, Mega-search with react-hook-form
+- `client/src/components/BookmarkCard/_BookmarkCard.tsx`, Card with OG image, metadata, delete
+- `client/src/hooks/useBookmarks.ts`, State management hook
 
 ## ADRs
 
-1. `001-monorepo-structure-and-tech-choices.md` — Stack decisions
-2. `002-ui-design-system-tokens.md` — Design tokens
-3. `003-url-scraping-architecture.md` — Scraping approach
+1. `001-monorepo-structure-and-tech-choices.md`, Stack decisions
+2. `002-ui-design-system-tokens.md`, Design tokens
+3. `003-url-scraping-architecture.md`, Scraping approach
 
 ## Quick Start
 

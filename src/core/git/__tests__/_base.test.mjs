@@ -19,12 +19,12 @@ test("an explicit branch argument wins over every other source", () => {
   const detected = detectBaseBranch(root, { baseBranch: "main" });
 
   assert.equal(detected.branch, "main", "the argument is authoritative");
-  assert.equal(detected.source, "argument", "and is labelled as such");
+  assert.equal(detected.source, "argument", "and is labeled as such");
   delete process.env[BASE_BRANCH_ENV];
   remove(root);
 });
 
-test("git config rule.baseBranch is read before the environment", () => {
+test("git config rule-mcp.baseBranch is read before the environment", () => {
   const root = makeRepo();
 
   run(root, "config", BASE_BRANCH_CONFIG_KEY, "develop");

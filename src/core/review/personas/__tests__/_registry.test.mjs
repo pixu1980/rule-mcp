@@ -73,7 +73,7 @@ test("a deprecated role leaves the surfaces but keeps its entry", () => {
 
 test("an overlay replaces an entry wholesale, by id", async () => {
   const { loadRoleOverlays } = await import("../../_overlays.js");
-  const home = mkdtempSync(join(tmpdir(), "rule-roles-user-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-roles-user-"));
   try {
     mkdirSync(join(home, "config", "roles"), { recursive: true });
     // Only the user's layer remains: a project layer read roles out of a
@@ -97,7 +97,7 @@ test("an overlay replaces an entry wholesale, by id", async () => {
 
 test("an invalid or unreadable overlay is reported, never fatal", async () => {
   const { loadRoleOverlays } = await import("../../_overlays.js");
-  const home = mkdtempSync(join(tmpdir(), "rule-roles-bad-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-roles-bad-"));
   try {
     mkdirSync(join(home, "config", "roles"), { recursive: true });
     writeFileSync(join(home, "config", "roles", "broken.md"), "---\nnot a persona file");

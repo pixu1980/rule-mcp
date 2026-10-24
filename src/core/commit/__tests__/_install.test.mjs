@@ -11,7 +11,7 @@ import { makeRepo, remove } from "../../git/__tests__/_fixture.mjs";
 
 test("a project that is not a git repository is left alone", () => {
   const root = makeRepo();
-  const governance = installGitGovernance("/nonexistent-rule-path");
+  const governance = installGitGovernance("/nonexistent-rule-mcp-path");
 
   assert.equal(governance.mechanism, "none", "no repository is no mechanism");
   assert.deepEqual(governance.hooks, {}, "and no hook is written");
@@ -29,7 +29,7 @@ test("the package manager is read from the lockfile", () => {
 
   assert.equal(detectPackageManager(root), "pnpm", "the pnpm lockfile decides");
 
-  assert.equal(detectPackageManager("/nonexistent-rule-path"), null, "no package is no manager");
+  assert.equal(detectPackageManager("/nonexistent-rule-mcp-path"), null, "no package is no manager");
   remove(root);
 });
 

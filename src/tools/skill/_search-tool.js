@@ -6,7 +6,7 @@ import { z } from "zod/v4";
 import { registerTool } from "../router/index.js";
 
 /**
- * Register the rule_tool_search tool for full-text search across ALL rule skills.
+ * Register the rule_tool_search tool for full-text search across ALL rule-mcp skills.
  */
 export function registerSearchTool() {
   // Lazy imports
@@ -20,13 +20,13 @@ export function registerSearchTool() {
   }
 
   const SearchSchema = z.object({
-    query: z.string().describe("Search query to find across all rule skills"),
+    query: z.string().describe("Search query to find across all rule-mcp skills"),
     maxResults: z.number().int().min(1).max(100).default(10).describe("Maximum number of ranked results"),
   });
   registerTool({
     name: "rule_tool_search",
     entry: "action",
-    description: "Semantic search across ALL rule skills using BM25 ranking. Returns scored, relevant sections.",
+    description: "Semantic search across ALL rule-mcp skills using BM25 ranking. Returns scored, relevant sections.",
     zodSchema: SearchSchema,
     handler: async (arguments_) => {
       const { search, buildIndex, isIndexReady, getIndexStats } = await getBm25();

@@ -1,25 +1,25 @@
 
 
-/** rule-handoff: the single options argument, the compact vocabulary, the help path. */
+/** rule-mcp-handoff: the single options argument, the compact vocabulary, the help path. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 import { getPrompt, parseHandoffOptions, prompts } from "./_prompts.fixture.mjs";
 
-test("rule-handoff takes a single free-form options argument", () => {
-  const p = prompts.find((x) => x.name === "rule-handoff");
-  assert.ok(p, "rule-handoff exists");
+test("rule-mcp-handoff takes a single free-form options argument", () => {
+  const p = prompts.find((x) => x.name === "rule-mcp-handoff");
+  assert.ok(p, "rule-mcp-handoff exists");
   assert.deepEqual(
     p.arguments.map((a) => a.name),
     ["options"],
     "single options argument, no required mode",
   );
   const options = p.arguments[0];
-  assert.equal(options.required, false, "options must be optional so /rule-handoff works bare");
+  assert.equal(options.required, false, "options must be optional so /rule-mcp-handoff works bare");
   assert.match(options.description, /default:/i, "options must document its default");
   assert.match(options.description, /help/i, "options must advertise the help token");
   assert.match(options.description, /close-session/, "options must list the close-session mode");
 
-  const text = getPrompt("rule-handoff")
+  const text = getPrompt("rule-mcp-handoff")
     .messages.map((m) => m.content?.text ?? "")
     .join("\n");
   assert.match(text, /default/i, "handler text must mention the defaults");
@@ -79,8 +79,8 @@ test("parseHandoffOptions translates the compact vocabulary", () => {
   }
 });
 
-test("rule-handoff getPrompt interpolates the parsed options into the message", () => {
-  const text = getPrompt("rule-handoff", { options: "close-session compress minimal" })
+test("rule-mcp-handoff getPrompt interpolates the parsed options into the message", () => {
+  const text = getPrompt("rule-mcp-handoff", { options: "close-session compress minimal" })
     .messages.map((m) => m.content?.text ?? "")
     .join("\n");
   assert.match(text, /close-session/, "message must carry the requested mode");
@@ -90,7 +90,7 @@ test("rule-handoff getPrompt interpolates the parsed options into the message", 
 });
 
 test("close-feature plans one confirmed squash after persisting all feature documents", () => {
-  const text = getPrompt("rule-handoff", { options: "close-feature" })
+  const text = getPrompt("rule-mcp-handoff", { options: "close-feature" })
     .messages.map((message) => message.content?.text ?? "")
     .join("\n");
 
@@ -104,11 +104,11 @@ test("close-feature plans one confirmed squash after persisting all feature docu
   assert.doesNotMatch(text.slice(text.indexOf("action=squash force=true confirm=true")), /Then commit that file ALONE/u, "nothing is committed after the close");
 });
 
-test("rule-handoff help returns the usage list as an instant assistant message", () => {
-  const full = getPrompt("rule-handoff", { options: "help" });
+test("rule-mcp-handoff help returns the usage list as an instant assistant message", () => {
+  const full = getPrompt("rule-mcp-handoff", { options: "help" });
   assert.equal(full.messages[0].role, "assistant", "handoff help must be an assistant message (no model call)");
   const text = full.messages[0].content.text;
-  assert.match(text, /^Usage: \/rule-handoff/, "help message must start with the usage line");
+  assert.match(text, /^Usage: \/rule-mcp-handoff/, "help message must start with the usage line");
   assert.match(text, /close-session/, "usage block must list close-session");
   assert.match(text, /close-feature.*squash/i, "usage must explain the implicit squash");
   assert.match(text, /no-compress/, "usage block must show a no-compress example");

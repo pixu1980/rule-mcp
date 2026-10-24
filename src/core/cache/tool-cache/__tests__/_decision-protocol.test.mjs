@@ -23,8 +23,8 @@ const candidates = [
 ];
 
 const routed = [
-  { label: "candidate-1", description: "request: a; skill: rule-frontend", route: "rule-frontend", argsKey: "{}", echo: false, fresh: true, isError: false },
-  { label: "candidate-2", description: "request: b; skill: rule-frontend-vue", route: "rule-frontend-vue", argsKey: "{}", echo: false, fresh: true, isError: false },
+  { label: "candidate-1", description: "request: a; skill: rule-mcp-frontend", route: "rule-mcp-frontend", argsKey: "{}", echo: false, fresh: true, isError: false },
+  { label: "candidate-2", description: "request: b; skill: rule-mcp-frontend-vue", route: "rule-mcp-frontend-vue", argsKey: "{}", echo: false, fresh: true, isError: false },
 ];
 
 function answer(choice, probability) {
@@ -53,9 +53,9 @@ test("the prompt hash is stable and does not expose the prompt", () => {
 });
 
 test("the gate state carries the tool, query, context and candidate count", () => {
-  const state = buildGateState({ toolName: "pix_tool", args: { prompt: "x", framework: "react", path: "/Users/ada/p" }, livePrompt: "x", candidates });
+  const state = buildGateState({ toolName: "rule_tool", args: { prompt: "x", framework: "react", path: "/Users/ada/p" }, livePrompt: "x", candidates });
 
-  assert.match(state, /^tool: pix_tool/u);
+  assert.match(state, /^tool: rule_tool/u);
   assert.match(state, /query: x/u);
   assert.equal(state.includes("queryHash"), false, "the hash is noise to the model");
   assert.match(state, /framework: react/u);
@@ -115,7 +115,7 @@ test("a guarded choice whose candidate echoes never replays", () => {
 test("a hub pick beside a leaf of the same area is ambiguous", () => {
   assert.equal(guardAmbiguity(routed[0], routed), "ambiguous-hub");
   assert.equal(guardAmbiguity(routed[1], routed), null, "the specific leaf wins over the hub");
-  assert.equal(guardAmbiguity({ ...routed[0], route: "rule-backend" }, routed), null);
+  assert.equal(guardAmbiguity({ ...routed[0], route: "rule-mcp-backend" }, routed), null);
   assert.equal(guardAmbiguity({ ...routed[0], route: undefined }, routed), null);
 });
 

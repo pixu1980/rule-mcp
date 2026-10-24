@@ -6,7 +6,7 @@ export function printHelp() {
   console.log(`
 Usage: node scripts/post-process.mjs [options]
 
-Validate and auto-fix project file tree structure against rule AI conventions.
+Validate and auto-fix project file tree structure against rule-mcp AI conventions.
 
 Options:
   --dir <path>      Project root directory (default: .)

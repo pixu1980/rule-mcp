@@ -77,6 +77,6 @@ const commandBody = () =>
 const geminiCommand = () => ['description = "Route coding work through rule-mcp"', 'prompt = """', commandBody().replaceAll("$ARGUMENTS", "{{args}}"), '"""', ""].join("\n");
 
 const copilotAgent = () =>
-  ["---", "name: rule-mcp", "description: Route work through rule MCP skills and enforce validation before completion.", "---", "", commandBody(), ""].join("\n");
+  ["---", "name: rule-mcp", "description: Route work through rule-mcp MCP skills and enforce validation before completion.", "---", "", commandBody(), ""].join("\n");
 
 export { upsertTomlBlock, removeTomlBlock, appendInstruction, removeInstruction, commandTemplate, commandBody, geminiCommand, copilotAgent };

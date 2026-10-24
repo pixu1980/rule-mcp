@@ -71,6 +71,6 @@ test("an explicit base branch overrides detection", () => {
   const freshness = checkBaseBranchFreshness(root, { baseBranch: "develop" });
 
   assert.equal(freshness.baseBranch, "develop", "the argument is used");
-  assert.equal(freshness.baseSource, "argument", "and labelled as such");
+  assert.equal(freshness.baseSource, "argument", "and labeled as such");
   remove(root);
 });

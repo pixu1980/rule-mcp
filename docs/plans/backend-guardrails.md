@@ -1,9 +1,9 @@
-# rule-backend guardrails execution plan
+# rule-mcp-backend guardrails execution plan
 
-Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the eight rule-backend leaves.
-Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the eight rule-backend leaves. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the eight rule-backend leaves, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
+Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the eight rule-mcp-backend leaves.
+Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the eight rule-mcp-backend leaves. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the eight rule-mcp-backend leaves, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
 
-Scope: extend the deterministic guardrails of the nine `rule-backend*` skills,
+Scope: extend the deterministic guardrails of the nine `rule-mcp-backend*` skills,
 fix the false positives inside the six rules that already exist, and record
 every rule against a citable public source. Implementation happens in a
 dedicated session: this document is the plan only.
@@ -14,17 +14,17 @@ Companion plan: `docs/plans/devops-guardrails.md` (same method, other area).
 
 Audited in this session (read-only):
 
-- `skills/rule-backend/SKILL.md` and `guardrails/` (six rules)
-- `skills/rule-backend-security/SKILL.md` (425 lines, no guardrails)
-- `skills/rule-backend-node/SKILL.md` (395 lines, no guardrails)
-- `skills/rule-backend-workers/SKILL.md` (424 lines, no guardrails)
-- `skills/rule-backend-graphql/SKILL.md` (no guardrails)
-- `skills/rule-backend-{express,fastify,hono,nestjs}/SKILL.md` (no guardrails)
+- `skills/rule-mcp-backend/SKILL.md` and `guardrails/` (six rules)
+- `skills/rule-mcp-backend-security/SKILL.md` (425 lines, no guardrails)
+- `skills/rule-mcp-backend-node/SKILL.md` (395 lines, no guardrails)
+- `skills/rule-mcp-backend-workers/SKILL.md` (424 lines, no guardrails)
+- `skills/rule-mcp-backend-graphql/SKILL.md` (no guardrails)
+- `skills/rule-mcp-backend-{express,fastify,hono,nestjs}/SKILL.md` (no guardrails)
 - `src/core/layers/_inherit.js` (`resolveInherited`, nearest definition wins)
 - `tests/fixtures/guardrail-corpus.mjs` (12 backend snippets cover the six rules)
 
-Current state: 6 rules, all owned by `rule-backend` and inherited by every child
-through `inherits: [rule-backend]`.
+Current state: 6 rules, all owned by `rule-mcp-backend` and inherited by every child
+through `inherits: [rule-mcp-backend]`.
 
 | Rule               | Trigger heuristic                             |
 | ------------------ | --------------------------------------------- |
@@ -63,22 +63,22 @@ Sources fetched and used (each accepted rule cites one or more):
 
 ## Decisions from the interview
 
-| Question         | Decision                                                               |
-| ---------------- | ---------------------------------------------------------------------- |
-| Target skills    | All nine. Shared rules in `rule-backend`, the rest in their topic skill |
-| Scope            | High-signal selection (6-10)                                           |
-| Fixes to the six | Extend the patterns to the framework equivalents                       |
-| Auth rules       | All five candidates                                                    |
-| Input rules      | All six candidates                                                     |
-| Runtime rules    | All five candidates                                                    |
-| GraphQL rules    | All five candidates                                                    |
-| Framework rules  | All four candidates                                                    |
-| Trigger policy   | Content heuristic on server/API files plus framework-scoped patterns   |
-| Severity         | Advisory until corpus precision is proven, then blocking               |
-| Corpus and tests | Fixtures, framework fixtures, unit tests, inheritance test             |
-| Artifacts        | Frontmatter, census, ADR, changelog, per-rule source                   |
-| Phasing          | Plan only now; implementation in a dedicated session                   |
-| Sources          | Every new rule cites its source                                        |
+| Question         | Decision                                                                    |
+| ---------------- | --------------------------------------------------------------------------- |
+| Target skills    | All nine. Shared rules in `rule-mcp-backend`, the rest in their topic skill |
+| Scope            | High-signal selection (6-10)                                                |
+| Fixes to the six | Extend the patterns to the framework equivalents                            |
+| Auth rules       | All five candidates                                                         |
+| Input rules      | All six candidates                                                          |
+| Runtime rules    | All five candidates                                                         |
+| GraphQL rules    | All five candidates                                                         |
+| Framework rules  | All four candidates                                                         |
+| Trigger policy   | Content heuristic on server/API files plus framework-scoped patterns        |
+| Severity         | Advisory until corpus precision is proven, then blocking                    |
+| Corpus and tests | Fixtures, framework fixtures, unit tests, inheritance test                  |
+| Artifacts        | Frontmatter, census, ADR, changelog, per-rule source                        |
+| Phasing          | Plan only now; implementation in a dedicated session                        |
+| Sources          | Every new rule cites its source                                             |
 
 ### Open item 1: 25 rules against a 6-10 budget
 
@@ -108,10 +108,10 @@ Owner confirmation requested before Phase 1.
 The five runtime rules are about the Node runtime, not about one framework, and
 they must reach the framework skills. Two ways:
 
-1. **Recommended**: owner `rule-backend-node`, and the server-bearing children
+1. **Recommended**: owner `rule-mcp-backend-node`, and the server-bearing children
    (`express`, `fastify`, `hono`, `nestjs`, `graphql`, `security`, `workers`)
-   add `rule-backend-node` to `inherits`, so the runtime layer is explicit.
-2. Owner `rule-backend`, like the other shared rules, at the cost of a flatter
+   add `rule-mcp-backend-node` to `inherits`, so the runtime layer is explicit.
+2. Owner `rule-mcp-backend`, like the other shared rules, at the cost of a flatter
    but less honest graph.
 
 `graceful-shutdown` and `worker-pool-per-request` are runtime-specific: on
@@ -136,7 +136,7 @@ the idiomatic form of every framework in the family.
 
 ## Accepted rules
 
-### Shared, owned by rule-backend
+### Shared, owned by rule-mcp-backend
 
 | Rule id                     | Rejects                                                          | Tier | Source                       |
 | --------------------------- | ---------------------------------------------------------------- | ---- | ---------------------------- |
@@ -160,7 +160,7 @@ the idiomatic form of every framework in the family.
 the devops plan; the backend copy is the authoritative one for request handling,
 and the devops plan stays about telemetry stores.
 
-### GraphQL, owned by rule-backend-graphql
+### GraphQL, owned by rule-mcp-backend-graphql
 
 | Rule id                  | Rejects                                             | Tier | Source        |
 | ------------------------ | --------------------------------------------------- | ---- | ------------- |
@@ -170,20 +170,20 @@ and the devops plan stays about telemetry stores.
 | `gql-pagination`         | list field without `first`/`last`/cursor            | B    | OWASP GraphQL |
 | `gql-authz-edges-nodes`  | resolver without an authorization check on the node | B    | OWASP GraphQL |
 
-### Runtime, owned by rule-backend-node (see open item 2)
+### Runtime, owned by rule-mcp-backend-node (see open item 2)
 
-| Rule id                   | Rejects                                        | Tier | Source              |
-| ------------------------- | ---------------------------------------------- | ---- | ------------------- |
-| `worker-pool-per-request` | `new Worker(` created inside a request handler | B    | rule-backend-workers |
+| Rule id                   | Rejects                                        | Tier | Source                   |
+| ------------------------- | ---------------------------------------------- | ---- | ------------------------ |
+| `worker-pool-per-request` | `new Worker(` created inside a request handler | B    | rule-mcp-backend-workers |
 
 ### Framework skills
 
-| Rule id                  | Skill               | Rejects                                                | Tier | Source                  |
-| ------------------------ | ------------------- | ------------------------------------------------------ | ---- | ----------------------- |
-| `express-error-handler`  | rule-backend-express | app with no four-argument error middleware             | A    | Express security        |
-| `fastify-route-schema`   | rule-backend-fastify | route without a validation/serialization schema        | B    | Fastify recommendations |
-| `hono-secure-headers`    | rule-backend-hono    | app with no `secureHeaders()`                          | A    | Hono secure headers     |
-| `nestjs-validation-pipe` | rule-backend-nestjs  | global pipe without `whitelist`/`forbidNonWhitelisted` | A    | NestJS security         |
+| Rule id                  | Skill                    | Rejects                                                | Tier | Source                  |
+| ------------------------ | ------------------------ | ------------------------------------------------------ | ---- | ----------------------- |
+| `express-error-handler`  | rule-mcp-backend-express | app with no four-argument error middleware             | A    | Express security        |
+| `fastify-route-schema`   | rule-mcp-backend-fastify | route without a validation/serialization schema        | B    | Fastify recommendations |
+| `hono-secure-headers`    | rule-mcp-backend-hono    | app with no `secureHeaders()`                          | A    | Hono secure headers     |
+| `nestjs-validation-pipe` | rule-mcp-backend-nestjs  | global pipe without `whitelist`/`forbidNonWhitelisted` | A    | NestJS security         |
 
 ## Enforcement model
 
@@ -193,8 +193,8 @@ and the devops plan stays about telemetry stores.
    returns `pass: true` with a note, the way the six do today.
 2. **Advisory first.** Each rule carries `severity: "advisory"` and does not
    block until Phase 6 promotes it after 100% precision and recall.
-3. **Registry wiring.** `rule-backend` keeps its `guardrails/index.js` and gains
-   the shared ids; `rule-backend-graphql`, `rule-backend-node` and the four
+3. **Registry wiring.** `rule-mcp-backend` keeps its `guardrails/index.js` and gains
+   the shared ids; `rule-mcp-backend-graphql`, `rule-mcp-backend-node` and the four
    framework skills gain their own `guardrails/index.js` and their `inherits`
    lines as decided in open item 2.
 4. **Tests.** Every rule gets a `good` and a `bad` entry in
@@ -233,7 +233,7 @@ Shared files: none: absorbed into the leaf plans named above
       framework forms, with a fixture per framework.
 - [ ] Rerun the corpus gate and confirm no regression on the six.
 
-### Phase 2 - Shared security rules in rule-backend
+### Phase 2 - Shared security rules in rule-mcp-backend
 
 - [ ] Implement the five auth rules (`jwt-*`, `cookie-security-flags`,
       `csrf-state-change`, `auth-log-redaction`).
@@ -250,11 +250,11 @@ Shared files: none: absorbed into the leaf plans named above
       `graceful-shutdown`, `worker-pool-per-request`.
 - [ ] Add corpus fixtures and unit tests.
 
-### Phase 4 - GraphQL rules in rule-backend-graphql
+### Phase 4 - GraphQL rules in rule-mcp-backend-graphql
 
 - [ ] Create `guardrails/` with the five rules.
 - [ ] Add corpus fixtures for a schema and a resolver file.
-- [ ] Update `rule-backend-graphql/SKILL.md` frontmatter.
+- [ ] Update `rule-mcp-backend-graphql/SKILL.md` frontmatter.
 
 ### Phase 5 - Framework rules
 
@@ -274,15 +274,15 @@ Shared files: none: absorbed into the leaf plans named above
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step                                           | Class      | Model                   | Why                            |
-| ---------------------------------------------- | ---------- | ----------------------- | ------------------------------ |
-| Phase 0 - Decisions and scaffolding            | `T1-plan`  | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Fix the six existing rules           | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
-| Phase 2 - Shared security rules in rule-backend | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
-| Phase 3 - Runtime rules                        | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
-| Phase 4 - GraphQL rules in rule-backend-graphql | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
-| Phase 5 - Framework rules                      | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
-| Phase 6 - Promotion and documentation          | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Step                                                | Class      | Model                   | Why                            |
+| --------------------------------------------------- | ---------- | ----------------------- | ------------------------------ |
+| Phase 0 - Decisions and scaffolding                 | `T1-plan`  | `gemini-4-argon` (high) | planning and prose that argues |
+| Phase 1 - Fix the six existing rules                | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 2 - Shared security rules in rule-mcp-backend | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 3 - Runtime rules                             | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 4 - GraphQL rules in rule-mcp-backend-graphql | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 5 - Framework rules                           | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 6 - Promotion and documentation               | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

@@ -5,8 +5,8 @@
 /** Title, tags and body lines for one auto-logged call, by tool. */
 export function autoLogFields(toolName, arguments_, result) {
   switch (toolName) {
-    case "pix_tool": {
-      // pix_tool: capture prompt + routing result
+    case "rule_tool": {
+      // rule_tool: capture prompt + routing result
       const prompt = (arguments_.prompt || "").slice(0, 200);
       let route = "unknown";
       let confidence = "0";

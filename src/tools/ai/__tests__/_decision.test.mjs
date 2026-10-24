@@ -1,6 +1,6 @@
 
 
-/** pix_tool reports the model's distribution and gates the override on it. */
+/** rule_tool reports the model's distribution and gates the override on it. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
@@ -18,8 +18,8 @@ await loadAllSkills(true);
 const PROMPT = "I need a React button component";
 const ENV = ["RULE_MCP_DECISION_MODEL", "RULE_MCP_DECISION_URL", "RULE_MCP_DECISION_TIMEOUT"];
 
-async function rule(prompt) {
-  return JSON.parse((await callTool("pix_tool", { prompt })).content[0].text);
+async function routePrompt(prompt) {
+  return JSON.parse((await callTool("rule_tool", { prompt })).content[0].text);
 }
 
 async function withDecision({ model = "laya", url } = {}, body) {
@@ -78,12 +78,12 @@ test("the model's distribution becomes the chosen skill's confidence", async () 
 
   try {
     await withDecision({ url: running.url }, async () => {
-      const result = await rule(PROMPT);
+      const result = await routePrompt(PROMPT);
 
-      assert.equal(result.route, "rule-frontend-react");
+      assert.equal(result.route, "rule-mcp-frontend-react");
       assert.equal(result.confidence, 0.9);
       assert.equal(result.uncertain, false);
-      assert.equal(criteria()[0], "rule-frontend-react");
+      assert.equal(criteria()[0], "rule-mcp-frontend-react");
       assert.ok(criteria().length <= 6, "the model never sees more than six options");
     });
   } finally {
@@ -97,7 +97,7 @@ test("a probability below the registry threshold marks the answer uncertain", as
 
   try {
     await withDecision({ url: running.url }, async () => {
-      const result = await rule(PROMPT);
+      const result = await routePrompt(PROMPT);
 
       assert.equal(result.uncertain, true);
       assert.equal(result.route, "unknown");
@@ -112,9 +112,9 @@ test("without a configured model the router never opens a socket", async () => {
 
   try {
     await withDecision({ model: null, url: server.url }, async () => {
-      const result = await rule(PROMPT);
+      const result = await routePrompt(PROMPT);
 
-      assert.equal(result.route, "rule-frontend-react");
+      assert.equal(result.route, "rule-mcp-frontend-react");
       assert.equal(result.uncertain, false);
       assert.equal(server.count, 0);
     });

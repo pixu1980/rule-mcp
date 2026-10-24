@@ -57,19 +57,19 @@ test("the bang and the footer both mark a breaking change", () => {
 
   const hyphen = parseCommitMessage("feat(api): replace it\n\nBREAKING-CHANGE: the v1 endpoint is gone");
 
-  assert.equal(hyphen.breaking, true, "the hyphenated footer is recognised");
+  assert.equal(hyphen.breaking, true, "the hyphenated footer is recognized");
 });
 
 test("system-generated subjects are exempt", () => {
   assert.equal(isSystemSubject("Merge pull request #12 from pixu1980/x"), true, "a PR merge is exempt");
-  assert.equal(isSystemSubject('Revert "feat(skills): add rule naming"'), true, "a revert is exempt");
-  assert.equal(isSystemSubject("feat(skills): add rule naming"), false, "a real commit is not exempt");
+  assert.equal(isSystemSubject('Revert "feat(skills): add rule-mcp naming"'), true, "a revert is exempt");
+  assert.equal(isSystemSubject("feat(skills): add rule-mcp naming"), false, "a real commit is not exempt");
 });
 
 test("the help block shows a valid example and quotes what was rejected", () => {
   const help = violationHelp("docs: missing scope");
 
   assert.match(help, /type\(scope\): subject/u, "the format is shown");
-  assert.match(help, /feat\(skills\): add rule naming/u, "a valid example is shown");
+  assert.match(help, /feat\(skills\): add rule-mcp naming/u, "a valid example is shown");
   assert.match(help, /got:\s+docs: missing scope/u, "the rejected subject is quoted");
 });

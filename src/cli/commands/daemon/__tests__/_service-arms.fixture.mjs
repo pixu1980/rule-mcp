@@ -17,8 +17,8 @@ const action = process.argv[3];
 
 Object.defineProperty(process, "platform", { value: forced, configurable: true });
 
-process.env.HOME = mkdtempSync(join(tmpdir(), "rule-service-arm-home-"));
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-service-arm-state-"));
+process.env.HOME = mkdtempSync(join(tmpdir(), "rule-mcp-service-arm-home-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-service-arm-state-"));
 
 const { actionDisable, actionEnable, actionInstall, actionUninstall } = await import("../_service.js");
 

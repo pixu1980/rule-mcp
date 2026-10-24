@@ -33,10 +33,10 @@ function scratchBin(dir, name, body) {
 }
 
 test("detectLocalRepo reads the manifest name, and nothing else", () => {
-  const bare = mkdtempSync(join(tmpdir(), "rule-preflight-bare-"));
-  const foreign = mkdtempSync(join(tmpdir(), "rule-preflight-foreign-"));
-  const local = mkdtempSync(join(tmpdir(), "rule-preflight-local-"));
-  const broken = mkdtempSync(join(tmpdir(), "rule-preflight-broken-"));
+  const bare = mkdtempSync(join(tmpdir(), "rule-mcp-preflight-bare-"));
+  const foreign = mkdtempSync(join(tmpdir(), "rule-mcp-preflight-foreign-"));
+  const local = mkdtempSync(join(tmpdir(), "rule-mcp-preflight-local-"));
+  const broken = mkdtempSync(join(tmpdir(), "rule-mcp-preflight-broken-"));
 
   try {
     writeFileSync(join(foreign, "package.json"), JSON.stringify({ name: "something-else" }));
@@ -58,8 +58,8 @@ test("a starved environment fails the binary and package manager checks and warn
   const here = dirname(fileURLToPath(import.meta.url));
   // A directory no binary could hide in: nothing on PATH, so every lookup
   // answers "" and the repo root is the empty dir itself.
-  const empty = mkdtempSync(join(tmpdir(), "rule-preflight-path-"));
-  const root = mkdtempSync(join(tmpdir(), "rule-preflight-root-"));
+  const empty = mkdtempSync(join(tmpdir(), "rule-mcp-preflight-path-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-preflight-root-"));
 
   try {
     const out = execFileSync(process.execPath, [join(here, "_preflight-child.fixture.mjs")], {
@@ -86,7 +86,7 @@ test("a starved environment fails the binary and package manager checks and warn
 });
 
 test("a package manager that runs but prints nothing is still the package manager", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-preflight-quiet-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-preflight-quiet-"));
 
   try {
     scratchBin(dir, "pnpm", "#!/bin/sh\nexit 0\n");
@@ -98,7 +98,7 @@ test("a package manager that runs but prints nothing is still the package manage
 });
 
 test("a probe that dies moves to the next package manager", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-preflight-dead-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-preflight-dead-"));
 
   try {
     scratchBin(dir, "pnpm", "#!/bin/sh\nexit 1\n");

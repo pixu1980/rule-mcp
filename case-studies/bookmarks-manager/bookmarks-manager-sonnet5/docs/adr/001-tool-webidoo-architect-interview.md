@@ -1,13 +1,13 @@
-# 001: Tool: pix_architect — interview
+# 001: Tool: rule_tool_architect, interview
 
 - **Date**: 2026-07-11 14:46:46
 - **Status**: accepted
 - **Tags**: tool, auto-log
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 
-Tool: pix_architect
+Tool: rule_tool_architect
 Args: {"mode":"interview","target":"/Users/emilianopisu/Projects/work/rule-mcp/poc/bookmarks-manager/bookmarks-sonnet5"}
 
 ## Decision
@@ -16,4 +16,4 @@ Tool executed successfully.
 
 ## Consequences
 
-None — informational entry.
+None, informational entry.

@@ -19,7 +19,7 @@ test("the families partition the command surface, with nothing left over", () =>
   assert.deepEqual(new Set(all), new Set(everything), "selecting every family is the same as asking for everything");
   assert.ok(all.length > 30, `hubs + personas + tasks: ${all.length}`);
   assert.ok(
-    all.every((name) => !/^rule-area-[a-z]+-/.test(name)),
+    all.every((name) => !/^rule-mcp-area-[a-z]+-/.test(name)),
     "no leaf area slash",
   );
 });
@@ -45,17 +45,17 @@ test("each preset is a subset of the next", () => {
 
 test("the router is in every preset, because nothing works without it", () => {
   for (const preset of Object.keys(PRESETS)) {
-    assert.ok(resolveSelection({ preset }).commands.includes("rule"), `${preset}: the dispatcher is not optional`);
+    assert.ok(resolveSelection({ preset }).commands.includes("rule-mcp"), `${preset}: the dispatcher is not optional`);
   }
 });
 
 test("minimal is the router and the area hubs, without leaf area slash", () => {
   const { commands } = resolveSelection({ preset: "minimal" });
 
-  assert.ok(commands.includes("rule-area-frontend"), "the hub is there");
-  assert.ok(!commands.includes("rule-area-frontend-react"), "the member is not");
+  assert.ok(commands.includes("rule-mcp-area-frontend"), "the hub is there");
+  assert.ok(!commands.includes("rule-mcp-area-frontend-react"), "the member is not");
   assert.ok(
-    commands.every((name) => !name.startsWith("rule-persona-")),
+    commands.every((name) => !name.startsWith("rule-mcp-persona-")),
     "and neither are the personas",
   );
 });
@@ -63,48 +63,48 @@ test("minimal is the router and the area hubs, without leaf area slash", () => {
 test("picking areas keeps only those hubs", () => {
   const { commands } = resolveSelection({ families: ["areas"], areas: ["frontend", "data"] });
 
-  assert.ok(commands.includes("rule-area-frontend"), "a chosen area keeps its hub");
-  assert.ok(commands.includes("rule-area-data"), "and data");
-  assert.ok(!commands.includes("rule-area-frontend-react"), "no leaf slash");
+  assert.ok(commands.includes("rule-mcp-area-frontend"), "a chosen area keeps its hub");
+  assert.ok(commands.includes("rule-mcp-area-data"), "and data");
+  assert.ok(!commands.includes("rule-mcp-area-frontend-react"), "no leaf slash");
   assert.ok(
-    commands.every((name) => !name.startsWith("rule-area-backend")),
+    commands.every((name) => !name.startsWith("rule-mcp-area-backend")),
     "an area nobody chose is absent",
   );
 });
 
 test("picking skills still keeps the hub of that area (leaves are tools, not slash)", () => {
-  const { commands } = resolveSelection({ families: ["areas"], areas: ["frontend"], skills: ["rule-frontend-react"] });
+  const { commands } = resolveSelection({ families: ["areas"], areas: ["frontend"], skills: ["rule-mcp-frontend-react"] });
 
-  assert.ok(commands.includes("rule-area-frontend"), "the hub stays reachable");
-  assert.ok(!commands.includes("rule-area-frontend-react"), "no leaf slash to select");
+  assert.ok(commands.includes("rule-mcp-area-frontend"), "the hub stays reachable");
+  assert.ok(!commands.includes("rule-mcp-area-frontend-react"), "no leaf slash to select");
 });
 
 test("personas and tasks are their own families", () => {
   const personas = resolveSelection({ families: ["personas"] }).commands;
 
-  assert.ok(personas.includes("rule-persona-security") && personas.includes("rule-persona-a11y"), "one command per role");
+  assert.ok(personas.includes("rule-mcp-persona-security") && personas.includes("rule-mcp-persona-a11y"), "one command per role");
   assert.ok(
     personas.every((name) => !/-(audit|review|plan)$/.test(name)),
     "the per-operation persona commands are gone (ADR 120)",
   );
   assert.ok(
-    personas.every((name) => !name.startsWith("rule-area-")),
+    personas.every((name) => !name.startsWith("rule-mcp-area-")),
     "and nothing from another family",
   );
 
   const tasks = resolveSelection({ families: ["tasks"] }).commands;
 
-  assert.ok(tasks.includes("rule-handoff") && tasks.includes("rule-check"), "the one-shot tasks");
+  assert.ok(tasks.includes("rule-mcp-handoff") && tasks.includes("rule-mcp-check"), "the one-shot tasks");
 });
 
 test("an empty selection is the router alone, not a crash", () => {
   const { commands } = resolveSelection({});
 
-  assert.deepEqual(commands, ["rule"], "something has to answer, and it is the dispatcher");
+  assert.deepEqual(commands, ["rule-mcp"], "something has to answer, and it is the dispatcher");
 });
 
 test("an unknown family, area or skill is reported rather than silently dropped", () => {
-  const result = resolveSelection({ families: ["areas", "nope"], areas: ["frontend", "nowhere"], skills: ["rule-not-a-skill"] });
+  const result = resolveSelection({ families: ["areas", "nope"], areas: ["frontend", "nowhere"], skills: ["rule-mcp-not-a-skill"] });
 
   assert.ok(
     result.problems.some((problem) => /nope/.test(problem)),
@@ -115,10 +115,10 @@ test("an unknown family, area or skill is reported rather than silently dropped"
     "so is the area",
   );
   assert.ok(
-    result.problems.some((problem) => /rule-not-a-skill/.test(problem)),
+    result.problems.some((problem) => /rule-mcp-not-a-skill/.test(problem)),
     "and the skill",
   );
-  assert.ok(result.commands.includes("rule-area-frontend"), "and what was valid still resolves");
+  assert.ok(result.commands.includes("rule-mcp-area-frontend"), "and what was valid still resolves");
 });
 
 test("the selection is sorted and free of duplicates", () => {

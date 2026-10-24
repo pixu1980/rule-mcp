@@ -2,7 +2,7 @@
  * @module app
  *
  * Express application factory. Wires middleware in the mandated order
- * (security headers → CORS → body parsing → logging → routes → 404 →
+ * (security headers -> CORS -> body parsing -> logging -> routes -> 404 ->
  * centralized error handler) and mounts the versioned API under `/api/v1`.
  * Kept separate from `server.ts` so tests can import the app without
  * binding a TCP port.

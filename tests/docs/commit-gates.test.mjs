@@ -53,12 +53,12 @@ test("the CI linter exempts the same system subjects as the hook", () => {
 test("system-generated subjects are exempt from the scope check", () => {
   const mergeRef = "Merge 9195216557deeb144e30b3fa5c33d769d23cd107 into d8788ed08900d63031cfb582c971c70996836e11";
   const mergePr = "Merge pull request #12 from pixu1980/fix-workflows";
-  const revert = 'Revert "feat(skills): add rule naming"';
+  const revert = 'Revert "feat(skills): add rule-mcp naming"';
 
   for (const subject of [mergeRef, mergePr, revert]) {
     assert.equal(isSystemSubject(subject), true, `${subject} must be exempt`);
   }
 
-  assert.equal(isSystemSubject("feat(skills): add rule naming"), false);
+  assert.equal(isSystemSubject("feat(skills): add rule-mcp naming"), false);
   assert.equal(isSystemSubject("docs: missing scope is still rejected"), false);
 });

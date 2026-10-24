@@ -90,7 +90,7 @@ const validatePy = join(homedir(), ".agents/skills/compression-reference/scripts
 const hasPython = spawnSync("python3", ["--version"], { stdio: "ignore" }).status === 0;
 
 test("the python validate.py CLI contract agrees with the guard", { skip: !(hasPython && existsSync(validatePy)) && "python3 or validate.py is not installed here" }, () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-guard-cli-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-guard-cli-"));
   const cases = [
     ["# One\n\n## Two\n", "# One\n", false],
     ["See https://example.com/a here.\n", "See here.\n", false],

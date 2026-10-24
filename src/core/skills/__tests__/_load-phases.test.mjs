@@ -29,7 +29,7 @@ const perSkillToolNames = () =>
 
 test("resetForReload empties the registry and the skill cache", async () => {
   await loadAllSkills();
-  skillCache.set("rule-probe", { name: "rule-probe" });
+  skillCache.set("rule-mcp-probe", { name: "rule-mcp-probe" });
 
   assert.ok(names().length > 0, "a loaded catalog registers tools");
   assert.equal(skillCache.size, 1, "and the seeded body is cached");
@@ -47,7 +47,7 @@ test("registerCoreTools registers the families that are not per-skill", async ()
   const core = names();
 
   assert.ok(core.length > 0, "the core families register");
-  assert.ok(core.includes("pix_tool"), "the router skill's own tool is one of them");
+  assert.ok(core.includes("rule_tool"), "the router skill's own tool is one of them");
   assert.ok(core.includes("rule_tool_meta"), "and the meta family");
   assert.ok(core.includes("rule_tool_update"), "and the update family");
 

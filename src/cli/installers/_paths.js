@@ -24,7 +24,7 @@ const IS_LINUX = platform() === "linux";
 
 const HOME = homedir();
 
-const COMMAND_TEMPLATE_PATH = fileURLToPath(new URL("../../../prompts/rule.md", import.meta.url));
+const COMMAND_TEMPLATE_PATH = fileURLToPath(new URL("../../../prompts/rule-mcp.md", import.meta.url));
 
 const readText = (file) => (existsSync(file) ? readFileSync(file, "utf8") : "");
 

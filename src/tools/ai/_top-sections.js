@@ -15,7 +15,7 @@ export function extractTopSections(skillName, promptWords) {
 
   const sections = extractSections(content);
   const meta = getSkillMetadata(skillName);
-  const skillBase = skillName.replace("rule-", "");
+  const skillBase = skillName.replace("rule-mcp-", "");
   const descText = (meta.description || "").toLowerCase();
 
   const scored = sections

@@ -15,7 +15,7 @@
 export const HANDOFF_BODY = [
   "Generate a session handoff and commit pending work: $ARGUMENTS",
   "",
-  '0. Feature close (`--close-feature`, optionally `--squash`): run `rule_tool_git` action=audit first (force=true when squashing). Report the base branch, merge base, range, Conventional Commit violations and merge commits; propose `rule_tool_sync` when the branch is behind its base, and `/rule-git` when violations or merges remain. With `--squash`, propose ONE `type(scope): subject` message for the WHOLE feature (not the last session) from its commits, diff and ADRs; show the base branch, merge base, commit count, commit range, the commits being squashed and the proposed message; ask the user to confirm; only then call `rule_tool_git` action=squash force=true confirm=true message="<the message>". That single commit also folds the feature ADRs and handoffs into one document each (deterministic concatenation, originals deleted, both indexes rebuilt), and refuses if any path other than the planned ones changed. Report one commit, the consolidated documents, the working tree, and the documents cited but outside the range (left untouched). The squash is never run without that confirmation, and `force` never replaces it. Write the final feature handoff AFTER the squash and commit it alone, as step 3 below.',
+  '0. Feature close (`--close-feature`, optionally `--squash`): run `rule_tool_git` action=audit first (force=true when squashing). Report the base branch, merge base, range, Conventional Commit violations and merge commits; propose `rule_tool_sync` when the branch is behind its base, and `/rule-mcp-git` when violations or merges remain. With `--squash`, propose ONE `type(scope): subject` message for the WHOLE feature (not the last session) from its commits, diff and ADRs; show the base branch, merge base, commit count, commit range, the commits being squashed and the proposed message; ask the user to confirm; only then call `rule_tool_git` action=squash force=true confirm=true message="<the message>". That single commit also folds the feature ADRs and handoffs into one document each (deterministic concatenation, originals deleted, both indexes rebuilt), and refuses if any path other than the planned ones changed. Report one commit, the consolidated documents, the working tree, and the documents cited but outside the range (left untouched). The squash is never run without that confirmation, and `force` never replaces it. Write the final feature handoff AFTER the squash and commit it alone, as step 3 below.',
   "1. Run `rule_tool_handoff` (default mode `handoff`, all includes on). Pass any tokens from the arguments through unchanged (e.g. `close-session`, `compress`, `brief`, `no-diff`, `no-archive`, `max=<n>`). The run archives completed audits/reviews/plans as ADRs by default and repairs the ADR numbering, so it writes to the tree; `no-archive` keeps it a read-only diagnosis.",
   "2. If the working tree has pending changes, commit them BEFORE emitting the handoff as a sequence of ATOMIC commits:",
   "   a. Group changed files by concern (one coherent change per group).",
@@ -44,7 +44,7 @@ export const HANDON_BODY = [
   "6. Responses are compressed automatically by the server: keep it factual and free of filler.",
 ].join("\n");
 
-/** /rule-git → rule_tool_git (audit, reword, linearize). */
+/** /rule-mcp-git -> rule_tool_git (audit, reword, linearize). */
 export const GIT_BODY = [
   "Audit the feature history and normalize it: $ARGUMENTS",
   "",
@@ -58,7 +58,7 @@ export const GIT_BODY = [
   "8. Write in English, American spelling (color, behavior, organize).",
 ].join("\n");
 
-/** /rule-compress → rule_tool_compress (ADR 115 sole engine). */
+/** /rule-mcp-compress -> rule_tool_compress (ADR 115 sole engine). */
 export const COMPRESS_BODY = [
   "Compress text with rule_tool_compress: $ARGUMENTS",
   "",
@@ -69,7 +69,7 @@ export const COMPRESS_BODY = [
   "5. Finish by proposing a conventional commit with a mandatory scope only if a tracked file changed.",
 ].join("\n");
 
-/** /rule-stats → rule_tool_stats. */
+/** /rule-mcp-stats -> rule_tool_stats. */
 export const STATS_BODY = [
   "Read local telemetry: $ARGUMENTS",
   "",
@@ -78,7 +78,7 @@ export const STATS_BODY = [
   "3. Finish by proposing a conventional commit with a mandatory scope only if docs change.",
 ].join("\n");
 
-/** /rule-usage → rule_tool_usage. */
+/** /rule-mcp-usage -> rule_tool_usage. */
 export const USAGE_BODY = [
   "Declare usage sidecar: $ARGUMENTS",
   "",
@@ -87,7 +87,7 @@ export const USAGE_BODY = [
   "3. Finish by proposing a conventional commit with a mandatory scope only if a tracked file changed.",
 ].join("\n");
 
-/** /rule-init → rule_tool_init. */
+/** /rule-mcp-init -> rule_tool_init. */
 export const INIT_BODY = [
   "Prepare this project for rule-mcp: $ARGUMENTS",
   "",
@@ -96,6 +96,6 @@ export const INIT_BODY = [
   "3. MANDATORY dependency policy: every dependency is an exact `x.y.z` pin - never `^`, `~`, `*` or a range, because a range lets a sub-dependency arrive without a decision. Pin each ranged specifier init reported with the project's package manager and `--save-exact` (e.g. `pnpm add <name>@latest --save-exact`), refresh the lockfile, and report the manifests that changed. `workspace:`, `file:`, `link:` and `npm:` aliases are not ranges and are left alone.",
   "4. When the project has no framework config yet (a fresh checkout, an empty repo) and the arguments do not say `no-scaffold`, call `rule_tool_detect`, then `rule_tool_styleguide mode=scaffold` for the missing config and toolchain files.",
   "5. Check the project's test setup exists; when there is no test surface, ask the user what to cover.",
-  "6. When the base branch is not `develop`, `main` or `master`, or the branch was cut from another feature branch, tell the user to state it once: `git config rule.baseBranch <name>`.",
+  "6. When the base branch is not `develop`, `main` or `master`, or the branch was cut from another feature branch, tell the user to state it once: `git config rule-mcp.baseBranch <name>`.",
   "7. Finish by proposing a conventional commit with a mandatory scope, e.g. `chore(init): ...`.",
 ].join("\n");

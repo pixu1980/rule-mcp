@@ -7,11 +7,11 @@ import { test } from "node:test";
 import { compare, depsFingerprint, describeCandidate, nonPromptArgs, rawRouteOf, routeOf } from "../_decision-identity.js";
 
 test("nonPromptArgs drops undefined and prompt-shaped fields", () => {
-  const args = JSON.parse(nonPromptArgs("pix_tool", { prompt: "find", limit: 3, projectDir: "/p" }));
+  const args = JSON.parse(nonPromptArgs("rule_tool", { prompt: "find", limit: 3, projectDir: "/p" }));
   assert.equal(args.limit, 3);
   assert.equal(args.projectDir, "/p");
   assert.equal("prompt" in args, false);
-  assert.deepEqual(JSON.parse(nonPromptArgs("pix_tool", { prompt: undefined, limit: 3 })), { limit: 3 });
+  assert.deepEqual(JSON.parse(nonPromptArgs("rule_tool", { prompt: undefined, limit: 3 })), { limit: 3 });
   assert.deepEqual(JSON.parse(nonPromptArgs("unknown", { b: 1, a: 2 })), { a: 2, b: 1 });
 });
 
@@ -23,7 +23,7 @@ test("depsFingerprint is stable and distinguishes deps", () => {
 
 test("describeCandidate redacts, truncates, and adds the route", () => {
   assert.equal(describeCandidate({ prompt: "x".repeat(300) }).length, "request: ".length + 160);
-  assert.match(describeCandidate({ prompt: "p", route: "rule-frontend-react" }), /skill: rule-frontend-react/u);
+  assert.match(describeCandidate({ prompt: "p", route: "rule-mcp-frontend-react" }), /skill: rule-mcp-frontend-react/u);
   assert.match(describeCandidate({ prompt: "password=secret" }), /request:/u);
 });
 

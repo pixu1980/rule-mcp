@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-doctor-home-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-home-"));
 process.env.HOME = home;
 process.env.APPDATA = join(home, "AppData", "Roaming");
 
@@ -69,7 +69,7 @@ test("detectIdeConfigs counts the skills directory and the platform paths", () =
   process.chdir(home);
   mkdirSync(join(home, "skills"), { recursive: true });
   for (let index = 0; index < 3; index++) {
-    writeFileSync(join(home, "skills", `rule-skill-${index}`), "");
+    writeFileSync(join(home, "skills", `rule-mcp-skill-${index}`), "");
   }
   mkdirSync(join(home, ".cursor"), { recursive: true });
   writeFileSync(join(home, ".cursor", "mcp.json"), "{}");

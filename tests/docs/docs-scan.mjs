@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * docs-scan.mjs - Scans docs/ for stale `pix_` tool references.
+ * docs-scan.mjs - Scans docs/ for stale `rule_tool_` tool references.
  *
  * Run after refactoring/renaming tools to ensure docs are up to date.
  * Usage: node test/docs-scan.mjs
@@ -33,7 +33,7 @@ function scan(dir) {
         // A token must end in an alphanumeric: no tool is named with a
         // trailing underscore, so `rule_tool_*` is the family wildcard in
         // prose rather than a reference that went stale.
-        for (const m of line.matchAll(/\bpix_[a-z0-9_]*[a-z0-9]\b/g)) {
+        for (const m of line.matchAll(/\brule_(?!tool\b|mcp\b)[a-z0-9_]*[a-z0-9]\b/g)) {
           if (tools.has(m[0]) || m[0] === "rule-mcp" || m[0] === "rule_tool_process_handoff") {
             continue;
           }

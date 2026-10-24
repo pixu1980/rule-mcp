@@ -19,7 +19,7 @@ process.env.RULE_MCP_NO_CACHE = "1";
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 process.env.RULE_MCP_NO_COMPRESSION = "1";
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-sync-extra-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-sync-extra-"));
 // The first pass over a conflict commits with the message git already has; an
 // editor in a non-interactive test would wait forever.
 process.env.GIT_EDITOR = "true";
@@ -55,7 +55,7 @@ function conflicting() {
 }
 
 test("a directory that is not a repository says so instead of guessing a base", async () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-sync-not-a-repo-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-sync-not-a-repo-"));
 
   try {
     const output = await text({ projectDir: root });

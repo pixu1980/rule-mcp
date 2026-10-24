@@ -34,7 +34,7 @@ const SHAPES = (bytes) => ({
 test("the 200 KB reproducer completes fast without the size cap", () => {
   const reproducer = SHAPES(200 * KB).braces;
   const started = performance.now();
-  const result = checkCode("rule-styleguide-css", reproducer, { fileName: "adv.css" });
+  const result = checkCode("rule-mcp-styleguide-css", reproducer, { fileName: "adv.css" });
   const elapsed = performance.now() - started;
   assert.equal(result.inputTooLarge, undefined, "200 KB is under the cap - the patterns themselves must hold");
   assert.ok(elapsed < 2000, `reproducer took ${Math.round(elapsed)}ms; the audit baseline was 67000ms`);

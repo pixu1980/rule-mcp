@@ -1,6 +1,6 @@
 /**
  * FILE: electron/main.js
- * USAGE: Thin Electron main process — app lifecycle, window creation, IPC registration.
+ * USAGE: Thin Electron main process, app lifecycle, window creation, IPC registration.
  */
 const { app, BrowserWindow } = require("electron");
 const path = require("path");

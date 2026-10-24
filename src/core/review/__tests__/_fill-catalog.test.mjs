@@ -16,7 +16,7 @@ const role = {
   yearsOfExperience: 10,
   skills: ["threat modeling"],
   lenses: ["depth over breadth"],
-  evidenceSkills: ["rule-backend-security"],
+  evidenceSkills: ["rule-mcp-backend-security"],
   status: "active",
 };
 
@@ -62,7 +62,7 @@ const PERSONA = (id) =>
   ].join("\n");
 
 test("loadPersonaCatalog reads, validates and orders persona files", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-personas-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-personas-"));
   writeFileSync(join(dir, "b.md"), PERSONA("b"));
   writeFileSync(join(dir, "a.md"), PERSONA("a"));
   writeFileSync(join(dir, "notes.txt"), "not a persona");
@@ -79,7 +79,7 @@ test("loadPersonaCatalog reads, validates and orders persona files", () => {
 });
 
 test("loadPersonaCatalog reports missing, unreadable, invalid and mismatched files", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-personas-bad-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-personas-bad-"));
   writeFileSync(join(dir, "broken.md"), "no frontmatter at all");
   writeFileSync(join(dir, "invalid.md"), PERSONA("invalid").replace("yearsOfExperience: 3", "yearsOfExperience: zero"));
   writeFileSync(join(dir, "mismatch.md"), PERSONA("different-id"));
@@ -94,7 +94,7 @@ test("loadPersonaCatalog reports missing, unreadable, invalid and mismatched fil
 });
 
 test("loadPersonaCatalog reports a missing and an unreadable directory", () => {
-  const missing = loadPersonaCatalog(join(tmpdir(), "rule-personas-absent-"));
+  const missing = loadPersonaCatalog(join(tmpdir(), "rule-mcp-personas-absent-"));
   assert.equal(missing.roles.length, 0, "no roles from nowhere");
   assert.match(missing.problems[0].reason, /does not exist/, "the missing dir is named");
 });

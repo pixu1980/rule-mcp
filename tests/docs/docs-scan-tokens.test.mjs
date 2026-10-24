@@ -1,7 +1,7 @@
 /**
  * docs-scan's staleness rule, on a scratch docs tree.
  *
- * The scanner flags `pix_*` tokens no registered tool answers to. A persona
+ * The scanner flags `rule_tool_*` tokens no registered tool answers to. A persona
  * run writes into docs/audits and docs/reviews, which are scanned, and prose
  * there legitimately names the tool family by wildcard (`rule_tool_*`): that is
  * not a stale reference, and flagging it failed the suite on a clean repo.
@@ -23,7 +23,7 @@ const root = fileURLToPath(new URL("../..", import.meta.url));
 
 /** Run the scanner over a scratch tree holding one markdown file. */
 function scan(contents) {
-  const box = mkdtempSync(join(tmpdir(), "rule-docs-scan-"));
+  const box = mkdtempSync(join(tmpdir(), "rule-mcp-docs-scan-"));
   mkdirSync(join(box, "audits"), { recursive: true });
   writeFileSync(join(box, "audits", "probe.md"), contents);
 

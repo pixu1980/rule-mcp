@@ -10,9 +10,9 @@
 /** The static prompt definitions (name, description, argument schemas). */
 export const PROMPT_DEFS = [
   {
-    name: "rule-handoff",
+    name: "rule-mcp-handoff",
     description:
-      "Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. Usage: /rule-handoff [options] or /rule-handoff help - no arguments = quick handoff",
+      "Produce a compressed context handoff (ADR summary + git context) to resume in a new session, commiting pending work as scoped Conventional Commits first. Usage: /rule-mcp-handoff [options] or /rule-mcp-handoff help - no arguments = quick handoff",
     arguments: [
       {
         name: "options",
@@ -23,7 +23,7 @@ export const PROMPT_DEFS = [
     ],
   },
   {
-    name: "rule-handon",
+    name: "rule-mcp-handon",
     description: "Resume: verify the last handoff against the repository as it is now, archive what finished, and propose the next workstream",
     arguments: [
       {
@@ -34,7 +34,7 @@ export const PROMPT_DEFS = [
     ],
   },
   {
-    name: "rule-git",
+    name: "rule-mcp-git",
     description:
       "Audit the feature history and normalize it: Conventional Commit violations, merge commits, and (with --force) merge-commit removal - every rewrite behind a confirmation gate",
     arguments: [
@@ -46,7 +46,7 @@ export const PROMPT_DEFS = [
     ],
   },
   {
-    name: "rule-init",
+    name: "rule-mcp-init",
     description: "Prepare a project end to end: git hooks, recorder directory, tokensave, dependency pins, then scaffold the missing config and toolchain",
     arguments: [
       {
@@ -57,7 +57,7 @@ export const PROMPT_DEFS = [
     ],
   },
   {
-    name: "rule-compress",
+    name: "rule-mcp-compress",
     description: "Run rule_tool_compress: sole engine for prompt/context preprocessing and prose postprocessing",
     arguments: [
       {
@@ -68,17 +68,17 @@ export const PROMPT_DEFS = [
     ],
   },
   {
-    name: "rule-stats",
+    name: "rule-mcp-stats",
     description: "Read local telemetry via rule_tool_stats: calls, cache hits, tokens, latency",
     arguments: [{ name: "options", description: "Reserved. Default: full readout.", required: false }],
   },
   {
-    name: "rule-usage",
+    name: "rule-mcp-usage",
     description: "Declare a usage sidecar via rule_tool_usage when no transcript is available",
     arguments: [{ name: "options", description: "Reserved. Default: follow the tool schema in the reply.", required: false }],
   },
   {
-    name: "rule-update",
+    name: "rule-mcp-update",
     description: "Apply an available server update explicitly, and report what changed",
     arguments: [
       {
@@ -91,21 +91,21 @@ export const PROMPT_DEFS = [
 ];
 
 /**
- * Examples shown by the generic `/rule-* help` message, keyed by prompt name.
+ * Examples shown by the generic `/rule-mcp-* help` message, keyed by prompt name.
  */
 export const PROMPT_EXAMPLES = {
-  "rule-area-ai": ["/rule-area-ai help", "/rule-area-ai add a web-search tool to the agent"],
-  "rule-area-backend": ["/rule-area-backend help", "/rule-area-backend express REST API with zod validation"],
-  "rule-area-data": ["/rule-area-data help", "/rule-area-data postgresql schema for the users table"],
-  "rule-area-devops": ["/rule-area-devops help", "/rule-area-devops multi-stage docker build for node"],
-  "rule-area-frontend": ["/rule-area-frontend help", "/rule-area-frontend react login form with validation"],
-  "rule-area-meta": ["/rule-area-meta help", "/rule-area-meta search for the a11y skill"],
-  "rule-area-platform": ["/rule-area-platform help", "/rule-area-platform electron desktop app scaffold"],
-  "rule-area-process": ["/rule-area-process help", "/rule-area-process run a code review on the pending changes"],
-  "rule-area-skills": ["/rule-area-skills help", "/rule-area-skills find a skill for docker"],
-  "rule-area-styleguide": ["/rule-area-styleguide help", "/rule-area-styleguide check this HTML for semantics"],
-  "rule-area-toolchain": ["/rule-area-toolchain help", "/rule-area-toolchain set up vite + biome"],
-  "rule-area-ui": ["/rule-area-ui help", "/rule-area-ui design-system button component"],
-  "rule-handoff": ["/rule-handoff help", "/rule-handoff close-session"],
-  "rule-git": ["/rule-git", "/rule-git --force"],
+  "rule-mcp-area-ai": ["/rule-mcp-area-ai help", "/rule-mcp-area-ai add a web-search tool to the agent"],
+  "rule-mcp-area-backend": ["/rule-mcp-area-backend help", "/rule-mcp-area-backend express REST API with zod validation"],
+  "rule-mcp-area-data": ["/rule-mcp-area-data help", "/rule-mcp-area-data postgresql schema for the users table"],
+  "rule-mcp-area-devops": ["/rule-mcp-area-devops help", "/rule-mcp-area-devops multi-stage docker build for node"],
+  "rule-mcp-area-frontend": ["/rule-mcp-area-frontend help", "/rule-mcp-area-frontend react login form with validation"],
+  "rule-mcp-area-meta": ["/rule-mcp-area-meta help", "/rule-mcp-area-meta search for the a11y skill"],
+  "rule-mcp-area-platform": ["/rule-mcp-area-platform help", "/rule-mcp-area-platform electron desktop app scaffold"],
+  "rule-mcp-area-process": ["/rule-mcp-area-process help", "/rule-mcp-area-process run a code review on the pending changes"],
+  "rule-mcp-area-skills": ["/rule-mcp-area-skills help", "/rule-mcp-area-skills find a skill for docker"],
+  "rule-mcp-area-styleguide": ["/rule-mcp-area-styleguide help", "/rule-mcp-area-styleguide check this HTML for semantics"],
+  "rule-mcp-area-toolchain": ["/rule-mcp-area-toolchain help", "/rule-mcp-area-toolchain set up vite + biome"],
+  "rule-mcp-area-ui": ["/rule-mcp-area-ui help", "/rule-mcp-area-ui design-system button component"],
+  "rule-mcp-handoff": ["/rule-mcp-handoff help", "/rule-mcp-handoff close-session"],
+  "rule-mcp-git": ["/rule-mcp-git", "/rule-mcp-git --force"],
 };

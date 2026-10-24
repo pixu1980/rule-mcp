@@ -42,6 +42,6 @@ describe("parseMetadata", () => {
     const html = `<html><body><p>${longText}</p></body></html>`;
     const result = parseMetadata(html, "https://example.org/");
     expect(result.textPreview?.length).toBeLessThanOrEqual(281);
-    expect(result.textPreview?.endsWith("…")).toBe(true);
+    expect(result.textPreview?.endsWith("...")).toBe(true);
   });
 });

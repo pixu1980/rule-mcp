@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 // process loads it too, so it registers the hook as every entry point does.
 const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 
-const fakeHome = mkdtempSync(join(tmpdir(), "rule-doctor-vscode-"));
+const fakeHome = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-vscode-"));
 const fakeProject = join(fakeHome, "project");
 mkdirSync(fakeProject, { recursive: true });
 const installModule = new URL("../index.js", import.meta.url).href;

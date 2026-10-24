@@ -17,7 +17,7 @@ import { probeFilesystem, probeTokensave, TOKENSAVE_DIR } from "../_probe.js";
 
 /** Create a scratch project, run `build` on it, and keep it for the test. */
 function scratch(build) {
-  const dir = mkdtempSync(join(tmpdir(), "rule-tokensave-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-tokensave-"));
 
   build(dir);
 

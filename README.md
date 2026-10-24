@@ -34,8 +34,8 @@
 </article>
 <article>
 <h3><a href="docs/17-surface-map.md">Surface map</a></h3>
-<p>Every command, tool, and skill in one generated table: Command · Tool · Skill.</p>
+<p>Every command, tool, and skill in one generated table: Command - Tool - Skill.</p>
 </article>
 </section>
 
-Node ≥ 20 · [MIT](LICENSE) · [Contributing](CONTRIBUTING.md) · [Governance](GOVERNANCE.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Maintainers](MAINTAINERS.md) · [Security](SECURITY.md) · runtime deps: `@modelcontextprotocol/sdk` + `zod` only.
+Node >= 20 - [MIT](LICENSE) - [Contributing](CONTRIBUTING.md) - [Governance](GOVERNANCE.md) - [Code of Conduct](CODE_OF_CONDUCT.md) - [Maintainers](MAINTAINERS.md) - [Security](SECURITY.md) - runtime deps: `@modelcontextprotocol/sdk` + `zod` only.

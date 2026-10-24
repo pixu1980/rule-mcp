@@ -16,7 +16,7 @@ import { fileURLToPath } from "node:url";
 // process loads it too, so it registers the hook as every entry point does.
 const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 test("a stdio server exits when its client is killed", async (t) => {
-  const handoff = join(mkdtempSync(join(tmpdir(), "rule-orphan-")), "pid");
+  const handoff = join(mkdtempSync(join(tmpdir(), "rule-mcp-orphan-")), "pid");
   let serverPid = null;
   t.after(() => {
     if (serverPid) {
@@ -58,7 +58,7 @@ test("a stdio server exits when its peer socket loses its other end", async (t) 
   // Not the same as a closed pipe. The orphans found in the wild had fd 0, 1
   // and 2 on unix socketpairs with no peer - a client that was killed rather
   // than closed - and reads on those error rather than reporting EOF.
-  const socketDir = mkdtempSync(join(tmpdir(), "rule-peerless-"));
+  const socketDir = mkdtempSync(join(tmpdir(), "rule-mcp-peerless-"));
   let serverPid = null;
   t.after(() => {
     if (serverPid) {

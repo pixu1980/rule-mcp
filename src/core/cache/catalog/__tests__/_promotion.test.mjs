@@ -12,19 +12,19 @@ beforeEach(() => {
 // ── What an entry has to remember ──
 
 test("an entry records what it would take to run it again", () => {
-  cacheStore("pix_tool", args("react button"), result("routed"), { [SKILL]: skillDigest(SKILL) });
+  cacheStore("rule_tool", args("react button"), result("routed"), { [SKILL]: skillDigest(SKILL) });
   const [entry] = cacheEntries();
 
-  assert.equal(entry.tool, "pix_tool", "the tool that produced it");
+  assert.equal(entry.tool, "rule_tool", "the tool that produced it");
   assert.deepEqual(entry.args, { prompt: "react button" }, "and the arguments it was given");
   assert.equal(entry.hits, 0, "a stored entry has not been reused yet");
 });
 
 test("a hit is counted, a miss is not", () => {
-  cacheStore("pix_tool", args("react button"), result("routed"), {});
-  cacheLookup("pix_tool", args("react button"));
-  cacheLookup("pix_tool", args("react button"));
-  cacheLookup("pix_tool", args("nothing stored for this"));
+  cacheStore("rule_tool", args("react button"), result("routed"), {});
+  cacheLookup("rule_tool", args("react button"));
+  cacheLookup("rule_tool", args("react button"));
+  cacheLookup("rule_tool", args("nothing stored for this"));
 
   const hits = cacheEntries().reduce((sum, entry) => sum + entry.hits, 0);
   assert.equal(hits, 2, "two hits, and the miss counts for nothing");
@@ -33,22 +33,22 @@ test("a hit is counted, a miss is not", () => {
 // ── Promotion ──
 
 test("promotion takes three reuses, because once is an accident", () => {
-  cacheStore("pix_tool", args("react button"), result("routed"), {});
+  cacheStore("rule_tool", args("react button"), result("routed"), {});
   for (let index = 0; index < MIN_HITS - 1; index++) {
-    cacheLookup("pix_tool", args("react button"));
+    cacheLookup("rule_tool", args("react button"));
   }
   assert.deepEqual(promotableEntries(), [], `${MIN_HITS - 1} reuses is not enough`);
 
-  cacheLookup("pix_tool", args("react button"));
+  cacheLookup("rule_tool", args("react button"));
   assert.equal(promotableEntries().length, 1, `${MIN_HITS} reuses promotes it`);
 });
 
 test("an entry that no longer reproduces is dropped, not exported", async () => {
-  cacheStore("pix_tool", args("stable"), result("same"), {});
-  cacheStore("pix_tool", args("drifted"), result("was this"), {});
+  cacheStore("rule_tool", args("stable"), result("same"), {});
+  cacheStore("rule_tool", args("drifted"), result("was this"), {});
   for (const prompt of ["stable", "drifted"]) {
     for (let index = 0; index < MIN_HITS; index++) {
-      cacheLookup("pix_tool", args(prompt));
+      cacheLookup("rule_tool", args(prompt));
     }
   }
 
@@ -79,9 +79,9 @@ test("an absolute path never reaches the catalog", async () => {
 
 test("the same cache exports byte-identical catalogs", async () => {
   for (const prompt of ["b second", "a first"]) {
-    cacheStore("pix_tool", args(prompt), result(prompt), {});
+    cacheStore("rule_tool", args(prompt), result(prompt), {});
     for (let index = 0; index < MIN_HITS; index++) {
-      cacheLookup("pix_tool", args(prompt));
+      cacheLookup("rule_tool", args(prompt));
     }
   }
   const options = { recompute: (tool, callArguments) => result(callArguments.prompt), now: "2026-09-01" };

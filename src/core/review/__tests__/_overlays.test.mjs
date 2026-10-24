@@ -11,7 +11,7 @@ import { validateRole } from "../roles/index.js";
 import { loadRoleOverlays } from "../_overlays.js";
 import { parsePersonaFile } from "../persona-file/index.js";
 
-const overlayDir = mkdtempSync(join(tmpdir(), "rule-overlay-"));
+const overlayDir = mkdtempSync(join(tmpdir(), "rule-mcp-overlay-"));
 process.env.RULE_MCP_ROLES_OVERLAY_DIR = overlayDir;
 
 test.after(() => {

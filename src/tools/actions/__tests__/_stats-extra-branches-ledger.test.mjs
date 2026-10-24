@@ -17,7 +17,7 @@ import { test } from "node:test";
 
 const skip = process.platform === "win32" && "a POSIX shell is needed to fake the tokensave CLI";
 
-const home = mkdtempSync(join(tmpdir(), "rule-stats-ledger-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-stats-ledger-"));
 const originalCwd = process.cwd();
 
 process.env.RULE_MCP_HOME = home;
@@ -115,7 +115,7 @@ test("the week window treats an event with no timestamp as older than it", { ski
   const result = await statsHandler()({});
 
   assert.match(result.content[0].text, /Last 7 days/u, "an absent scope reads as the week");
-  assert.equal(result._meta.pixStats.calls, 0, "an event that cannot be dated is outside the window");
+  assert.equal(result._meta.ruleStats.calls, 0, "an event that cannot be dated is outside the window");
 });
 
 test("archived days add only the figures they carry, and a bare graph says what it cannot know", { skip }, async () => {
@@ -160,7 +160,7 @@ test("a project with no graph reports no graph section", { skip }, async () => {
   const result = await callTool("rule_tool_stats", {});
   const text = result.content[0].text;
 
-  assert.equal(result._meta.pixGraph, undefined, "no graph is reported as absent, not as zeros");
+  assert.equal(result._meta.ruleGraph, undefined, "no graph is reported as absent, not as zeros");
   assert.doesNotMatch(text, /## TokenSave graph/u, "and nothing claims one");
   assert.match(text, /## TokenSave ledger/u, "the ledger is still read: it is machine-wide");
 });

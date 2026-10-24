@@ -14,7 +14,7 @@ import { startHttpServer, stopHttpServer } from "../index.js";
 process.env.RULE_MCP_SSE_TOKEN = "c".repeat(64);
 
 test("an https server boots with generated self-signed certificates", async () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-http-tls-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-http-tls-"));
   try {
     const certPath = join(dir, "cert.pem");
     const keyPath = join(dir, "key.pem");
@@ -44,7 +44,7 @@ test("an https server boots with generated self-signed certificates", async () =
 });
 
 test("an unusable certificate path fails loudly instead of booting plaintext", async () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-http-tls-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-http-tls-"));
   try {
     writeFileSync(join(dir, "blocker"), "a file, not a directory", "utf8");
     await assert.rejects(

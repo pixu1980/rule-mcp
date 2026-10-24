@@ -15,7 +15,7 @@ Add an opt-in L3 gate built from deterministic parts: same-tool, same non-prompt
 
 ## Consequences
 
-No response changes in phase 1; an opt-in model call runs after the response on a cache miss; the report is local. Phase 2 can reuse the same protocol for replay. NON_CACHEABLE tools, error results, echoed prompts, stale deps and RULE_MCP_NO_CACHE still win. The gate is limited to pix_tool because it is the only tool with a NORMALIZABLE prompt field.
+No response changes in phase 1; an opt-in model call runs after the response on a cache miss; the report is local. Phase 2 can reuse the same protocol for replay. NON_CACHEABLE tools, error results, echoed prompts, stale deps and RULE_MCP_NO_CACHE still win. The gate is limited to rule_tool because it is the only tool with a NORMALIZABLE prompt field.
 
 ## What would end this
 

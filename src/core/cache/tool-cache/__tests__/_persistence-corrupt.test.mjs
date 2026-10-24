@@ -11,7 +11,7 @@ import { test } from "node:test";
 
 const { cacheFile, cacheGet, cacheSet } = await import("../index.js");
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-toolcache-garbage-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-toolcache-garbage-"));
 
 test.after(() => {
   rmSync(stateDir, { recursive: true, force: true });

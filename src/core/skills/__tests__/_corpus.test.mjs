@@ -9,25 +9,25 @@ import { parseSkillFrontmatter } from "../index.js";
 import { markdownLinks, skillDirectories, skillsRoot } from "./_docs.fixture.mjs";
 
 const removedSkillNames = [
-  "rule-scaffolding",
-  "rule-coverage-gates",
-  "rule-devops-docker-standards",
-  "rule-frontend-forms",
-  "rule-frontend-forms-validation",
-  // Merged into rule-process-ai, which owns their guardrails and references.
-  "rule-process-simplicity",
-  "rule-styleguide-english",
-  "rule-styleguide-fingerprint",
-  "rule-process-ai-sdlc",
+  "rule-mcp-scaffolding",
+  "rule-mcp-coverage-gates",
+  "rule-mcp-devops-docker-standards",
+  "rule-mcp-frontend-forms",
+  "rule-mcp-frontend-forms-validation",
+  // Merged into rule-mcp-process-ai, which owns their guardrails and references.
+  "rule-mcp-process-simplicity",
+  "rule-mcp-styleguide-english",
+  "rule-mcp-styleguide-fingerprint",
+  "rule-mcp-process-ai-sdlc",
 ];
 
-console.log("rule skill documentation test: corpus");
+console.log("rule-mcp skill documentation test: corpus");
 
 const directories = skillDirectories();
 assert.ok(directories.length > 0, "No skill directories found");
-assert.ok(directories.includes("rule-ui"), "rule-ui umbrella skill must be present");
-assert.ok(directories.includes("rule-ui-design-system"), "rule-ui-design-system skill must be present");
-for (const requiredSkill of ["rule-backend-graphql", "rule-devops-observability", "rule-process-code-review"]) {
+assert.ok(directories.includes("rule-mcp-ui"), "rule-mcp-ui umbrella skill must be present");
+assert.ok(directories.includes("rule-mcp-ui-design-system"), "rule-mcp-ui-design-system skill must be present");
+for (const requiredSkill of ["rule-mcp-backend-graphql", "rule-mcp-devops-observability", "rule-mcp-process-code-review"]) {
   assert.ok(directories.includes(requiredSkill), `${requiredSkill} must be present`);
 }
 
@@ -43,7 +43,7 @@ for (const dir of directories) {
   assert.ok(Array.isArray(metadata.tags) && metadata.tags.length > 0, `${dir}: tags must be a non-empty YAML list`);
   assert.ok(Array.isArray(metadata.frameworks) && metadata.frameworks.length > 0, `${dir}: frameworks must be present`);
 
-  const innerFrontmatterCount = (content.match(/\n---\nname:\s*rule-/g) || []).length;
+  const innerFrontmatterCount = (content.match(/\n---\nname:\s*rule-mcp-/g) || []).length;
   assert.equal(innerFrontmatterCount, 0, `${dir}: contains an embedded second SKILL.md document`);
 
   assert.ok(content.includes("## See also"), `${dir}: missing See also cross-reference section`);

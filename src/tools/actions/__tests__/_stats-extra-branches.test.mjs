@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const state = mkdtempSync(join(tmpdir(), "rule-stats-extra-"));
+const state = mkdtempSync(join(tmpdir(), "rule-mcp-stats-extra-"));
 process.env.RULE_MCP_STATE_DIR = state;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 process.env.RULE_MCP_NO_CACHE = "1";
@@ -20,8 +20,8 @@ registerStatsTool();
 
 test("the week window drops an event without a timestamp", async () => {
   const events = [
-    { tool: "pix_tool", ts: Date.now(), ms: 1 },
-    { tool: "pix_tool", ms: 1 },
+    { tool: "rule_tool", ts: Date.now(), ms: 1 },
+    { tool: "rule_tool", ms: 1 },
   ];
 
   writeFileSync(join(getProjectPaths().dir, "telemetry.jsonl"), events.map((event) => JSON.stringify(event)).join("\n"));
@@ -41,7 +41,7 @@ test("rollups with missing fields count as zero", async () => {
 });
 
 test("the ledger defaults every missing field and prints the finite dollar figure", { skip: process.platform === "win32" }, async () => {
-  const bin = mkdtempSync(join(tmpdir(), "rule-stats-bin-"));
+  const bin = mkdtempSync(join(tmpdir(), "rule-mcp-stats-bin-"));
   const fake = join(bin, "tokensave");
 
   writeFileSync(fake, "#!/bin/sh\nprintf '%s' '{}'\n");

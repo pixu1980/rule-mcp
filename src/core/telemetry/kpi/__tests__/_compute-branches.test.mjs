@@ -27,7 +27,7 @@ test("empty inputs produce structurally complete zeros", () => {
 
 test("usage without cost and a single timestamp fill the undefined gaps", () => {
   const kpi = computeKpi({
-    events: [{ ts: "not-a-number", durationMs: 5, tool: "pix_tool", saved: { compression: "many" } }],
+    events: [{ ts: "not-a-number", durationMs: 5, tool: "rule_tool", saved: { compression: "many" } }],
     usage: { input: 100, output: 50, cacheRead: 25, cacheWrite: 5 },
   });
 
@@ -59,7 +59,7 @@ test("a cost-bearing usage spreads per-1k and per-prompt costs", () => {
 
 test("a log without reminder tokens falls back to the core-to-final gap", () => {
   const kpi = computeKpi({
-    events: [{ ts: 1000, coreTokens: 100, finalTokens: 140, tool: "pix_tool" }],
+    events: [{ ts: 1000, coreTokens: 100, finalTokens: 140, tool: "rule_tool" }],
     usage: { output: 140 },
   });
 

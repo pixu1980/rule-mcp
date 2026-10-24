@@ -9,7 +9,7 @@ import { test } from "node:test";
 
 const { atomicWrite, backupFile, readText, removeFile, resolveGlobalBinary, writeText } = await import("../_paths.js");
 
-const dir = mkdtempSync(join(tmpdir(), "rule-paths-"));
+const dir = mkdtempSync(join(tmpdir(), "rule-mcp-paths-"));
 
 test.after(() => rmSync(dir, { recursive: true, force: true }));
 

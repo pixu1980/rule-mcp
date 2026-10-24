@@ -9,10 +9,10 @@
  * numbers describe the cache rather than the harness that measured it.
  */
 export const WORKLOAD = [
-  ["pix_tool", { prompt: "react button component" }],
+  ["rule_tool", { prompt: "react button component" }],
   ["rule_tool_frontend_react", { mode: "tldr", query: "hooks" }],
   ["rule_tool_styleguide_css", { mode: "tldr", query: "container query" }],
-  ["rule_tool_check", { skill: "rule-styleguide-css", code: "a{color:red}" }],
+  ["rule_tool_check", { skill: "rule-mcp-styleguide-css", code: "a{color:red}" }],
   ["rule_tool_search", { query: "container query" }],
   ["rule_tool_component", { component: "button", framework: "react" }],
   ["rule_tool_compress", { text: "It is important to note that this is filler." }],

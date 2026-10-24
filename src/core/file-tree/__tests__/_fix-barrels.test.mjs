@@ -13,7 +13,7 @@ import { test } from "node:test";
 
 import { createMissingBarrels, populateEmptyBarrels } from "../_fix-barrels.js";
 
-const box = () => mkdtempSync(join(tmpdir(), "rule-barrels-"));
+const box = () => mkdtempSync(join(tmpdir(), "rule-mcp-barrels-"));
 
 test("createMissingBarrels ignores issues of another type or marked unfixable", () => {
   const fixed = [];

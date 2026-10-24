@@ -4,7 +4,7 @@
  * @module tools/actions/init
  *
  * `rule_tool_init`: prepare a project for rule-mcp (central recorder dir
- * and optional tokensave). Same work as `rule-mcp init` / `/rule-init`.
+ * and optional tokensave). Same work as `rule-mcp init` / `/rule-mcp-init`.
  *
  * @see module:cli/init
  */

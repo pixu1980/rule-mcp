@@ -17,7 +17,7 @@
  * that they go through it.
  *
  * Ported upstream behavior (hardening 4.6) with the recorder paths rebranded
- * to the rule layout.
+ * to the rule-mcp layout.
  */
 import { strict as assert } from "node:assert";
 import { spawnSync } from "node:child_process";
@@ -54,7 +54,7 @@ for (const suite of RUN) {
     // here - detected deterministically, with no race against whatever other
     // suites the parallel runner has in flight (the old check watched the real
     // home, which anything could touch mid-window).
-    const home = mkdtempSync(join(tmpdir(), "rule-leak-home-"));
+    const home = mkdtempSync(join(tmpdir(), "rule-mcp-leak-home-"));
     const projects = join(home, ".rule-mcp", "projects");
     const env = { ...process.env, HOME: home, USERPROFILE: home };
     // The point is the default path: a pin from the parent would hide the leak.

@@ -30,11 +30,11 @@ function familyOf(name) {
     return "router";
   }
 
-  if (name.startsWith("rule-area-")) {
+  if (name.startsWith("rule-mcp-area-")) {
     return "areas";
   }
 
-  return name.startsWith("rule-persona-") ? "personas" : "tasks";
+  return name.startsWith("rule-mcp-persona-") ? "personas" : "tasks";
 }
 
 /**
@@ -52,12 +52,12 @@ export const PRESETS = {
 
 /** The hub command name of every area. */
 function hubNames() {
-  return new Set([...skillAreas().keys()].map((area) => `rule-area-${area}`));
+  return new Set([...skillAreas().keys()].map((area) => `rule-mcp-area-${area}`));
 }
 
-/** The area a `rule-area-*` command belongs to. */
+/** The area a `rule-mcp-area-*` command belongs to. */
 function areaOfCommand(name) {
-  return areaOf(`rule-${name.slice("rule-area-".length)}`)?.area;
+  return areaOf(`rule-mcp-${name.slice("rule-mcp-area-".length)}`)?.area;
 }
 
 /**
@@ -136,7 +136,7 @@ export function resolveSelection(selection = {}) {
       return false;
     }
 
-    return !skills || skills.has(`rule-${name.slice("rule-area-".length)}`);
+    return !skills || skills.has(`rule-mcp-${name.slice("rule-mcp-area-".length)}`);
   });
 
   return { commands, problems };

@@ -26,8 +26,8 @@ const BIN = fileURLToPath(new URL("../../../../../bin/rule-mcp.js", import.meta.
 
 /** A home and a project of their own, so cases cannot see each other's roles. */
 export function sandbox() {
-  const home = mkdtempSync(join(tmpdir(), "rule-roles-home-"));
-  const project = mkdtempSync(join(tmpdir(), "rule-roles-project-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-roles-home-"));
+  const project = mkdtempSync(join(tmpdir(), "rule-mcp-roles-project-"));
   mkdirSync(join(project, ".git"), { recursive: true });
 
   return { home, project };

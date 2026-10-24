@@ -9,7 +9,7 @@ import { test } from "node:test";
 
 import { syncRoleDocs } from "../_sync.js";
 
-const project = mkdtempSync(join(tmpdir(), "rule-sync-scope-"));
+const project = mkdtempSync(join(tmpdir(), "rule-mcp-sync-scope-"));
 
 test.after(() => rmSync(project, { recursive: true, force: true }));
 
@@ -45,7 +45,7 @@ test("a scoped sync records the scope and keeps out-of-scope findings open", () 
 });
 
 test("an unscoped sync writes no scope line and keeps the flip semantics", () => {
-  const box = mkdtempSync(join(tmpdir(), "rule-sync-plain-"));
+  const box = mkdtempSync(join(tmpdir(), "rule-mcp-sync-plain-"));
 
   try {
     const result = syncRoleDocs({

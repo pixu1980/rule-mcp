@@ -14,7 +14,7 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-setup-index-home-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-setup-index-home-"));
 const stateDir = join(home, ".rule-mcp", "state");
 
 mkdirSync(stateDir, { recursive: true });
@@ -55,7 +55,7 @@ registerHooks({
 });
 
 // Stubs read these through the shared control object exported below.
-Object.defineProperty(globalThis, "__pixSetupBranches", {
+Object.defineProperty(globalThis, "__ruleSetupBranches", {
   configurable: true,
   value: {
     get plainMode() {

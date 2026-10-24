@@ -10,9 +10,9 @@ import { search, searchSkills } from "../_score.js";
 /** A tiny index over three pretend skills. */
 function seedIndex() {
   const docs = [
-    { id: 0, skill: "rule-frontend-react", section: "flex", snippet: "flex layout" },
-    { id: 1, skill: "rule-frontend-react", section: "grid", snippet: "grid layout" },
-    { id: 2, skill: "rule-backend-node", section: "io", snippet: "file io" },
+    { id: 0, skill: "rule-mcp-frontend-react", section: "flex", snippet: "flex layout" },
+    { id: 1, skill: "rule-mcp-frontend-react", section: "grid", snippet: "grid layout" },
+    { id: 2, skill: "rule-mcp-backend-node", section: "io", snippet: "file io" },
   ];
   setIndex({
     df: new Map([
@@ -47,7 +47,7 @@ test("search ranks matching sections and ignores unknown terms", () => {
 test("searchSkills rolls sections per skill and drops zero-coverage skills", () => {
   const skills = searchSkills("flex grid", { maxSections: 10 });
   assert.equal(skills.length, 1, "only the react skill covers both terms");
-  assert.equal(skills[0].skill, "rule-frontend-react", "the covering skill wins");
+  assert.equal(skills[0].skill, "rule-mcp-frontend-react", "the covering skill wins");
   assert.ok(skills[0].sections.length >= 2, "both sections are listed");
 });
 

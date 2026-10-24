@@ -3,7 +3,7 @@
 - **Date**: 2026-07-11 12:45:51
 - **Status**: accepted
 - **Tags**: tool, auto-log
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 
@@ -16,4 +16,4 @@ Project scaffold files generated/validated.
 
 ## Consequences
 
-None — informational entry.
+None, informational entry.

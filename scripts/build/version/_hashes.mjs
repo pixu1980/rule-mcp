@@ -20,7 +20,7 @@ import { join } from "node:path";
  * @param {string} oldPkg - version being replaced
  */
 export function refreshManifests(root, version, oldPkg) {
-  const tmp = mkdtempSync(join(tmpdir(), "rule-version-"));
+  const tmp = mkdtempSync(join(tmpdir(), "rule-mcp-version-"));
 
   try {
     execFileSync("pnpm", ["pack", "--pack-destination", tmp], { cwd: root, stdio: "pipe" });

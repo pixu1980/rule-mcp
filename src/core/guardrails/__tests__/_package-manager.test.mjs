@@ -25,7 +25,7 @@ const OFFENDING = JSON.stringify(
 const WITH_ENGINES = JSON.stringify({ name: "x", engines: { node: ">=22" } }, null, 2);
 
 test("pkg-no-corepack is in the baseline every skill carries", () => {
-  for (const skill of ["rule-styleguide-json", "rule-styleguide-configuration", "rule-toolchain-pnpm"]) {
+  for (const skill of ["rule-mcp-styleguide-json", "rule-mcp-styleguide-configuration", "rule-mcp-toolchain-pnpm"]) {
     assert.ok(
       getGuardrails(skill).some((rule) => rule.id === "pkg-no-corepack"),
       `${skill} carries pkg-no-corepack`,
@@ -34,7 +34,7 @@ test("pkg-no-corepack is in the baseline every skill carries", () => {
 });
 
 test("pkg-no-engines is in the baseline every skill carries", () => {
-  for (const skill of ["rule-styleguide-json", "rule-styleguide-configuration", "rule-toolchain-pnpm"]) {
+  for (const skill of ["rule-mcp-styleguide-json", "rule-mcp-styleguide-configuration", "rule-mcp-toolchain-pnpm"]) {
     assert.ok(
       getGuardrails(skill).some((rule) => rule.id === "pkg-no-engines"),
       `${skill} carries pkg-no-engines`,
@@ -43,7 +43,7 @@ test("pkg-no-engines is in the baseline every skill carries", () => {
 });
 
 test("pkg-no-engines fails the engines field both ways", () => {
-  for (const skill of ["rule-styleguide-json", "rule-styleguide-configuration", "rule-toolchain-pnpm"]) {
+  for (const skill of ["rule-mcp-styleguide-json", "rule-mcp-styleguide-configuration", "rule-mcp-toolchain-pnpm"]) {
     const result = checkCode(skill, WITH_ENGINES, { fileName: "package.json" });
 
     assert.equal(result.allPass, false, `${skill} rejects the field`);
@@ -55,15 +55,15 @@ test("pkg-no-engines fails the engines field both ways", () => {
 });
 
 test("pkg-no-corepack does not fire on engines and pkg-no-engines does not fire on packageManager", () => {
-  const corepackIds = checkCode("rule-toolchain-pnpm", WITH_ENGINES, { fileName: "package.json" }).failed.map((rule) => rule.id);
-  const enginesIds = checkCode("rule-toolchain-pnpm", OFFENDING, { fileName: "package.json" }).failed.map((rule) => rule.id);
+  const corepackIds = checkCode("rule-mcp-toolchain-pnpm", WITH_ENGINES, { fileName: "package.json" }).failed.map((rule) => rule.id);
+  const enginesIds = checkCode("rule-mcp-toolchain-pnpm", OFFENDING, { fileName: "package.json" }).failed.map((rule) => rule.id);
 
   assert.equal(corepackIds.includes("pkg-no-corepack"), false, "the corepack rule is about corepack");
   assert.equal(enginesIds.includes("pkg-no-engines"), false, "the engines rule is about engines");
 });
 
 test("pkg-no-corepack fails both forbidden fields", () => {
-  for (const skill of ["rule-styleguide-json", "rule-styleguide-configuration", "rule-toolchain-pnpm"]) {
+  for (const skill of ["rule-mcp-styleguide-json", "rule-mcp-styleguide-configuration", "rule-mcp-toolchain-pnpm"]) {
     const result = checkCode(skill, OFFENDING, { fileName: "package.json" });
 
     assert.equal(result.allPass, false, `${skill} rejects the fields`);

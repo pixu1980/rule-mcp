@@ -78,13 +78,13 @@ assert.ok(
 // Devin custom skills: one directory per command holding SKILL.md, invoked as /<name>.
 const skillFiles = devinPath.filter((path) => path.endsWith("SKILL.md"));
 
-assert.ok(skillFiles.length > 1, "devin must receive the clean /rule-* command set as skills");
+assert.ok(skillFiles.length > 1, "devin must receive the clean /rule-mcp-* command set as skills");
 assert.ok(
   skillFiles.every((path) => path.includes(join("devin", "skills"))),
   `devin skills must land under the documented skills dir: ${skillFiles[0]}`,
 );
-// The router is `pix_tool` with no suffix; every other command is rule-<area>.
-assert.match(skillFiles[0], /rule(?:-[\w-]+)?\/SKILL\.md$/, "each command is its own directory containing SKILL.md");
+// The router is `rule_tool` with no suffix; every other command is rule-mcp-<area>.
+assert.match(skillFiles[0], /rule-mcp(?:-[\w-]+)?\/SKILL\.md$/, "each command is its own directory containing SKILL.md");
 console.log("  ✅ devin installs to its documented config path, branded (formerly Windsurf)");
 
 // ── 3. Windsurf is gone from the catalog; naming it redirects to Devin ─────

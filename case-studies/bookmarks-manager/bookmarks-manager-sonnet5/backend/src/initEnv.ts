@@ -2,7 +2,7 @@
  * @module initEnv
  *
  * Validates and parses `process.env` with zod at startup. The app must never
- * read `process.env` directly outside this module — every other file imports
+ * read `process.env` directly outside this module, every other file imports
  * the typed, validated `env` object exported here. Fails fast (throws) when a
  * required variable is missing or malformed, so misconfiguration is caught
  * before the HTTP server starts accepting traffic.

@@ -27,7 +27,7 @@ echo "--- Homebrew formula ---"
 SHASUM=$(shasum -a 256 "${NAME}-${VERSION}.tgz" 2>/dev/null | cut -d' ' -f1 || echo "unknown")
 cat > "${NAME}.rb" << FORMULA
 class RuleMcp < Formula
-  desc "MCP server for the rule-* skill ecosystem"
+  desc "MCP server for the rule-mcp-* skill ecosystem"
   homepage "https://github.com/pixu1980/rule-mcp"
   url "https://github.com/pixu1980/rule-mcp/releases/download/v${VERSION}/${NAME}-${VERSION}.tgz"
   sha256 "${SHASUM}"

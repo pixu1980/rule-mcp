@@ -3,19 +3,19 @@
 - **Date**: 2026-07-11
 - **Status**: accepted
 - **Tags**: backend, architecture, api-design
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 
-rule-backend-express and rule-backend-api-design mandate a feature-based, layered structure (`routes → handlers → services → repositories`), zod validation at the edge, a centralized error handler with a stable JSON error contract, and OpenAPI documentation.
+rule-mcp-backend-express and rule-mcp-backend-api-design mandate a feature-based, layered structure (`routes → handlers → services → repositories`), zod validation at the edge, a centralized error handler with a stable JSON error contract, and OpenAPI documentation.
 
 ## Decision
 
-The backend is organized as `modules/bookmarks/{router,controller,service,repository,schema,types}.ts` plus a shared `common/` (errors, middleware, utils) and a standalone `scraping/` module. Zod schemas validate `req.body`/`req.query`/`req.params` in the controller before any service call. All operational failures throw `AppError(statusCode, code, message)`, caught by a single 4-arg `errorHandler` that shapes every error response as `{ statusCode, correlationId, errors: [{ code, message }] }` — matching `api/openapi.yaml`. The repository is an in-memory `Map` behind a narrow function-based interface (`insert/list/findById/remove/findByUrl`), chosen deliberately over a real database for this POC to keep the stack dependency-free while keeping the swap-out boundary explicit.
+The backend is organized as `modules/bookmarks/{router,controller,service,repository,schema,types}.ts` plus a shared `common/` (errors, middleware, utils) and a standalone `scraping/` module. Zod schemas validate `req.body`/`req.query`/`req.params` in the controller before any service call. All operational failures throw `AppError(statusCode, code, message)`, caught by a single 4-arg `errorHandler` that shapes every error response as `{ statusCode, correlationId, errors: [{ code, message }] }`, matching `api/openapi.yaml`. The repository is an in-memory `Map` behind a narrow function-based interface (`insert/list/findById/remove/findByUrl`), chosen deliberately over a real database for this POC to keep the stack dependency-free while keeping the swap-out boundary explicit.
 
 ## Consequences
 
-Positive: 8 backend integration/unit tests exercise the full HTTP surface through supertest without mocking Express itself, only the network-touching modules (`scrape.service`, `ssrfGuard`) are mocked. Swapping the in-memory `bookmarks.repository` for a real store touches exactly one file. Negative: state does not survive a process restart and there is no concurrency control — acceptable for a POC, called out explicitly as a follow-up.
+Positive: 8 backend integration/unit tests exercise the full HTTP surface through supertest without mocking Express itself, only the network-touching modules (`scrape.service`, `ssrfGuard`) are mocked. Swapping the in-memory `bookmarks.repository` for a real store touches exactly one file. Negative: state does not survive a process restart and there is no concurrency control, acceptable for a POC, called out explicitly as a follow-up.
 
 ## Alternatives Considered
 

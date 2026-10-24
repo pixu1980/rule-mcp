@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { before, test } from "node:test";
 
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-gateway-core-extra-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-gateway-core-extra-"));
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 process.env.RULE_MCP_NO_CACHE = "1";

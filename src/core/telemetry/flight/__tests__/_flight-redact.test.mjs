@@ -21,14 +21,14 @@ const flight = () => ({
   project: { dir: "/Users/someone/Projects/acme-secret", id: "p1", branch: "feat/x" },
   kpi: { measuredSaved: 0, reminderOverhead: 460 },
   prompts: [
-    { ts: 1, tool: "pix_tool", session: "s1", length: 42, text: "rewrite the ACME pricing page" },
-    { ts: 2, tool: "pix_tool", session: "s1", length: 42, text: "rewrite the ACME pricing page", repeat: true },
+    { ts: 1, tool: "rule_tool", session: "s1", length: 42, text: "rewrite the ACME pricing page" },
+    { ts: 2, tool: "rule_tool", session: "s1", length: 42, text: "rewrite the ACME pricing page", repeat: true },
   ],
   sessions: [{ id: "s1", client: "claude", transport: "stdio" }],
   session: {
     id: "s1",
     events: [
-      { ts: 1, tool: "pix_tool", path: "/Users/someone/Projects/acme-secret/src/app.js" },
+      { ts: 1, tool: "rule_tool", path: "/Users/someone/Projects/acme-secret/src/app.js" },
       { ts: 2, tool: "rule_tool_check" },
     ],
   },

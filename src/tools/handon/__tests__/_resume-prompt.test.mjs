@@ -75,7 +75,7 @@ test("a quoted prompt is not the handoff's own open work", () => {
 });
 
 test("the report closes with the prompt the handoff wrote", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-handon-prompt-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-handon-prompt-"));
   mkdirSync(join(root, "docs", "handoff"), { recursive: true });
   mkdirSync(join(root, "docs", "adr"), { recursive: true });
   git(root, "init", "-q");

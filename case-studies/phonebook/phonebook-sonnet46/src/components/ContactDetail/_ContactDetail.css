@@ -2,7 +2,7 @@
  * ContactDetail — _ContactDetail.css
  * Full-page detail view: hero, quick actions, info sections, and footer.
  * Rich with microinteractions: spring physics on action buttons,
- * glowing favourite toggle, staggered section entrance animation.
+ * glowing favorite toggle, staggered section entrance animation.
  * =============================================================================
  */
 
@@ -40,13 +40,13 @@ header[data-part="detail-hero"] {
   gap: var(--space-4);
 }
 
-/* Avatar + favourite button */
+/* Avatar + favorite button */
 div[data-part="hero-avatar"] {
   position: relative;
   display: inline-flex;
 }
 
-/* Favourite toggle — absolute badge on avatar */
+/* Favorite toggle — absolute badge on avatar */
 button[data-part="favorite-btn"] {
   position: absolute;
   bottom: -2px;
@@ -171,7 +171,7 @@ button[data-part="quick-action"]:hover span[data-part="qa-icon-wrap"] {
   box-shadow: var(--shadow-sm);
 }
 
-/* Colour variants */
+/* Color variants */
 button[data-part="quick-action"][data-color="blue"]:hover span[data-part="qa-icon-wrap"] {
   background: var(--accent-subtle);
   border-color: var(--border-accent);

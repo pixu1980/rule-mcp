@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-detect-env-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-detect-env-"));
 process.env.HOME = home;
 
 const { detectIdeConfigs, detectModelConfig, detectStoredModelKeys, getEnvironmentInfo } = await import("../_detect-env.js");
@@ -94,7 +94,7 @@ test("getEnvironmentInfo names the platform and never leaves shell empty", () =>
 });
 
 test("detectIdeConfigs survives an unreadable skills entry", () => {
-  const cwd = mkdtempSync(join(tmpdir(), "rule-detect-env-cwd-"));
+  const cwd = mkdtempSync(join(tmpdir(), "rule-mcp-detect-env-cwd-"));
   writeFileSync(join(cwd, "skills"), "a file, not a directory");
   const previous = process.cwd();
   process.chdir(cwd);

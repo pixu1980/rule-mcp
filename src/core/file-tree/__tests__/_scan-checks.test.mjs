@@ -56,7 +56,7 @@ test("orphanCssIssues reports a prefixed stylesheet with no component beside it"
 });
 
 test("staleBarrelIssues reads the barrel and reports empty and export-less ones", () => {
-  const box = mkdtempSync(join(tmpdir(), "rule-file-tree-"));
+  const box = mkdtempSync(join(tmpdir(), "rule-mcp-file-tree-"));
 
   try {
     writeFileSync(join(box, "index.js"), "   \n");
@@ -78,7 +78,7 @@ test("staleBarrelIssues reads the barrel and reports empty and export-less ones"
 });
 
 test("staleBarrelIssues skips non-barrels and unreadable files", () => {
-  const box = mkdtempSync(join(tmpdir(), "rule-file-tree-"));
+  const box = mkdtempSync(join(tmpdir(), "rule-mcp-file-tree-"));
 
   try {
     writeFileSync(join(box, "_Button.js"), "");

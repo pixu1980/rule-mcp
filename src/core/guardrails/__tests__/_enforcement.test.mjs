@@ -60,12 +60,12 @@ assert.equal(isBlockedHandlerCalled, false, "blocked handler must never execute"
 assert.match(blocked.content[0].text, /policy denied/, "blocked response must explain policy failure");
 
 await loadAllSkills();
-const routed = await callTool("pix_tool", { prompt: "React accessible form" });
+const routed = await callTool("rule_tool", { prompt: "React accessible form" });
 assert.equal(routed.isError, undefined, "valid router request must pass enforcement");
-assert.equal(routed._meta?.pixEnforcement?.preprocessed, true, "result metadata must prove preprocessing");
-assert.equal(routed._meta?.pixEnforcement?.postprocessed, true, "result metadata must prove postprocessing");
+assert.equal(routed._meta?.ruleEnforcement?.preprocessed, true, "result metadata must prove preprocessing");
+assert.equal(routed._meta?.ruleEnforcement?.postprocessed, true, "result metadata must prove postprocessing");
 assert.ok(
-  routed.content.some((item) => item.text?.includes("PIX WORKFLOW REMINDER")),
+  routed.content.some((item) => item.text?.includes("RULE-MCP WORKFLOW REMINDER")),
   "model-visible contract must be appended",
 );
 const route = JSON.parse(routed.content[0].text);
@@ -79,57 +79,59 @@ for (const toolName of route.next_tools) {
   );
 }
 
-const emptyPrompt = await callTool("pix_tool", { prompt: " ".repeat(3) });
+const emptyPrompt = await callTool("rule_tool", { prompt: " ".repeat(3) });
 assert.equal(emptyPrompt.isError, true, "blank routing prompt must fail closed before execution");
 
-const placeholderReport = checkCode("rule-frontend-react", "export function Demo() { /* TODO */ }");
+const placeholderReport = checkCode("rule-mcp-frontend-react", "export function Demo() { /* TODO */ }");
 assert.ok(
   placeholderReport.failed.some((item) => item.id === "ai-no-placeholder-implementation"),
   "TODO code must fail guardrails",
 );
 
-const suppressedReport = checkCode("rule-frontend-react", "// @ts-ignore\ntry { work(); } catch {}\n");
+const suppressedReport = checkCode("rule-mcp-frontend-react", "// @ts-ignore\ntry { work(); } catch {}\n");
 assert.ok(
   suppressedReport.failed.some((item) => item.id === "ai-no-suppressed-errors"),
   "suppressed errors must fail guardrails",
 );
 
-const dependencyReport = checkCode("rule-frontend-react", 'import invented from "invented-sdk";\nexport function Demo() { return invented; }', { allowedDependencies: ["react"] });
+const dependencyReport = checkCode("rule-mcp-frontend-react", 'import invented from "invented-sdk";\nexport function Demo() { return invented; }', {
+  allowedDependencies: ["react"],
+});
 assert.ok(
   dependencyReport.failed.some((item) => item.id === "verified-dependencies-only"),
   "unknown dependency must fail when manifest context exists",
 );
 
 const failedCheck = await callTool("rule_tool_check", {
-  skill: "rule-frontend-react",
+  skill: "rule-mcp-frontend-react",
   code: "export function Demo() { /* TODO */ }",
 });
 assert.equal(failedCheck.isError, true, "rule_tool_check must block downstream use when guardrails fail");
 
 const dependencyCheck = await callTool("rule_tool_check", {
-  skill: "rule-frontend-react",
+  skill: "rule-mcp-frontend-react",
   code: 'import invented from "invented-sdk";\nexport function Demo() { return invented; }',
   allowedDependencies: ["react"],
 });
 assert.ok(
-  dependencyCheck._meta?.pixGuardrails?.failed?.some((item) => item.id === "verified-dependencies-only"),
+  dependencyCheck._meta?.ruleGuardrails?.failed?.some((item) => item.id === "verified-dependencies-only"),
   "rule_tool_check MCP schema must pass manifest dependencies into guardrail context",
 );
 
 // ── Token-saving: the full contract is emitted once per session, re-anchors are
 //    terse, and RULE_MCP_NO_REMINDER suppresses it (hardening 4.2). ──
-const secondRoute = await callTool("pix_tool", { prompt: "Vue button component" });
-const secondReminder = secondRoute.content.find((item) => item.text?.includes("PIX WORKFLOW REMINDER"));
+const secondRoute = await callTool("rule_tool", { prompt: "Vue button component" });
+const secondReminder = secondRoute.content.find((item) => item.text?.includes("RULE-MCP WORKFLOW REMINDER"));
 assert.ok(secondReminder, "repeat call must still carry a (terse) reminder");
 assert.ok(!secondReminder.text.includes("Missing evidence means unknown"), "repeat call reminder must be the terse one-liner, not the full contract");
 
 process.env.RULE_MCP_NO_REMINDER = "1";
-const suppressed = await callTool("pix_tool", { prompt: "React accessible form" });
+const suppressed = await callTool("rule_tool", { prompt: "React accessible form" });
 assert.ok(
-  suppressed.content.every((item) => !item.text?.includes("PIX WORKFLOW REMINDER")),
+  suppressed.content.every((item) => !item.text?.includes("RULE-MCP WORKFLOW REMINDER")),
   "RULE_MCP_NO_REMINDER=1 must suppress the model-visible reminder",
 );
-assert.equal(suppressed._meta?.pixEnforcement?.postprocessed, true, "suppression must not disable enforcement metadata");
+assert.equal(suppressed._meta?.ruleEnforcement?.postprocessed, true, "suppression must not disable enforcement metadata");
 delete process.env.RULE_MCP_NO_REMINDER;
 
 console.log("  ✅ preprocessing and postprocessing fail closed; hallucination guardrails enforced");

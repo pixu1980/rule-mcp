@@ -34,26 +34,26 @@ export function skillForPath(path) {
   const extension = extname(path);
 
   if (extension === ".sql" || extension === ".prisma") {
-    return "rule-data-sql";
+    return "rule-mcp-data-sql";
   }
 
   if (extension === ".vue") {
-    return "rule-frontend-vue";
+    return "rule-mcp-frontend-vue";
   }
 
   if (extension === ".svelte") {
-    return "rule-frontend-svelte";
+    return "rule-mcp-frontend-svelte";
   }
 
   if (extension === ".jsx" || extension === ".tsx") {
-    return "rule-frontend-react";
+    return "rule-mcp-frontend-react";
   }
 
   if (extension === ".css") {
-    return "rule-styleguide-css";
+    return "rule-mcp-styleguide-css";
   }
 
-  return "rule-styleguide-javascript";
+  return "rule-mcp-styleguide-javascript";
 }
 
 /**
@@ -89,5 +89,5 @@ export function decide(command, kind = "bash", collectFailures = () => []) {
     .map(({ file, failures: ids }) => `- ${file}: ${ids.join(", ")}`)
     .join("\n");
 
-  return ask(`rule guardrails fail on the staged files. Fix them or confirm the commit deliberately.\n${summary}`);
+  return ask(`rule-mcp guardrails fail on the staged files. Fix them or confirm the commit deliberately.\n${summary}`);
 }

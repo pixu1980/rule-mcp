@@ -10,7 +10,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-nyx-tier-extra-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-nyx-tier-extra-"));
 
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
@@ -51,14 +51,14 @@ test("entries without an embedding or without a stored prompt are skipped", asyn
 
   // Blank prompt: annotateMissing skips it, so the loop hits !embedding.
   store.set("no-embed", {
-    tool: "pix_tool",
+    tool: "rule_tool",
     args: { prompt: " ".repeat(3) },
     result: { content: [{ type: "text", text: "x" }] },
     deps: {},
   });
   // Embedding present but no stored prompt text: the loop hits !storedText.
   store.set("blank-prompt", {
-    tool: "pix_tool",
+    tool: "rule_tool",
     args: { prompt: " ".repeat(3) },
     result: { content: [{ type: "text", text: "x" }] },
     deps: {},
@@ -72,31 +72,31 @@ test("entries without an embedding or without a stored prompt are skipped", asyn
     nyx: { cacheGroup: "docs|easy|plain", embedding: [1, 0] },
   });
 
-  assert.equal(await cacheLookupSemantic("pix_tool", { prompt: "write an adr for the cache tier" }), undefined);
+  assert.equal(await cacheLookupSemantic("rule_tool", { prompt: "write an adr for the cache tier" }), undefined);
 });
 
 test("a replay verdict with a stale digest is still a miss", async () => {
   cacheClear();
   entriesStore().set("stale", {
-    tool: "pix_tool",
+    tool: "rule_tool",
     args: { prompt: "write an adr for the cache" },
     result: { content: [{ type: "text", text: "stored" }] },
-    deps: { "rule-does-not-exist": "deadbeefdeadbeef" },
+    deps: { "rule-mcp-does-not-exist": "deadbeefdeadbeef" },
     nyx: { cacheGroup: "docs|easy|plain", embedding: [1, 0] },
   });
 
-  assert.equal(await cacheLookupSemantic("pix_tool", { prompt: "write an adr for the cache tier" }), undefined);
+  assert.equal(await cacheLookupSemantic("rule_tool", { prompt: "write an adr for the cache tier" }), undefined);
 });
 
 test("an adapter throw is a miss, never an error", async () => {
   cacheClear();
   entriesStore().set("ok", {
-    tool: "pix_tool",
+    tool: "rule_tool",
     args: { prompt: "write an adr for the cache" },
     result: { content: [{ type: "text", text: "stored" }] },
     deps: {},
     nyx: { cacheGroup: "docs|easy|plain", embedding: [1, 0] },
   });
 
-  assert.equal(await cacheLookupSemantic("pix_tool", { prompt: "throw-please write an adr" }), undefined);
+  assert.equal(await cacheLookupSemantic("rule_tool", { prompt: "throw-please write an adr" }), undefined);
 });

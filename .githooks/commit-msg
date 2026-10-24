@@ -5,7 +5,7 @@
 # hook, the pre-push gate, the CLI and CI cannot drift apart.
 #
 #   format:   type(scope): subject
-#   example:  feat(skills): add rule naming
+#   example:  feat(skills): add rule-mcp naming
 #   rejected: docs: port documentation
 #
 # Install: pnpm hooks:install

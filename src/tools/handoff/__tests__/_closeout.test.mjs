@@ -19,7 +19,7 @@ const AUTHOR = "test <t@t.t>";
 
 /** A project with one done and one open doc per kind, plus an orphan audit. */
 function seed() {
-  const dir = mkdtempSync(join(tmpdir(), "rule-closeout-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-closeout-"));
 
   for (const sub of ["audits", "reviews", "plans", "adr"]) {
     mkdirSync(join(dir, "docs", sub), { recursive: true });

@@ -12,7 +12,7 @@ export async function statsCommand(directory) {
   const tokens = entries.reduce((sum, entry) => sum + entry.tokens, 0);
   const promotable = promotableEntries().length;
 
-  print(`# rule cache\n`);
+  print(`# rule-mcp cache\n`);
   print(`Enabled: ${cacheEnabled() ? "yes" : "no (RULE_MCP_NO_CACHE=1)"}`);
   print(`Tiers: exact${normalizedTierEnabled() ? " + normalized" : " only (RULE_MCP_CACHE_EXACT_ONLY=1)"}`);
   print(`Entries: ${entries.length}, about ${tokens} tokens stored`);

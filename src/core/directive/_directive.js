@@ -5,7 +5,7 @@
  *
  * The session-wide rules, written once and reused verbatim everywhere.
  *
- * Three of them cost real money when a session forgets: skipping `rule`
+ * Three of them cost real money when a session forgets: skipping `rule-mcp`
  * means guessing at rules the server already knows; spawning a subagent pays a
  * fresh context window for work a deterministic tool answers for free; dropping
  * compression means every answer carries filler nobody reads. None of the three is
@@ -17,7 +17,7 @@
  * One canonical wording, one grep. Anything that repeats these rules imports
  * them from this module instead of paraphrasing.
  *
- * Flight guidance (`rule-area-process-flight`) rides along: full block on
+ * Flight guidance (`rule-mcp-area-process-flight`) rides along: full block on
  * SessionStart, a short fragment on every UserPromptSubmit. Opt out of flight
  * alone with RULE_MCP_NO_FLIGHT=1 (ADR 114).
  *
@@ -35,7 +35,8 @@ export const MANTRA = "Every token saved is a token earned.";
  * The no-subagent rule. Reused verbatim in the session directive, the generated
  * agent commands, and the skills - a paraphrase would read as a different rule.
  */
-export const NO_SUBAGENTS = "NEVER spawn subagents for research or implementation - they burn tokens. Use rule tools (deterministic, LLM-free) and tokensave (code graph) instead.";
+export const NO_SUBAGENTS =
+  "NEVER spawn subagents for research or implementation - they burn tokens. Use rule-mcp tools (deterministic, LLM-free) and tokensave (code graph) instead.";
 
 /**
  * The dependencies rule, one sentence, for every surface that states policy:
@@ -98,7 +99,7 @@ export function sessionDirective() {
   return [
     "## PIX SESSION DIRECTIVE",
     "",
-    "- Call `rule` (or `rule_tool_gateway`) before any implementation, on every prompt. " +
+    "- Call `rule-mcp` (or `rule_tool_gateway`) before any implementation, on every prompt. " +
       "Routed skill evidence is source of truth; never invent APIs, files, dependencies, or passing checks.",
     `- ${NO_SUBAGENTS}`,
     "- Compression output: drop filler, articles and pleasantries. Keep every technical fact, code block, path and error string verbatim.",
@@ -121,7 +122,7 @@ export function promptDirective() {
   }
 
   const flight = promptFlight();
-  const base = "rule first. compression on. no subagents. every token saved is a token earned.";
+  const base = "rule-mcp first. compression on. no subagents. every token saved is a token earned.";
 
   return flight ? `${base} ${flight}` : base;
 }

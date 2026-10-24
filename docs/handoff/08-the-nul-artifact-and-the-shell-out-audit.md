@@ -57,16 +57,16 @@ taken with those edits stashed. Recorded in the audit as an out-of-scope observa
 
 ## Gates
 
-| Gate                                                       | Result                                                                   |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------ |
-| `pnpm test:all`                                            | 1735 pass, 0 fail, 3 skipped (one more than before: the regression test) |
-| `pnpm lint`                                                | 0 errors, 36 warnings                                                    |
-| `pnpm format`                                              | clean                                                                    |
-| `pnpm census:check`                                        | census is current                                                        |
-| `tests/docs/*`                                             | 58 pass                                                                  |
-| `pnpm test:coverage`                                       | red at 90.99 percent branches, floor 91 (see above)                      |
-| `nul` after a full run                                     | no such file                                                             |
-| `rule_tool_check rule-styleguide-english` on the audit prose | 59 of 59 pass                                                            |
+| Gate                                                             | Result                                                                   |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `pnpm test:all`                                                  | 1735 pass, 0 fail, 3 skipped (one more than before: the regression test) |
+| `pnpm lint`                                                      | 0 errors, 36 warnings                                                    |
+| `pnpm format`                                                    | clean                                                                    |
+| `pnpm census:check`                                              | census is current                                                        |
+| `tests/docs/*`                                                   | 58 pass                                                                  |
+| `pnpm test:coverage`                                             | red at 90.99 percent branches, floor 91 (see above)                      |
+| `nul` after a full run                                           | no such file                                                             |
+| `rule_tool_check rule-mcp-styleguide-english` on the audit prose | 59 of 59 pass                                                            |
 
 ## Open items
 

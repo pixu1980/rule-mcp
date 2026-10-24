@@ -10,7 +10,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const originalHome = process.env.HOME;
-process.env.HOME = mkdtempSync(join(tmpdir(), "rule-sse-auth-"));
+process.env.HOME = mkdtempSync(join(tmpdir(), "rule-mcp-sse-auth-"));
 
 try {
   const { loadAllSkills } = await import("../index.js");

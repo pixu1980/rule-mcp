@@ -23,5 +23,5 @@ test("recomputeCore runs a schemaless tool and refuses an unknown one", async ()
 
 test("estimateRoutingSaving only prices the router tool with a resolved route", () => {
   assert.equal(estimateRoutingSaving("rule_tool_search", {}, {}), undefined, "a non-router tool has no routing saving");
-  assert.equal(estimateRoutingSaving("pix_tool", { content: [{ type: "text", text: "{}" }] }, {}), undefined, "a router answer without a route prices nothing");
+  assert.equal(estimateRoutingSaving("rule_tool", { content: [{ type: "text", text: "{}" }] }, {}), undefined, "a router answer without a route prices nothing");
 });

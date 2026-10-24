@@ -1,6 +1,6 @@
 /* =============================================================================
  * Avatar — _Avatar.css
- * Circular initials avatar with 12 colour slots (data-color="0"…"11")
+ * Circular initials avatar with 12 color slots (data-color="0"…"11")
  * and five size variants (data-size="xs|sm|md|lg|xl").
  * =============================================================================
  */
@@ -67,7 +67,7 @@
 }
 
 /* ----------------------------------------------------------------------------
- * Colour palette — 12 deterministic slots
+ * Color palette — 12 deterministic slots
  * ---------------------------------------------------------------------------- */
 [data-part="avatar"][data-color="0"]  { background: var(--avatar-0); }
 [data-part="avatar"][data-color="1"]  { background: var(--avatar-1); }

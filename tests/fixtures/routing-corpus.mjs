@@ -9,7 +9,7 @@
  * corpus of prompts written to pass measures nothing.
  *
  * `expect` is a substring of the skill name, so "javascript" accepts
- * rule-styleguide-javascript. `area` groups near misses: landing on a
+ * rule-mcp-styleguide-javascript. `area` groups near misses: landing on a
  * sibling in the right area is a different failure from landing in devops.
  *
  * @see docs/plans/token-first-upgrade.md - Workstream L
@@ -36,7 +36,7 @@ export const CORPUS = [
 
   // ── Inflection in the name signal ──
   // "test" against the skill part "testing" was scoring half credit, so this
-  // routed to rule-ai-prompting. A different inflection of a word is the same
+  // routed to rule-mcp-ai-prompting. A different inflection of a word is the same
   // word, and the name signal now says so.
   { prompt: "how do I test my code", expect: "devops-testing", area: "devops" },
 
@@ -49,8 +49,8 @@ export const CORPUS = [
   { prompt: "agent loop or a graph for orchestration", expect: "ai-agent-architecture", area: "ai" },
 
   // ── Session boundaries (ADR 115): handoff/handon are tool+slash only ──
-  // (`rule_tool_handoff` / `/rule-handoff`, `rule_tool_handon` / `/rule-handon`).
-  // Compression is likewise tool-only (`rule_tool_compress` / `/rule-compress`).
+  // (`rule_tool_handoff` / `/rule-mcp-handoff`, `rule_tool_handon` / `/rule-mcp-handon`).
+  // Compression is likewise tool-only (`rule_tool_compress` / `/rule-mcp-compress`).
   // No skill-route corpus rows: BM25 cannot target a removed skill.
 
   // ── Internationalization: the skill R0 added ──
@@ -89,7 +89,7 @@ export const CORPUS = [
 
   // ── Process and AI: added in P2 and P4 ──
   { prompt: "should I extract this into a helper function", expect: "process-ai", area: "process" },
-  // Compression is tool-only after ADR 115 (rule_tool_compress / /rule-compress), not a skill route.
+  // Compression is tool-only after ADR 115 (rule_tool_compress / /rule-mcp-compress), not a skill route.
 
   {
     prompt: "remove em dashes and use american english spelling",
@@ -176,7 +176,7 @@ export const NONSENSE = ["zzzzz qqqqq wwwww xxxxx", "asdf jkl qwerty"];
  * A persona request is not a skill request: "act as a security engineer and
  * audit this" wants the security role's lenses and its three documents, not the
  * backend-security skill on its own. The router has to name the role and point
- * at `pix_plan`; which skill it also picks is a secondary matter.
+ * at `rule_tool_plan`; which skill it also picks is a secondary matter.
  *
  * @type {Array<{ prompt: string, role: string }>}
  */

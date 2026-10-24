@@ -29,7 +29,7 @@ import { join } from "node:path";
 import { gunzipSync } from "node:zlib";
 
 // Isolate mutable state to a temp dir BEFORE the cache module resolves paths.
-const stateDir = mkdtempSync(join(tmpdir(), "rule-cache-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-cache-"));
 process.env.RULE_MCP_STATE_DIR = stateDir;
 delete process.env.RULE_MCP_NO_CACHE;
 process.env.RULE_MCP_DISABLE_AUTO_ADR = "1";
@@ -39,11 +39,11 @@ const { cacheKey, cacheGet, cacheSet, cacheClear, flush } = await import("../ind
 const { registerTool, callTool } = await import("../../../../tools/router/index.js");
 
 // ── T1: keying + denylist ──
-check("T1 read-only tool gets a key", typeof cacheKey("rule", { prompt: "x" }) === "string");
+check("T1 read-only tool gets a key", typeof cacheKey("rule-mcp", { prompt: "x" }) === "string");
 check("T1.1 mutation tool rule_tool_apply has no key", cacheKey("rule_tool_apply", {}) === null);
 check("T1.2 rule_tool_fix has no key", cacheKey("rule_tool_fix", {}) === null);
 check("T1.2.1 rule_tool_init has no key: it reads the graph, the hooks and the manifest", cacheKey("rule_tool_init", {}) === null);
-check("T1.3 key stable regardless of arg order", cacheKey("rule", { a: 1, b: 2 }) === cacheKey("rule", { b: 2, a: 1 }));
+check("T1.3 key stable regardless of arg order", cacheKey("rule-mcp", { a: 1, b: 2 }) === cacheKey("rule-mcp", { b: 2, a: 1 }));
 
 // ── T2: roundtrip + deep-copy isolation ──
 const k = cacheKey("rule_tool_search", { query: "grid" });
@@ -68,7 +68,7 @@ check("T4.1 persisted payload holds the stored entry", disk.entries[k]?.result?.
 // ── T5: end-to-end replay through callTool (handler runs once) ──
 let calls = 0;
 registerTool({
-  name: "pix_cache_probe",
+  name: "rule_tool_cache_probe",
   entry: "action",
   description: "test-only cacheable tool",
   handler: async () => {
@@ -76,11 +76,11 @@ registerTool({
     return { content: [{ type: "text", text: `run ${calls}` }] };
   },
 });
-const r1 = await callTool("pix_cache_probe", { seed: 1 });
-const r2 = await callTool("pix_cache_probe", { seed: 1 });
+const r1 = await callTool("rule_tool_cache_probe", { seed: 1 });
+const r2 = await callTool("rule_tool_cache_probe", { seed: 1 });
 check("T5 handler ran exactly once for identical calls", calls === 1);
 check("T5.1 both calls return the same payload", r1.content[0].text === "run 1" && r2.content[0].text === "run 1");
-const r3 = await callTool("pix_cache_probe", { seed: 2 });
+const r3 = await callTool("rule_tool_cache_probe", { seed: 2 });
 check("T5.2 different args recompute", calls === 2 && r3.content[0].text === "run 2");
 
 // ── T6: opt-out disables caching ──

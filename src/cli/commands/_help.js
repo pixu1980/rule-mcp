@@ -108,9 +108,9 @@ async function serveCommand(opts = {}) {
  *   enable|disable          - Load/unload the native service without removing it
  *
  * Platform-native services (install):
- *   macOS:   LaunchAgent plist → appears in System Settings → General → Login Items
- *   Linux:   systemd user service → systemctl --user
- *   Windows: Windows Service → sc.exe
+ *   macOS:   LaunchAgent plist -> appears in System Settings -> General -> Login Items
+ *   Linux:   systemd user service -> systemctl --user
+ *   Windows: Windows Service -> sc.exe
  *
  * @param {{ action: string, dryRun?: boolean }} opts
  */

@@ -10,7 +10,7 @@ import { git, handon, write } from "./_handon.fixture.mjs";
 import "../../../../tests/fixtures/git-hermetic.mjs";
 
 test("a range with a fixed end counts only what landed after it", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-handon-fixed-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-handon-fixed-"));
   mkdirSync(join(root, "docs", "handoff"), { recursive: true });
   mkdirSync(join(root, "docs", "adr"), { recursive: true });
   git(root, "init", "-q");
@@ -58,7 +58,7 @@ test("an end this repository cannot find is not reported as HEAD", () => {
   // is naming a commit that no longer exists. Falling back to counting from the
   // start is right; calling that range "ends at HEAD" is not, because it says
   // the handoff was written open-ended when it named an end that went away.
-  const root = mkdtempSync(join(tmpdir(), "rule-handon-lost-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-handon-lost-"));
   mkdirSync(join(root, "docs", "handoff"), { recursive: true });
   mkdirSync(join(root, "docs", "adr"), { recursive: true });
   git(root, "init", "-q");

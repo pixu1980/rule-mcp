@@ -21,8 +21,8 @@ from that tag onward. Manifests are parked on `0.1.0-beta` until that cut.
 2. `scripts/release` accepts `--version <x.y.z[-prerelease]>` so a plan can
    override the derived bump once. Without the flag, the version stays a
    function of the commits since the newest tag (ADR 127 / ADR 130).
-3. After `v0.1.0` exists, every later release is derived: `fix` → patch,
-   `feat` → minor, `!` / `BREAKING CHANGE` → major.
+3. After `v0.1.0` exists, every later release is derived: `fix` -> patch,
+   `feat` -> minor, `!` / `BREAKING CHANGE` -> major.
 4. ADR 097 is superseded on the release target it named.
 
 ## Consequences

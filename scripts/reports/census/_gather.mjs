@@ -50,7 +50,7 @@ export async function gather() {
     .filter((entry) => entry.isDirectory() && existsSync(join(ROOT, "skills", entry.name, "SKILL.md")))
     .map((entry) => entry.name)
     .sort((a, b) => a.localeCompare(b));
-  const catalog = skillDirs.filter((name) => name.startsWith("rule-"));
+  const catalog = skillDirs.filter((name) => name.startsWith("rule-mcp-"));
   const skillToolNames = new Set(catalog.map((name) => toolOf(name)));
   const families = guardrailFamilies();
   const areas = new Map();

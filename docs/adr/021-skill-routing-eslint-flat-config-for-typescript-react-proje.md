@@ -8,12 +8,12 @@
 ## Context
 
 Prompt: "ESLint flat config for TypeScript React project"
-Routed to: **rule-toolchain-eslint** (confidence: 1)
-Alternatives: rule-frontend-react (0.55), rule-platform-expo (0.55), rule-frontend-vanilla-reactive (0.52)
+Routed to: **rule-mcp-toolchain-eslint** (confidence: 1)
+Alternatives: rule-mcp-frontend-react (0.55), rule-mcp-platform-expo (0.55), rule-mcp-frontend-vanilla-reactive (0.52)
 
 ## Decision
 
-Use `rule-toolchain-eslint` for this task.
+Use `rule-mcp-toolchain-eslint` for this task.
 
 ## Consequences
 

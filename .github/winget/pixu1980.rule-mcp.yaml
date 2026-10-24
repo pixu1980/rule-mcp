@@ -9,7 +9,7 @@ PackageName: rule-mcp
 PackageUrl: https://github.com/pixu1980/rule-mcp
 License: MIT
 LicenseUrl: https://github.com/pixu1980/rule-mcp/blob/main/LICENSE
-ShortDescription: MCP server for the rule-* skill ecosystem
+ShortDescription: MCP server for the rule-mcp-* skill ecosystem
 Description: Serves styleguides, component templates, framework best practices, and design system patterns directly to your coding agent.
 Moniker: rule-mcp
 Installers:

@@ -27,8 +27,8 @@ export const META_CONCEPTS = {
  * @type {Record<string, string[]>}
  */
 export const META_HUB = {
-  astro: ["rule-frontend", "rule-styleguide"],
-  next: ["rule-frontend-react", "rule-styleguide"],
-  nuxt: ["rule-frontend-vue", "rule-styleguide"],
-  remix: ["rule-frontend-react", "rule-styleguide"],
+  astro: ["rule-mcp-frontend", "rule-mcp-styleguide"],
+  next: ["rule-mcp-frontend-react", "rule-mcp-styleguide"],
+  nuxt: ["rule-mcp-frontend-vue", "rule-mcp-styleguide"],
+  remix: ["rule-mcp-frontend-react", "rule-mcp-styleguide"],
 };

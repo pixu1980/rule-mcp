@@ -36,12 +36,12 @@ import { loadAllSkills } from "../../skills/index.js";
 import { callTool } from "../../../tools/router/index.js";
 
 // Project WITH a tokensave graph.
-const withTs = mkdtempSync(join(tmpdir(), "rule-ts-"));
+const withTs = mkdtempSync(join(tmpdir(), "rule-mcp-ts-"));
 mkdirSync(join(withTs, ".tokensave"), { recursive: true });
 writeFileSync(join(withTs, "package.json"), JSON.stringify({ name: "graphed", dependencies: { react: "18.0.0" } }));
 
 // Project WITHOUT.
-const withoutTs = mkdtempSync(join(tmpdir(), "rule-nots-"));
+const withoutTs = mkdtempSync(join(tmpdir(), "rule-mcp-nots-"));
 writeFileSync(join(withoutTs, "package.json"), JSON.stringify({ name: "plain", dependencies: { react: "18.0.0" } }));
 
 // ── T1: detection ──

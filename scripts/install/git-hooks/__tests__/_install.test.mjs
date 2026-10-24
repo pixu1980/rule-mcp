@@ -22,7 +22,7 @@ const TRACKED = new URL("../../../../.githooks", import.meta.url).pathname;
 
 /** A clone with this repository's tracked hooks and a global hooks path set. */
 function clone({ globalHooks = false } = {}) {
-  const root = mkdtempSync(join(tmpdir(), "rule-hooks-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-hooks-"));
   execFileSync("git", ["init", "--quiet", "--initial-branch=main"], { cwd: root });
   mkdirSync(join(root, ".githooks"), { recursive: true });
 

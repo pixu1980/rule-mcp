@@ -52,7 +52,7 @@ test("textBytes counts the text in content and estimateTokens rounds up", () => 
 test("guardrailRulesOf tallies failed rules and tolerates empty reports", () => {
   const tally = guardrailRulesOf({
     _meta: {
-      pixGuardrails: {
+      ruleGuardrails: {
         failed: [
           { id: "a", failCount: 3 },
           { id: "b", failCount: 0 },
@@ -63,5 +63,5 @@ test("guardrailRulesOf tallies failed rules and tolerates empty reports", () => 
   assert.deepEqual(tally, { a: 3, b: 1 }, "failCounts carry and zeroes go to one");
 
   assert.equal(guardrailRulesOf({}), undefined, "no report means no tally");
-  assert.equal(guardrailRulesOf({ _meta: { pixGuardrails: { failed: [] } } }), undefined, "no failures means no tally");
+  assert.equal(guardrailRulesOf({ _meta: { ruleGuardrails: { failed: [] } } }), undefined, "no failures means no tally");
 });

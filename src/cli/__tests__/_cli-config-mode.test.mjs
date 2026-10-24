@@ -8,7 +8,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const root = new URL("../../..", import.meta.url).pathname;
-const fakeHome = mkdtempSync(join(tmpdir(), "rule-config-mode-"));
+const fakeHome = mkdtempSync(join(tmpdir(), "rule-mcp-config-mode-"));
 const output = execFileSync(process.execPath, [join(root, "bin", "rule-mcp.js"), "config", "--mode", "daemon"], {
   cwd: root,
   env: { ...process.env, HOME: fakeHome },

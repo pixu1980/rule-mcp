@@ -16,7 +16,7 @@ import "../../../../tests/fixtures/git-hermetic.mjs";
 const git = (cwd, ...args) => gitRun(cwd, ...args);
 
 test("verify consults the repository for branches, ranges and commands", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-verify-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-verify-"));
   git(root, "init", "--initial-branch=main", "-q");
   git(root, "config", "user.email", "t@t.t");
   git(root, "config", "user.name", "t");
@@ -58,7 +58,7 @@ test("verify consults the repository for branches, ranges and commands", () => {
 });
 
 test("verify answers unverified without a git repository", () => {
-  const bare = mkdtempSync(join(tmpdir(), "rule-verify-nogit-"));
+  const bare = mkdtempSync(join(tmpdir(), "rule-mcp-verify-nogit-"));
   const claims = verify(bare, { branches: ["main"], files: [], ranges: [], commands: [], adrs: [], open: [] });
   assert.ok(
     claims.some((c) => c.bucket === "unverified"),
@@ -68,7 +68,7 @@ test("verify answers unverified without a git repository", () => {
 });
 
 test("getGitDiff reports files, staged and unstaged, without a repo", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-gitdiff-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-gitdiff-"));
   git(root, "init", "-q");
   git(root, "config", "user.email", "t@t.t");
   git(root, "config", "user.name", "t");

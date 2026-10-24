@@ -28,7 +28,7 @@ test("a value that is not a string comes back untouched", () => {
 });
 
 test("a JSON body is data, so no level compresses it", () => {
-  const body = JSON.stringify({ route: "rule-frontend-react", sections: ["really just prose"] });
+  const body = JSON.stringify({ route: "rule-mcp-frontend-react", sections: ["really just prose"] });
 
   for (const level of ["lite", "full", "ultra"]) {
     assert.equal(compressText(body, { level }), body, `${level} must not corrupt a payload`);
@@ -110,8 +110,8 @@ test("classifyText reads the extension first and the content only without one", 
 });
 
 test("looksLikeYaml needs a majority, not a single colon", () => {
-  assert.equal(looksLikeYaml(["name: rule", "kind: skill", "tags: two"]), true);
-  assert.equal(looksLikeYaml(["A sentence about a thing.", "Another one.", "name: rule"]), false);
+  assert.equal(looksLikeYaml(["name: rule-mcp", "kind: skill", "tags: two"]), true);
+  assert.equal(looksLikeYaml(["A sentence about a thing.", "Another one.", "name: rule-mcp"]), false);
   assert.equal(looksLikeYaml([]), false, "no lines is not YAML");
   assert.equal(looksLikeYaml(["", " ".repeat(3)]), false, "blank lines are not YAML either");
 });

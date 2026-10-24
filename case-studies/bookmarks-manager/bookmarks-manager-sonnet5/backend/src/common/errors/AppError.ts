@@ -20,7 +20,7 @@ export type ErrorCode =
 
 /**
  * Operational error carrying an HTTP status code and a stable error code.
- * Instances are safe to serialize directly to API clients — never include
+ * Instances are safe to serialize directly to API clients, never include
  * stack traces or internal details in `message`.
  */
 export class AppError extends Error {

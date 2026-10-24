@@ -21,7 +21,7 @@ test("a string that names a place on this machine is caught", () => {
 });
 
 test("a string that names nothing local passes", () => {
-  for (const value of ["react", "src/index.js", "rule-frontend-react", "https://example.com/a", ""]) {
+  for (const value of ["react", "src/index.js", "rule-mcp-frontend-react", "https://example.com/a", ""]) {
     assert.equal(namesALocalPath(value), false, `${value} is portable`);
   }
 });
@@ -43,21 +43,21 @@ test("a value that is neither string, array nor object names nothing", () => {
 test("entries sort by tool, then by their arguments, so a diff shows a change", () => {
   const entries = [
     { tool: "rule_tool_search", args: { query: "b" } },
-    { tool: "pix_tool", args: { prompt: "z" } },
+    { tool: "rule_tool", args: { prompt: "z" } },
     { tool: "rule_tool_search", args: { query: "a" } },
-    { tool: "pix_tool", args: { prompt: "a" } },
+    { tool: "rule_tool", args: { prompt: "a" } },
   ];
 
   const sorted = [...entries].sort(compareEntries);
 
   assert.deepEqual(
     sorted.map((entry) => `${entry.tool}:${Object.values(entry.args)[0]}`),
-    ["pix_tool:a", "pix_tool:z", "rule_tool_search:a", "rule_tool_search:b"],
+    ["rule_tool:a", "rule_tool:z", "rule_tool_search:a", "rule_tool_search:b"],
   );
 });
 
 test("two entries of the same tool and arguments tie rather than reshuffle", () => {
-  const entry = { tool: "pix_tool", args: { prompt: "same" } };
+  const entry = { tool: "rule_tool", args: { prompt: "same" } };
 
   assert.equal(compareEntries(entry, { ...entry }), 0);
 });

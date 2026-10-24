@@ -13,7 +13,7 @@ test("the deterministic core is cached under its own key", async () => {
 
   const stored = cacheGet(cacheKey(GATEWAY_CORE_TOOL, gatewayCoreArguments(ARGUMENTS)));
   assert.ok(stored, "the gateway core is not in the cache");
-  assert.ok(stored.effectiveRoute?.startsWith("rule-"), "the cached core carries the route");
+  assert.ok(stored.effectiveRoute?.startsWith("rule-mcp-"), "the cached core carries the route");
   assert.ok(stored.evidence?.length > 0, "the cached core carries the evidence");
   assert.equal(stored.checkResult.allPass, true, "the cached core carries the guardrail verdict");
 });
@@ -38,10 +38,10 @@ test("the second call is answered from the core cache", async () => {
   // reaches the output; if it recomputes, it does not.
   const key = cacheKey(GATEWAY_CORE_TOOL, gatewayCoreArguments(ARGUMENTS));
   const stored = cacheGet(key);
-  cacheSet(key, { ...stored, effectiveRoute: "rule-poisoned-marker" });
+  cacheSet(key, { ...stored, effectiveRoute: "rule-mcp-poisoned-marker" });
 
   const second = await callTool("rule_tool_gateway", ARGUMENTS);
-  assert.equal(answerOf(second).route, "rule-poisoned-marker", "the core cache was not consulted");
+  assert.equal(answerOf(second).route, "rule-mcp-poisoned-marker", "the core cache was not consulted");
 });
 
 test("a hit and a miss render the same answer apart from the receipt", async () => {

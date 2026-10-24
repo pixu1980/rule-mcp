@@ -32,7 +32,7 @@ function printCommandTargets(opts) {
   print(targets.map((t) => [t.agent, t.format, t.scope, t.dir].join("\t")).join("\n"));
 }
 /**
- * Generate (or remove) the clean `/rule-*` agent slash-command files for one
+ * Generate (or remove) the clean `/rule-mcp-*` agent slash-command files for one
  * agent directory. Registry-driven (see {@link module:core/agent-commands}) so
  * the same ordered set is written for every agent.
  *

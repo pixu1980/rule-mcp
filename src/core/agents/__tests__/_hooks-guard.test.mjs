@@ -78,8 +78,11 @@ check(
 check("T3.5 an empty command is never blocked", decide("").hookSpecificOutput.permissionDecision === "allow");
 
 // ── T4: file -> skill mapping for the staged check ──
-check("T4 sql and prisma map to the data skill", skillForPath("prisma/migrations/x/migration.sql") === "rule-data-sql" && skillForPath("prisma/schema.prisma") === "rule-data-sql");
-check("T4.1 components map to their framework", skillForPath("src/Button.tsx") === "rule-frontend-react");
+check(
+  "T4 sql and prisma map to the data skill",
+  skillForPath("prisma/migrations/x/migration.sql") === "rule-mcp-data-sql" && skillForPath("prisma/schema.prisma") === "rule-mcp-data-sql",
+);
+check("T4.1 components map to their framework", skillForPath("src/Button.tsx") === "rule-mcp-frontend-react");
 
 // ── T5: the settings merge is additive, idempotent and reversible ──
 const foreign = {

@@ -11,7 +11,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const state = mkdtempSync(join(tmpdir(), "rule-stats-"));
+const state = mkdtempSync(join(tmpdir(), "rule-mcp-stats-"));
 
 process.env.RULE_MCP_STATE_DIR = state;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";

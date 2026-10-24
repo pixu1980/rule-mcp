@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-decision-replay-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-decision-replay-"));
 
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_NO_SYNC_GUARD = "1";
@@ -64,18 +64,18 @@ test("the replay returns the chosen cached core before compute", async () => {
   clearShadows();
   clearDecisionCache();
   resetDecisionRuntime();
-  cacheStore("pix_tool", { prompt: "create a react button", framework: "react" }, result("rule-frontend-react"), {});
+  cacheStore("rule_tool", { prompt: "create a react button", framework: "react" }, result("rule-mcp-frontend-react"), {});
   const server = await scriptedServer();
   process.env.RULE_MCP_DECISION_URL = server.url;
 
   try {
-    const response = await callTool("pix_tool", { prompt: "create a react form component", framework: "react" });
+    const response = await callTool("rule_tool", { prompt: "create a react form component", framework: "react" });
     const parsed = JSON.parse(response.content[0].text);
 
     assert.equal(parsed.replayed, true, "the cached core answered, not a fresh compute");
-    assert.equal(response._meta?.pixCache?.tier, "decision");
-    assert.equal(response._meta?.pixCache?.choice, "candidate-1");
-    assert.equal(response._meta?.pixCache?.probability, 0.95);
+    assert.equal(response._meta?.ruleCache?.tier, "decision");
+    assert.equal(response._meta?.ruleCache?.choice, "candidate-1");
+    assert.equal(response._meta?.ruleCache?.probability, 0.95);
     assert.deepEqual(readShadows(), [], "replay mode does not also shadow");
     assert.equal(server.count > 0, true);
   } finally {
@@ -86,9 +86,9 @@ test("the replay returns the chosen cached core before compute", async () => {
 test("with the replay flag off the same live prompt computes and hides the sentinel", async () => {
   delete process.env.RULE_MCP_DECISION_CACHE_REPLAY;
 
-  const response = await callTool("pix_tool", { prompt: "create a react form component", framework: "react" });
+  const response = await callTool("rule_tool", { prompt: "create a react form component", framework: "react" });
   const parsed = JSON.parse(response.content[0].text);
 
   assert.equal(parsed.replayed, undefined);
-  assert.equal(response._meta?.pixCache, undefined);
+  assert.equal(response._meta?.ruleCache, undefined);
 });

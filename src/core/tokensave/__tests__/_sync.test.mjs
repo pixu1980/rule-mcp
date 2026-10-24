@@ -1,7 +1,7 @@
 
 
 /**
- * After rule writes, the graph is stale until TokenSave is told.
+ * After rule-mcp writes, the graph is stale until TokenSave is told.
  *
  * `syncIndex` is the adapter's write-side counterpart: incremental sync when a
  * graph exists, a silent no-op when it does not, and a reported reason when the

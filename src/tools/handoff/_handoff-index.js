@@ -113,7 +113,7 @@ export function buildHandoffIndex(entries) {
     "",
     "## Operating rules",
     "",
-    "- Write a handoff with `/rule-handoff`; it persists to `docs/handoff/<NN>-<slug>.md`.",
+    "- Write a handoff with `/rule-mcp-handoff`; it persists to `docs/handoff/<NN>-<slug>.md`.",
     "- Never edit this file. Edit a handoff and let the next `handoff doctor` regenerate it.",
     "",
   ].join("\n");

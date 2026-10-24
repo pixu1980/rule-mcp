@@ -3,7 +3,7 @@
 /**
  * @module tools/ai/decision
  *
- * The gated second opinion for `pix_tool`.
+ * The gated second opinion for `rule_tool`.
  *
  * BM25 already chose six candidates. The model is asked one `choice` over those
  * six, and its pick replaces the ranker only when the probability clears the

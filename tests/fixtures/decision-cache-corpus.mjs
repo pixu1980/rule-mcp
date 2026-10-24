@@ -7,7 +7,7 @@
  *
  * Each group is one cached call (the seed) and the live phrasings that should
  * reuse it. The benchmark computes each prompt's gold route with the live
- * `pix_tool` call, so the corpus never asserts a route by hand. The negatives
+ * `rule_tool` call, so the corpus never asserts a route by hand. The negatives
  * are live prompts whose skill has no seed: any candidate is a wrong replay,
  * and `none` is the only safe choice.
  *

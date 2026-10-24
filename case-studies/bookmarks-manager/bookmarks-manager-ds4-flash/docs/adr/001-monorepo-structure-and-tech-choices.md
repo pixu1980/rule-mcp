@@ -19,7 +19,7 @@ semantic HTML, a11y-first, and consistent design system.
 - **A11y**: WCAG 2.2 AA, Playwright + axe-core tests
 - **Storage**: Local filesystem JSON (MVP), easy to swap for PostgreSQL later
 - **API versioning**: URI-based `/api/v1/`
-- **No CSS classes, no inline styles, no Tailwind** — rule-mcp compliant
+- **No CSS classes, no inline styles, no Tailwind**, rule-mcp compliant
 
 ## Consequences
 

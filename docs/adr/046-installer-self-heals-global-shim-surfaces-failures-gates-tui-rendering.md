@@ -20,7 +20,7 @@ launch. That trust broke in a real scenario:
    so the failure looked exactly like a successful-but-skipped install. The pi
    entry was never written to `~/.pi/agent/mcp.json`, and re-running
    `./scripts/install.sh` never repaired anything because a relink only happened
-   when `command -v rule-mcp` **failed** — it never did.
+   when `command -v rule-mcp` **failed**, it never did.
 
 While fixing this, `pnpm link --global .` proved worse than useless as a repair
 strategy: pnpm 10/11 rewrites `pnpm-workspace.yaml` (clobbering the `hono:`
@@ -36,7 +36,7 @@ script under `set -euo pipefail`.
 
 ## Decision
 
-1. **Verify before trust.** `shim_works()` (bash) / `Test-PixCli` (PS) run
+1. **Verify before trust.** `shim_works()` (bash) / `Test-RuleMCPCli` (PS) run
    `rule-mcp --version`; the global binary is used only when it launches.
    When it exists but fails, the installer warns, removes the stale shim, and
    **writes a plain launcher script** (`exec node '<project>/bin/rule-mcp.js'`)
@@ -44,7 +44,7 @@ script under `set -euo pipefail`.
    `global-bin-dir`, or the platform default). In the local-repo flow the shim is
    never created via `pnpm link --global`. `RULE_MCP_SKIP_GLOBAL_LINK=1`
    skips writing the shim entirely (tests/sandboxes).
-2. **Fall back instead of failing silently.** `run_cli` / `Invoke-PixCli` fall
+2. **Fall back instead of failing silently.** `run_cli` / `Invoke-RuleMCPCli` fall
    back to the local entrypoint (`node $LOCAL_BIN`) when the shim is broken, so a
    stale shim can never again block the install.
 3. **Surface CLI errors.** All `install`/`daemon`/`doctor` calls capture output
@@ -69,7 +69,7 @@ rule-mcp` resolves to nothing afterward.
 
 **Positive**
 
-- A stale/`moved-repo` shim is detected, warned about, and repaired — the
+- A stale/`moved-repo` shim is detected, warned about, and repaired, the
   original "pi silently skipped" failure is structurally impossible.
 - `pnpm-workspace.yaml` / lockfile overrides can no longer be clobbered by the
   installer (regression-guarded by a source test in

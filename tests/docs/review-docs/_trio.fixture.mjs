@@ -17,7 +17,7 @@ export const { readFindings, syncRoleDocs, validateTrio } = await import("../../
 
 /** A project of its own for each case: these tests write files. */
 export function project() {
-  const dir = mkdtempSync(join(tmpdir(), "rule-trio-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-trio-"));
 
   mkdirSync(join(dir, ".git"), { recursive: true });
 

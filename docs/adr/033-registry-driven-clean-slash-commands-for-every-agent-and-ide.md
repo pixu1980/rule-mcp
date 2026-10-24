@@ -9,10 +9,10 @@
 
 Every MCP host namespaces the prompts a server exposes, and none of them let the server drop the prefix:
 
-- Claude Code → `/rule-mcp:rule-backend (MCP)`
-- VS Code (Copilot Chat) → `/mcp.rule-mcp.rule-backend`
+- Claude Code -> `/rule-mcp:rule-mcp-backend (MCP)`
+- VS Code (Copilot Chat) -> `/mcp.rule-mcp.rule-mcp-backend`
 
-Only the host's own command/prompt **files** are invoked bare (`/rule-backend`). ADR 028 solved this for Claude Code and Pi with user-level command files plus `RULE_MCP_NO_PROMPTS=1`, but the knowledge of _which directory, which format, which host_ was spread across three places: the per-agent installers (`src/cli/install.js`), a hand-maintained installer script (`scripts/install-agent-commands.sh`) and a hand-maintained path list in `scripts/uninstall.sh`.
+Only the host's own command/prompt **files** are invoked bare (`/rule-mcp-backend`). ADR 028 solved this for Claude Code and Pi with user-level command files plus `RULE_MCP_NO_PROMPTS=1`, but the knowledge of _which directory, which format, which host_ was spread across three places: the per-agent installers (`src/cli/install.js`), a hand-maintained installer script (`scripts/install-agent-commands.sh`) and a hand-maintained path list in `scripts/uninstall.sh`.
 
 Consequences of that split: VS Code was never covered (its commands stayed prefixed), and nothing structurally prevented the next new agent from being forgotten the same way.
 
@@ -36,7 +36,7 @@ VS Code support arrives as a new `prompt` render format: `<name>.prompt.md` with
 
 - A new agent cannot silently ship with prefixed-only commands - the coverage test blocks it.
 - Installer, uninstaller and doctor cannot drift from the registry.
-- VS Code finally gets bare `/rule-*` commands with no duplicate `/mcp.rule-mcp.*` entries.
+- VS Code finally gets bare `/rule-mcp-*` commands with no duplicate `/mcp.rule-mcp.*` entries.
 - The remaining gaps are explicit, reasoned and reviewable instead of invisible.
 
 **Negative**
@@ -48,7 +48,7 @@ VS Code support arrives as a new `prompt` render format: `<name>.prompt.md` with
 
 ## Alternatives considered
 
-- **Shorten the MCP server name** so the host prefix hurts less - rejected: `/mcp.w.rule-backend` is still prefixed and destroys discoverability.
+- **Shorten the MCP server name** so the host prefix hurts less - rejected: `/mcp.w.rule-mcp-backend` is still prefixed and destroys discoverability.
 - **Ship a Claude plugin** - rejected in ADR 028: plugin commands are namespaced `/plugin:command`.
 - **Keep per-installer writes and add VS Code by hand to each script** - rejected: that drift is exactly what left VS Code uncovered.
 - **Auto-write `.github/prompts` in every repo** - rejected: pollutes the user's working tree.

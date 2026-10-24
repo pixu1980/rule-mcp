@@ -15,8 +15,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-gr-home-"));
-const projectRoot = mkdtempSync(join(tmpdir(), "rule-gr-project-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-gr-home-"));
+const projectRoot = mkdtempSync(join(tmpdir(), "rule-mcp-gr-project-"));
 
 process.env.RULE_MCP_HOME = home;
 mkdirSync(join(projectRoot, ".git"), { recursive: true });
@@ -43,10 +43,10 @@ function skill(base, name, { declares = [], exports_ = declares, inherits = [], 
 }
 
 test("a skill's own rules load from its guardrails folder", async () => {
-  skill(join(projectRoot, ".rule-mcp"), "rule-house-rules", { declares: ["no-todo", "no-fixme"] });
+  skill(join(projectRoot, ".rule-mcp"), "rule-mcp-house-rules", { declares: ["no-todo", "no-fixme"] });
 
   const loaded = await loadLayerGuardrails({ cwd: projectRoot });
-  const entry = loaded.get("rule-house-rules");
+  const entry = loaded.get("rule-mcp-house-rules");
 
   assert.equal(entry.layer, "project", "the rules are attributed to the layer they came from");
   assert.deepEqual(
@@ -58,43 +58,43 @@ test("a skill's own rules load from its guardrails folder", async () => {
 });
 
 test("the inheritance a skill declares is carried through", async () => {
-  skill(join(projectRoot, ".rule-mcp"), "rule-house-child", { declares: ["child-rule"], inherits: ["rule-house-rules"] });
+  skill(join(projectRoot, ".rule-mcp"), "rule-mcp-house-child", { declares: ["child-rule"], inherits: ["rule-mcp-house-rules"] });
 
   const loaded = await loadLayerGuardrails({ cwd: projectRoot });
 
-  assert.deepEqual(loaded.get("rule-house-child").inherits, ["rule-house-rules"]);
+  assert.deepEqual(loaded.get("rule-mcp-house-child").inherits, ["rule-mcp-house-rules"]);
 });
 
 test("a skill with no guardrails folder loads with none", async () => {
-  const dir = join(projectRoot, ".rule-mcp", "skills", "rule-text-only");
+  const dir = join(projectRoot, ".rule-mcp", "skills", "rule-mcp-text-only");
   mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "SKILL.md"), "---\nname: rule-text-only\n---\n\n# Text only\n");
+  writeFileSync(join(dir, "SKILL.md"), "---\nname: rule-mcp-text-only\n---\n\n# Text only\n");
 
   const loaded = await loadLayerGuardrails({ cwd: projectRoot });
 
-  assert.deepEqual(loaded.get("rule-text-only").guardrails, [], "a skill is allowed to be documentation and nothing else");
+  assert.deepEqual(loaded.get("rule-mcp-text-only").guardrails, [], "a skill is allowed to be documentation and nothing else");
   assert.deepEqual(
-    loaded.problems.filter((problem) => problem.skill === "rule-text-only"),
+    loaded.problems.filter((problem) => problem.skill === "rule-mcp-text-only"),
     [],
     "and that is not a problem",
   );
 });
 
 test("a guardrails folder that throws on import is reported, not fatal", async () => {
-  skill(join(projectRoot, ".rule-mcp"), "rule-broken-rules", { declares: ["never-loads"], body: "throw new Error('boom');\n" });
+  skill(join(projectRoot, ".rule-mcp"), "rule-mcp-broken-rules", { declares: ["never-loads"], body: "throw new Error('boom');\n" });
 
   const loaded = await loadLayerGuardrails({ cwd: projectRoot });
 
-  assert.deepEqual(loaded.get("rule-broken-rules").guardrails, [], "nothing is taken from a folder that would not load");
+  assert.deepEqual(loaded.get("rule-mcp-broken-rules").guardrails, [], "nothing is taken from a folder that would not load");
   assert.ok(
-    loaded.problems.some((problem) => problem.skill === "rule-broken-rules" && /boom/.test(problem.reason)),
+    loaded.problems.some((problem) => problem.skill === "rule-mcp-broken-rules" && /boom/.test(problem.reason)),
     `the failure is reported with its reason: ${JSON.stringify(loaded.problems)}`,
   );
-  assert.ok(loaded.get("rule-house-rules").guardrails.length > 0, "and the other skills still load");
+  assert.ok(loaded.get("rule-mcp-house-rules").guardrails.length > 0, "and the other skills still load");
 });
 
 test("a rule that is not a rule is refused", async () => {
-  skill(join(projectRoot, ".rule-mcp"), "rule-bad-shape", {
+  skill(join(projectRoot, ".rule-mcp"), "rule-mcp-bad-shape", {
     declares: ["fine"],
     body: `export const GUARDRAILS = [{ id: "fine", check: () => ({ pass: true }) }, { label: "no id" }, { id: "no-check" }];\n`,
   });
@@ -102,18 +102,18 @@ test("a rule that is not a rule is refused", async () => {
   const loaded = await loadLayerGuardrails({ cwd: projectRoot });
 
   assert.deepEqual(
-    loaded.get("rule-bad-shape").guardrails.map((rule) => rule.id),
+    loaded.get("rule-mcp-bad-shape").guardrails.map((rule) => rule.id),
     ["fine"],
     "an entry without an id or without a check is not a guardrail",
   );
-  assert.equal(loaded.problems.filter((problem) => problem.skill === "rule-bad-shape").length, 2, "and each one is reported");
+  assert.equal(loaded.problems.filter((problem) => problem.skill === "rule-mcp-bad-shape").length, 2, "and each one is reported");
 });
 
 test("a frontmatter that does not match the folder is reported", async () => {
-  skill(join(projectRoot, ".rule-mcp"), "rule-drifted", { declares: ["declared-only"], exports_: ["exported-only"] });
+  skill(join(projectRoot, ".rule-mcp"), "rule-mcp-drifted", { declares: ["declared-only"], exports_: ["exported-only"] });
 
   const loaded = await loadLayerGuardrails({ cwd: projectRoot });
-  const drift = loaded.problems.filter((problem) => problem.skill === "rule-drifted");
+  const drift = loaded.problems.filter((problem) => problem.skill === "rule-mcp-drifted");
 
   assert.equal(drift.length, 2, "both directions of the drift are reported");
   assert.ok(
@@ -127,10 +127,10 @@ test("a frontmatter that does not match the folder is reported", async () => {
 });
 
 test("the user layer's rules replace the project's for the same skill", async () => {
-  skill(home, "rule-house-rules", { declares: ["user-rule"] });
+  skill(home, "rule-mcp-house-rules", { declares: ["user-rule"] });
 
   const loaded = await loadLayerGuardrails({ cwd: projectRoot });
-  const entry = loaded.get("rule-house-rules");
+  const entry = loaded.get("rule-mcp-house-rules");
 
   assert.equal(entry.layer, "user");
   assert.deepEqual(

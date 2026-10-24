@@ -29,7 +29,7 @@ One unrelated test that was already failing at HEAD was fixed in its own commit.
 - `src/tools/handoff/_closeout.js`: `closeoutLines` takes the heading level, so
   the handoff keeps `###` and the resume report can use `##`.
 - CLI: `rule-mcp handoff --no-archive`.
-- `/rule-handoff` vocabulary: the `no-archive` token, plus the usage block and
+- `/rule-mcp-handoff` vocabulary: the `no-archive` token, plus the usage block and
   the prompt's resolved-argument list.
 - `src/prompts/_handoff-prompt.js`: because the run now writes to the tree, the
   workflow gained an explicit step that stages the archive and commits it as one
@@ -51,7 +51,7 @@ One unrelated test that was already failing at HEAD was fixed in its own commit.
   `## Next from the plans` with the wording that this is a proposal to confirm.
 - `src/tools/handon/_register.js`: `closeout` parameter, description updated,
   and the `readOnlyHint: true` annotation dropped because the tool writes now.
-- CLI: `rule-mcp handon --no-archive`; `/rule-handon` prompt tells the
+- CLI: `rule-mcp handon --no-archive`; `/rule-mcp-handon` prompt tells the
   agent to commit the sweep as one `docs(adr): ...` and to ask the user which
   workstream to start.
 - Tests: `_closeout-sweep.test.mjs`, `_plans.test.mjs`.
@@ -60,7 +60,7 @@ One unrelated test that was already failing at HEAD was fixed in its own commit.
 
 - `src/cli/install/__tests__/_installer-stdio-path.test.mjs` asserted every
   opt-out env flag ships as `"0"`, but `DEFAULT_OPTOUT_ENV` carries
-  `RULE_MCP_NO_PROMPTS: "1"` so Claude Code shows the clean `/rule-*`
+  `RULE_MCP_NO_PROMPTS: "1"` so Claude Code shows the clean `/rule-mcp-*`
   commands (ADR 028). The test failed at HEAD. It now compares each flag against
   its own default and pins the one exception.
 
@@ -70,18 +70,18 @@ One unrelated test that was already failing at HEAD was fixed in its own commit.
 - ADR 087 is marked `superseded` with a pointer to 103, scoped to the mode
   question only: what counts as complete, the one-ADR-per-doc fold and the
   English gate stay as 087 wrote them.
-- Skill `rule-process-handoff` no longer claims `handon` is read-only, documents
+- Skill `rule-mcp-process-handoff` no longer claims `handon` is read-only, documents
   the `no-archive` token, and gains a "What the sweep does" section.
 - README, `docs/plans/github.md` and the census-owned docs regenerated.
 
 ## Verification
 
-| Gate                                 | Result                                                                                                                                                                                                                                                                                                                                                             |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `scripts/ci/run-tests/index.mjs all` | 1779 tests, 1776 pass, 3 skipped, 0 fail (exit 0)                                                                                                                                                                                                                                                                                                                  |
-| `rule_tool_check` mode=project        | 2/5 red, both pre-existing: `project-circular` (3 cycles in `src/transport/session-registry/*`, `src/core/session/resume/*`, `src/cli/commands/_targets*` and the `skills/rule-frontend-vanilla-reactive/examples` tree) and `project-dead-code` (53 symbols; the 3 in `tools/handoff` and `tools/handon` are `register*Tool`, invoked dynamically by the registry) |
-| `pnpm lint`                          | Baseline already red at HEAD: 64 errors repo-wide. Every file this session added is clean; the 7 errors inside the touched directories are on pre-existing lines                                                                                                                                                                                                   |
-| census freshness                     | Green at the tip                                                                                                                                                                                                                                                                                                                                                   |
+| Gate                                 | Result                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `scripts/ci/run-tests/index.mjs all` | 1779 tests, 1776 pass, 3 skipped, 0 fail (exit 0)                                                                                                                                                                                                                                                                                                                       |
+| `rule_tool_check` mode=project       | 2/5 red, both pre-existing: `project-circular` (3 cycles in `src/transport/session-registry/*`, `src/core/session/resume/*`, `src/cli/commands/_targets*` and the `skills/rule-mcp-frontend-vanilla-reactive/examples` tree) and `project-dead-code` (53 symbols; the 3 in `tools/handoff` and `tools/handon` are `register*Tool`, invoked dynamically by the registry) |
+| `pnpm lint`                          | Baseline already red at HEAD: 64 errors repo-wide. Every file this session added is clean; the 7 errors inside the touched directories are on pre-existing lines                                                                                                                                                                                                        |
+| census freshness                     | Green at the tip                                                                                                                                                                                                                                                                                                                                                        |
 
 `nextPlanSteps` and `planLines` are not in the dead-code list: `handon` calls
 them.
@@ -113,7 +113,7 @@ regenerate `docs/adr/ADR.md`.
 ### Skill display name in Claude Code App for macOS
 
 Carried over from handoffs 09 and 10, still unverified. The CLI shows the clean
-`/rule-handoff`; the app may still show `/rule-mcp:rule-handoff`. The prompt
+`/rule-mcp-handoff`; the app may still show `/rule-mcp:rule-mcp-handoff`. The prompt
 suppression fix in the previous session addresses the MCP-prompt path; the app
 path was never checked. Look at `src/cli/setup/_task-extras.js`,
 `src/cli/setup/_commands-items.js` and `~/.claude/mcp.json`.
@@ -135,7 +135,7 @@ Carried over from handoff 10: POSIX-only, exercised in a scratch copy with a fak
 false` is the read-only run
 - ADR 087: session close archives completed audits, reviews and plans
   (superseded on the mode question)
-- ADR 028: clean `/rule-*` commands via user commands and prompt suppression
+- ADR 028: clean `/rule-mcp-*` commands via user commands and prompt suppression
 - ADR 068: `src/shared` for every shareable helper (the sweep stayed in
   `tools/handoff`, following the existing cross-tool import convention that
   `_closeout.js` already uses for `../adr/*`)
@@ -146,5 +146,5 @@ false` is the read-only run
 - `src/tools/handon/_plans.js`, `_handon.js`, `_register.js`
 - `src/prompts/_handoff-options.js`, `_handoff-options.data.js`, `_handoff-prompt.js`
 - `src/cli/_register-handoff.js`, `src/cli/_register-session.js`
-- `skills/rule-process-handoff/SKILL.md`
+- `skills/rule-mcp-process-handoff/SKILL.md`
 - `docs/adr/103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md`

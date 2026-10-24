@@ -35,18 +35,18 @@ export function supportsUnicode() {
 const UNICODE = {
   checked: "◉",
   unchecked: "◯",
-  radioOn: "●",
+  radioOn: "-",
   radioOff: "○",
   pointer: "❯",
   ok: "✓",
   warn: "▲",
   fail: "✗",
   skip: "-",
-  pending: "·",
+  pending: "-",
   barFull: "█",
   barEmpty: "░",
-  dot: "•",
-  arrow: "→",
+  dot: "-",
+  arrow: "->",
   spinner: ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"],
 };
 

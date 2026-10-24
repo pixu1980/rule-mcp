@@ -13,7 +13,7 @@ import { gzipSync } from "node:zlib";
 import { namespace } from "../_config.js";
 const { cacheFile, cacheGet, cacheKey } = await import("../index.js");
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-toolcache-persist-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-toolcache-persist-"));
 
 test.after(() => {
   rmSync(stateDir, { recursive: true, force: true });
@@ -34,7 +34,7 @@ test("legacy entries without a result and request-id carriers are dropped", () =
           version: 3,
           entries: {
             legacy: { value: 42 },
-            withRequest: { result: { _meta: { pixEnforcement: { requestId: "abc" } }, content: [] } },
+            withRequest: { result: { _meta: { ruleEnforcement: { requestId: "abc" } }, content: [] } },
             fine: { result: { content: [{ type: "text", text: "loaded" }] } },
           },
         }),
@@ -42,7 +42,7 @@ test("legacy entries without a result and request-id carriers are dropped", () =
     ),
   );
 
-  assert.equal(cacheGet(cacheKey("pix_tool", { prompt: "legacy" })), undefined, "a legacy entry never loads");
-  assert.equal(cacheGet(cacheKey("pix_tool", { prompt: "withRequest" })), undefined, "a request-id entry never loads");
+  assert.equal(cacheGet(cacheKey("rule_tool", { prompt: "legacy" })), undefined, "a legacy entry never loads");
+  assert.equal(cacheGet(cacheKey("rule_tool", { prompt: "withRequest" })), undefined, "a request-id entry never loads");
   assert.doesNotThrow(() => cacheGet("fine"), "the loader tolerates the mix");
 });

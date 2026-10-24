@@ -88,7 +88,7 @@ export function skillItems(areas) {
     ...(all.get(area)?.members ?? []).map((skill) => ({
       id: skill,
       label: skill,
-      detail: [`Writes /${skill.replace(/^rule-/, "rule-area-")}.`, "", `Area: ${area}.`],
+      detail: [`Writes /${skill.replace(/^rule-mcp-/, "rule-mcp-area-")}.`, "", `Area: ${area}.`],
     })),
   ]);
 }

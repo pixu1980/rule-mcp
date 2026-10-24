@@ -50,7 +50,7 @@ export default defineConfig([
         },
       ],
       // ── ADR 028: rules that fight this codebase's conventions (revisit later) ──
-      "unicorn/name-replacements": "off", // i → index, stateDir → stateDirectory: noisy renames
+      "unicorn/name-replacements": "off", // i -> index, stateDir -> stateDirectory: noisy renames
       "unicorn/import-style": "off", // named node builtin imports are the repo convention
       "unicorn/text-encoding-identifier-case": "off", // utf-8 vs utf8: both valid, cosmetic
       // unicorn 74 turns this rule on with the `multiline` default, which would

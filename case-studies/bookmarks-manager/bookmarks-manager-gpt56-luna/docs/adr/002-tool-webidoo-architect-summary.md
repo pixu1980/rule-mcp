@@ -1,13 +1,13 @@
-# 002: Tool: pix_architect — summary
+# 002: Tool: rule_tool_architect, summary
 
 - **Date**: 2026-07-11 14:46:18
 - **Status**: accepted
 - **Tags**: tool, auto-log
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 
-Tool: pix_architect
+Tool: rule_tool_architect
 Args: {"mode":"summary"}
 
 ## Decision
@@ -16,4 +16,4 @@ Tool executed successfully.
 
 ## Consequences
 
-None — informational entry.
+None, informational entry.

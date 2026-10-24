@@ -35,7 +35,7 @@ export function validateRouterResult(result, toolNames, skillNames) {
   try {
     routing = JSON.parse(result.content[0].text);
   } catch {
-    throw new Error("rule router returned invalid JSON");
+    throw new Error("rule-mcp router returned invalid JSON");
   }
 
   const routes = [routing.route, ...(routing.alternatives ?? []).map((item) => item.route)];
@@ -44,17 +44,17 @@ export function validateRouterResult(result, toolNames, skillNames) {
     // "none" and "unknown" are valid non-skill routes the router emits when no
     // confident match exists - they are not invented skills.
     if (route !== "none" && route !== "unknown" && !skillNames.has(route)) {
-      throw new Error(`rule router invented unknown skill: ${route}`);
+      throw new Error(`rule-mcp router invented unknown skill: ${route}`);
     }
   }
 
   for (const toolName of routing.next_tools ?? []) {
     if (!toolNames.has(toolName)) {
-      throw new Error(`rule router invented unknown tool: ${toolName}`);
+      throw new Error(`rule-mcp router invented unknown tool: ${toolName}`);
     }
   }
 
   if (typeof routing.confidence !== "number" || routing.confidence < 0 || routing.confidence > 1) {
-    throw new Error("rule router returned invalid confidence");
+    throw new Error("rule-mcp router returned invalid confidence");
   }
 }

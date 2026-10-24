@@ -141,7 +141,7 @@ export async function scrapeUrl(url: URL): Promise<ScrapedMetadata> {
 
 /**
  * Reads a `Response` body up to `maxBytes`, aborting the stream early if the
- * limit is exceeded — protects against unbounded or malicious payloads that
+ * limit is exceeded, protects against unbounded or malicious payloads that
  * omit `content-length`.
  */
 async function readBounded(response: Response, maxBytes: number): Promise<string> {

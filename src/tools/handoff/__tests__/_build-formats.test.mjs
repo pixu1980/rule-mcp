@@ -11,7 +11,7 @@ import { buildHandoff } from "../_build.js";
 import { adrLines, contextLines, headerLines, identityLines } from "../_sections-core.js";
 import { footerLines, gitLogLines, workingTreeLines } from "../_sections-repo.js";
 
-const project = mkdtempSync(join(tmpdir(), "rule-handoff-fmt-"));
+const project = mkdtempSync(join(tmpdir(), "rule-mcp-handoff-fmt-"));
 
 test.before(() => {
   mkdirSync(join(project, "docs", "adr"), { recursive: true });

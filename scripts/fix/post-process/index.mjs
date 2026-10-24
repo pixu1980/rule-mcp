@@ -6,7 +6,7 @@
  * @module scripts/post-process
  *
  * Standalone file tree post-processing script.
- * Scans a project directory, validates the file tree against rule AI
+ * Scans a project directory, validates the file tree against rule-mcp AI
  * conventions, and auto-fixes violations.
  *
  * Usage:

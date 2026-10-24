@@ -7,7 +7,7 @@
  * Regenerates `src/core/wcag-data/index.js` from the W3C's published WCAG JSON.
  *
  * The criteria are vendored rather than fetched at runtime for the same reason
- * every other rule output is deterministic: a tool that reaches the network
+ * every other rule-mcp output is deterministic: a tool that reaches the network
  * to answer gives a different answer when the network is down, and cannot be
  * cached. WCAG 2.2 is a Recommendation, so the data changes on the order of
  * years - a sync script run deliberately is the right cadence, not a fetch on

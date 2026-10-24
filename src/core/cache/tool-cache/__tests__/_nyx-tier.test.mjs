@@ -13,9 +13,9 @@ delete process.env.RULE_MCP_NO_NYX;
 
 test("a similar prompt with the same labels replays at the similar tier", async () => {
   cacheClear();
-  cacheStore("pix_tool", { prompt: "write an adr for the cache" }, result("stored adr"));
+  cacheStore("rule_tool", { prompt: "write an adr for the cache" }, result("stored adr"));
 
-  const cached = await cacheLookupSemantic("pix_tool", { prompt: "write an adr for the cache tier" });
+  const cached = await cacheLookupSemantic("rule_tool", { prompt: "write an adr for the cache tier" });
 
   assert.equal(cached?.tier, "similar");
   assert.equal(cached?.result.content[0].text, "stored adr");
@@ -23,9 +23,9 @@ test("a similar prompt with the same labels replays at the similar tier", async 
 
 test("a similar prompt with different labels does not replay", async () => {
   cacheClear();
-  cacheStore("pix_tool", { prompt: "write an adr for the cache" }, result("stored adr"));
+  cacheStore("rule_tool", { prompt: "write an adr for the cache" }, result("stored adr"));
 
-  assert.equal(await cacheLookupSemantic("pix_tool", { prompt: "write a poem about the sea" }), undefined);
+  assert.equal(await cacheLookupSemantic("rule_tool", { prompt: "write a poem about the sea" }), undefined);
 });
 
 test("a tool without an allow-listed prompt field never reaches the tier", async () => {
@@ -37,11 +37,11 @@ test("a tool without an allow-listed prompt field never reaches the tier", async
 
 test("the tier stays off without RULE_MCP_NYX_CACHE=1", async () => {
   cacheClear();
-  cacheStore("pix_tool", { prompt: "write an adr for the cache" }, result("stored adr"));
+  cacheStore("rule_tool", { prompt: "write an adr for the cache" }, result("stored adr"));
   delete process.env.RULE_MCP_NYX_CACHE;
 
   try {
-    assert.equal(await cacheLookupSemantic("pix_tool", { prompt: "write an adr for the cache tier" }), undefined);
+    assert.equal(await cacheLookupSemantic("rule_tool", { prompt: "write an adr for the cache tier" }), undefined);
   } finally {
     process.env.RULE_MCP_NYX_CACHE = "1";
   }

@@ -12,11 +12,11 @@ test("a skill has a stable content digest", () => {
 
   assert.match(digest, /^[0-9a-f]{16,64}$/, "a hex digest");
   assert.equal(digest, skillDigest(REAL_SKILL), "stable across calls");
-  assert.notEqual(digest, skillDigest("rule-styleguide-css"), "two skills differ");
+  assert.notEqual(digest, skillDigest("rule-mcp-styleguide-css"), "two skills differ");
 });
 
 test("an unknown skill has no digest", () => {
-  assert.equal(skillDigest("rule-does-not-exist"), undefined);
+  assert.equal(skillDigest("rule-mcp-does-not-exist"), undefined);
 });
 
 // ── Invalidation is per dependency ──
@@ -24,36 +24,36 @@ test("an unknown skill has no digest", () => {
 test("an entry survives when its dependencies are unchanged", () => {
   cacheClear();
   const args = { prompt: "react button component" };
-  cacheStore("pix_tool", args, result("kept"), { [REAL_SKILL]: skillDigest(REAL_SKILL) });
+  cacheStore("rule_tool", args, result("kept"), { [REAL_SKILL]: skillDigest(REAL_SKILL) });
 
-  assert.equal(cacheLookup("pix_tool", args)?.result.content[0].text, "kept");
+  assert.equal(cacheLookup("rule_tool", args)?.result.content[0].text, "kept");
 });
 
 test("an entry is dropped when a dependency's digest no longer matches", () => {
   cacheClear();
   const args = { prompt: "react button component" };
-  cacheStore("pix_tool", args, result("stale"), { [REAL_SKILL]: "0000000000000000" });
+  cacheStore("rule_tool", args, result("stale"), { [REAL_SKILL]: "0000000000000000" });
 
-  assert.equal(cacheLookup("pix_tool", args), undefined, "a changed skill invalidates its dependents");
+  assert.equal(cacheLookup("rule_tool", args), undefined, "a changed skill invalidates its dependents");
 });
 
 test("a dependency that no longer exists invalidates the entry", () => {
   cacheClear();
   const args = { prompt: "deleted skill" };
-  cacheStore("pix_tool", args, result("orphan"), { "rule-deleted-skill": "abcabcabcabcabca" });
+  cacheStore("rule_tool", args, result("orphan"), { "rule-mcp-deleted-skill": "abcabcabcabcabca" });
 
-  assert.equal(cacheLookup("pix_tool", args), undefined, "unverifiable is not the same as valid");
+  assert.equal(cacheLookup("rule_tool", args), undefined, "unverifiable is not the same as valid");
 });
 
 test("one skill changing leaves the entries that do not depend on it alone", () => {
   cacheClear();
   const react = { prompt: "react button component" };
   const css = { prompt: "css selector strategy" };
-  cacheStore("pix_tool", react, result("react"), { [REAL_SKILL]: "0000000000000000" });
-  cacheStore("pix_tool", css, result("css"), { "rule-styleguide-css": skillDigest("rule-styleguide-css") });
+  cacheStore("rule_tool", react, result("react"), { [REAL_SKILL]: "0000000000000000" });
+  cacheStore("rule_tool", css, result("css"), { "rule-mcp-styleguide-css": skillDigest("rule-mcp-styleguide-css") });
 
-  assert.equal(cacheLookup("pix_tool", react), undefined, "the dependent is dropped");
-  assert.equal(cacheLookup("pix_tool", css)?.result.content[0].text, "css", "the independent survives");
+  assert.equal(cacheLookup("rule_tool", react), undefined, "the dependent is dropped");
+  assert.equal(cacheLookup("rule_tool", css)?.result.content[0].text, "css", "the independent survives");
 });
 
 test("an entry with no dependencies survives every skill edit", () => {
@@ -67,8 +67,8 @@ test("an entry with no dependencies survives every skill edit", () => {
 test("a dropped entry is actually removed, not merely hidden", () => {
   cacheClear();
   const args = { prompt: "react button component" };
-  cacheStore("pix_tool", args, result("stale"), { [REAL_SKILL]: "0000000000000000" });
-  assert.equal(cacheLookup("pix_tool", args), undefined);
+  cacheStore("rule_tool", args, result("stale"), { [REAL_SKILL]: "0000000000000000" });
+  assert.equal(cacheLookup("rule_tool", args), undefined);
 
   assert.equal(cacheEntries().length, 0, "the stale entry is evicted on the miss that found it");
 });

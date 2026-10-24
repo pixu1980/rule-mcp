@@ -7,11 +7,11 @@ import "./_install.fixture.mjs";
 console.log("=== package.json guardrails: exact versions ===\n");
 
 // ── T0: the guardrails exist and are shared, not skill-specific ──
-const ids = new Set(getGuardrails("rule-styleguide-javascript").map((g) => g.id));
+const ids = new Set(getGuardrails("rule-mcp-styleguide-javascript").map((g) => g.id));
 check("T0 both guardrails are shared", ids.has(EXACT) && ids.has(COREPACK));
 check(
   "T0.1 they are shared for every skill",
-  ["rule-frontend-react", "rule-backend-node", "rule-data-sql"].every((skill) => getGuardrails(skill).some((g) => g.id === EXACT)),
+  ["rule-mcp-frontend-react", "rule-mcp-backend-node", "rule-mcp-data-sql"].every((skill) => getGuardrails(skill).some((g) => g.id === EXACT)),
 );
 
 // ── T1: ranges are rejected, wherever they hide ──

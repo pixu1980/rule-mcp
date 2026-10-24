@@ -48,7 +48,7 @@ mkdirSync(claudeDir, { recursive: true });
 writeFileSync(
   join(claudeDir, "session.jsonl"),
   [
-    JSON.stringify({ type: "user", message: { role: "user", content: "usa rule MCP" } }),
+    JSON.stringify({ type: "user", message: { role: "user", content: "usa rule-mcp MCP" } }),
     // Claude Code returns tool results as user-role rows: 196 of them against
     // 3 prompts in the transcript this was checked against.
     JSON.stringify({ type: "user", message: { role: "user", content: [{ type: "tool_result", content: "ok" }] } }),

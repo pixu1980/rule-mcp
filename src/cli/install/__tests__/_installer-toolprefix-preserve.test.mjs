@@ -7,7 +7,7 @@
  * `/mcp__rule_mcp__*` command prefixes come back after uninstall+install.
  *
  * Also asserts that fresh pi installs now default to `toolPrefix: "none"`,
- * i.e. bare `rule-tool-*` tools and `/rule-*` prompts instead of the
+ * i.e. bare `rule-mcp-tool-*` tools and `/rule-mcp-*` prompts instead of the
  * `mcp__rule_mcp__*` form.
  */
 import { strict as assert } from "node:assert";
@@ -72,7 +72,7 @@ assert.equal(entry.directTools, true, "reinstall must refresh managed connection
 assert.equal(entry.type, "stdio");
 assert.ok(entry.args.includes("serve"), "reinstall must keep the serve command");
 
-// 2. Fresh pi install defaults to toolPrefix "none" (clean /rule-* naming).
+// 2. Fresh pi install defaults to toolPrefix "none" (clean /rule-mcp-* naming).
 const fakeHome2 = mkdtempSync(join(tmpdir(), "rule-mcp-fresh-"));
 const piDir2 = join(fakeHome2, ".pi", "agent");
 installForPi(fakeHome2, piDir2);
@@ -93,4 +93,4 @@ execFileSync(
 const afterUninstall = readFileSync(join(piDir2, "mcp.json"), "utf8").trim();
 assert.ok(!afterUninstall || !JSON.parse(afterUninstall).mcpServers?.["rule-mcp"], "uninstall must remove the rule-mcp entry");
 
-console.log("  ✅ pi reinstall preserves toolPrefix and defaults to clean /rule-* naming");
+console.log("  ✅ pi reinstall preserves toolPrefix and defaults to clean /rule-mcp-* naming");

@@ -10,7 +10,7 @@
  *   - repeated options (--set A --set B) must all be collected
  *   - `--help` / unknown-command exit codes must be stable
  *
- * Every case spawns the real binary so the full parse→dispatch path is covered.
+ * Every case spawns the real binary so the full parse->dispatch path is covered.
  */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
@@ -29,7 +29,7 @@ function packageVersion() {
 
 /** Run the CLI in a sandboxed HOME so nothing touches the real machine. */
 function run(...args) {
-  const fakeHome = mkdtempSync(join(tmpdir(), "rule-cli-surface-"));
+  const fakeHome = mkdtempSync(join(tmpdir(), "rule-mcp-cli-surface-"));
   const env = {
     ...process.env,
     HOME: fakeHome,
@@ -86,7 +86,7 @@ test("--version prints the package version", () => {
 });
 
 test("config env collects every repeated --set value", () => {
-  const home = mkdtempSync(join(tmpdir(), "rule-cli-surface-env-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-cli-surface-env-"));
   const env = {
     ...process.env,
     HOME: home,

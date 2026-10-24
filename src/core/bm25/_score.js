@@ -50,7 +50,7 @@ function search(query, maxResults = DEFAULT_MAX_RESULTS) {
   }
 
   const { df, docLength, docs, totalDocs, avgDocLength } = _index;
-  const scores = new Map(); // docId → cumulative score
+  const scores = new Map(); // docId -> cumulative score
 
   for (const term of queryTerms) {
     const posting = df.get(term);

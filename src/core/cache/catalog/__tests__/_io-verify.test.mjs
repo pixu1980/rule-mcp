@@ -15,7 +15,7 @@ test("a catalog entry without a tool or result is skipped, not primed", () => {
     version: 1,
     generatedAt: "2026-09-01",
     serverVersion: "test",
-    entries: [{ tool: "pix_tool" }, { args: args("ghost") }, { tool: "pix_tool", args: args("live"), dependsOn: {}, result: result("live") }],
+    entries: [{ tool: "rule_tool" }, { args: args("ghost") }, { tool: "rule_tool", args: args("live"), dependsOn: {}, result: result("live") }],
   });
 
   const { loaded, skipped } = primeFromCatalog(project);
@@ -31,10 +31,10 @@ test("verifyCache skips tool-less, unrunnable, repeated and stale entries", asyn
   // entries live under theirs; the twin shares the same identity string
   // under another key to exercise the already-seen skip.
   const dupArgs = args("dup");
-  const keys = [cacheKey("pix_tool", dupArgs), "verify-dup", cacheKey("pix_tool", args("stale")), "verify-bare"];
-  cacheState.store.set(keys[0], { tool: "pix_tool", args: dupArgs, result: result("dup"), deps: {} });
-  cacheState.store.set(keys[1], { tool: "pix_tool", args: dupArgs, result: result("dup"), deps: {} });
-  cacheState.store.set(keys[2], { tool: "pix_tool", args: args("stale"), result: result("stale"), deps: { [SKILL]: "moved" } });
+  const keys = [cacheKey("rule_tool", dupArgs), "verify-dup", cacheKey("rule_tool", args("stale")), "verify-bare"];
+  cacheState.store.set(keys[0], { tool: "rule_tool", args: dupArgs, result: result("dup"), deps: {} });
+  cacheState.store.set(keys[1], { tool: "rule_tool", args: dupArgs, result: result("dup"), deps: {} });
+  cacheState.store.set(keys[2], { tool: "rule_tool", args: args("stale"), result: result("stale"), deps: { [SKILL]: "moved" } });
   cacheState.store.set(keys[3], { result: undefined, deps: {} });
 
   try {

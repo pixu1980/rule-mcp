@@ -29,7 +29,7 @@ console.log("=== Post-process Tests ===\n");
 
 const { postProcessFiles } = await import("../../../src/core/index.js");
 
-const tmpDir = mkdtempSync(join(tmpdir(), "rule-pp-"));
+const tmpDir = mkdtempSync(join(tmpdir(), "rule-mcp-pp-"));
 const origCwd = process.cwd();
 
 try {

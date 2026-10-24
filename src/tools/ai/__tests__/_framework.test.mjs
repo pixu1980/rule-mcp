@@ -13,24 +13,24 @@ test("an explicit framework hint wins without touching the project", () => {
   const resolved = detectFrameworkSkill({ framework: "react", path: "/does/not/exist" });
 
   assert.equal(resolved.detectedFramework, "react", "the hint is kept");
-  assert.equal(resolved.detectedSkillName, "rule-frontend-react", "the react skill is suggested");
+  assert.equal(resolved.detectedSkillName, "rule-mcp-frontend-react", "the react skill is suggested");
   assert.equal(resolved.detectedDomain, "frontend", "react is frontend");
 });
 
 test("an agents hint resolves to the ai domain", () => {
   const resolved = detectFrameworkSkill({ framework: "agents" });
 
-  assert.equal(resolved.detectedSkillName, "rule-ai", "the agents hint resolves to the ai umbrella");
+  assert.equal(resolved.detectedSkillName, "rule-mcp-ai", "the agents hint resolves to the ai umbrella");
   assert.equal(resolved.detectedDomain, "ai", "agents is ai");
 });
 
 test("a project with a package.json detects its framework when no hint is given", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-detect-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-detect-"));
   writeFileSync(join(dir, "package.json"), JSON.stringify({ dependencies: { react: "^19.0.0" } }, null, 2));
 
   const resolved = detectFrameworkSkill({ path: dir });
   assert.equal(resolved.detectedFramework, "react", "react is detected from dependencies");
-  assert.equal(resolved.detectedSkillName, "rule-frontend-react", "the skill follows the detection");
+  assert.equal(resolved.detectedSkillName, "rule-mcp-frontend-react", "the skill follows the detection");
   rmSync(dir, { recursive: true, force: true });
 });
 
@@ -52,8 +52,8 @@ test("no framework and no project mean an empty resolution", () => {
 test("a meta-framework is frontend, so the router still applies its bias", () => {
   const resolved = detectFrameworkSkill({ framework: "astro" });
 
-  assert.equal(resolved.detectedSkillName, "rule-meta-astro", "astro suggests the meta skill");
-  // The rule-meta rename dropped astro out of the rule-frontend prefix, and with
+  assert.equal(resolved.detectedSkillName, "rule-mcp-meta-astro", "astro suggests the meta skill");
+  // The rule-mcp-meta rename dropped astro out of the rule-mcp-frontend prefix, and with
   // it the framework bias the router applies when the domains agree.
   assert.equal(resolved.detectedDomain, "frontend", "a meta-framework is still frontend");
 });
@@ -61,7 +61,7 @@ test("a meta-framework is frontend, so the router still applies its bias", () =>
 test("a skill with no routing domain resolves to null rather than a wrong one", () => {
   const resolved = detectFrameworkSkill({ framework: "electron" });
 
-  assert.equal(resolved.detectedSkillName, "rule-platform-desktop");
+  assert.equal(resolved.detectedSkillName, "rule-mcp-platform-desktop");
   assert.equal(resolved.detectedDomain, null, "platform is not one of the routing domains");
 });
 
@@ -76,7 +76,7 @@ test("every domain the table can produce is one FRAMEWORK_SKILL_MAP can reach", 
 
   assert.deepEqual([...domains].sort(), ["ai", "frontend", null].sort(), "the reachable domains, and nothing else");
   assert.ok(
-    [...suggested].every((skill) => !(skill.startsWith("rule-backend") || skill.startsWith("rule-data") || skill.startsWith("rule-devops"))),
+    [...suggested].every((skill) => !(skill.startsWith("rule-mcp-backend") || skill.startsWith("rule-mcp-data") || skill.startsWith("rule-mcp-devops"))),
     "no suggestion reaches those domains, which is why the table does not list them",
   );
 });

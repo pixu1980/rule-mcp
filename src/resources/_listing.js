@@ -6,10 +6,10 @@
  * The list-time compression pass for `resources/list`.
  *
  * Resource bodies are already compressed at read time (`./_serve.js`); the
- * listing labels are prose the model reads when it discovers what a `rule://`
+ * listing labels are prose the model reads when it discovers what a `rulemcp://`
  * URI can answer, so they go through the same pass. Measured: the real labels
  * are terse by design and the pass is a no-op on them (plan 2c) - the wiring
- * stays so the "every server→model surface is compressed" invariant holds.
+ * stays so the "every server->model surface is compressed" invariant holds.
  */
 
 import { compressText } from "../core/text/_compression.js";

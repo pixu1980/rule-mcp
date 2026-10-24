@@ -6,15 +6,15 @@
 // by nothing else.
 //
 // It used to merge ~/.agents/skills into the surface, and any directory holding
-// a SKILL.md became a tool under the pix_ prefix. On the machine that ran
-// the 2026-08-04 audit that meant 79 stale `rule-*` directories from the previous
-// brand resurfaced as callable `pix_pix_*` tools - plus generic skills such
-// as `test-driven-development` renamed to `pix_test_driven_development`.
+// a SKILL.md became a tool under the rule_tool_ prefix. On the machine that ran
+// the 2026-08-04 audit that meant 79 stale `rule-mcp-*` directories from the previous
+// brand resurfaced as callable `rule_tool_rule_mcp_*` tools - plus generic skills such
+// as `test-driven-development` renamed to `rule_tool_test_driven_development`.
 // 176 tools instead of 88, half of them foreign, ~54k tokens of tool schemas in
 // every model turn.
 //
 // Two invariants, both load-bearing:
-//   1. every tool traces back to a `rule-*` directory in ./skills;
+//   1. every tool traces back to a `rule-mcp-*` directory in ./skills;
 //   2. nothing in the home directory can add, rename, or shadow a tool.
 //
 // The home directory is also where plugin.js used to be imported from, i.e.
@@ -57,19 +57,19 @@ export function surfaceWith(home) {
 
 /** A home directory carrying skills that must NOT reach the tool surface. */
 export function makeHostileHome() {
-  const home = mkdtempSync(join(tmpdir(), "rule-home-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-home-"));
   const skills = join(home, ".agents", "skills");
-  // A stale skill from a previous brand - a rule-* name not in the embedded
-  // corpus must NOT become a pix_* tool because rule only scans rule-* from
+  // A stale skill from a previous brand - a rule-mcp-* name not in the embedded
+  // corpus must NOT become a rule_tool_* tool because rule-mcp only scans rule-mcp-* from
   // the embedded ./skills tree.
-  mkdirSync(join(skills, "rule-outdated-brand"), { recursive: true });
-  writeFileSync(join(skills, "rule-outdated-brand", "SKILL.md"), "---\nname: rule-outdated-brand\n---\nstale\n");
+  mkdirSync(join(skills, "rule-mcp-outdated-brand"), { recursive: true });
+  writeFileSync(join(skills, "rule-mcp-outdated-brand", "SKILL.md"), "---\nname: rule-mcp-outdated-brand\n---\nstale\n");
   // A generic third-party skill.
   mkdirSync(join(skills, "test-driven-development"), { recursive: true });
   writeFileSync(join(skills, "test-driven-development", "SKILL.md"), "---\nname: tdd\n---\ngeneric\n");
   // A home copy that tries to SHADOW a real embedded skill with other content.
-  mkdirSync(join(skills, "rule-frontend-react"), { recursive: true });
-  writeFileSync(join(skills, "rule-frontend-react", "SKILL.md"), "---\nname: rule-frontend-react\n---\nSHADOWED\n");
+  mkdirSync(join(skills, "rule-mcp-frontend-react"), { recursive: true });
+  writeFileSync(join(skills, "rule-mcp-frontend-react", "SKILL.md"), "---\nname: rule-mcp-frontend-react\n---\nSHADOWED\n");
   // A plugin that would be imported and executed at startup.
   mkdirSync(join(skills, "evil-plugin"), { recursive: true });
   writeFileSync(join(skills, "evil-plugin", "SKILL.md"), "---\nname: evil\n---\nx\n");

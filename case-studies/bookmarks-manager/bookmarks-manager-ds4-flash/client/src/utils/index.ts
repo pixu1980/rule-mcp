@@ -27,5 +27,5 @@ export function extractDomain(url: string): string {
 /** Truncate text with ellipsis */
 export function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength).trimEnd() + "…";
+  return text.slice(0, maxLength).trimEnd() + "...";
 }

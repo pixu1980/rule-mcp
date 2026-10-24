@@ -12,10 +12,10 @@ skills:
   - "commit-driven doc maintenance"
   - "plain-language editing"
 evidenceSkills:
-    - "rule-styleguide-markdown"
-  - "rule-process-readme"
-  - "rule-process-adr"
-  - "rule-styleguide-javascript"
+    - "rule-mcp-styleguide-markdown"
+  - "rule-mcp-process-readme"
+  - "rule-mcp-process-adr"
+  - "rule-mcp-styleguide-javascript"
 aliases:
   - "docs-engineer"
   - "documentation engineer"

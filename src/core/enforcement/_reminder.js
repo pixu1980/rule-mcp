@@ -29,7 +29,7 @@ function reminderCadence() {
 
 function enforcementContract(name, terse, styling = false) {
   if (terse) {
-    return `## PIX WORKFLOW REMINDER - evidence is source of truth; minimal change, no unrequested scope; rule_tool_check before done; rule_tool_process_adr without being asked; no subagents;${styling ? ` ${FLEX_FIRST}` : ""}`;
+    return `## RULE-MCP WORKFLOW REMINDER - evidence is source of truth; minimal change, no unrequested scope; rule_tool_check before done; rule_tool_process_adr without being asked; no subagents;${styling ? ` ${FLEX_FIRST}` : ""}`;
   }
 
   const nextStep =
@@ -38,7 +38,7 @@ function enforcementContract(name, terse, styling = false) {
       : "Do not invent APIs, files, tools, dependencies, or requirements. Use only returned evidence. Validate generated code with rule_tool_check before finalizing.";
 
   return [
-    "## PIX WORKFLOW REMINDER",
+    "## RULE-MCP WORKFLOW REMINDER",
     "",
     "- Work with the minimal change: build exactly what was asked, propose anything extra in prose.",
     "- No unrequested scope: no new tables, flags, packages, interfaces, or endpoints without an explicit request.",

@@ -3,16 +3,16 @@
 /**
  * @module test/plans/skills-plan
  *
- * The plan catalogue is a graph, and a graph nothing checks is prose.
+ * The plan catalog is a graph, and a graph nothing checks is prose.
  *
  * ADR 154 gives every plan a format: a status line from a closed vocabulary, a
  * `## Dependency graph` section with parseable lines, and checkbox steps. ADR 153
- * gives the catalogue an order: nodes are plans, edges have four kinds, stages
+ * gives the catalog an order: nodes are plans, edges have four kinds, stages
  * order them, and a dependency sits in an earlier stage than the node that needs
  * it - unless the edge names a phase, because then what closes first is the
  * phase, not the plan.
  *
- * This test is the contract. It failed on the catalogue as it stood on
+ * This test is the contract. It failed on the catalog as it stood on
  * 2026-10-21 (0 of 93 plans had a graph section) and it is meant to keep that
  * from happening again.
  */
@@ -333,7 +333,7 @@ test("done means no open box, and the progress table matches the files", () => {
   assert.deepEqual(offenders, [], `fix these: ${offenders.join("; ")}`);
 });
 
-test("every plan path in the catalogue resolves", () => {
+test("every plan path in the catalog resolves", () => {
   const missing = files.filter((path) => !existsSync(join(plansRoot, path)));
 
   assert.deepEqual(missing, [], `resolve these paths: ${missing.join(", ")}`);

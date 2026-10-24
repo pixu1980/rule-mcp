@@ -13,7 +13,7 @@ import { compact, top } from "./_format.js";
  */
 export function renderStats(stats, options = {}) {
   const lines = [
-    `# ${options.title ?? "rule telemetry"}`,
+    `# ${options.title ?? "rule-mcp telemetry"}`,
     "",
     `Calls: ${stats.calls} across ${stats.sessions} session(s)`,
     `Cache hit rate: ${(stats.cacheHitRate * 100).toFixed(0)}%   Error rate: ${(stats.errorRate * 100).toFixed(0)}%`,

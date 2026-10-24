@@ -46,13 +46,13 @@ function getSkillMetadata(skillName) {
 
 /**
  * The two skills the target retains that the source does not ship. They are a
- * real part of the rule union and route normally; the routing-corpus thresholds
+ * real part of the rule-mcp union and route normally; the routing-corpus thresholds
  * were measured on the source's skill set, so the corpus tests opt into the
  * source-commensurate universe (RULE_MCP_SKILL_UNIVERSE=base) to keep the
  * measurement comparable - their extra bodies would otherwise dilute the
  * term-document frequencies (idf) the scorer's numbers are pinned to.
  */
-const TARGET_ONLY_SKILLS = new Set(["rule-frontend-template-engine", "rule-platform-auth"]);
+const TARGET_ONLY_SKILLS = new Set(["rule-mcp-frontend-template-engine", "rule-mcp-platform-auth"]);
 
 /**
  * Every skill name that resolves, sorted.
@@ -63,7 +63,7 @@ const TARGET_ONLY_SKILLS = new Set(["rule-frontend-template-engine", "rule-platf
  * frontmatter asks for one, which is `exposeTool` and defaults to false for
  * anything this server does not ship.
  *
- * The bare `rule` directory is excluded: it backs the dispatcher tool, which is
+ * The bare `rule-mcp` directory is excluded: it backs the dispatcher tool, which is
  * registered by code rather than as a per-skill tool.
  *
  * @returns {string[]}
@@ -73,9 +73,9 @@ function getSkillNames() {
   const names = [];
 
   for (const entry of resolved().values()) {
-    // The bare `rule` directory backs the dispatcher, which is registered by
+    // The bare `rule-mcp` directory backs the dispatcher, which is registered by
     // code; listing it here would mint a second, per-skill tool for it.
-    if (entry.name === "rule" || (baseUniverse && TARGET_ONLY_SKILLS.has(entry.name))) {
+    if (entry.name === "rule-mcp" || (baseUniverse && TARGET_ONLY_SKILLS.has(entry.name))) {
       continue;
     }
 
@@ -118,8 +118,8 @@ function exposesTool(skillName) {
  * @returns {boolean}
  */
 function isPluginSkill(skillName) {
-  // rule is the router skill, not a plugin
-  if (skillName === "rule") {
+  // rule-mcp is the router skill, not a plugin
+  if (skillName === "rule-mcp") {
     return false;
   }
 

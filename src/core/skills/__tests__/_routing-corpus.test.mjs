@@ -49,7 +49,7 @@ await loadAllSkills(true);
 
 /** @param {string} prompt @returns {Promise<object>} */
 async function route(prompt) {
-  return JSON.parse((await callTool("pix_tool", { prompt })).content[0].text);
+  return JSON.parse((await callTool("rule_tool", { prompt })).content[0].text);
 }
 
 const results = [];

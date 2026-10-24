@@ -16,7 +16,7 @@ export const IDLE_GAP_MS = 90_000;
  * How many separate times someone asked for something.
  *
  * Only the prompts this server saw are visible, so a follow-up typed at an
- * agent that never called a rule tool is invisible to the inference. That is
+ * agent that never called a rule-mcp tool is invisible to the inference. That is
  * why the transcript's own user-turn count wins whenever it exists.
  *
  * @param {object[]} events

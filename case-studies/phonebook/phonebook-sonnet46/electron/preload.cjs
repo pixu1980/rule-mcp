@@ -1,6 +1,6 @@
 /**
  * @file electron/preload.cjs
- * @description Context bridge — exposes the `phonebook` API to the renderer.
+ * @description Context bridge, exposes the `phonebook` API to the renderer.
  * Only `invoke`-based IPC channels are exposed. Never exposes nodeRequire or process.
  */
 "use strict";

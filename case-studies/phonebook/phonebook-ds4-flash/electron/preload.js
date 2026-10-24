@@ -1,6 +1,6 @@
 /**
  * FILE: electron/preload.js
- * USAGE: Context bridge — exposes safe IPC channels to the renderer process.
+ * USAGE: Context bridge, exposes safe IPC channels to the renderer process.
  */
 const { contextBridge, ipcRenderer } = require("electron");
 

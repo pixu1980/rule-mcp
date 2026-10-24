@@ -84,7 +84,7 @@ span[data-part="card-subtitle"] {
   line-height: var(--leading-tight);
 }
 
-/* Favourite indicator dot */
+/* Favorite indicator dot */
 span[data-part="favorite-dot"] {
   width: 6px;
   height: 6px;

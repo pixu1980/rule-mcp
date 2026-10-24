@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-nyx-tier-no-adapter-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-nyx-tier-no-adapter-"));
 
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
@@ -27,7 +27,7 @@ test.after(() => {
 
 test("an adapter without embed is a miss", async () => {
   cacheClear();
-  cacheStore("pix_tool", { prompt: "write an adr for the cache" }, { content: [{ type: "text", text: "stored" }] });
+  cacheStore("rule_tool", { prompt: "write an adr for the cache" }, { content: [{ type: "text", text: "stored" }] });
 
-  assert.equal(await cacheLookupSemantic("pix_tool", { prompt: "write an adr for the cache tier" }), undefined);
+  assert.equal(await cacheLookupSemantic("rule_tool", { prompt: "write an adr for the cache tier" }), undefined);
 });

@@ -23,7 +23,7 @@ function adrFiles(root) {
 
 /** A persisted handoff plus one completed and one open paper of each kind. */
 function seeded() {
-  const root = mkdtempSync(join(tmpdir(), "rule-handon-sweep-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-handon-sweep-"));
 
   git(root, "init", "--initial-branch=main", "-q");
   git(root, "config", "user.email", "fixture@example.com");

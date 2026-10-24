@@ -7,7 +7,7 @@
  *
  * Deleting the folder is the easy part and the only part that is obvious. The
  * rows that link to it are the part that rots: the area router table, the
- * dispatcher, the cross-references in neighbour skills, the persona that
+ * dispatcher, the cross-references in neighbor skills, the persona that
  * listed it as evidence, and the plan index. Every one of them is a plain
  * string in a Markdown file, so nothing fails when the folder goes.
  *
@@ -23,7 +23,7 @@ import test from "node:test";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "..");
 
 /** Skills the catalog retired. Adding one is a decision; removing one is not. */
-export const RETIRED = ["rule-platform-agent", "rule-frontend-vanilla-reactive", "rule-frontend-custom-element"];
+export const RETIRED = ["rule-mcp-platform-agent", "rule-mcp-frontend-vanilla-reactive", "rule-mcp-frontend-custom-element"];
 
 /** Every SKILL.md in the catalog. */
 function skillFiles() {

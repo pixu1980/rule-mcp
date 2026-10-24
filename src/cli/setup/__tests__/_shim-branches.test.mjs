@@ -10,7 +10,7 @@ import { test } from "node:test";
 import { globalBinDir, shimCandidates, shimPath, shimTarget, shimWorks } from "../_shim.js";
 
 function scratch() {
-  return mkdtempSync(join(tmpdir(), "rule-shim-branches-"));
+  return mkdtempSync(join(tmpdir(), "rule-mcp-shim-branches-"));
 }
 
 function withPath(dir, fn) {
@@ -39,7 +39,7 @@ test("shimPath resolves the launcher on PATH", () => {
 });
 
 test("shimTarget falls back to empty on an unreadable path", () => {
-  assert.equal(shimTarget(join(tmpdir(), "rule-shim-does-not-exist")), "");
+  assert.equal(shimTarget(join(tmpdir(), "rule-mcp-shim-does-not-exist")), "");
 });
 
 test("shimWorks refuses an empty version", () => {

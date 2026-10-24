@@ -16,7 +16,7 @@ import { formatDoctorTerminal } from "../index.js";
 delete process.env.FORCE_COLOR;
 delete process.env.NO_COLOR;
 
-console.log("rule doctor UI test");
+console.log("rule-mcp doctor UI test");
 
 const report = {
   ok: true,
@@ -26,7 +26,7 @@ const report = {
   platform: "darwin",
   arch: "arm64",
   entrypoint: "/repo/bin/rule-mcp.js",
-  tools: ["rule", "rule_tool_check", "rule_tool_detect"],
+  tools: ["rule-mcp", "rule_tool_check", "rule_tool_detect"],
   agentsConfigured: 2,
   agentsTotal: 3,
   agents: [

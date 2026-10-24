@@ -38,7 +38,7 @@ const RUNS = 5;
  */
 const baseEnv = { ...process.env, RULE_MCP_NO_TELEMETRY: "1", RULE_MCP_NO_AUTOUPDATE: "1", NODE_DISABLE_COMPILE_CACHE: "1" };
 
-const cacheDir = mkdtempSync(join(tmpdir(), "rule-compile-cache-"));
+const cacheDir = mkdtempSync(join(tmpdir(), "rule-mcp-compile-cache-"));
 const cachedEnv = { ...baseEnv, NODE_COMPILE_CACHE: cacheDir, NODE_DISABLE_COMPILE_CACHE: undefined };
 
 // Prime the cache so the measurement is the steady state an installed agent

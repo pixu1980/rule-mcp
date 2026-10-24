@@ -12,7 +12,7 @@ import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileS
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const base = mkdtempSync(join(tmpdir(), "rule-inject-"));
+const base = mkdtempSync(join(tmpdir(), "rule-mcp-inject-"));
 const meta = '$(touch INJECTED);"quoted" spaced';
 const home = join(base, meta);
 const argvLog = join(base, "argv.log");
@@ -20,7 +20,7 @@ const binDir = join(base, "stub-bin");
 
 mkdirSync(home, { recursive: true });
 process.env.HOME = home;
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-inject-state-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-inject-state-"));
 process.chdir(home);
 
 mkdirSync(binDir, { recursive: true });

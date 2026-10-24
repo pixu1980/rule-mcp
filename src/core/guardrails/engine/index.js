@@ -8,7 +8,7 @@
  * per module rather than through the barrel: the barrel re-exports this
  * engine, so importing it back would be a cycle).
  *
- * The agent iterates: generate → check → fix → re-check → until all pass.
+ * The agent iterates: generate -> check -> fix -> re-check -> until all pass.
  */
 
 export * from "./_registry.js";

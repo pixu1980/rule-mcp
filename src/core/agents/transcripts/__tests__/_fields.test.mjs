@@ -10,8 +10,8 @@ import { test } from "node:test";
 const { detectAgentUsage, readAgentUsage } = await import("../../index.js");
 const { filesUnder, list, mtime, readJson, readJsonl } = await import("../_fs.js");
 
-const home = mkdtempSync(join(tmpdir(), "rule-transcripts-fields-"));
-const projectDir = mkdtempSync(join(tmpdir(), "rule-transcripts-project-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-transcripts-fields-"));
+const projectDir = mkdtempSync(join(tmpdir(), "rule-mcp-transcripts-project-"));
 
 test.after(() => {
   rmSync(home, { recursive: true, force: true });
@@ -67,8 +67,8 @@ test("readAgentUsage folds a codex session and skips other projects", () => {
 });
 
 test("a codex folder with no matching cwd returns nothing", () => {
-  const lone = mkdtempSync(join(tmpdir(), "rule-codex-lone-"));
-  const other = mkdtempSync(join(tmpdir(), "rule-codex-none-"));
+  const lone = mkdtempSync(join(tmpdir(), "rule-mcp-codex-lone-"));
+  const other = mkdtempSync(join(tmpdir(), "rule-mcp-codex-none-"));
 
   assert.equal(readAgentUsage({ agent: "codex", projectDir: other, home: lone }), undefined, "no matching session means no usage");
   assert.equal(detectAgentUsage({ projectDir: other, home: lone }), undefined, "the detector finds nothing");

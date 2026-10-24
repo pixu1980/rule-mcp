@@ -1,6 +1,6 @@
 
 
-/** @module resources/read - serve one rule:// body; `./_serve.js` is the way out callers use */
+/** @module resources/read - serve one rulemcp:// body; `./_serve.js` is the way out callers use */
 
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
@@ -10,7 +10,7 @@ import { readSkill } from "../tools/router/index.js";
 /**
  * Serve a resource by its URI, before compression.
  *
- * @param {string} uri - e.g. "rule://skills", "rule://rule-frontend-react"
+ * @param {string} uri - e.g. "rulemcp://skills", "rulemcp://rule-mcp-frontend-react"
  * @returns {Promise<{ contents: Array<{ uri: string, mimeType: string, text: string }> }>}
  */
 export async function serveResource(uri) {
@@ -18,13 +18,13 @@ export async function serveResource(uri) {
   const { embeddedSkills } = getSkillsDirectories();
 
   // ── Skill index ────────────────────────────────────────────────
-  if (uri === "rule://skills") {
+  if (uri === "rulemcp://skills") {
     const directories = [];
 
     for (const base of [embeddedSkills]) {
       try {
         for (const entry of readdirSync(base, { withFileTypes: true })) {
-          if (!(entry.isDirectory() && entry.name.startsWith("rule"))) {
+          if (!(entry.isDirectory() && entry.name.startsWith("rule-mcp"))) {
             continue;
           }
 
@@ -45,7 +45,7 @@ export async function serveResource(uri) {
   }
 
   // ── Templates catalog ──────────────────────────────────────────
-  if (uri === "rule://templates") {
+  if (uri === "rulemcp://templates") {
     const { listTemplateCategories } = await import("../core/scaffold/templates/index.js");
 
     return {
@@ -59,42 +59,42 @@ export async function serveResource(uri) {
     };
   }
 
-  // ── rule skill ───────────────────────────────────────────
-  if (uri === "rule://ai") {
-    return { contents: [{ uri, mimeType: "text/markdown", text: readSkill("rule") || "" }] };
+  // ── rule-mcp skill ───────────────────────────────────────────
+  if (uri === "rulemcp://ai") {
+    return { contents: [{ uri, mimeType: "text/markdown", text: readSkill("rule-mcp") || "" }] };
   }
 
   // ── A11y resources ─────────────────────────────────────────────
-  if (uri === "rule://a11y") {
+  if (uri === "rulemcp://a11y") {
     return {
       contents: [
         {
           uri,
           mimeType: "text/markdown",
           text:
-            "For a11y testing with Playwright + axe-core, see rule-styleguide-a11y and /rule-persona-a11y.\n\n" +
-            "Use `/rule-area-styleguide` (and related styleguide skills) for templates and config generation.",
+            "For a11y testing with Playwright + axe-core, see rule-mcp-styleguide-a11y and /rule-mcp-persona-a11y.\n\n" +
+            "Use `/rule-mcp-area-styleguide` (and related styleguide skills) for templates and config generation.",
         },
       ],
     };
   }
 
-  if (uri === "rule://a11y/test-basic") {
+  if (uri === "rulemcp://a11y/test-basic") {
     const { getTemplate } = await import("../core/scaffold/templates/index.js");
     const tmpl = getTemplate("a11y-test-basic");
 
     return { contents: [{ uri, mimeType: "text/plain", text: typeof tmpl === "string" ? tmpl : tmpl?.html || "" }] };
   }
 
-  if (uri === "rule://a11y/test-forms") {
+  if (uri === "rulemcp://a11y/test-forms") {
     const { getTemplate } = await import("../core/scaffold/templates/index.js");
     const tmpl = getTemplate("a11y-test-forms");
 
     return { contents: [{ uri, mimeType: "text/plain", text: typeof tmpl === "string" ? tmpl : tmpl?.html || "" }] };
   }
 
-  // ── rule://community - list community skills ───────────────────
-  if (uri === "rule://community") {
+  // ── rulemcp://community - list community skills ───────────────────
+  if (uri === "rulemcp://community") {
     const { getSkillNames, isPluginSkill, readSkill } = await import("../tools/router/index.js");
     const allSkills = getSkillNames();
     const plugins = [];
@@ -114,8 +114,8 @@ export async function serveResource(uri) {
     return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result, null, 2) }] };
   }
 
-  // ── rule://project - analyze project and suggest tools ──────────
-  if (uri === "rule://project") {
+  // ── rulemcp://project - analyze project and suggest tools ──────────
+  if (uri === "rulemcp://project") {
     const { detectProject, getFrameworkSuggestion } = await import("../core/detector/index.js");
     const profile = detectProject(process.cwd());
     const { skillName, toolName } = getFrameworkSuggestion(profile.framework);
@@ -123,14 +123,14 @@ export async function serveResource(uri) {
       ...profile,
       suggested_skills: [skillName],
       suggested_tools: [toolName, "rule_tool_check", "rule_tool_styleguide"],
-      message: `Detected ${profile.framework} project "${profile.projectName}". Use ${toolName} for rule-compliant code generation.`,
+      message: `Detected ${profile.framework} project "${profile.projectName}". Use ${toolName} for rule-mcp-compliant code generation.`,
     };
 
     return { contents: [{ uri, mimeType: "application/json", text: JSON.stringify(result, null, 2) }] };
   }
 
-  // ── Dynamic: rule://<skill-name> or rule://<skill-name>/<part> ──
-  const m = uri?.match(/^rule:\/\/(rule(?:-[a-z0-9]+)*)(?:\/(\w+))?$/);
+  // ── Dynamic: rulemcp://<skill-name> or rulemcp://<skill-name>/<part> ──
+  const m = uri?.match(/^rulemcp:\/\/(rule-mcp(?:-[a-z0-9]+)*)(?:\/(\w+))?$/);
 
   if (m) {
     const [, skillName, section] = m;

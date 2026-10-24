@@ -21,9 +21,9 @@ test("truncate and promptHash are stable", () => {
 });
 
 test("buildGateState caps the context and the whole state", () => {
-  const state = buildGateState({ toolName: "pix_tool", args: { prompt: "p", projectDir: "/p", extra: "x".repeat(200) }, livePrompt: "q", candidates: [{}, {}] });
+  const state = buildGateState({ toolName: "rule_tool", args: { prompt: "p", projectDir: "/p", extra: "x".repeat(200) }, livePrompt: "q", candidates: [{}, {}] });
 
-  assert.match(state, /tool: pix_tool/u);
+  assert.match(state, /tool: rule_tool/u);
   assert.match(state, /projectDir: \/p/u);
   assert.match(state, /candidates: 2/u);
   const many = Object.fromEntries(Array.from({ length: 20 }, (_, i) => [`key${i}`, "x".repeat(120)]));

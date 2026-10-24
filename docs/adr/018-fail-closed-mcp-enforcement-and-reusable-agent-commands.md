@@ -11,7 +11,7 @@ LLM clients can submit malformed or adversarial arguments, consume invalid tool 
 
 ## Decision
 
-Wrap every MCP handler with mandatory preprocessing and postprocessing. Reject unsafe input and malformed output, verify rule routes against live registries, attach auditable enforcement metadata, make rule_tool_check failures blocking, expose manifest-derived allowedDependencies, and install the rule-mcp workflow using each host verified command or agent mechanism. Rename the dispatcher skill to rule while retaining rule-mcp as the product name.
+Wrap every MCP handler with mandatory preprocessing and postprocessing. Reject unsafe input and malformed output, verify rule-mcp routes against live registries, attach auditable enforcement metadata, make rule_tool_check failures blocking, expose manifest-derived allowedDependencies, and install the rule-mcp workflow using each host verified command or agent mechanism. Rename the dispatcher skill to rule-mcp while retaining rule-mcp as the product name.
 
 ## Consequences
 
@@ -20,5 +20,5 @@ Positive: deterministic fail-closed behavior, visible audit contract, fewer hall
 ## Alternatives Considered
 
 1. Rely only on prompt instructions and non-blocking after hooks.
-1. Apply enforcement only to the rule router rather than every tool.
+1. Apply enforcement only to the rule-mcp router rather than every tool.
 1. Assume one universal slash-command filesystem convention for all agents.

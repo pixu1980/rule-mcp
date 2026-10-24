@@ -1,7 +1,7 @@
-# rule-ai guardrails execution plan
+# rule-mcp-ai guardrails execution plan
 
-Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-ai-agent-architecture.
-Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-ai-agent-architecture. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-ai-agent-architecture, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
+Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-mcp-ai-agent-architecture.
+Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-mcp-ai-agent-architecture. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-mcp-ai-agent-architecture, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
 
 Scope: give the AI area its first deterministic guardrails, keep the rest of the
 area narrative, and record every rule against a citable public source.
@@ -16,15 +16,15 @@ per-rule source).
 
 Audited in this session (read-only):
 
-- `skills/rule-ai/SKILL.md` (router, no guardrails)
-- `skills/rule-ai-agent-architecture/SKILL.md` (207 lines)
-- `skills/rule-ai-context-engineering/SKILL.md` (195 lines)
-- `skills/rule-ai-evals/SKILL.md` (247 lines)
-- `skills/rule-ai-prompting/SKILL.md` (159 lines)
+- `skills/rule-mcp-ai/SKILL.md` (router, no guardrails)
+- `skills/rule-mcp-ai-agent-architecture/SKILL.md` (207 lines)
+- `skills/rule-mcp-ai-context-engineering/SKILL.md` (195 lines)
+- `skills/rule-mcp-ai-evals/SKILL.md` (247 lines)
+- `skills/rule-mcp-ai-prompting/SKILL.md` (159 lines)
 - `src/core/layers/_inherit.js` (inheritance needs an `inherits:` line)
 
 Current state: 5 skills, 0 guardrails, 0 `inherits` lines. The area is the only
-one besides `rule-ui` with no deterministic check at all.
+one besides `rule-mcp-ui` with no deterministic check at all.
 
 Sources fetched and used:
 
@@ -38,26 +38,26 @@ Sources fetched and used:
 
 ## Decisions from the interview
 
-| Question      | Decision                                                             |
-| ------------- | -------------------------------------------------------------------- |
-| Target skills | `rule-ai` owns the shared rules; the area stays otherwise narrative   |
-| Scope         | High-signal selection (4-6)                                          |
-| Candidates    | All eight selected                                                   |
-| Trigger       | Devops default: target file or content heuristic, no universal sweep |
-| Severity      | Devops default: advisory, then blocking after corpus proof           |
-| Corpus/tests  | Devops default: fixtures, unit tests, inheritance test               |
-| Artifacts     | Devops default: frontmatter, census, ADR, changelog, per-rule source |
-| Phasing       | Plan only now; implementation in a dedicated session                 |
+| Question      | Decision                                                                |
+| ------------- | ----------------------------------------------------------------------- |
+| Target skills | `rule-mcp-ai` owns the shared rules; the area stays otherwise narrative |
+| Scope         | High-signal selection (4-6)                                             |
+| Candidates    | All eight selected                                                      |
+| Trigger       | Devops default: target file or content heuristic, no universal sweep    |
+| Severity      | Devops default: advisory, then blocking after corpus proof              |
+| Corpus/tests  | Devops default: fixtures, unit tests, inheritance test                  |
+| Artifacts     | Devops default: frontmatter, census, ADR, changelog, per-rule source    |
+| Phasing       | Plan only now; implementation in a dedicated session                    |
 
 ### Open item: how the shared rules reach the four children
 
-The four child skills declare no `inherits`, so rules owned by `rule-ai` do not
+The four child skills declare no `inherits`, so rules owned by `rule-mcp-ai` do not
 reach them. Two ways:
 
-1. **Recommended**: add `inherits: [rule-ai]` to `rule-ai-agent-architecture`,
-   `rule-ai-context-engineering`, `rule-ai-evals` and `rule-ai-prompting`, the way
+1. **Recommended**: add `inherits: [rule-mcp-ai]` to `rule-mcp-ai-agent-architecture`,
+   `rule-mcp-ai-context-engineering`, `rule-mcp-ai-evals` and `rule-mcp-ai-prompting`, the way
    the backend and data children already inherit their umbrella.
-2. Keep the rules on `rule-ai` only, and accept that a check routed to a child
+2. Keep the rules on `rule-mcp-ai` only, and accept that a check routed to a child
    skill runs without them.
 
 ### Tiering: six rules against a 4-6 budget
@@ -73,20 +73,20 @@ carries the prompt and model version. Only one of the two owns each claim.
 
 ## Accepted rules
 
-| Rule id                   | Rejects                                                       | Tier | Source                       |
-| ------------------------- | ------------------------------------------------------------- | ---- | ---------------------------- |
-| `ai-tool-schema`          | tool definition with no parameter schema                      | A    | MCP spec; agent architecture |
-| `ai-call-timeout`         | model or tool call without a timeout or abort signal          | A    | Node.js docs; OpenAI errors  |
-| `ai-max-tokens`           | model call with no explicit output cap                        | A    | OpenAI errors; Anthropic     |
-| `ai-output-validated`     | parsed model output without schema validation                 | A    | OWASP LLM05                  |
-| `ai-no-secrets-in-prompt` | credentials or personal data interpolated into a prompt       | A    | OWASP LLM02 and LLM01        |
-| `ai-trace-span`           | model call with no generation span                            | A    | OpenTelemetry GenAI semconv  |
-| `ai-eval-presence`        | agent project with no eval dataset or CI eval gate            | B    | rule-ai-evals; NIST AI RMF    |
-| `ai-mcp-token-validation` | MCP server accepting a token without audience and scope check | B    | MCP Security Best Practices  |
+| Rule id                   | Rejects                                                       | Tier | Source                         |
+| ------------------------- | ------------------------------------------------------------- | ---- | ------------------------------ |
+| `ai-tool-schema`          | tool definition with no parameter schema                      | A    | MCP spec; agent architecture   |
+| `ai-call-timeout`         | model or tool call without a timeout or abort signal          | A    | Node.js docs; OpenAI errors    |
+| `ai-max-tokens`           | model call with no explicit output cap                        | A    | OpenAI errors; Anthropic       |
+| `ai-output-validated`     | parsed model output without schema validation                 | A    | OWASP LLM05                    |
+| `ai-no-secrets-in-prompt` | credentials or personal data interpolated into a prompt       | A    | OWASP LLM02 and LLM01          |
+| `ai-trace-span`           | model call with no generation span                            | A    | OpenTelemetry GenAI semconv    |
+| `ai-eval-presence`        | agent project with no eval dataset or CI eval gate            | B    | rule-mcp-ai-evals; NIST AI RMF |
+| `ai-mcp-token-validation` | MCP server accepting a token without audience and scope check | B    | MCP Security Best Practices    |
 
 ## Enforcement model
 
-1. **Owner**: `rule-ai` gets a `guardrails/index.js` with the rules above.
+1. **Owner**: `rule-mcp-ai` gets a `guardrails/index.js` with the rules above.
 2. **Triggers**: content heuristics narrowed to files that import a known model
    SDK or declare tools; a file with no model call returns `pass: true`.
 3. **Advisory first**: Tier A promotes to blocking after 100% precision and
@@ -116,14 +116,14 @@ Shared files: none: absorbed into the leaf plans named above
 - [ ] Confirm the `inherits` change (open item).
 - [ ] Create the ADR for the AI guardrail family.
 
-### Phase 1 - Shared rules in rule-ai
+### Phase 1 - Shared rules in rule-mcp-ai
 
 - [ ] Implement `ai-tool-schema`, `ai-call-timeout`, `ai-max-tokens`.
 - [ ] Implement `ai-output-validated`, `ai-no-secrets-in-prompt`,
       `ai-trace-span`.
 - [ ] Implement `ai-eval-presence` and `ai-mcp-token-validation` as Tier B.
 - [ ] Add corpus fixtures, unit tests and the inheritance test.
-- [ ] Update `rule-ai/SKILL.md` frontmatter and rule section.
+- [ ] Update `rule-mcp-ai/SKILL.md` frontmatter and rule section.
 
 ### Phase 2 - Promotion and documentation
 
@@ -138,7 +138,7 @@ Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 | Step                                  | Class      | Model                   | Why                            |
 | ------------------------------------- | ---------- | ----------------------- | ------------------------------ |
 | Phase 0 - Decisions and scaffolding   | `T1-plan`  | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Shared rules in rule-ai      | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 1 - Shared rules in rule-mcp-ai | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
 | Phase 2 - Promotion and documentation | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.

@@ -5,7 +5,7 @@
 /**
  * The help text shown by the top-level CLI command.
  */
-export const HELP_TEXT = `rule-mcp - MCP server for the rule-* skill ecosystem.
+export const HELP_TEXT = `rule-mcp - MCP server for the rule-mcp-* skill ecosystem.
 
 Usage:
   rule-mcp <command> [options]
@@ -18,7 +18,7 @@ Commands:
 
   dev [opts]           Start MCP server (stdio)
                         On-demand from repo: pnpm dev
-                        Agent spawns via mcp.json → no pre-start needed
+                        Agent spawns via mcp.json -> no pre-start needed
                         Prints mcp.json config for agent setup
 
   up [opts]            Start SSE server (alias for \`serve --transport sse\`)

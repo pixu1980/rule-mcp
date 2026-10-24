@@ -43,7 +43,7 @@ const manifests = execFileSync("git", ["ls-files", "-z", "--", "*package.json"],
   .filter((path) => !path.includes("node_modules/"));
 check("T5 every tracked manifest was found", manifests.length > 0);
 const offenders = manifests.filter((path) => {
-  const report = checkCode("rule-toolchain-pnpm", readFileSync(path, "utf8"), { fileName: path });
+  const report = checkCode("rule-mcp-toolchain-pnpm", readFileSync(path, "utf8"), { fileName: path });
 
   return report.failed.some((failure) => failure.id === EXACT || failure.id === COREPACK || failure.id === ENGINES);
 });
@@ -53,7 +53,7 @@ check(`T5.1 every tracked manifest passes all three rules${offenders.length > 0 
 //
 // The manifest rule catches a caret that is already written. `save-exact=true`
 // is what keeps `pnpm add` from writing one, so scaffold mode requires the file.
-const npmrc = (code) => checkCode("rule-styleguide", code, { fileName: ".npmrc", mode: "scaffold" });
+const npmrc = (code) => checkCode("rule-mcp-styleguide", code, { fileName: ".npmrc", mode: "scaffold" });
 check(
   "T6 a missing save-exact fails",
   npmrc("registry=https://registry.npmjs.org/\n").failed.some((f) => f.id === "scaffold-npmrc"),
@@ -72,7 +72,7 @@ check(
 );
 check(
   "T6.3 outside scaffold mode it is not checked",
-  checkCode("rule-styleguide", "", { fileName: ".npmrc" }).failed.every((f) => !(f.id === "scaffold-npmrc")),
+  checkCode("rule-mcp-styleguide", "", { fileName: ".npmrc" }).failed.every((f) => !(f.id === "scaffold-npmrc")),
 );
 check("T6.4 this repository has one", readFileSync(".npmrc", "utf8").includes("save-exact=true"));
 

@@ -19,12 +19,12 @@ const seed = (dir, name) => {
 };
 
 test("the copied names are the catalog plus the generated persona skills", () => {
-  assert.ok(catalogSkillNames().includes("rule-data-sqlite"), "a catalog skill is a copied name");
-  assert.ok(personaSkillNames().includes("rule-persona-security"), "a generated persona skill is a copied name");
+  assert.ok(catalogSkillNames().includes("rule-mcp-data-sqlite"), "a catalog skill is a copied name");
+  assert.ok(personaSkillNames().includes("rule-mcp-persona-security"), "a generated persona skill is a copied name");
 });
 
 test("removeInstalledSkills removes the catalog and persona dirs, leaves a user skill", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-skills-rm-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-skills-rm-"));
 
   try {
     const catalog = catalogSkillNames()[0];
@@ -46,7 +46,7 @@ test("removeInstalledSkills removes the catalog and persona dirs, leaves a user 
 });
 
 test("removeInstalledSkills dry-run reports without deleting", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-skills-rm-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-skills-rm-"));
 
   try {
     const catalog = catalogSkillNames()[0];
@@ -62,23 +62,23 @@ test("removeInstalledSkills dry-run reports without deleting", () => {
 });
 
 test("removeInstalledSkills on a missing directory is a no-op", () => {
-  assert.deepEqual(removeInstalledSkills(join(tmpdir(), `rule-skills-missing-${Date.now()}`)), []);
+  assert.deepEqual(removeInstalledSkills(join(tmpdir(), `rule-mcp-skills-missing-${Date.now()}`)), []);
 });
 
 test("removeInstalledSkills also removes the persona shapes an earlier release wrote", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-skills-rm-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-skills-rm-"));
 
   try {
-    seed(dir, "rule-persona-security-audit");
-    seed(dir, "rule-persona-security");
-    seed(dir, "rule-plan-security");
+    seed(dir, "rule-mcp-persona-security-audit");
+    seed(dir, "rule-mcp-persona-security");
+    seed(dir, "rule-mcp-plan-security");
     seed(dir, "caveman");
 
     const removed = removeInstalledSkills(dir);
 
-    assert.ok(removed.includes("rule-persona-security-audit"), "the per-operation persona skill is removed");
-    assert.ok(removed.includes("rule-persona-security"), "the current persona skill is removed");
-    assert.ok(removed.includes("rule-plan-security"), "the pre-persona shape is removed");
+    assert.ok(removed.includes("rule-mcp-persona-security-audit"), "the per-operation persona skill is removed");
+    assert.ok(removed.includes("rule-mcp-persona-security"), "the current persona skill is removed");
+    assert.ok(removed.includes("rule-mcp-plan-security"), "the pre-persona shape is removed");
     assert.ok(!removed.includes("caveman"), "a user skill still survives");
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -86,7 +86,7 @@ test("removeInstalledSkills also removes the persona shapes an earlier release w
 });
 
 test("skillsUninstallCommand removes the copied skills from the global dirs", () => {
-  const home = mkdtempSync(join(tmpdir(), "rule-skills-home-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-skills-home-"));
   const previous = process.env.HOME;
   process.env.HOME = home;
 
@@ -109,7 +109,7 @@ test("skillsUninstallCommand removes the copied skills from the global dirs", ()
 });
 
 test("skillsUninstallCommand dry-run reports nothing and removes nothing", () => {
-  const home = mkdtempSync(join(tmpdir(), "rule-skills-home-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-skills-home-"));
   const previous = process.env.HOME;
   process.env.HOME = home;
 

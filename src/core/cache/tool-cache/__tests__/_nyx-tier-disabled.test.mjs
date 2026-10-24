@@ -13,7 +13,7 @@ delete process.env.RULE_MCP_NYX_CACHE;
 
 test("without Nyx the similar tier is a no-op miss", async () => {
   cacheClear();
-  cacheStore("pix_tool", { prompt: "write an adr" }, result("stored"));
+  cacheStore("rule_tool", { prompt: "write an adr" }, result("stored"));
 
-  assert.equal(await cacheLookupSemantic("pix_tool", { prompt: "write an adr now" }), undefined);
+  assert.equal(await cacheLookupSemantic("rule_tool", { prompt: "write an adr now" }), undefined);
 });

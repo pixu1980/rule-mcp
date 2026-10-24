@@ -18,7 +18,7 @@ The flow graph below is the same path an agent takes, top to bottom.
 </li>
 <li data-part="step">
 <h3>Router</h3>
-<p><code>pix_tool</code> scores the request and picks the skill or the area hub.</p>
+<p><code>rule_tool</code> scores the request and picks the skill or the area hub.</p>
 </li>
 <li data-part="step">
 <h3>Skill or tool</h3>
@@ -36,16 +36,16 @@ The flow graph below is the same path an agent takes, top to bottom.
 
 ## Surfaces
 
-| Surface        | Role                                                                              |
-| -------------- | --------------------------------------------------------------------------------- |
-| Slash commands | Same set installed into each agent/IDE (`/rule`, `/rule-area-*`, personas, session) |
-| MCP tools      | Action tools + one tool per catalog skill                                         |
-| MCP prompts    | Workflow, area, and persona prompts                                               |
-| MCP resources  | `rule://` indexes and summaries                                                    |
-| Guardrails     | Deterministic checks by family / framework                                        |
-| CLI            | Install, doctor, serve, setup, tools                                              |
+| Surface        | Role                                                                                        |
+| -------------- | ------------------------------------------------------------------------------------------- |
+| Slash commands | Same set installed into each agent/IDE (`/rule-mcp`, `/rule-mcp-area-*`, personas, session) |
+| MCP tools      | Action tools + one tool per catalog skill                                                   |
+| MCP prompts    | Workflow, area, and persona prompts                                                         |
+| MCP resources  | `rulemcp://` indexes and summaries                                                          |
+| Guardrails     | Deterministic checks by family / framework                                                  |
+| CLI            | Install, doctor, serve, setup, tools                                                        |
 
-Live counts and the Command · Tool · Skill table: [Surface map](./17-surface-map.md). Full inventories: [09-17](./README.md).
+Live counts and the Command - Tool - Skill table: [Surface map](./17-surface-map.md). Full inventories: [09-17](./README.md).
 
 ## Design constraints
 
@@ -73,7 +73,7 @@ Live counts and the Command · Tool · Skill table: [Surface map](./17-surface-m
 | MCP prompts               | 38    | `src/prompts/index.js`                        |
 | - reusable                | 19    | workflow and area prompts                     |
 | - persona                 | 19    | 19 active roles, one command each             |
-| Skills                    | 81    | `skills/rule-*/SKILL.md`                       |
+| Skills                    | 81    | `skills/rule-mcp-*/SKILL.md`                  |
 | Review personas           | 19    | `src/core/review/roles/index.js`              |
 | Guardrail rules           | 9     | `src/core/guardrails/index.js`                |
 | Agent slash commands      | 41    | `src/core/agents/commands/index.js`           |

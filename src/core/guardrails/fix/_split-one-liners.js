@@ -12,7 +12,7 @@ export function apply(text) {
     return `${head}{\n    ${body};\n  }`;
   });
   text = text.replaceAll(/((?:constructor|\w+)\s*\([^()]*(?:\([^()]*\)[^()]*)*\)\s*)\{\s*([^{}\n]+?)\s*\}/g, (m, head, body) => {
-    // never touch `if (...) {` / `for (...) {` / `while (...) {` — handled above only for for; skip if/keywords
+    // never touch `if (...) {` / `for (...) {` / `while (...) {`, handled above only for for; skip if/keywords
     if (/^\s*(if|for|while|switch|catch)\s*/.test(head)) {
       return m;
     }

@@ -16,7 +16,7 @@ import { runSelfUpdate, buildBanner, scheduleRestartIfNeeded } from "../../core/
 import { detectInstallType } from "../../cli/paths/index.js";
 
 /**
- * Register the pix_update tool.
+ * Register the rule_tool_update tool.
  */
 export function registerUpdateTool() {
   registerTool({

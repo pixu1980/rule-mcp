@@ -8,12 +8,12 @@
 ## Context
 
 Prompt: "TypeScript tsconfig strict mode configuration"
-Routed to: **rule-toolchain-typescript** (confidence: 1)
-Alternatives: rule-toolchain-biome (0.33), rule-toolchain-parcel (0.3), rule-toolchain-vite (0.3)
+Routed to: **rule-mcp-toolchain-typescript** (confidence: 1)
+Alternatives: rule-mcp-toolchain-biome (0.33), rule-mcp-toolchain-parcel (0.3), rule-mcp-toolchain-vite (0.3)
 
 ## Decision
 
-Use `rule-toolchain-typescript` for this task.
+Use `rule-mcp-toolchain-typescript` for this task.
 
 ## Consequences
 

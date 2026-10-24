@@ -24,7 +24,7 @@ const COMMANDS = buildProgram()
 
 /** Write a script to a scratch file and hand it to a syntax checker. */
 function syntaxCheck(command, arguments_, script) {
-  const box = mkdtempSync(join(tmpdir(), "rule-completions-"));
+  const box = mkdtempSync(join(tmpdir(), "rule-mcp-completions-"));
   const file = join(box, "completion");
   writeFileSync(file, script);
 

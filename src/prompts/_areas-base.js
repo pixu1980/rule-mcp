@@ -5,8 +5,8 @@
  *
  * The skill-name to area mapping behind the area prompts.
  *
- * The area is already in the name: `rule-frontend-react` is frontend, and
- * `rule-frontend` is frontend itself. Deriving the grouping means a skill that
+ * The area is already in the name: `rule-mcp-frontend-react` is frontend, and
+ * `rule-mcp-frontend` is frontend itself. Deriving the grouping means a skill that
  * joins any layer - this repository, a project, a user's own - joins its area
  * without a second place remembering it.
  */
@@ -14,7 +14,7 @@
 import { getSkillNames } from "../tools/router/index.js";
 
 /** The router skill backs the dispatcher, not an area. */
-const ROUTER = "rule";
+const ROUTER = "rule-mcp";
 
 /**
  * The area a skill belongs to, and what it is called inside it.
@@ -23,11 +23,11 @@ const ROUTER = "rule";
  * @returns {{ area: string, member: string }|null} null when the name is not a skill of ours
  */
 export function areaOf(skillName) {
-  if (typeof skillName !== "string" || !skillName.startsWith("rule-")) {
+  if (typeof skillName !== "string" || !skillName.startsWith("rule-mcp-")) {
     return null;
   }
 
-  const rest = skillName.slice("rule-".length);
+  const rest = skillName.slice("rule-mcp-".length);
   const area = rest.split("-", 1)[0];
 
   return area === "" ? null : { area, member: rest.slice(area.length + 1) };
@@ -46,21 +46,21 @@ export function areaCommandName(skillName) {
     return null;
   }
 
-  return `rule-area-${parsed.area}`;
+  return `rule-mcp-area-${parsed.area}`;
 }
 
 /**
- * Skill name → MCP tool name (`rule-frontend-react` → `rule_tool_frontend_react`).
+ * Skill name -> MCP tool name (`rule-mcp-frontend-react` -> `rule_tool_frontend_react`).
  *
  * @param {string} skillName
  * @returns {string|null}
  */
 export function skillToolName(skillName) {
-  if (typeof skillName !== "string" || !skillName.startsWith("rule-")) {
+  if (typeof skillName !== "string" || !skillName.startsWith("rule-mcp-")) {
     return null;
   }
 
-  return `rule_tool_${skillName.slice("rule-".length).replaceAll("-", "_")}`;
+  return `rule_tool_${skillName.slice("rule-mcp-".length).replaceAll("-", "_")}`;
 }
 
 /**

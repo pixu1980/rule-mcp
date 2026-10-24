@@ -9,7 +9,7 @@ import { iterationsAndProject, productivitySection, routingTables, usageSection 
 const KPI = (overrides = {}) => ({
   iterations: { count: 3, distinctPrompts: 2, retries: 1, estimated: false },
   productivity: { linesPerPrompt: 10, linesPerMinute: 200, costPer1kOutput: 0.5, costPerPrompt: 0.02, avgPerCallMs: 12 },
-  routing: { bySkill: { "rule-frontend-react": 2 }, byTool: { pix_tool: 3 } },
+  routing: { bySkill: { "rule-mcp-frontend-react": 2 }, byTool: { rule_tool: 3 } },
   ...overrides,
 });
 

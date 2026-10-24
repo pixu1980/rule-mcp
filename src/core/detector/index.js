@@ -24,8 +24,8 @@ import { BUILD_TOOL_RULES, FRAMEWORK_RULES, FRAMEWORK_SKILL_MAP } from "./_rules
  * @returns {{ skillName: string, toolName: string }}
  */
 export function getFrameworkSuggestion(framework) {
-  const skillName = FRAMEWORK_SKILL_MAP[framework] || "rule-frontend";
-  const displayName = skillName.replace(/^rule-/, "").replaceAll("-", "_");
+  const skillName = FRAMEWORK_SKILL_MAP[framework] || "rule-mcp-frontend";
+  const displayName = skillName.replace(/^rule-mcp-/, "").replaceAll("-", "_");
 
   return { skillName, toolName: `rule_tool_${displayName}` };
 }
@@ -132,7 +132,7 @@ export function detectProjectGraph(projectDir = ".", options = {}) {
 
 /**
  * Detect whether a project has a tokensave code graph (`.tokensave/`).
- * When present, rule tools defer code exploration to tokensave and suppress
+ * When present, rule-mcp tools defer code exploration to tokensave and suppress
  * their own redundant context dumps to save tokens.
  *
  * @param {string} projectDir - Path to project root

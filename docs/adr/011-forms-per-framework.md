@@ -7,7 +7,7 @@
 
 ## Context
 
-The `rule-frontend-forms` skill was React-specific (`react-hook-form`, `FormProvider`, `useFieldArray`) but sat at the top level as if it applied to all frameworks. This violated two architectural principles:
+The `rule-mcp-frontend-forms` skill was React-specific (`react-hook-form`, `FormProvider`, `useFieldArray`) but sat at the top level as if it applied to all frameworks. This violated two architectural principles:
 
 1. **Single Responsibility Principle (SOLID - S)**: A skill should cover one framework, not masquerade as generic while being framework-specific
 2. **Interface Segregation (SOLID - I)**: Each framework should have its own form patterns, not depend on a React-specific interface
@@ -16,9 +16,9 @@ Additionally, the skill contained Italian business entity validation (partita IV
 
 ## Decision
 
-### 1. Merge React forms into `rule-frontend-react`
+### 1. Merge React forms into `rule-mcp-frontend-react`
 
-All React-specific form content (`react-hook-form`, `zod`, `FormProvider`, `useFieldArray`) moved directly into the React skill where it belongs. The old `rule-frontend-forms` directory is deleted.
+All React-specific form content (`react-hook-form`, `zod`, `FormProvider`, `useFieldArray`) moved directly into the React skill where it belongs. The old `rule-mcp-frontend-forms` directory is deleted.
 
 ### 2. Create form sections for every UI framework
 
@@ -36,7 +36,7 @@ Each framework skill now has a `## Forms` section idiomatic to its ecosystem:
 
 ### 3. Italian business validation - preserved but needs relocation
 
-The Italian entity validation (partita IVA, codice fiscale, SDI) is currently orphaned after the forms skill deletion. This domain logic will be relocated to a future `rule-process-compliance` or `rule-platform-italian` skill in a follow-up - it is out of scope for this change.
+The Italian entity validation (partita IVA, codice fiscale, SDI) is currently orphaned after the forms skill deletion. This domain logic will be relocated to a future `rule-mcp-process-compliance` or `rule-mcp-platform-italian` skill in a follow-up - it is out of scope for this change.
 
 ## Consequences
 
@@ -51,4 +51,4 @@ The Italian entity validation (partita IVA, codice fiscale, SDI) is currently or
 
 - Italian business validation is temporarily orphaned (needs new home)
 - Developers must look in each framework skill for form guidance rather than a central "forms" skill
-- Cleanup: cross-references in other skills may still point to `rule-frontend-forms`
+- Cleanup: cross-references in other skills may still point to `rule-mcp-frontend-forms`

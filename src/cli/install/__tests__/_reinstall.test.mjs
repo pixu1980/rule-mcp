@@ -10,7 +10,7 @@ import { dirname, join } from "node:path";
 import { hermeticEnv, root } from "./_purge.fixture.mjs";
 
 {
-  const home = mkdtempSync(join(tmpdir(), "rule-purge-reinstall-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-purge-reinstall-"));
   mkdirSync(join(home, ".pi", "agent"), { recursive: true });
   writeFileSync(join(home, ".pi", "agent", "mcp.json"), '{"mcpServers":{}}\n');
   // Symlink-free local-binary install path: install.sh resolves the CLI from

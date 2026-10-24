@@ -19,9 +19,9 @@ export function registerCompletionHandler(server) {
         return { completion: { values: filtered.slice(0, 10), total: filtered.length, hasMore: filtered.length > 10 } };
       };
 
-      // Every rule-* prompt takes a single free-form primary argument, so
-      // only rule-handoff (fixed token vocabulary) needs argument completions.
-      if (promptName === "rule-handoff" && argument.name === "options") {
+      // Every rule-mcp-* prompt takes a single free-form primary argument, so
+      // only rule-mcp-handoff (fixed token vocabulary) needs argument completions.
+      if (promptName === "rule-mcp-handoff" && argument.name === "options") {
         // Token-aware completion: complete the last token of a space-separated list.
         const value = argument.value ?? "";
         const last = value.split(/\s+/).pop() ?? "";

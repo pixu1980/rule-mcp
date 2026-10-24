@@ -8,9 +8,9 @@ import { depsFingerprint, describeCandidate, nonPromptArgs } from "../_decision-
 import { CANDIDATE_CAP, rankCandidates } from "../_decision-ranker.js";
 
 test("non-prompt args are stable and exclude the prompt", () => {
-  assert.equal(nonPromptArgs("pix_tool", { prompt: "x", framework: "react", path: "/repo" }), '{"framework":"react","path":"/repo"}');
-  assert.equal(nonPromptArgs("pix_tool", { path: "/repo", prompt: "x", framework: "react" }), '{"framework":"react","path":"/repo"}');
-  assert.equal(nonPromptArgs("pix_tool", { prompt: "x", framework: undefined }), "{}");
+  assert.equal(nonPromptArgs("rule_tool", { prompt: "x", framework: "react", path: "/repo" }), '{"framework":"react","path":"/repo"}');
+  assert.equal(nonPromptArgs("rule_tool", { path: "/repo", prompt: "x", framework: "react" }), '{"framework":"react","path":"/repo"}');
+  assert.equal(nonPromptArgs("rule_tool", { prompt: "x", framework: undefined }), "{}");
   assert.equal(nonPromptArgs("other", { query: "x" }), '{"query":"x"}');
 });
 
@@ -23,11 +23,11 @@ test("a candidate description carries the request and skill but no hashes or hit
   const description = describeCandidate({
     key: "abcdef012345",
     prompt: "  create   a button ",
-    route: "rule-frontend-react",
+    route: "rule-mcp-frontend-react",
     deps: "abcd1234",
   });
 
-  assert.equal(description, "request: create a button; skill: rule-frontend-react");
+  assert.equal(description, "request: create a button; skill: rule-mcp-frontend-react");
   assert.ok(describeCandidate({ key: "k", prompt: "x".repeat(500) }).length <= 200);
 });
 

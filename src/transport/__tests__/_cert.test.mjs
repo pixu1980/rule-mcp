@@ -17,7 +17,7 @@ const REAL_PATH = process.env.PATH;
 
 /** A tmp dir holding a fake `openssl` that fails exactly the given steps. */
 function fakeOpenssl({ version = true, genrsa = true, req = true } = {}) {
-  const dir = mkdtempSync(join(tmpdir(), "rule-cert-fake-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-cert-fake-"));
   const script = [
     "#!/bin/sh",
     'case "$1" in',
@@ -39,7 +39,7 @@ function fakeOpenssl({ version = true, genrsa = true, req = true } = {}) {
 }
 
 const pathsFor = () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-cert-out-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-cert-out-"));
   return { certPath: join(dir, "cert.pem"), keyPath: join(dir, "key.pem"), dir };
 };
 

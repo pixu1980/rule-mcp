@@ -21,7 +21,7 @@ test("a session pays less than 40 % of what the reminder used to cost", () => {
 test("the diet cuts repetition, not substance", () => {
   const script = String.raw`
     import { decorateWorkflowReminder } from ${JSON.stringify(ENFORCEMENT)};
-    const decorated = decorateWorkflowReminder("pix_tool", { content: [{ type: "text", text: "routed" }] });
+    const decorated = decorateWorkflowReminder("rule_tool", { content: [{ type: "text", text: "routed" }] });
     process.stdout.write(decorated.content.map((part) => part.text).join("\n"));
   `;
   const full = execFileSync(process.execPath, ["--import", ALIAS_HOOK, "--input-type=module", "-e", script], {

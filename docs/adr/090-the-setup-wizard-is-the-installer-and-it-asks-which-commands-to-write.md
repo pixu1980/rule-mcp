@@ -27,9 +27,9 @@ The instruction files got two blocks, and only one of them was in node. The
 short routing line lived in `cli/installers/_writers-text.js`; the enforced
 workflow - evidence before implementation, failing tests before code,
 guardrails before done - was a heredoc in `install.sh`, and it was the copy
-that named the tools correctly. The node block advertised `pix_component`,
-`pix_check`, `pix_search`, `pix_scaffold` and `pix_process_adr`, none of which
-this server registers: every tool is `pix_tool*`.
+that named the tools correctly. The node block advertised `rule_tool_component`,
+`rule_tool_check`, `rule_tool_search`, `rule_tool_scaffold` and `rule_tool_process_adr`, none of which
+this server registers: every tool is `rule_tool*`.
 
 Both blocks now live in `cli/installers/_instruction.data.js`, with the shell's
 names, and both are written and swept by the same pair of functions. A

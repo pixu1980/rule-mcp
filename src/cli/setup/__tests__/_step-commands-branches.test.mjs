@@ -22,7 +22,7 @@ import { FakeStdin, FakeStdout } from "./_fake-terminal.fixture.mjs";
 import { StepCommands } from "../_step-commands.js";
 
 process.env.RULE_MCP_SKIP_GLOBAL_LINK = "1";
-process.env.RULE_MCP_HOME = mkdtempSync(join(tmpdir(), "rule-step-commands-"));
+process.env.RULE_MCP_HOME = mkdtempSync(join(tmpdir(), "rule-mcp-step-commands-"));
 process.env.RULE_MCP_STATE_DIR = join(process.env.RULE_MCP_HOME, "state");
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 

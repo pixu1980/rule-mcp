@@ -11,7 +11,7 @@ never hand-edited; this document points at them instead of restating them.
 
 - Every tool, with its schema and modes: [10-tools.md](./10-tools.md)
 - Every prompt and its arguments: [11-prompts.md](./11-prompts.md)
-- Every `rule://` resource URI: [16-resources.md](./16-resources.md)
+- Every `rulemcp://` resource URI: [16-resources.md](./16-resources.md)
 - What each skill covers: [09-skills.md](./09-skills.md)
 
 ## Plugins
@@ -20,10 +20,10 @@ never hand-edited; this document points at them instead of restating them.
 
 Any directory in `~/.agents/skills/` with a `SKILL.md` file is auto-detected as a skill.
 
-- **Official rule skills** start with `rule-` (e.g., `rule-frontend-react`, `rule-frontend-vue`)
+- **Official rule-mcp skills** start with `rule-mcp-` (e.g., `rule-mcp-frontend-react`, `rule-mcp-frontend-vue`)
 - **Community/plugin skills** can use any name (e.g., `my-company-rules`)
 
-Plugins are automatically registered as MCP tools (`pix_<plugin-name>`) and support
+Plugins are automatically registered as MCP tools (`rule_tool_<plugin-name>`) and support
 all standard skill tool modes: `full`, `summary`, `search`, `guardrails`, `check`.
 
 ### Creating a basic plugin
@@ -100,7 +100,7 @@ export const generators = {
 ├── my-company-rules/
 │   ├── SKILL.md
 │   └── plugin.js
-└── rule-frontend-react/                ← Official rule skills coexist
+└── rule-mcp-frontend-react/                ← Official rule-mcp skills coexist
     └── SKILL.md
 ```
 
@@ -110,16 +110,16 @@ export const generators = {
 2. Any directory with a `SKILL.md` file is registered as a skill
 3. If the directory also has `plugin.js`, it's dynamically imported
 4. The plugin's guardrails are merged into the guardrails engine
-5. The plugin is registered as an MCP tool: `pix_<plugin-name>`
+5. The plugin is registered as an MCP tool: `rule_tool_<plugin-name>`
 
 ### Community skills
 
-The `rule://community` resource lists all installed plugins:
+The `rulemcp://community` resource lists all installed plugins:
 
 ```bash
-rule-mcp tools call rule --json '{"prompt": "List available community skills"}'
+rule-mcp tools call rule-mcp --json '{"prompt": "List available community skills"}'
 # Or directly via MCP resource:
-# rule://community
+# rulemcp://community
 ```
 
 ### Best practices
@@ -153,7 +153,7 @@ git push -u origin main
 
 ### 2. Configure GitHub Secrets
 
-Go to **GitHub → rule-mcp-rule-mcp → Settings → Secrets and variables → Actions** and add:
+Go to **GitHub -> rule-mcp-rule-mcp -> Settings -> Secrets and variables -> Actions** and add:
 
 | Secret      | Value                                                                                                                            |
 | ----------- | -------------------------------------------------------------------------------------------------------------------------------- |
@@ -168,10 +168,10 @@ Go to **GitHub → rule-mcp-rule-mcp → Settings → Secrets and variables → 
 After the first push to `main`, CI starts automatically:
 
 - **Lint job**: syntax check + ESLint + Prettier
-- **Test job**: 6 combinations (ubuntu × node20/22, macos × node20/22, windows × node20/22)
+- **Test job**: 6 combinations (ubuntu x node20/22, macos x node20/22, windows x node20/22)
 - **Audit job**: `pnpm audit --prod`
 
-Check: **GitHub → Actions → ci**
+Check: **GitHub -> Actions -> ci**
 
 ---
 
@@ -243,7 +243,7 @@ Users can install using these methods:
 | Gemini CLI         | `~/.gemini/commands/rule-mcp.toml`    | `/rule-mcp`                                            |
 | Cursor             | `.cursor/commands/rule-mcp.md`        | `/rule-mcp`                                            |
 | GitHub Copilot CLI | `~/.copilot/agents/rule-mcp.agent.md` | `/agent` selection                                     |
-| Codex CLI          | `~/.agents/skills/rule/`               | Skill workflow; no stable exact custom command assumed |
+| Codex CLI          | `~/.agents/skills/rule-mcp/`          | Skill workflow; no stable exact custom command assumed |
 
 Uninstall removes same artifact. Universal command body forces routing, evidence lookup, test-first implementation, blocking `rule_tool_check`, real test reporting, and ADR capture.
 
@@ -267,7 +267,7 @@ curl http://localhost:37999/health
 # Test tools
 rule-mcp tools list
 rule-mcp tools call rule_tool_detect --json '{}'
-rule-mcp tools call rule --json '{"prompt": "React button"}'
+rule-mcp tools call rule-mcp --json '{"prompt": "React button"}'
 
 # Verify a release tarball (every GitHub Release attaches both files)
 curl -fsSLO https://github.com/pixu1980/rule-mcp/releases/download/<tag>/rule-mcp-<version>.tgz
@@ -336,7 +336,7 @@ rule-mcp doctor
 rule-mcp tools list
 
 # Test a specific tool
-rule-mcp tools call rule --json '{"prompt": "test"}'
+rule-mcp tools call rule-mcp --json '{"prompt": "test"}'
 
 # Check daemon status
 rule-mcp daemon status
@@ -478,7 +478,7 @@ rule-mcp daemon logs
   rule-mcp skills reload
   ```
 
-**Issue**: `pix_tool` returns no matching skill.
+**Issue**: `rule_tool` returns no matching skill.
 
 - **Verify**: Skills are loaded:
   ```bash

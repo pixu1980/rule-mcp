@@ -8,9 +8,9 @@
  * transport/sse/, which is kept only as a back-compat alias.
  *
  * Single MCP endpoint:
- *   POST   /mcp   - client → server JSON-RPC (initialize + requests). Response is
+ *   POST   /mcp   - client -> server JSON-RPC (initialize + requests). Response is
  *                   either a JSON body or an SSE stream, chosen by the SDK transport.
- *   GET    /mcp   - server → client SSE stream for notifications (needs session id).
+ *   GET    /mcp   - server -> client SSE stream for notifications (needs session id).
  *   DELETE /mcp   - terminate a session.
  *   GET    /health - health check (no auth).
  *

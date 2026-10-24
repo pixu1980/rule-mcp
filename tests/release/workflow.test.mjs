@@ -77,9 +77,9 @@ test("a GPG-signed test tag passes verification and an unsigned annotated tag fa
 
   assert.ok(existsSync(keyFile), ".github/release-signing-key.asc must exist before testing tag verification");
 
-  const repoDir = mkdtempSync(join(tmpdir(), "rule-release-tag-repo-"));
-  const signHome = mkdtempSync(join(tmpdir(), "rule-release-gpg-sign-"));
-  const verifyHome = mkdtempSync(join(tmpdir(), "rule-release-gpg-verify-"));
+  const repoDir = mkdtempSync(join(tmpdir(), "rule-mcp-release-tag-repo-"));
+  const signHome = mkdtempSync(join(tmpdir(), "rule-mcp-release-gpg-sign-"));
+  const verifyHome = mkdtempSync(join(tmpdir(), "rule-mcp-release-gpg-verify-"));
   const run = (cmd, args, home) => execFileSync(cmd, args, { cwd: repoDir, env: home ? { ...process.env, GNUPGHOME: home } : process.env, encoding: "utf8", stdio: "pipe" });
 
   try {

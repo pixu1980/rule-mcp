@@ -22,17 +22,17 @@ test("a tool without a prompt field and an undefined argument build a state", ()
 
 test("a long state is capped", () => {
   const args = Object.fromEntries(Array.from({ length: 20 }, (_, index) => [`k${index}`, "x".repeat(100)]));
-  const state = buildGateState({ toolName: "pix_tool", args, livePrompt: "p", candidates: [] });
+  const state = buildGateState({ toolName: "rule_tool", args, livePrompt: "p", candidates: [] });
 
   assert.equal(state.length, 600);
   assert.ok(state.endsWith("..."));
 });
 
 test("a bare pick with a numeric probability is read", () => {
-  const candidates = [{ label: "rule-styleguide-css", description: "d" }];
-  const parsed = parseGateAnswer({ pick: "rule-styleguide-css", probability: 0.9 }, candidates);
+  const candidates = [{ label: "rule-mcp-styleguide-css", description: "d" }];
+  const parsed = parseGateAnswer({ pick: "rule-mcp-styleguide-css", probability: 0.9 }, candidates);
 
-  assert.equal(parsed.choice, "rule-styleguide-css");
+  assert.equal(parsed.choice, "rule-mcp-styleguide-css");
   assert.equal(parsed.probability, 0.9);
   assert.equal(parsed.wouldReplay, true);
 });

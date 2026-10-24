@@ -7,7 +7,7 @@
 
 import { z } from "zod";
 
-/** POST /api/v1/bookmarks body — the URL to scrape and save. */
+/** POST /api/v1/bookmarks body, the URL to scrape and save. */
 export const createBookmarkSchema = z.object({
   url: z
     .string({ required_error: "url is required" })
@@ -18,7 +18,7 @@ export const createBookmarkSchema = z.object({
 
 export type CreateBookmarkInput = z.infer<typeof createBookmarkSchema>;
 
-/** GET /api/v1/bookmarks query — pagination. */
+/** GET /api/v1/bookmarks query, pagination. */
 export const listBookmarksQuerySchema = z.object({
   offset: z.coerce.number().int().min(0).default(0),
   limit: z.coerce.number().int().min(1).max(100).default(20),

@@ -6,7 +6,7 @@
  * The shared half of the cache.
  *
  * `tool-cache.json.gz` is private to one machine: everything, hot, evicted
- * freely. `rule-catalog.json` is the part a team inherits: promoted entries,
+ * freely. `rule-mcp-catalog.json` is the part a team inherits: promoted entries,
  * readable, sorted, and committed to the repository on purpose. Conflating the
  * two is what turns a catalog into a dump, so they are separate files with
  * separate rules.

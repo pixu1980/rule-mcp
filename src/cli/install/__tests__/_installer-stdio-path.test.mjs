@@ -21,7 +21,7 @@ const config = mcpServerConfig(entrypoint)["rule-mcp"];
 // Invariant: generated stdio config ships every opt-out flag at its own default
 // (feature ON), so the switches are discoverable and easy to flip in the user's
 // mcp.json. Prompt suppression is the single exception, and ships suppressed so
-// Claude Code shows the clean /rule-* commands instead of MCP prompt names
+// Claude Code shows the clean /rule-mcp-* commands instead of MCP prompt names
 // (ADR 028): the flag is still discoverable, its value is just already flipped.
 for (const [k, v] of Object.entries(DEFAULT_OPTOUT_ENV)) {
   assert.equal(config.env?.[k], v, `${k} must default to "${v}" in generated config`);

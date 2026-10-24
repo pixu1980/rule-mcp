@@ -14,7 +14,7 @@ const { CORPUS_IT } = await import("../../../../tests/fixtures/routing-corpus-it
 await loadAllSkills(true);
 
 async function route(prompt) {
-  return JSON.parse((await callTool("pix_tool", { prompt })).content[0].text);
+  return JSON.parse((await callTool("rule_tool", { prompt })).content[0].text);
 }
 
 const results = [];

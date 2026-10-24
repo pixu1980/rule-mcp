@@ -10,7 +10,7 @@
  * report. A model that writes `packageManager`, `engines` or
  * `devEngines.packageManager` into a manifest gets them removed before the
  * check, so the content a receipt binds is the content that gets written. The
- * edit is surgical: parse, delete, re-serialise with the indentation the file
+ * edit is surgical: parse, delete, re-serialize with the indentation the file
  * already used, so everything around the removed keys survives.
  *
  * The path decides, not the content: a JSON config that happens to carry an

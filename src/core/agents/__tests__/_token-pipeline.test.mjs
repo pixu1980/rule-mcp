@@ -9,8 +9,8 @@ import { test } from "node:test";
 
 import { decorateWithTokensave, resetTokenPipeline, suppressIfTokensave, TOKENSAVE_SUPPRESSIBLE } from "../_token-pipeline.js";
 
-const project = mkdtempSync(join(tmpdir(), "rule-tokensave-"));
-const cleanDir = mkdtempSync(join(tmpdir(), "rule-tokensave-clean-"));
+const project = mkdtempSync(join(tmpdir(), "rule-mcp-tokensave-"));
+const cleanDir = mkdtempSync(join(tmpdir(), "rule-mcp-tokensave-clean-"));
 const previousCwd = process.cwd();
 
 test.before(() => {
@@ -64,12 +64,12 @@ test("a custom threshold comes from the environment or the options", () => {
 
 test("decorateWithTokensave skips errors, test tools and unknown dirs", () => {
   resetTokenPipeline();
-  assert.deepEqual(decorateWithTokensave("pix_tool", null), null, "no core passes through");
-  assert.deepEqual(decorateWithTokensave("pix_tool", { isError: true, content: [] }), { isError: true, content: [] }, "an error core passes through");
-  assert.deepEqual(decorateWithTokensave("pix_tool", { content: "nope" }), { content: "nope" }, "non-array content passes through");
-  assert.deepEqual(decorateWithTokensave("test_pix_tool", { content: [{ type: "text", text: "x" }] }), { content: [{ type: "text", text: "x" }] }, "test tools keep payloads");
+  assert.deepEqual(decorateWithTokensave("rule_tool", null), null, "no core passes through");
+  assert.deepEqual(decorateWithTokensave("rule_tool", { isError: true, content: [] }), { isError: true, content: [] }, "an error core passes through");
+  assert.deepEqual(decorateWithTokensave("rule_tool", { content: "nope" }), { content: "nope" }, "non-array content passes through");
+  assert.deepEqual(decorateWithTokensave("test_rule_tool", { content: [{ type: "text", text: "x" }] }), { content: [{ type: "text", text: "x" }] }, "test tools keep payloads");
   assert.deepEqual(
-    decorateWithTokensave("pix_tool", { content: [{ type: "text", text: "x" }] }, {}),
+    decorateWithTokensave("rule_tool", { content: [{ type: "text", text: "x" }] }, {}),
     { content: [{ type: "text", text: "x" }] },
     "no tokensave dir means no decoration",
   );
@@ -78,15 +78,15 @@ test("decorateWithTokensave skips errors, test tools and unknown dirs", () => {
 test("decorateWithTokensave emits once and defers for JSON payloads", () => {
   resetTokenPipeline();
   const plain = { content: [{ type: "text", text: "hello world" }] };
-  const once = decorateWithTokensave("pix_tool", plain, { path: project });
+  const once = decorateWithTokensave("rule_tool", plain, { path: project });
   assert.match(once.content[0].text, /TOKENSAVE ACTIVE/, "the directive leads the first call");
 
-  const twice = decorateWithTokensave("pix_tool", plain, { path: project });
+  const twice = decorateWithTokensave("rule_tool", plain, { path: project });
   assert.equal(twice.content[0].text, "hello world", "the directive is not emitted again");
 
   resetTokenPipeline();
   const json = { content: [{ type: "text", text: '{"tool":"x"}' }] };
-  const jsonOut = decorateWithTokensave("pix_tool", json, { path: project });
+  const jsonOut = decorateWithTokensave("rule_tool", json, { path: project });
   assert.equal(jsonOut.content[0].text, '{"tool":"x"}', "a JSON payload is not decorated");
 });
 

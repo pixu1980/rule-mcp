@@ -35,11 +35,11 @@ export const rulesRemovalTask = () => ({
   },
 });
 
-/** Remove the rule-* command files from every agent directory. */
+/** Remove the rule-mcp-* command files from every agent directory. */
 export const commandsRemovalTask = () => ({
   id: "commands",
   title: "Agent slash commands",
-  detail: "remove the rule-* command files",
+  detail: "remove the rule-mcp-* command files",
   run: async ({ dryRun }) => {
     const result = await runCliCommand(commandSyncArgs({ remove: true, dryRun }));
 
@@ -60,7 +60,7 @@ export const commandsRemovalTask = () => ({
  */
 export const skillsRemovalTask = () => ({
   id: "skills",
-  title: "Bundled rule-* skills",
+  title: "Bundled rule-mcp-* skills",
   detail: "~/.agents/skills and ~/.claude/skills",
   run: async ({ dryRun }) => {
     const result = await runCliCommand(["skills", "uninstall", ...(dryRun ? ["--dry-run"] : [])]);

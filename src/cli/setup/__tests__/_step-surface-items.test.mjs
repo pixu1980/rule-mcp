@@ -51,13 +51,13 @@ test("the skills of an area are offered, hub included, and named by kind", () =>
 
   assert.ok(items.length > 0, `${first.id} has skills to offer`);
 
-  const hub = items.find((item) => item.id === `rule-${first.id}`);
+  const hub = items.find((item) => item.id === `rule-mcp-${first.id}`);
 
   if (hub) {
     assert.deepEqual(hub.detail, ["Area hub: kept either way."], "a hub says it is kept whatever the tick");
   }
 
-  const members = items.filter((entry) => entry.id !== `rule-${first.id}`);
+  const members = items.filter((entry) => entry.id !== `rule-mcp-${first.id}`);
 
   for (const item of members) {
     assert.deepEqual(item.detail, ["Member skill tool."]);

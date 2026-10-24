@@ -23,7 +23,7 @@ import { updateAdrIndex } from "../../adr/_adr-index.js";
  * so a project is only clean once its index exists and is current.
  */
 function cleanProject() {
-  const root = mkdtempSync(join(tmpdir(), "rule-renumber-clean-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-renumber-clean-"));
   const adrDir = join(root, "docs", "adr");
 
   mkdirSync(adrDir, { recursive: true });

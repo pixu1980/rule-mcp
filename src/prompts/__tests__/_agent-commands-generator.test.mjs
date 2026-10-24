@@ -9,7 +9,7 @@
  *   - coverage: one command per MCP prompt + the router
  *   - render formats: args (md frontmatter), workflow (md heading), gemini (toml)
  *   - handoff command drives atomic scoped commits and never pushes
- *   - every command routes through rule and closes with a scoped commit
+ *   - every command routes through rule-mcp and closes with a scoped commit
  */
 
 import { strict as assert } from "node:assert";
@@ -29,44 +29,44 @@ test("router is pinned first and the rest are alphabetical", () => {
   assert.deepEqual(rest, sorted, "commands after the router must be locale-alphabetical");
 });
 
-test("coverage: one clean command per prompt, plus the router, plus /rule-check (no area check siblings)", () => {
+test("coverage: one clean command per prompt, plus the router, plus /rule-mcp-check (no area check siblings)", () => {
   assert.equal(new Set(names).size, names.length, "command names must be unique");
   for (const p of promptNames) {
     assert.ok(names.includes(p), `missing command for prompt ${p}`);
   }
-  // router + every prompt + the two general commands (rule-check, rule-fix); ADR 116 dropped area *-check siblings
+  // router + every prompt + the two general commands (rule-mcp-check, rule-mcp-fix); ADR 116 dropped area *-check siblings
   assert.ok(!promptNames.includes(ROUTER_COMMAND), "router must not also be a prompt");
-  assert.equal(names.length, promptNames.length + 1 + 2, "router + all prompts + rule-check + rule-fix");
-  assert.ok(names.includes("rule-check"), "rule-check remains");
-  assert.ok(names.includes("rule-fix"), "rule-fix remains");
+  assert.equal(names.length, promptNames.length + 1 + 2, "router + all prompts + rule-mcp-check + rule-mcp-fix");
+  assert.ok(names.includes("rule-mcp-check"), "rule-mcp-check remains");
+  assert.ok(names.includes("rule-mcp-fix"), "rule-mcp-fix remains");
   assert.ok(
-    names.filter((name) => name.endsWith("-check")).every((name) => name === "rule-check"),
-    "only /rule-check ends with -check; no area siblings",
+    names.filter((name) => name.endsWith("-check")).every((name) => name === "rule-mcp-check"),
+    "only /rule-mcp-check ends with -check; no area siblings",
   );
 });
 
-test("area and router bodies fold check intent via keywords; rule-check stays dedicated", () => {
-  const area = listAgentCommands().find((c) => c.name === "rule-area-frontend");
-  assert.ok(area, "rule-area-frontend must exist");
+test("area and router bodies fold check intent via keywords; rule-mcp-check stays dedicated", () => {
+  const area = listAgentCommands().find((c) => c.name === "rule-mcp-area-frontend");
+  assert.ok(area, "rule-mcp-area-frontend must exist");
   assert.match(area.body, /Check intent/i);
   assert.match(area.body, /controlla/);
   assert.match(area.body, /rule_tool_check/);
-  assert.match(area.body, /rule-frontend/, "area check path binds the hub skill");
+  assert.match(area.body, /rule-mcp-frontend/, "area check path binds the hub skill");
   assert.match(area.body, /rule_tool_frontend_react|Leaf skills/, "hub lists leaf tools for routing");
 
   const router = listAgentCommands().find((c) => c.name === ROUTER_COMMAND);
   assert.match(router.body, /Check intent/i);
   assert.match(router.body, /auto-detected skill/);
 
-  const check = listAgentCommands().find((c) => c.name === "rule-check");
-  assert.ok(check, "rule-check must exist");
+  const check = listAgentCommands().find((c) => c.name === "rule-mcp-check");
+  assert.ok(check, "rule-mcp-check must exist");
   assert.match(check.body, /rule_tool_check/);
   assert.match(check.body, /Auto-detect/i);
 });
 
-test("every command routes through rule and proposes a scoped commit", () => {
+test("every command routes through rule-mcp and proposes a scoped commit", () => {
   for (const cmd of listAgentCommands()) {
-    assert.ok(/rule/i.test(cmd.body), `${cmd.name}: body must route through rule`);
+    assert.ok(/rule[-_](?:mcp|tool)/i.test(cmd.body), `${cmd.name}: body must route through the rule-mcp workflow`);
     assert.ok(/commit/i.test(cmd.body) && /scope/i.test(cmd.body), `${cmd.name}: body must propose a commit with scope`);
     assert.ok(cmd.description && cmd.description.length > 0, `${cmd.name}: description required`);
   }
@@ -97,8 +97,8 @@ test("workflow format uses a heading", () => {
 });
 
 test("handoff command drives atomic scoped commits, a separate docs commit, and never pushes", () => {
-  const handoff = listAgentCommands().find((c) => c.name === "rule-handoff");
-  assert.ok(handoff, "rule-handoff command must exist");
+  const handoff = listAgentCommands().find((c) => c.name === "rule-mcp-handoff");
+  assert.ok(handoff, "rule-mcp-handoff command must exist");
   const body = handoff.body;
   assert.match(body, /rule_tool_handoff/, "must run the handoff tool");
   assert.match(body, /atomic/i, "must describe atomic commits");
@@ -110,7 +110,7 @@ test("handoff command drives atomic scoped commits, a separate docs commit, and 
 test("handoff command persists the generated handoff and commits it on its own", () => {
   // A handoff that only ever exists in the chat is lost when the session ends -
   // the next session has to reconstruct it from git log and ADRs.
-  const body = listAgentCommands().find((c) => c.name === "rule-handoff").body;
+  const body = listAgentCommands().find((c) => c.name === "rule-mcp-handoff").body;
   assert.match(body, /docs\/handoff\//, "must say where the handoff file is written");
   assert.match(body, /chore\(handoff\)/, "must commit the written handoff under a chore(handoff) scope");
   assert.match(body, /next free|next available/i, "must state how the file number is chosen");
@@ -118,9 +118,9 @@ test("handoff command persists the generated handoff and commits it on its own",
 
 test("the MCP handoff prompt persists the handoff too", async () => {
   // Hosts that use the MCP prompt instead of the generated user command must get
-  // the same instruction, or the behaviour depends on the client.
+  // the same instruction, or the behavior depends on the client.
   const { getPrompt } = await import("../index.js");
-  const text = getPrompt("rule-handoff", {})
+  const text = getPrompt("rule-mcp-handoff", {})
     .messages.map((m) => m.content.text)
     .join("\n");
   assert.match(text, /docs\/handoff\//, "prompt must say where the handoff file is written");

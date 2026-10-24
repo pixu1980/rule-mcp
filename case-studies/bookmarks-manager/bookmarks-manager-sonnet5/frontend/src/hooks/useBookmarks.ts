@@ -3,8 +3,8 @@
  *
  * Owns all bookmark data and the submission lifecycle for the composer.
  * Two independent pieces of state are modeled as discriminated unions via
- * `useReducer` — the bookmark list load state and the create-bookmark
- * submission state — so "loading + error" or "success + error" can never
+ * `useReducer`, the bookmark list load state and the create-bookmark
+ * submission state, so "loading + error" or "success + error" can never
  * coexist inconsistently.
  */
 
@@ -89,17 +89,17 @@ export function useBookmarks() {
   const [composerState, dispatchComposer] = useReducer(composerReducer, { status: "idle" });
 
   useEffect(() => {
-    let cancelled = false;
+    let canceled = false;
     dispatchList({ type: "list/loading" });
     fetchBookmarks()
       .then((bookmarks) => {
-        if (!cancelled) dispatchList({ type: "list/success", bookmarks });
+        if (!canceled) dispatchList({ type: "list/success", bookmarks });
       })
       .catch((error: unknown) => {
-        if (!cancelled) dispatchList({ type: "list/error", message: toMessage(error) });
+        if (!canceled) dispatchList({ type: "list/error", message: toMessage(error) });
       });
     return () => {
-      cancelled = true;
+      canceled = true;
     };
   }, []);
 

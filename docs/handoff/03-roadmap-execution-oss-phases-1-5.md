@@ -9,7 +9,7 @@
 
 Executed the OSS remediation roadmap code-first across all phases, plus
 owner-directed extras. Every step ran TDD (failing test first, true red
-verified), `rule` routing before implementation, `pix_check` before
+verified), `rule-mcp` routing before implementation, `rule_tool_check` before
 committing, and Conventional Commits with mandatory scope plus DCO
 `Signed-off-by` trailers (active since the Step 5 commit).
 
@@ -18,7 +18,7 @@ committing, and Conventional Commits with mandatory scope plus DCO
   Closed the earlier install/uninstall complaint: each agent's
   install/uninstall is scoped to that agent only.
 - **Phase 1**: Step 12 (drop self `link:` dep), Step 4 (registry install
-  claims → clone path), Step 3 (server.json `io.github.pixu1980`, ADR 081),
+  claims -> clone path), Step 3 (server.json `io.github.pixu1980`, ADR 081),
   Step 2 code (SECURITY.md private channel; owner clicks 2.1/2.5 open),
   Step 20 (CHANGELOG header + generator preamble), Step 21 (version
   script + package.json fields), Step 18 (holder pixu1980 + AUTHORS).
@@ -36,7 +36,7 @@ committing, and Conventional Commits with mandatory scope plus DCO
   verified pipe), Step 22 (Scorecard/SBOM via cdxgen), Step 24 (README),
   Step 29 code (signing docs + tag gate).
 - **Phase 6**: Step 30 (preserved-controls lens on oss persona).
-- **Owner extras**: version reset 1.0.0 → 0.1.0 (ADR 085, tag v1.0.0
+- **Owner extras**: version reset 1.0.0 -> 0.1.0 (ADR 085, tag v1.0.0
   deleted locally); Step 13 closed as superseded by ADR 080; follow-up
   batch (setup.sh deletion, truthful hints, org fixes, manifest hashes
   in `version --apply`).
@@ -59,7 +59,7 @@ committing, and Conventional Commits with mandatory scope plus DCO
 
 ### Project Identity
 
-- Description: MCP server for rule-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.
+- Description: MCP server for rule-mcp-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.
 - Version: 0.1.0
 
 ### ADR Log (session additions 080-086)
@@ -149,7 +149,7 @@ f3d1827 fix(changelog): sync the generator preamble with the header
 - `pnpx reuse` does not exist (Python tool); a pip venv was used
   ephemerally and removed. `npm sbom` cannot read a pnpm tree -
   cdxgen is wired instead. No `gh` CLI here; no docker daemon.
-- The rule MCP tool serves stale code until the server reloads: 31.3
+- The rule-mcp MCP tool serves stale code until the server reloads: 31.3
   tool-level re-verification belongs to the next session.
-- rule `a11y-test-required` guardrail is a systematic false positive on
+- rule-mcp `a11y-test-required` guardrail is a systematic false positive on
   Node contract tests; `en-english-only-prose` flags `com` inside URLs.

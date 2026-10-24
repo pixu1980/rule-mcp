@@ -519,7 +519,7 @@
 @layer home {
   /* The home page is two columns: the hero owns the left half, the flow and the
      cards stack on the right. Named areas are the documented reason to reach
-     for grid over flex here (rule-styleguide-css: css-flex-first). */
+     for grid over flex here (rule-mcp-styleguide-css: css-flex-first). */
   body[data-page="home"] main {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

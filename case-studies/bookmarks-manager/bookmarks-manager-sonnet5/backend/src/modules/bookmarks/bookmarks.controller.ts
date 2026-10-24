@@ -14,7 +14,7 @@ import {
 import * as bookmarksService from "./bookmarks.service.js";
 import { AppError } from "../../common/errors/AppError.js";
 
-/** POST /api/v1/bookmarks — scrape and save a new bookmark. */
+/** POST /api/v1/bookmarks, scrape and save a new bookmark. */
 export async function createBookmarkHandler(req: Request, res: Response): Promise<void> {
   const parsed = createBookmarkSchema.safeParse(req.body);
   if (!parsed.success) {
@@ -25,7 +25,7 @@ export async function createBookmarkHandler(req: Request, res: Response): Promis
   res.status(201).json(bookmark);
 }
 
-/** GET /api/v1/bookmarks — paginated list of bookmarks. */
+/** GET /api/v1/bookmarks, paginated list of bookmarks. */
 export function listBookmarksHandler(req: Request, res: Response): void {
   const parsed = listBookmarksQuerySchema.safeParse(req.query);
   if (!parsed.success) {
@@ -38,7 +38,7 @@ export function listBookmarksHandler(req: Request, res: Response): void {
   res.status(200).json(items);
 }
 
-/** GET /api/v1/bookmarks/:id — fetch a single bookmark. */
+/** GET /api/v1/bookmarks/:id, fetch a single bookmark. */
 export function getBookmarkHandler(req: Request, res: Response): void {
   const parsed = bookmarkIdParamsSchema.safeParse(req.params);
   if (!parsed.success) {
@@ -47,7 +47,7 @@ export function getBookmarkHandler(req: Request, res: Response): void {
   res.status(200).json(bookmarksService.getBookmark(parsed.data.id));
 }
 
-/** DELETE /api/v1/bookmarks/:id — remove a bookmark. */
+/** DELETE /api/v1/bookmarks/:id, remove a bookmark. */
 export function deleteBookmarkHandler(req: Request, res: Response): void {
   const parsed = bookmarkIdParamsSchema.safeParse(req.params);
   if (!parsed.success) {

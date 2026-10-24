@@ -16,7 +16,7 @@ import { projectManifest } from "../_deps.js";
 
 /** A scratch project with a package.json. */
 function project(manifest) {
-  const root = mkdtempSync(join(tmpdir(), "rule-deps-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-deps-"));
 
   writeFileSync(join(root, "package.json"), JSON.stringify(manifest));
 

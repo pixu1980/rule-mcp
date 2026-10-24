@@ -35,7 +35,7 @@ function decode(parsed) {
     return [];
   }
 
-  return Object.entries(parsed.entries).filter(([, value]) => value && typeof value === "object" && value.result && value.result?._meta?.pixEnforcement?.requestId === undefined);
+  return Object.entries(parsed.entries).filter(([, value]) => value && typeof value === "object" && value.result && value.result?._meta?.ruleEnforcement?.requestId === undefined);
 }
 
 /** Whether the file-backed store has been installed. */

@@ -20,7 +20,7 @@ import { join } from "node:path";
 
 const { AGENT_TRANSCRIPTS, detectAgentUsage, readAgentUsage, supportedAgents, unsupportedAgents } = await import("../../../../../src/core/agents/transcripts/index.js");
 
-const home = mkdtempSync(join(tmpdir(), "rule-transcripts-home-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-transcripts-home-"));
 
 /** A fake pi session directory: --Users-me-app-- with one JSONL row. */
 function piSession(projectDir, row, file = "s1.jsonl") {
@@ -39,7 +39,7 @@ test("the adapter table lists the four readable agents and states the rest", () 
 });
 
 test("readAgentUsage folds a pi session, counting only human turns as turns", () => {
-  const projectDir = mkdtempSync(join(tmpdir(), "rule-transcripts-project-"));
+  const projectDir = mkdtempSync(join(tmpdir(), "rule-mcp-transcripts-project-"));
   piSession(projectDir, {
     timestamp: "2026-01-01T00:00:00Z",
     message: {
@@ -72,13 +72,13 @@ test("readAgentUsage folds a pi session, counting only human turns as turns", ()
 });
 
 test("an unknown agent and an empty transcript both contribute nothing", () => {
-  const projectDir = mkdtempSync(join(tmpdir(), "rule-transcripts-none-"));
+  const projectDir = mkdtempSync(join(tmpdir(), "rule-mcp-transcripts-none-"));
   assert.equal(readAgentUsage({ agent: "cursor", projectDir, home }), undefined);
   assert.equal(readAgentUsage({ agent: "pi", projectDir, home }), undefined);
 });
 
 test("detectAgentUsage picks the busiest agent and honors the client hint", () => {
-  const projectDir = mkdtempSync(join(tmpdir(), "rule-transcripts-multi-"));
+  const projectDir = mkdtempSync(join(tmpdir(), "rule-mcp-transcripts-multi-"));
   piSession(projectDir, {
     timestamp: "2026-01-01T00:00:00Z",
     message: { role: "user", usage: { input: 10, output: 10 }, model: "m1" },

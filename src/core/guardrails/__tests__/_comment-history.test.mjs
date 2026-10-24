@@ -33,15 +33,15 @@ import "./_install.fixture.mjs";
 
 const RULE = "js-comment-no-history";
 const context = { framework: "vanilla", isComponent: false, fileName: "sample.js" };
-const fires = (code) => checkCode("rule-styleguide-javascript", code, context).failed.some((entry) => entry.id === RULE);
+const fires = (code) => checkCode("rule-mcp-styleguide-javascript", code, context).failed.some((entry) => entry.id === RULE);
 
 // ── The rule exists and is shared, so it is not one language's opinion ──
 
-const ids = new Set(getGuardrails("rule-styleguide-javascript").map((g) => g.id));
+const ids = new Set(getGuardrails("rule-mcp-styleguide-javascript").map((g) => g.id));
 check("T0 the rule is registered", ids.has(RULE));
 check(
   "T0.1 and it is shared with the CSS and backend skills",
-  new Set(getGuardrails("rule-styleguide-css").map((g) => g.id)).has(RULE) && new Set(getGuardrails("rule-backend-node").map((g) => g.id)).has(RULE),
+  new Set(getGuardrails("rule-mcp-styleguide-css").map((g) => g.id)).has(RULE) && new Set(getGuardrails("rule-mcp-backend-node").map((g) => g.id)).has(RULE),
 );
 
 // ── What it must catch ──

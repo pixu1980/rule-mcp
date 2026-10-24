@@ -13,7 +13,7 @@ and how to configure it.
 6. [Prompts](./11-prompts.md): every prompt the server serves
 7. [Guardrails](./15-guardrails.md): the rules code is checked against
 8. [Personas](./14-personas.md): review roles, their lenses, and their operations
-9. [Resources](./16-resources.md): the `rule://` surface
+9. [Resources](./16-resources.md): the `rulemcp://` surface
 10. [CLI](./13-cli.md): commands, flags, and defaults
 11. [Env vars](./05-env-variables.md): the `RULE_MCP_*` configuration
 

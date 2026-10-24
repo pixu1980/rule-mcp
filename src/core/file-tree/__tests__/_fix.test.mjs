@@ -11,7 +11,7 @@ import { autoFixFileTree } from "../_fix.js";
 
 /** Build a scratch project from a { relativePath: contents } map. */
 function project(files) {
-  const root = mkdtempSync(join(tmpdir(), "rule-fix-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-fix-"));
 
   for (const [relative, contents] of Object.entries(files)) {
     const file = join(root, relative);

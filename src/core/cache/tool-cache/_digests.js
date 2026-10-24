@@ -19,7 +19,7 @@ export let _digestsLoaded = false;
  * router and the router imports this file: putting it there would close a
  * cycle. The only consumer is invalidation, so this is where it belongs anyway.
  *
- * @param {string} name a `rule-*` directory name
+ * @param {string} name a `rule-mcp-*` directory name
  * @returns {string|undefined} 16 hex characters, or undefined if there is no such skill
  */
 export function skillDigest(name) {
@@ -29,7 +29,7 @@ export function skillDigest(name) {
       const { embeddedSkills } = getSkillsDirectories();
 
       for (const entry of readdirSync(embeddedSkills, { withFileTypes: true })) {
-        if (!entry.isDirectory() || !entry.name.startsWith("rule-")) {
+        if (!entry.isDirectory() || !entry.name.startsWith("rule-mcp-")) {
           continue;
         }
 

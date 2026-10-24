@@ -14,8 +14,8 @@ import assert from "node:assert/strict";
 import { nyxShadowStats, rerankSkillScores } from "../_nyx-rerank.js";
 
 const SKILL_SCORES = [
-  { skill: "rule-alpha", relativeScore: 1, absoluteScore: 10, sections: ["A"], next_tools: ["rule_tool_search"] },
-  { skill: "rule-beta", relativeScore: 0.5, absoluteScore: 5, sections: ["B"], next_tools: [] },
+  { skill: "rule-mcp-alpha", relativeScore: 1, absoluteScore: 10, sections: ["A"], next_tools: ["rule_tool_search"] },
+  { skill: "rule-mcp-beta", relativeScore: 0.5, absoluteScore: 5, sections: ["B"], next_tools: [] },
 ];
 
 test("a disabled adapter leaves the order untouched", async () => {

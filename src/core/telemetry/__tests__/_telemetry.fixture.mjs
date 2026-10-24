@@ -33,13 +33,13 @@ export function finish() {
   }
 }
 
-export const stateDir = mkdtempSync(join(tmpdir(), "rule-telemetry-"));
+export const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-telemetry-"));
 process.env.RULE_MCP_STATE_DIR = stateDir;
 delete process.env.RULE_MCP_NO_TELEMETRY;
 delete process.env.RULE_MCP_NO_PROMPTS;
 // The log is project-scoped, so each suite gets a project of its own. realpath,
 // because macOS hands out /var/folders while cwd reports /private/var.
-export const projectDir = realpathSync(mkdtempSync(join(tmpdir(), "rule-telemetry-project-")));
+export const projectDir = realpathSync(mkdtempSync(join(tmpdir(), "rule-mcp-telemetry-project-")));
 mkdirSync(join(projectDir, ".git"), { recursive: true });
 process.chdir(projectDir);
 
@@ -56,12 +56,12 @@ export function seedEvents() {
   recorder.endSession({ now: T0 + 1000 });
   recorder.startSession({ transport: "stdio", now: T0 + 2000 });
   recorder.recordToolCall({
-    tool: "pix_tool",
+    tool: "rule_tool",
     args: { prompt: "add a dark mode toggle to the header for acme corp" },
     durationMs: 12,
     ok: true,
     cacheHit: false,
-    routedSkill: "rule-frontend-react",
+    routedSkill: "rule-mcp-frontend-react",
     saved: { cache: 0, compression: 120, tokensave: 0, estimatedRouting: 3400 },
     now: T0 + 2100,
   });
@@ -74,7 +74,7 @@ export function seedEvents() {
     now: T0 + 2200,
   });
   recorder.recordToolCall({
-    tool: "pix_tool",
+    tool: "rule_tool",
     durationMs: 1,
     ok: true,
     cacheHit: true,

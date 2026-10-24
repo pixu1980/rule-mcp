@@ -16,7 +16,7 @@ import "../_sections-repo.js";
 
 const git = (args, cwd) => execFileSync("git", args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
 
-const project = mkdtempSync(join(tmpdir(), "rule-handoff-"));
+const project = mkdtempSync(join(tmpdir(), "rule-mcp-handoff-"));
 
 test.before(() => {
   mkdirSync(join(project, "docs", "adr"), { recursive: true });
@@ -63,7 +63,7 @@ test("readProjectIdentity degrades from package.json", () => {
   assert.equal(identity.name, "demo-proj", "the package name reads");
   assert.equal(identity.version, "0.3.1", "the version reads");
 
-  const bare = mkdtempSync(join(tmpdir(), "rule-handoff-bare-"));
+  const bare = mkdtempSync(join(tmpdir(), "rule-mcp-handoff-bare-"));
   assert.deepEqual(readProjectIdentity(bare), {}, "no package.json means no identity");
   rmSync(bare, { recursive: true, force: true });
 });

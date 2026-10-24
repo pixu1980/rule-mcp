@@ -2,7 +2,7 @@
  * @file src/helpers/_sampleData.js
  * @description 24 rich sample contacts seeded on first application launch.
  * Each contact carries phones, emails, address, birthday, company, notes,
- * social handles, group memberships, and a favourite flag.
+ * social handles, group memberships, and a favorite flag.
  *
  * @typedef {Object} PhoneEntry
  * @property {string} id
@@ -273,7 +273,7 @@ export const SAMPLE_CONTACTS = [
       country: "United States",
     },
     birthday: "1993-12-05",
-    notes: "Shot our team photos last year. Specialises in architecture and portrait.",
+    notes: "Shot our team photos last year. Specializes in architecture and portrait.",
     social: [
       { id: "s1", platform: "instagram", handle: "@noahgarcia.photo" },
       { id: "s2", platform: "website", handle: "noahgarcia.photo" },
@@ -286,7 +286,7 @@ export const SAMPLE_CONTACTS = [
     firstName: "Mia",
     lastName: "Rodriguez",
     company: "UCSF Medical Center",
-    jobTitle: "Internist — Primary Care",
+    jobTitle: "Internist, Primary Care",
     phones: [
       { id: "p1", label: "mobile", value: "+1 (415) 555-0455" },
       { id: "p2", label: "work", value: "+1 (415) 476-1000" },
@@ -324,7 +324,7 @@ export const SAMPLE_CONTACTS = [
       country: "United States",
     },
     birthday: "1995-10-11",
-    notes: "Has my usual order memorised. Saturday regulars.",
+    notes: "Has my usual order memorized. Saturday regulars.",
     social: [{ id: "s1", platform: "instagram", handle: "@ethanbrews" }],
     groups: ["friends"],
     favorite: false,
@@ -334,7 +334,7 @@ export const SAMPLE_CONTACTS = [
     firstName: "Charlotte",
     lastName: "Moore",
     company: "Morrison & Foerster LLP",
-    jobTitle: "Partner — Tech & IP",
+    jobTitle: "Partner, Tech & IP",
     phones: [
       { id: "p1", label: "mobile", value: "+1 (415) 555-0611" },
       { id: "p2", label: "work", value: "+1 (415) 268-7000" },
@@ -385,7 +385,7 @@ export const SAMPLE_CONTACTS = [
     firstName: "Amelia",
     lastName: "Brown",
     company: "Stanford University",
-    jobTitle: "Research Scientist — HCI",
+    jobTitle: "Research Scientist, HCI",
     phones: [
       { id: "p1", label: "mobile", value: "+1 (650) 555-0348" },
       { id: "p2", label: "work", value: "+1 (650) 723-2300" },

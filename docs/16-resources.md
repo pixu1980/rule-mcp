@@ -14,23 +14,23 @@ a client can cache: no call runs a model, and none of them writes.
 
 ### The fixed indexes
 
-| URI                     | Name                                                    | Media type         |
-| ----------------------- | ------------------------------------------------------- | ------------------ |
-| `rule://skills`          | All rule skills index                                    | `application/json` |
-| `rule://templates`       | Design system component templates                       | `application/json` |
-| `rule://project`         | Project analysis (detected framework + suggested tools) | `application/json` |
-| `rule://community`       | Community rule skills index                              | `application/json` |
-| `rule://ai`              | rule skill full content                                  | `text/markdown`    |
-| `rule://a11y`            | A11y testing guide (Playwright + axe-core)              | `text/markdown`    |
-| `rule://a11y/test-basic` | Basic a11y test template                                | `text/plain`       |
-| `rule://a11y/test-forms` | Form a11y test template                                 | `text/plain`       |
+| URI                         | Name                                                    | Media type         |
+| --------------------------- | ------------------------------------------------------- | ------------------ |
+| `rulemcp://skills`          | All rule-mcp skills index                               | `application/json` |
+| `rulemcp://templates`       | Design system component templates                       | `application/json` |
+| `rulemcp://project`         | Project analysis (detected framework + suggested tools) | `application/json` |
+| `rulemcp://community`       | Community rule-mcp skills index                         | `application/json` |
+| `rulemcp://ai`              | rule-mcp skill full content                             | `text/markdown`    |
+| `rulemcp://a11y`            | A11y testing guide (Playwright + axe-core)              | `text/markdown`    |
+| `rulemcp://a11y/test-basic` | Basic a11y test template                                | `text/plain`       |
+| `rulemcp://a11y/test-forms` | Form a11y test template                                 | `text/plain`       |
 
 ### Per skill
 
 162 more, two for each skill that mints them:
 
-- `rule://<skill>` - the whole `SKILL.md`
-- `rule://<skill>/summary` - the condensed form a router hands back
+- `rulemcp://<skill>` - the whole `SKILL.md`
+- `rulemcp://<skill>/summary` - the condensed form a router hands back
 
 Listing them one row at a time would restate [`09-skills.md`](09-skills.md).
 

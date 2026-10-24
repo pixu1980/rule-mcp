@@ -36,4 +36,4 @@ The assumption this leans on, and the observation that would make it wrong.
 1. Three parseable lines with no prose (rejected: the prose is where the reason for an edge lives, and a bare edge list invites deleting it)
 1. A machine-readable table of edges in every plan (rejected: 83 tables to maintain by hand, and the orchestrator already holds the graph)
 1. Generate the status line and the graph section from skills-plan.md (rejected: the plan is the record; the orchestrator is the summary, and reversing that makes every edit a two-file edit)
-1. Uppercase - [X] as the closed marker (rejected: every existing file uses lowercase and the test normalises anyway)
+1. Uppercase - [X] as the closed marker (rejected: every existing file uses lowercase and the test normalizes anyway)

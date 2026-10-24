@@ -77,7 +77,7 @@ Measured on this checkout, before any change, so the plan argues from numbers an
 | Slash-command intent | A frozen keyword list, English and Italian                                                                             | `src/core/agents/commands/_check-intent.js`                                               |
 | Outbound HTTP        | None in the request path: no production module calls `fetch`                                                           | `src/`                                                                                    |
 | Privacy stance       | "Everything this server records stays on the machine"; remote transport is off by a code constant                      | `docs/06-privacy.md`                                                                      |
-| Configuration        | `RULE_MCP_*` environment variables, 30 of them today                                                             | `src/`                                                                                    |
+| Configuration        | `RULE_MCP_*` environment variables, 30 of them today                                                                   | `src/`                                                                                    |
 
 ## Prototype measurements
 

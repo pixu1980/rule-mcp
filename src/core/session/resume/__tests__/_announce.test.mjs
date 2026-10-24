@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-resume-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-resume-"));
 
 test.after(() => {
   rmSync(stateDir, { recursive: true, force: true });
@@ -19,7 +19,7 @@ process.env.RULE_MCP_STATE_DIR = stateDir;
 const { markAnnounced, wasAnnouncedThisSession, clearAnnounced, resumeAnnouncement } = await import("../_announce.js");
 
 const { scriptedRepository } = await import("../../../../tools/handon/__tests__/_handon.fixture.mjs");
-const cwd = mkdtempSync(join(tmpdir(), "rule-resume-project-"));
+const cwd = mkdtempSync(join(tmpdir(), "rule-mcp-resume-project-"));
 
 test.after(() => rmSync(cwd, { recursive: true, force: true }));
 

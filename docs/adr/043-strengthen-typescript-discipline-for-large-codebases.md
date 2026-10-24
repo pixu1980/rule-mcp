@@ -11,7 +11,7 @@ The OpenReplay article proposes useful practices for maintaining refactorability
 
 ## Decision
 
-Update rule-toolchain-typescript with exactOptionalPropertyTypes, verbatimModuleSyntax, explicit strict checks, incremental migration, discriminated unions, branded types, unknown, boundary validation, generated types, project references, and type-coverage ratcheting. Statements tied to TypeScript 6/7 remain version-gated and don't become baseline dependencies.
+Update rule-mcp-toolchain-typescript with exactOptionalPropertyTypes, verbatimModuleSyntax, explicit strict checks, incremental migration, discriminated unions, branded types, unknown, boundary validation, generated types, project references, and type-coverage ratcheting. Statements tied to TypeScript 6/7 remain version-gated and don't become baseline dependencies.
 
 ## Consequences
 

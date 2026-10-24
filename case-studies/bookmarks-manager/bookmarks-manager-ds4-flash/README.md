@@ -75,10 +75,10 @@ pnpm dev
 ## Design System
 
 - **Dark theme** with oklch color space
-- **Typography**: Chivo (display, weights 400–900) + Inter (body)
+- **Typography**: Chivo (display, weights 400-900) + Inter (body)
 - **Spacing**: Proportional 4px grid
 - **Elevation**: 5-level layered shadow system
-- **Motion**: 200–400ms cubic-bezier transitions, respects `prefers-reduced-motion`
+- **Motion**: 200-400ms cubic-bezier transitions, respects `prefers-reduced-motion`
 - **Focus**: High-contrast rings with `:focus-visible`
 
 ## ADRs

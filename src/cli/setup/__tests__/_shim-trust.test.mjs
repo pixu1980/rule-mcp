@@ -30,7 +30,7 @@ function withPath(dir, fn) {
 
 /** A scratch dir with an executable `rule-mcp` whose body is given. */
 function scratchShim(body) {
-  const dir = mkdtempSync(join(tmpdir(), "rule-shim-trust-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-shim-trust-"));
   const shim = join(dir, "rule-mcp");
 
   writeFileSync(shim, body);
@@ -40,13 +40,13 @@ function scratchShim(body) {
 }
 
 test("a shim naming another program is not ours and is never run", () => {
-  const { dir } = scratchShim(`#!/bin/sh\ntouch "${join(tmpdir(), "rule-shim-ran")}"\necho 9.9.9\n`);
+  const { dir } = scratchShim(`#!/bin/sh\ntouch "${join(tmpdir(), "rule-mcp-shim-ran")}"\necho 9.9.9\n`);
 
   try {
     const ran = withPath(dir, () => shimWorks());
 
     assert.equal(ran, false, "a foreign shim is not trusted");
-    assert.equal(existsSync(join(tmpdir(), "rule-shim-ran")), false, "and it is never executed");
+    assert.equal(existsSync(join(tmpdir(), "rule-mcp-shim-ran")), false, "and it is never executed");
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -75,7 +75,7 @@ test("a launcher naming this checkout's entrypoint is ours, and the shim is what
 });
 
 test("a symlink to the entrypoint resolves to it", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-shim-trust-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-shim-trust-"));
   const link = join(dir, "rule-mcp");
 
   try {

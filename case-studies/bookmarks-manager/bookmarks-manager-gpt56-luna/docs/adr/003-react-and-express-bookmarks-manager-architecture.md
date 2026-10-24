@@ -3,7 +3,7 @@
 - **Date**: 2026-07-11
 - **Status**: accepted
 - **Tags**: architecture, react, express, security, design-system
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

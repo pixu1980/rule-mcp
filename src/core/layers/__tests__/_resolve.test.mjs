@@ -10,8 +10,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-resolve-home-"));
-const projectRoot = mkdtempSync(join(tmpdir(), "rule-resolve-project-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-resolve-home-"));
+const projectRoot = mkdtempSync(join(tmpdir(), "rule-mcp-resolve-project-"));
 
 process.env.RULE_MCP_HOME = home;
 mkdirSync(join(projectRoot, ".git"), { recursive: true });
@@ -46,39 +46,39 @@ test("the bundled skills resolve as the native layer", () => {
   const resolved = resolveSkillDirs({ cwd: projectRoot });
 
   assert.ok(resolved.size > 80, `the bundled catalog resolves: ${resolved.size}`);
-  assert.equal(resolved.get("rule-devops-docker").layer, "native");
-  assert.ok(resolved.get("rule-devops-docker").dir.endsWith(join("skills", "rule-devops-docker")));
+  assert.equal(resolved.get("rule-mcp-devops-docker").layer, "native");
+  assert.ok(resolved.get("rule-mcp-devops-docker").dir.endsWith(join("skills", "rule-mcp-devops-docker")));
 });
 
 test("a project skill is added, and reports its layer", () => {
-  skill(join(projectRoot, ".rule-mcp"), "rule-project-rules");
+  skill(join(projectRoot, ".rule-mcp"), "rule-mcp-project-rules");
 
   const resolved = resolveSkillDirs({ cwd: projectRoot });
-  const entry = resolved.get("rule-project-rules");
+  const entry = resolved.get("rule-mcp-project-rules");
 
   assert.equal(entry.layer, "project", "a skill the repo ships is attributed to the repo");
-  assert.equal(entry.meta.name, "rule-project-rules", "its frontmatter is parsed from the layer that won");
+  assert.equal(entry.meta.name, "rule-mcp-project-rules", "its frontmatter is parsed from the layer that won");
 });
 
 test("the user layer overrides the project layer, which overrides native", () => {
-  skill(join(projectRoot, ".rule-mcp"), "rule-devops-docker", "description: from the project");
+  skill(join(projectRoot, ".rule-mcp"), "rule-mcp-devops-docker", "description: from the project");
 
-  assert.equal(resolveSkillDirs({ cwd: projectRoot }).get("rule-devops-docker").layer, "project", "the repo overrides what the server ships");
+  assert.equal(resolveSkillDirs({ cwd: projectRoot }).get("rule-mcp-devops-docker").layer, "project", "the repo overrides what the server ships");
 
-  skill(home, "rule-devops-docker", "description: from the user");
+  skill(home, "rule-mcp-devops-docker", "description: from the user");
 
-  const resolved = resolveSkillDirs({ cwd: projectRoot }).get("rule-devops-docker");
+  const resolved = resolveSkillDirs({ cwd: projectRoot }).get("rule-mcp-devops-docker");
   assert.equal(resolved.layer, "user", "and the machine owner has the last word");
   assert.equal(resolved.meta.description, "from the user");
 });
 
 test("a directory with no SKILL.md is not a skill", () => {
-  mkdirSync(join(home, "skills", "rule-not-a-skill"), { recursive: true });
+  mkdirSync(join(home, "skills", "rule-mcp-not-a-skill"), { recursive: true });
 
-  assert.equal(resolveSkillDirs({ cwd: projectRoot }).has("rule-not-a-skill"), false, "a folder without a SKILL.md declares nothing");
+  assert.equal(resolveSkillDirs({ cwd: projectRoot }).has("rule-mcp-not-a-skill"), false, "a folder without a SKILL.md declares nothing");
 });
 
-test("a custom skill need not be named rule-anything", () => {
+test("a custom skill need not be named rule-mcp-anything", () => {
   skill(home, "my-house-rules");
 
   const entry = resolveSkillDirs({ cwd: projectRoot }).get("my-house-rules");
@@ -117,7 +117,7 @@ test("a persona that does not validate is reported and skipped", () => {
 });
 
 test("a missing layer directory is not a problem", () => {
-  const bare = mkdtempSync(join(tmpdir(), "rule-resolve-bare-"));
+  const bare = mkdtempSync(join(tmpdir(), "rule-mcp-resolve-bare-"));
 
   try {
     const resolved = resolveSkillDirs({ cwd: bare });

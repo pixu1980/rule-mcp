@@ -30,7 +30,7 @@ const actual = {};
     (entry) => entry.isDirectory() && existsSync(join(skillsRoot, entry.name, "SKILL.md")),
   ).length;
   actual.catalog = readdirSync(new URL("../../skills", import.meta.url).pathname, { withFileTypes: true }).filter(
-    (entry) => entry.isDirectory() && entry.name.startsWith("rule-") && existsSync(join(skillsRoot, entry.name, "SKILL.md")),
+    (entry) => entry.isDirectory() && entry.name.startsWith("rule-mcp-") && existsSync(join(skillsRoot, entry.name, "SKILL.md")),
   ).length;
 }
 

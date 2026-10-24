@@ -7,11 +7,11 @@
 
 ## Context
 
-WS4 removes merge commits from a feature branch while preserving exactly what the branch contains. The obvious commands are wrong in two different ways: `git rebase <base>` also pulls the base's new commits in and changes the tree, and squashing each merge into its neighbour loses any content a merge resolved in a way neither parent had (an "evil merge"). A history rewrite that quietly changes what the repository holds is worse than leaving the merges in.
+WS4 removes merge commits from a feature branch while preserving exactly what the branch contains. The obvious commands are wrong in two different ways: `git rebase <base>` also pulls the base's new commits in and changes the tree, and squashing each merge into its neighbor loses any content a merge resolved in a way neither parent had (an "evil merge"). A history rewrite that quietly changes what the repository holds is worse than leaving the merges in.
 
 ## Decision
 
-Linearization runs `git rebase <merge-base>`: replaying the feature commits onto the fork point drops the merges and leaves the final tree exactly as it was. Every rewrite - reword (via `git filter-branch --msg-filter`) and linearize - captures `HEAD^{tree}` before and re-reads it after, and if the two differ the branch is rolled back with `git reset --hard <original>` and the rewrite is refused. A conflict aborts and rolls back the same way, and the conflicted files are reported, never resolved. Destructive proposals require `force: true` (the `/rule-git --force` flag); execution always requires `confirm: true`, and `force` never substitutes for it.
+Linearization runs `git rebase <merge-base>`: replaying the feature commits onto the fork point drops the merges and leaves the final tree exactly as it was. Every rewrite - reword (via `git filter-branch --msg-filter`) and linearize - captures `HEAD^{tree}` before and re-reads it after, and if the two differ the branch is rolled back with `git reset --hard <original>` and the rewrite is refused. A conflict aborts and rolls back the same way, and the conflicted files are reported, never resolved. Destructive proposals require `force: true` (the `/rule-mcp-git --force` flag); execution always requires `confirm: true`, and `force` never substitutes for it.
 
 ## Consequences
 

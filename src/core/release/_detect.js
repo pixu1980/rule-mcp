@@ -5,7 +5,7 @@
  *
  * What release tooling a project already has.
  *
- * `/rule-init` reports this rather than installing anything: a changelog
+ * `/rule-mcp-init` reports this rather than installing anything: a changelog
  * generator, a version script and a release workflow are the project's choice,
  * and the honest first step is to say whether one is already there. It reads
  * files only - nothing is written and no dependency is added.

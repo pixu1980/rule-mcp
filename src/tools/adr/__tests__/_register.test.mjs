@@ -10,7 +10,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-adr-state-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-adr-state-"));
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 
 const { registerProcessAdrTool } = await import("../_register.js");
@@ -26,7 +26,7 @@ const text = (result) => result.content.map((part) => part.text).join("\n");
 const adrs = (root) => readdirSync(join(root, "docs", "adr")).filter((name) => name !== "ADR.md");
 
 test("an ADR written in another language is refused, with the offenses named", async () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-adr-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-adr-"));
 
   try {
     const result = await callTool("rule_tool_process_adr", {
@@ -44,7 +44,7 @@ test("an ADR written in another language is refused, with the offenses named", a
 });
 
 test("an ADR is written, numbered, and added to the index", async () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-adr-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-adr-"));
 
   try {
     const result = await callTool("rule_tool_process_adr", {
@@ -76,7 +76,7 @@ test("an ADR is written, numbered, and added to the index", async () => {
 });
 
 test("the next ADR takes the next number", async () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-adr-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-adr-"));
 
   try {
     await callTool("rule_tool_process_adr", { title: "Use PostgreSQL as the primary database", projectDir: root });
@@ -91,7 +91,7 @@ test("the next ADR takes the next number", async () => {
 });
 
 test("auto-logging declines every tool it was not asked to record", async () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-adr-auto-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-adr-auto-"));
 
   try {
     await autoLog("rule_tool_check", { projectDir: root });
@@ -103,13 +103,13 @@ test("auto-logging declines every tool it was not asked to record", async () => 
 });
 
 test("auto-logging records a routed call as an informational entry", async () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-adr-auto-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-adr-auto-"));
 
   try {
     await autoLog(
-      "pix_tool",
+      "rule_tool",
       { prompt: "build a react button", projectDir: root },
-      { content: [{ type: "text", text: JSON.stringify({ route: "rule-frontend-react", confidence: 0.9 }) }] },
+      { content: [{ type: "text", text: JSON.stringify({ route: "rule-mcp-frontend-react", confidence: 0.9 }) }] },
     );
 
     const [file] = adrs(root);
@@ -125,11 +125,11 @@ test("auto-logging records a routed call as an informational entry", async () =>
 });
 
 test("auto-logging is off when the environment turns it off", async () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-adr-auto-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-adr-auto-"));
   process.env.RULE_MCP_DISABLE_AUTO_ADR = "1";
 
   try {
-    await autoLog("pix_tool", { prompt: "anything", projectDir: root });
+    await autoLog("rule_tool", { prompt: "anything", projectDir: root });
 
     assert.throws(() => adrs(root), /ENOENT/, "the kill switch writes nothing");
   } finally {

@@ -49,7 +49,7 @@ export function registerAdrCommand(program) {
 export function registerSkillsCommand(program) {
   program
     .command("skills")
-    .description("Manage the rule AI skill system")
+    .description("Manage the rule-mcp AI skill system")
     .argument("[action]", "install | uninstall | list | reload")
     .option("--scope <s>", "global (default, ~/.agents/skills/) or project (.agents/skills/)", "global")
     .option("--all", "pre-select all skills")

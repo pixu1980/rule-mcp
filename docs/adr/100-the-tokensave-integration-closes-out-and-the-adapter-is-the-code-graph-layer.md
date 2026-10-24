@@ -7,7 +7,7 @@
 
 ## Context
 
-docs/plans/tokensave-integration.md analysed the TokenSave code-graph server (89 tools) against this repository's own surface (107 tools), produced a replacement map, and tracked nine milestones (M0 to M8) across the adapter, the read paths, routing, edits, dependencies and hardening. It shipped on 2026-09-15, from commit d4521b5 (M0, the adapter foundation) to commit f38b003 (M8, the version gate, staleness and parity), with every milestone stamped done in the plan.
+docs/plans/tokensave-integration.md analyzed the TokenSave code-graph server (89 tools) against this repository's own surface (107 tools), produced a replacement map, and tracked nine milestones (M0 to M8) across the adapter, the read paths, routing, edits, dependencies and hardening. It shipped on 2026-09-15, from commit d4521b5 (M0, the adapter foundation) to commit f38b003 (M8, the version gate, staleness and parity), with every milestone stamped done in the plan.
 
 ## Decision
 

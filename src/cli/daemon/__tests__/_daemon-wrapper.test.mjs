@@ -11,7 +11,7 @@
 import { strict as assert } from "node:assert";
 import { generateWrapperScript } from "../index.js";
 
-console.log("rule daemon wrapper test");
+console.log("rule-mcp daemon wrapper test");
 
 const script = generateWrapperScript({
   node: "/usr/local/bin/node",

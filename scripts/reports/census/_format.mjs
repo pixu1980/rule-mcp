@@ -38,12 +38,12 @@ export const firstSentence = (text) => {
   return stop === -1 ? clean : clean.slice(0, stop + 1);
 };
 
-/** The area a `rule-<area>-<topic>` skill belongs to. */
+/** The area a `rule-mcp-<area>-<topic>` skill belongs to. */
 export const areaOf = (name) => {
   const parts = name.split("-");
 
   return parts.length > 1 ? parts[1] : name;
 };
 
-/** The MCP tool a catalog skill directory mints: `rule-frontend-react` -> `rule_tool_frontend_react`. */
-export const toolOf = (name) => (name === "rule" ? "pix_tool" : `rule_tool_${name.slice("rule-".length).replaceAll("-", "_")}`);
+/** The MCP tool a catalog skill directory mints: `rule-mcp-frontend-react` -> `rule_tool_frontend_react`. */
+export const toolOf = (name) => (name === "rule-mcp" ? "rule_tool" : `rule_tool_${name.slice("rule-mcp-".length).replaceAll("-", "_")}`);

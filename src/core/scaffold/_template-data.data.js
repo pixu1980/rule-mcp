@@ -85,7 +85,7 @@ export const COMPONENT_TEMPLATES = {
     vanilla: [
       "/**",
       " * FILE: playwright.config.js",
-      " * USAGE: Shared Playwright config for rule AI projects",
+      " * USAGE: Shared Playwright config for rule-mcp AI projects",
       " * SCOPE: Chromium, a11y tests in tests/a11y/, dev server auto-start",
       " */",
       "",

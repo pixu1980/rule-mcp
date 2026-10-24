@@ -26,7 +26,7 @@ export function taskPrompt(name, args, user) {
   }
 
   switch (name) {
-    case "rule-handon": {
+    case "rule-mcp-handon": {
       return {
         name,
         description: "Verify the last handoff against the repository now",
@@ -48,7 +48,7 @@ export function taskPrompt(name, args, user) {
       };
     }
 
-    case "rule-init": {
+    case "rule-mcp-init": {
       return {
         name,
         description: "Prepare a project for rule-mcp",
@@ -59,8 +59,8 @@ export function taskPrompt(name, args, user) {
             "1. Call `rule_tool_init` (or `rule-mcp init`) - it prepares this project's directory under the",
             "   state dir, moves a local `./.rule-mcp` left by an earlier version, and runs tokensave init",
             "   unless `no-tokensave` / noTokensave is set.",
-            "2. For a brand-new project with no config yet, bootstrap via `/rule-area-styleguide` and",
-            "   `/rule-area-toolchain` (name leaves like file-tree / vite in the request) plus `rule_tool_detect` before step 3.",
+            "2. For a brand-new project with no config yet, bootstrap via `/rule-mcp-area-styleguide` and",
+            "   `/rule-mcp-area-toolchain` (name leaves like file-tree / vite in the request) plus `rule_tool_detect` before step 3.",
             "3. Report the git governance it installs or integrates: a `commit-msg` gate and a `pre-push` gate that",
             "   enforce `type(scope): subject`. Husky is installed only when a Node project has no hook mechanism;",
             "   an existing `.husky/`, `.githooks/` or `core.hooksPath` is integrated, never replaced. Recorder state",
@@ -77,7 +77,7 @@ export function taskPrompt(name, args, user) {
       };
     }
 
-    case "rule-update": {
+    case "rule-mcp-update": {
       return {
         name,
         description: "Apply an available server update",

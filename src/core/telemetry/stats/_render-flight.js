@@ -19,7 +19,7 @@ import { iterationsAndProject, productivitySection, routingTables, usageSection 
 export function renderFlight(flight) {
   const kpi = flight?.kpi ?? {};
   const lines = [
-    `# rule flight: ${flight?.session?.id ?? "unknown"}`,
+    `# rule-mcp flight: ${flight?.session?.id ?? "unknown"}`,
     "",
     // A reader has to know which variant is in front of them: absent prompts
     // in a redacted flight mean "removed for sharing", not "never recorded".

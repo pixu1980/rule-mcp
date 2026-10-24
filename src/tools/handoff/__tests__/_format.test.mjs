@@ -35,7 +35,7 @@ test("priorityScore buckets the context keys by importance", () => {
 });
 
 test("pruneExports removes old exports beyond the keep floor", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-flight-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-flight-"));
   const NOW = 1_760_000_000_000;
   const DAY = 86_400_000;
   for (let index = 0; index < 4; index++) {
@@ -52,7 +52,7 @@ test("pruneExports removes old exports beyond the keep floor", () => {
 });
 
 test("pruneExports keeps the newest file and tolerates empty or missing dirs", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-flight-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-flight-"));
   const NOW = 1_760_000_000_000;
   const DAY = 86_400_000;
   for (let index = 0; index < 3; index++) {

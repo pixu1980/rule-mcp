@@ -60,7 +60,7 @@ check(
     // as a negative compression, that reads as compression having made things
     // worse; it is the reminder's own cost and belongs in its own field.
     const grown = computeKpi({
-      events: [{ ts: T0, session: "s", tool: "pix_tool", coreTokens: 100, finalTokens: 130 }],
+      events: [{ ts: T0, session: "s", tool: "rule_tool", coreTokens: 100, finalTokens: 130 }],
     });
 
     return grown.tokens.compressionRatio === 0 && grown.tokens.reminderOverhead === 30;

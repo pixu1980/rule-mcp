@@ -11,7 +11,7 @@ The MCP server self-update (src/core/self-update.js) currently runs once per pro
 
 ## Decision
 
-The check fires on every tool invocation but the actual git fetch is throttled: at most every RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS (default 60, 0 = every call, min 1s). The check is async fire-and-forget: the tool responds immediately, the update happens in the background, and the banner appears on the next result. Banner only when something has changed. Daemon restart policy unchanged (no auto-exit for multi-client). Fail-open unchanged (offline/dirty tree/errors → silent skip).
+The check fires on every tool invocation but the actual git fetch is throttled: at most every RULE_MCP_AUTO_UPDATE_INTERVAL_SECONDS (default 60, 0 = every call, min 1s). The check is async fire-and-forget: the tool responds immediately, the update happens in the background, and the banner appears on the next result. Banner only when something has changed. Daemon restart policy unchanged (no auto-exit for multi-client). Fail-open unchanged (offline/dirty tree/errors -> silent skip).
 
 ## Consequences
 

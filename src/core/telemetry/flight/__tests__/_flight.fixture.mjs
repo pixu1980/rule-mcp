@@ -42,8 +42,8 @@ export function makeCheck(title) {
  * hands out /var/folders and cwd reports /private/var.
  */
 export function makeSandbox() {
-  process.env.HOME = mkdtempSync(join(tmpdir(), "rule-flight-home-"));
-  const workspace = realpathSync(mkdtempSync(join(tmpdir(), "rule-flight-")));
+  process.env.HOME = mkdtempSync(join(tmpdir(), "rule-mcp-flight-home-"));
+  const workspace = realpathSync(mkdtempSync(join(tmpdir(), "rule-mcp-flight-")));
   const project = join(workspace, "acme-app");
 
   mkdirSync(join(project, ".git"), { recursive: true });
@@ -65,14 +65,14 @@ export function recordSampleSession({ setClientInfo, startSession, recordToolCal
   setClientInfo({ name: "claude-code", version: "2.4.1" });
   startSession({ transport: "stdio", now: T0 });
   recordToolCall({
-    tool: "pix_tool",
+    tool: "rule_tool",
     args: { prompt: "add a dark mode toggle to the header for acme corp", mode: "full" },
     durationMs: 120,
     ok: true,
     cacheHit: false,
     cacheTier: "miss",
     entry: "router",
-    routedSkill: "rule-frontend-react",
+    routedSkill: "rule-mcp-frontend-react",
     mode: "full",
     argsBytes: 96,
     resultBytes: 8000,
@@ -98,7 +98,7 @@ export function recordSampleSession({ setClientInfo, startSession, recordToolCal
     now: T0 + 200_000,
   });
   recordToolCall({
-    tool: "get_pix_frontend_react_skill_full_content",
+    tool: "get_rule_mcp_frontend_react_skill_full_content",
     resource: true,
     durationMs: 4,
     ok: true,
@@ -106,7 +106,7 @@ export function recordSampleSession({ setClientInfo, startSession, recordToolCal
     now: T0 + 200_400,
   });
   process.env.RULE_MCP_NO_PROMPTS = "1";
-  recordToolCall({ tool: "pix_tool", args: { prompt: "a secret product plan" }, now: T0 + 300_000 });
+  recordToolCall({ tool: "rule_tool", args: { prompt: "a secret product plan" }, now: T0 + 300_000 });
   flush();
   delete process.env.RULE_MCP_NO_PROMPTS;
 }
@@ -127,7 +127,7 @@ export function writePiFixture(workspace, project) {
     [
       JSON.stringify({
         type: "message",
-        message: { role: "user", content: [{ type: "text", text: "usa rule MCP" }] },
+        message: { role: "user", content: [{ type: "text", text: "usa rule-mcp MCP" }] },
       }),
       // pi has a third role, and it is the one that would inflate the turn count.
       JSON.stringify({ type: "message", message: { role: "toolResult", content: [] } }),

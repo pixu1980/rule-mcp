@@ -1,6 +1,6 @@
 
 
-/** WS7.1 - /rule-init reports the release tooling a project already has. */
+/** WS7.1 - /rule-mcp-init reports the release tooling a project already has. */
 import { strict as assert } from "node:assert";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -10,7 +10,7 @@ import { test } from "node:test";
 import { detectReleaseTooling, releaseToolingLabels } from "../index.js";
 
 test("a project with nothing reports nothing", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-release-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-release-"));
   const tooling = detectReleaseTooling(root);
 
   assert.deepEqual(
@@ -23,7 +23,7 @@ test("a project with nothing reports nothing", () => {
 });
 
 test("a project's own release tooling is detected", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-release-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-release-"));
 
   mkdirSync(join(root, ".github", "workflows"), { recursive: true });
   writeFileSync(join(root, "package.json"), JSON.stringify({ name: "x", version: "1.2.3", scripts: { changelog: "x", version: "y" } }));
@@ -40,7 +40,7 @@ test("a project's own release tooling is detected", () => {
   assert.deepEqual(
     releaseToolingLabels(tooling).sort(),
     ["changelog", "changelogScript", "packageVersioning", "releaseWorkflow", "versionScript"],
-    "every found tooling is labelled",
+    "every found tooling is labeled",
   );
   rmSync(root, { recursive: true, force: true });
 });

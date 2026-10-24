@@ -8,7 +8,7 @@
  * One rule (`type(scope): subject`, with `!` and the `BREAKING CHANGE:` footer),
  * one linter over a message, a range or a push, and the idempotent installer
  * that gives a project the hooks to enforce it. Every consumer reads from here:
- * the `commit-msg` and `pre-push` hooks, the CLI, `/rule-git`, the handoff and
+ * the `commit-msg` and `pre-push` hooks, the CLI, `/rule-mcp-git`, the handoff and
  * the CI lint.
  *
  * @see ADR 061 - one concern per file

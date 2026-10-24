@@ -9,12 +9,12 @@ import { join } from "node:path";
 
 const { readAgentUsage } = await import("../index.js");
 
-const home = mkdtempSync(join(tmpdir(), "rule-read-claude-home-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-read-claude-home-"));
 
 test.after(() => rmSync(home, { recursive: true, force: true }));
 
 test("the claude reader counts humans, skips tool results and rows outside the window", () => {
-  const projectDir = mkdtempSync(join(tmpdir(), "rule-read-claude-project-"));
+  const projectDir = mkdtempSync(join(tmpdir(), "rule-mcp-read-claude-project-"));
   const dir = join(home, ".claude", "projects", projectDir.replaceAll("/", "-"));
   mkdirSync(dir, { recursive: true });
 
@@ -73,7 +73,7 @@ test("the claude reader counts humans, skips tool results and rows outside the w
 });
 
 test("missing token fields fold as zero and the first model name sticks", () => {
-  const projectDir = mkdtempSync(join(tmpdir(), "rule-read-claude-sparse-"));
+  const projectDir = mkdtempSync(join(tmpdir(), "rule-mcp-read-claude-sparse-"));
   const dir = join(home, ".claude", "projects", projectDir.replaceAll("/", "-"));
   mkdirSync(dir, { recursive: true });
 

@@ -1,6 +1,6 @@
 /**
  * FILE: electron/ipc/index.js
- * USAGE: Barrel — registers all domain IPC handler modules.
+ * USAGE: Barrel, registers all domain IPC handler modules.
  */
 const { registerContactHandlers } = require("./_contacts.js");
 

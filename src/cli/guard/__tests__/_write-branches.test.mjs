@@ -16,7 +16,7 @@ test("locale files are skipped before any read", async () => {
 });
 
 test("composeFile prefers disk and falls back to the payload", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-write-branches-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-write-branches-"));
   const empty = join(dir, "empty.js");
   writeFileSync(empty, "");
   try {
@@ -29,7 +29,7 @@ test("composeFile prefers disk and falls back to the payload", () => {
 });
 
 test("non-checkable paths and missing files report nothing", async () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-write-branches-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-write-branches-"));
   try {
     assert.deepEqual(await writeGuardrailReport({ file_path: join(dir, "README.md") }), { report: "" });
     assert.deepEqual(await writeGuardrailReport({ file_path: join(dir, "missing.js") }), { report: "" });
@@ -39,7 +39,7 @@ test("non-checkable paths and missing files report nothing", async () => {
 });
 
 test("a clean file reports nothing", async () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-write-branches-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-write-branches-"));
   const file = join(dir, "clean.js");
 
   try {
@@ -50,11 +50,11 @@ test("a clean file reports nothing", async () => {
 });
 
 test("adviseWrite combines the language report with the guardrail report", async () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-write-branches-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-write-branches-"));
   const file = join(dir, "bad.js");
-  writeFileSync(file, "// colour and \u201Cquotes\u201D\nconst x = 1;\n");
+  writeFileSync(file, "// color and \u201Cquotes\u201D\nconst x = 1;\n");
   try {
-    const result = await adviseWrite({ file_path: file, content: "// colour and \u201Cquotes\u201D\nconst x = 1;\n" });
+    const result = await adviseWrite({ file_path: file, content: "// color and \u201Cquotes\u201D\nconst x = 1;\n" });
 
     assert.match(result.advice, /British|em\/en dash|curly quote/u);
   } finally {

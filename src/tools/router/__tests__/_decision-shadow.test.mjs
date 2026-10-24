@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-decision-shadow-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-decision-shadow-"));
 
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_NO_SYNC_GUARD = "1";
@@ -60,21 +60,21 @@ test("the pipeline observes a would-be replay and still computes the answer", as
   process.env.RULE_MCP_DECISION_URL = server.url;
 
   try {
-    await callTool("pix_tool", { prompt: "create a react button component" });
+    await callTool("rule_tool", { prompt: "create a react button component" });
     await waitForDecisionShadows();
-    const second = await callTool("pix_tool", { prompt: "create a react form component" });
+    const second = await callTool("rule_tool", { prompt: "create a react form component" });
     await waitForDecisionShadows();
 
     const parsed = JSON.parse(second.content[0].text);
     const records = readShadows();
     const last = records.at(-1);
 
-    assert.equal(parsed._meta?.pixCache, undefined, "phase 1 never replays a decision");
+    assert.equal(parsed._meta?.ruleCache, undefined, "phase 1 never replays a decision");
     assert.equal(
       records.some((record) => record.reason === "no-candidates"),
       true,
     );
-    assert.equal(last.tool, "pix_tool");
+    assert.equal(last.tool, "rule_tool");
     assert.equal(last.wouldReplay, true);
     assert.equal(last.choice, "candidate-1");
     assert.equal(JSON.stringify(last).includes("create a react"), false, "the report keeps no prompt text");

@@ -20,19 +20,19 @@ const lookupOver = (graph) => (name) => graph[name];
 const ids = (resolved) => resolved.guardrails.map((rule) => rule.id);
 
 test("a skill with no inheritance resolves to its own rules", () => {
-  const graph = { "rule-devops-docker": { guardrails: [{ id: "docker-non-root" }, { id: "docker-healthcheck" }] } };
+  const graph = { "rule-mcp-devops-docker": { guardrails: [{ id: "docker-non-root" }, { id: "docker-healthcheck" }] } };
 
-  assert.deepEqual(ids(resolveInherited("rule-devops-docker", lookupOver(graph))), ["docker-non-root", "docker-healthcheck"]);
+  assert.deepEqual(ids(resolveInherited("rule-mcp-devops-docker", lookupOver(graph))), ["docker-non-root", "docker-healthcheck"]);
 });
 
 test("a child takes its parent's rules, parent first", () => {
   const graph = {
-    "rule-backend": { guardrails: [{ id: "cors-explicit" }, { id: "sql-injection" }] },
-    "rule-backend-express": { inherits: ["rule-backend"], guardrails: [{ id: "express-async-errors" }] },
+    "rule-mcp-backend": { guardrails: [{ id: "cors-explicit" }, { id: "sql-injection" }] },
+    "rule-mcp-backend-express": { inherits: ["rule-mcp-backend"], guardrails: [{ id: "express-async-errors" }] },
   };
 
   assert.deepEqual(
-    ids(resolveInherited("rule-backend-express", lookupOver(graph))),
+    ids(resolveInherited("rule-mcp-backend-express", lookupOver(graph))),
     ["cors-explicit", "sql-injection", "express-async-errors"],
     "inherited rules come first, so the skill's own can override them",
   );
@@ -40,11 +40,11 @@ test("a child takes its parent's rules, parent first", () => {
 
 test("the child's definition of an id wins over the one it inherits", () => {
   const graph = {
-    "rule-backend": { guardrails: [{ id: "cors-explicit", label: "parent" }] },
-    "rule-backend-express": { inherits: ["rule-backend"], guardrails: [{ id: "cors-explicit", label: "child" }] },
+    "rule-mcp-backend": { guardrails: [{ id: "cors-explicit", label: "parent" }] },
+    "rule-mcp-backend-express": { inherits: ["rule-mcp-backend"], guardrails: [{ id: "cors-explicit", label: "child" }] },
   };
 
-  const resolved = resolveInherited("rule-backend-express", lookupOver(graph));
+  const resolved = resolveInherited("rule-mcp-backend-express", lookupOver(graph));
 
   assert.deepEqual(ids(resolved), ["cors-explicit"], "the rule runs once");
   assert.equal(resolved.guardrails[0].label, "child", "and it is the nearest definition that runs");
@@ -95,13 +95,13 @@ test("resolving a skill that does not exist is a problem, not a throw", () => {
 
 test("the chain the rules came from is reported, for attribution", () => {
   const graph = {
-    "rule-backend": { guardrails: [{ id: "cors-explicit" }] },
-    "rule-backend-express": { inherits: ["rule-backend"], guardrails: [{ id: "express-async-errors" }] },
+    "rule-mcp-backend": { guardrails: [{ id: "cors-explicit" }] },
+    "rule-mcp-backend-express": { inherits: ["rule-mcp-backend"], guardrails: [{ id: "express-async-errors" }] },
   };
 
-  const resolved = resolveInherited("rule-backend-express", lookupOver(graph));
+  const resolved = resolveInherited("rule-mcp-backend-express", lookupOver(graph));
 
-  assert.deepEqual(resolved.chain, ["rule-backend", "rule-backend-express"], "a rule nobody can attribute is a rule nobody can debug");
+  assert.deepEqual(resolved.chain, ["rule-mcp-backend", "rule-mcp-backend-express"], "a rule nobody can attribute is a rule nobody can debug");
 });
 
 test("depth is bounded, so a pathological graph cannot exhaust the stack", () => {

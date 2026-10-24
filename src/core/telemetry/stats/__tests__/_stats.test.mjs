@@ -25,7 +25,7 @@ test("percentile is nearest-rank over a sorted copy", () => {
 test("aggregate keeps measured savings separate from the routing estimate", () => {
   const events = [
     {
-      tool: "pix_tool",
+      tool: "rule_tool",
       durationMs: 10,
       saved: { compression: 40 },
       cacheHit: true,
@@ -34,7 +34,7 @@ test("aggregate keeps measured savings separate from the routing estimate", () =
       ts: 1,
       session: "s1",
     },
-    { tool: "pix_tool", durationMs: 20, estimatedRouting: 500, ok: false, ts: 2, session: "s1" },
+    { tool: "rule_tool", durationMs: 20, estimatedRouting: 500, ok: false, ts: 2, session: "s1" },
   ];
   const stats = aggregate(events);
 
@@ -49,7 +49,7 @@ test("aggregate keeps measured savings separate from the routing estimate", () =
 });
 
 test("renderStats never merges the estimate into the measured total", () => {
-  const stats = aggregate([{ tool: "pix_tool", durationMs: 5, saved: { compression: 10 }, estimatedRouting: 900, ok: true, ts: 1, session: "s" }]);
+  const stats = aggregate([{ tool: "rule_tool", durationMs: 5, saved: { compression: 10 }, estimatedRouting: 900, ok: true, ts: 1, session: "s" }]);
   const out = renderStats(stats);
 
   assert.ok(!out.includes("910"), "the estimate must not be added to the measured total");
@@ -76,7 +76,7 @@ test("renderFlight carries the modeled-estimate sentence with its number", () =>
   };
   const out = renderFlight(flight);
 
-  assert.match(out, /# rule flight: abc/, "the renderer brands its output");
+  assert.match(out, /# rule-mcp flight: abc/, "the renderer brands its output");
   assert.match(out, /Redacted export/, "a redacted flight says so up front");
   assert.ok(out.indexOf("~400") < out.indexOf("is modeled, not measured"), "the estimate sentence sits beside its number");
 });

@@ -11,7 +11,7 @@ await loadAllSkills(true);
 // ── End to end ──
 test("a real call records the dependencies of its answer", async () => {
   cacheClear();
-  await callTool("pix_tool", { prompt: "svelte store for shared state" });
+  await callTool("rule_tool", { prompt: "svelte store for shared state" });
   const [entry] = cacheEntries();
 
   assert.ok(entry, "the call was stored");
@@ -37,7 +37,7 @@ test("editing one skill no longer empties the cache", async () => {
   cacheClear();
   const { CORPUS } = await import("../../../../tests/fixtures/routing-corpus.mjs");
   for (const item of CORPUS) {
-    await callTool("pix_tool", { prompt: item.prompt });
+    await callTool("rule_tool", { prompt: item.prompt });
   }
 
   const entries = cacheEntries();
@@ -55,7 +55,7 @@ test("editing one skill no longer empties the cache", async () => {
 
   console.log(`  ${entries.length} entries; worst case is ${worst} (${hit} dependents), ${Math.round(survival * 100)}% survive`);
   // The union surface (94 skills, item 11) concentrates the corpus dependents
-  // on a few hubs (rule-ai-evals at ~100/198); the bar follows the measured
+  // on a few hubs (rule-mcp-ai-evals at ~100/198); the bar follows the measured
   // equilibrium of this surface rather than the 6-skill corpus it was set on.
   assert.ok(survival > 0.45, `a single skill edit must leave most of the cache alone, got ${Math.round(survival * 100)}%`);
 });
@@ -64,9 +64,9 @@ test("editing one skill no longer empties the cache", async () => {
 
 /** One cacheable call per entry path, plus the two tools that read no skill. */
 const WORKLOAD = [
-  ["pix_tool", { prompt: "react button component" }],
+  ["rule_tool", { prompt: "react button component" }],
   ["rule_tool_frontend_react", { mode: "tldr", query: "hooks" }],
-  ["rule_tool_check", { skill: "rule-styleguide-css", code: "a{color:red}" }],
+  ["rule_tool_check", { skill: "rule-mcp-styleguide-css", code: "a{color:red}" }],
   ["rule_tool_search", { query: "container query" }],
   ["rule_tool_stats", {}],
   ["rule_tool_compress", { text: "It is important to note that this is filler." }],
@@ -86,7 +86,7 @@ test("the same call computed twice gives the same answer", async () => {
 });
 
 test("a hit decorates to the same output as a miss", async () => {
-  // The one permitted difference is `_meta.pixCache`, which names the tier
+  // The one permitted difference is `_meta.ruleCache`, which names the tier
   // that answered. Everything a caller reads has to be identical, or the cache
   // is a second implementation of every tool.
   for (const [tool, arguments_] of WORKLOAD) {
@@ -95,8 +95,8 @@ test("a hit decorates to the same output as a miss", async () => {
     const hit = await callTool(tool, arguments_);
 
     assert.equal(hit.content[0].text, miss.content[0].text, `${tool} replays differently`);
-    assert.equal(miss._meta?.pixCache, undefined, `${tool} reported a tier on a miss`);
-    assert.ok(hit._meta?.pixCache?.tier, `${tool} replayed without naming its tier`);
+    assert.equal(miss._meta?.ruleCache, undefined, `${tool} reported a tier on a miss`);
+    assert.ok(hit._meta?.ruleCache?.tier, `${tool} replayed without naming its tier`);
   }
 });
 

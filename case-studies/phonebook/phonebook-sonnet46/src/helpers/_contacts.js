@@ -4,7 +4,7 @@
  * filtering, sorting, and alphabetical grouping.
  */
 
-/** @type {string[]} Ordered avatar palette — 12 tokens. */
+/** @type {string[]} Ordered avatar palette, 12 tokens. */
 const AVATAR_PALETTE = [
   "var(--avatar-0)",
   "var(--avatar-1)",
@@ -21,7 +21,7 @@ const AVATAR_PALETTE = [
 ];
 
 /**
- * Derives an avatar color index (0–11) deterministically from a name string.
+ * Derives an avatar color index (0-11) deterministically from a name string.
  * @param {string} name
  * @returns {number}
  */
@@ -55,7 +55,7 @@ export function getInitials(firstName = "", lastName = "") {
 }
 
 /**
- * Formats a YYYY-MM-DD date string to a localised readable form.
+ * Formats a YYYY-MM-DD date string to a localized readable form.
  * @param {string} dateStr
  * @returns {string}
  */
@@ -70,7 +70,7 @@ export function formatBirthday(dateStr) {
 }
 
 /**
- * Returns the display label for a phone/email type (capitalised).
+ * Returns the display label for a phone/email type (capitalized).
  * @param {string} label
  * @returns {string}
  */

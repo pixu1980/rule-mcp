@@ -19,8 +19,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-accounting-state-"));
-const projectDir = realpathSync(mkdtempSync(join(tmpdir(), "rule-accounting-project-")));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-accounting-state-"));
+const projectDir = realpathSync(mkdtempSync(join(tmpdir(), "rule-mcp-accounting-project-")));
 mkdirSync(join(projectDir, ".git"), { recursive: true });
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
@@ -73,7 +73,7 @@ test("reminderOverhead is the reminder, even when compression removed more than 
       {
         ts: 1,
         session: "s",
-        tool: "pix_tool",
+        tool: "rule_tool",
         coreTokens: 1000,
         finalTokens: 980,
         reminderTokens: 60,
@@ -88,7 +88,7 @@ test("reminderOverhead is the reminder, even when compression removed more than 
 
 test("a log written before the field existed still reports something honest", () => {
   const kpi = computeKpi({
-    events: [{ ts: 1, session: "s", tool: "pix_tool", coreTokens: 1000, finalTokens: 1130 }],
+    events: [{ ts: 1, session: "s", tool: "rule_tool", coreTokens: 1000, finalTokens: 1130 }],
   });
 
   assert.equal(kpi.tokens.reminderOverhead, 130, "with nothing measured, the net growth is the best available answer");
@@ -104,8 +104,8 @@ test("a hit reports the output it replayed, not a token saving", () => {
 test("measuredSaved counts only what was really saved", () => {
   const kpi = computeKpi({
     events: [
-      { ts: 1, session: "s", tool: "pix_tool", cacheHit: false, durationMs: 12, saved: { compression: 80 } },
-      { ts: 2, session: "s", tool: "pix_tool", cacheHit: true, durationMs: 1, replayedTokens: 1000 },
+      { ts: 1, session: "s", tool: "rule_tool", cacheHit: false, durationMs: 12, saved: { compression: 80 } },
+      { ts: 2, session: "s", tool: "rule_tool", cacheHit: true, durationMs: 1, replayedTokens: 1000 },
     ],
   });
 
@@ -119,7 +119,7 @@ test("a log that still books cache as a saving is read honestly", () => {
   // Every session recorded before this change carries saved.cache. Counting it
   // would keep the old overstatement alive in every historical export.
   const kpi = computeKpi({
-    events: [{ ts: 1, session: "s", tool: "pix_tool", cacheHit: true, durationMs: 1, saved: { cache: 900 } }],
+    events: [{ ts: 1, session: "s", tool: "rule_tool", cacheHit: true, durationMs: 1, saved: { cache: 900 } }],
   });
 
   assert.equal(kpi.tokens.measuredSaved, 0, "an old log's cache figure is not a saving now either");

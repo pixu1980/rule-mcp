@@ -18,12 +18,12 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const read = (file) => readFileSync(join(root, file), "utf8");
 const version = JSON.parse(read("package.json")).version;
 const OWNER = "github.com/pixu1980/rule-mcp";
-const STALE_OWNER = /github\.com\/rule([/'"]|$)/u;
+const STALE_OWNER = /github\.com\/rule-mcp([/'"]|$)/u;
 const SQUAT_OWNER = /github\.com\/rule-mcp\//u;
 
 function assertOwnerAndFresh(file, text) {
   assert.ok(text.includes(OWNER), `${file} must resolve to ${OWNER}`);
-  assert.ok(!STALE_OWNER.test(text), `${file} still names the rule owner`);
+  assert.ok(!STALE_OWNER.test(text), `${file} still names the rule-mcp owner`);
   assert.ok(!SQUAT_OWNER.test(text), `${file} still names the rule-mcp owner`);
   assert.ok(!text.includes("PLACEHOLDER"), `${file} still carries a PLACEHOLDER`);
   assert.ok(!text.includes("registry.npmjs.org"), `${file} still points at the npm registry`);
@@ -39,7 +39,7 @@ test("the scoop manifest tracks the owner and the version", () => {
 });
 
 test("winget is one pixu1980 manifest tracking the version", () => {
-  assert.ok(!existsSync(join(root, ".github", "winget", "rule.rule-mcp.yaml")), "the rule-namespaced winget manifest is deleted");
+  assert.ok(!existsSync(join(root, ".github", "winget", "rule-mcp.rule-mcp.yaml")), "the rule-mcp-namespaced winget manifest is deleted");
 
   const file = ".github/winget/pixu1980.rule-mcp.yaml";
   const text = read(file);

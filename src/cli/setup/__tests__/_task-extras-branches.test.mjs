@@ -16,7 +16,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-task-extras-branches-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-task-extras-branches-"));
 
 process.env.HOME = home;
 process.env.RULE_MCP_HOME = join(home, ".rule-mcp");

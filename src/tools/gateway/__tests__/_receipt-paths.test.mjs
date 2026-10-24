@@ -4,7 +4,7 @@
 //
 // Audit finding 02 - the gateway receipt proved "these bytes passed the
 // guardrails" and nothing about where they would land, so a receipt earned for
-// benign content authorised a write to any path under the project root.
+// benign content authorized a write to any path under the project root.
 //
 // The fix adds a second, path-bound binding: issueFilesReceipt() signs the
 // ordered (path, contentHash) tuple list. Two rules carry the weight:
@@ -25,7 +25,7 @@ import { issueReceipt, issueFilesReceipt, validateReceipt, validateApply } from 
 
 const T0 = 2_000_000; // injected clock (ms)
 const TTL = 300_000;
-const SKILL = "rule-frontend-react";
+const SKILL = "rule-mcp-frontend-react";
 
 // ── Path-bound receipts ────────────────────────────────────────────────────
 
@@ -95,7 +95,7 @@ test("validateReceipt refuses a path-bound token (no downgrade to content-only)"
   assert.match(result.reason, /path-bound|binding/i);
 });
 
-test("a content-only receipt still authorises the single-file write", () => {
+test("a content-only receipt still authorizes the single-file write", () => {
   const code = "const code = 1;";
   const token = issueReceipt(code, SKILL, true, T0);
   const result = validateApply(token, [{ path: "src/example.js", content: code }], T0);
@@ -103,7 +103,7 @@ test("a content-only receipt still authorises the single-file write", () => {
   assert.equal(result.binding, "content");
 });
 
-test("a content-only receipt cannot authorise a multi-file write", () => {
+test("a content-only receipt cannot authorize a multi-file write", () => {
   // The old code concatenated contents with "\n---FILE---\n", so a receipt for
   // that concatenation validated an arbitrary set of files. Multi-file writes
   // now require the path-bound flow.

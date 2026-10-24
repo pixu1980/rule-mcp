@@ -12,7 +12,7 @@ import { bumpForCommit, deriveBump, deriveNextVersion, nextVersion } from "../_d
 
 /** A scripted repository with one release tag and unreleased work on top. */
 function repository(messages) {
-  const root = mkdtempSync(join(tmpdir(), "rule-derive-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-derive-"));
   const git = (...args) => execFileSync("git", args, { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
 
   git("init", "--initial-branch=main", "-q");

@@ -18,7 +18,7 @@ import { applyRules, installableTargets, removableTargets, removeRules } from ".
 
 /** A HOME with claude and cursor present. */
 function scaffold() {
-  const home = mkdtempSync(join(tmpdir(), "rule-rules-home-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-rules-home-"));
 
   mkdirSync(join(home, ".claude"), { recursive: true });
   mkdirSync(join(home, ".cursor"), { recursive: true });

@@ -75,7 +75,7 @@ test("a published commit is never rewritten", () => {
   const root = seedRepo();
   // The message has to name the moved file, or there is nothing to refuse.
   git(["commit", "--quiet", "--allow-empty", "-m", "docs(adr): accept docs/adr/069-personas.md"], root);
-  const bare = mkdtempSync(join(tmpdir(), "rule-doctor-remote-"));
+  const bare = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-remote-"));
   git(["init", "--quiet", "--bare"], bare);
   git(["remote", "add", "origin", bare], root);
   git(["push", "--quiet", "-u", "origin", "main"], root);

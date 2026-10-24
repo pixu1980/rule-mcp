@@ -30,7 +30,7 @@ import { fileURLToPath } from "node:url";
 const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 
 test("daemon start detaches instead of holding the daemon open", async (t) => {
-  const stateDir = mkdtempSync(join(tmpdir(), "rule-daemon-detach-"));
+  const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-daemon-detach-"));
   const port = await reservePort();
   let daemonPid = null;
   t.after(() => {
@@ -77,13 +77,13 @@ test("daemon start detaches instead of holding the daemon open", async (t) => {
 });
 
 test("daemon stop escalates to SIGKILL and only then forgets the pid", async (t) => {
-  const stateDir = mkdtempSync(join(tmpdir(), "rule-daemon-stop-"));
+  const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-daemon-stop-"));
   const pidFile = join(stateDir, "daemon.pid");
   t.after(() => rmSync(stateDir, { recursive: true, force: true }));
 
   // A daemon that ignores SIGTERM. The old stop path left this running forever
   // and removed the only record of its pid. It reports when its handler is
-  // installed: signalled any earlier, it would die of the default action and
+  // installed: signaled any earlier, it would die of the default action and
   // prove nothing.
   const stubborn = spawn(process.execPath, ["-e", "process.on('SIGTERM', () => {}); setInterval(() => {}, 1000); console.log('ready')"], { stdio: ["ignore", "pipe", "ignore"] });
   t.after(() => reap(stubborn.pid));
@@ -117,7 +117,7 @@ test("daemon stop escalates to SIGKILL and only then forgets the pid", async (t)
 });
 
 test("daemon stop takes the graceful path when the daemon has one", async (t) => {
-  const stateDir = mkdtempSync(join(tmpdir(), "rule-daemon-graceful-"));
+  const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-daemon-graceful-"));
   const pidFile = join(stateDir, "daemon.pid");
   t.after(() => rmSync(stateDir, { recursive: true, force: true }));
 
@@ -132,7 +132,7 @@ test("daemon stop takes the graceful path when the daemon has one", async (t) =>
     const startedAt = Date.now();
     const result = await stopDaemonProcess({});
     assert.equal(result.action, "stopped");
-    assert.ok(Date.now() - startedAt < 2000, "SIGTERM was honoured but stop still waited out the grace period");
+    assert.ok(Date.now() - startedAt < 2000, "SIGTERM was honored but stop still waited out the grace period");
     assert.equal(existsSync(pidFile), false);
   } finally {
     if (previous === undefined) {

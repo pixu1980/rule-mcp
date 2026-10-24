@@ -28,7 +28,7 @@ test("the installer looks for the token where the daemon writes it", () => {
 });
 
 test("a missing precondition is named, one reason at a time", () => {
-  const cwd = mkdtempSync(join(tmpdir(), "rule-docker-"));
+  const cwd = mkdtempSync(join(tmpdir(), "rule-mcp-docker-"));
 
   try {
     // No compose file here, so that is the blocker reported - not a single
@@ -43,7 +43,7 @@ test("a missing precondition is named, one reason at a time", () => {
 });
 
 test("a dry run starts nothing", () => {
-  const cwd = mkdtempSync(join(tmpdir(), "rule-docker-"));
+  const cwd = mkdtempSync(join(tmpdir(), "rule-mcp-docker-"));
 
   writeFileSync(join(cwd, "docker-compose.yml"), "services: {}\n");
 

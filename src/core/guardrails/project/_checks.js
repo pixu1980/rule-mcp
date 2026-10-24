@@ -105,7 +105,7 @@ export const PROJECT_CHECKS = [
       return {
         failCount: count,
         detail: [`${count} unsafe pattern site(s) outside tests`, ...(kinds ? [kinds] : [])],
-        suggestion: "Replace with a checked error path (see rule-backend-security).",
+        suggestion: "Replace with a checked error path (see rule-mcp-backend-security).",
       };
     },
   },
@@ -154,7 +154,7 @@ export const PROJECT_CHECKS = [
       return {
         failCount: pairs.length,
         detail: [`${pairs.length} pair(s) with identical bodies`, `first: ${where} (similarity ${first?.similarity ?? "?"})`],
-        suggestion: "Keep one and call it, or make the difference explicit; see rule-process-ai.",
+        suggestion: "Keep one and call it, or make the difference explicit; see rule-mcp-process-ai.",
       };
     },
   },

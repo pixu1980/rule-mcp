@@ -16,7 +16,7 @@ import { fileURLToPath } from "node:url";
 // process loads it too, so it registers the hook as every entry point does.
 const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 
-const fakeHome = mkdtempSync(join(tmpdir(), "rule-vscode-install-"));
+const fakeHome = mkdtempSync(join(tmpdir(), "rule-mcp-vscode-install-"));
 const fakeProject = join(fakeHome, "project");
 const globalFile =
   process.platform === "darwin" ? join(fakeHome, "Library", "Application Support", "Code", "User", "mcp.json") : join(fakeHome, ".config", "Code", "User", "mcp.json");
@@ -69,7 +69,7 @@ assert.equal(globalConfig.servers["other-global-server"].command, "other", "must
 assert.equal(globalConfig.mcpServers?.other_server.command, "keep-me", "must preserve other mcpServers entries");
 
 const workspaceConfig = JSON.parse(readFileSync(join(fakeProject, ".vscode", "mcp.json"), "utf8"));
-assert.equal(workspaceConfig.servers["rule-mcp"], undefined, "must not create a workspace rule server");
+assert.equal(workspaceConfig.servers["rule-mcp"], undefined, "must not create a workspace rule-mcp server");
 assert.equal(workspaceConfig.servers["other-workspace-server"].command, "other", "must preserve workspace config");
 assert.ok(existsSync(globalFile), "must write the user-global VS Code config");
 

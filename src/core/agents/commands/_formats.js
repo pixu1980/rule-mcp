@@ -25,7 +25,7 @@ export const FORMATS = {
   devin: { ext: "/SKILL.md", frontmatter: "devin", placeholder: null },
 };
 
-/** Supported render formats → file extension. */
+/** Supported render formats -> file extension. */
 export const FORMAT_EXT = Object.fromEntries(Object.entries(FORMATS).map(([format, spec]) => [format, spec.ext]));
 
 /**

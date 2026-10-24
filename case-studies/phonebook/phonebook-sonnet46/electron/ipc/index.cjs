@@ -1,6 +1,6 @@
 /**
  * @file electron/ipc/index.cjs
- * @description Barrel — registers all IPC handler modules.
+ * @description Barrel, registers all IPC handler modules.
  */
 "use strict";
 

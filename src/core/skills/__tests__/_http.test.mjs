@@ -4,7 +4,7 @@
  * @module test/http.test
  *
  * Integration tests for the Streamable HTTP transport (transport/http/index.js).
- * Exercises the MCP spec 2025-03-26+ handshake: initialize → session id →
+ * Exercises the MCP spec 2025-03-26+ handshake: initialize -> session id ->
  * authenticated tools/list, plus auth and session-validation edge cases.
  */
 
@@ -76,7 +76,7 @@ const initRequest = {
 // ── T1: unauthenticated request is rejected ──
 {
   const { res } = await post(initRequest, { token: null });
-  check("T1 unauthenticated initialize → 401", res.status === 401);
+  check("T1 unauthenticated initialize -> 401", res.status === 401);
 }
 
 // ── T2: initialize returns a session id + server info ──
@@ -84,7 +84,7 @@ let sessionId;
 {
   const { res, body } = await post(initRequest);
   sessionId = res.headers.get("mcp-session-id");
-  check("T2 initialize → 200", res.status === 200);
+  check("T2 initialize -> 200", res.status === 200);
   check("T2.1 initialize returns Mcp-Session-Id", !!sessionId);
   check("T2.2 initialize result has serverInfo", body?.result?.serverInfo?.name === "rule-mcp");
 }
@@ -92,23 +92,23 @@ let sessionId;
 // ── T3: a non-initialize request without a session id is rejected ──
 {
   const { res } = await post({ jsonrpc: "2.0", id: 2, method: "tools/list", params: {} });
-  check("T3 tools/list without session → 400", res.status === 400);
+  check("T3 tools/list without session -> 400", res.status === 400);
 }
 
-// ── T4: authenticated tools/list on the session lists the rule tool ──
+// ── T4: authenticated tools/list on the session lists the rule-mcp tool ──
 {
   // The client must confirm initialization before issuing requests.
   await post({ jsonrpc: "2.0", method: "notifications/initialized", params: {} }, { sessionId });
   const { res, body } = await post({ jsonrpc: "2.0", id: 3, method: "tools/list", params: {} }, { sessionId });
-  check("T4 tools/list → 200", res.status === 200);
+  check("T4 tools/list -> 200", res.status === 200);
   const names = (body?.result?.tools ?? []).map((t) => t.name);
-  check("T4.1 tools/list includes 'rule'", names.includes("pix_tool"));
+  check("T4.1 tools/list includes 'rule-mcp'", names.includes("rule_tool"));
 }
 
 // ── T4.5: logging/setLevel is honored (advertised capability must work) ──
 {
   const { res, body } = await post({ jsonrpc: "2.0", id: 5, method: "logging/setLevel", params: { level: "info" } }, { sessionId });
-  check("T4.5 logging/setLevel → 200", res.status === 200);
+  check("T4.5 logging/setLevel -> 200", res.status === 200);
   check("T4.5.1 logging/setLevel returns a non-error result", !!body && !body.error);
 }
 
@@ -118,9 +118,9 @@ let sessionId;
     method: "DELETE",
     headers: { Authorization: `Bearer ${TOKEN}`, "Mcp-Session-Id": sessionId },
   });
-  check("T5 DELETE session → 200", res.status === 200);
+  check("T5 DELETE session -> 200", res.status === 200);
   const { res: after } = await post({ jsonrpc: "2.0", id: 4, method: "tools/list", params: {} }, { sessionId });
-  check("T5.1 reusing a terminated session → 400", after.status === 400);
+  check("T5.1 reusing a terminated session -> 400", after.status === 400);
 }
 
 await stopHttpServer();

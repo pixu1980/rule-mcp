@@ -45,7 +45,7 @@ export const NON_CACHEABLE = new Set([
  * the output: replaying a stored answer for a rephrased question is correct
  * only when the answer does not quote the question.
  *
- * Measured against the live tools rather than assumed. `pix_tool` scores a
+ * Measured against the live tools rather than assumed. `rule_tool` scores a
  * prompt and returns a route, and the prompt appears nowhere in the result. A
  * skill tool in `mode=search` and `rule_tool_search` both echo the query verbatim
  * in their heading, so a normalized replay would hand back a header for a
@@ -58,7 +58,7 @@ export const NON_CACHEABLE = new Set([
  *
  * @see test/cache-tiers.test.mjs - the echo checks that justify each entry
  */
-export const NORMALIZABLE = new Map([["pix_tool", new Set(["prompt"])]]);
+export const NORMALIZABLE = new Map([["rule_tool", new Set(["prompt"])]]);
 
 /** Max in-memory entries before oldest-first eviction. */
 export const MAX_MEMORY_ENTRIES = 500;

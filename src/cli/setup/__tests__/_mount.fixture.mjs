@@ -20,7 +20,7 @@ import { FakeStdin, FakeStdout } from "./_fake-terminal.fixture.mjs";
 
 // Never touch the machine's real shim or runtime home from a test.
 process.env.RULE_MCP_SKIP_GLOBAL_LINK = "1";
-process.env.RULE_MCP_HOME = mkdtempSync(join(tmpdir(), "rule-wizard-home-"));
+process.env.RULE_MCP_HOME = mkdtempSync(join(tmpdir(), "rule-mcp-wizard-home-"));
 
 /** Mount an app against a fake terminal and hand back the driving handles. */
 export function mountApp(App, defaults, size) {

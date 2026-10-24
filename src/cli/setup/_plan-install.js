@@ -46,7 +46,7 @@ export function buildInstallPlan({ agents = [], mode = "stdio", extras = {}, for
   } else {
     // The step owns the skill directories, so not selecting it means absent:
     // reconcile away whatever an earlier install copied, or the host keeps
-    // discovering `/skill:rule-*` the user did not ask for. The task reports
+    // discovering `/skill:rule-mcp-*` the user did not ask for. The task reports
     // "nothing to remove" when there is nothing to reconcile.
     plan.push(skillsRemovalTask());
   }

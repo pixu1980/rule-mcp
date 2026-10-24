@@ -20,25 +20,25 @@ test("summarize counts exact and top-or-alternative", () => {
 });
 
 test("shortlistFor keeps the route first and caps the list", () => {
-  const row = { got: "rule-a", alternatives: ["rule-b", "rule-c", "rule-d"] };
+  const row = { got: "rule-mcp-a", alternatives: ["rule-mcp-b", "rule-mcp-c", "rule-mcp-d"] };
 
-  assert.deepEqual(shortlistFor(row, 3), ["rule-a", "rule-b", "rule-c"]);
-  assert.deepEqual(shortlistFor(row, 0), ["rule-a"]);
+  assert.deepEqual(shortlistFor(row, 3), ["rule-mcp-a", "rule-mcp-b", "rule-mcp-c"]);
+  assert.deepEqual(shortlistFor(row, 0), ["rule-mcp-a"]);
 });
 
 test("a described choice carries the labels, a catalog choice carries the names", () => {
   const options = [
-    { name: "rule-a", description: "does a" },
-    { name: "rule-b", description: "does b" },
+    { name: "rule-mcp-a", description: "does a" },
+    { name: "rule-mcp-b", description: "does b" },
   ];
 
-  assert.deepEqual(buildQuestion(options, { described: true }).pick.criteria, { "rule-a": "does a", "rule-b": "does b" });
-  assert.deepEqual(buildQuestion(options, { described: false }).pick.options, ["rule-a", "rule-b"]);
+  assert.deepEqual(buildQuestion(options, { described: true }).pick.criteria, { "rule-mcp-a": "does a", "rule-mcp-b": "does b" });
+  assert.deepEqual(buildQuestion(options, { described: false }).pick.options, ["rule-mcp-a", "rule-mcp-b"]);
 });
 
 test("pickOf reads the router answer shape", () => {
-  assert.equal(pickOf({ answers: { pick: { choice: "rule-a" } } }), "rule-a");
-  assert.equal(pickOf({ answers: { pick: "rule-b" } }), "rule-b");
+  assert.equal(pickOf({ answers: { pick: { choice: "rule-mcp-a" } } }), "rule-mcp-a");
+  assert.equal(pickOf({ answers: { pick: "rule-mcp-b" } }), "rule-mcp-b");
   assert.equal(pickOf({ answers: {} }), null);
 });
 

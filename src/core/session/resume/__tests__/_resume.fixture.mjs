@@ -19,7 +19,7 @@
  * prompt) lands when the gateway wires the output layer. The module semantics
  * are pinned here.
  *
- * Ported upstream behavior with the tool names rebranded to rule-native.
+ * Ported upstream behavior with the tool names rebranded to rule-mcp-native.
  */
 
 import { execFileSync } from "node:child_process";
@@ -54,7 +54,7 @@ export function finish() {
 
 /** A project with one handoff, and a git repository so handon has something to verify. */
 export function project({ handoff = true } = {}) {
-  const dir = mkdtempSync(join(tmpdir(), "rule-resume-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-resume-"));
   execFileSync("git", ["init", "-q", "-b", "feat/x"], { cwd: dir, stdio: "ignore" });
   execFileSync("git", ["config", "user.email", "t@t.t"], { cwd: dir, stdio: "ignore" });
   execFileSync("git", ["config", "user.name", "t"], { cwd: dir, stdio: "ignore" });

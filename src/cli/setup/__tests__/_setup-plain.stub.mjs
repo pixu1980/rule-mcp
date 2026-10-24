@@ -2,7 +2,7 @@
 
 /** Test double for setup/_plain.js used by _setup-index-branches.test.mjs. */
 
-const control = () => globalThis.__pixSetupBranches;
+const control = () => globalThis.__ruleSetupBranches;
 
 export async function runPlain() {
   const fail = control()?.plainMode === "fail";

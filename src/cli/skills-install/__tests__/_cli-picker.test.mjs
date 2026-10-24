@@ -5,7 +5,7 @@
  *
  * The picker is backed by @clack/prompts` multiselect (battle-tested raw-mode
  * handling on macOS/Linux/Windows). These tests drive the injectable `prompt`
- * seam, so the selection → install decision logic is covered without a TTY:
+ * seam, so the selection -> install decision logic is covered without a TTY:
  *   - the catalog is mapped to clack options (value=index, label, hint)
  *   - installing a subset installs exactly that subset
  *   - an aborted prompt (cancel) writes nothing and exits non-zero
@@ -28,7 +28,7 @@ const items = [
  * project cwd, so `.agents/skills` (project scope) is isolated.
  */
 function sandbox() {
-  const root = mkdtempSync(join(tmpdir(), "rule-picker-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-picker-"));
   const project = join(root, "project");
   mkdirSync(project, { recursive: true });
   const previous = { home: process.env.HOME, cwd: process.cwd() };
@@ -88,7 +88,7 @@ test("an aborted prompt writes nothing and fails the command non-zero", async ()
   try {
     await skillsInstallCommand({ scope: "project", interactive: true, prompt: async () => {} });
 
-    assert.equal(process.exitCode, 1, "a cancelled selection is a failure, not a silent no-op");
+    assert.equal(process.exitCode, 1, "a canceled selection is a failure, not a silent no-op");
     assert.ok(!existsSync(box.installedDir), "nothing is written on cancel");
   } finally {
     process.exitCode = previous;
@@ -99,7 +99,7 @@ test("an aborted prompt writes nothing and fails the command non-zero", async ()
 test("isCancelSelection accepts clack's own cancel symbol path", async () => {
   // Cannot fabricate clack's internal symbol from outside; the predicate must
   // accept undefined (the injected-prompt abort) which the flow maps to the
-  // same "cancelled" branch a real Escape press takes.
+  // same "canceled" branch a real Escape press takes.
   assert.equal(isCancelSelection(), true);
   assert.equal(isCancelSelection([0, 1]), false);
   assert.equal(isCancelSelection([]), false);

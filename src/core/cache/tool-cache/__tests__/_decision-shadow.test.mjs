@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-decision-shadow-report-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-decision-shadow-report-"));
 
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_DECISION_CACHE_SHADOW = "1";
@@ -83,8 +83,8 @@ test("guarded events never count toward the floor", () => {
 
 test("the record round-trips through the JSONL file and clears", () => {
   clearShadows();
-  recordShadow({ tool: "pix_tool", correct: true });
-  recordShadow({ tool: "pix_tool", correct: false });
+  recordShadow({ tool: "rule_tool", correct: true });
+  recordShadow({ tool: "rule_tool", correct: false });
 
   assert.equal(readShadows().length, 2);
 
@@ -96,14 +96,14 @@ test("the record round-trips through the JSONL file and clears", () => {
 test("a no-candidates record still carries the gold route and no prediction", async () => {
   cacheClear();
   clearShadows();
-  const core = { content: [{ type: "text", text: JSON.stringify({ route: "rule-frontend-react" }) }] };
+  const core = { content: [{ type: "text", text: JSON.stringify({ route: "rule-mcp-frontend-react" }) }] };
 
-  await observeDecisionShadow("pix_tool", { prompt: "a prompt that matches no cached call", framework: "react" }, { core, computeMs: 2 });
+  await observeDecisionShadow("rule_tool", { prompt: "a prompt that matches no cached call", framework: "react" }, { core, computeMs: 2 });
   await waitForDecisionShadows();
   const last = readShadows().at(-1);
 
   assert.equal(last.reason, "no-candidates");
-  assert.equal(last.goldRoute, "rule-frontend-react");
+  assert.equal(last.goldRoute, "rule-mcp-frontend-react");
   assert.equal(last.candidateRoute, null);
   assert.equal(last.correct, null);
   assert.equal(last.wouldReplay, false);

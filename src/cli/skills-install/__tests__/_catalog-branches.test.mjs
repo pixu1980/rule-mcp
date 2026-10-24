@@ -13,14 +13,14 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { test } from "node:test";
 
-const catalogRoot = mkdtempSync(join(tmpdir(), "rule-catalog-branches-"));
+const catalogRoot = mkdtempSync(join(tmpdir(), "rule-mcp-catalog-branches-"));
 const embedded = join(catalogRoot, "embedded");
 const missing = join(catalogRoot, "missing-embedded");
 const stubPathsUrl = pathToFileURL(join(import.meta.dirname, "_catalog-paths.stub.mjs")).href;
 
 mkdirSync(embedded, { recursive: true });
 
-Object.defineProperty(globalThis, "__pixCatalogBranches", {
+Object.defineProperty(globalThis, "__ruleCatalogBranches", {
   configurable: true,
   value: {
     embeddedSkills: embedded,
@@ -45,13 +45,13 @@ test.after(() => {
 });
 
 test("a missing embedded catalog returns an empty list", () => {
-  globalThis["__pixCatalogBranches"].embeddedSkills = missing;
+  globalThis["__ruleCatalogBranches"].embeddedSkills = missing;
   assert.deepEqual(getAvailableSkills(), []);
-  globalThis["__pixCatalogBranches"].embeddedSkills = embedded;
+  globalThis["__ruleCatalogBranches"].embeddedSkills = embedded;
 });
 
 test("directories without SKILL.md are skipped and empty frontmatter falls back", () => {
-  globalThis["__pixCatalogBranches"].embeddedSkills = embedded;
+  globalThis["__ruleCatalogBranches"].embeddedSkills = embedded;
   mkdirSync(join(embedded, "no-skill-md"), { recursive: true });
   writeFileSync(join(embedded, "no-skill-md", "README.md"), "# not a skill\n");
 

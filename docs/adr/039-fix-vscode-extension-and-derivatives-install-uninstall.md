@@ -1,6 +1,6 @@
 # 039: Fix VS Code extension and derivatives install/uninstall
 
-> **Superseded by [ADR 046](056-drop-the-vs-code-extension-and-its-installers.md)** — the extension and its installers were removed on the lean-web decision; kept for attribution.
+> **Superseded by [ADR 046](056-drop-the-vs-code-extension-and-its-installers.md)**, the extension and its installers were removed on the lean-web decision; kept for attribution.
 
 - **Date**: 2026-07-19
 - **Status**: superseded
@@ -9,7 +9,7 @@
 
 ## Context
 
-The VS Code extension rule-vanilla-reactive (syntax highlighting, autocomplete for HTML templates) was not being installed correctly. The CLI `install.js` only wrote the MCP config in mcp.json but did not install the .vsix. `install.sh` silenced errors with `2>/dev/null`. Missing support for derivative editors (Cursor, Windsurf, VS Code Insiders, Code-OSS, Codium).
+The VS Code extension rule-mcp-vanilla-reactive (syntax highlighting, autocomplete for HTML templates) was not being installed correctly. The CLI `install.js` only wrote the MCP config in mcp.json but did not install the .vsix. `install.sh` silenced errors with `2>/dev/null`. Missing support for derivative editors (Cursor, Windsurf, VS Code Insiders, Code-OSS, Codium).
 
 ## Decision
 

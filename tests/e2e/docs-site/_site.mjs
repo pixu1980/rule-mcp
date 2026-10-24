@@ -66,7 +66,7 @@ export function installSite(test) {
   let base = "";
 
   test.beforeAll(async () => {
-    outDir = mkdtempSync(join(tmpdir(), "rule-docs-site-"));
+    outDir = mkdtempSync(join(tmpdir(), "rule-mcp-docs-site-"));
     buildSite({ projectDir: ROOT, outDir });
     server = serve(outDir);
     await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));

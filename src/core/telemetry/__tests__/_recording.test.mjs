@@ -49,8 +49,8 @@ check(
 );
 
 const events = readEvents();
-const routed = events.find((event) => event.tool === "pix_tool" && !event.cacheHit);
-check("T3.3 the routed skill is recorded", routed.routedSkill === "rule-frontend-react");
+const routed = events.find((event) => event.tool === "rule_tool" && !event.cacheHit);
+check("T3.3 the routed skill is recorded", routed.routedSkill === "rule-mcp-frontend-react");
 check("T3.4 duration, outcome and cache hit are recorded", routed.durationMs === 12 && routed.ok === true && routed.cacheHit === false);
 check(
   "T3.5 the session is carried on every event",
@@ -64,12 +64,12 @@ check("T4 measured savings are summed per source", routed.saved.compression === 
 check("T4.1 the routing estimate is a separate field, not part of saved", routed.estimatedRouting === 3400 && routed.saved.estimatedRouting === undefined);
 
 // ── T8: never break the call it observes ──
-const readOnly = mkdtempSync(join(tmpdir(), "rule-telemetry-ro-"));
+const readOnly = mkdtempSync(join(tmpdir(), "rule-mcp-telemetry-ro-"));
 chmodSync(readOnly, 0o500);
 process.env.RULE_MCP_STATE_DIR = readOnly;
 let threw = false;
 try {
-  recordToolCall({ tool: "pix_tool", durationMs: 1, ok: true, cacheHit: false, now: T0 });
+  recordToolCall({ tool: "rule_tool", durationMs: 1, ok: true, cacheHit: false, now: T0 });
   flush();
 } catch {
   threw = true;
@@ -81,14 +81,14 @@ process.env.RULE_MCP_STATE_DIR = stateDir;
 // ── T9: the kill switch stops recording, not just reporting ──
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 const before = readEvents().length;
-recordToolCall({ tool: "pix_tool", durationMs: 1, ok: true, cacheHit: false, now: T0 + 9999 });
+recordToolCall({ tool: "rule_tool", durationMs: 1, ok: true, cacheHit: false, now: T0 + 9999 });
 flush();
 check("T9 nothing is recorded while disabled", readEvents().length === before);
 delete process.env.RULE_MCP_NO_TELEMETRY;
 
 // ── T12: the prompt kill switch, on an emptied log so it counts nothing else ──
 process.env.RULE_MCP_NO_PROMPTS = "1";
-recordToolCall({ tool: "pix_tool", args: { prompt: "a confidential merger" }, now: T0 + 7000 });
+recordToolCall({ tool: "rule_tool", args: { prompt: "a confidential merger" }, now: T0 + 7000 });
 flush();
 delete process.env.RULE_MCP_NO_PROMPTS;
 check("T12 the kill switch keeps the prompt text off disk", !readFileSync(eventsFile(), "utf8").includes("confidential"));

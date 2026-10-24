@@ -7,7 +7,7 @@
 
 ## Context
 
-Three skills (rule-data-duckdb, rule-data-indexed-db, rule-data-sqlite) were missing the ## See also section, breaking documentation tests.
+Three skills (rule-mcp-data-duckdb, rule-mcp-data-indexed-db, rule-mcp-data-sqlite) were missing the ## See also section, breaking documentation tests.
 
 ## Decision
 

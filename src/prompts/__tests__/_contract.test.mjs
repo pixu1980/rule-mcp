@@ -15,42 +15,42 @@ test("every listed prompt has a getPrompt implementation with messages", () => {
   }
 });
 
-test("refactor: areas are rule-area-*, removed commands gone", () => {
+test("refactor: areas are rule-mcp-area-*, removed commands gone", () => {
   const names = new Set(listPrompts().map((p) => p.name));
-  // The area prompts live under the rule-area-* namespace now.
+  // The area prompts live under the rule-mcp-area-* namespace now.
   for (const area of AREA_PROMPTS) {
     assert.ok(names.has(area), `${area} must exist`);
   }
   for (const removed of [
-    "rule-a11y-audit",
-    "rule-code-review",
-    "rule-compression",
-    "rule-process-compression",
-    "rule-flight",
-    "rule-process-flight",
-    "rule-area-process-flight",
-    "rule-process-compression",
-    "rule-area-process-compression",
-    "rule-process-handoff",
-    "rule-area-process-handoff",
-    "rule-tdd",
-    "rule-new-feature",
-    "rule-pull-request",
-    "rule-setup-project",
-    "rule-write-tests",
-    "rule-generate-component",
-    "rule-a11y-test",
-    "rule-a11y-review",
-    "rule-adr",
-    "rule-process-check",
-    "rule-audit-security",
-    "rule-plan-security",
-    "rule-review-security",
+    "rule-mcp-a11y-audit",
+    "rule-mcp-code-review",
+    "rule-mcp-compression",
+    "rule-mcp-process-compression",
+    "rule-mcp-flight",
+    "rule-mcp-process-flight",
+    "rule-mcp-area-process-flight",
+    "rule-mcp-process-compression",
+    "rule-mcp-area-process-compression",
+    "rule-mcp-process-handoff",
+    "rule-mcp-area-process-handoff",
+    "rule-mcp-tdd",
+    "rule-mcp-new-feature",
+    "rule-mcp-pull-request",
+    "rule-mcp-setup-project",
+    "rule-mcp-write-tests",
+    "rule-mcp-generate-component",
+    "rule-mcp-a11y-test",
+    "rule-mcp-a11y-review",
+    "rule-mcp-adr",
+    "rule-mcp-process-check",
+    "rule-mcp-audit-security",
+    "rule-mcp-plan-security",
+    "rule-mcp-review-security",
   ]) {
     assert.ok(!names.has(removed), `${removed} must be removed`);
   }
-  // rule-check is an agent command (not an MCP prompt) - not in this registry
-  assert.ok(!names.has("rule-check"), "rule-check is an agent command, not an MCP prompt");
+  // rule-mcp-check is an agent command (not an MCP prompt) - not in this registry
+  assert.ok(!names.has("rule-mcp-check"), "rule-mcp-check is an agent command, not an MCP prompt");
 });
 
 // ── Content rules (commit scope + TDD/a11y baselines) ────────────
@@ -70,7 +70,7 @@ test("every prompt supports /<name> help as an instant assistant message", () =>
       assert.equal(full.messages.length, 1, `${p.name}: help must be a single message`);
       assert.equal(full.messages[0].role, "assistant", `${p.name}: ${token} help must be an assistant message (shown instantly, no model call)`);
       const text = full.messages[0].content.text;
-      assert.match(text, /^Usage: \/rule-/, `${p.name}: ${token} must start with the usage line`);
+      assert.match(text, /^Usage: \/rule-mcp-/, `${p.name}: ${token} must start with the usage line`);
       assert.ok(!/Do NOT call/i.test(text), `${p.name}: ${token} help must be pure content, no meta-instruction`);
     }
   }

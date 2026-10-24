@@ -16,7 +16,7 @@ import { listFiles, parseFlatFileList, walkFiles } from "../_files.js";
 
 /** Create a scratch project, run `build` on it, and keep it for the test. */
 function scratch(build) {
-  const dir = mkdtempSync(join(tmpdir(), "rule-files-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-files-"));
 
   build(dir);
 

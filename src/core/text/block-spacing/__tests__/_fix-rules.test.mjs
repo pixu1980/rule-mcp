@@ -9,7 +9,7 @@ import test from "node:test";
 
 import { fixBlockSpacing } from "../index.js";
 
-const dir = mkdtempSync(join(tmpdir(), "rule-block-spacing-fix-"));
+const dir = mkdtempSync(join(tmpdir(), "rule-mcp-block-spacing-fix-"));
 
 test.after(() => rmSync(dir, { recursive: true, force: true }));
 

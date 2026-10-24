@@ -23,11 +23,11 @@ with `rule-mcp setup`; `rule-mcp doctor` is the health check.
 In the agent, call the router:
 
 ```json
-pix_tool({ "prompt": "create a React form component", "framework": "react" })
+rule_tool({ "prompt": "create a React form component", "framework": "react" })
 ```
 
 The response names the routed skill and loads its evidence. If the request is
-ambiguous, the router returns an area hub; call `pix_tool` again with the
+ambiguous, the router returns an area hub; call `rule_tool` again with the
 narrower request. The server is deterministic and never calls a model.
 
 ## 3. Check
@@ -35,11 +35,11 @@ narrower request. The server is deterministic and never calls a model.
 `rule_tool_check` runs the guardrails for the routed skill:
 
 ```json
-rule_tool_check({ "skill": "rule-frontend-react", "code": "<the generated code>" })
+rule_tool_check({ "skill": "rule-mcp-frontend-react", "code": "<the generated code>" })
 ```
 
 Failed guardrails are blocking. `mode: "project"` runs the graph checks
-(cycles, dead symbols, unused imports). The `/rule-check` command is the same
+(cycles, dead symbols, unused imports). The `/rule-mcp-check` command is the same
 workflow when the agent exposes slash commands.
 
 ## 4. Fix
@@ -77,7 +77,7 @@ rule_tool_audit({ "role": "security" })
 rule_tool_review({ "role": "security", "topic": "the diff" })
 ```
 
-The slash command is `/rule-persona-security`; the request selects the
+The slash command is `/rule-mcp-persona-security`; the request selects the
 operation. `rule-mcp roles list` shows the registry, and `roles new` adds
 a role.
 

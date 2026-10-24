@@ -7,15 +7,15 @@
 
 ## Context
 
-The review catalog covers every engineering axis except the one that keeps an open source project alive: governance, contributor onboarding, donor and funding management, release cadence and community building. Requests about those topics were routed to unrelated personas (docs, security, devops) whose lenses do not cover them. The old `.roo/commands/rule-*-oss.md` files already referenced `role=oss`, but no persona file existed, so the role was never loaded into the catalog and those commands fell back to a generic body.
+The review catalog covers every engineering axis except the one that keeps an open source project alive: governance, contributor onboarding, donor and funding management, release cadence and community building. Requests about those topics were routed to unrelated personas (docs, security, devops) whose lenses do not cover them. The old `.roo/commands/rule-mcp-*-oss.md` files already referenced `role=oss`, but no persona file existed, so the role was never loaded into the catalog and those commands fell back to a generic body.
 
 ## Decision
 
-Add `personas/oss.md` as an active persona named `Open Source Steward` with id `oss`. Its skills cover open source governance, contributor management, donor and funding management, release management, and community building and engagement. Its evidence skills point at the process skills that already exist (`rule-process-adr`, `rule-process-changelog`, `rule-process-npm-release`). Because the catalog is read from the `personas/` folder at startup, the role gains its MCP prompt, its slash commands (`rule-persona-oss-plan`, `rule-persona-oss-audit`, `rule-persona-oss-review`) and its tool surfaces with no code change.
+Add `personas/oss.md` as an active persona named `Open Source Steward` with id `oss`. Its skills cover open source governance, contributor management, donor and funding management, release management, and community building and engagement. Its evidence skills point at the process skills that already exist (`rule-mcp-process-adr`, `rule-mcp-process-changelog`, `rule-mcp-process-npm-release`). Because the catalog is read from the `personas/` folder at startup, the role gains its MCP prompt, its slash commands (`rule-mcp-persona-oss-plan`, `rule-mcp-persona-oss-audit`, `rule-mcp-persona-oss-review`) and its tool surfaces with no code change.
 
 ## Consequences
 
-A free-text request about governance, contributors, donors or community now resolves to a role that owns those lenses. The persona is data, so editing the file edits every surface. Stale `rule-*-oss.md` command files in `.roo/commands/` now have a matching role and a real body rather than a fallback. The catalog census (`docs/11-personas.md`) must be regenerated with `pnpm census`.
+A free-text request about governance, contributors, donors or community now resolves to a role that owns those lenses. The persona is data, so editing the file edits every surface. Stale `rule-mcp-*-oss.md` command files in `.roo/commands/` now have a matching role and a real body rather than a fallback. The catalog census (`docs/11-personas.md`) must be regenerated with `pnpm census`.
 
 ## What would end this
 

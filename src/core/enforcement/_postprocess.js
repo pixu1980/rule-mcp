@@ -13,7 +13,7 @@ import { validateResultShape, validateRouterResult } from "./_validate.js";
 export function postprocessToolResult(name, arguments_, result, context = {}) {
   validateResultShape(result);
 
-  if (!result.isError && name === "pix_tool") {
+  if (!result.isError && name === "rule_tool") {
     validateRouterResult(result, new Set(context.toolNames), new Set(context.skillNames));
   }
 
@@ -25,7 +25,7 @@ export function postprocessToolResult(name, arguments_, result, context = {}) {
     ...result,
     _meta: {
       ...result._meta,
-      pixEnforcement: {
+      ruleEnforcement: {
         policy: "advisory",
         preprocessed: true,
         postprocessed: true,
@@ -49,7 +49,7 @@ export function postprocessToolResult(name, arguments_, result, context = {}) {
  * @returns {object} the same result, now carrying its per-call identity
  */
 export function stampRequestId(result, requestId = randomUUID()) {
-  if (!result || result.isError || !result._meta?.pixEnforcement) {
+  if (!result || result.isError || !result._meta?.ruleEnforcement) {
     return result;
   }
 
@@ -57,7 +57,7 @@ export function stampRequestId(result, requestId = randomUUID()) {
     ...result,
     _meta: {
       ...result._meta,
-      pixEnforcement: { requestId, ...result._meta.pixEnforcement },
+      ruleEnforcement: { requestId, ...result._meta.ruleEnforcement },
     },
   };
 }
@@ -68,7 +68,7 @@ export function enforcementError(name, stage, error) {
     isError: true,
     content: [{ type: "text", text: `PIX enforcement ${stage} blocked ${name}: ${error.message}` }],
     _meta: {
-      pixEnforcement: {
+      ruleEnforcement: {
         policy: "advisory",
         stage,
         tool: name,

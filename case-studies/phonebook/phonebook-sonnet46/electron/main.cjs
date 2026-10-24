@@ -1,6 +1,6 @@
 /**
  * @file electron/main.cjs
- * @description Electron main process — thin orchestration layer.
+ * @description Electron main process, thin orchestration layer.
  * Creates the BrowserWindow, registers IPC handlers, and manages app lifecycle.
  */
 "use strict";

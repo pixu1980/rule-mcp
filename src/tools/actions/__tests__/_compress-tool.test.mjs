@@ -27,7 +27,7 @@ test("a sensitive file name is refused before anything is compressed", async () 
 
     const result = await call({ text: "The value is really just prose.", fileName });
     assert.equal(result.isError, true, `${fileName} must be refused`);
-    assert.equal(result._meta.pixCompress.refused, "sensitive-file-name");
+    assert.equal(result._meta.ruleCompress.refused, "sensitive-file-name");
     assert.match(result.content[0].text, /REFUSED/);
   }
 });
@@ -37,9 +37,9 @@ test("an ordinary file name compresses, and the saving is reported", async () =>
 
   assert.notEqual(result.isError, true);
   assert.equal(isSensitivePath("docs/08-engineering-guides.md"), false);
-  assert.ok(result._meta.pixCompress.saved >= 0);
-  assert.equal(result._meta.pixCompress.guarded, true, "a clean pass reports a clean guard");
-  assert.deepEqual(result._meta.pixCompress.violations, []);
+  assert.ok(result._meta.ruleCompress.saved >= 0);
+  assert.equal(result._meta.ruleCompress.guarded, true, "a clean pass reports a clean guard");
+  assert.deepEqual(result._meta.ruleCompress.violations, []);
 });
 
 test("every mode passes the guard on a text with structure to lose", async () => {
@@ -47,7 +47,7 @@ test("every mode passes the guard on a text with structure to lose", async () =>
 
   for (const mode of ["both", "compression", "fingerprint"]) {
     const result = await call({ text, mode });
-    assert.equal(result._meta.pixCompress.guarded, true, `${mode} must not break structure`);
+    assert.equal(result._meta.ruleCompress.guarded, true, `${mode} must not break structure`);
     assert.match(result.content[0].text, /^# The heading/, `${mode} keeps the heading`);
     assert.match(result.content[0].text, /const the = 1;/, `${mode} keeps the code`);
     assert.match(result.content[0].text, /https:\/\/example\.com\/a/, `${mode} keeps the URL`);

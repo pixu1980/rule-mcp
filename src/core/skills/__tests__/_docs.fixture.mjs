@@ -3,7 +3,7 @@
 /**
  * @module test/skills-docs
  *
- * Documentation quality checks for rule AI skill corpus.
+ * Documentation quality checks for rule-mcp AI skill corpus.
  * Keeps skills portable across LLM clients by enforcing consistent metadata,
  * resolvable cross-references, and no accidental concatenated skill documents.
  */

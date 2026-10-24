@@ -11,7 +11,7 @@ import { exactPinCommand, unpinnedDependencies } from "../index.js";
 
 /** Write a package.json into a throwaway project. */
 function project(manifest) {
-  const root = mkdtempSync(join(tmpdir(), "rule-pins-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-pins-"));
   writeFileSync(join(root, "package.json"), JSON.stringify(manifest));
 
   return root;
@@ -49,7 +49,7 @@ test("every kind of range is reported with its field", () => {
 });
 
 test("a project with no manifest has nothing to report", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-pins-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-pins-"));
 
   assert.deepEqual(unpinnedDependencies(root), [], "no package.json means no specifiers");
   rmSync(root, { recursive: true, force: true });

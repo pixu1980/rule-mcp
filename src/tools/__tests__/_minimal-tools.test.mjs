@@ -18,7 +18,7 @@ import { REGISTERED_BY_CODE } from "../../core/skills/_skill-tools.js";
 const bin = fileURLToPath(new URL("../../../bin/rule-mcp.js", import.meta.url));
 
 const embeddedSkillCount = readdirSync(new URL("../../../skills", import.meta.url).pathname, { withFileTypes: true }).filter(
-  (e) => e.isDirectory() && e.name.startsWith("rule-"),
+  (e) => e.isDirectory() && e.name.startsWith("rule-mcp-"),
 ).length;
 
 /** Core/action tools that are not minted 1:1 from an exposing skill. */
@@ -65,7 +65,7 @@ const retiredAliasIgnored = toolNames({ RULE_MCP_STRICT_MODE: "1" });
 assert.equal(retiredAliasIgnored.length, expectedFull, "removed RULE_MCP_STRICT_MODE alias must NOT trigger minimal mode");
 console.log(`  ✅ retired RULE_MCP_STRICT_MODE ignored → ${retiredAliasIgnored.length} tools (full)`);
 
-for (const t of ["pix_tool", "rule_tool_gateway", "rule_tool_apply", "rule_tool_check"]) {
+for (const t of ["rule_tool", "rule_tool_gateway", "rule_tool_apply", "rule_tool_check"]) {
   assert.ok(minimal.includes(t), `minimal surface must include ${t}`);
 }
 console.log("  ✅ dispatcher + action tools present in minimal mode");

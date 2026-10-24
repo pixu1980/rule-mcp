@@ -64,7 +64,7 @@ function dependenciesOf(name, args, result) {
     return out;
   };
 
-  if (name === "pix_tool") {
+  if (name === "rule_tool") {
     const named = new Set();
     try {
       const answer = JSON.parse(result?.content?.[0]?.text ?? "{}");
@@ -88,7 +88,7 @@ function dependenciesOf(name, args, result) {
   }
 
   if (entryPathOf(name) === "skill") {
-    return withDigests([`rule-${name.replace(/^rule_tool_/, "").replaceAll("_", "-")}`]);
+    return withDigests([`rule-mcp-${name.replace(/^rule_tool_/, "").replaceAll("_", "-")}`]);
   }
 
   if (name === "rule_tool_check" && typeof args?.skill === "string") {
@@ -111,7 +111,7 @@ function dependenciesOf(name, args, result) {
  * @returns {string|undefined}
  */
 function routedSkillOf(name, result) {
-  if (name !== "pix_tool") {
+  if (name !== "rule_tool") {
     return;
   }
 

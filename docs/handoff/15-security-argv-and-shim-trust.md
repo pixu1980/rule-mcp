@@ -17,18 +17,18 @@ worked from the top: six of its eight steps are done.
 
 ### 1. No corepack, no engines (ADR 109)
 
-- `skills/rule-toolchain-pnpm/guardrails/_no-engines.js` (new): `pkg-no-engines`
+- `skills/rule-mcp-toolchain-pnpm/guardrails/_no-engines.js` (new): `pkg-no-engines`
   forbids `engines` in a `package.json`, next to `pkg-no-corepack`. Both are in
   the baseline, so every skill applies them. The front matter of
-  `rule-toolchain-pnpm/SKILL.md` declares the new rule.
+  `rule-mcp-toolchain-pnpm/SKILL.md` declares the new rule.
 - `src/core/guardrails/_manifest-strip.js` (new): the write path removes
   `packageManager`, `engines` and `devEngines.packageManager` from a manifest
   before the gateway checks it, so the receipt binds the cleaned content and the
   reply carries it back. The path decides, not the content.
 - `package.json` drops `engines`; the Node floor lives in `.nvmrc`, the
   installers (`NODE_MIN=20`) and CI.
-- Documentation: the policy section in `rule-toolchain-pnpm`, `rule-styleguide-json`
-  and `rule-toolchain-project` says rule-mcp does not support corepack.
+- Documentation: the policy section in `rule-mcp-toolchain-pnpm`, `rule-mcp-styleguide-json`
+  and `rule-mcp-toolchain-project` says rule-mcp does not support corepack.
 
 ### 2. The roadmap
 

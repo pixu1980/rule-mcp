@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { beforeEach, test } from "node:test";
 
-process.env.RULE_MCP_HOME = mkdtempSync(join(tmpdir(), "rule-roles-"));
+process.env.RULE_MCP_HOME = mkdtempSync(join(tmpdir(), "rule-mcp-roles-"));
 
 const { rolesCommand } = await import("../_command.js");
 const { mergedRoles, userRolesDir } = await import("../_store.js");
@@ -80,13 +80,13 @@ test("new refuses with no id, an existing id, or a missing title/skills, and wri
   assert.equal(process.exitCode, 1);
 
   process.exitCode = 0;
-  const written = out(() => rolesCommand("new", { id: "probe-role", role: "Probe Role", skills: "rule-styleguide-css, rule-styleguide-html" }));
+  const written = out(() => rolesCommand("new", { id: "probe-role", role: "Probe Role", skills: "rule-mcp-styleguide-css, rule-mcp-styleguide-html" }));
 
   assert.match(written, /Wrote/);
   assert.ok(existsSync(join(userRolesDir(), "probe-role.md")), "the user layer gets the new role file");
 
   process.exitCode = 0;
-  const duplicate = out(() => rolesCommand("new", { id: "probe-role", role: "Probe Role", skills: "rule-styleguide-css" }));
+  const duplicate = out(() => rolesCommand("new", { id: "probe-role", role: "Probe Role", skills: "rule-mcp-styleguide-css" }));
 
   assert.match(duplicate, /already has "probe-role"/);
   assert.equal(process.exitCode, 1);

@@ -18,7 +18,7 @@ const BARREL = `export { Button } from '${"./_Button.js"}';\n`;
 
 /** Build a scratch project from a { relativePath: contents } map. */
 function project(files) {
-  const root = mkdtempSync(join(tmpdir(), "rule-scan-flat-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-scan-flat-"));
 
   for (const [relative, contents] of Object.entries(files)) {
     const file = join(root, relative);

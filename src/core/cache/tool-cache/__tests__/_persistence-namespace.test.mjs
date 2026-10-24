@@ -12,7 +12,7 @@ import { gzipSync } from "node:zlib";
 
 const { cacheFile, cacheGet, cacheKey, cacheSet } = await import("../index.js");
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-toolcache-ns-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-toolcache-ns-"));
 
 test.after(() => {
   rmSync(stateDir, { recursive: true, force: true });
@@ -26,8 +26,8 @@ test("a cache file from another namespace is ignored and replaced", () => {
   mkdirSync(stateDir, { recursive: true });
   writeFileSync(cacheFile(), gzipSync(Buffer.from(JSON.stringify({ namespace: "some-other-namespace", version: 3, entries: { k: { result: { content: [] } } } }))));
 
-  assert.equal(cacheGet(cacheKey("pix_tool", { prompt: "n" })), undefined, "a foreign namespace entry never loads");
+  assert.equal(cacheGet(cacheKey("rule_tool", { prompt: "n" })), undefined, "a foreign namespace entry never loads");
 
-  cacheSet(cacheKey("pix_tool", { prompt: "mine" }), { content: [{ type: "text", text: "now" }] }, {});
-  assert.equal(cacheGet(cacheKey("pix_tool", { prompt: "mine" }))?.content?.[0]?.text, "now", "the current namespace works");
+  cacheSet(cacheKey("rule_tool", { prompt: "mine" }), { content: [{ type: "text", text: "now" }] }, {});
+  assert.equal(cacheGet(cacheKey("rule_tool", { prompt: "mine" }))?.content?.[0]?.text, "now", "the current namespace works");
 });

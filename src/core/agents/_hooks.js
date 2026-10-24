@@ -71,13 +71,13 @@ export function hookEntries(launcher) {
     // The structural gate asks once per task about a boundary change, never
     // once per file (ADR 129). Write/Edit/MultiEdit land through PostToolUse.
     PreToolUse: [
-      entry("bash", "rule guard: migration and commit checks", { matcher: "Bash" }),
-      entry("structure", "rule guard: structural change, once per task", { matcher: "Write|Edit|MultiEdit" }),
+      entry("bash", "rule-mcp guard: migration and commit checks", { matcher: "Bash" }),
+      entry("structure", "rule-mcp guard: structural change, once per task", { matcher: "Write|Edit|MultiEdit" }),
     ],
     // PostToolUse carries `additionalContext` and no permission decision, so a
     // language or guardrail report reaches the model and nobody else (ADR 129).
     PostToolUse: [
-      entry("write", "rule guard: language and guardrails on the written file", {
+      entry("write", "rule-mcp guard: language and guardrails on the written file", {
         matcher: "Write|Edit|MultiEdit",
       }),
     ],
@@ -85,8 +85,8 @@ export function hookEntries(launcher) {
     // full-once-then-terse shape as the workflow reminder, for the same reason:
     // the rules have to survive turn 50 without being paid for 50 times.
     // SessionStart also injects the verified handoff when `source` is "resume".
-    SessionStart: [entry("session-start", "rule: session directive, handoff on resume")],
-    UserPromptSubmit: [entry("prompt-submit", "rule: prompt directive")],
+    SessionStart: [entry("session-start", "rule-mcp: session directive, handoff on resume")],
+    UserPromptSubmit: [entry("prompt-submit", "rule-mcp: prompt directive")],
   };
 }
 

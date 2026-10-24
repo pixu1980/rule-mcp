@@ -1,6 +1,6 @@
 /**
  * FILE: seed-data.js
- * USAGE: Shared seed contacts generator — pure JS, works in both Electron and browser.
+ * USAGE: Shared seed contacts generator, pure JS, works in both Electron and browser.
  * @returns {Array} 75 sample contacts
  */
 export function generateSeedContacts() {

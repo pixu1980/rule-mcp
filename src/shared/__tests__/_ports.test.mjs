@@ -19,7 +19,7 @@ const { createFileStore, createMemoryStore } = await import("../ports/index.js")
 
 /** A scratch directory for the tests that need a file. */
 function home() {
-  return mkdtempSync(join(tmpdir(), "rule-ports-"));
+  return mkdtempSync(join(tmpdir(), "rule-mcp-ports-"));
 }
 
 /** The shape a caller supplies: what goes in the file, and what comes back out. */

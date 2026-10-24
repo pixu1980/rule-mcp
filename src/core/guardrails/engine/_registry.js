@@ -56,37 +56,37 @@ export function skillChain(skillName) {
  * cycle the resolver has to break is not a declaration anybody can read.
  */
 export const BASELINE_SKILLS = [
-  "rule-styleguide-css",
-  "rule-styleguide-html",
-  "rule-styleguide-javascript",
-  "rule-styleguide-naming",
-  "rule-styleguide-file-tree",
-  "rule-styleguide-a11y",
-  "rule-process-ai",
-  "rule-styleguide-comments",
-  "rule-styleguide-typescript",
-  "rule-toolchain-pnpm",
+  "rule-mcp-styleguide-css",
+  "rule-mcp-styleguide-html",
+  "rule-mcp-styleguide-javascript",
+  "rule-mcp-styleguide-naming",
+  "rule-mcp-styleguide-file-tree",
+  "rule-mcp-styleguide-a11y",
+  "rule-mcp-process-ai",
+  "rule-mcp-styleguide-comments",
+  "rule-mcp-styleguide-typescript",
+  "rule-mcp-toolchain-pnpm",
 ];
 
 // ─── Skill -> framework mapping ───
 
 export const SKILL_FRAMEWORK_MAP = {
-  "rule-frontend-react": "react",
-  "rule-frontend-vue": "vue",
-  "rule-frontend-svelte": "svelte",
-  "rule-frontend-solidjs": "solid",
-  "rule-frontend-angular": "angular",
-  "rule-meta-astro": "astro",
-  "rule-styleguide": "vanilla",
-  "rule-styleguide-html": "vanilla",
-  "rule-styleguide-css": "vanilla",
-  "rule-styleguide-javascript": "vanilla",
-  "rule-styleguide-json": "vanilla",
-  "rule-styleguide-markdown": "vanilla",
-  "rule-styleguide-a11y": "vanilla",
-  "rule-styleguide-naming": "vanilla",
-  "rule-data-validation": "vanilla",
-  rule: "vanilla",
+  "rule-mcp-frontend-react": "react",
+  "rule-mcp-frontend-vue": "vue",
+  "rule-mcp-frontend-svelte": "svelte",
+  "rule-mcp-frontend-solidjs": "solid",
+  "rule-mcp-frontend-angular": "angular",
+  "rule-mcp-meta-astro": "astro",
+  "rule-mcp-styleguide": "vanilla",
+  "rule-mcp-styleguide-html": "vanilla",
+  "rule-mcp-styleguide-css": "vanilla",
+  "rule-mcp-styleguide-javascript": "vanilla",
+  "rule-mcp-styleguide-json": "vanilla",
+  "rule-mcp-styleguide-markdown": "vanilla",
+  "rule-mcp-styleguide-a11y": "vanilla",
+  "rule-mcp-styleguide-naming": "vanilla",
+  "rule-mcp-data-validation": "vanilla",
+  "rule-mcp": "vanilla",
 };
 
 // ─── Plugin guardrails registry ───
@@ -120,7 +120,7 @@ export function mergePluginGuardrails(pluginName, guardrails) {
  * @returns {Array<object>}
  */
 export function getGuardrails(skillName, mode) {
-  const scaffold = skillName === "rule-styleguide" && mode === "scaffold" ? SCAFFOLD_GUARDRAILS : [];
+  const scaffold = skillName === "rule-mcp-styleguide" && mode === "scaffold" ? SCAFFOLD_GUARDRAILS : [];
   const plugin = PLUGIN_GUARDRAILS.get(skillName) || [];
 
   // The skill's own rules come last so that a rule which has moved into a

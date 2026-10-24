@@ -56,7 +56,7 @@ export function registerStatsTool() {
 
           return {
             content: [{ type: "text", text: renderFlight(flight) }],
-            _meta: { pixFlight: flight.kpi },
+            _meta: { ruleFlight: flight.kpi },
           };
         } catch (error) {
           return {
@@ -80,7 +80,7 @@ export function registerStatsTool() {
 
       const stats = aggregate(events);
       const title = { session: "This session", week: "Last 7 days", all: "All recorded" }[scope];
-      let text = renderStats(stats, { title: `rule telemetry: ${title}` });
+      let text = renderStats(stats, { title: `rule-mcp telemetry: ${title}` });
 
       if (scope === "all") {
         const rollups = readRollups();
@@ -139,7 +139,7 @@ export function registerStatsTool() {
         text += [...lines, ""].join("\n");
       }
 
-      return { content: [{ type: "text", text }], _meta: { pixStats: stats, pixGraph: status ?? undefined } };
+      return { content: [{ type: "text", text }], _meta: { ruleStats: stats, ruleGraph: status ?? undefined } };
     },
   });
 }

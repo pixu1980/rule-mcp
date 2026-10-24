@@ -25,13 +25,13 @@ hand on top of it.
 ## The four critical findings
 
 1. **OSS-1** - three packaging manifests name three different GitHub owners.
-   scoop says `github.com/rule`, winget says owner `rule` with `github.com/rule`,
+   scoop says `github.com/rule-mcp`, winget says owner `rule-mcp` with `github.com/rule-mcp`,
    Homebrew says `github.com/rule-mcp`. All three pin `0.1.0`, two carry a
    literal `PLACEHOLDER` hash, and all three point at a `v0.1.0` tag that does
    not exist. The owner is `pixu1980`.
 2. **OSS-2** - `SECURITY.md` routes vulnerability reports to a public issue. No
    private channel, no contact, no SLA, no embargo window, no CVE step.
-3. **OSS-3** - `server.json` claims the `io.github.rule` namespace while the
+3. **OSS-3** - `server.json` claims the `io.github.rule-mcp` namespace while the
    GitHub owner is `pixu1980`. The registry validates namespace ownership
    against the publishing account, so the file is unpublishable as written.
 4. **OSS-4** - README, its npm badge and `docs/01-getting-started.md` sell
@@ -46,16 +46,16 @@ cannot work even against a registry.
 
 ## Interview decisions the plan is built on
 
-| #   | Decision                                                                  | Consequence                                                                                                      |
-| --- | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| D1  | License stays `MIT`                                                       | Step 17 adds SPDX headers; no relicensing, no contributor re-consent                                             |
-| D2  | Copyright holder is `pixu1980`                                            | Step 18 rewrites one `LICENSE` line and adds `AUTHORS`                                                           |
-| D3  | DCO inbound, no CLA                                                       | Step 5 adds a `Signed-off-by` check to hook and CI                                                               |
+| #   | Decision                                                                  | Consequence                                                                                                |
+| --- | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| D1  | License stays `MIT`                                                       | Step 17 adds SPDX headers; no relicensing, no contributor re-consent                                       |
+| D2  | Copyright holder is `pixu1980`                                            | Step 18 rewrites one `LICENSE` line and adds `AUTHORS`                                                     |
+| D3  | DCO inbound, no CLA                                                       | Step 5 adds a `Signed-off-by` check to hook and CI                                                         |
 | D4  | Distribution stays git-clone plus installer; npm publication out of scope | Step 4 removes every npm claim, but keeps the global `rule-mcp` command documented from the local checkout |
-| D5  | Documentation site built from scratch, deployed with GitHub Actions       | Step 27 adds the site; its URL replaces the placeholder host in step 11                                          |
-| D6  | Explicit BDFL with a documented path to co-maintainers                    | Step 16 writes the model down and adds `CODEOWNERS`                                                              |
-| D7  | Contributor Covenant 3.0                                                  | Step 14 adopts the text verbatim                                                                                 |
-| D8  | Funding is GitHub Sponsors                                                | Step 25 adds `FUNDING.yml` and the policy text                                                                   |
+| D5  | Documentation site built from scratch, deployed with GitHub Actions       | Step 27 adds the site; its URL replaces the placeholder host in step 11                                    |
+| D6  | Explicit BDFL with a documented path to co-maintainers                    | Step 16 writes the model down and adds `CODEOWNERS`                                                        |
+| D7  | Contributor Covenant 3.0                                                  | Step 14 adopts the text verbatim                                                                           |
+| D8  | Funding is GitHub Sponsors                                                | Step 25 adds `FUNDING.yml` and the policy text                                                             |
 | D9  | MCP registry identity is the GitHub owner, not a claimed brand            | Step 3 rewrites `server.json` to `io.github.pixu1980/rule-mcp`                                             |
 
 ## Bugs the work surfaced
@@ -84,8 +84,8 @@ session ended by running `format:fix`, which is the workaround, not the fix.
 
 All four held at the end of the session:
 
-- `rule-styleguide-english` on the three documents: `allPass: true` (59/59 each)
-- `rule-styleguide-markdown` on the three documents: `allPass: true` (59/59 each)
+- `rule-mcp-styleguide-english` on the three documents: `allPass: true` (59/59 each)
+- `rule-mcp-styleguide-markdown` on the three documents: `allPass: true` (59/59 each)
 - `pnpm exec prettier --check` on the three documents: clean
 - `node --test tests/docs/*.test.mjs`: 20/20 pass
 

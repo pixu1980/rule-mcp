@@ -10,7 +10,7 @@ const DATA_DIR = path.join(app.getPath("userData"), "phonebook-data");
 const ARCHIVE_PATH = path.join(DATA_DIR, "contacts.json");
 
 /**
- * Seed data — 75 contacts generated from arrays to avoid syntax issues.
+ * Seed data, 75 contacts generated from arrays to avoid syntax issues.
  * @returns {Array} Contact list
  */
 function seedContacts() {
@@ -145,7 +145,7 @@ function seedContacts() {
 }
 
 /**
- * Read the archive from disk. Initialises with seeds if absent.
+ * Read the archive from disk. Initializes with seeds if absent.
  * @returns {Array} Contact list
  */
 function readArchive() {

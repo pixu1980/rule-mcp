@@ -19,8 +19,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-estimate-state-"));
-const projectDir = realpathSync(mkdtempSync(join(tmpdir(), "rule-estimate-project-")));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-estimate-state-"));
+const projectDir = realpathSync(mkdtempSync(join(tmpdir(), "rule-mcp-estimate-project-")));
 mkdirSync(join(projectDir, ".git"), { recursive: true });
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
@@ -40,15 +40,15 @@ const PROMPTS = ["I need a React button component", "postgres index for a slow q
 
 const answers = [];
 for (const prompt of PROMPTS) {
-  const result = await callTool("pix_tool", { prompt });
+  const result = await callTool("rule_tool", { prompt });
   answers.push({ prompt, text: result.content.map((part) => part.text).join("") });
 }
 
-await callTool("rule_tool_check", { skill: "rule-styleguide-javascript", code: "export const a = 1;\n" });
+await callTool("rule_tool_check", { skill: "rule-mcp-styleguide-javascript", code: "export const a = 1;\n" });
 flush();
 
 const events = readEvents();
-const routerEvents = events.filter((event) => event.tool === "pix_tool" && !event.cacheHit);
+const routerEvents = events.filter((event) => event.tool === "rule_tool" && !event.cacheHit);
 const tokens = (text) => Math.ceil(text.length / 4);
 
 test("every routed call recorded an estimate", () => {
@@ -64,7 +64,7 @@ test("the estimate is the routed skill's own size, not a constant", () => {
   assert.ok(distinct.size > 1, `four different skills cannot all cost the same: ${[...distinct].join(", ")}`);
 
   for (const [index, event] of routerEvents.entries()) {
-    const route = JSON.parse(answers[index].text.split("## PIX WORKFLOW REMINDER", 1)[0]).route;
+    const route = JSON.parse(answers[index].text.split("## RULE-MCP WORKFLOW REMINDER", 1)[0]).route;
     const skill = readSkill(route);
 
     assert.ok(skill, `${route} has to be a skill on disk, or the estimate is about nothing`);
@@ -75,7 +75,7 @@ test("the estimate is the routed skill's own size, not a constant", () => {
 
 test("the estimate never claims more than reading the file would cost", () => {
   for (const [index, event] of routerEvents.entries()) {
-    const route = JSON.parse(answers[index].text.split("## PIX WORKFLOW REMINDER", 1)[0]).route;
+    const route = JSON.parse(answers[index].text.split("## RULE-MCP WORKFLOW REMINDER", 1)[0]).route;
 
     assert.ok(event.estimatedRouting <= tokens(readSkill(route)), `${route}: a saving larger than the file it avoids reading is not a saving`);
     assert.ok(event.estimatedRouting >= 0, "and it is never negative");
@@ -84,8 +84,8 @@ test("the estimate never claims more than reading the file would cost", () => {
 
 test("the estimate is positive exactly when the skill costs more than the answer", () => {
   // Measured on this corpus: a large skill is worth routing to
-  // (rule-frontend-react is ~6100 tokens against a ~1900-token answer), and a
-  // small one is not - rule-toolchain-vite is ~510 tokens while the router's
+  // (rule-mcp-frontend-react is ~6100 tokens against a ~1900-token answer), and a
+  // small one is not - rule-mcp-toolchain-vite is ~510 tokens while the router's
   // own answer, which lists every skill, is ~1400. Routing that prompt costs
   // more than reading the file. The estimate says zero, and zero is the honest
   // answer rather than a missing field.
@@ -93,7 +93,7 @@ test("the estimate is positive exactly when the skill costs more than the answer
   let sawNone = false;
 
   for (const [index, event] of routerEvents.entries()) {
-    const route = JSON.parse(answers[index].text.split("## PIX WORKFLOW REMINDER", 1)[0]).route;
+    const route = JSON.parse(answers[index].text.split("## RULE-MCP WORKFLOW REMINDER", 1)[0]).route;
     const bigger = tokens(readSkill(route)) > tokens(answers[index].text);
 
     assert.equal(event.estimatedRouting > 0, bigger, `${route}: the sign has to follow the measurement`);

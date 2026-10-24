@@ -5,7 +5,7 @@
  *
  * TDD tests for SSE transport layer.
  * SSEServerTransport flow:
- *   1. Client opens GET /sse → receives endpoint event with sessionId
+ *   1. Client opens GET /sse -> receives endpoint event with sessionId
  *   2. Client POSTs MCP messages to /message?sessionId=XXX
  *   3. Responses come back via the SSE stream
  */

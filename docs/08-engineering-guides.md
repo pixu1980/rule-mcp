@@ -71,8 +71,8 @@ commit - the docs follow the code instead of being remembered.
 ## Measured numbers
 
 - **Skills**: 96 `skills/*/SKILL.md` documents, each registered as a
-  `rule-tool-<skill>` MCP tool with full/summary/tldr/search/guardrails/check
-  modes; 112 tools and 198 `rule://` resources in total (runtime counts, see
+  `rule-mcp-tool-<skill>` MCP tool with full/summary/tldr/search/guardrails/check
+  modes; 112 tools and 198 `rulemcp://` resources in total (runtime counts, see
   the generated blocks).
 - **Skill reading** is cached (LRU): a cache hit is sub-millisecond, a miss is
   one disk read.
@@ -98,7 +98,7 @@ commit - the docs follow the code instead of being remembered.
   like, and that is the corpus the level table describes. Guard violations
   are 0 at every level on all four, which is the number that has to stay 0.
 
-  The rules are ported from the `rule_tool_compress` / `/rule-compress` (ADR 115)
+  The rules are ported from the `rule_tool_compress` / `/rule-mcp-compress` (ADR 115)
   skill and its `caveman-compress` companion: the vocabulary tables, the
   classification guards and `validate.py`'s structural validator. The LLM
   compression step is deliberately not ported - an LLM in the output path
@@ -133,15 +133,15 @@ why they are not compressed.
 By document category, the answer to "is it compressed before it reaches a
 model?":
 
-| Category                                                                            | Status                                                                                                                   |
-| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Markdown (handoffs, docs served via `rule://` text resources, the resume hook block) | compressed (tool result, resource read, `caveman-resume`)                                                                |
-| Skills (full body + summary resources, tool-embedded evidence)                      | compressed (resource read + tool-result pass)                                                                            |
-| Resources                                                                           | read: compressed; list labels: pass-through (no-op, ADR 077)                                                             |
-| Instructions (session/prompt directives, agent-instruction files)                   | directives already terse by authorship; anything emitted runs the pass                                                   |
-| Prompts                                                                             | get: compressed; list: descriptions compressed (ADR 077)                                                                 |
-| Tools                                                                               | results: compressed; list: descriptions compressed, schemas never (ADR 077)                                              |
-| Personas                                                                            | served content (plan outputs): compressed via the tool-result pass; `src/roles/*.md` source files stay untouched on disk |
+| Category                                                                                | Status                                                                                                                   |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Markdown (handoffs, docs served via `rulemcp://` text resources, the resume hook block) | compressed (tool result, resource read, `caveman-resume`)                                                                |
+| Skills (full body + summary resources, tool-embedded evidence)                          | compressed (resource read + tool-result pass)                                                                            |
+| Resources                                                                               | read: compressed; list labels: pass-through (no-op, ADR 077)                                                             |
+| Instructions (session/prompt directives, agent-instruction files)                       | directives already terse by authorship; anything emitted runs the pass                                                   |
+| Prompts                                                                                 | get: compressed; list: descriptions compressed (ADR 077)                                                                 |
+| Tools                                                                                   | results: compressed; list: descriptions compressed, schemas never (ADR 077)                                              |
+| Personas                                                                                | served content (plan outputs): compressed via the tool-result pass; `src/roles/*.md` source files stay untouched on disk |
 
 Opt-outs apply everywhere: `RULE_MCP_NO_CAVEMAN=1` and
 `RULE_MCP_CAVEMAN_LEVEL=off` turn the pass off on every surface that
@@ -174,7 +174,7 @@ turns the whole integration off.
 | `_changes.js`                    | `commit_context`, `diff_context`, `log` in the handoff | no section                                    |
 | `_routing.js`                    | `search` as a routing bonus                            | BM25 alone                                    |
 | `_memory.js`                     | `record_decision` / `session_recall`                   | no-op                                         |
-| `_ledger.js`                     | `tokensave gain --json` in `rule_tool_stats`            | no section                                    |
+| `_ledger.js`                     | `tokensave gain --json` in `rule_tool_stats`           | no section                                    |
 
 The graph is refused outright when its `last_indexed_version` names a different major than the
 adapter supports (currently `7`), and a failing tool call is skipped, never failed.
@@ -205,19 +205,19 @@ Measured on 2026-09-15, `develop`:
 
 ### The command surface today (41)
 
-| Kind       | Count | Example             | Reach for it when                                               |
-| ---------- | ----- | ------------------- | --------------------------------------------------------------- |
-| `router`   | 1     | `/rule`              | Routes a free-text request to the skill that answers it         |
-| `area`     | 11    | `/rule-area-ai`      | Area hub: free text routes to leaf skills/tools (ADR 117)       |
-| `workflow` | 3     | `/rule-check`        | Runs a named workflow (e.g. /rule-check auto-detects guardrails) |
-| `session`  | 7     | `/rule-compress`     | Carries a session across a context boundary                     |
-| `persona`  | 19    | `/rule-persona-a11y` | Runs one review role at one operation, and writes its documents |
+| Kind       | Count | Example                  | Reach for it when                                                    |
+| ---------- | ----- | ------------------------ | -------------------------------------------------------------------- |
+| `router`   | 1     | `/rule-mcp`              | Routes a free-text request to the skill that answers it              |
+| `area`     | 11    | `/rule-mcp-area-ai`      | Area hub: free text routes to leaf skills/tools (ADR 117)            |
+| `workflow` | 3     | `/rule-mcp-check`        | Runs a named workflow (e.g. /rule-mcp-check auto-detects guardrails) |
+| `session`  | 7     | `/rule-mcp-compress`     | Carries a session across a context boundary                          |
+| `persona`  | 19    | `/rule-mcp-persona-a11y` | Runs one review role at one operation, and writes its documents      |
 
-**Areas**: `/rule-area-ai`, `/rule-area-backend`, `/rule-area-data`, `/rule-area-devops`, `/rule-area-frontend`, `/rule-area-meta`, `/rule-area-platform`, `/rule-area-process`, `/rule-area-styleguide`, `/rule-area-toolchain`, `/rule-area-ui`
+**Areas**: `/rule-mcp-area-ai`, `/rule-mcp-area-backend`, `/rule-mcp-area-data`, `/rule-mcp-area-devops`, `/rule-mcp-area-frontend`, `/rule-mcp-area-meta`, `/rule-mcp-area-platform`, `/rule-mcp-area-process`, `/rule-mcp-area-styleguide`, `/rule-mcp-area-toolchain`, `/rule-mcp-area-ui`
 
-**Workflows**: `/rule-check`, `/rule-fix`, `/rule-git`
+**Workflows**: `/rule-mcp-check`, `/rule-mcp-fix`, `/rule-mcp-git`
 
-**Sessions**: `/rule-compress`, `/rule-handoff`, `/rule-handon`, `/rule-init`, `/rule-stats`, `/rule-update`, `/rule-usage`
+**Sessions**: `/rule-mcp-compress`, `/rule-mcp-handoff`, `/rule-mcp-handon`, `/rule-mcp-init`, `/rule-mcp-stats`, `/rule-mcp-update`, `/rule-mcp-usage`
 
 Every command, with its description and its install target, is in
 [`12-instructions.md`](12-instructions.md). Regenerate this block with `pnpm census`.

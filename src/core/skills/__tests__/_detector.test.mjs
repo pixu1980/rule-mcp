@@ -42,7 +42,7 @@ const hasDetect = tools.some((t) => t.name === "rule_tool_detect");
 check("T4 rule_tool_detect tool registered", hasDetect);
 
 // ── T4b: rule_tool_detect suggests registered thematic skill tools ──
-const detectTmpDir = mkdtempSync(join(tmpdir(), "rule-detect-tool-"));
+const detectTmpDir = mkdtempSync(join(tmpdir(), "rule-mcp-detect-tool-"));
 writeFileSync(
   join(detectTmpDir, "package.json"),
   JSON.stringify({
@@ -52,7 +52,7 @@ writeFileSync(
 );
 const detectToolResult = await callTool("rule_tool_detect", { path: detectTmpDir });
 const detectPayload = JSON.parse(detectToolResult.content[0].text);
-check("T4b suggested skill uses existing thematic name", detectPayload.suggested_skills.includes("rule-frontend-react"));
+check("T4b suggested skill uses existing thematic name", detectPayload.suggested_skills.includes("rule-mcp-frontend-react"));
 check(
   "T4b suggested tool is registered",
   tools.some((t) => t.name === detectPayload.suggested_tools[0]),
@@ -61,7 +61,7 @@ check("T4b suggested tool uses thematic name", detectPayload.suggested_tools[0] 
 rmSync(detectTmpDir, { recursive: true, force: true });
 
 // ── T5: Detects React from package.json ──
-const tmpDir = mkdtempSync(join(tmpdir(), "rule-detect-"));
+const tmpDir = mkdtempSync(join(tmpdir(), "rule-mcp-detect-"));
 writeFileSync(
   join(tmpDir, "package.json"),
   JSON.stringify({

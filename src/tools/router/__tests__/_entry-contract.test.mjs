@@ -32,7 +32,7 @@ await bootstrapCoreTools();
 
 /** The entry a tool name should declare, derived here on purpose (see the header). */
 function expectedEntry(name) {
-  if (name === "pix_tool") {
+  if (name === "rule_tool") {
     return "router";
   }
 
@@ -40,14 +40,14 @@ function expectedEntry(name) {
     return "gateway";
   }
 
-  return skillDirectories().has(`rule-${name.replace(/^rule_tool_/, "").replaceAll("_", "-")}`) ? "skill" : "action";
+  return skillDirectories().has(`rule-mcp-${name.replace(/^rule_tool_/, "").replaceAll("_", "-")}`) ? "skill" : "action";
 }
 
 /** The bundled skill directories, as the surface test reads them. */
 function skillDirectories() {
   return new Set(
     readdirSync(join(root, "skills"), { withFileTypes: true })
-      .filter((entry) => entry.isDirectory() && entry.name.startsWith("rule-"))
+      .filter((entry) => entry.isDirectory() && entry.name.startsWith("rule-mcp-"))
       .map((entry) => entry.name),
   );
 }

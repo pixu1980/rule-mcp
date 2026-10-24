@@ -15,7 +15,7 @@ export function actionInstall(opts) {
       case "macos": {
         print(`✓ LaunchAgent created: ${result.result.path}`);
         print("  The daemon should now appear in:");
-        print("    System Settings → General → Login Items & Extensions");
+        print("    System Settings -> General -> Login Items & Extensions");
 
         if (result.result.action === "loaded") {
           print("  ✓ launchctl loaded the service (it will start at next login)");

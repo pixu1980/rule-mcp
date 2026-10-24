@@ -29,7 +29,7 @@ let template;
 
 /** Build the template: bare upstream, seed working copy, clone that tracks it. */
 function buildTemplate() {
-  const base = mkdtempSync(join(tmpdir(), "rule-sandbox-template-"));
+  const base = mkdtempSync(join(tmpdir(), "rule-mcp-sandbox-template-"));
   const upstream = join(base, "upstream.git");
   const clone = join(base, "clone");
   const seed = join(base, "seed");
@@ -40,8 +40,8 @@ function buildTemplate() {
   git(["init", "-b", "main"], seed);
   git(["config", "user.email", "t@t.t"], seed);
   git(["config", "user.name", "t"], seed);
-  mkdirSync(join(seed, "skills", "rule"), { recursive: true });
-  writeFileSync(join(seed, "skills", "rule", "SKILL.md"), "v1\n");
+  mkdirSync(join(seed, "skills", "rule-mcp"), { recursive: true });
+  writeFileSync(join(seed, "skills", "rule-mcp", "SKILL.md"), "v1\n");
   mkdirSync(join(seed, "src"), { recursive: true });
   writeFileSync(join(seed, "src", "server.js"), "// v1\n");
   git(["add", "-A"], seed);
@@ -75,7 +75,7 @@ export function clonePair() {
 
   template ??= buildTemplate();
 
-  const base = mkdtempSync(join(tmpdir(), "rule-sandbox-"));
+  const base = mkdtempSync(join(tmpdir(), "rule-mcp-sandbox-"));
   cpSync(template, base, { recursive: true });
   const upstream = join(base, "upstream.git");
   const clone = join(base, "clone");

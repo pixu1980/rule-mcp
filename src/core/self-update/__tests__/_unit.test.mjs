@@ -7,35 +7,35 @@ import { readFileSync } from "node:fs";
 
 import { normalizeRemoteUrl, resolveAllowedRemotes } from "../index.js";
 
-// ── URL normalisation ──────────────────────────────────────────────────────
+// ── URL normalization ──────────────────────────────────────────────────────
 
-test("scp-style SSH and HTTPS forms of the same repo normalise equally", () => {
-  const ssh = normalizeRemoteUrl("git@github.com:rule/rule-mcp.git");
-  const https = normalizeRemoteUrl("https://github.com/rule/rule-mcp");
+test("scp-style SSH and HTTPS forms of the same repo normalize equally", () => {
+  const ssh = normalizeRemoteUrl("git@github.com:rule-mcp/rule-mcp.git");
+  const https = normalizeRemoteUrl("https://github.com/rule-mcp/rule-mcp");
   assert.equal(ssh, https, "the repo's real remote must match the declared one");
 });
 
-test("normalisation ignores .git suffix, trailing slash, case, and credentials", () => {
-  const canonical = normalizeRemoteUrl("https://github.com/rule/x");
+test("normalization ignores .git suffix, trailing slash, case, and credentials", () => {
+  const canonical = normalizeRemoteUrl("https://github.com/rule-mcp/x");
   for (const variant of [
-    "https://github.com/rule/x.git",
-    "https://github.com/rule/x/",
-    "https://GitHub.com/rule/x",
-    "https://user:token@github.com/rule/x.git",
-    "ssh://git@github.com/rule/x.git",
+    "https://github.com/rule-mcp/x.git",
+    "https://github.com/rule-mcp/x/",
+    "https://GitHub.com/rule-mcp/x",
+    "https://user:token@github.com/rule-mcp/x.git",
+    "ssh://git@github.com/rule-mcp/x.git",
   ]) {
     assert.equal(normalizeRemoteUrl(variant), canonical, `${variant} must normalise to the canonical form`);
   }
 });
 
-test("different hosts and different paths never normalise equally", () => {
-  const good = normalizeRemoteUrl("https://github.com/rule/x");
-  assert.notEqual(normalizeRemoteUrl("https://evil.example/rule/x"), good);
-  assert.notEqual(normalizeRemoteUrl("https://github.com/rule/y"), good);
-  assert.notEqual(normalizeRemoteUrl("https://notgithub.com/rule/x"), good);
+test("different hosts and different paths never normalize equally", () => {
+  const good = normalizeRemoteUrl("https://github.com/rule-mcp/x");
+  assert.notEqual(normalizeRemoteUrl("https://evil.example/rule-mcp/x"), good);
+  assert.notEqual(normalizeRemoteUrl("https://github.com/rule-mcp/y"), good);
+  assert.notEqual(normalizeRemoteUrl("https://notgithub.com/rule-mcp/x"), good);
 });
 
-test("an unusable remote value normalises to null rather than matching anything", () => {
+test("an unusable remote value normalizes to null rather than matching anything", () => {
   for (const bad of ["", " ".repeat(3), null, undefined]) {
     assert.equal(normalizeRemoteUrl(bad), null);
   }

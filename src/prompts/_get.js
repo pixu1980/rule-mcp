@@ -20,7 +20,7 @@ import { taskPrompt } from "./_task-prompts.js";
 export function getPrompt(name, args = {}) {
   const user = (text) => [{ role: "user", content: { type: "text", text } }];
 
-  // ── Generic `/rule-* help` ──────────────────────────────────────
+  // ── Generic `/rule-mcp-* help` ──────────────────────────────────────
   // Any prompt whose primary argument is `help` (or --help / -h) returns
   // its usage block instead of running a task.
   const def = listPrompts().find((p) => p.name === name);
@@ -30,7 +30,7 @@ export function getPrompt(name, args = {}) {
   if (primaryValue !== undefined && HELP_TOKENS.has(String(primaryValue).trim().toLowerCase())) {
     // Help is returned as a ready-made assistant message: the client displays it
     // immediately instead of asking the model to generate it (no reasoning, no tokens).
-    const helpText = name === "rule-handoff" ? HANDOFF_USAGE : buildHelpMessage(name, def, promptExamples(name));
+    const helpText = name === "rule-mcp-handoff" ? HANDOFF_USAGE : buildHelpMessage(name, def, promptExamples(name));
 
     return {
       name,
@@ -57,7 +57,7 @@ export function getPrompt(name, args = {}) {
     }
   }
 
-  if (name === "rule-handoff") {
+  if (name === "rule-mcp-handoff") {
     return handoffPrompt(args, user);
   }
 

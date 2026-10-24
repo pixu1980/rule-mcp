@@ -11,7 +11,7 @@ import { HOME, resolveEntrypoint, tryExecFile, WRAPPER_SCRIPT_PATH, generateWrap
 // ═══════════════════════════════════════════════════════════════════════════
 
 /** The LaunchAgent label. */
-export const LAUNCH_AGENT_LABEL = "io.github.rule.rule-mcp";
+export const LAUNCH_AGENT_LABEL = "io.github.rule-mcp.rule-mcp";
 
 /** Where user LaunchAgents live. */
 export const LAUNCH_AGENT_DIR = join(HOME, "Library", "LaunchAgents");
@@ -21,7 +21,7 @@ export const LAUNCH_AGENT_PATH = join(LAUNCH_AGENT_DIR, `${LAUNCH_AGENT_LABEL}.p
 
 /**
  * Install the macOS LaunchAgent plist and wrapper script, then load it.
- * After this, the daemon appears in System Settings → General → Login Items
+ * After this, the daemon appears in System Settings -> General -> Login Items
  * as "rule-mcpd" (not "Node.js Foundation").
  *
  * @param {{ dryRun?: boolean, exec?: Function }} [opts]

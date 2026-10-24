@@ -6,7 +6,7 @@ import { renderGatewayReply } from "./_render.js";
 import { stripManifestFiles } from "../../core/guardrails/_manifest-strip.js";
 
 /**
- * Register the single-entry orchestrator: route → evidence → guardrails →
+ * Register the single-entry orchestrator: route -> evidence -> guardrails ->
  * receipt, with the deterministic core cached and the receipt always fresh.
  */
 export async function registerGatewayTool() {
@@ -33,8 +33,8 @@ export async function registerGatewayTool() {
     name: "rule_tool_gateway",
     entry: "gateway",
     description:
-      "Single-entry orchestrator: routes prompt → loads skill evidence → checks code against guardrails → returns receipt. " +
-      "Use this as the primary entry point instead of calling rule + skill tools separately. " +
+      "Single-entry orchestrator: routes prompt -> loads skill evidence -> checks code against guardrails -> returns receipt. " +
+      "Use this as the primary entry point instead of calling rule-mcp + skill tools separately. " +
       "The returned receipt must be passed to rule_tool_apply when writing files.",
     zodSchema: GatewaySchema,
     handler: async (arguments_) => {
@@ -79,7 +79,7 @@ export async function registerGatewayTool() {
         // guardrail corpus is deterministic. This is what lets one skill edit
         // invalidate exactly these entries (cache-invalidation).
         const deps = {};
-        const primarySkill = core.effectiveRoute?.startsWith("rule-") ? core.effectiveRoute : null;
+        const primarySkill = core.effectiveRoute?.startsWith("rule-mcp-") ? core.effectiveRoute : null;
 
         if (primarySkill) {
           const digest = skillDigest(primarySkill);
@@ -100,7 +100,7 @@ export async function registerGatewayTool() {
           { type: "text", text: `\`\`\`json\n${JSON.stringify(response, null, 2)}\n\`\`\`` },
         ],
         _meta: {
-          pixGateway: {
+          ruleGateway: {
             route: core.effectiveRoute,
             checkPerformed: !!(fileSet || code),
             allPass: checkResult?.allPass ?? null,

@@ -8,7 +8,7 @@
  * One env var carries the installer's answer into the server process, in the
  * same grammar the `--surface` flag accepts: a preset on its own, or one
  * list - `minimal`, `standard`, `full`, `areas:frontend,data`, or
- * `skills:rule-ai,rule-data-sql`. Empty and unknown read as full, never as
+ * `skills:rule-mcp-ai,rule-mcp-data-sql`. Empty and unknown read as full, never as
  * empty: a typo must not silence the server.
  *
  * The filter is additive over the minimal mechanism, not a second one: preset
@@ -58,15 +58,15 @@ export function parseSurface(raw) {
   return kind === "areas" ? { areas: values } : { skills: values };
 }
 
-/** Whether a skill is an area hub: `rule-frontend`, not `rule-frontend-react`. */
-export const isRootSkill = (name) => typeof name === "string" && name.startsWith("rule-") && name.split("-").length === 2;
+/** Whether a skill is an area hub: `rule-mcp-frontend`, not `rule-mcp-frontend-react`. */
+export const isRootSkill = (name) => typeof name === "string" && name.startsWith("rule-mcp-") && name.split("-").length === 3;
 
-/** The area a skill belongs to: `rule-data-sql` belongs to `data`. */
-export const areaOfSkill = (name) => name.split("-", 2)[1];
+/** The area a skill belongs to: `rule-mcp-data-sql` belongs to `data`. */
+export const areaOfSkill = (name) => name.split("-", 3)[2];
 
 /** Every area the catalog covers, sorted. Foreign skills cover none. */
 export function areasOfSkills(skillNames = []) {
-  return [...new Set(skillNames.filter((name) => name.startsWith("rule-")).map(areaOfSkill))].sort();
+  return [...new Set(skillNames.filter((name) => name.startsWith("rule-mcp-")).map(areaOfSkill))].sort();
 }
 
 /**
@@ -82,7 +82,7 @@ export function areasOfSkills(skillNames = []) {
  */
 export function filterSurfaceSkills(selection = {}, skillNames = []) {
   const problems = [];
-  const native = skillNames.filter((name) => name.startsWith("rule-"));
+  const native = skillNames.filter((name) => name.startsWith("rule-mcp-"));
   const kept = new Set();
 
   if (selection.preset === "standard") {
@@ -130,7 +130,7 @@ export function filterSurfaceSkills(selection = {}, skillNames = []) {
     for (const skill of selection.skills) {
       if (known.has(skill)) {
         kept.add(skill);
-        kept.add(`rule-${areaOfSkill(skill)}`);
+        kept.add(`rule-mcp-${areaOfSkill(skill)}`);
       } else {
         problems.push(`unknown skill "${skill}"`);
       }

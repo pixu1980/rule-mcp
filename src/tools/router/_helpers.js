@@ -83,7 +83,7 @@ function argsBytes(args) {
  * @returns {Record<string, number>|undefined}
  */
 function guardrailRulesOf(result) {
-  const failed = result?._meta?.pixGuardrails?.failed;
+  const failed = result?._meta?.ruleGuardrails?.failed;
 
   if (!Array.isArray(failed) || failed.length === 0) {
     return;

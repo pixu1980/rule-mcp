@@ -4,11 +4,11 @@
  * @module core/review/roles/command-name
  *
  * Canonical slash-command / prompt name for a review persona: one command per
- * role, `rule-persona-<roleId>`. The operation is no longer part of the name;
+ * role, `rule-mcp-persona-<roleId>`. The operation is no longer part of the name;
  * it is decided from the request (ADR 120, see `./_operation-intent.js`).
  */
 
-const PREFIX = "rule-persona-";
+const PREFIX = "rule-mcp-persona-";
 
 /**
  * The command/prompt name for one role.

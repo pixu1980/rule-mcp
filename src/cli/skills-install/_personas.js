@@ -54,8 +54,8 @@ const skillContent = (role) => {
 
 /**
  * Remove persona skill dirs that no longer name a role: the per-operation
- * `rule-persona-<role>-<operation>` dirs, and the older
- * `rule-{plan|audit|review}-*` names that predate them (ADR 120, ADR 116).
+ * `rule-mcp-persona-<role>-<operation>` dirs, and the older
+ * `rule-mcp-{plan|audit|review}-*` names that predate them (ADR 120, ADR 116).
  *
  * @param {string} targetDir
  * @param {boolean} dryRun
@@ -70,8 +70,8 @@ function purgeLegacyPersonaSkills(targetDir, dryRun) {
   const removed = [];
 
   for (const entry of readdirSync(targetDir)) {
-    const oldShape = /^rule-(plan|audit|review)-/.test(entry);
-    const stalePersona = entry.startsWith("rule-persona-") && !current.has(entry);
+    const oldShape = /^rule-mcp-(plan|audit|review)-/.test(entry);
+    const stalePersona = entry.startsWith("rule-mcp-persona-") && !current.has(entry);
 
     if (!oldShape && !stalePersona) {
       continue;

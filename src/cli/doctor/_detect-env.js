@@ -21,7 +21,7 @@ export function detectIdeConfigs() {
   let skillsCount = 0;
   try {
     if (existsSync("skills")) {
-      skillsCount = readdirSync("skills").filter((d) => d.startsWith("rule")).length;
+      skillsCount = readdirSync("skills").filter((d) => d.startsWith("rule-mcp")).length;
     }
   } catch {
     /* skills dir may be absent in packaged installs */

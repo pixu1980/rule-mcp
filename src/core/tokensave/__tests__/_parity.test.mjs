@@ -19,7 +19,7 @@ import { listFiles, walkFiles } from "../_files.js";
 
 /** A scratch project, kept until the test cleans it. */
 function scratch(build) {
-  const dir = mkdtempSync(join(tmpdir(), "rule-parity-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-parity-"));
 
   build(dir);
 

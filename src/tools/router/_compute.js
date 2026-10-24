@@ -9,7 +9,7 @@ import { postprocessToolResult, preprocessToolCall } from "../../core/enforcemen
 import { routedSkillOf } from "./_entry.js";
 
 function estimateRoutingSaving(name, core, final) {
-  if (name !== "pix_tool") {
+  if (name !== "rule_tool") {
     return;
   }
 

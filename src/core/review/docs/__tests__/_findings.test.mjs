@@ -9,7 +9,7 @@ import { test } from "node:test";
 
 import { readFindings, mergeFindings } from "../_findings.js";
 
-const project = mkdtempSync(join(tmpdir(), "rule-findings-"));
+const project = mkdtempSync(join(tmpdir(), "rule-mcp-findings-"));
 mkdirSync(join(project, "docs", "reviews"), { recursive: true });
 
 test.after(() => rmSync(project, { recursive: true, force: true }));

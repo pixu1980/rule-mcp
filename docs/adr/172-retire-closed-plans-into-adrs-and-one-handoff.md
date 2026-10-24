@@ -7,11 +7,11 @@
 
 ## Context
 
-`docs/plans` holds 100 Markdown files: two closed plans (`plan-of-plans.md`, `plan-of-plans-reference.md`), two catalogue documents (`skills/README.md`, `skills/DEPENDENCIES.md`), 10 open non-skill plans (146 open boxes) and 86 open skill plans (1,336 open boxes). The reference carries eight more follow-ups. The plan-of-plans is `Status: done`; the other 98 plan files are not. The user chose to retire only the closed plans and keep the open roadmap.
+`docs/plans` holds 100 Markdown files: two closed plans (`plan-of-plans.md`, `plan-of-plans-reference.md`), two catalog documents (`skills/README.md`, `skills/DEPENDENCIES.md`), 10 open non-skill plans (146 open boxes) and 86 open skill plans (1,336 open boxes). The reference carries eight more follow-ups. The plan-of-plans is `Status: done`; the other 98 plan files are not. The user chose to retire only the closed plans and keep the open roadmap.
 
 ## Decision
 
-Turn each closed plan into an ADR: 170 for the plan-of-plans, 171 for the reference. Add one handoff, 27, that indexes every plan and carries the eight reference follow-ups. Delete only the two closed plan files. Keep the 96 open plans and the two catalogue documents. Delete the plan-of-plans test and its cross-branch helper; keep the skills plan test. Regenerate the ADR and handoff indexes with the docs-numbering doctor. The release PR #9 remains a separate release; the plan-of-plans and reference were already excluded from it.
+Turn each closed plan into an ADR: 170 for the plan-of-plans, 171 for the reference. Add one handoff, 27, that indexes every plan and carries the eight reference follow-ups. Delete only the two closed plan files. Keep the 96 open plans and the two catalog documents. Delete the plan-of-plans test and its cross-branch helper; keep the skills plan test. Regenerate the ADR and handoff indexes with the docs-numbering doctor. The release PR #9 remains a separate release; the plan-of-plans and reference were already excluded from it.
 
 ## Consequences
 

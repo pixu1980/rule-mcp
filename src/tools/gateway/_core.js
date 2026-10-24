@@ -32,16 +32,16 @@ const BACKEND_FRAMEWORKS = new Set(["express", "fastify", "nestjs", "hono"]);
 
 /** Domain override per framework, when the router picked a frontend skill. */
 const DOMAIN_OVERRIDE = {
-  express: "rule-backend-express",
-  fastify: "rule-backend-fastify",
-  nestjs: "rule-backend-nestjs",
-  hono: "rule-backend-hono",
-  postgresql: "rule-data-postgresql",
-  mysql: "rule-data-mysql",
-  mongodb: "rule-data-mongodb",
-  sqlite: "rule-data-sqlite",
-  duckdb: "rule-data-duckdb",
-  sql: "rule-data-sql",
+  express: "rule-mcp-backend-express",
+  fastify: "rule-mcp-backend-fastify",
+  nestjs: "rule-mcp-backend-nestjs",
+  hono: "rule-mcp-backend-hono",
+  postgresql: "rule-mcp-data-postgresql",
+  mysql: "rule-mcp-data-mysql",
+  mongodb: "rule-mcp-data-mongodb",
+  sqlite: "rule-mcp-data-sqlite",
+  duckdb: "rule-mcp-data-duckdb",
+  sql: "rule-mcp-data-sql",
 };
 
 /**
@@ -57,7 +57,7 @@ export async function computeGatewayCore(arguments_, fileSet) {
 
   // ── Step 1: Route the prompt ──
   const { callTool } = await import("../router/index.js");
-  const routeResult = await callTool("pix_tool", {
+  const routeResult = await callTool("rule_tool", {
     prompt,
     ...(path && { path }),
     ...(framework && { framework }),
@@ -72,9 +72,9 @@ export async function computeGatewayCore(arguments_, fileSet) {
 
   // ── Domain override: when framework is backend/data/devops, force correct domain skill ──
   const isBackendFramework = framework && BACKEND_FRAMEWORKS.has(framework);
-  const isFrontendRoute = route.route?.startsWith("rule-frontend") || route.route?.startsWith("rule-platform");
-  const effectiveRoute = isBackendFramework && isFrontendRoute ? DOMAIN_OVERRIDE[framework] || `rule-backend-${framework}` : route.route;
-  const primarySkill = effectiveRoute?.startsWith("rule-") ? effectiveRoute : null;
+  const isFrontendRoute = route.route?.startsWith("rule-mcp-frontend") || route.route?.startsWith("rule-mcp-platform");
+  const effectiveRoute = isBackendFramework && isFrontendRoute ? DOMAIN_OVERRIDE[framework] || `rule-mcp-backend-${framework}` : route.route;
+  const primarySkill = effectiveRoute?.startsWith("rule-mcp-") ? effectiveRoute : null;
 
   // ── Step 2: Load primary skill evidence ──
   let evidence = "";
@@ -83,7 +83,7 @@ export async function computeGatewayCore(arguments_, fileSet) {
     // Skill tools register under rule_tool_<skill-in-underscores>; anything else
     // resolves to "Unknown tool" and the evidence block silently carried that
     // error text instead of the skill's rules (surfaced by the coverage phase).
-    const skillResult = await callTool(`rule_tool_${primarySkill.replace(/^rule-/, "").replaceAll("-", "_")}`, {
+    const skillResult = await callTool(`rule_tool_${primarySkill.replace(/^rule-mcp-/, "").replaceAll("-", "_")}`, {
       mode: "tldr",
       query: prompt.slice(0, 300),
     });
@@ -95,7 +95,7 @@ export async function computeGatewayCore(arguments_, fileSet) {
   let checkResult = null;
 
   if (fileSet || code) {
-    const skillName = primarySkill || "rule-ui-design-system";
+    const skillName = primarySkill || "rule-mcp-ui-design-system";
     const { checkCodeGuarded } = await import("../../core/guardrails/index.js");
     const checkContext = {
       framework: framework || "vanilla",

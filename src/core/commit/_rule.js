@@ -6,7 +6,7 @@
  * The one Conventional Commit rule.
  *
  * The subject every commit gate accepts is defined here and nowhere else: the
- * `commit-msg` hook, the `pre-push` hook, the CLI, `/rule-git`, the handoff
+ * `commit-msg` hook, the `pre-push` hook, the CLI, `/rule-mcp-git`, the handoff
  * commits and CI all reach this module, so a rule change lands in one place and
  * cannot drift between them.
  *
@@ -141,7 +141,7 @@ export function explainViolation(subject) {
 export function violationHelp(subject) {
   return [
     "Conventional Commit required: type(scope): subject",
-    "  valid:   feat(skills): add rule naming",
+    "  valid:   feat(skills): add rule-mcp naming",
     "  valid:   fix(api)!: replace the authentication API",
     "  invalid: docs: port documentation            (missing scope)",
     ...(subject ? [`  got:     ${subject}`] : []),

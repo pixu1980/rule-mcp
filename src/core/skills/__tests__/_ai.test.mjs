@@ -4,7 +4,7 @@
  * @module test/ai.test
  *
  * TDD tests for context-aware skill routing (Phase 3.1).
- * rule should return structured JSON with route, confidence,
+ * rule-mcp should return structured JSON with route, confidence,
  * sections, and next_tools, not plain text.
  */
 
@@ -20,7 +20,7 @@ const check = (label, ok) => {
   }
 };
 
-console.log("=== rule Routing Tests ===\n");
+console.log("=== rule-mcp Routing Tests ===\n");
 
 process.env.RULE_MCP_DISABLE_AUTO_ADR = "1";
 process.env.RULE_MCP_NO_CACHE = "1"; // hermetic: deterministic tool behavior, not the cache
@@ -31,8 +31,8 @@ import { callTool } from "../../../tools/router/index.js";
 
 await loadAllSkills();
 
-// ── T1: rule returns structured JSON ──
-const r1 = await callTool("pix_tool", { prompt: "I need a React button component" });
+// ── T1: rule-mcp returns structured JSON ──
+const r1 = await callTool("rule_tool", { prompt: "I need a React button component" });
 const text = r1.content?.[0]?.text ?? "";
 check("T1 returns content", text.length > 0);
 
@@ -57,7 +57,7 @@ if (isParsed) {
 check("T2 response size reasonable (under 8KB)", text.length < 8000);
 
 // ── T3: Multi-skill query ──
-const r2 = await callTool("pix_tool", { prompt: "React accessibility components" });
+const r2 = await callTool("rule_tool", { prompt: "React accessibility components" });
 const text2 = r2.content?.[0]?.text ?? "";
 
 let isParsed2 = false;
@@ -69,12 +69,12 @@ try {
 
 if (isParsed2) {
   const allRoutes = [isParsed2.route, ...(isParsed2.alternatives || []).map((a) => a.route)];
-  const hasReact = allRoutes.some((r) => r?.includes("rule-frontend-react"));
+  const hasReact = allRoutes.some((r) => r?.includes("rule-mcp-frontend-react"));
   check("T3 multi-skill: React routes", hasReact);
 }
 
 // ── T3.1: Pure accessibility query routes to styleguides ──
-const r3 = await callTool("pix_tool", { prompt: "accessibility guidelines a11y WCAG standards" });
+const r3 = await callTool("rule_tool", { prompt: "accessibility guidelines a11y WCAG standards" });
 const text3 = r3.content?.[0]?.text ?? "";
 let isParsed3 = false;
 try {
@@ -84,14 +84,14 @@ try {
 }
 if (isParsed3) {
   const allRoutes = [isParsed3.route, ...(isParsed3.alternatives || []).map((a) => a.route)];
-  const hasA11y = allRoutes.some((r) => r?.includes("rule-styleguide"));
+  const hasA11y = allRoutes.some((r) => r?.includes("rule-mcp-styleguide"));
   check("T3.1 a11y query routes to styleguides", hasA11y);
 }
 
 // ── T4: Low-confidence prompt returns route:"unknown" without erroring ──
 // Regression guard for F1: enforcement.validateRouterResult must not reject the
 // "unknown" route the handler emits when no skill matches confidently.
-const r4 = await callTool("pix_tool", { prompt: "zzzzz qqqqq wwwww xxxxx" });
+const r4 = await callTool("rule_tool", { prompt: "zzzzz qqqqq wwwww xxxxx" });
 check("T4 low-confidence prompt does not error", r4.isError !== true);
 let isParsed4 = false;
 try {

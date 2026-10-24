@@ -1,7 +1,7 @@
 
 
 /**
- * ITEM 1 (plan: execution-plan.md) — the handoff block injected by the resume
+ * ITEM 1 (plan: execution-plan.md), the handoff block injected by the resume
  * hook is prose the model pays for, exactly like a tool result, but it never
  * went through the compressor: `handoffBlock`/`resumeContext` handed the raw
  * handon report to the SessionStart hook's `additionalContext`.
@@ -19,7 +19,7 @@ import { strict as assert } from "node:assert";
 import { test } from "node:test";
 import "../../../../../tests/fixtures/git-hermetic.mjs";
 
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-resume-compression-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-resume-compression-"));
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 delete process.env.RULE_MCP_NO_COMPRESSION;
@@ -33,7 +33,7 @@ const tokens = (text) => Math.ceil(text.length / 4);
 
 /** A temp git project whose handoff is deliberately verbose prose. */
 function verboseProject() {
-  const dir = mkdtempSync(join(tmpdir(), "rule-resume-verbose-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-resume-verbose-"));
   execFileSync("git", ["init", "-q", "-b", "feat/x"], { cwd: dir, stdio: "ignore" });
   execFileSync("git", ["config", "user.email", "t@t.t"], { cwd: dir, stdio: "ignore" });
   execFileSync("git", ["config", "user.name", "t"], { cwd: dir, stdio: "ignore" });

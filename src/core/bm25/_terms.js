@@ -18,8 +18,8 @@ const DEFAULT_MAX_RESULTS = 20;
 
 /**
  * @typedef {Object} Bm25Index
- * @property {Map<string, Map<number, number>>} df - term → { docId → termFreq }
- * @property {Map<number, number>} docLength - docId → total terms in document
+ * @property {Map<string, Map<number, number>>} df - term -> { docId -> termFreq }
+ * @property {Map<number, number>} docLength - docId -> total terms in document
  * @property {Bm25Doc[]} docs - array of documents
  * @property {number} totalDocs - total number of indexed documents
  * @property {number} avgDocLength - average document length
@@ -28,7 +28,7 @@ const DEFAULT_MAX_RESULTS = 20;
 /**
  * @typedef {Object} Bm25Doc
  * @property {number} id - document ID
- * @property {string} skill - skill name (e.g. "rule-frontend-react")
+ * @property {string} skill - skill name (e.g. "rule-mcp-frontend-react")
  * @property {string} section - section heading (e.g. "CSS Architecture")
  * @property {string} text - full section text
  * @property {string} snippet - first 200 chars of text

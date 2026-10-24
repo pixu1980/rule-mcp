@@ -11,11 +11,11 @@ The `design-system` persona owned design tokens, semantic HTML and component API
 
 ## Decision
 
-Rename the role id `design-system` to `ui` and its title to UI/UX Lead. Widen its lenses from five to ten - user goals, accessibility as baseline, semantics/tokens/styling order, component API durability, flex-first layout, purposeful motion, visual hierarchy, consistency via tokens, cross-framework parity, and industry standards as the floor. Expand evidence skills to include `rule-ui`, `rule-styleguide-a11y` and every frontend framework skill.
+Rename the role id `design-system` to `ui` and its title to UI/UX Lead. Widen its lenses from five to ten - user goals, accessibility as baseline, semantics/tokens/styling order, component API durability, flex-first layout, purposeful motion, visual hierarchy, consistency via tokens, cross-framework parity, and industry standards as the floor. Expand evidence skills to include `rule-mcp-ui`, `rule-mcp-styleguide-a11y` and every frontend framework skill.
 
 ## Consequences
 
-The active role set stays at 19; only the id and title change. The three commands per role become `/rule-persona-ui-plan`, `/rule-persona-ui-audit` and `/rule-persona-ui-review`. Evidence skills grow from four to thirteen, so the persona reaches every frontend skill and the a11y styleguide. Aliases, the persona catalog in `personas/`, the registry test and `docs/13-personas.md` follow. Any citation of the old `design-system` id is stale.
+The active role set stays at 19; only the id and title change. The three commands per role become `/rule-mcp-persona-ui-plan`, `/rule-mcp-persona-ui-audit` and `/rule-mcp-persona-ui-review`. Evidence skills grow from four to thirteen, so the persona reaches every frontend skill and the a11y styleguide. Aliases, the persona catalog in `personas/`, the registry test and `docs/13-personas.md` follow. Any citation of the old `design-system` id is stale.
 
 ## What would end this
 

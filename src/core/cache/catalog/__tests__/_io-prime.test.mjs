@@ -27,9 +27,9 @@ beforeEach(() => {
 });
 
 test("a written catalog reads back as it was written", async () => {
-  cacheStore("pix_tool", args("react button"), result("routed"), { [SKILL]: skillDigest(SKILL) });
+  cacheStore("rule_tool", args("react button"), result("routed"), { [SKILL]: skillDigest(SKILL) });
   for (let index = 0; index < MIN_HITS; index++) {
-    cacheLookup("pix_tool", args("react button"));
+    cacheLookup("rule_tool", args("react button"));
   }
   const { catalog } = await buildCatalog({ recompute: () => result("routed"), now: "2026-09-01" });
 
@@ -48,7 +48,7 @@ test("a catalog entry is a floor, never an override", () => {
     serverVersion: "test",
     entries: [
       {
-        tool: "pix_tool",
+        tool: "rule_tool",
         args: { prompt: "react button" },
         dependsOn: {},
         hits: 9,
@@ -58,10 +58,10 @@ test("a catalog entry is a floor, never an override", () => {
   };
   writeCatalog(project, catalog);
 
-  cacheStore("pix_tool", args("react button"), result("computed here"), {});
+  cacheStore("rule_tool", args("react button"), result("computed here"), {});
   primeFromCatalog(project);
 
-  const hit = cacheLookup("pix_tool", args("react button"));
+  const hit = cacheLookup("rule_tool", args("react button"));
   assert.equal(hit.result.content[0].text, "computed here", "what this machine computed wins");
 });
 
@@ -72,7 +72,7 @@ test("a primed catalog entry answers, and reports an ordinary tier", () => {
     serverVersion: "test",
     entries: [
       {
-        tool: "pix_tool",
+        tool: "rule_tool",
         args: { prompt: "react button" },
         dependsOn: {},
         hits: 9,
@@ -84,7 +84,7 @@ test("a primed catalog entry answers, and reports an ordinary tier", () => {
   const { loaded } = primeFromCatalog(project);
   assert.equal(loaded, 1);
 
-  const hit = cacheLookup("pix_tool", args("react button"));
+  const hit = cacheLookup("rule_tool", args("react button"));
   assert.equal(hit?.result.content[0].text, "from the catalog");
   assert.ok(["exact", "normalized"].includes(hit.tier), "the catalog is not a third tier");
 });
@@ -96,7 +96,7 @@ test("a catalog entry whose skill has moved is not served", () => {
     serverVersion: "test",
     entries: [
       {
-        tool: "pix_tool",
+        tool: "rule_tool",
         args: { prompt: "react button" },
         dependsOn: { [SKILL]: "0000000000000000" },
         hits: 9,
@@ -106,7 +106,7 @@ test("a catalog entry whose skill has moved is not served", () => {
   });
 
   primeFromCatalog(project);
-  assert.equal(cacheLookup("pix_tool", args("react button")), undefined, "freshness applies to inherited answers too");
+  assert.equal(cacheLookup("rule_tool", args("react button")), undefined, "freshness applies to inherited answers too");
 });
 
 test("a corrupt catalog is ignored, never fatal", () => {
@@ -122,7 +122,7 @@ test("no cache means no catalog either", () => {
     serverVersion: "test",
     entries: [
       {
-        tool: "pix_tool",
+        tool: "rule_tool",
         args: { prompt: "react button" },
         dependsOn: {},
         hits: 9,

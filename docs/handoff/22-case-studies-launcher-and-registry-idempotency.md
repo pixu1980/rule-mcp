@@ -7,7 +7,7 @@
 
 ### Project Identity
 
-- Description: MCP server for rule-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.
+- Description: MCP server for rule-mcp-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.
 - Version: 0.2.0-rc
 
 ### Shipped this session
@@ -16,7 +16,7 @@
 
 **Tool registration is idempotent by name.** The core tools are registered from two entry points in one process (the CLI `preAction` hook and `startServer`), so a blind push advertised `rule_tool_gateway` and `rule_tool_apply` twice and every MCP client had to dedupe them. `registerTool` now replaces an existing name in place, preserving registry order, and `resetTools` owns the generation bump. The registry state moved to `src/tools/router/_registry.js`; `src/tools/router/_hooks.js` re-exports its public surface. New test `src/tools/router/__tests__/_registry-idempotency.test.mjs` covers duplicate-name, order and `bootstrapCoreTools`. Verified: 3/3 pass under `node --import ./scripts/alias-hook.mjs --test`.
 
-**Generated docs refreshed.** ADR 123 recorded and indexed; `docs/02-architecture.md` decision count 122 → 123; `tests/fixtures/census.json` hash regenerated; `site-dist/index.html` rebuilt to the live surface (107 tools, 37 prompts, 40 slash commands).
+**Generated docs refreshed.** ADR 123 recorded and indexed; `docs/02-architecture.md` decision count 122 -> 123; `tests/fixtures/census.json` hash regenerated; `site-dist/index.html` rebuilt to the live surface (107 tools, 37 prompts, 40 slash commands).
 
 Surface unchanged this session: 107 tools, 40 commands, 37 prompts, 89 skills.
 
@@ -25,9 +25,9 @@ Surface unchanged this session: 107 tools, 40 commands, 37 prompts, 89 skills.
 | #   | Status   | Title                                                             | Tags                              | Decision                                                                                                            |
 | --- | -------- | ----------------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | 123 | accepted | Start the six case-study apps with one port-allocating command    | tooling, case-studies, dev-server | `pnpm case-studies` allocates ports per app, exports them as env vars, starts six in parallel, kills all on Ctrl-C. |
-| 122 | accepted | The fix tool and command apply the deterministic guardrails...    | tools, commands, guardrails       | `rule_tool_fix` applies the deterministic guardrail fixes; `/rule-fix` mirrors it.                                    |
+| 122 | accepted | The fix tool and command apply the deterministic guardrails...    | tools, commands, guardrails       | `rule_tool_fix` applies the deterministic guardrail fixes; `/rule-mcp-fix` mirrors it.                              |
 | 121 | accepted | The install reconciles the bundled skills when the step is not... | installer, skills, commands       | Declining the skills step removes what an earlier install copied; `skills uninstall` is a real action.              |
-| 120 | accepted | Fold the per-operation persona commands into one per role...      | commands, personas, prompts       | One `/rule-persona-<role>`; the depth is read from the request; old names deleted.                                   |
+| 120 | accepted | Fold the per-operation persona commands into one per role...      | commands, personas, prompts       | One `/rule-mcp-persona-<role>`; the depth is read from the request; old names deleted.                              |
 | 117 | accepted | Area slash commands are collectors only...                        | commands, prompts, areas          | Slash and MCP area prompts emit only hub collectors; leaves route from free text.                                   |
 
 Full log: `docs/adr/ADR.md` (123 entries).
@@ -40,14 +40,14 @@ Full log: `docs/adr/ADR.md` (123 entries).
 ed68537c fix(router): make tool registration idempotent by name
 47490808 chore(handoff): add session handoff 21-fix-tool-and-nomenclature-alignment
 73d18476 docs(handoff): refresh the root handoff summary
-66188b2d chore(census): map the rule-fix command to rule_tool_fix
+66188b2d chore(census): map the rule-mcp-fix command to rule_tool_fix
 a9333f14 docs(adr): record 122 and regenerate the census for the fix tool
 ```
 
 ### Flagged, not fixed
 
 - `main` is 30 commits ahead of `origin/main`; never pushed.
-- The census pre-commit hook (`.githooks/pre-commit`) regenerates and stages `docs/02-architecture.md` on every commit, so the 122 → 123 count landed in `fix(router)` rather than the `docs(adr)` commit. Same hook keeps the other generated docs current.
+- The census pre-commit hook (`.githooks/pre-commit`) regenerates and stages `docs/02-architecture.md` on every commit, so the 122 -> 123 count landed in `fix(router)` rather than the `docs(adr)` commit. Same hook keeps the other generated docs current.
 - Backlog Step 4 (ARCH-10) is open: no `Transport` interface and no `ToolPolicy` type (`docs/plans/backlog.md`).
 - The owner actions in `docs/plans/backlog.md` (GitHub vulnerability reporting, branch protection, Pages URL, labels, sponsors, Vigilant Mode, stale `v1.0.0` tag) are unchanged.
 - The docs site and the presentation deck remain the agreed next workstream; the deck artifact (new or existing) is still not confirmed.

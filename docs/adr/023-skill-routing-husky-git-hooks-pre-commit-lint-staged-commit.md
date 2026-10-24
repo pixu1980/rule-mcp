@@ -8,12 +8,12 @@
 ## Context
 
 Prompt: "Husky git hooks pre-commit lint-staged commitlint"
-Routed to: **rule-toolchain-husky** (confidence: 1)
-Alternatives: rule-devops-version (0.62), rule-backend-fastify (0.15), rule-platform-expo (0.12)
+Routed to: **rule-mcp-toolchain-husky** (confidence: 1)
+Alternatives: rule-mcp-devops-version (0.62), rule-mcp-backend-fastify (0.15), rule-mcp-platform-expo (0.12)
 
 ## Decision
 
-Use `rule-toolchain-husky` for this task.
+Use `rule-mcp-toolchain-husky` for this task.
 
 ## Consequences
 

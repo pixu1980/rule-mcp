@@ -23,7 +23,7 @@ export async function loadCorpus() {
   const rows = [];
 
   for (const entry of CORPUS) {
-    const answer = JSON.parse((await callTool("pix_tool", { prompt: entry.prompt })).content[0].text);
+    const answer = JSON.parse((await callTool("rule_tool", { prompt: entry.prompt })).content[0].text);
     const alternatives = (answer.alternatives ?? []).map((alternative) => alternative.route);
 
     rows.push({

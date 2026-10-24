@@ -10,7 +10,7 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const dir = mkdtempSync(join(tmpdir(), "rule-block-spacing-detect-"));
+const dir = mkdtempSync(join(tmpdir(), "rule-mcp-block-spacing-detect-"));
 
 test.after(() => rmSync(dir, { recursive: true, force: true }));
 
@@ -52,12 +52,12 @@ test("a comment-only block body is not a block", () => {
 });
 
 test("classifyBlock labels toplevel, nested, start, end and only-child", () => {
-  // toplevel if → middle (no parent)
+  // toplevel if -> middle (no parent)
   const top = ["if (a) {", "  x();", "}", ""].join("\n").split("\n");
   const topBlocks = findBlocks(top);
   assert.equal(classifyBlock(topBlocks[0], topBlocks, top), "middle", "toplevel is middle");
 
-  // nested: outer loop + inner if only child → start_end
+  // nested: outer loop + inner if only child -> start_end
   const nest = ["for (;;) {", "  if (a) {", "    b();", "  }", "}", ""].join("\n").split("\n");
   const nestBlocks = findBlocks(nest);
   const inner = nestBlocks.find((b) => b.openLine === 1);

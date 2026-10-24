@@ -16,7 +16,7 @@ import { test } from "node:test";
 import { applyEdit } from "../_edit.js";
 
 /** A scratch directory. */
-const scratch = () => mkdtempSync(join(tmpdir(), "rule-edit-"));
+const scratch = () => mkdtempSync(join(tmpdir(), "rule-mcp-edit-"));
 
 test("applyEdit falls back when there is no graph", () => {
   const root = scratch();

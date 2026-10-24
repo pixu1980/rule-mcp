@@ -18,7 +18,7 @@ export function listPrompts() {
 }
 
 /**
- * One prompt per active review persona: `rule-persona-<role>` - 19 persona
+ * One prompt per active review persona: `rule-mcp-persona-<role>` - 19 persona
  * commands for the 19 active roles (ADR 120). The depth of the run (audit,
  * audit+review, audit+review+plan) is read from the request, not from the
  * command name; see `core/review/roles/operation-intent`.
@@ -48,7 +48,7 @@ function rolePrompts() {
  * Whether MCP prompts are currently suppressed.
  *
  * Claude Code exposes MCP prompts as `/<server>:<prompt> (MCP)` and offers no
- * client-side way to hide them. The installer ships clean `/rule-*` user
+ * client-side way to hide them. The installer ships clean `/rule-mcp-*` user
  * commands for Claude and sets this flag so the prefixed prompt duplicates are
  * not also listed. `listPrompts()` itself stays pure (the full registry) - only
  * `listActivePrompts()` honors the flag.

@@ -10,7 +10,7 @@ import { test } from "node:test";
 import { readAdrs, readContextValues } from "../_sources.js";
 
 test("an ADR without a status line defaults to proposed", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-sources-branches-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-sources-branches-"));
 
   mkdirSync(join(root, "docs", "adr"), { recursive: true });
   writeFileSync(join(root, "docs", "adr", "001-no-status.md"), "# 001: No status\n\nA body without a status line.\n");
@@ -22,7 +22,7 @@ test("an ADR without a status line defaults to proposed", () => {
 });
 
 test("a non-markdown context file is skipped", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-sources-branches-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-sources-branches-"));
 
   mkdirSync(join(root, ".context"), { recursive: true });
   writeFileSync(join(root, ".context", "notes.txt"), "**Ignored**: yes\n");

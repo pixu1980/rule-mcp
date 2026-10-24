@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-decision-ambiguity-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-decision-ambiguity-"));
 
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_DECISION_CACHE_SHADOW = "1";
@@ -37,8 +37,8 @@ test.after(() => {
 
 test("a hub pick beside a leaf is recorded as ambiguous and never replays", async () => {
   cacheClear();
-  cacheStore("pix_tool", { prompt: "create a react form component", framework: "react" }, result("rule-frontend"), {});
-  cacheStore("pix_tool", { prompt: "create a react form", framework: "react" }, result("rule-frontend-react"), {});
+  cacheStore("rule_tool", { prompt: "create a react form component", framework: "react" }, result("rule-mcp-frontend"), {});
+  cacheStore("rule_tool", { prompt: "create a react form", framework: "react" }, result("rule-mcp-frontend-react"), {});
   clearShadows();
   clearDecisionCache();
   resetDecisionRuntime();
@@ -48,7 +48,7 @@ test("a hub pick beside a leaf is recorded as ambiguous and never replays", asyn
     }
 
     const criteria = body.questions.pick.criteria;
-    const hub = Object.keys(criteria).find((label) => criteria[label].endsWith("skill: rule-frontend"));
+    const hub = Object.keys(criteria).find((label) => criteria[label].endsWith("skill: rule-mcp-frontend"));
 
     return {
       body: {
@@ -60,11 +60,11 @@ test("a hub pick beside a leaf is recorded as ambiguous and never replays", asyn
   process.env.RULE_MCP_DECISION_URL = server.url;
 
   try {
-    await observeDecisionShadow("pix_tool", { prompt: "create a react form component", framework: "react" }, { core: result("rule-frontend"), computeMs: 3 });
+    await observeDecisionShadow("rule_tool", { prompt: "create a react form component", framework: "react" }, { core: result("rule-mcp-frontend"), computeMs: 3 });
     await waitForDecisionShadows();
     const last = readShadows().at(-1);
 
-    assert.equal(last.candidateRoute, "rule-frontend");
+    assert.equal(last.candidateRoute, "rule-mcp-frontend");
     assert.equal(last.reason, "ambiguous-hub");
     assert.equal(last.guard, "ambiguous-hub");
     assert.equal(last.wouldReplay, false);

@@ -19,8 +19,8 @@ const BIN = fileURLToPath(new URL("../../../../bin/rule-mcp.js", import.meta.url
 
 /** One session against one project, with its own state directory. */
 function session() {
-  const stateDir = mkdtempSync(join(tmpdir(), "rule-structural-state-"));
-  const cwd = realpathSync(mkdtempSync(join(tmpdir(), "rule-structural-")));
+  const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-structural-state-"));
+  const cwd = realpathSync(mkdtempSync(join(tmpdir(), "rule-mcp-structural-")));
   mkdirSync(join(cwd, ".git"), { recursive: true });
   mkdirSync(join(cwd, "src"), { recursive: true });
 

@@ -29,11 +29,11 @@ the package version from anywhere. An error exits 1 and prints to stderr;
 | [`uninstall`](#rule-mcp-uninstall)           | 7       | Remove rule-mcp from an agent/IDE                                                         |
 | [`setup`](#rule-mcp-setup)                   | 29      | Full-screen install/uninstall wizard (falls back to flags when piped)                     |
 | [`tools`](#rule-mcp-tools)                   | 1       | List or call MCP tools directly                                                           |
-| [`config`](#rule-mcp-config)                 | 5       | Print the mcp.json snippet, or manage RULE_MCP_* env vars with `config env`                    |
+| [`config`](#rule-mcp-config)                 | 5       | Print the mcp.json snippet, or manage RULE_MCP_* env vars with `config env`               |
 | [`doctor`](#rule-mcp-doctor)                 | 4       | Run system health check                                                                   |
 | [`adr`](#rule-mcp-adr)                       | 5       | Create a new Architecture Decision Record (ADR)                                           |
 | [`handoff`](#rule-mcp-handoff)               | 7       | Generate a compressed LLM context handoff summary                                         |
-| [`skills`](#rule-mcp-skills)                 | 4       | Manage the rule AI skill system                                                            |
+| [`skills`](#rule-mcp-skills)                 | 4       | Manage the rule-mcp AI skill system                                                       |
 | [`fix`](#rule-mcp-fix)                       | 3       | Apply the deterministic guardrail fixes of every skill                                    |
 | [`completions`](#rule-mcp-completions)       | 1       | Generate shell auto-completion script                                                     |
 | [`handon`](#rule-mcp-handon)                 | 4       | Verify the last handoff against the repo now                                              |
@@ -134,7 +134,7 @@ rule-mcp install
 | `--no-commands`              | -       | -                                            | skip agent slash commands                                                   |
 | `--hooks`                    | -       | -                                            | install guard hooks (Claude)                                                |
 | `--no-hooks`                 | -       | -                                            | skip guard hooks                                                            |
-| `--skills`                   | -       | -                                            | install the bundled rule-* skills                                            |
+| `--skills`                   | -       | -                                            | install the bundled rule-mcp-* skills                                       |
 | `--no-skills`                | -       | -                                            | skip the bundled skills                                                     |
 | `--minimal`                  | -       | -                                            | minimal server tool surface (--no-minimal for full)                         |
 | `--surface <spec>`           | -       | -                                            | server tool surface: minimal, standard, full, areas:<a,b> or skills:<s,...> |
@@ -188,7 +188,7 @@ rule-mcp setup
 | `--no-commands`              | -       | -                             | skip agent slash commands                                                   |
 | `--hooks`                    | -       | -                             | install guard hooks (Claude)                                                |
 | `--no-hooks`                 | -       | -                             | skip guard hooks                                                            |
-| `--skills`                   | -       | -                             | install the bundled rule-* skills                                            |
+| `--skills`                   | -       | -                             | install the bundled rule-mcp-* skills                                       |
 | `--no-skills`                | -       | -                             | skip the bundled skills                                                     |
 | `--minimal`                  | -       | -                             | minimal server tool surface (--no-minimal for full)                         |
 | `--no-minimal`               | -       | -                             | full server tool surface                                                    |
@@ -240,8 +240,8 @@ rule-mcp config section
 
 **Arguments**
 
-| Argument  | Default | Description                                                        |
-| --------- | ------- | ------------------------------------------------------------------ |
+| Argument  | Default | Description                                                             |
+| --------- | ------- | ----------------------------------------------------------------------- |
 | `section` | -       | env to configure RULE_MCP_* variables (default: print mcp.json snippet) |
 
 **Options**
@@ -251,8 +251,8 @@ rule-mcp config section
 | `--global`      | -       | -       | use clean command path (requires global install) |
 | `--mode <name>` | -       | -       | stdio (default), daemon (SSE), or docker         |
 | `--set <pair>`  |         | -       | KEY=VALUE to save (repeatable)                   |
-| `--list`        | -       | -       | list saved RULE_MCP_* env vars                        |
-| `--unset <key>` | -       | -       | remove a saved RULE_MCP_* env var                     |
+| `--list`        | -       | -       | list saved RULE_MCP_* env vars                   |
+| `--unset <key>` | -       | -       | remove a saved RULE_MCP_* env var                |
 
 ## rule-mcp doctor
 
@@ -324,7 +324,7 @@ rule-mcp handoff subcommand
 
 ## rule-mcp skills
 
-Manage the rule AI skill system
+Manage the rule-mcp AI skill system
 
 ```sh
 rule-mcp skills action

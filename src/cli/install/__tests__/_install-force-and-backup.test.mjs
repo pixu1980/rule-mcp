@@ -33,7 +33,7 @@ const check = (label, ok) => {
 
 console.log("installer force and backup test");
 
-const sandbox = mkdtempSync(join(tmpdir(), "rule-force-"));
+const sandbox = mkdtempSync(join(tmpdir(), "rule-mcp-force-"));
 const home = join(sandbox, "home");
 mkdirSync(join(home, ".claude", "commands"), { recursive: true });
 
@@ -51,7 +51,7 @@ const install = (options = {}) => installAgent({ agent: "claude", entrypoint, ..
 
 install();
 const commandsDir = join(home, ".claude", "commands");
-const sampleCommand = join(commandsDir, "rule.md");
+const sampleCommand = join(commandsDir, "rule-mcp.md");
 check("T1 the first install writes the command set", existsSync(sampleCommand));
 
 const MINE = "# my own version\n";
@@ -101,7 +101,7 @@ check("T14 refreshing twice is stable", readFileSync(claudeMd, "utf8") === refre
 
 // ── A dry run still writes nothing ──
 
-const dryTarget = join(commandsDir, "rule-backend.md");
+const dryTarget = join(commandsDir, "rule-mcp-backend.md");
 const dryBefore = existsSync(dryTarget) ? readFileSync(dryTarget, "utf8") : null;
 install({ dryRun: true, force: true });
 const dryAfter = existsSync(dryTarget) ? readFileSync(dryTarget, "utf8") : null;

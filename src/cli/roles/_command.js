@@ -43,7 +43,7 @@ function showSubcommand(roles, options) {
  * @param {string} [options.skills] - new: comma-separated skills
  * @param {number} [options.years] - new: years of experience
  * @param {string} [options.lenses] - new: comma-separated lenses
- * @param {string} [options.evidenceSkills] - new: comma-separated rule skills
+ * @param {string} [options.evidenceSkills] - new: comma-separated rule-mcp skills
  * @param {string} [options.by] - deprecate: the role that replaces this one
  */
 export function rolesCommand(subcommand = "list", options = {}) {

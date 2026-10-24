@@ -25,7 +25,7 @@ function commonLines(role, scope) {
     "",
     "Write every finding, review, plan step and document in English, American spelling",
     "(color, behavior, organize). A user's prompt in another language does not change that.",
-    "Run `rule_tool_check` with rule-process-ai (or rule-styleguide-markdown) over each written",
+    "Run `rule_tool_check` with rule-mcp-process-ai (or rule-mcp-styleguide-markdown) over each written",
     "document and iterate until `allPass: true` before closing the run.",
     "",
     "Call `rule_tool_impersonation` with this role and the findings of this run rather than writing that",

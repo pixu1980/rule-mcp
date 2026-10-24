@@ -19,7 +19,7 @@ import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-catalog-state-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-catalog-state-"));
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 delete process.env.RULE_MCP_NO_CACHE;
 
@@ -27,9 +27,9 @@ export const { cacheStore, cacheLookup, cacheClear, cacheEntries, promotableEntr
 export const { CATALOG_FILE, MIN_HITS, catalogPath, buildCatalog, writeCatalog, readCatalog, primeFromCatalog, verifyCache } = await import("../index.js");
 
 /** A skill that exists, so its digest is real and freshness can be checked. */
-export const SKILL = "rule-frontend-react";
+export const SKILL = "rule-mcp-frontend-react";
 
 export const result = (text) => ({ content: [{ type: "text", text }] });
 export const args = (prompt) => ({ prompt });
 
-export const project = mkdtempSync(join(tmpdir(), "rule-catalog-project-"));
+export const project = mkdtempSync(join(tmpdir(), "rule-mcp-catalog-project-"));

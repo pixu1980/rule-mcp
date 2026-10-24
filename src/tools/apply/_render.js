@@ -26,7 +26,7 @@ export function renderApplyResult({ dryRun, receiptCheck, rootDir, results }) {
   return {
     content: [{ type: "text", text: lines.join("\n") }],
     _meta: {
-      pixApply: {
+      ruleApply: {
         receiptValid: true,
         receiptBinding: receiptCheck.binding,
         root: rootDir,

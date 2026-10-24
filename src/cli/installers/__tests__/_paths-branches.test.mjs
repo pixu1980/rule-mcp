@@ -10,15 +10,15 @@ import { test } from "node:test";
 import { atomicWrite, backupFile, readText, removeFile } from "../_paths.js";
 
 test("readText returns empty for a missing file", () => {
-  assert.equal(readText(join(tmpdir(), "rule-paths-missing-" + Date.now())), "");
+  assert.equal(readText(join(tmpdir(), "rule-mcp-paths-missing-" + Date.now())), "");
 });
 
 test("removeFile is a no-op when the path is absent", () => {
-  assert.doesNotThrow(() => removeFile(join(tmpdir(), "rule-paths-absent-" + Date.now())));
+  assert.doesNotThrow(() => removeFile(join(tmpdir(), "rule-mcp-paths-absent-" + Date.now())));
 });
 
 test("atomicWrite creates the parent directory and replaces an existing file", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-paths-branches-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-paths-branches-"));
   const file = join(root, "nested", "out.json");
 
   mkdirSync(join(root, "nested"), { recursive: true });
@@ -32,7 +32,7 @@ test("atomicWrite creates the parent directory and replaces an existing file", (
 });
 
 test("backupFile returns null when the source cannot be read", { skip: process.platform === "win32" }, () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-paths-branches-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-paths-branches-"));
   const file = join(root, "locked.txt");
 
   writeFileSync(file, "x");

@@ -58,7 +58,7 @@ export function buildProgram() {
 
   program
     .name("rule-mcp")
-    .description("MCP server for the rule-* skill ecosystem")
+    .description("MCP server for the rule-mcp-* skill ecosystem")
     .version(version, "-v, --version")
     .helpOption("-h, --help")
     .allowExcessArguments(false)

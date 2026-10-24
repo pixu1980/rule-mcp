@@ -13,7 +13,7 @@ import { g, makeClonePair, runUpdateIn } from "./_update.fixture.mjs";
 
 // ── T16: non-git installs are skipped with a manual-update hint ──
 {
-  const base = mkdtempSync(join(tmpdir(), "rule-su-npm-"));
+  const base = mkdtempSync(join(tmpdir(), "rule-mcp-su-npm-"));
   const npm = join(base, "node_modules");
   mkdirSync(npm, { recursive: true });
   const r = runUpdateIn(npm, {});
@@ -25,7 +25,7 @@ import { g, makeClonePair, runUpdateIn } from "./_update.fixture.mjs";
 
 // ── T17: docker installs are skipped with the compose hint ──
 {
-  const base = mkdtempSync(join(tmpdir(), "rule-su-docker-"));
+  const base = mkdtempSync(join(tmpdir(), "rule-mcp-su-docker-"));
   const r = runUpdateIn(base, { RULE_MCP_DOCKER: "1" });
   assert.equal(r.reason, "docker", "RULE_MCP_DOCKER reports docker");
   assert.match(r.note, /docker compose pull/, "docker installs get the compose hint");

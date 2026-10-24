@@ -31,4 +31,4 @@ export const STYLING_CONTRACT = {
 };
 
 /** Routes that end in stylesheets, and therefore carry the layout contract. */
-export const STYLING_ROUTES = /^rule-(?:frontend|ui|platform-(?:web|desktop|expo))|^rule-styleguide-(?:css|html|a11y)$/;
+export const STYLING_ROUTES = /^rule-mcp-(?:frontend|ui|platform-(?:web|desktop|expo))|^rule-mcp-styleguide-(?:css|html|a11y)$/;

@@ -28,7 +28,7 @@ export function registerDetectTool() {
         suggested_tools: suggestions,
         message:
           `Detected ${profile.framework === "vanilla" ? "vanilla JS" : profile.framework} project "${profile.projectName}". ` +
-          `Use ${suggestions.join(", ")} and /rule-area-styleguide* for rule-compliant generation.`,
+          `Use ${suggestions.join(", ")} and /rule-mcp-area-styleguide* for rule-mcp-compliant generation.`,
       };
 
       return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };

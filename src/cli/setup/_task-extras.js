@@ -55,7 +55,7 @@ export const rulesTask = (agents = []) => ({
   },
 });
 
-/** Write the rule-* slash commands into the selected agents' directories. */
+/** Write the rule-mcp-* slash commands into the selected agents' directories. */
 export const commandsTask = (force, agents = [], selection = null) => ({
   id: "commands",
   title: "Agent slash commands",
@@ -74,7 +74,7 @@ export const commandsTask = (force, agents = [], selection = null) => ({
 /** Copy the bundled skill catalog to the central skills directory. */
 export const skillsTask = () => ({
   id: "skills",
-  title: "Bundled rule-* skills",
+  title: "Bundled rule-mcp-* skills",
   detail: "~/.agents/skills",
   run: async ({ dryRun }) => {
     if (dryRun) {

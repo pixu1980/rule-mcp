@@ -30,7 +30,7 @@ const isRemoved = (entry) => entry.status === "removed";
 
 /** A HOME with its own bin dir, and optionally a shim that does not launch. */
 function sandbox({ brokenShim = false } = {}) {
-  const home = mkdtempSync(join(tmpdir(), "rule-shim-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-shim-"));
   const bin = join(home, "bin");
 
   mkdirSync(bin, { recursive: true });

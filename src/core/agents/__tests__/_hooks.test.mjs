@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const state = mkdtempSync(join(tmpdir(), "rule-promote-"));
+const state = mkdtempSync(join(tmpdir(), "rule-mcp-promote-"));
 
 test.before(() => {
   process.env.RULE_MCP_STATE_DIR = state;
@@ -24,24 +24,24 @@ const { HOOK_EVENTS, hookEntries, isCommitCommand, isMigrationCommand, withHooks
 
 test("cachePrime stores only under an empty key and reports it", () => {
   cacheClear();
-  const key = cacheKey("pix_tool", { prompt: "first" });
-  assert.equal(cachePrime("pix_tool", { prompt: "first" }, { content: [] }), true, "a fresh key primes");
+  const key = cacheKey("rule_tool", { prompt: "first" });
+  assert.equal(cachePrime("rule_tool", { prompt: "first" }, { content: [] }), true, "a fresh key primes");
   assert.equal(cacheGet("nope"), undefined, "an unknown key misses");
 
-  assert.equal(cachePrime("pix_tool", { prompt: "first" }, { content: [] }), false, "an existing key refuses a second prime");
+  assert.equal(cachePrime("rule_tool", { prompt: "first" }, { content: [] }), false, "an existing key refuses a second prime");
 });
 
 test("promotableEntries merges tiers and filters below the hit floor", () => {
   const args = (prompt) => ({ prompt });
-  cacheStore("pix_tool", args("hot"), { content: [{ type: "text", text: "x" }] }, {});
+  cacheStore("rule_tool", args("hot"), { content: [{ type: "text", text: "x" }] }, {});
   for (let index = 0; index < MIN_HITS; index++) {
-    cacheLookup("pix_tool", args("hot"));
+    cacheLookup("rule_tool", args("hot"));
   }
-  cacheStore("pix_tool", args("cold"), { content: [] }, {});
+  cacheStore("rule_tool", args("cold"), { content: [] }, {});
 
   const promoted = promotableEntries();
   assert.ok(
-    promoted.some((entry) => entry.tool === "pix_tool" && JSON.stringify(entry.args) === JSON.stringify(args("hot"))),
+    promoted.some((entry) => entry.tool === "rule_tool" && JSON.stringify(entry.args) === JSON.stringify(args("hot"))),
     "the hot call earns promotion",
   );
   assert.ok(

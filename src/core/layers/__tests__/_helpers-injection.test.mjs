@@ -23,8 +23,8 @@ import { test } from "node:test";
 // text it is, rather than as a relative import this file makes.
 const BARREL = `import { noTodo } from '${"./_no-todo.js"}';\n\nexport const GUARDRAILS = [noTodo];\n`;
 
-const home = mkdtempSync(join(tmpdir(), "rule-inject-home-"));
-const projectRoot = mkdtempSync(join(tmpdir(), "rule-inject-project-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-inject-home-"));
+const projectRoot = mkdtempSync(join(tmpdir(), "rule-mcp-inject-project-"));
 
 process.env.RULE_MCP_HOME = home;
 mkdirSync(join(projectRoot, ".git"), { recursive: true });

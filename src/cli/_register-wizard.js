@@ -64,7 +64,7 @@ export function registerSetupCommand(program) {
     .option("--no-commands", "skip agent slash commands")
     .option("--hooks", "install guard hooks (Claude)")
     .option("--no-hooks", "skip guard hooks")
-    .option("--skills", "install the bundled rule-* skills")
+    .option("--skills", "install the bundled rule-mcp-* skills")
     .option("--no-skills", "skip the bundled skills")
     .option("--minimal", "minimal server tool surface (--no-minimal for full)")
     .option("--no-minimal", "full server tool surface")

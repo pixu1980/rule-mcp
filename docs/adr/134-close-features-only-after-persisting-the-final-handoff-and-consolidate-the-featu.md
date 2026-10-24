@@ -7,7 +7,7 @@
 
 ## Context
 
-The /rule-handoff close-feature prompt required an extra squash token and placed the rewrite ahead of the final handoff commit. The existing squash backend already consolidates in-range ADRs and handoffs behind a confirmation gate, but the command did not invoke it by default.
+The /rule-mcp-handoff close-feature prompt required an extra squash token and placed the rewrite ahead of the final handoff commit. The existing squash backend already consolidates in-range ADRs and handoffs behind a confirmation gate, but the command did not invoke it by default.
 
 ## Decision
 

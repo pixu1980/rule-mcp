@@ -57,7 +57,7 @@ test("closing a hole moves the documents after it down, and only those", () => {
 });
 
 test("a sequence with no hole and no duplicate plans nothing", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-doctor-dense-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-dense-"));
 
   try {
     mkdirSync(join(root, "docs", "adr"), { recursive: true });
@@ -73,7 +73,7 @@ test("a sequence with no hole and no duplicate plans nothing", () => {
 });
 
 test("the oldest document anchors the sequence, so a family may start where it likes", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-doctor-offset-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-offset-"));
 
   try {
     mkdirSync(join(root, "docs", "adr"), { recursive: true });

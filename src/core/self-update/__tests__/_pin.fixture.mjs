@@ -32,7 +32,7 @@ export const git = (arguments_, cwd) => execFileSync("git", arguments_, { cwd, s
 
 /** A bare upstream plus a clone that tracks it, with one upstream commit ahead. */
 export function makeClonePair() {
-  const base = mkdtempSync(join(tmpdir(), "rule-pin-"));
+  const base = mkdtempSync(join(tmpdir(), "rule-mcp-pin-"));
   const upstream = join(base, "upstream.git");
   const seed = join(base, "seed");
   const clone = join(base, "clone");
@@ -42,8 +42,8 @@ export function makeClonePair() {
   git(["init", "-b", "main"], seed);
   git(["config", "user.email", "t@t.t"], seed);
   git(["config", "user.name", "t"], seed);
-  mkdirSync(join(seed, "skills", "rule"), { recursive: true });
-  writeFileSync(join(seed, "skills", "rule", "SKILL.md"), "v1\n");
+  mkdirSync(join(seed, "skills", "rule-mcp"), { recursive: true });
+  writeFileSync(join(seed, "skills", "rule-mcp", "SKILL.md"), "v1\n");
   git(["add", "-A"], seed);
   git(["commit", "-m", "seed"], seed);
   git(["remote", "add", "origin", upstream], seed);
@@ -52,7 +52,7 @@ export function makeClonePair() {
   git(["config", "user.email", "t@t.t"], clone);
   git(["config", "user.name", "t"], clone);
   // Move the upstream forward so there is something to fast-forward to.
-  writeFileSync(join(seed, "skills", "rule", "SKILL.md"), "v2\n");
+  writeFileSync(join(seed, "skills", "rule-mcp", "SKILL.md"), "v2\n");
   git(["add", "-A"], seed);
   git(["commit", "-m", "upstream change"], seed);
   git(["push", "origin", "main"], seed);

@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-skills-home-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-skills-home-"));
 const ORIGINAL_HOME = process.env.HOME;
 process.env.HOME = home;
 
@@ -35,15 +35,15 @@ test("getAvailableSkills reads the shipped catalog and tolerates a bad SKILL.md"
     "a display name falls back to the entry name",
   );
 
-  const root = mkdtempSync(join(tmpdir(), "rule-skills-empty-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-skills-empty-"));
   const meta = readSkillMeta(join(root, "not-a-skill"));
   assert.deepEqual(meta, { name: "", desc: "", tags: [] }, "an unreadable skill directory reads empty");
   rmSync(root, { recursive: true, force: true });
 });
 
 test("copySkill copies trees, recurses and replaces an existing destination", () => {
-  const target = mkdtempSync(join(tmpdir(), "rule-skills-copy-"));
-  const source = mkdtempSync(join(tmpdir(), "rule-skills-src-"));
+  const target = mkdtempSync(join(tmpdir(), "rule-mcp-skills-copy-"));
+  const source = mkdtempSync(join(tmpdir(), "rule-mcp-skills-src-"));
   mkdirSync(join(source, "sub"), { recursive: true });
   writeFileSync(join(source, "SKILL.md"), "# S\n");
   writeFileSync(join(source, "sub", "rule.js"), "// rule\n");

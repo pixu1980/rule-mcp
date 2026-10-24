@@ -46,7 +46,7 @@ function inHome(home, call) {
 
 /** A fake HOME carrying both directories a purge is expected to take. */
 function seeded() {
-  const home = mkdtempSync(join(tmpdir(), "rule-purge-home-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-purge-home-"));
 
   for (const dir of ["state", "projects", "data", "config"]) {
     mkdirSync(join(home, ".rule-mcp", dir), { recursive: true });
@@ -60,7 +60,7 @@ function seeded() {
 }
 
 test("an install recreates the whole layout, not just the directory", () => {
-  const home = mkdtempSync(join(tmpdir(), "rule-home-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-home-"));
 
   try {
     const result = inHome(home, "ensureRuntimeHome({})");
@@ -78,7 +78,7 @@ test("an install recreates the whole layout, not just the directory", () => {
 });
 
 test("a dry run creates nothing", () => {
-  const home = mkdtempSync(join(tmpdir(), "rule-home-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-home-"));
 
   try {
     inHome(home, "ensureRuntimeHome({ dryRun: true })");

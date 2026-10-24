@@ -74,7 +74,7 @@ export async function requestHandler(request, res) {
       return;
     }
 
-    // ── GET /mcp (server → client SSE) and DELETE /mcp (terminate) ──
+    // ── GET /mcp (server -> client SSE) and DELETE /mcp (terminate) ──
     if (request.method === "GET" || request.method === "DELETE") {
       if (!existing) {
         res.writeHead(404, { "Content-Type": "application/json" });

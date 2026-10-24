@@ -1,13 +1,13 @@
-# 005: Tool: pix_architect — guardrails
+# 005: Tool: rule_tool_architect, guardrails
 
 - **Date**: 2026-07-11 12:50:10
 - **Status**: accepted
 - **Tags**: tool, auto-log
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 
-Tool: pix_architect
+Tool: rule_tool_architect
 Args: {"mode":"guardrails"}
 
 ## Decision
@@ -16,4 +16,4 @@ Tool executed successfully.
 
 ## Consequences
 
-None — informational entry.
+None, informational entry.

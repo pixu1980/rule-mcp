@@ -16,7 +16,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-central-home-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-central-home-"));
 process.env.HOME = home; // homedir() reads it, so no new knob is needed
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 
@@ -28,7 +28,7 @@ const git = (cwd, ...args) => execFileSync("git", args, { cwd, encoding: "utf8",
 const projectsRoot = () => join(getRuntimePaths().homeDir, "projects");
 
 test("the recording lands under the state projects root, not in the project", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-central-plain-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-central-plain-"));
   git(root, "init", "-q");
   const paths = getProjectPaths(root);
 
@@ -39,7 +39,7 @@ test("the recording lands under the state projects root, not in the project", ()
 });
 
 test("projectSlug names the project and its checkout", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-central-slug-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-central-slug-"));
   assert.match(projectSlug(join(root, "My App")), /^my-app-[0-9a-f]{8}$/);
   assert.notEqual(projectSlug(join(root, "My App")), projectSlug(join(root, "My App", "checkout")));
 });

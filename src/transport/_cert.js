@@ -33,7 +33,7 @@ import { tmpdir } from "node:os";
 export function generateSelfSignedCert({ certPath, keyPath, commonName = "rule-mcp.local", days = 730 }) {
   // Config written to a real temp file (not /dev/stdin, which is POSIX-only) so
   // certificate generation works on Windows as well as macOS/Linux.
-  const configPath = join(tmpdir(), `rule-cert-${process.pid}.cnf`);
+  const configPath = join(tmpdir(), `rule-mcp-cert-${process.pid}.cnf`);
   try {
     mkdirSync(dirname(certPath), { recursive: true });
     mkdirSync(dirname(keyPath), { recursive: true });

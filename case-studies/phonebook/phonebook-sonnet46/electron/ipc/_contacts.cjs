@@ -10,14 +10,14 @@ const fs = require("fs");
 const { getContactsFilePath } = require("../helpers/index.cjs");
 
 /**
- * Reads contacts from disk; initialises file if it does not exist.
+ * Reads contacts from disk; initializes file if it does not exist.
  * @returns {import('../../src/helpers/_sampleData.js').Contact[]}
  */
 function readContacts() {
   const filePath = getContactsFilePath();
 
   if (!fs.existsSync(filePath)) {
-    // First launch: no data yet — renderer will seed with sample data and call save
+    // First launch: no data yet, renderer will seed with sample data and call save
     fs.writeFileSync(filePath, JSON.stringify([], null, 2), "utf8");
     return [];
   }

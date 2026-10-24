@@ -52,7 +52,7 @@ test("audit and review tools pin their operation", async () => {
 test("rule_tool_plan detects tokensave in the project dir for a scoped run", async () => {
   // Assertions stay on headings and inline-code tokens: tool results pass
   // through text compression, which never touches either.
-  const box = mkdtempSync(join(tmpdir(), "rule-plan-"));
+  const box = mkdtempSync(join(tmpdir(), "rule-mcp-plan-"));
 
   try {
     const before = await callTool("rule_tool_plan", { role: "security", operation: "audit", topic: "SSE daemon", projectDir: box });
@@ -73,11 +73,11 @@ test("rule_tool_plan detects tokensave in the project dir for a scoped run", asy
 });
 
 test("an aliased id is reachable by the tool but has no generated surface", async () => {
-  // The adopted registry keeps legacy ids as aliases (`api-design` → backend,
-  // `simplicity-staff-eng` → simplicity): no generated surface exists under
+  // The adopted registry keeps legacy ids as aliases (`api-design` -> backend,
+  // `simplicity-staff-eng` -> simplicity): no generated surface exists under
   // the old name, but the tool must still answer with the owning role.
   const names = new Set(listPrompts().map((prompt) => prompt.name));
-  for (const aliased of ["rule-persona-api-design", "rule-persona-simplicity-staff-eng"]) {
+  for (const aliased of ["rule-mcp-persona-api-design", "rule-mcp-persona-simplicity-staff-eng"]) {
     assert.equal(names.has(aliased), false, "aliased ids stay out of the surfaces");
   }
   const result = await callTool("rule_tool_plan", { role: "api-design" });

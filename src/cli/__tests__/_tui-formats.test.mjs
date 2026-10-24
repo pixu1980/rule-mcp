@@ -58,7 +58,7 @@ test("formatUninstallResult renders an empty failed run without a table", () => 
 });
 
 test("formatToolsList renders the registry with blank descriptions tolerated", () => {
-  const ui = formatToolsList([{ name: "pix_tool", description: "route" }, { name: "rule_tool_check" }]);
+  const ui = formatToolsList([{ name: "rule_tool", description: "route" }, { name: "rule_tool_check" }]);
 
   assert.match(ui, /2 registered tools/);
   assert.match(ui, /rule_tool_check/);
@@ -67,8 +67,8 @@ test("formatToolsList renders the registry with blank descriptions tolerated", (
 
 test("formatSkillsList marks installed and available skills apart", () => {
   const ui = formatSkillsList([
-    { name: "rule-frontend-react", installed: true, description: "react" },
-    { name: "rule-backend-node", installed: false },
+    { name: "rule-mcp-frontend-react", installed: true, description: "react" },
+    { name: "rule-mcp-backend-node", installed: false },
   ]);
 
   assert.match(ui, /2 available skills/);

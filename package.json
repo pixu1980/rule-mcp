@@ -1,7 +1,7 @@
 {
   "name": "rule-mcp",
   "version": "0.1.0",
-  "description": "RuleMCP - MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
+  "description": "RuleMCP - MCP server for the rule-mcp-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "type": "module",
   "license": "MIT",
   "author": "pixu1980",
@@ -97,7 +97,7 @@
     "angular",
     "solidjs",
     "astro",
-    "rule",
+    "rule-mcp",
     "desktop",
     "electron",
     "library",

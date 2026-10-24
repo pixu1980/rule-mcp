@@ -9,7 +9,7 @@
  */
 
 /** Conceptual id - process area, never listed on the command surface. */
-export const FLIGHT_CONCEPT = "rule-area-process-flight";
+export const FLIGHT_CONCEPT = "rule-mcp-area-process-flight";
 
 /**
  * Whether flight guidance is injected with the session/prompt directive.

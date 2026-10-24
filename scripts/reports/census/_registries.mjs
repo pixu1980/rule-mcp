@@ -40,7 +40,7 @@ const guardrails = await import("../../../src/core/guardrails/index.js");
 
 /**
  * The role a persona name addresses, or nothing when the name is not one.
- * Canonical form: `rule-persona-<role>` (ADR 120).
+ * Canonical form: `rule-mcp-persona-<role>` (ADR 120).
  *
  * @param {string} name
  * @returns {{role: string} | undefined}
@@ -126,7 +126,7 @@ export function resourceKinds(resources, skillDirs) {
 
   for (const resource of resources) {
     const prefix = String(resource.uri)
-      .replace(/^rule:\/\//, "")
+      .replace(/^rulemcp:\/\//, "")
       .split("/", 1)[0];
 
     if (skills.has(prefix)) {

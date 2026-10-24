@@ -32,7 +32,7 @@ test("parseHandoffOptions defaults, short-circuits and reports help", () => {
 
 test("handoffPrompt renders an option-agnostic contract with the defaults", () => {
   const prompt = handoffPrompt({}, user);
-  assert.equal(prompt.name, "rule-handoff", "the prompt names itself");
+  assert.equal(prompt.name, "rule-mcp-handoff", "the prompt names itself");
   assert.match(prompt.messages[0].text, /mode=handoff/, "the default mode is spelled out");
   assert.match(prompt.messages[0].text, /compress=true/, "the compress default is spelled out");
   assert.match(prompt.messages[0].text, /includeGitDiff=yes/, "the diff flag is spelled out");

@@ -12,11 +12,11 @@ import { commandConfig } from "./_env.js";
 import { parseJson, toJson, upsertJsonServer } from "./_writers-json.js";
 import { commandTemplate, geminiCommand, copilotAgent, appendInstruction, upsertTomlBlock } from "./_writers-text.js";
 
-/** Install into Claude Code only (~/.claude/commands/rule.md, never other agents). */
+/** Install into Claude Code only (~/.claude/commands/rule-mcp.md, never other agents). */
 const installClaude = ({ entrypoint, dryRun = false, global = false, force = false }) => {
   const file = join(HOME, ".claude.json");
   const mdFile = join(HOME, ".claude", "CLAUDE.md");
-  const commandFile = join(HOME, ".claude", "commands", "rule.md");
+  const commandFile = join(HOME, ".claude", "commands", "rule-mcp.md");
 
   return [
     // The config is an upsert where a merge can go wrong, so the pre-write
@@ -60,7 +60,7 @@ const installCodex = ({ entrypoint, dryRun = false, global = false }) => {
 const installCursor = ({ entrypoint, dryRun = false, global = false }) => {
   const files = [];
   const cursorGlobal = join(HOME, ".cursor", "mcp.json");
-  const cursorCommand = join(process.cwd(), ".cursor", "commands", "rule.md");
+  const cursorCommand = join(process.cwd(), ".cursor", "commands", "rule-mcp.md");
   files.push(
     writeText({
       file: cursorGlobal,
@@ -72,7 +72,7 @@ const installCursor = ({ entrypoint, dryRun = false, global = false }) => {
   // Also write to .cursorrules
   const cursorRules = join(HOME, ".cursorrules");
 
-  if (!existsSync(cursorRules) || !readText(cursorRules).includes("rule")) {
+  if (!existsSync(cursorRules) || !readText(cursorRules).includes("rule-mcp")) {
     writeText({
       file: cursorRules,
       content: appendInstruction(readText(cursorRules)),
@@ -107,7 +107,7 @@ const installCopilot = ({ entrypoint, dryRun = false, global = false }) => {
 const installGemini = ({ entrypoint, dryRun = false, global = false }) => {
   const file = join(HOME, ".gemini", "settings.json");
   const mdFile = join(HOME, ".gemini", "GEMINI.md");
-  const commandFile = join(HOME, ".gemini", "commands", "rule.toml");
+  const commandFile = join(HOME, ".gemini", "commands", "rule-mcp.toml");
 
   return [
     writeText({
@@ -129,7 +129,7 @@ const installPi = ({ entrypoint, dryRun = false, global = false, mode = "stdio" 
   // Pi uses $PI_CODING_AGENT_DIR/mcp.json or ~/.pi/agent/mcp.json
   const piDir = process.env.PI_CODING_AGENT_DIR ? join(process.env.PI_CODING_AGENT_DIR) : join(HOME, ".pi", "agent");
   const file = join(piDir, "mcp.json");
-  const promptFile = join(piDir, "prompts", "rule.md");
+  const promptFile = join(piDir, "prompts", "rule-mcp.md");
 
   return [
     writeText({

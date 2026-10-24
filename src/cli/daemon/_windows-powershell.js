@@ -21,7 +21,7 @@ function psQuote(value) {
  */
 export function installViaPowerShell(name, command) {
   const script = [
-    `New-Service -Name '${psQuote(name)}' -BinaryPathName '${psQuote(command)}' -StartupType Automatic -Description 'MCP server for the rule-* skill ecosystem'`,
+    `New-Service -Name '${psQuote(name)}' -BinaryPathName '${psQuote(command)}' -StartupType Automatic -Description 'MCP server for the rule-mcp-* skill ecosystem'`,
     `Start-Service -Name '${psQuote(name)}'`,
   ].join("; ");
 

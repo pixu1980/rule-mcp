@@ -16,7 +16,7 @@ await bootstrapCoreTools();
 
 // ── End to end through callTool ──
 test("every call is classified by the path it arrived on", () => {
-  assert.equal(entryPathOf("pix_tool"), "router");
+  assert.equal(entryPathOf("rule_tool"), "router");
   assert.equal(entryPathOf("rule_tool_gateway"), "gateway");
   assert.equal(entryPathOf("rule_tool_frontend_react"), "skill");
   assert.equal(entryPathOf("rule_tool_styleguide_css"), "skill");
@@ -29,9 +29,9 @@ test("every call is classified by the path it arrived on", () => {
 test("the aggregate reports hit rate per tier and calls per entry path", async () => {
   const { aggregate } = await import("../../../telemetry/stats/index.js");
   const stats = aggregate([
-    { tool: "pix_tool", cacheHit: false, cacheTier: "miss", entry: "router" },
-    { tool: "pix_tool", cacheHit: true, cacheTier: "exact", entry: "router" },
-    { tool: "pix_tool", cacheHit: true, cacheTier: "normalized", entry: "router" },
+    { tool: "rule_tool", cacheHit: false, cacheTier: "miss", entry: "router" },
+    { tool: "rule_tool", cacheHit: true, cacheTier: "exact", entry: "router" },
+    { tool: "rule_tool", cacheHit: true, cacheTier: "normalized", entry: "router" },
     { tool: "rule_tool_frontend_react", cacheHit: true, cacheTier: "exact", entry: "skill" },
   ]);
 
@@ -44,7 +44,7 @@ test("the rendered report names the tiers and the entry paths", async () => {
   const { aggregate, renderStats } = await import("../../../telemetry/stats/index.js");
   const text = renderStats(
     aggregate([
-      { tool: "pix_tool", cacheHit: true, cacheTier: "normalized", entry: "router" },
+      { tool: "rule_tool", cacheHit: true, cacheTier: "normalized", entry: "router" },
       { tool: "rule_tool_frontend_react", cacheHit: false, cacheTier: "miss", entry: "skill" },
     ]),
   );
@@ -70,12 +70,12 @@ test("a rephrased corpus mostly replays, and L0 alone cannot do it", async () =>
   const run = async () => {
     cacheClear();
     for (const entry of CORPUS) {
-      await call("pix_tool", { prompt: entry.prompt });
+      await call("rule_tool", { prompt: entry.prompt });
     }
     let replayed = 0;
     for (const entry of CORPUS) {
-      const result = await call("pix_tool", { prompt: rephrase(entry.prompt) });
-      if (result?._meta?.pixCache?.tier) {
+      const result = await call("rule_tool", { prompt: rephrase(entry.prompt) });
+      if (result?._meta?.ruleCache?.tier) {
         replayed += 1;
       }
     }
@@ -115,15 +115,15 @@ test("no tier above the normalized key is wired in", async () => {
   cacheClear();
 
   const args = { prompt: "svelte store for shared state" };
-  cacheStore("pix_tool", args, result("stored"));
+  cacheStore("rule_tool", args, result("stored"));
 
   for (const probe of [args, { prompt: "Svelte stores for shared state?" }]) {
-    const tier = lookup("pix_tool", probe)?.tier;
+    const tier = lookup("rule_tool", probe)?.tier;
     assert.ok(TIERS.has(tier), `unexpected tier ${tier}: a new tier needs its own report`);
   }
 
   // A prompt that only overlaps must miss, not approximate.
-  assert.equal(lookup("pix_tool", { prompt: "store for state" }), undefined, "partial overlap must miss: replaying it is the wrong replay the report measured");
+  assert.equal(lookup("rule_tool", { prompt: "store for state" }), undefined, "partial overlap must miss: replaying it is the wrong replay the report measured");
 });
 
 process.on("exit", () => rmSync(stateDir, { recursive: true, force: true }));

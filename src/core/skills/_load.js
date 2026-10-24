@@ -75,7 +75,7 @@ export async function registerCoreTools() {
   registerSearchTool();
   registerCheckTool();
   registerDetectTool();
-  // Action tools: the collection-helpers of the rule surface. All read-only
+  // Action tools: the collection-helpers of the rule-mcp surface. All read-only
   // except the plan/impersonation writers, which are operationally useful in every
   // mode.
   registerActionTools();

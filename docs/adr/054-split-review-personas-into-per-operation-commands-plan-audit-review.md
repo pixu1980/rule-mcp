@@ -7,11 +7,11 @@
 
 ## Context
 
-Each of the 7 active review personas shipped as one combined command, rule-plan-<role>, whose template instructs one run to produce all three documents of the trio (docs/audits, docs/reviews, docs/plans). Running only one step meant the user invoked the combined command and mentally ignored two thirds of the contract; the per-role command body was also a generic routing recap, so the persona-specific operation contract only surfaced via the MCP prompt, which is suppressed on hosts that install clean slash commands.
+Each of the 7 active review personas shipped as one combined command, rule-mcp-plan-<role>, whose template instructs one run to produce all three documents of the trio (docs/audits, docs/reviews, docs/plans). Running only one step meant the user invoked the combined command and mentally ignored two thirds of the contract; the per-role command body was also a generic routing recap, so the persona-specific operation contract only surfaced via the MCP prompt, which is suppressed on hosts that install clean slash commands.
 
 ## Decision
 
-Give each active role three slash commands - `rule-persona-<role>-plan`, `rule-persona-<role>-audit`, `rule-persona-<role>-review` (naming finalized in ADR 113; originally shipped as `rule-plan-<role>` / `rule-audit-<role>` / `rule-review-<role>`), all generated from the same registry and all routing through the tools under the hood: the command body calls rule_tool_plan (with role and operation) to fetch the operation contract, and rule_tool_plan_docs for the trio bookkeeping. The template's header clause and operation section are now operation-aware; rule_tool_plan gained an optional operation parameter (default all three, unchanged for existing callers). Combined plan command becomes plan-only.
+Give each active role three slash commands - `rule-mcp-persona-<role>-plan`, `rule-mcp-persona-<role>-audit`, `rule-mcp-persona-<role>-review` (naming finalized in ADR 113; originally shipped as `rule-mcp-plan-<role>` / `rule-mcp-audit-<role>` / `rule-mcp-review-<role>`), all generated from the same registry and all routing through the tools under the hood: the command body calls rule_tool_plan (with role and operation) to fetch the operation contract, and rule_tool_plan_docs for the trio bookkeeping. The template's header clause and operation section are now operation-aware; rule_tool_plan gained an optional operation parameter (default all three, unchanged for existing callers). Combined plan command becomes plan-only.
 
 ## Consequences
 
@@ -22,7 +22,7 @@ Positive: the user can run just the step they need; every command body names the
 A single run of the trio stops being the user's default and per-step runs become a habit.
 Once that is routine, an explicit `rule_tool_plan` call with no operation is the combined
 contract and the three per-role commands could be collapsed back, or extended to a
-fourth operation (e.g. `rule-close-*`) if the lifecycle needs it.
+fourth operation (e.g. `rule-mcp-close-*`) if the lifecycle needs it.
 
 ## Alternatives Considered
 

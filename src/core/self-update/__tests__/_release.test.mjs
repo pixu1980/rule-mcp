@@ -27,7 +27,7 @@ test("highestVersionTag picks by version, not by text order", () => {
 });
 
 test("releaseState reports newer when origin/main carries a higher tag", async () => {
-  const remote = mkdtempSync(join(tmpdir(), "rule-rel-remote-"));
+  const remote = mkdtempSync(join(tmpdir(), "rule-mcp-rel-remote-"));
   const git = (cwd, args) => execFileSync("git", ["-c", "init.defaultBranch=main", ...args], { cwd, encoding: "utf8" }).trim();
 
   git(remote, ["init"]);
@@ -43,7 +43,7 @@ test("releaseState reports newer when origin/main carries a higher tag", async (
   git(remote, ["commit", "-m", "feat: next"]);
   git(remote, ["tag", "-a", "v2.1.0", "-m", "v2.1.0"]);
 
-  const dir = mkdtempSync(join(tmpdir(), "rule-rel-local-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-rel-local-"));
   git(dir, ["clone", remote, "."]);
   git(dir, ["checkout", "--detach", first]);
   git(dir, ["checkout", "-B", "main"]);

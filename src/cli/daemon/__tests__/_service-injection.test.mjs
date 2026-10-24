@@ -29,7 +29,7 @@ test("tryExecFile passes a metacharacter argument literally", () => {
 });
 
 test("the launchd wrapper single-quotes the paths, so a metacharacter path is one exec argument", () => {
-  const base = mkdtempSync(join(tmpdir(), "rule-wrapper-"));
+  const base = mkdtempSync(join(tmpdir(), "rule-mcp-wrapper-"));
   const dir = join(base, 'node $(touch INJECTED);"q" spaced');
   const fakeNode = join(dir, "fake-node");
   const wrapper = join(base, "wrapper.sh");

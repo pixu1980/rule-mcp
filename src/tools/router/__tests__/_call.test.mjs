@@ -8,7 +8,7 @@ import { join } from "node:path";
 import { before, test } from "node:test";
 import { z } from "zod/v4";
 
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-call-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-call-"));
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 delete process.env.RULE_MCP_NO_CACHE;
@@ -38,7 +38,7 @@ before(() => {
     zodSchema: z.object({}),
     handler: () => ({
       isError: true,
-      _meta: { pixGuardrails: { failCount: 2, failed: [{ id: "fp-x", label: "x", suggestion: "y", failCount: 1 }] } },
+      _meta: { ruleGuardrails: { failCount: 2, failed: [{ id: "fp-x", label: "x", suggestion: "y", failCount: 1 }] } },
       content: [{ type: "text", text: "failed" }],
     }),
   });

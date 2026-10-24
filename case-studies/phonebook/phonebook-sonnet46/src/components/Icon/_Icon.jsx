@@ -3,7 +3,7 @@
  * @description Scalable SVG icon component using Heroicons 2 outline paths.
  * Renders a single <svg> with a <path d="…"> — no external dependencies.
  * Uses SVG presentation attributes (fill, stroke, etc.) which are NOT CSS
- * inline styles and are therefore rule-compliant.
+ * inline styles and are therefore rule-mcp-compliant.
  */
 
 /**

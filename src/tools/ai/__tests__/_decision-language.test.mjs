@@ -17,8 +17,8 @@ await loadAllSkills(true);
 
 const ENV = ["RULE_MCP_DECISION_MODEL", "RULE_MCP_DECISION_URL", "RULE_MCP_DECISION_TIMEOUT"];
 
-async function rule(prompt) {
-  return JSON.parse((await callTool("pix_tool", { prompt })).content[0].text);
+async function routePrompt(prompt) {
+  return JSON.parse((await callTool("rule_tool", { prompt })).content[0].text);
 }
 
 async function withAuto(url, body) {
@@ -65,13 +65,13 @@ test("auto selects Julia for Italian and Laya for English", async () => {
 
   try {
     await withAuto(server.url, async () => {
-      const italian = await rule("Come faccio a creare un componente React?");
-      const english = await rule("I need a React button component");
+      const italian = await routePrompt("Come faccio a creare un componente React?");
+      const english = await routePrompt("I need a React button component");
 
       assert.deepEqual(models, ["ggml-org/Julia-1-GGUF:Q8_0", "ggml-org/Laya-GGUF:Q8_0"]);
-      assert.equal(italian.route, "rule-frontend-react");
+      assert.equal(italian.route, "rule-mcp-frontend-react");
       assert.equal(italian.confidence, 0.9);
-      assert.equal(english.route, "rule-frontend-react");
+      assert.equal(english.route, "rule-mcp-frontend-react");
       assert.equal(english.confidence, 0.9);
     });
   } finally {

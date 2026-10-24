@@ -24,7 +24,7 @@ beforeEach(() => {
   cacheClear();
 });
 
-async function readyEntry(tool = "pix_tool", entryArgs = args("react button"), text = "verified") {
+async function readyEntry(tool = "rule_tool", entryArgs = args("react button"), text = "verified") {
   cacheStore(tool, entryArgs, result(text), { [SKILL]: skillDigest(SKILL) });
   for (let index = 0; index < MIN_HITS; index++) {
     cacheLookup(tool, entryArgs);
@@ -39,7 +39,7 @@ test("primeFromCatalog skips entries without a tool or a result", () => {
     version: 1,
     generatedAt: "2026-09-01",
     serverVersion: "test",
-    entries: [{ result: result("no tool") }, { tool: 42, result: result("bad tool") }, { tool: "pix_tool", args: args("rule ui"), result: result("good") }],
+    entries: [{ result: result("no tool") }, { tool: 42, result: result("bad tool") }, { tool: "rule_tool", args: args("rule-mcp ui"), result: result("good") }],
   };
   writeCatalog(project, catalog);
 
@@ -50,11 +50,11 @@ test("primeFromCatalog skips entries without a tool or a result", () => {
 });
 
 test("verifyCache reports drift, failures and skips together", async () => {
-  const { tool, entryArgs } = await readyEntry("pix_tool", args("react button"), "blessed");
+  const { tool, entryArgs } = await readyEntry("rule_tool", args("react button"), "blessed");
 
   const verify = await verifyCache({
-    recompute: (name, candidateArgs) => (name === "pix_tool" && candidateArgs.prompt === "react button" ? result("blessed") : result("different")),
-    canRun: (name) => name === "pix_tool",
+    recompute: (name, candidateArgs) => (name === "rule_tool" && candidateArgs.prompt === "react button" ? result("blessed") : result("different")),
+    canRun: (name) => name === "rule_tool",
   });
 
   assert.equal(verify.checked, 1, "one fresh entry is checked");
@@ -64,16 +64,16 @@ test("verifyCache reports drift, failures and skips together", async () => {
 });
 
 test("verifyCache flags a changed recompute as drift", async () => {
-  const { tool, entryArgs } = await readyEntry("pix_tool", args("react button"), "blessed");
+  const { tool, entryArgs } = await readyEntry("rule_tool", args("react button"), "blessed");
 
   const verify = await verifyCache({ recompute: () => result("rewritten elsewhere") });
 
   assert.equal(verify.drifted.length, 1, "the recomputed answer differs");
-  assert.equal(verify.drifted[0].tool, "pix_tool", "drift names the tool");
+  assert.equal(verify.drifted[0].tool, "rule_tool", "drift names the tool");
 });
 
 test("verifyCache records recompute failures and refuses to run some tools", async () => {
-  const { tool, entryArgs } = await readyEntry("pix_tool", args("react button"), "blessed");
+  const { tool, entryArgs } = await readyEntry("rule_tool", args("react button"), "blessed");
 
   const verify = await verifyCache({
     recompute: () => {
@@ -88,11 +88,11 @@ test("verifyCache records recompute failures and refuses to run some tools", asy
 });
 
 test("verifyCache skips entries the canRun gate refuses and stale entries", async () => {
-  const { tool } = await readyEntry("pix_tool", args("react button"), "blessed");
+  const { tool } = await readyEntry("rule_tool", args("react button"), "blessed");
   await readyEntry("rule_tool_check", args("clean code"), "checked");
 
-  const verify = await verifyCache({ recompute: () => result("same"), canRun: (name) => name === "pix_tool" });
+  const verify = await verifyCache({ recompute: () => result("same"), canRun: (name) => name === "rule_tool" });
 
   assert.equal(verify.skipped, 1, "the gate refuses rule_tool_check");
-  assert.equal(verify.checked, 1, "pix_tool is verified");
+  assert.equal(verify.checked, 1, "rule_tool is verified");
 });

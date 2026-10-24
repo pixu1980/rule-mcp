@@ -48,7 +48,7 @@ test("workingTreeState separates staged, unstaged and untracked paths", () => {
 });
 
 test("workingTreeState reports an invalid verdict outside a repository", () => {
-  const state = workingTreeState("/nonexistent-rule-path");
+  const state = workingTreeState("/nonexistent-rule-mcp-path");
 
   assert.equal(state.valid, false, "no repository means no verdict");
   assert.equal(state.clean, false, "an unknown tree is not clean");
@@ -109,7 +109,7 @@ test("rewriteSafety is safe only on a settled, tracked-clean tree", () => {
 });
 
 test("rewriteSafety refuses outside a repository", () => {
-  const safety = rewriteSafety("/nonexistent-rule-path");
+  const safety = rewriteSafety("/nonexistent-rule-mcp-path");
 
   assert.equal(safety.safe, false, "no repository is never safe");
   assert.ok(

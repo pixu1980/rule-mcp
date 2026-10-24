@@ -19,7 +19,7 @@ const script = join(root, "scripts", "reinstall.sh");
 
 /** A scratch checkout with the script, a fake pnpm, and leftovers to purge. */
 function scratch() {
-  const dir = mkdtempSync(join(tmpdir(), "rule-reinstall-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-reinstall-"));
   const bin = join(dir, "bin");
   const log = join(dir, "pnpm.log");
   mkdirSync(bin, { recursive: true });

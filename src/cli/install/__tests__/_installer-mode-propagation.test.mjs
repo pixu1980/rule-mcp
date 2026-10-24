@@ -15,7 +15,7 @@ import { join } from "node:path";
 // process loads it too, so it registers the hook as every entry point does.
 const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 
-const fakeHome = mkdtempSync(join(tmpdir(), "rule-mode-propagation-"));
+const fakeHome = mkdtempSync(join(tmpdir(), "rule-mcp-mode-propagation-"));
 const piDir = join(fakeHome, ".pi", "agent");
 const installModule = new URL("../index.js", import.meta.url).href;
 const source = [`import { installAgent } from ${JSON.stringify(installModule)};`, 'installAgent({ agent: "pi", entrypoint: "/tmp/rule-mcp.js", mode: "daemon" });'].join(" ");

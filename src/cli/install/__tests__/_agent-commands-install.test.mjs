@@ -13,7 +13,7 @@ const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", i
 
 // eslint-disable-next-line no-unused-vars
 const root = new URL("../../../..", import.meta.url).pathname;
-const fakeHome = mkdtempSync(join(tmpdir(), "rule-agent-commands-"));
+const fakeHome = mkdtempSync(join(tmpdir(), "rule-mcp-agent-commands-"));
 const fakeProject = join(fakeHome, "project");
 const piDir = join(fakeHome, ".pi", "agent");
 const installModule = new URL("../index.js", import.meta.url).href;
@@ -32,10 +32,10 @@ execFileSync(
 );
 
 const expectations = [
-  [join(piDir, "prompts", "rule.md"), "$ARGUMENTS", "Pi slash command"],
-  [join(fakeHome, ".claude", "commands", "rule.md"), "$ARGUMENTS", "Claude command"],
-  [join(fakeHome, ".gemini", "commands", "rule.toml"), "{{args}}", "Gemini custom command"],
-  [join(fakeProject, ".cursor", "commands", "rule.md"), "$ARGUMENTS", "Cursor project command"],
+  [join(piDir, "prompts", "rule-mcp.md"), "$ARGUMENTS", "Pi slash command"],
+  [join(fakeHome, ".claude", "commands", "rule-mcp.md"), "$ARGUMENTS", "Claude command"],
+  [join(fakeHome, ".gemini", "commands", "rule-mcp.toml"), "{{args}}", "Gemini custom command"],
+  [join(fakeProject, ".cursor", "commands", "rule-mcp.md"), "$ARGUMENTS", "Cursor project command"],
   [join(fakeHome, ".copilot", "agents", "rule-mcp.agent.md"), "rule-mcp", "Copilot custom agent"],
 ];
 
@@ -59,4 +59,4 @@ for (const [file, , label] of expectations) {
   assert.ok(!existsSync(file), `${label} must be removed during uninstall`);
 }
 
-console.log("  ✅ reusable rule command install/uninstall works for Pi, Claude, Gemini, Cursor, and Copilot");
+console.log("  ✅ reusable rule-mcp command install/uninstall works for Pi, Claude, Gemini, Cursor, and Copilot");

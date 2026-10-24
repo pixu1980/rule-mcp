@@ -3,7 +3,7 @@
 /**
  * PERF-5: the surfaces that used to leave uncompressed.
  *
- * Only router tool results went through the compressor. A `rule://` resource
+ * Only router tool results went through the compressor. A `rulemcp://` resource
  * body and a prompt body are the same thing from the model's side - prose the
  * server emits and the context pays for - and both left at full length. This
  * pins that they no longer do, that the guard still holds on them, and that
@@ -15,7 +15,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-surface-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-surface-"));
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 process.env.RULE_MCP_NO_CACHE = "1";
 delete process.env.RULE_MCP_NO_COMPRESSION;
@@ -39,8 +39,8 @@ const structure = (value) => ({
 
 test("a markdown resource body is compressed and booked as its own source", async () => {
   resetTokenStats();
-  const source = readSkill("rule-backend-node");
-  const served = await readResource("rule://rule-backend-node");
+  const source = readSkill("rule-mcp-backend-node");
+  const served = await readResource("rulemcp://rule-mcp-backend-node");
   const out = served.contents[0].text;
 
   assert.ok(out.length < source.length, `the body must lose its filler: ${source.length} -> ${out.length}`);
@@ -52,7 +52,7 @@ test("a markdown resource body is compressed and booked as its own source", asyn
 });
 
 test("a JSON resource body is data and is left alone", async () => {
-  const served = await readResource("rule://skills");
+  const served = await readResource("rulemcp://skills");
 
   assert.equal(served.contents[0].mimeType, "application/json");
   assert.doesNotThrow(() => JSON.parse(served.contents[0].text), "compressing a catalog would corrupt it");
@@ -64,7 +64,7 @@ test("a prompt body is compressed and booked as its own source", async () => {
   registerPromptHandlers({ setRequestHandler: (schema, handler) => handlers.set(schema.shape?.method?.value ?? handlers.size, handler) });
 
   const get = [...handlers.values()].at(-1);
-  const name = listPrompts().find((prompt) => prompt.name.startsWith("rule-area-")).name;
+  const name = listPrompts().find((prompt) => prompt.name.startsWith("rule-mcp-area-")).name;
   const before = getPrompt(name, {}).messages[0].content.text;
   const after = (await get({ params: { name } })).messages[0].content.text;
 

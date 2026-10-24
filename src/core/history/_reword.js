@@ -111,7 +111,7 @@ export function applyReword(projectDir, options = {}) {
 
   const original = git(projectDir, ["rev-parse", "HEAD"]);
   const beforeTree = git(projectDir, ["rev-parse", "HEAD^{tree}"]);
-  const directory = mkdtempSync(join(tmpdir(), "rule-reword-"));
+  const directory = mkdtempSync(join(tmpdir(), "rule-mcp-reword-"));
 
   try {
     const script = join(directory, "filter.mjs");

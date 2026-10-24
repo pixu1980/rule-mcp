@@ -11,7 +11,7 @@ The skill holds international business data rules: email, phone, VAT, tax IDs, p
 
 ## Decision
 
-Rename rule-styleguide-validation to rule-data-validation, change the tool to rule_tool_data_validation, move its rows from the styleguide tables into the data tables in rule and rule-data, update the personas that name it, the framework map in the guardrail registry, the tool-surface snapshot and the census, and broaden the data area description to include the shape and validation of the data that reaches the database.
+Rename rule-mcp-styleguide-validation to rule-mcp-data-validation, change the tool to rule_tool_data_validation, move its rows from the styleguide tables into the data tables in rule-mcp and rule-mcp-data, update the personas that name it, the framework map in the guardrail registry, the tool-surface snapshot and the census, and broaden the data area description to include the shape and validation of the data that reaches the database.
 
 ## Consequences
 

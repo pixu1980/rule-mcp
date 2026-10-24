@@ -5,7 +5,7 @@
 import { checkCodeGuarded } from "../../core/guardrails/index.js";
 import { extractScaffoldSection, extractSingleScaffoldFile } from "../../core/scaffold/_parser.js";
 
-/** mode=scaffold (rule-styleguide only): the scaffold section, or one file of it. */
+/** mode=scaffold (rule-mcp-styleguide only): the scaffold section, or one file of it. */
 export function scaffoldMode(content, arguments_) {
   const scaffoldSection = extractScaffoldSection(content);
 
@@ -57,13 +57,13 @@ export async function checkMode(skillName, arguments_) {
   }
 
   if (result.allPass) {
-    lines.push("✅ All guardrails pass. Code is rule-compliant.");
+    lines.push("✅ All guardrails pass. Code is rule-mcp-compliant.");
   }
 
   return {
     isError: !result.allPass,
     content: [{ type: "text", text: lines.join("\n") }],
-    _meta: { pixGuardrails: result },
+    _meta: { ruleGuardrails: result },
   };
 }
 
@@ -117,7 +117,7 @@ export async function tldrMode(skillName, displayName, query) {
       lines.push("## " + r.section + " _(score: " + r.score + ")", "", snippet, "");
     }
 
-    lines.push("---", "Full skill: call `pix_" + displayName + "` mode=full");
+    lines.push("---", "Full skill: call `rule_tool_" + displayName + "` mode=full");
 
     return { content: [{ type: "text", text: lines.join("\n") }] };
   }

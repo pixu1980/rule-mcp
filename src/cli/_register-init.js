@@ -3,7 +3,7 @@
 /**
  * The `init` command: prepare a project for this server.
  *
- * The same work as `rule_tool_init` and `/rule-init`, so the prompt, the tool
+ * The same work as `rule_tool_init` and `/rule-mcp-init`, so the prompt, the tool
  * and the shell cannot drift apart. The handler is imported inside the action:
  * `--help` renders the declarations, and a static import would put the whole
  * init pipeline on the help path.

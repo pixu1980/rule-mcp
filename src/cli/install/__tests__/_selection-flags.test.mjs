@@ -38,7 +38,7 @@ test("a comma-separated flag becomes a trimmed list", () => {
 });
 
 test("an array flag is taken as it is", () => {
-  assert.deepEqual(selectionOf({ skills: ["rule-styleguide-css"] }).skills, ["rule-styleguide-css"]);
+  assert.deepEqual(selectionOf({ skills: ["rule-mcp-styleguide-css"] }).skills, ["rule-mcp-styleguide-css"]);
 });
 
 test("a preset alone is a selection", () => {
@@ -55,13 +55,13 @@ test("a preset wins the argv on its own", () => {
 });
 
 test("families, areas and skills each contribute their flag", () => {
-  assert.deepEqual(selectionArgs({ families: ["areas", "tasks"], areas: ["frontend"], skills: ["rule-backend"] }), [
+  assert.deepEqual(selectionArgs({ families: ["areas", "tasks"], areas: ["frontend"], skills: ["rule-mcp-backend"] }), [
     "--families",
     "areas,tasks",
     "--areas",
     "frontend",
     "--skills",
-    "rule-backend",
+    "rule-mcp-backend",
   ]);
 });
 

@@ -45,7 +45,7 @@ export const COMMAND_TARGETS = [
     format: "args",
     scope: "global",
     // Pi is configured with toolPrefix "none", so its MCP prompts are already
-    // bare `/rule-*` - keep them and add the files.
+    // bare `/rule-mcp-*` - keep them and add the files.
     namespacedPrompts: false,
     detect: (ctx) => ctx.exists(ctx.env.PI_CODING_AGENT_DIR || join(ctx.home, ".pi", "agent")),
     dirs: (ctx) => [join(ctx.env.PI_CODING_AGENT_DIR || join(ctx.home, ".pi", "agent"), "prompts")],

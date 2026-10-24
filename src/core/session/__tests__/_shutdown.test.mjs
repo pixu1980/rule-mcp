@@ -46,7 +46,7 @@ test("serve shuts down on a signal", async (t) => {
     ["SIGINT", 130],
   ]) {
     const port = await reservePort();
-    const stateDir = mkdtempSync(join(tmpdir(), "rule-serve-signal-"));
+    const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-serve-signal-"));
     const child = spawn(process.execPath, [bin, "serve", "--transport", "http", "--port", String(port)], {
       cwd: root,
       stdio: ["ignore", "ignore", "pipe"],

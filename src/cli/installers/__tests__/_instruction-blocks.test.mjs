@@ -31,13 +31,14 @@ test("an install writes both blocks, each inside its own sentinels", () => {
 test("the rules name the tools this server registers", () => {
   const text = written();
 
-  for (const tool of ["pix_tool -", "rule_tool_process_adr", "rule_tool_handoff", "rule_tool_check"]) {
+  for (const tool of ["rule_tool -", "rule_tool_process_adr", "rule_tool_handoff", "rule_tool_check"]) {
     assert.ok(text.includes(tool), `the rules must reference ${tool}`);
   }
-  // The node block advertised a surface that does not exist: `pix_component`,
-  // `pix_check`, `pix_search`, `pix_scaffold`, `pix_process_adr`. Every tool
-  // is `pix_tool*`, so a bare `pix_` name is a name nothing answers to.
-  for (const absent of ["pix_component", "pix_check", "pix_search", "pix_scaffold", "pix_process_adr"]) {
+  // The node block advertised a surface that does not exist: `rule_tool_component`
+  // and `rule_tool_scaffold` were never registered. The names the server does
+  // answer to (`rule_tool_check`, `rule_tool_search`, `rule_tool_process_adr`)
+  // stay in the block above.
+  for (const absent of ["rule_tool_component", "rule_tool_scaffold"]) {
     assert.ok(!new RegExp(`(?<![A-Za-z0-9_])${absent}(?![A-Za-z0-9_])`).test(text), `${absent} is not a tool`);
   }
 });

@@ -5,7 +5,7 @@ Notes:`planned` Notes:`planned`. Outside the skills graph: this plan covers repo
 
 A sibling project shipped this set of installer and documentation changes on 2026-10-18. This plan
 replays it here, adapted to this repository's names (`rule-mcp`, `RULE_MCP_*`,
-`pix_process_adr`, `/rule-handoff`, `~/.rule-mcp/`). A port is a merge, not a copy: diff each
+`rule_tool_process_adr`, `/rule-mcp-handoff`, `~/.rule-mcp/`). A port is a merge, not a copy: diff each
 subsystem first and keep what this repository already does better.
 
 Rules for every step: tests first, Conventional Commits with a scope, never push, run the full
@@ -15,19 +15,19 @@ gates (`pnpm run ci`), and run the guardrail check on every changed file.
 
 Checked on `main` at `46f84e5a`:
 
-| Capability                                      | Here today                                                  |
-| ----------------------------------------------- | ----------------------------------------------------------- |
-| ADR policy (`full` / `handoff` / `on-demand`)   | absent: only `RULE_MCP_AUTO_ADR` / `DISABLE_AUTO_ADR` |
-| Pending ADRs numbered on landing                | absent (`docs/adr/_pending/` not used)                      |
-| Index merge driver, `post-merge`/`post-rewrite` | absent                                                      |
-| Install scope `project` for MCP configs         | absent (`--scope` exists for skills only)                   |
-| Feature toggles (`feature list/enable/disable`) | absent; switches are raw env vars                           |
-| Claude attribution switch                       | absent                                                      |
-| Path completion in the setup wizard             | absent                                                      |
-| Vendor-documented generic host paths            | partial: most hosts still use `~/.config/<name>/mcp.json`   |
-| JetBrains config                                | writes `.idea/mcp.json` into the cwd (undocumented path)    |
-| Project rules block refresh                     | absent                                                      |
-| Numbering doctor rename threshold               | `--follow` at git's 50% default (same bug)                  |
+| Capability                                      | Here today                                                |
+| ----------------------------------------------- | --------------------------------------------------------- |
+| ADR policy (`full` / `handoff` / `on-demand`)   | absent: only `RULE_MCP_AUTO_ADR` / `DISABLE_AUTO_ADR`     |
+| Pending ADRs numbered on landing                | absent (`docs/adr/_pending/` not used)                    |
+| Index merge driver, `post-merge`/`post-rewrite` | absent                                                    |
+| Install scope `project` for MCP configs         | absent (`--scope` exists for skills only)                 |
+| Feature toggles (`feature list/enable/disable`) | absent; switches are raw env vars                         |
+| Claude attribution switch                       | absent                                                    |
+| Path completion in the setup wizard             | absent                                                    |
+| Vendor-documented generic host paths            | partial: most hosts still use `~/.config/<name>/mcp.json` |
+| JetBrains config                                | writes `.idea/mcp.json` into the cwd (undocumented path)  |
+| Project rules block refresh                     | absent                                                    |
+| Numbering doctor rename threshold               | `--follow` at git's 50% default (same bug)                |
 
 ## Order
 
@@ -106,7 +106,7 @@ One table, read by install, uninstall and detection, so the three cannot disagre
      `~/.rule-mcp/config/env.json` -> default `handoff`.
    - `_rule.js`: `ADR_RULE` (static text for rules blocks and generated commands) and
      `adrRule(policy, { terse })` (for surfaces that run inside a project).
-2. `pix_process_adr` gains `category` and `moment` (`handoff` or `task`, default `task`) and
+2. `rule_tool_process_adr` gains `category` and `moment` (`handoff` or `task`, default `task`) and
    answers "Not written" with the rule when the policy does not allow the call.
 3. Replace every "record decisions without being asked" line (rules block, reminder, router
    follow-up, `ADR.md` footer, handoff body) with the policy rule.
@@ -119,7 +119,7 @@ One table, read by install, uninstall and detection, so the three cannot disagre
 
 ### Step 5 - ADR numbers given on landing
 
-1. Off the trunk, `pix_process_adr` writes `docs/adr/_pending/<slug>.md` and refers to it as
+1. Off the trunk, `rule_tool_process_adr` writes `docs/adr/_pending/<slug>.md` and refers to it as
    `ADR <slug>`.
 2. `src/core/docs/adr-pending/`:
    - `_list.js`: the pending ADRs, ordered by first add commit, ties by slug.
@@ -134,7 +134,7 @@ One table, read by install, uninstall and detection, so the three cannot disagre
    `.gitattributes` gets `docs/adr/ADR.md merge=<driver>` and `docs/handoff/HANDOFF.md merge=<driver>`.
 5. `src/core/git-hooks/`: plan -> apply -> remove for those hooks and the driver, idempotent (a
    second run is all "preserve"), private variant (`.git/info/attributes`) for local installs.
-6. `/rule-handoff`: run `handoff land --commit` before writing ADRs, then pass `moment: "handoff"`.
+6. `/rule-mcp-handoff`: run `handoff land --commit` before writing ADRs, then pass `moment: "handoff"`.
 7. Watch out: a squash gives every pending ADR the same add commit, so the landing order becomes
    alphabetical. Regenerate the index after a squash (`handoff doctor --fix`).
 8. Commit: `feat(adr): number pending ADRs when they land on the trunk`.
@@ -143,8 +143,8 @@ One table, read by install, uninstall and detection, so the three cannot disagre
 
 1. `src/core/runtime/features/_catalog.data.js`: each feature a list of levels (default first),
    each level the env keys it writes (`null` removes the key):
-   - `adr`: on, off (`NO_ADR`). Off removes `pix_process_adr`, `rule_tool_handoff`,
-     `rule_tool_handon`, `/rule-handoff`, `/rule-handon`, the rule line and the numbering hooks.
+   - `adr`: on, off (`NO_ADR`). Off removes `rule_tool_process_adr`, `rule_tool_handoff`,
+     `rule_tool_handon`, `/rule-mcp-handoff`, `/rule-mcp-handon`, the rule line and the numbering hooks.
    - `telemetry`: full, anonymous (no prompt text, machine id or client name), off.
    - `update`: auto, notify, off.
    - `tokensave`: on, autotrack (also `tokensave branch add`), off.
@@ -209,7 +209,7 @@ One table, read by install, uninstall and detection, so the three cannot disagre
    `setup --refresh-projects` and `setup --uninstall` walk it.
 7. `rule-mcp project add [path] [--project-config] [--agent]` copies the last recorded
    project's configuration; `project remove [path]` takes back every config and forgets it.
-   `/rule-init` adds its own project when the install is per project.
+   `/rule-mcp-init` adds its own project when the install is per project.
 8. Each project also gets the numbering hooks and merge driver from step 5.
 9. Wizard: a Scope step (global / project), a project list with the cwd offered, `p` to type a
    path, then a Project config step (shared / local).
@@ -289,7 +289,7 @@ rule-mcp setup --scope project --project /tmp/try --project-config shared --dry-
 rule-mcp handoff doctor
 ```
 
-Then `/rule-handoff close-feature` and hand the person the close command. Never push.
+Then `/rule-mcp-handoff close-feature` and hand the person the close command. Never push.
 
 ## Dependency graph
 

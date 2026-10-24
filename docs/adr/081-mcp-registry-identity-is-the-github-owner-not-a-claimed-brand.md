@@ -7,7 +7,7 @@
 
 ## Context
 
-OSS-3: server.json claimed the io.github.rule namespace while the GitHub owner is pixu1980. The MCP registry validates namespace ownership against the publishing account, so the file as written was unpublishable. Interview decision D9 settled the identity on the GitHub owner.
+OSS-3: server.json claimed the io.github.rule-mcp namespace while the GitHub owner is pixu1980. The MCP registry validates namespace ownership against the publishing account, so the file as written was unpublishable. Interview decision D9 settled the identity on the GitHub owner.
 
 ## Decision
 
@@ -24,4 +24,4 @@ The assumption this leans on, and the observation that would make it wrong.
 ## Alternatives Considered
 
 1. Publish now with the mcp-publisher CLI (rejected: needs the owner's authenticated login, unavailable in this session; owner action 8 stays open)
-1. Keep the io.github.rule namespace (rejected: unpublishable and claims a namespace the maintainer does not control)
+1. Keep the io.github.rule-mcp namespace (rejected: unpublishable and claims a namespace the maintainer does not control)

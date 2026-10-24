@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "description": "MCP server for the rule-* skill ecosystem",
+  "description": "MCP server for the rule-mcp-* skill ecosystem",
   "homepage": "https://github.com/pixu1980/rule-mcp",
   "license": "MIT",
   "architecture": {

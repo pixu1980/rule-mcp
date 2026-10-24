@@ -7,7 +7,7 @@
 
 ## Context
 
-The install offers one opt-in step, Bundled rule-* skills, that copies the catalog to ~/.agents/skills and ~/.claude/skills for hosts that read skills from disk (pi, Claude). DEFAULT_EXTRAS excludes it, so a default install writes no skills. What it also did was remove nothing: a machine that had the skills from an earlier run kept them, and the hosts kept discovering /skill:rule-* the user did not ask for. Separately, the uninstall skillsRemovalTask called `rule-mcp skills uninstall --dry-run`, an action the CLI never implemented, so the removal path failed silently in every flow. The catalog was installed by one step and owned by no step.
+The install offers one opt-in step, Bundled rule-mcp-* skills, that copies the catalog to ~/.agents/skills and ~/.claude/skills for hosts that read skills from disk (pi, Claude). DEFAULT_EXTRAS excludes it, so a default install writes no skills. What it also did was remove nothing: a machine that had the skills from an earlier run kept them, and the hosts kept discovering /skill:rule-mcp-* the user did not ask for. Separately, the uninstall skillsRemovalTask called `rule-mcp skills uninstall --dry-run`, an action the CLI never implemented, so the removal path failed silently in every flow. The catalog was installed by one step and owned by no step.
 
 ## Decision
 

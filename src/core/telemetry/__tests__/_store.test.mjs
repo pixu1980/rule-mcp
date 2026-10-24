@@ -16,7 +16,7 @@ seedEvents();
 const old = {
   ts: T0 - (RAW_RETENTION_DAYS + 2) * DAY,
   session: "old",
-  tool: "pix_tool",
+  tool: "rule_tool",
   durationMs: 5,
   ok: true,
   cacheHit: false,

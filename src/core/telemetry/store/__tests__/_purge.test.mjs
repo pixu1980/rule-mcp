@@ -12,7 +12,7 @@ const DAY_MS = 86_400_000;
 
 /** Point RULE_MCP_HOME at a fresh temp dir for one scenario. */
 function withHome(fn) {
-  return withHomePrefix(fn, "rule-purge-");
+  return withHomePrefix(fn, "rule-mcp-purge-");
 }
 
 test.after(() => {

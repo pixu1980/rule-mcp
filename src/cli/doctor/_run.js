@@ -53,7 +53,7 @@ export async function runDoctor(telemetry = false) {
 
   const { readdirSync } = await import("node:fs");
   try {
-    surface.skills = readdirSync(new URL("../../../skills", import.meta.url)).filter((d) => d.startsWith("rule-")).length;
+    surface.skills = readdirSync(new URL("../../../skills", import.meta.url)).filter((d) => d.startsWith("rule-mcp-")).length;
   } catch {
     /* no skills dir next to the module (installed elsewhere) */
   }

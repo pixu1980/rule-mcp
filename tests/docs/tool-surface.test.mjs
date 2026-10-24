@@ -51,9 +51,9 @@ test("the handbook quotes the surface the server serves", () => {
   // is an action tool. Reimplemented here rather than imported so this test
   // fails when the derivation drifts, instead of agreeing with it.
   const catalog = readdirSync(`${root}skills`, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && entry.name.startsWith("rule-"))
+    .filter((entry) => entry.isDirectory() && entry.name.startsWith("rule-mcp-"))
     .map((entry) => entry.name);
-  const skillToolNames = new Set(catalog.map((name) => `rule_tool_${name.slice("rule-".length).replaceAll("-", "_")}`));
+  const skillToolNames = new Set(catalog.map((name) => `rule_tool_${name.slice("rule-mcp-".length).replaceAll("-", "_")}`));
   const actionTools = liveTools().filter((name) => !skillToolNames.has(name));
   const handbook = readFileSync(`${root}docs/10-tools.md`, "utf8");
   const quoted = handbook.match(/## Action tools \((\d+)\)/);

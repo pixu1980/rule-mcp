@@ -2,7 +2,7 @@
 
 /**
  * In-memory receipt store (cleared on server restart).
- * Maps receipt token → { codeHash, binding, skillName, allPass, expiresAt }
+ * Maps receipt token -> { codeHash, binding, skillName, allPass, expiresAt }
  *
  * `binding` records WHAT the receipt proves:
  *   - "content" - a hash of the checked code, no destination bound

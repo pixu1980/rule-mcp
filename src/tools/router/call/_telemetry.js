@@ -63,7 +63,7 @@ export function recordFailure({ tool, args, startedAt, core }) {
     mode: args?.mode,
     argsBytes: argsBytes(args),
     resultBytes: textBytes(core),
-    guardrailFailures: core?._meta?.pixGuardrails?.failCount,
+    guardrailFailures: core?._meta?.ruleGuardrails?.failCount,
     guardrailRules: guardrailRulesOf(core),
   });
 }

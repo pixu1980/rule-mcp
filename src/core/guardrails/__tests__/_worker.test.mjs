@@ -19,7 +19,7 @@ const { checkCodeGuarded, shutdownGuardrailWorker } = await import("../../../../
 await import("./_install.fixture.mjs");
 
 test("a normal check answers like the inline engine", async () => {
-  const result = await checkCodeGuarded("rule-styleguide-css", "a { color: red; }", { fileName: "a.css" });
+  const result = await checkCodeGuarded("rule-mcp-styleguide-css", "a { color: red; }", { fileName: "a.css" });
   assert.equal(typeof result.allPass, "boolean");
   assert.ok(result.total > 0);
   assert.equal(result.aborted, undefined);
@@ -30,7 +30,7 @@ test("a runaway check is aborted at the budget and the next call answers", async
   process.env.RULE_MCP_TEST_SLOW_CHECK_MS = "60000";
   try {
     const started = performance.now();
-    const aborted = await checkCodeGuarded("rule-styleguide-css", "a { color: red; }", { fileName: "a.css" }, { timeoutMs: 500 });
+    const aborted = await checkCodeGuarded("rule-mcp-styleguide-css", "a { color: red; }", { fileName: "a.css" }, { timeoutMs: 500 });
     const elapsed = performance.now() - started;
     assert.equal(aborted.aborted, true, "the runaway check must be aborted");
     assert.equal(aborted.allPass, false);
@@ -40,7 +40,7 @@ test("a runaway check is aborted at the budget and the next call answers", async
   } finally {
     delete process.env.RULE_MCP_TEST_SLOW_CHECK_MS;
   }
-  const next = await checkCodeGuarded("rule-styleguide-css", "a { color: red; }", { fileName: "a.css" });
+  const next = await checkCodeGuarded("rule-mcp-styleguide-css", "a { color: red; }", { fileName: "a.css" });
   assert.equal(typeof next.allPass, "boolean", "the daemon answers the next call after an abort");
   assert.equal(next.aborted, undefined);
   await shutdownGuardrailWorker();

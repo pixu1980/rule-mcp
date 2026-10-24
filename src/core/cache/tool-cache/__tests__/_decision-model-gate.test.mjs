@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-decision-model-gate-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-decision-model-gate-"));
 
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_DECISION_MODEL = "julia";
@@ -26,9 +26,9 @@ test.after(() => {
 
 test("the multilingual model is excluded from the cache gate", async () => {
   cacheClear();
-  cacheStore("pix_tool", { prompt: "create a react button component" }, { content: [{ type: "text", text: JSON.stringify({ route: "rule-frontend-react" }) }] }, {});
+  cacheStore("rule_tool", { prompt: "create a react button component" }, { content: [{ type: "text", text: JSON.stringify({ route: "rule-mcp-frontend-react" }) }] }, {});
 
-  const evaluated = await evaluateDecision("pix_tool", { prompt: "create a react form component" });
+  const evaluated = await evaluateDecision("rule_tool", { prompt: "create a react form component" });
 
   assert.equal(evaluated, null);
 });

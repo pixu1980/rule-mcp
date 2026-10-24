@@ -16,7 +16,7 @@ test("compression removes something measurable from real tool results", () => {
 });
 
 test("prose compresses and data is left alone", () => {
-  const router = results.find((item) => item.name === "pix_tool");
+  const router = results.find((item) => item.name === "rule_tool");
   assert.equal(text(router.compressed), text(router.core), "the router answers in JSON: compressing it would corrupt the payload");
 
   const skill = results.find((item) => item.name === "rule_tool_backend_node");

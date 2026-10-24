@@ -4,7 +4,7 @@
 import { join } from "node:path";
 
 /**
- * Convert PascalCase to kebab-case (e.g. MyButton → my-button).
+ * Convert PascalCase to kebab-case (e.g. MyButton -> my-button).
  * @param {string} name
  * @returns {string}
  */
@@ -16,7 +16,7 @@ function toKebab(name) {
 }
 
 /**
- * Generate the full file tree for a component following rule AI conventions.
+ * Generate the full file tree for a component following rule-mcp AI conventions.
  * Returns an array of { path, content } objects.
  *
  * @param {object} options

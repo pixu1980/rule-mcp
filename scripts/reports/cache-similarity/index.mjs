@@ -54,7 +54,7 @@ const { jaccard, terms, variants } = await import("./_similarity.mjs");
 
 /** @param {string} prompt @returns {Promise<string>} */
 async function routeOf(prompt) {
-  return JSON.parse((await callTool("pix_tool", { prompt })).content[0].text).route;
+  return JSON.parse((await callTool("rule_tool", { prompt })).content[0].text).route;
 }
 
 const stored = [];

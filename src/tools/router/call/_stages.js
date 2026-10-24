@@ -18,8 +18,8 @@ import { runAfterHooks } from "./_after.js";
  * @returns {{ isError?: boolean, content: Array<{ type: string, text: string }> }}
  */
 function replayCached(cached, name, validated, startedAt) {
-  const pixCache = { tier: cached.tier, ...cached.meta };
-  const replay = { ...cached.result, _meta: { ...cached.result._meta, pixCache } };
+  const ruleCache = { tier: cached.tier, ...cached.meta };
+  const replay = { ...cached.result, _meta: { ...cached.result._meta, ruleCache } };
   const { final, compressionSaved, reminderTokens } = finalize(name, replay);
 
   recordHit({ tool: name, args: validated, startedAt, cached, final, compressionSaved, reminderTokens });
@@ -96,7 +96,7 @@ export function storeAndFinalize(name, processedArguments, core, startedAt) {
       compressionSaved,
       reminderTokens,
       estimatedRouting: estimateRoutingSaving(name, core, final),
-      guardrailFailures: core?._meta?.pixGuardrails?.failCount,
+      guardrailFailures: core?._meta?.ruleGuardrails?.failCount,
       guardrailRules: guardrailRulesOf(core),
     });
     runAfterHooks(name, processedArguments, final);

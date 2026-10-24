@@ -6,7 +6,7 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 /** The committed file. One name, so a reader always knows what they are looking at. */
-export const CATALOG_FILE = "rule-catalog.json";
+export const CATALOG_FILE = "rule-mcp-catalog.json";
 
 /** The format this module writes. Bumped when the shape changes, not the contents. */
 export const CATALOG_VERSION = 1;

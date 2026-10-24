@@ -22,7 +22,7 @@ import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-export const stateDir = mkdtempSync(join(tmpdir(), "rule-tiers-"));
+export const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-tiers-"));
 process.env.RULE_MCP_STATE_DIR = stateDir;
 delete process.env.RULE_MCP_NO_CACHE;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";

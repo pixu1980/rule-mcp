@@ -9,7 +9,7 @@ import { test } from "node:test";
 
 import { validateAgentConfigs } from "../_detect-agents.js";
 
-const home = mkdtempSync(join(tmpdir(), "rule-detect-agents-branches-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-detect-agents-branches-"));
 
 test.after(() => rmSync(home, { recursive: true, force: true }));
 

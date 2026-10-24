@@ -24,7 +24,7 @@ const GENERIC = (overrides = {}) => ({
 
 test("renderFlight renders the tables, the redaction note and the model sentence", () => {
   const out = renderFlight(GENERIC());
-  assert.match(out, /# rule flight: s-1/, "the flight name renders");
+  assert.match(out, /# rule-mcp flight: s-1/, "the flight name renders");
   assert.doesNotMatch(out, /Redacted export/, "a normal flight has no redaction note");
   assert.match(out, /## MCP token footprint/, "the footprint block renders");
   assert.match(out, /estimatedRouting|Routing estimate/, "the routing estimate renders");

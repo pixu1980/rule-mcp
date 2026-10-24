@@ -5,7 +5,7 @@
  *
  * The rule says the fields must not be there; the write path says what happens
  * when a model writes them anyway. The strip is surgical - it parses the
- * manifest, deletes the three fields, and re-serialises with the indentation
+ * manifest, deletes the three fields, and re-serializes with the indentation
  * the file already used - so everything around them survives byte for byte.
  */
 import { strict as assert } from "node:assert";

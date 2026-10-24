@@ -86,7 +86,7 @@ test("applying regenerates the ADR index instead of patching its links", () => {
 });
 
 test("a missing ADR index is created, not just refreshed", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-doctor-no-index-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-no-index-"));
 
   try {
     mkdirSync(join(root, "docs", "adr"), { recursive: true });

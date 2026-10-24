@@ -13,7 +13,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-apply-state-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-apply-state-"));
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 
 const { registerApplyTool } = await import("../_tool.js");
@@ -24,7 +24,7 @@ await registerApplyTool();
 
 /** A scratch directory that reads as a project root. */
 function project() {
-  const root = mkdtempSync(join(tmpdir(), "rule-apply-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-apply-"));
   writeFileSync(join(root, "package.json"), JSON.stringify({ name: "probe" }));
   mkdirSync(join(root, "src"), { recursive: true });
 
@@ -35,7 +35,7 @@ function project() {
 const text = (result) => result.content.map((part) => part.text).join("\n");
 
 /** A receipt that authorizes writing exactly these files. */
-const receiptFor = (files) => issueFilesReceipt(files, "rule-styleguide-javascript", true);
+const receiptFor = (files) => issueFilesReceipt(files, "rule-mcp-styleguide-javascript", true);
 
 test("a project root that is not one is rejected before anything else", async () => {
   const files = [{ path: "src/_Probe.js", content: "export const probe = 1;\n" }];
@@ -43,7 +43,7 @@ test("a project root that is not one is rejected before anything else", async ()
 
   assert.equal(result.isError, true, "the filesystem root is not a project");
   assert.match(text(result), /root REJECTED/i, "the refusal names the gate that fired");
-  assert.equal(result._meta.pixApply.filesWritten, 0, "nothing is written when the root is refused");
+  assert.equal(result._meta.ruleApply.filesWritten, 0, "nothing is written when the root is refused");
 });
 
 test("a receipt that does not cover the files is rejected", async () => {
@@ -54,7 +54,7 @@ test("a receipt that does not cover the files is rejected", async () => {
     const missing = await callTool("rule_tool_apply", { files, receipt: "not-a-receipt", path: root, dryRun: false });
     assert.equal(missing.isError, true, "an invented receipt is refused");
     assert.match(text(missing), /Receipt validation FAILED/i);
-    assert.equal(missing._meta.pixApply.receiptValid, false);
+    assert.equal(missing._meta.ruleApply.receiptValid, false);
 
     const tampered = [{ path: "src/_Probe.js", content: "export const probe = 2;\n" }];
     const stale = await callTool("rule_tool_apply", { files: tampered, receipt: receiptFor(files), path: root, dryRun: false });
@@ -74,7 +74,7 @@ test("a path that escapes the project is rejected after the receipt passes", asy
 
     assert.equal(result.isError, true, "an escaping path is refused");
     assert.match(text(result), /Path validation FAILED/i);
-    assert.equal(result._meta.pixApply.receiptValid, true, "the receipt was valid; the destination was not");
+    assert.equal(result._meta.ruleApply.receiptValid, true, "the receipt was valid; the destination was not");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

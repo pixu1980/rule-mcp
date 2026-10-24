@@ -7,7 +7,7 @@
 
 ## Context
 
-Closing a feature with `/rule-handoff --close-feature --squash` left the feature's ADRs and handoff documents as their own commits - `docs(adr): ...` and `chore(handoff): ...` - so the "single commit for the feature" existed only for the code. The developer wants the close to fold those documents too, verify which commits are involved, and rewrite the result coherently without losing any detail. The server must not decide the boundary semantically, and must not lose a decision in a synthesized summary.
+Closing a feature with `/rule-mcp-handoff --close-feature --squash` left the feature's ADRs and handoff documents as their own commits - `docs(adr): ...` and `chore(handoff): ...` - so the "single commit for the feature" existed only for the code. The developer wants the close to fold those documents too, verify which commits are involved, and rewrite the result coherently without losing any detail. The server must not decide the boundary semantically, and must not lose a decision in a synthesized summary.
 
 ## Decision
 

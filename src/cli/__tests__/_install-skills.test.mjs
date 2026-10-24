@@ -15,14 +15,14 @@ import { spawnSync } from "node:child_process";
 
 const root = resolve(import.meta.dirname, "../../..");
 const packageJson = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
-const testHome = join(tmpdir(), `rule-skills-install-${process.pid}`);
+const testHome = join(tmpdir(), `rule-mcp-skills-install-${process.pid}`);
 const target = join(testHome, ".agents", "skills");
 
 console.log("global skills installer test");
 
 try {
-  mkdirSync(join(target, "rule"), { recursive: true });
-  writeFileSync(join(target, "rule", "stale.txt"), "remove me");
+  mkdirSync(join(target, "rule-mcp"), { recursive: true });
+  writeFileSync(join(target, "rule-mcp", "stale.txt"), "remove me");
   mkdirSync(join(target, "custom-skill"), { recursive: true });
   writeFileSync(join(target, "custom-skill", "SKILL.md"), "custom");
 
@@ -51,7 +51,7 @@ try {
     assert.ok(existsSync(join(target, skill, "SKILL.md")), `${skill} was not installed`);
   }
 
-  assert.ok(!existsSync(join(target, "rule", "stale.txt")), "existing bundled skill must be replaced cleanly");
+  assert.ok(!existsSync(join(target, "rule-mcp", "stale.txt")), "existing bundled skill must be replaced cleanly");
   assert.ok(existsSync(join(target, "custom-skill", "SKILL.md")), "unrelated custom skills must be preserved");
   assert.ok(result.stdout.includes(`Installed ${sourceSkills.length} skills`), "installer must report the installed count");
   assert.ok(result.stdout.includes(target), "installer must report the global destination");

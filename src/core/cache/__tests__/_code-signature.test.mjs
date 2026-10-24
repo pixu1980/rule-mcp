@@ -15,7 +15,7 @@ test("the cache key moves when the server's code changes", async () => {
   // computed before the code under test existed and reported green.
   const { cacheKey } = await import("../tool-cache/index.js");
   const { codeSignature } = await import("../_code-signature.js");
-  const before = cacheKey("pix_tool", { prompt: "same question" });
+  const before = cacheKey("rule_tool", { prompt: "same question" });
   const signature = codeSignature();
 
   assert.match(signature, /^[0-9a-f]{8,}$/, "the signature is a short digest, not a path or a date");

@@ -7,7 +7,7 @@
  * Produce labeled samples for the L3 gate from a local paraphrase corpus.
  *
  * The run lives in `_run.mjs`: it computes each prompt's gold route with the
- * live `pix_tool`, seeds the cache, and writes the same shadow records a live
+ * live `rule_tool`, seeds the cache, and writes the same shadow records a live
  * call would write. This file pins the environment, runs it, and prints the
  * report path. The state directory is dedicated and printed.
  *
@@ -35,7 +35,7 @@ if (flag("--help")) {
 const model = value("--model", "laya");
 const limit = Number(value("--limit", "0"));
 const asJson = flag("--json");
-const stateDir = value("--state-dir", mkdtempSync(join(tmpdir(), "rule-decision-cache-")));
+const stateDir = value("--state-dir", mkdtempSync(join(tmpdir(), "rule-mcp-decision-cache-")));
 
 if (!Number.isInteger(limit) || limit < 0) {
   console.error("--limit must be 0 (all) or a positive integer");

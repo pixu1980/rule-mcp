@@ -22,7 +22,7 @@ import { getSkillNames } from "../../tools/router/index.js";
 /** The presets, plus the way out of the one-screen case. */
 export function surfacePresetItems() {
   const skills = getSkillNames();
-  const hubs = skills.filter((name) => name.split("-").length === 2).length;
+  const hubs = skills.filter((name) => name.split("-").length === 3).length;
 
   return [
     { id: "full", label: `Full (${skills.length} skill tools + utilities)`, detail: ["Every skill tool, for whoever bills tokens by the value."] },
@@ -37,7 +37,7 @@ export function surfaceAreaItems() {
   const skills = getSkillNames();
 
   return areasOfSkills(skills).map((area) => {
-    const members = skills.filter((name) => name === `rule-${area}` || name.startsWith(`rule-${area}-`));
+    const members = skills.filter((name) => name === `rule-mcp-${area}` || name.startsWith(`rule-mcp-${area}-`));
 
     return { id: area, label: `${area} (${members.length} skills)`, detail: [`The ${area} hub and its ${members.length - 1} member skills.`] };
   });
@@ -45,9 +45,9 @@ export function surfaceAreaItems() {
 
 /** The skills of the chosen areas, hub rows first. */
 export function surfaceSkillItems(areas) {
-  const skills = getSkillNames().filter((name) => areas.includes(name.split("-", 2)[1]));
+  const skills = getSkillNames().filter((name) => areas.includes(name.split("-", 3)[2]));
 
-  return skills.map((name) => ({ id: name, label: name, detail: name.split("-").length === 2 ? ["Area hub: kept either way."] : ["Member skill tool."] }));
+  return skills.map((name) => ({ id: name, label: name, detail: name.split("-").length === 3 ? ["Area hub: kept either way."] : ["Member skill tool."] }));
 }
 
 /**

@@ -19,26 +19,26 @@ test("hubs-only drops leaf area commands but keeps the hub", () => {
 
   assert.deepEqual(problems, []);
   assert.ok(commands.includes(ROUTER_COMMAND));
-  assert.ok(commands.some((name) => name.startsWith("rule-area-")));
-  assert.ok(commands.every((name) => name === ROUTER_COMMAND || name.startsWith("rule-area-")));
+  assert.ok(commands.some((name) => name.startsWith("rule-mcp-area-")));
+  assert.ok(commands.every((name) => name === ROUTER_COMMAND || name.startsWith("rule-mcp-area-")));
 });
 
 test("a skill filter keeps matching leaves when hubsOnly is off", () => {
   const { commands } = resolveSelection({
     families: ["areas"],
     hubsOnly: false,
-    skills: ["rule-frontend-react"],
+    skills: ["rule-mcp-frontend-react"],
   });
 
   assert.ok(commands.includes(ROUTER_COMMAND));
-  assert.ok(commands.some((name) => name.includes("frontend") || name.startsWith("rule-area-")));
+  assert.ok(commands.some((name) => name.includes("frontend") || name.startsWith("rule-mcp-area-")));
 });
 
 test("an unknown area and skill are reported", () => {
   const { problems } = resolveSelection({
     families: ["areas"],
     areas: ["no-such-area"],
-    skills: ["rule-no-such-skill"],
+    skills: ["rule-mcp-no-such-skill"],
   });
 
   assert.ok(problems.some((line) => /unknown area/u.test(line)));

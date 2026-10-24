@@ -45,7 +45,7 @@ function goldRoute(response) {
 async function gold(prompt) {
   cacheClear();
   const startedAt = Date.now();
-  const response = await callTool("pix_tool", { prompt });
+  const response = await callTool("rule_tool", { prompt });
 
   return { route: goldRoute(response), ms: Date.now() - startedAt };
 }
@@ -104,13 +104,13 @@ export async function runCorpus({ model, limit }) {
           continue;
         }
 
-        cacheStore("pix_tool", { prompt: seed.prompt }, { content: [{ type: "text", text: JSON.stringify({ route }) }] }, {});
+        cacheStore("rule_tool", { prompt: seed.prompt }, { content: [{ type: "text", text: JSON.stringify({ route }) }] }, {});
       }
 
       const oracle = goldByPrompt.get(sample.prompt);
       const core = { content: [{ type: "text", text: JSON.stringify({ route: oracle.route ?? "none" }) }] };
 
-      await observeDecisionShadow("pix_tool", { prompt: sample.prompt }, { core, computeMs: oracle.ms });
+      await observeDecisionShadow("rule_tool", { prompt: sample.prompt }, { core, computeMs: oracle.ms });
       await waitForDecisionShadows();
     }
 

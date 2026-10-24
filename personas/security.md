@@ -10,8 +10,8 @@ skills:
   - "MCP and agent security"
   - "input hardening"
 evidenceSkills:
-  - "rule-backend-security"
-  - "rule-data-validation"
+  - "rule-mcp-backend-security"
+  - "rule-mcp-data-validation"
 aliases:
   - "security engineer"
   - "ingegnere della sicurezza"

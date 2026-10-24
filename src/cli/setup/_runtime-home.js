@@ -30,8 +30,8 @@ const COMPILE_CACHE_DIR = join(homedir(), ".cache", "rule-mcp", "compile-cache")
 /** Also `cli/installers/_env.js`: the switches file and the stored model keys. */
 const ENV_CONFIG_DIR = join(homedir(), ".config", "rule-mcp");
 
-/** Former `pixGalaxyHome()` - now the rule-mcp runtime root. */
-const pixGalaxyHome = () => getRuntimePaths().homeDir;
+/** Former `ruleGalaxyHome()` - now the rule-mcp runtime root. */
+const ruleGalaxyHome = () => getRuntimePaths().homeDir;
 
 /** Subdirectories the runtime expects to find under the home root. */
 const SUBDIRS = ["state", "data", "projects", "config"];
@@ -60,7 +60,7 @@ export function countFiles(dir) {
  * @returns {{ homeDir: string, dirs: string[], status: "created"|"planned", settings: "written"|"kept"|"planned" }}
  */
 export function ensureRuntimeHome({ dryRun = false } = {}) {
-  const homeDir = pixGalaxyHome();
+  const homeDir = ruleGalaxyHome();
   const dirs = SUBDIRS.map((name) => join(homeDir, name));
 
   if (dryRun) {
@@ -88,7 +88,7 @@ export function purgeTargets() {
     {
       id: "runtime-home",
       label: "Runtime home (state, data, projects, config)",
-      dir: pixGalaxyHome(),
+      dir: ruleGalaxyHome(),
     },
     { id: "compile-cache", label: "Compiled-code cache", dir: COMPILE_CACHE_DIR },
     // A purge that took the runtime home and left this behind is what made

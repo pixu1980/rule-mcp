@@ -7,7 +7,7 @@
 
 ## Context
 
-`docs/plans/plan-of-plans-reference.md` was the audit that asked whether the plan graph allowed a linear implementation. It is `Status: done`, but it still carries eight follow-ups: F1 (apply the contract stage by stage), F2 (the Stage 3 order), F3 (the toolchain additions), F4 (one id per node), F5 (the five-line format), F8 (normalise the status line per stage), F9 (exempt the non-skill plans from the checkbox assertion) and the per-stage node list. The plan-graph review, `docs/reviews/plan-graph.md`, is the historical audit; the `plan-graph` role is already in `HISTORICAL_ROLES`.
+`docs/plans/plan-of-plans-reference.md` was the audit that asked whether the plan graph allowed a linear implementation. It is `Status: done`, but it still carries eight follow-ups: F1 (apply the contract stage by stage), F2 (the Stage 3 order), F3 (the toolchain additions), F4 (one id per node), F5 (the five-line format), F8 (normalize the status line per stage), F9 (exempt the non-skill plans from the checkbox assertion) and the per-stage node list. The plan-graph review, `docs/reviews/plan-graph.md`, is the historical audit; the `plan-graph` role is already in `HISTORICAL_ROLES`.
 
 ## Decision
 

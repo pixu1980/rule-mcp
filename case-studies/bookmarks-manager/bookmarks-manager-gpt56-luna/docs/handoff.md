@@ -1,4 +1,4 @@
-# Luma Bookmarks — session handoff
+# Luma Bookmarks, session handoff
 
 **Closed:** 2026-07-11 17:00 UTC  
 **Version:** 0.1.0
@@ -6,7 +6,7 @@
 ## Delivered
 
 - pnpm workspace with `apps/web` React/Vite/TypeScript and `apps/api` Express/TypeScript.
-- Primary paste-link flow: zod + React Hook Form validation → API scrape → metadata/text preview → explicit save.
+- Primary paste-link flow: zod + React Hook Form validation -> API scrape -> metadata/text preview -> explicit save.
 - Open Graph/Twitter title, description, image extraction and accessible image rendering; Mozilla Readability preview.
 - SSRF baseline: HTTP(S)-only, local/private IPv4/IPv6 rejection, 8s timeout, 2 MB HTML cap, HTML content-type guard.
 - Versioned JSON API: `GET /health`, `GET /api/v1/bookmarks`, `POST /api/v1/bookmarks/preview`, `POST /api/v1/bookmarks`.

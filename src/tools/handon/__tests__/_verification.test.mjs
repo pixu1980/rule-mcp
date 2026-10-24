@@ -61,7 +61,7 @@ test("lines groups files and adrs by verdict and renders the other kinds", () =>
 });
 
 test("verifyBranch reads the checkout, the trunks and the merges", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-handon-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-handon-"));
   git(["init", "--quiet", "--initial-branch=main"], root);
   git(["config", "user.email", "t@t.t"], root);
   git(["config", "user.name", "t"], root);
@@ -83,7 +83,7 @@ test("verifyBranch reads the checkout, the trunks and the merges", () => {
 });
 
 test("isAncestor answers by exit code", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-handon-anc-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-handon-anc-"));
   git(["init", "--quiet", "--initial-branch=main"], root);
   git(["config", "user.email", "t@t.t"], root);
   git(["config", "user.name", "t"], root);
@@ -102,7 +102,7 @@ test("isAncestor answers by exit code", () => {
 });
 
 test("verifyAdr reads the status from the numbered file", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-handon-adr-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-handon-adr-"));
   mkdirSync(join(root, "docs", "adr"), { recursive: true });
   writeFileSync(join(root, "docs", "adr", "001-first.md"), "# 001\n\n- **Status**: proposed\n");
   writeFileSync(join(root, "docs", "adr", "002-second.md"), "# 002\n\n- **Status**: accepted\n");

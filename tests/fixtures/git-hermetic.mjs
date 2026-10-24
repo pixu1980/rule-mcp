@@ -25,7 +25,7 @@ import { mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const HOME = mkdtempSync(join(tmpdir(), "rule-git-home-"));
+const HOME = mkdtempSync(join(tmpdir(), "rule-mcp-git-home-"));
 
 /** The empty config file every hermetic fixture points `GIT_CONFIG_GLOBAL` at. */
 export const HERMETIC_CONFIG = join(HOME, "gitconfig");

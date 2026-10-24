@@ -64,7 +64,7 @@ export function registerCompressTool() {
     description:
       "Sole compression engine (ADR 115): preprocess enriched prompts/contexts and postprocess model prose. " +
       "Strip filler and leading articles, replace typographic characters with ASCII, convert British spelling " +
-      "to American. Code, inline spans, URLs and JSON are never touched. Prefer /rule-compress.",
+      "to American. Code, inline spans, URLs and JSON are never touched. Prefer /rule-mcp-compress.",
     zodSchema: CompressSchema,
     handler: async (arguments_) => {
       const { text, mode = "both", fileName } = arguments_;
@@ -77,7 +77,7 @@ export function registerCompressTool() {
           `That name looks like a secret (.env, credentials, a key, or a path under .ssh). ` +
           `Compression rewrites text and reports what it removed - neither belongs anywhere near a credential.`;
 
-        return { isError: true, content: [{ type: "text", text: refusal }], _meta: { pixCompress: { mode, refused: "sensitive-file-name" } } };
+        return { isError: true, content: [{ type: "text", text: refusal }], _meta: { ruleCompress: { mode, refused: "sensitive-file-name" } } };
       }
 
       const candidate = compress(text, mode);
@@ -91,7 +91,7 @@ export function registerCompressTool() {
 
       return {
         content: [{ type: "text", text: out }],
-        _meta: { pixCompress: { mode, beforeTokens: before, afterTokens: after, saved, percent, guarded: verdict.ok, violations } },
+        _meta: { ruleCompress: { mode, beforeTokens: before, afterTokens: after, saved, percent, guarded: verdict.ok, violations } },
       };
     },
   });

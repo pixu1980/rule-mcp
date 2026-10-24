@@ -88,13 +88,13 @@ export function scanInstallation() {
     {
       id: "commands",
       label: "Agent slash commands",
-      detail: "remove the rule-* command files",
+      detail: "remove the rule-mcp-* command files",
       count: commands.reduce((total, entry) => total + entry.files.length, 0),
       items: commands.map((entry) => `${entry.files.length} in ${entry.dir}`),
     },
     {
       id: "skills",
-      label: "Bundled rule-* skills",
+      label: "Bundled rule-mcp-* skills",
       detail: "delete the copied catalog directories",
       count: skills.reduce((total, entry) => total + entry.removed.length, 0),
       items: skills.map((entry) => `${entry.removed.length} in ${entry.dir}`),

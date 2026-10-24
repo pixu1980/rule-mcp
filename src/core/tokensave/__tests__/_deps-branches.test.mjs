@@ -10,7 +10,7 @@ import { test } from "node:test";
 import { projectManifest, readManifest } from "../_deps.js";
 
 test("a malformed manifest reads as no manifest", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-deps-branches-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-deps-branches-"));
 
   writeFileSync(join(root, "package.json"), "{not json");
 
@@ -18,7 +18,7 @@ test("a malformed manifest reads as no manifest", () => {
 });
 
 test("an unreadable path that is not a missing file is rethrown", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-deps-branches-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-deps-branches-"));
 
   mkdirSync(join(root, "package.json"));
 
@@ -26,7 +26,7 @@ test("an unreadable path that is not a missing file is rethrown", () => {
 });
 
 test("TokenSave config answers each key and defaults the missing ones", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-deps-branches-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-deps-branches-"));
   const values = { name: "app", dependencies: { a: "1" }, devDependencies: null, "engines.node": null };
 
   const manifest = projectManifest(root, {
@@ -38,7 +38,7 @@ test("TokenSave config answers each key and defaults the missing ones", () => {
 });
 
 test("four null answers fall back to package.json", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-deps-branches-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-deps-branches-"));
 
   writeFileSync(join(root, "package.json"), JSON.stringify({ name: "from-file" }));
 
@@ -51,7 +51,7 @@ test("four null answers fall back to package.json", () => {
 });
 
 test("no graph reads package.json directly", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-deps-branches-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-deps-branches-"));
 
   writeFileSync(join(root, "package.json"), JSON.stringify({ name: "direct", dependencies: { b: "2" } }));
 

@@ -21,7 +21,7 @@ function write(path, content) {
 
 /** Point RULE_MCP_HOME at a fresh temp dir for one scenario. */
 function withHome(fn) {
-  return withHomePrefix(fn, "rule-store-");
+  return withHomePrefix(fn, "rule-mcp-store-");
 }
 
 test.after(() => {
@@ -51,7 +51,7 @@ test("rollup returns zero days with no events and skips today's events", () => {
     assert.deepEqual(rollup({ now: NOW }), { days: 0 }, "no events means no days");
     assert.deepEqual(rollup(), { days: 0 }, "the now option defaults to the clock");
 
-    write(eventsFile(), [JSON.stringify({ tool: "pix_tool", ts: NOW + 1000 }), JSON.stringify({ tool: "pix_tool" }), ""].join("\n"));
+    write(eventsFile(), [JSON.stringify({ tool: "rule_tool", ts: NOW + 1000 }), JSON.stringify({ tool: "rule_tool" }), ""].join("\n"));
     assert.deepEqual(rollup({ now: NOW + 2000 }), { days: 0 }, "today's and timestamp-less events are still accumulating");
   });
 });

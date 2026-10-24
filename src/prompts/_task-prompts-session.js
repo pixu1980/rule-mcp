@@ -19,7 +19,7 @@
  */
 export function sessionTaskPrompt(name, args, user) {
   switch (name) {
-    case "rule-git": {
+    case "rule-mcp-git": {
       return {
         name,
         description: "Audit and normalize the feature history",
@@ -45,7 +45,7 @@ export function sessionTaskPrompt(name, args, user) {
       };
     }
 
-    case "rule-compress": {
+    case "rule-mcp-compress": {
       return {
         name,
         description: "Compress prose / preprocess prompt text via rule_tool_compress",
@@ -65,7 +65,7 @@ export function sessionTaskPrompt(name, args, user) {
       };
     }
 
-    case "rule-stats": {
+    case "rule-mcp-stats": {
       return {
         name,
         description: "Read local telemetry via rule_tool_stats",
@@ -80,7 +80,7 @@ export function sessionTaskPrompt(name, args, user) {
       };
     }
 
-    case "rule-usage": {
+    case "rule-mcp-usage": {
       return {
         name,
         description: "Declare usage via rule_tool_usage",

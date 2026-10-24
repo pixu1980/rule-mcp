@@ -4,7 +4,7 @@
  * Centralized Express error-handling middleware (4-argument signature).
  * Maps {@link AppError} instances to their declared status/code, and treats
  * any other thrown value as an unexpected 500. Never leaks stack traces or
- * internal messages to the client — only a stable error code, a safe
+ * internal messages to the client, only a stable error code, a safe
  * message, and a correlation id for support/log correlation.
  */
 

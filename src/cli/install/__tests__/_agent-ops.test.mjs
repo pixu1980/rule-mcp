@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-agentops-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-agentops-"));
 const ENTRY = "/tmp/fake-rule-mcp.js";
 
 test.before(() => {

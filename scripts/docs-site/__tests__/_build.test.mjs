@@ -13,7 +13,7 @@ const root = join(import.meta.dirname, "..", "..", "..");
 const posix = (path) => path.split(sep).join("/");
 
 test("the emitted site has no dead internal links among public pages", () => {
-  const outDir = mkdtempSync(join(tmpdir(), "rule-site-"));
+  const outDir = mkdtempSync(join(tmpdir(), "rule-mcp-site-"));
   const pages = buildSite({ projectDir: root, outDir });
   const emitted = new Set(pages.map((page) => page.out));
   const dead = [];
@@ -46,7 +46,7 @@ test("the emitted site has no dead internal links among public pages", () => {
 });
 
 test("nav labels never render undefined; primary trio is present", () => {
-  const outDir = mkdtempSync(join(tmpdir(), "rule-site-nav-"));
+  const outDir = mkdtempSync(join(tmpdir(), "rule-mcp-site-nav-"));
   buildSite({ projectDir: root, outDir });
 
   const html = readFileSync(join(outDir, "index.html"), "utf8");
@@ -59,7 +59,7 @@ test("nav labels never render undefined; primary trio is present", () => {
 });
 
 test("the architecture page renders the flow without a chart library", () => {
-  const outDir = mkdtempSync(join(tmpdir(), "rule-site-flow-"));
+  const outDir = mkdtempSync(join(tmpdir(), "rule-mcp-site-flow-"));
   buildSite({ projectDir: root, outDir });
 
   assert.ok(!existsSync(join(outDir, "vendor")), "no vendored chart library is emitted");
@@ -73,7 +73,7 @@ test("the architecture page renders the flow without a chart library", () => {
 });
 
 test("external links open in a new tab with no opener", () => {
-  const outDir = mkdtempSync(join(tmpdir(), "rule-site-links-"));
+  const outDir = mkdtempSync(join(tmpdir(), "rule-mcp-site-links-"));
   const pages = buildSite({ projectDir: root, outDir });
   const bare = [];
 
@@ -93,7 +93,7 @@ test("external links open in a new tab with no opener", () => {
 });
 
 test("the composed instructions page carries both sources under one h1", () => {
-  const outDir = mkdtempSync(join(tmpdir(), "rule-site-composed-"));
+  const outDir = mkdtempSync(join(tmpdir(), "rule-mcp-site-composed-"));
   buildSite({ projectDir: root, outDir });
 
   const html = readFileSync(join(outDir, "docs", "instructions.html"), "utf8");
@@ -106,7 +106,7 @@ test("the composed instructions page carries both sources under one h1", () => {
 });
 
 test("a table scroll container is reachable by keyboard and named", () => {
-  const outDir = mkdtempSync(join(tmpdir(), "rule-site-scroll-"));
+  const outDir = mkdtempSync(join(tmpdir(), "rule-mcp-site-scroll-"));
   buildSite({ projectDir: root, outDir });
 
   const html = readFileSync(join(outDir, "docs", "surface-map.html"), "utf8");
@@ -118,7 +118,7 @@ test("a table scroll container is reachable by keyboard and named", () => {
 });
 
 test("the preferences menu carries no stray comma between markup fragments", () => {
-  const outDir = mkdtempSync(join(tmpdir(), "rule-site-prefs-"));
+  const outDir = mkdtempSync(join(tmpdir(), "rule-mcp-site-prefs-"));
   buildSite({ projectDir: root, outDir });
 
   const html = readFileSync(join(outDir, "index.html"), "utf8");
@@ -132,7 +132,7 @@ test("the preferences menu carries no stray comma between markup fragments", () 
 });
 
 test("the stored theme applies before the stylesheet loads, so it cannot flash", () => {
-  const outDir = mkdtempSync(join(tmpdir(), "rule-site-theme-"));
+  const outDir = mkdtempSync(join(tmpdir(), "rule-mcp-site-theme-"));
   buildSite({ projectDir: root, outDir });
 
   const html = readFileSync(join(outDir, "index.html"), "utf8");

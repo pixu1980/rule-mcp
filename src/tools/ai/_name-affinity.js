@@ -8,7 +8,7 @@ const INFLECTIONS = new Set(["s", "es", "ed", "ing", "ion", "ions", "er", "ers",
 /** How much the prompt names this skill (three tiers, same/stem/prefix). */
 export function nameAffinity(skillName, promptWords) {
   const parts = skillName
-    .replace(/^rule(?:-|$)/, "")
+    .replace(/^rule-mcp(?:-|$)/, "")
     .split("-")
     .filter((part) => part.length > 2);
   const sameWord = (long, short) => INFLECTIONS.has(long.slice(short.length));

@@ -56,7 +56,7 @@ check("T6 idempotent", compressText(c1) === c1);
 // ── T7: compressResult skips JSON content items, compresses prose items ──
 const result = {
   content: [
-    { type: "text", text: JSON.stringify({ route: "rule-frontend-react" }) },
+    { type: "text", text: JSON.stringify({ route: "rule-mcp-frontend-react" }) },
     { type: "text", text: "This is really just prose." },
   ],
 };

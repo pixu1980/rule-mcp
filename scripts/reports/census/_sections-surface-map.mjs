@@ -16,17 +16,17 @@ import { commandDefinition, getSkillMetadata, listAreaPrompts } from "./_registr
 
 /** Session / check / router commands that name an action tool directly. */
 const COMMAND_TO_TOOL = {
-  rule: "pix_tool",
-  "rule-check": "rule_tool_check",
-  "rule-fix": "rule_tool_fix",
-  "rule-compress": "rule_tool_compress",
-  "rule-git": "rule_tool_git",
-  "rule-handoff": "rule_tool_handoff",
-  "rule-handon": "rule_tool_handon",
-  "rule-init": "rule_tool_init",
-  "rule-stats": "rule_tool_stats",
-  "rule-usage": "rule_tool_usage",
-  "rule-update": "rule_tool_update",
+  "rule-mcp": "rule_tool",
+  "rule-mcp-check": "rule_tool_check",
+  "rule-mcp-fix": "rule_tool_fix",
+  "rule-mcp-compress": "rule_tool_compress",
+  "rule-mcp-git": "rule_tool_git",
+  "rule-mcp-handoff": "rule_tool_handoff",
+  "rule-mcp-handon": "rule_tool_handon",
+  "rule-mcp-init": "rule_tool_init",
+  "rule-mcp-stats": "rule_tool_stats",
+  "rule-mcp-usage": "rule_tool_usage",
+  "rule-mcp-update": "rule_tool_update",
 };
 
 /**
@@ -59,8 +59,8 @@ export function surfaceMapSection(data) {
       skillsCovered.add(skill);
     } else if (COMMAND_TO_TOOL[name]) {
       tool = COMMAND_TO_TOOL[name];
-      if (name === "rule" && data.skillDirs.includes("rule")) {
-        skill = "rule";
+      if (name === "rule-mcp" && data.skillDirs.includes("rule-mcp")) {
+        skill = "rule-mcp";
       }
     }
 

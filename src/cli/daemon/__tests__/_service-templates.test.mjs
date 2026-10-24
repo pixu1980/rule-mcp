@@ -14,8 +14,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-service-home-"));
-const state = mkdtempSync(join(tmpdir(), "rule-service-state-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-service-home-"));
+const state = mkdtempSync(join(tmpdir(), "rule-mcp-service-state-"));
 
 process.env.HOME = home;
 process.env.RULE_MCP_STATE_DIR = state;
@@ -62,7 +62,7 @@ test("the LaunchAgent plist names the label, the wrapper and the log", () => {
   const plist = generateLaunchAgentPlist(resolveEntrypoint());
 
   assert.match(plist, /^<\?xml version="1\.0" encoding="UTF-8"\?>/, "a plist opens with the XML declaration");
-  assert.match(plist, /<key>Label<\/key>\s*<string>io\.github\.rule\.rule-mcp<\/string>/, "the label is the one the adapter looks for");
+  assert.match(plist, /<key>Label<\/key>\s*<string>io\.github\.rule-mcp\.rule-mcp<\/string>/, "the label is the one the adapter looks for");
   assert.match(plist, /rule-mcpd/, "the Program is the wrapper, so Login Items shows the daemon name");
   assert.match(plist, /<key>KeepAlive<\/key>\s*<true\/>/, "the agent is restarted when it dies");
   assert.ok(plist.includes(join(state, "daemon.log")), "the log goes to the configured state dir");

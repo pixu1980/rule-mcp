@@ -9,7 +9,7 @@ import { renderRenumberPlan, planRenumber, staleCommitReferences } from "../../.
 import { git, seedRepo, seedScrambledIndex } from "./_doctor.fixture.mjs";
 
 test("a clean tree reports nothing to do", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-doctor-clean-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-clean-"));
   try {
     mkdirSync(join(root, "docs", "adr"), { recursive: true });
     writeFileSync(join(root, "docs", "adr", "001-one.md"), "# 001: One\n");
@@ -52,7 +52,7 @@ test("a dry run changes nothing on disk", () => {
 });
 
 test("the report says nothing when there is nothing to renumber", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-doctor-clean-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-clean-"));
   git(["init", "--quiet", "--initial-branch=main"], root);
   git(["config", "user.email", "t@example.com"], root);
   git(["config", "user.name", "T"], root);

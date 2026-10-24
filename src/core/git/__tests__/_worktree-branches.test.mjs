@@ -11,7 +11,7 @@ import { rewriteSafety } from "../_worktree.js";
 import { makeRepo, remove, run, write } from "./_fixture.mjs";
 
 test("a directory that is not a repository is refused", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-worktree-branches-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-worktree-branches-"));
 
   assert.deepEqual(rewriteSafety(root).reasons, ["not a git repository"]);
 });

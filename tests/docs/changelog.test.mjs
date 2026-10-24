@@ -35,7 +35,7 @@ const git = (root, ...args) => execFileSync("git", args, { cwd: root, encoding: 
 
 /** A repository with two releases and some unreleased work on top. */
 function scriptedRepository() {
-  const root = mkdtempSync(join(tmpdir(), "rule-changelog-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-changelog-"));
   git(root, "init", "--initial-branch=main", "-q");
   git(root, "config", "user.email", "fixture@example.com");
   git(root, "config", "user.name", "Fixture");
@@ -107,7 +107,7 @@ check(
 
 // ── It survives a repository with no tags at all ──
 
-const bare = mkdtempSync(join(tmpdir(), "rule-changelog-bare-"));
+const bare = mkdtempSync(join(tmpdir(), "rule-mcp-changelog-bare-"));
 git(bare, "init", "--initial-branch=main", "-q");
 git(bare, "config", "user.email", "f@example.com");
 git(bare, "config", "user.name", "F");

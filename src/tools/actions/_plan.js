@@ -8,7 +8,7 @@
  *
  * One composable entry point (`rule_tool_plan`, with an `operation`) plus one
  * tool per operation, so a custom IDE that lists tools instead of slash
- * commands can reach `/rule-persona-*-audit` and `/rule-persona-*-review` without knowing the
+ * commands can reach `/rule-mcp-persona-*-audit` and `/rule-mcp-persona-*-review` without knowing the
  * `operation` parameter. The per-role prompts and agent commands are
  * conveniences generated from the same registry, so whatever these tools
  * answer, they answer too.

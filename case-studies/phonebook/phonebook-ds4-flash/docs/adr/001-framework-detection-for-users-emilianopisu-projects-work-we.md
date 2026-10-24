@@ -3,7 +3,7 @@
 - **Date**: 2026-07-11 13:06:03
 - **Status**: accepted
 - **Tags**: tool, auto-log
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 
@@ -16,4 +16,4 @@ Use vanilla tooling for this project.
 
 ## Consequences
 
-None — informational entry.
+None, informational entry.

@@ -7,7 +7,7 @@
 
 ## Context
 
-rule skills were only accessible via MCP tools. Claude Code has a native auto-discovery mechanism in .claude/skills/ that wasn't being used.
+rule-mcp skills were only accessible via MCP tools. Claude Code has a native auto-discovery mechanism in .claude/skills/ that wasn't being used.
 
 ## Decision
 

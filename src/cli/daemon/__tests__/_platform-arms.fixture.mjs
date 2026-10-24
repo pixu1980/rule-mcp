@@ -19,8 +19,8 @@ const forced = process.argv[2];
 
 Object.defineProperty(process, "platform", { value: forced, configurable: true });
 
-process.env.HOME = mkdtempSync(join(tmpdir(), "rule-platform-home-"));
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-platform-state-"));
+process.env.HOME = mkdtempSync(join(tmpdir(), "rule-mcp-platform-home-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-platform-state-"));
 
 const { detectPlatform, installDaemonService, uninstallDaemonService } = await import("../_service.js");
 const { checkDaemonService, getServiceFilePath, getServiceName } = await import("../_service-status.js");

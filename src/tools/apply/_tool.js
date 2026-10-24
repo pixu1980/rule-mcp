@@ -62,7 +62,7 @@ export async function registerApplyTool() {
                 `Pass the project directory you are working in - rule_tool_apply never writes outside it.`,
             },
           ],
-          _meta: { pixApply: { receiptValid: false, rootError: error.message, filesWritten: 0 } },
+          _meta: { ruleApply: { receiptValid: false, rootError: error.message, filesWritten: 0 } },
         };
       }
 
@@ -83,7 +83,7 @@ export async function registerApplyTool() {
                 `If you modified the code after rule_tool_gateway, run rule_tool_gateway again with the updated code.`,
             },
           ],
-          _meta: { pixApply: { receiptValid: false, reason: receiptCheck.reason, filesWritten: 0 } },
+          _meta: { ruleApply: { receiptValid: false, reason: receiptCheck.reason, filesWritten: 0 } },
         };
       }
 
@@ -104,7 +104,7 @@ export async function registerApplyTool() {
                 text: `# rule_tool_apply: Path validation FAILED\n\n**File:** ${file.path}\n**Error:** ${error.message}`,
               },
             ],
-            _meta: { pixApply: { receiptValid: true, pathError: error.message, filesWritten: 0 } },
+            _meta: { ruleApply: { receiptValid: true, pathError: error.message, filesWritten: 0 } },
           };
         }
       }

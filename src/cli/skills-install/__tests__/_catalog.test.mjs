@@ -9,7 +9,7 @@ import { test } from "node:test";
 
 import { copySkill, getAvailableSkills, isInstalled, readSkillMeta } from "../_catalog.js";
 
-const root = mkdtempSync(join(tmpdir(), "rule-catalog-"));
+const root = mkdtempSync(join(tmpdir(), "rule-mcp-catalog-"));
 
 test.after(() => rmSync(root, { recursive: true, force: true }));
 

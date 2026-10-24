@@ -23,9 +23,9 @@ export function renderGatewayReply(core, arguments_, fileSet, lines, stripped = 
     sections: core.matchedSections,
     next_tools: core.routeNextTools,
   };
-  const primarySkill = effectiveRoute?.startsWith("rule-") ? effectiveRoute : null;
+  const primarySkill = effectiveRoute?.startsWith("rule-mcp-") ? effectiveRoute : null;
   const checkResult = core.checkResult;
-  const truncated = core.evidence.length > 8000 ? core.evidence.slice(0, 8000) + "\n\n... (truncated, use pix_* tool for full content)" : core.evidence;
+  const truncated = core.evidence.length > 8000 ? core.evidence.slice(0, 8000) + "\n\n... (truncated, use rule_tool_* tool for full content)" : core.evidence;
 
   lines.push(`## Route: ${effectiveRoute} (confidence: ${Math.round((route.confidence || 0) * 100)}%)`);
 
@@ -43,7 +43,7 @@ export function renderGatewayReply(core, arguments_, fileSet, lines, stripped = 
   let receipt = null;
 
   if (fileSet || code) {
-    const skillName = primarySkill || "rule-ui-design-system";
+    const skillName = primarySkill || "rule-mcp-ui-design-system";
 
     // The removal happens before the check, so the receipt below covers the
     // cleaned content. Saying so is the whole point: without it the caller

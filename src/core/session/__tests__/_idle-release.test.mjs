@@ -10,7 +10,7 @@ import { join } from "node:path";
 // ── Idle memory release ───────────────────────────────────────────
 
 test("releaseMemory hands the heap back and reloads from disk", async () => {
-  const stateDir = mkdtempSync(join(tmpdir(), "rule-cache-release-"));
+  const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-cache-release-"));
   const previous = process.env.RULE_MCP_STATE_DIR;
   process.env.RULE_MCP_STATE_DIR = stateDir;
   try {

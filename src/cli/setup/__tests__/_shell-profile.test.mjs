@@ -10,13 +10,13 @@ import test from "node:test";
 import { cleanProfileText, hasOwnedLines } from "../_shell-profile.js";
 
 test("an owned comment and the export it annotates are removed together", () => {
-  const before = ["export PATH=/usr/bin", "# rule-mcp: model key", 'export OPENAI_API_KEY="sk-rule"', "alias ll=ls"].join("\n");
+  const before = ["export PATH=/usr/bin", "# rule-mcp: model key", 'export OPENAI_API_KEY="sk-rule-mcp"', "alias ll=ls"].join("\n");
 
   assert.equal(cleanProfileText(before), ["export PATH=/usr/bin", "alias ll=ls"].join("\n"));
 });
 
 test("a key the user set themselves survives", () => {
-  const before = ['export OPENAI_API_KEY="sk-mine"', "# rule-mcp: model key", 'export ANTHROPIC_API_KEY="sk-rule"'].join("\n");
+  const before = ['export OPENAI_API_KEY="sk-mine"', "# rule-mcp: model key", 'export ANTHROPIC_API_KEY="sk-rule-mcp"'].join("\n");
 
   assert.equal(cleanProfileText(before), 'export OPENAI_API_KEY="sk-mine"');
 });
@@ -35,7 +35,7 @@ test("a profile with nothing of ours is left alone", () => {
 });
 
 test("fish set -gx is recognized as the annotated export", () => {
-  const before = ["# rule-mcp: model key", "set -gx OPENAI_API_KEY sk-rule", "echo hi"].join("\n");
+  const before = ["# rule-mcp: model key", "set -gx OPENAI_API_KEY sk-rule-mcp", "echo hi"].join("\n");
 
   assert.equal(cleanProfileText(before), "echo hi");
 });

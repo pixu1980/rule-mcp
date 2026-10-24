@@ -6,7 +6,7 @@
  * The hook files rule-mcp installs, and the idempotent write of one.
  *
  * A hook whose file is already ours is left alone; a hook someone else wrote is
- * kept beside ours as `<name>.rule-backup` and chained from the end of ours, so
+ * kept beside ours as `<name>.rule-mcp-backup` and chained from the end of ours, so
  * integrating never destroys another tool's work. A hook whose validator is not
  * on `PATH` warns and lets the commit through: a gate that cannot run must not
  * make the repository unusable.
@@ -19,7 +19,7 @@ import { join } from "node:path";
 export const HOOK_MARKER = "rule-mcp:commit-lint";
 
 /** The suffix a hook we displaced is kept under. */
-export const BACKUP_SUFFIX = ".rule-backup";
+export const BACKUP_SUFFIX = ".rule-mcp-backup";
 
 /** The default binary the hooks invoke. */
 export const DEFAULT_COMMAND = "rule-mcp";

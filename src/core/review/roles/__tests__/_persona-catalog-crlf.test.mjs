@@ -16,7 +16,7 @@ test("a Windows checkout with CRLF endings loads the whole catalog", () => {
   // windows-latest checks out text as CRLF (no .gitattributes pins LF), and
   // the smoke test failed there with an empty embedded catalog: every file
   // was rejected because \r leaked into the parsed values.
-  const dir = mkdtempSync(join(tmpdir(), "rule-personas-crlf-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-personas-crlf-"));
   const shipped = readdirSync(PERSONA_DIR).filter((entry) => entry.endsWith(".md"));
 
   try {

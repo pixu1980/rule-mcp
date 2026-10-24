@@ -16,7 +16,7 @@ import { lintMode } from "../_lint.js";
 
 /** Build a scratch project from a { relativePath: contents } map. */
 function project(files = {}) {
-  const root = mkdtempSync(join(tmpdir(), "rule-fix-mode-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-fix-mode-"));
 
   for (const [relative, contents] of Object.entries(files)) {
     const file = join(root, relative);

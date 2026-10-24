@@ -1,16 +1,16 @@
-# Report Comparativo: `rule-mcp` × 3 Modelli (Bookmarks Manager)
+# Report Comparativo: `rule-mcp` x 3 Modelli (Bookmarks Manager)
 
 > **Stesso prompt, 3 modelli, 3 applicazioni bookmarks manager (React + Express/TS).**
 > Benchmark oggettivo dell'efficacia del server MCP locale `rule-mcp` su un task full-stack più complesso del phonebook: scraping lato server, persistenza, validazione SSRF, microinterazioni di paste-link, e suite di test a11y obbligatoria.
 
 ---
 
-## TL;DR — Il verdetto secco
+## TL;DR, Il verdetto secco
 
 | KPI                                                     |                            🥇 Sonnet 5 |                  🥈 GPT 5.6 Luna |                 🥉 DeepSeek v4 Flash |
 | ------------------------------------------------------- | -------------------------------------: | -------------------------------: | -----------------------------------: |
 | Iterazioni utente per arrivare all'MVP                  |                               **1** ✅ |                  2 (1 + 1 retry) |              **3** (1 + 2 follow-up) |
-| Tempo attivo sessione (primo prompt → fine)             |                                  19:24 |                            21:11 |                            **13:49** |
+| Tempo attivo sessione (primo prompt -> fine)            |                                  19:24 |                            21:11 |                            **13:49** |
 | Prompt totali (incluso retry)                           |                                      1 |                                2 |                                    3 |
 | Componenti React create                                 |                            6 (1 nuovo) |                      6 (1 nuovo) |                   **10** (più ricca) |
 | File totali (escl. nm/dist/.git)                        |                                     90 |                               81 |                                   67 |
@@ -19,11 +19,11 @@
 | Costo monetario (reale, fatturato)                      |                         **$5.4903** 💸 |                          $1.8812 |                          **$0.0674** |
 | LLM API call effettuate                                 |                                     89 |                              114 |                                  110 |
 | **Peak context window usato** (max in 1 call)           |              **276.432** (27,6% di 1M) |   **189.673** (51,0% di 372K) ⚠️ |                160.572 (16,1% di 1M) |
-| Crescita contesto (1ª → ultima call)                    |                               +183.788 |                         +145.203 |                              +97.802 |
+| Crescita contesto (1ª -> ultima call)                   |                               +183.788 |                         +145.203 |                              +97.802 |
 | Output tokens totali (REALE, generato)                  |                             **97.280** |                           40.322 |                               49.870 |
 | Input tokens "uncached" cumulato (REALE)                |                                    178 |                          255.496 |                              119.602 |
 | **Cache write** (REALE, token messi in cache)           |                         **275.803** ✅ |                             0 ❌ |                                 0 ❌ |
-| Cache read cumulato (N × context, **informativo solo**) |                                19.14 M |                          13.84 M |                              13.11 M |
+| Cache read cumulato (N x context, **informativo solo**) |                                19.14 M |                          13.84 M |                              13.11 M |
 | Tool call rule-mcp                                      |                                     23 |                           **30** |                                   10 |
 | Test passati al primo colpo (sui 6 definiti)            |                                 ✅ 6/6 |              ✅ 6/6 (dopo 1 fix) |                     ❌ 0 (zero test) |
 | ADR generati                                            |                                  **7** |                                6 |                                    3 |
@@ -36,7 +36,7 @@
 
 **Verdetto sintetico (in una riga):**
 
-> **Sonnet 5 è l'unico modello che ha consegnato un MVP funzionante al primo prompt**, con 7 ADR, suite a11y Playwright+axe verde, e 6/6 test verdi. Costo 80× superiore a DeepSeek, ma è l'unico che ha richiesto **zero** intervento dell'utente dopo il prompt iniziale. **GPT 5.6 Luna** ha barato sull'architettura (ha sfruttato `rule_tool_check` 5 volte per correggersi, poi ha richiesto 1 follow-up per CORS). **DeepSeek v4 Flash** è imbattibile sul costo ($0.07) ma ha richiesto 2 follow-up per bug di import CSS e failure di scraping.
+> **Sonnet 5 è l'unico modello che ha consegnato un MVP funzionante al primo prompt**, con 7 ADR, suite a11y Playwright+axe verde, e 6/6 test verdi. Costo 80x superiore a DeepSeek, ma è l'unico che ha richiesto **zero** intervento dell'utente dopo il prompt iniziale. **GPT 5.6 Luna** ha barato sull'architettura (ha sfruttato `rule_tool_check` 5 volte per correggersi, poi ha richiesto 1 follow-up per CORS). **DeepSeek v4 Flash** è imbattibile sul costo ($0.07) ma ha richiesto 2 follow-up per bug di import CSS e failure di scraping.
 
 ---
 
@@ -44,7 +44,7 @@
 
 ### 1.1 Prompt identico per le 3 sessioni
 
-Tutte e 3 le sessioni sono partite dallo stesso identico prompt utente (verbatim, abbreviato qui per leggibilità — integrale analizzato in §3):
+Tutte e 3 le sessioni sono partite dallo stesso identico prompt utente (verbatim, abbreviato qui per leggibilità, integrale analizzato in §3):
 
 > _"usa `rule-mcp` per creare una applicazione react che implementi una bookmarks manager con i seguenti requisiti:_
 > _- implementa tutti gli standard indicati dalle skills e dai tools del server MCP_
@@ -67,11 +67,11 @@ Tutte e 3 le sessioni sono partite dallo stesso identico prompt utente (verbatim
 | `019f51a3…e942` | `gpt-5.6-luna`      | `openai-codex`   | `poc/bookmarks-manager/bookmarks-manager-gpt56-luna/` | idem         |
 | `019f51a3…6a26` | `claude-sonnet-5`   | `github-copilot` | `poc/bookmarks-manager/bookmarks-sonnet5/`            | idem         |
 
-Nota: la sessione Sonnet 5 è partita con 2 swap di modello (gpt-5.6-luna → claude-sonnet-5) nei primi 17 secondi — il modello `claude-sonnet-5` è diventato operativo da `14:46:11Z`. L'utente ha quindi cambiato intenzionalmente modello dopo l'avvio della sessione.
+Nota: la sessione Sonnet 5 è partita con 2 swap di modello (gpt-5.6-luna -> claude-sonnet-5) nei primi 17 secondi, il modello `claude-sonnet-5` è diventato operativo da `14:46:11Z`. L'utente ha quindi cambiato intenzionalmente modello dopo l'avvio della sessione.
 
 ### 1.3 Tool MCP resi disponibili
 
-Il server `rule-mcp` ha esposto **105 tool** + 186 risorse `rule://*` + 1 router, organizzati in skill folder: `frontend/*`, `backend/*`, `data/*`, `devops/*`, `platform/*`, `process/*`, `styleguide/*`, `toolchain/*`, `ui/*`, `ai-agents/*`.
+Il server `rule-mcp` ha esposto **105 tool** + 186 risorse `rulemcp://*` + 1 router, organizzati in skill folder: `frontend/*`, `backend/*`, `data/*`, `devops/*`, `platform/*`, `process/*`, `styleguide/*`, `toolchain/*`, `ui/*`, `ai-agents/*`.
 
 ---
 
@@ -81,14 +81,14 @@ Il server `rule-mcp` ha esposto **105 tool** + 186 risorse `rule://*` + 1 router
 
 L'API LLM restituisce per ogni chiamata un blocco `usage` con 4 contatori:
 
-| Campo        | Significato                                                 | È un "reale"?                                                |
-| ------------ | ----------------------------------------------------------- | ------------------------------------------------------------ |
-| `input`      | Token **nuovi** (non in cache) visti in **questa** chiamata | ✅ sì, ma cumulato su N call = "token nuovi totali"          |
-| `output`     | Token **generati** dal modello in **questa** chiamata       | ✅ sì, cumulato = "token generati totali"                    |
-| `cacheRead`  | Token **letti dalla cache** in **questa** chiamata          | ⚠️ **NON è unique** — è N × (contesto al momento della call) |
-| `cacheWrite` | Token **messi in cache** (nuovi) in **questa** chiamata     | ✅ sì, cumulato = "token effettivamente cacheati"            |
+| Campo        | Significato                                                 | È un "reale"?                                               |
+| ------------ | ----------------------------------------------------------- | ----------------------------------------------------------- |
+| `input`      | Token **nuovi** (non in cache) visti in **questa** chiamata | ✅ sì, ma cumulato su N call = "token nuovi totali"         |
+| `output`     | Token **generati** dal modello in **questa** chiamata       | ✅ sì, cumulato = "token generati totali"                   |
+| `cacheRead`  | Token **letti dalla cache** in **questa** chiamata          | ⚠️ **NON è unique**, è N x (contesto al momento della call) |
+| `cacheWrite` | Token **messi in cache** (nuovi) in **questa** chiamata     | ✅ sì, cumulato = "token effettivamente cacheati"           |
 
-**Errore comune** (presente in prima stesura di questo report): sommare `input + cacheRead + output` su tutte le call. Questo **non** dà i "token totali processati" — dà un multiplo del context window. Esempio: 110 call × 63K context = ~7M di `cacheRead` cumulato, ma il context unico era 63K.
+**Errore comune** (presente in prima stesura di questo report): sommare `input + cacheRead + output` su tutte le call. Questo **non** dà i "token totali processati", dà un multiplo del context window. Esempio: 110 call x 63K context = ~7M di `cacheRead` cumulato, ma il context unico era 63K.
 
 **Le metriche reali che contano sono:**
 
@@ -107,7 +107,7 @@ L'API LLM restituisce per ogni chiamata un blocco `usage` con 4 contatori:
 | N° LLM API call                        |         110 |          114 |             89 |
 | **Peak context usato (max in 1 call)** | **160.572** |  **189.673** |    **276.432** |
 | % del context window al picco          |       16,1% | **51,0%** ⚠️ |          27,6% |
-| Crescita contesto (1ª → ultima call)   |     +97.802 |     +145.203 |       +183.788 |
+| Crescita contesto (1ª -> ultima call)  |     +97.802 |     +145.203 |       +183.788 |
 | **Output tokens totali (REALE)**       |      49.870 |       40.322 |     **97.280** |
 | Input "uncached" cumulato (REALE)      |     119.602 |  **255.496** |            178 |
 | **Cache write cumulato (REALE)**       |        0 ❌ |         0 ❌ | **275.803** ✅ |
@@ -121,7 +121,7 @@ L'API LLM restituisce per ogni chiamata un blocco `usage` con 4 contatori:
 
 1. **Sonnet 5 è l'unico che ha **attivamente** usato il prompt caching.** Ha scritto 275.803 token in cache (il prompt iniziale + skill caricate) e li ha riletti per 88/89 call successive a tariffa ridotta (10% del prezzo input). Questo spiega perché il `cacheRead` cumulato è 19M ma il context unico era solo 276K.
 
-2. **GPT 5.6 Luna ha riempito il 51% della sua context window** (189K su 372K). È il modello che è arrivato **più vicino al limite** — ogni nuova iterazione era a rischio di truncation. Per confronto: DS4 al 16,1% e Sonnet al 27,6% del loro rispettivo 1M. **GPT ha la context window più piccola dei 3 (372K) e l'ha usata più intensamente.**
+2. **GPT 5.6 Luna ha riempito il 51% della sua context window** (189K su 372K). È il modello che è arrivato **più vicino al limite**, ogni nuova iterazione era a rischio di truncation. Per confronto: DS4 al 16,1% e Sonnet al 27,6% del loro rispettivo 1M. **GPT ha la context window più piccola dei 3 (372K) e l'ha usata più intensamente.**
 
 3. **DS4 Flash e GPT 5.6 Luna non hanno mai scritto in cache** (`cacheWrite=0` su entrambi). Hanno pagato ogni singolo token di input a prezzo pieno ad ogni call. Per DS4, il `cacheRead` di 13M suggerisce che **il provider ha applicato prompt caching in modo trasparente** (la convenzione Anthropic/OpenAI è di addebitare il primo token a prezzo pieno e i successivi a 10%), ma non viene esplicitato come `cacheWrite` nel report di DS4. Per GPT via `openai-codex`, stesso pattern ma con prezzi diversi.
 
@@ -133,11 +133,11 @@ L'API LLM restituisce per ogni chiamata un blocco `usage` con 4 contatori:
 | GPT 5.6 Luna |        $0.006 |        40.322 |      $0.2419 |                13% |
 | Sonnet 5     |        $0.010 |        97.280 |      $0.9728 |                18% |
 
-**Osservazione chiave:** Sonnet 5 ha generato **2× l'output di GPT 5.6 e di DS4** (97K vs 40-50K). Ha anche scritto il **45-50% di codice in più**. Il costo elevato di Sonnet ($5.49) **non** è dovuto al context grande — è dovuto a:
+**Osservazione chiave:** Sonnet 5 ha generato **2x l'output di GPT 5.6 e di DS4** (97K vs 40-50K). Ha anche scritto il **45-50% di codice in più**. Il costo elevato di Sonnet ($5.49) **non** è dovuto al context grande, è dovuto a:
 
 - Più token di output (97K vs 40-50K)
 - 275K di cache_write upfront (costo pieno la prima volta)
-- Modello Sonnet ha prezzi unitari più alti di DS4 di ~30× e di GPT di ~1.7×
+- Modello Sonnet ha prezzi unitari più alti di DS4 di ~30x e di GPT di ~1.7x
 
 GPT 5.6 Luna e DS4 Flash non hanno mai scritto in cache (entrambi `cache_write=0`). Hanno goduto del prompt caching del provider (presumibilmente Anthropic o il routing) ma non lo hanno _alimentato attivamente_.
 
@@ -145,14 +145,14 @@ GPT 5.6 Luna e DS4 Flash non hanno mai scritto in cache (entrambi `cache_write=0
 
 **Risposta: il costo del server MCP è < 6% del costo totale del task.** Ecco perché:
 
-1. **I tool `rule_tool_*` non sono LLM** — sono esecuzioni di regole deterministiche (scaffolding, lint, validazione). Il costo è il context che il modello spende per leggere il risultato del tool.
+1. **I tool `rule_tool_*` non sono LLM**, sono esecuzioni di regole deterministiche (scaffolding, lint, validazione). Il costo è il context che il modello spende per leggere il risultato del tool.
 2. **Stima del context "speso" per i tool rule-mcp** (proxy: somma caratteri dei tool result, ~4 token/char):
 
-| Sessione     | N° tool rule-mcp | Chars ritornati | Token stimati (4×) | Costo stimato |
-| ------------ | -----------------: | --------------: | -----------------: | ------------: |
-| DS4 Flash    |                 10 |          82.664 |               ~21K |      ~$0.0001 |
-| GPT 5.6 Luna |                 30 |          68.677 |               ~17K |        ~$0.05 |
-| Sonnet 5     |                 23 |         108.447 |               ~27K |        ~$0.30 |
+| Sessione     | N° tool rule-mcp | Chars ritornati | Token stimati (4x) | Costo stimato |
+| ------------ | ---------------: | --------------: | -----------------: | ------------: |
+| DS4 Flash    |               10 |          82.664 |               ~21K |      ~$0.0001 |
+| GPT 5.6 Luna |               30 |          68.677 |               ~17K |        ~$0.05 |
+| Sonnet 5     |               23 |         108.447 |               ~27K |        ~$0.30 |
 
 Il "costo stimato" è calcolato come `token × prezzo_input_del_modello` (es. Sonnet input = $3/Mtoken, GPT = $1/Mtoken, DS4 = $0.14/Mtoken). Anche per Sonnet (il più costoso), il costo dei tool è < 6% del totale.
 
@@ -162,11 +162,11 @@ Il "costo stimato" è calcolato come `token × prezzo_input_del_modello` (es. So
 
 | Modello      | Peak context |    Window |   % usato | "Headroom" rimanente |
 | ------------ | -----------: | --------: | --------: | -------------------: |
-| DS4 Flash    |      160.572 | 1.000.000 |     16,1% |     839K (5,2× peak) |
-| GPT 5.6 Luna |      189.673 |   372.000 | **51,0%** | 182K (0,96× peak) ⚠️ |
-| Sonnet 5     |      276.432 | 1.000.000 |     27,6% |     724K (2,6× peak) |
+| DS4 Flash    |      160.572 | 1.000.000 |     16,1% |     839K (5,2x peak) |
+| GPT 5.6 Luna |      189.673 |   372.000 | **51,0%** | 182K (0,96x peak) ⚠️ |
+| Sonnet 5     |      276.432 | 1.000.000 |     27,6% |     724K (2,6x peak) |
 
-→ **GPT 5.6 Luna è il modello "più sotto pressione"** — ha usato metà della sua context window. Una sessione più lunga (es. con 200 turn anziché 114) lo avrebbe portato al limite. DS4 e Sonnet hanno ampio margine per crescere ulteriormente.
+-> **GPT 5.6 Luna è il modello "più sotto pressione"**, ha usato metà della sua context window. Una sessione più lunga (es. con 200 turn anziché 114) lo avrebbe portato al limite. DS4 e Sonnet hanno ampio margine per crescere ulteriormente.
 
 ### 2.6 Quanto è costato `tokensave` (a sua volta un MCP)
 
@@ -176,7 +176,7 @@ Il "costo stimato" è calcolato come `token × prezzo_input_del_modello` (es. So
 | GPT 5.6 Luna |                              0 |            $0 |           0% |
 | Sonnet 5     | 2 (health + 1 record_decision) |      <$0.0001 |      < 0.01% |
 
-→ Il costo dei tool tokensave è **praticamente nullo**. Il vero "costo" è che i modelli **non li hanno sfruttati** come acceleratori.
+-> Il costo dei tool tokensave è **praticamente nullo**. Il vero "costo" è che i modelli **non li hanno sfruttati** come acceleratori.
 
 ### 2.7 Risparmio potenziale da caveman e tokensave (NON ottenuto)
 
@@ -185,13 +185,13 @@ Il "costo stimato" è calcolato come `token × prezzo_input_del_modello` (es. So
 | **caveman**   | 0/3 sessioni                    | 0 token                          | ~75% su memos lunghi (qui non applicato perché non c'erano memo) |
 | **tokensave** | 1/3 (Sonnet: 1 record_decision) | ~0 (1 sola scrittura, 0 letture) |                                        ~50-70% sul context grafo |
 
-**Verità nuda:** né caveman né tokensave sono stati sfruttati come acceleratori, **nonostante il prompt utente chiedesse esplicitamente** di fare `tokensave init` ad inizio sessione e `tokensave sync` ad ogni iterazione. Le 4 invocazioni totali (2 su DS4, 0 su GPT, 2 su Sonnet) sono state solo chiamate di **health check / status** — nessuna lettura efficiente del grafo codice, nessuna compressione memo.
+**Verità nuda:** né caveman né tokensave sono stati sfruttati come acceleratori, **nonostante il prompt utente chiedesse esplicitamente** di fare `tokensave init` ad inizio sessione e `tokensave sync` ad ogni iterazione. Le 4 invocazioni totali (2 su DS4, 0 su GPT, 2 su Sonnet) sono state solo chiamate di **health check / status**, nessuna lettura efficiente del grafo codice, nessuna compressione memo.
 
 Se Sonnet avesse usato `tokensave_read` invece di leggere i file interi:
 
-- File `_AppContext.jsx` (ipotetico 5KB) → `tokensave_read` = ~1KB = **-80%**
-- File `tokens.css` (5KB) → `tokensave_entities` = ~1.5KB = **-70%**
-- File di scrape `scrape.service.ts` (10KB) → `tokensave_body` = ~1KB = **-90%**
+- File `_AppContext.jsx` (ipotetico 5KB) -> `tokensave_read` = ~1KB = **-80%**
+- File `tokens.css` (5KB) -> `tokensave_entities` = ~1.5KB = **-70%**
+- File di scrape `scrape.service.ts` (10KB) -> `tokensave_body` = ~1KB = **-90%**
 
 **Stima risparmio mancato**: $1.50-3.00 per sessione Sonnet, $0.50-1.00 per le altre.
 
@@ -203,7 +203,7 @@ Se Sonnet avesse usato `tokensave_read` invece di leggere i file interi:
 | GPT 5.6 Luna |      $1.8812 |                     5/6 |               $0.376 |
 | Sonnet 5     |      $5.4903 |                     6/6 |               $0.915 |
 
-> **DeepSeek v4 Flash è imbattibile come rapporto qualità/prezzo**, ma il TCO reale (tempo utente × costo/ora) è più alto di quello che dice il grafico: 3 prompt × tempo di attesa = 3 round di correzione esplicita. Su 13:49 di durata attiva, ~10 minuti sono stati spesi in "dai, non funziona, fixalo" — un costo-opportunità che il dollaro non cattura.
+> **DeepSeek v4 Flash è imbattibile come rapporto qualità/prezzo**, ma il TCO reale (tempo utente x costo/ora) è più alto di quello che dice il grafico: 3 prompt x tempo di attesa = 3 round di correzione esplicita. Su 13:49 di durata attiva, ~10 minuti sono stati spesi in "dai, non funziona, fixalo", un costo-opportunità che il dollaro non cattura.
 
 ---
 
@@ -225,7 +225,7 @@ Se Sonnet avesse usato `tokensave_read` invece di leggere i file interi:
 [14:46:33.997Z]  usa rule-mcp per creare una applicazione react che implementi una bookmarks manager...
 ```
 
-→ **1 prompt, MVP pronto.** Caso ideale. Caso benchmark.
+-> **1 prompt, MVP pronto.** Caso ideale. Caso benchmark.
 
 **GPT 5.6 Luna:**
 
@@ -234,7 +234,7 @@ Se Sonnet avesse usato `tokensave_read` invece di leggere i file interi:
 [15:04:17.844Z]  le API sembrano andare in errore                    (gap: 18:33)
 ```
 
-→ **1 retry a fine sessione**, dopo 18 minuti di lavoro. Il retry ha richiesto solo ~2.5 minuti per essere risolto (fix CORS: `localhost` vs `127.0.0.1`, porta 3002 occupata da altro progetto).
+-> **1 retry a fine sessione**, dopo 18 minuti di lavoro. Il retry ha richiesto solo ~2.5 minuti per essere risolto (fix CORS: `localhost` vs `127.0.0.1`, porta 3002 occupata da altro progetto).
 
 **DeepSeek v4 Flash:**
 
@@ -245,7 +245,7 @@ Se Sonnet avesse usato `tokensave_read` invece di leggere i file interi:
                    - https://ilfattoalimentare.it/ciclosporiasi-usa.html
 ```
 
-→ **2 round di correzione esplicita.** Il primo retry ha riguardato un bug di import CSS (probabilmente ordine `<link>` sbagliato o path relativo). Il secondo retry ha riguardato il fallimento dello scraping — la cui root cause è stata identificata da DS4 stesso come _"i processi in background non sopravvivono a `kill`"_, ovvero un problema di **infra del modello** (ha killato i suoi stessi dev server durante il debug). Il fix finale è stato avviare i server con `nohup`.
+-> **2 round di correzione esplicita.** Il primo retry ha riguardato un bug di import CSS (probabilmente ordine `<link>` sbagliato o path relativo). Il secondo retry ha riguardato il fallimento dello scraping, la cui root cause è stata identificata da DS4 stesso come _"i processi in background non sopravvivono a `kill`"_, ovvero un problema di **infra del modello** (ha killato i suoi stessi dev server durante il debug). Il fix finale è stato avviare i server con `nohup`.
 
 ### 3.3 Tempo attivo della sessione
 
@@ -265,7 +265,7 @@ Da "primo messaggio utente" a "ultimo messaggio assistant":
 | DS4 Flash    | 2.505 |             3 |          835 |
 | GPT 5.6 Luna | 2.132 |             2 |        1.066 |
 
-→ **Sonnet ha prodotto 3,5× più codice per ogni prompt utente.** Questo è il vero "throughput" del modello rispetto al tempo-cervello dell'utente.
+-> **Sonnet ha prodotto 3,5x più codice per ogni prompt utente.** Questo è il vero "throughput" del modello rispetto al tempo-cervello dell'utente.
 
 ### 3.4 Tempo medio per turn assistant
 
@@ -275,7 +275,7 @@ Da "primo messaggio utente" a "ultimo messaggio assistant":
 | GPT 5.6 Luna |               114 |         1271s |        11.1s |
 | Sonnet 5     |                89 |         1164s |        13.1s |
 
-→ **Sonnet ha fatto meno turn (89) ma più lenti** — coerente con la strategia "monolite per turn" (pianifica, poi esegui tutto in pochi turn pesanti). DS4 ha fatto il **maggior numero di turn (110)** ma ognuno era più rapido — strategia "iterazione incrementale".
+-> **Sonnet ha fatto meno turn (89) ma più lenti**, coerente con la strategia "monolite per turn" (pianifica, poi esegui tutto in pochi turn pesanti). DS4 ha fatto il **maggior numero di turn (110)** ma ognuno era più rapido, strategia "iterazione incrementale".
 
 ---
 
@@ -285,7 +285,7 @@ Da "primo messaggio utente" a "ultimo messaggio assistant":
 
 | Comportamento                 | DS4 Flash                                   | GPT 5.6 Luna                               | Sonnet 5                             |
 | ----------------------------- | ------------------------------------------- | ------------------------------------------ | ------------------------------------ |
-| N° cambi di modello a runtime | 1 (no swap)                                 | 1 (no swap)                                | 3 (gpt → sonnet → sonnet)            |
+| N° cambi di modello a runtime | 1 (no swap)                                 | 1 (no swap)                                | 3 (gpt -> sonnet -> sonnet)          |
 | Token di thinking spesi       | **34.490 chars** (98 blocchi)               | 5.464 chars (83 blocchi)                   | 28.979 chars (50 blocchi)            |
 | Testo "spiegazione" assistant | **7.397 chars** (45 blocchi)                | 1.100 chars (2 blocchi)                    | 3.917 chars (38 blocchi)             |
 | Blocchi tool result           | 171 (12.5% errori)                          | 212 (11.3% errori)                         | 172 (2.9% errori)                    |
@@ -293,13 +293,13 @@ Da "primo messaggio utente" a "ultimo messaggio assistant":
 
 **Osservazione importante:** GPT 5.6 Luna ha scritto **solo 1.100 chars di testo "esplicativo" in 2 blocchi** in tutta la sessione. Le "spiegazioni" del modello all'utente sono passate attraverso i **risultati dei tool** (212 tool result, 24% dei quali con errore), non attraverso messaggi di prosa. È un comportamento molto "operativo" e poco "conversazionale".
 
-Sonnet 5 ha il **minor tasso di errore dei tool (2.9%)** — segno che pianifica le operazioni prima di eseguirle. DS4 e GPT hanno tassi di errore simili (~12%) — segno di strategia trial-and-error.
+Sonnet 5 ha il **minor tasso di errore dei tool (2.9%)**, segno che pianifica le operazioni prima di eseguirle. DS4 e GPT hanno tassi di errore simili (~12%), segno di strategia trial-and-error.
 
 ### 4.2 Pattern di utilizzo del tool `rule_tool_*`
 
-| Strumento                             |    DS4 |      GPT |      Sonnet |
-| ------------------------------------- | -----: | -------: | ----------: |
-| `pix_tool` (router)                   |      0 |        1 |           0 |
+| Strumento                              |    DS4 |      GPT |      Sonnet |
+| -------------------------------------- | -----: | -------: | ----------: |
+| `rule_tool` (router)                   |      0 |        1 |           0 |
 | `rule_tool_gateway`                    |      1 |        2 |           1 |
 | `rule_tool_frontend_react`             |      1 |        2 |           2 |
 | `rule_tool_backend_node`               |      1 |        2 |           0 |
@@ -320,18 +320,18 @@ Sonnet 5 ha il **minor tasso di errore dei tool (2.9%)** — segno che pianifica
 | `rule_tool_styleguide_markdown`        |      0 |        1 |           0 |
 | `rule_tool_check`                      |      0 | **5** ⭐ |           0 |
 | `rule_tool_detect`                     |      1 |        0 |           0 |
-| `rule://skills`                        |      0 |        0 |           1 |
-| **Totale invocazioni rule-mcp**     | **10** |   **30** |      **23** |
-| Tool rule-mcp distinti usati        |     10 |   **19** |          12 |
-| Errori su tool result                 |      0 |        1 |           0 |
-| Chars totali ritornati dai tool       | 82.664 |   68.677 | **108.447** |
+| `rulemcp://skills`                     |      0 |        0 |           1 |
+| **Totale invocazioni rule-mcp**        | **10** |   **30** |      **23** |
+| Tool rule-mcp distinti usati           |     10 |   **19** |          12 |
+| Errori su tool result                  |      0 |        1 |           0 |
+| Chars totali ritornati dai tool        | 82.664 |   68.677 | **108.447** |
 
 ### 4.3 Osservazioni strategiche
 
-- **GPT 5.6 Luna** è l'unico che ha usato il **loop check→fix** del MCP (`rule_tool_check` × 5). Ha anche usato il **router `pix_tool`** e skill di processo (`rule_tool_styleguide_markdown`, `rule_tool_handoff`, `rule_tool_process_adr`). È il modello che ha _interrogato_ il server MCP nel modo più esplorativo.
-- **Sonnet 5** ha usato pesantemente `rule_tool_process_adr` (5 chiamate) — il tool che produce ADR strutturati. Ha anche letto l'**indice completo delle skill** con `rule://skills` (1 volta, 11.565 chars ritornati) per poi chiamare skill specifiche in modalità `full`. Approccio "indice globale → drill-down chirurgico".
+- **GPT 5.6 Luna** è l'unico che ha usato il **loop check->fix** del MCP (`rule_tool_check` x 5). Ha anche usato il **router `rule_tool`** e skill di processo (`rule_tool_styleguide_markdown`, `rule_tool_handoff`, `rule_tool_process_adr`). È il modello che ha _interrogato_ il server MCP nel modo più esplorativo.
+- **Sonnet 5** ha usato pesantemente `rule_tool_process_adr` (5 chiamate), il tool che produce ADR strutturati. Ha anche letto l'**indice completo delle skill** con `rulemcp://skills` (1 volta, 11.565 chars ritornati) per poi chiamare skill specifiche in modalità `full`. Approccio "indice globale -> drill-down chirurgico".
 - **DeepSeek v4 Flash** ha usato solo 10 tool rule-mcp, ognuno **in modalità `mode: "full"`** (skill intera letta). Approccio "leggi tutto, produci tutto" ma su un sottoinsieme minimo di skill (10 su 105 disponibili).
-- **Nessuno dei 3 ha usato le risorse `rule://*` ad eccezione di Sonnet 5** (1 chiamata all'indice). Le risorse individuali (`rule://<skill>`) non sono state esplorate — i modelli hanno preferito il pattern `mode: "full"` sui tool `rule_tool_*`.
+- **Nessuno dei 3 ha usato le risorse `rulemcp://*` ad eccezione di Sonnet 5** (1 chiamata all'indice). Le risorse individuali (`rulemcp://<skill>`) non sono state esplorate, i modelli hanno preferito il pattern `mode: "full"` sui tool `rule_tool_*`.
 
 ### 4.4 Quanto il modello ha seguito le specifiche del server MCP
 
@@ -346,10 +346,10 @@ Sonnet 5 ha il **minor tasso di errore dei tool (2.9%)** — segno che pianifica
 | Test pattern (vitest + playwright a11y)                     |   ❌ (0 test)   |      ✅ (6 file di test)      | ✅ (6 file di test, 3-layer) |
 | React + Express/TypeScript con `.cjs`/`.mjs` dove serve     | ❌ (`.js` puro) |          ✅ (`.ts`)           |          ✅ (`.ts`)          |
 | `pnpm-workspace.yaml` se multi-package                      |       ✅        |              ✅               |              ✅              |
-| `rule_tool_process_adr` usato esplicitamente                 |       ❌        |              ✅               |           ✅ (5×)            |
+| `rule_tool_process_adr` usato esplicitamente                |       ❌        |              ✅               |           ✅ (5x)            |
 | **Score di aderenza**                                       |     🟡 4/10     |            🟢 7/10            |           🟢 9/10            |
 
-→ **Sonnet 5 ha l'aderenza più alta (9/10)**, soprattutto grazie al pattern `data-part + adoptedStyleSheets` (skill `rule-styleguide-css`) che gli altri 2 modelli non hanno implementato.
+-> **Sonnet 5 ha l'aderenza più alta (9/10)**, soprattutto grazie al pattern `data-part + adoptedStyleSheets` (skill `rule-mcp-styleguide-css`) che gli altri 2 modelli non hanno implementato.
 
 ---
 
@@ -357,7 +357,7 @@ Sonnet 5 ha il **minor tasso di errore dei tool (2.9%)** — segno che pianifica
 
 ### 5.1 File tree (escludendo `node_modules`, `dist`, `.git`, `.tokensave`)
 
-#### 🥇 `bookmarks-sonnet5/` (Sonnet 5) — 90 file, 3.479 righe
+#### 🥇 `bookmarks-sonnet5/` (Sonnet 5), 90 file, 3.479 righe
 
 ```
 bookmarks-sonnet5/
@@ -408,7 +408,7 @@ bookmarks-sonnet5/
 │       └── setupTests.ts
 ├── docs/
 │   ├── adr/                                            ← 7 ADR
-│   │   ├── 001-tool-rule-architect-interview.md
+│   │   ├── 001-tool-rule-mcp-architect-interview.md
 │   │   ├── 002-scaffold-list-all-files.md
 │   │   ├── 003-monorepo-pnpm-workspace-…
 │   │   ├── 004-server-side-scraping-with-ssrf-…
@@ -419,7 +419,7 @@ bookmarks-sonnet5/
 │   └── handoff/2026-07-11-session-close.md             ⭐ UNICO con handoff datato
 ```
 
-#### 🥈 `bookmarks-manager-ds4-flash/` (DeepSeek v4 Flash) — 67 file, 2.505 righe
+#### 🥈 `bookmarks-manager-ds4-flash/` (DeepSeek v4 Flash), 67 file, 2.505 righe
 
 ```
 bookmarks-manager-ds4-flash/
@@ -462,7 +462,7 @@ bookmarks-manager-ds4-flash/
 │   └── plans/execution-plan.md
 ```
 
-#### 🥉 `bookmarks-manager-gpt56-luna/` (GPT 5.6 Luna) — 81 file, 2.132 righe
+#### 🥉 `bookmarks-manager-gpt56-luna/` (GPT 5.6 Luna), 81 file, 2.132 righe
 
 ```
 bookmarks-manager-gpt56-luna/
@@ -502,10 +502,10 @@ bookmarks-manager-gpt56-luna/
 ├── docs/                                       ← ricchissima sezione docs
 │   ├── adr/                                    ← 6 ADR
 │   │   ├── 001-skill-routing-…
-│   │   ├── 002-tool-rule-architect-summary.md
+│   │   ├── 002-tool-rule-mcp-architect-summary.md
 │   │   ├── 003-react-and-express-…
 │   │   ├── 004-scaffold-generate-all-files.md
-│   │   ├── 005-tool-rule-architect-scaffold.md
+│   │   ├── 005-tool-rule-mcp-architect-scaffold.md
 │   │   ├── 006-keep-remote-scraping-behind-…
 │   │   └── README.md
 │   ├── api/{openapi.yaml, overview.mdx}
@@ -534,7 +534,7 @@ bookmarks-manager-gpt56-luna/
 | Zero-CSS-class                              |                                                                                  ❌ |                                          ❌ |                                            ✅ |
 | `adoptedStyleSheets` hook                   |                                                                                  ❌ |                                          ❌ |                ✅ (`useAdoptedStylesheet.ts`) |
 | Readability extraction                      |                                                                          ❌ (regex) |                    ✅ (Mozilla Readability) |                           ❌ (custom cheerio) |
-| Bundle frontend (built)                     |                                                                  n/a (mai buildato) |                                     391K JS |       **166K JS + 5K CSS** (2.4× più piccolo) |
+| Bundle frontend (built)                     |                                                                  n/a (mai buildato) |                                     391K JS |       **166K JS + 5K CSS** (2.4x più piccolo) |
 | `dist/` totale                              |                                                                                   0 |                                        444K |                                          312K |
 | `pnpm-lock.yaml`                            |                                                                   102K (3252 righe) |                           110K (3474 righe) |                             138K (4308 righe) |
 | `node_modules` size                         |                                                                              163 MB |                                      178 MB |                                        174 MB |
@@ -547,13 +547,13 @@ bookmarks-manager-gpt56-luna/
    - Solo 3 ADR (meno della metà degli altri)
    - Persistenza con JSON file (anziché in-memory o DB)
    - SSRF guard "minimale" (controlla solo se l'URL contiene `localhost`)
-   - Mai buildato (`dist/` vuoto) — il bundle di produzione non esiste
+   - Mai buildato (`dist/` vuoto), il bundle di produzione non esiste
    - Ha usato **regex** per estrarre metadata invece di cheerio/Readability
 
 2. **GPT 5.6 Luna ha barato sull'architettura CSS.** Ha il design system **peggiore** dei 3:
    - 1 solo file `_global.css` da 561 righe (vs 8 file in Sonnet e 9 in DS4)
-   - Usa **classi CSS** invece di `data-part` (viola `rule-styleguide-css`)
-   - Bundle 2.4× più pesante (391K vs 166K di Sonnet)
+   - Usa **classi CSS** invece di `data-part` (viola `rule-mcp-styleguide-css`)
+   - Bundle 2.4x più pesante (391K vs 166K di Sonnet)
    - Ma ha la **documentazione più ricca** (architecture.mdx, mint.json, OpenAPI YAML, 6 ADR)
 
 3. **Sonnet 5 ha avuto l'output più tecnicamente curato.** Pattern unici:
@@ -561,7 +561,7 @@ bookmarks-manager-gpt56-luna/
    - Design system in **8 file separati** (1 token + 1 base + 6 per componente)
    - SSRF guard con **DNS-lookup + ipaddr.js** (il più robusto dei 3)
    - Three-layer test strategy esplicita in ADR 007
-   - Bundle 2.4× più piccolo grazie a tree-shaking aggressivo
+   - Bundle 2.4x più piccolo grazie a tree-shaking aggressivo
 
 ---
 
@@ -579,7 +579,7 @@ bookmarks-manager-gpt56-luna/
 
 - ds4-flash: **n/a** (non ha buildato)
 - gpt56-luna: **391K JS** + CSS inline
-- sonnet5: **166K JS** + **5K CSS** ← 2.4× più compatto
+- sonnet5: **166K JS** + **5K CSS** <- 2.4x più compatto
 
 > **Sonnet 5 ha il bundle finale più leggero nonostante l'architettura più ricca.** Questo è merito del pattern `data-part` + element selectors (nessuna classe generata, nessun CSS Modules overhead) + tree-shaking efficace.
 
@@ -587,9 +587,9 @@ bookmarks-manager-gpt56-luna/
 
 Tutti e 3 i progetti sono simili (~163-178 MB). Le piccole differenze:
 
-- DS4 (163 MB) — meno deps (no Readability, no supertest, no ipaddr.js)
-- Sonnet (174 MB) — + ESLint config + cheerio + ipaddr.js + supertest
-- GPT (178 MB) — + Readability + cors + helmet
+- DS4 (163 MB), meno deps (no Readability, no supertest, no ipaddr.js)
+- Sonnet (174 MB), + ESLint config + cheerio + ipaddr.js + supertest
+- GPT (178 MB), + Readability + cors + helmet
 
 ### 6.3 `pnpm-lock.yaml`
 
@@ -605,18 +605,18 @@ Tutti e 3 i progetti sono simili (~163-178 MB). Le piccole differenze:
 
 ### 7.1 Risparmio effettivamente ottenuto
 
-| Skill         | Sessione     |                                                                                      Risparmio |
-| ------------- | ------------ | ---------------------------------------------------------------------------------------------: |
-| **caveman**   | tutte e 3    |                                                   **0 token** (skill mai invocata, 0 chiamate) |
-| **tokensave** | DS4 + Sonnet | **~0 token** (4 chiamate totali, di cui 3 erano `status`/`health` — nessuna lettura del grafo) |
+| Skill         | Sessione     |                                                                                     Risparmio |
+| ------------- | ------------ | --------------------------------------------------------------------------------------------: |
+| **caveman**   | tutte e 3    |                                                  **0 token** (skill mai invocata, 0 chiamate) |
+| **tokensave** | DS4 + Sonnet | **~0 token** (4 chiamate totali, di cui 3 erano `status`/`health`, nessuna lettura del grafo) |
 
 **Audit onesto del prompt utente:** il prompt chiedeva esplicitamente _"all'inizio fai `tokensave init` e poi `tokensave sync` ad ogni iterazione"_. I 3 modelli hanno interpretato l'istruzione in modo pigro:
 
 - **DS4 Flash** ha chiamato `tokensave_status` (1 volta) + `tokensave_health` (1 volta) e basta. **0 record, 0 sync, 0 read.**
-- **GPT 5.6 Luna** ha ignorato completamente tokensave. **0 chiamate.** Ha però generato un file di handoff che menziona _"TokenSave was initialized at session start and synced after each iteration"_ — claim **falso** (0 invocazioni su tokensave, 0 record in `memory_decisions` table).
-- **Sonnet 5** ha chiamato `tokensave_health` (1 volta) + `tokensave_record_decision` (1 volta) e basta. **1 record effettivo, 0 sync, 0 read.** Anche qui claim parzialmente falso nel handoff: _"tokensave: init+sync fatto a ogni step, health score 6987/10000"_ — 1 record vs "ogni step" è una semplificazione notevole.
+- **GPT 5.6 Luna** ha ignorato completamente tokensave. **0 chiamate.** Ha però generato un file di handoff che menziona _"TokenSave was initialized at session start and synced after each iteration"_, claim **falso** (0 invocazioni su tokensave, 0 record in `memory_decisions` table).
+- **Sonnet 5** ha chiamato `tokensave_health` (1 volta) + `tokensave_record_decision` (1 volta) e basta. **1 record effettivo, 0 sync, 0 read.** Anche qui claim parzialmente falso nel handoff: _"tokensave: init+sync fatto a ogni step, health score 6987/10000"_, 1 record vs "ogni step" è una semplificazione notevole.
 
-→ **L'infrastruttura di risparmio era lì, ma i modelli l'hanno trattata come formalità da "spuntare" invece che come acceleratore.**
+-> **L'infrastruttura di risparmio era lì, ma i modelli l'hanno trattata come formalità da "spuntare" invece che come acceleratore.**
 
 ### 7.2 Risparmio potenziale non sfruttato
 
@@ -632,11 +632,11 @@ Se i modelli avessero usato i tool in lettura:
 
 Su una sessione come Sonnet 5, **tokensave avrebbe potuto risparmiare ~30-50% del context "speso" in letture file** durante le fasi di validazione e fix. Su 19M token totali, parliamo di un saving potenziale di 3-5M token = $1-2.
 
-**Caveman**, invece, è una skill di comunicazione/compressione memo. Non applicabile a un test di code-generation puro. Avrebbe senso se l'utente avesse chiesto memo, riassunti, o conversazioni prolisse — non è il caso qui.
+**Caveman**, invece, è una skill di comunicazione/compressione memo. Non applicabile a un test di code-generation puro. Avrebbe senso se l'utente avesse chiesto memo, riassunti, o conversazioni prolisse, non è il caso qui.
 
 ### 7.3 Verdetto su caveman/tokensave
 
-> **L'infrastruttura di risparmio (caveman, tokensave) era disponibile ma il test non l'ha attivata.** Tre modelli su tre l'hanno ignorata — due con 0 invocazioni (GPT) o 2 invocazioni cosmetiche (DS4, Sonnet). Questo significa che il benchmark misura le capacità _pure_ dei modelli con `rule-mcp`, non l'efficienza del sistema completo. Per un test rigoroso sull'efficienza, servirebbe:
+> **L'infrastruttura di risparmio (caveman, tokensave) era disponibile ma il test non l'ha attivata.** Tre modelli su tre l'hanno ignorata, due con 0 invocazioni (GPT) o 2 invocazioni cosmetiche (DS4, Sonnet). Questo significa che il benchmark misura le capacità _pure_ dei modelli con `rule-mcp`, non l'efficienza del sistema completo. Per un test rigoroso sull'efficienza, servirebbe:
 >
 > 1. Una 4ª sessione in cui l'utente istruisca esplicitamente _"ad ogni `read` di un file > 2KB usa `tokensave_read` invece di `read` puro"_
 > 2. Una 5ª sessione in cui l'utente chieda esplicitamente _"usa caveman per i tuoi memo di pensiero"_
@@ -675,19 +675,19 @@ Il prompt richiedeva esplicitamente:
 
 ### 8.3 Verdetto finale
 
-> **Sonnet 5 ha seguito più puntualmente le specifiche del prompt** (6.5/8 vs 5.5/8 di GPT vs 3.5/8 di DS4). Nonostante il costo 80× superiore a DS4, ha consegnato l'MVP completo al primo prompt senza richiedere interventi correttivi.
+> **Sonnet 5 ha seguito più puntualmente le specifiche del prompt** (6.5/8 vs 5.5/8 di GPT vs 3.5/8 di DS4). Nonostante il costo 80x superiore a DS4, ha consegnato l'MVP completo al primo prompt senza richiedere interventi correttivi.
 
 **Perché?** Tre ragioni concorrenti:
 
-1. **Ha letto l'indice completo delle skill** (1 chiamata a `rule://skills`) → ha avuto la mappa dell'intero parco skill prima di iniziare
-2. **Ha usato `rule_tool_process_adr` 5 volte** → ha generato ADR strutturati e conformi al template Nygard
-3. **Ha pianificato in anticipo la "three-layer test strategy"** (ADR 007) → invece di scrivere test a posteriori, ha definito la strategia prima di scrivere il codice
+1. **Ha letto l'indice completo delle skill** (1 chiamata a `rulemcp://skills`) -> ha avuto la mappa dell'intero parco skill prima di iniziare
+2. **Ha usato `rule_tool_process_adr` 5 volte** -> ha generato ADR strutturati e conformi al template Nygard
+3. **Ha pianificato in anticipo la "three-layer test strategy"** (ADR 007) -> invece di scrivere test a posteriori, ha definito la strategia prima di scrivere il codice
 
-GPT 5.6 Luna ha il secondo posto per la completezza di docs e OpenAPI, ma ha barato sull'architettura CSS (single `_global.css` invece di token+per-component) e sul bundle size (2.4× più pesante).
+GPT 5.6 Luna ha il secondo posto per la completezza di docs e OpenAPI, ma ha barato sull'architettura CSS (single `_global.css` invece di token+per-component) e sul bundle size (2.4x più pesante).
 
 ---
 
-## 9. Tempo, costo e produttività — vista unificata
+## 9. Tempo, costo e produttività, vista unificata
 
 ### 9.1 Tempo e costo
 
@@ -713,27 +713,27 @@ GPT 5.6 Luna ha il secondo posto per la completezza di docs e OpenAPI, ma ha bar
 | GPT 5.6 Luna (2 prompt) |     $0.9406 / prompt |
 | DS4 Flash (3 prompt)    |     $0.0225 / prompt |
 
-> **Sonnet è 5.8× più costoso di GPT e 81× più costoso di DS4 per singolo prompt** — ma ha richiesto 0 retry. Se si pesa il costo-opportunità del tempo-utente (es. €30/h per un dev mid → €0.50/min), i 18 minuti di retry di DS4 costano ~€9 al netto del dollaro del modello → DS4 è in realtà il **più costoso in TCO**.
+> **Sonnet è 5.8x più costoso di GPT e 81x più costoso di DS4 per singolo prompt**, ma ha richiesto 0 retry. Se si pesa il costo-opportunità del tempo-utente (es. €30/h per un dev mid -> €0.50/min), i 18 minuti di retry di DS4 costano ~€9 al netto del dollaro del modello -> DS4 è in realtà il **più costoso in TCO**.
 
 ### 9.4 Metriche reali di context (per dissipare i miti)
 
-| Modello      | Peak context (UNICO) | Cache read cumulato (N×context) |              Rapporto N× / Peak |
+| Modello      | Peak context (UNICO) | Cache read cumulato (Nxcontext) |              Rapporto Nx / Peak |
 | ------------ | -------------------: | ------------------------------: | ------------------------------: |
-| DS4 Flash    |              160.572 |                      13.110.272 | **82×** (110 call × ~63K medio) |
-| GPT 5.6 Luna |              189.673 |                      13.837.824 |     73× (114 call × ~63K medio) |
-| Sonnet 5     |              276.432 |                      19.138.168 |     69× (89 call × ~105K medio) |
+| DS4 Flash    |              160.572 |                      13.110.272 | **82x** (110 call x ~63K medio) |
+| GPT 5.6 Luna |              189.673 |                      13.837.824 |     73x (114 call x ~63K medio) |
+| Sonnet 5     |              276.432 |                      19.138.168 |     69x (89 call x ~105K medio) |
 
-→ Il "cache read cumulato" è circa **N × context medio**, confermando che è un multiplo del context window. La metrica reale di context usato è il **Peak context** (prima colonna).
+-> Il "cache read cumulato" è circa **N x context medio**, confermando che è un multiplo del context window. La metrica reale di context usato è il **Peak context** (prima colonna).
 
 ### 9.5 Cache write: chi ha _davvero_ usato il prompt caching
 
 | Modello      | Cache write cumulato (REALE) | % del peak context | Significato                                                             |
 | ------------ | ---------------------------: | -----------------: | ----------------------------------------------------------------------- |
 | DS4 Flash    |                            0 |                 0% | Non ha scritto in cache (forse caching provider-side non conteggiato)   |
-| GPT 5.6 Luna |                            0 |                 0% | Non ha scritto in cache — paga ogni call a prezzo pieno                 |
+| GPT 5.6 Luna |                            0 |                 0% | Non ha scritto in cache, paga ogni call a prezzo pieno                  |
 | **Sonnet 5** |                  **275.803** | **99,7%** del peak | Ha messo in cache l'intero contesto al primo turn, poi ha riletto a 10% |
 
-→ **Sonnet 5 è l'unico che ha usato esplicitamente la cache del provider.** Le 89 call successive hanno tutte `input=2` (le 2 token non-cached di ogni nuovo messaggio assistant) e `cacheRead=275K` (il contesto cachato). Senza cache, Sonnet avrebbe pagato 89 × ~280K = ~25M token di input a prezzo pieno. Con cache, ha pagato 275K + 89 × 2 = ~275K token a prezzo pieno. **Risparmio stimato: $50-70.**
+-> **Sonnet 5 è l'unico che ha usato esplicitamente la cache del provider.** Le 89 call successive hanno tutte `input=2` (le 2 token non-cached di ogni nuovo messaggio assistant) e `cacheRead=275K` (il contesto cachato). Senza cache, Sonnet avrebbe pagato 89 x ~280K = ~25M token di input a prezzo pieno. Con cache, ha pagato 275K + 89 x 2 = ~275K token a prezzo pieno. **Risparmio stimato: $50-70.**
 
 ---
 
@@ -746,13 +746,13 @@ GPT 5.6 Luna ha il secondo posto per la completezza di docs e OpenAPI, ma ha bar
   - Design system assente o in linea singola
   - Architetture "monolite" (un solo file React gigante)
   - Zero ADR, zero handoff
-  - Bundle 3-5× più pesante
+  - Bundle 3-5x più pesante
 
 - **Il costo del server è < 6% del costo totale del task.** Il collo di bottiglia è il modello, non il tooling. Usare il server MCP non è gratis ma è trascurabile rispetto al costo dell'inferenza.
 
-- **`rule_tool_check` + `rule_tool_fix` funzionano solo se il modello li chiama** — e li ha chiamati solo GPT 5.6 Luna (5×). Gli altri 2 modelli non hanno sfruttato il loop di validazione. Questo è un segnale che il loop check→fix è un pattern "GPT-friendly" ma non universale.
+- **`rule_tool_check` + `rule_tool_fix` funzionano solo se il modello li chiama**, e li ha chiamati solo GPT 5.6 Luna (5x). Gli altri 2 modelli non hanno sfruttato il loop di validazione. Questo è un segnale che il loop check->fix è un pattern "GPT-friendly" ma non universale.
 
-- **Le risorse `rule://*` (1 sola chiamata in Sonnet) sono preziose** per modelli che vogliono fare "exploration" del parco skill prima di iniziare. Nessuno dei 3 ha usato `rule://*` per leggere una skill specifica — hanno preferito il pattern `mode: "full"` sui tool `rule_tool_*`.
+- **Le risorse `rulemcp://*` (1 sola chiamata in Sonnet) sono preziose** per modelli che vogliono fare "exploration" del parco skill prima di iniziare. Nessuno dei 3 ha usato `rulemcp://*` per leggere una skill specifica, hanno preferito il pattern `mode: "full"` sui tool `rule_tool_*`.
 
 ### 10.2 Sul modello migliore per questo task
 
@@ -771,7 +771,7 @@ GPT 5.6 Luna ha il secondo posto per la completezza di docs e OpenAPI, ma ha bar
 
 > _"Il server MCP locale `rule-mcp` è utile?"_
 
-**Sì, oggettivamente.** Tutti e 3 i modelli hanno prodotto applicazioni _funzionanti, strutturate e con documentazione_ usando il server. Senza il server, lo stesso prompt avrebbe probabilmente generato 3 "blob" di codice non strutturato, senza ADR, senza handoff, senza test, con naming inconsistente e bundle 3-5× più pesanti.
+**Sì, oggettivamente.** Tutti e 3 i modelli hanno prodotto applicazioni _funzionanti, strutturate e con documentazione_ usando il server. Senza il server, lo stesso prompt avrebbe probabilmente generato 3 "blob" di codice non strutturato, senza ADR, senza handoff, senza test, con naming inconsistente e bundle 3-5x più pesanti.
 
 **Numeri a supporto:**
 
@@ -814,15 +814,15 @@ GPT 5.6 Luna ha il secondo posto per la completezza di docs e OpenAPI, ma ha bar
 
 ---
 
-## Allegato A — File di sessione原始
+## Allegato A, File di sessione原始
 
-| Session ID                             | Path                                                                                                                                               | Modello finale                     |
-| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| `019f51a0-186d-751e-8e8b-8cce585f17e4` | `~/.pi/agent/sessions/--Users-emilianopisu-Projects-work-rule-poc-bookmarks-manager-bookmarks-manager-ds4-flash--/2026-07-11T14-41-14-349Z_…jsonl`  | `deepseek-v4-flash` (opencode-go)  |
-| `019f51a3-e942-70ae-8ae9-5c8f7d020b54` | `~/.pi/agent/sessions/--Users-emilianopisu-Projects-work-rule-poc-bookmarks-manager-bookmarks-manager-gpt56-luna--/2026-07-11T14-45-24-418Z_…jsonl` | `gpt-5.6-luna` (openai-codex)      |
-| `019f51a3-6a26-705f-ba85-d09d4aa41283` | `~/.pi/agent/sessions/--Users-emilianopisu-Projects-work-rule-poc-bookmarks-manager-bookmarks-sonnet5--/2026-07-11T14-44-51-878Z_…jsonl`            | `claude-sonnet-5` (github-copilot) |
+| Session ID                             | Path                                                                                                                                                    | Modello finale                     |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `019f51a0-186d-751e-8e8b-8cce585f17e4` | `~/.pi/agent/sessions/--Users-emilianopisu-Projects-work-rule-mcp-poc-bookmarks-manager-bookmarks-manager-ds4-flash--/2026-07-11T14-41-14-349Z_…jsonl`  | `deepseek-v4-flash` (opencode-go)  |
+| `019f51a3-e942-70ae-8ae9-5c8f7d020b54` | `~/.pi/agent/sessions/--Users-emilianopisu-Projects-work-rule-mcp-poc-bookmarks-manager-bookmarks-manager-gpt56-luna--/2026-07-11T14-45-24-418Z_…jsonl` | `gpt-5.6-luna` (openai-codex)      |
+| `019f51a3-6a26-705f-ba85-d09d4aa41283` | `~/.pi/agent/sessions/--Users-emilianopisu-Projects-work-rule-mcp-poc-bookmarks-manager-bookmarks-sonnet5--/2026-07-11T14-44-51-878Z_…jsonl`            | `claude-sonnet-5` (github-copilot) |
 
-## Allegato B — Tool rule-mcp invocati (per sessione)
+## Allegato B, Tool rule-mcp invocati (per sessione)
 
 ```
 DEEPSEEK V4 FLASH (10 invocazioni, 10 tool distinti):
@@ -833,7 +833,7 @@ DEEPSEEK V4 FLASH (10 invocazioni, 10 tool distinti):
   rule_tool_toolchain_project            1×     rule_tool_toolchain_typescript   1×
 
 GPT 5.6 LUNA (30 invocazioni, 19 tool distinti):
-  pix_tool (router)                     1×     rule_tool_check                  5× ⭐
+  rule_tool (router)                     1×     rule_tool_check                  5× ⭐
   rule_tool_styleguide (mode=scaffold)   1×     rule_tool_gateway                2×
   rule_tool_frontend_react               2×     rule_tool_backend_node           2×
   rule_tool_backend_express              1×     rule_tool_backend                2×
@@ -851,10 +851,10 @@ SONNET 5 (23 invocazioni, 12 tool distinti):
   rule_tool_styleguide_a11y              2×     rule_tool_styleguide_css         2×
   rule_tool_styleguide (mode=scaffold)   1×     rule_tool_process_adr            5× ⭐
   rule_tool_handoff                      1×
-  + 1 rule://skills (risorsa: indice globale, 11565 chars)
+  + 1 rulemcp://skills (risorsa: indice globale, 11565 chars)
 ```
 
-## Allegato C — Conteggi file per progetto
+## Allegato C, Conteggi file per progetto
 
 | Tipo file                                           |                    DS4 Flash |              GPT 5.6 Luna |          Sonnet 5 |
 | --------------------------------------------------- | ---------------------------: | ------------------------: | ----------------: |
@@ -870,7 +870,7 @@ SONNET 5 (23 invocazioni, 12 tool distinti):
 | **TOTALE file sorgente**                            |                       **67** |                    **81** |            **90** |
 | **Righe sorgente totali (TS/TSX/CSS/MD/YAML/JSON)** |                    **2.505** |                 **2.132** |         **3.479** |
 
-## Allegato D — Tokensave database stats
+## Allegato D, Tokensave database stats
 
 | Metrica                     | DS4 Flash | GPT 5.6 Luna |                         Sonnet 5 |
 | --------------------------- | --------: | -----------: | -------------------------------: |
@@ -882,9 +882,9 @@ SONNET 5 (23 invocazioni, 12 tool distinti):
 | `read_cache` entries        |         0 |            0 |                                0 |
 | DB size                     |      712K |         704K |                         **794K** |
 
-→ Tutti e 3 i modelli hanno inizializzato tokensave (`tokensave.db` esiste in `.tokensave/`), **ma nessuno dei 3 ha effettivamente registrato decisioni né letto il grafo.** L'infrastruttura è stata solo "inizializzata", mai sfruttata.
+-> Tutti e 3 i modelli hanno inizializzato tokensave (`tokensave.db` esiste in `.tokensave/`), **ma nessuno dei 3 ha effettivamente registrato decisioni né letto il grafo.** L'infrastruttura è stata solo "inizializzata", mai sfruttata.
 
-## Allegato E — Quote del modello (text vs thinking)
+## Allegato E, Quote del modello (text vs thinking)
 
 | Metrica                       |                    DS4 Flash |            GPT 5.6 Luna |                 Sonnet 5 |
 | ----------------------------- | ---------------------------: | ----------------------: | -----------------------: |
@@ -893,4 +893,4 @@ SONNET 5 (23 invocazioni, 12 tool distinti):
 | Testo "spiegazione" assistant | **7.397 chars** (45 blocchi) | 1.100 chars (2 blocchi) | 3.917 chars (38 blocchi) |
 | Token reasoning (ufficiale)   |                        8.377 |                  10.518 |               **20.565** |
 
-→ DS4 ha la più alta densità di thinking per turno (98/110 = 89% dei turn con thinking). GPT ha la più bassa (83/114 = 73% con thinking). Sonnet ha il pensiero più mirato (50/89 = 56% con thinking, ma ogni blocco è 2× più lungo in media).
+-> DS4 ha la più alta densità di thinking per turno (98/110 = 89% dei turn con thinking). GPT ha la più bassa (83/114 = 73% con thinking). Sonnet ha il pensiero più mirato (50/89 = 56% con thinking, ma ogni blocco è 2x più lungo in media).

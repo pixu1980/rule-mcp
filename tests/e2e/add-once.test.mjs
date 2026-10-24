@@ -8,7 +8,7 @@ test("add adds exactly 1 group per click", async ({ page }) => {
   await page.click("[data-part='project-type-card']:first-child");
   await page.waitForTimeout(200);
 
-  // Navigate: step 2 → 3 → 4 → 5
+  // Navigate: step 2 -> 3 -> 4 -> 5
   for (let index = 0; index < 4; index++) {
     await page.click("[data-part='nav-btn'][data-direction='next']");
     await page.waitForTimeout(300);

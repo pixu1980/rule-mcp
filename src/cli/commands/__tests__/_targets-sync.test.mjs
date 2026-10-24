@@ -12,7 +12,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-sync-home-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-sync-home-"));
 
 process.env.HOME = home;
 
@@ -67,11 +67,11 @@ test("a real sync writes the whole command set into the target", () => {
   const written = readdirSync(directory);
   assert.ok(written.length > 0, "the command files land");
   assert.ok(
-    written.every((name) => /^rule[-.]/.test(name)),
-    `every file belongs to the rule namespace: ${written.join(", ")}`,
+    written.every((name) => /^rule-mcp[-.]/.test(name)),
+    `every file belongs to the rule-mcp namespace: ${written.join(", ")}`,
   );
-  assert.ok(written.includes("rule-persona-security.md"), "a persona command is part of the set");
-  assert.ok(written.includes("rule.md"), "so is the root routing command");
+  assert.ok(written.includes("rule-mcp-persona-security.md"), "a persona command is part of the set");
+  assert.ok(written.includes("rule-mcp.md"), "so is the root routing command");
 });
 
 test("a normal sync purges the folded persona commands", () => {
@@ -79,28 +79,28 @@ test("a normal sync purges the folded persona commands", () => {
 
   out(() => syncCommandTargets({ agent: "claude" }));
   // A machine that ran the 57-command release still has the old files.
-  writeFileSync(join(directory, "rule-persona-security-audit.md"), "an older release\n");
-  writeFileSync(join(directory, "rule-persona-security-plan.md"), "an older release\n");
+  writeFileSync(join(directory, "rule-mcp-persona-security-audit.md"), "an older release\n");
+  writeFileSync(join(directory, "rule-mcp-persona-security-plan.md"), "an older release\n");
 
   out(() => syncCommandTargets({ agent: "claude" }));
 
   const written = readdirSync(directory);
-  assert.ok(written.includes("rule-persona-security.md"), "the current command is there");
-  assert.ok(!written.includes("rule-persona-security-audit.md"), "the old per-operation command is swept");
-  assert.ok(!written.includes("rule-persona-security-plan.md"), "including the plan sibling");
+  assert.ok(written.includes("rule-mcp-persona-security.md"), "the current command is there");
+  assert.ok(!written.includes("rule-mcp-persona-security-audit.md"), "the old per-operation command is swept");
+  assert.ok(!written.includes("rule-mcp-persona-security-plan.md"), "including the plan sibling");
 });
 
-test("remove sweeps the whole rule namespace, including names the registry dropped", () => {
+test("remove sweeps the whole rule-mcp namespace, including names the registry dropped", () => {
   const directory = claudeDir();
 
   out(() => syncCommandTargets({ agent: "claude" }));
-  writeFileSync(join(directory, "rule-renamed-away.md"), "a command from an older release\n");
+  writeFileSync(join(directory, "rule-mcp-renamed-away.md"), "a command from an older release\n");
   writeFileSync(join(directory, "keep-me.md"), "not ours\n");
 
   const text = out(() => syncCommandTargets({ agent: "claude", remove: true }));
 
-  assert.match(text, /removed \d+ rule\* command file/, "the removal reports its count");
-  assert.deepEqual(readdirSync(directory), ["keep-me.md"], "every rule file goes, and nothing else does");
+  assert.match(text, /removed \d+ rule-mcp\* command file/, "the removal reports its count");
+  assert.deepEqual(readdirSync(directory), ["keep-me.md"], "every rule-mcp file goes, and nothing else does");
 });
 
 test("a dry-run remove reports what it would sweep and sweeps nothing", () => {
@@ -145,7 +145,7 @@ test("a comma-separated agent list writes every named agent", () => {
   const text = out(() => syncCommandTargets({ agent: "claude,pi" }));
 
   assert.match(text, /across 2 directory/, "both named agents are covered in one call");
-  assert.ok(readdirSync(claude).includes("rule.md"), "claude receives the router");
-  assert.ok(readdirSync(pi).includes("rule.md"), "pi receives the router too");
-  assert.ok(readdirSync(pi).includes("rule-persona-security.md"), "and the rest of the clean set");
+  assert.ok(readdirSync(claude).includes("rule-mcp.md"), "claude receives the router");
+  assert.ok(readdirSync(pi).includes("rule-mcp.md"), "pi receives the router too");
+  assert.ok(readdirSync(pi).includes("rule-mcp-persona-security.md"), "and the rest of the clean set");
 });

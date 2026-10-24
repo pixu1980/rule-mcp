@@ -14,9 +14,9 @@ per-agent installer/uninstaller definitions).
 
 ## Decision
 
-1. **Guardrails**: each family moves to `src/core/guardrails/` —
+1. **Guardrails**: each family moves to `src/core/guardrails/`,
    `shared.js`, `file-tree.js`, `framework.js`, `scaffold.js`, `backend.js`,
-   `database.js`, `devops.js`, `util.js` — with `guardrail-defs.js` kept as a
+   `database.js`, `devops.js`, `util.js`, with `guardrail-defs.js` kept as a
    one-line re-export (`export * from "./guardrails/index.js"`) so historical
    import paths and the public export names never change.
 2. **Installer**: the per-agent domain (file helpers, command builders,

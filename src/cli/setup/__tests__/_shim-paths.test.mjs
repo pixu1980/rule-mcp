@@ -47,7 +47,7 @@ test("linkCandidates ignores missing global stores", () => {
 
 test("globalBinDir falls back to the platform default without pnpm", () => {
   const here = dirname(fileURLToPath(import.meta.url));
-  const empty = mkdtempSync(join(tmpdir(), "rule-shim-path-"));
+  const empty = mkdtempSync(join(tmpdir(), "rule-mcp-shim-path-"));
   const expected = platform() === "darwin" ? join(homedir(), "Library", "pnpm", "bin") : join(homedir(), ".local", "share", "pnpm", "bin");
 
   try {

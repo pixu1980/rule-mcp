@@ -7,8 +7,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-layers-branches-home-"));
-const root = mkdtempSync(join(tmpdir(), "rule-layers-branches-proj-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-layers-branches-home-"));
+const root = mkdtempSync(join(tmpdir(), "rule-mcp-layers-branches-proj-"));
 
 process.env.RULE_MCP_HOME = home;
 mkdirSync(join(root, ".git"), { recursive: true });

@@ -23,7 +23,7 @@ export const g = (arguments_, cwd) => execFileSync("git", arguments_, { cwd, std
 
 /** Build a bare "upstream" + a working clone that tracks it. */
 export function makeClonePair() {
-  const base = mkdtempSync(join(tmpdir(), "rule-su-"));
+  const base = mkdtempSync(join(tmpdir(), "rule-mcp-su-"));
   const upstream = join(base, "upstream.git");
   const clone = join(base, "clone");
   mkdirSync(upstream);
@@ -34,8 +34,8 @@ export function makeClonePair() {
   g(["init", "-b", "main"], seed);
   g(["config", "user.email", "t@t.t"], seed);
   g(["config", "user.name", "t"], seed);
-  mkdirSync(join(seed, "skills", "rule"), { recursive: true });
-  writeFileSync(join(seed, "skills", "rule", "SKILL.md"), "v1\n");
+  mkdirSync(join(seed, "skills", "rule-mcp"), { recursive: true });
+  writeFileSync(join(seed, "skills", "rule-mcp", "SKILL.md"), "v1\n");
   mkdirSync(join(seed, "src"), { recursive: true });
   writeFileSync(join(seed, "src", "server.js"), "// v1\n");
   g(["add", "-A"], seed);
@@ -65,7 +65,7 @@ export function pushUpstreamChange(seed, files) {
  * Run runSelfUpdate against a clone by pointing getRepoRoot there via a fresh
  * module import with a stubbed paths module is overkill; instead we exercise the
  * pure git logic by replicating runSelfUpdate's steps is also overkill. We run
- * the real module with RULE_MCP_GALAXY_MCP overriding cwd through a child process.
+ * the real module with RULE_MCP overriding cwd through a child process.
  */
 export function runUpdateIn(clone, environment = {}, reloadSkills = false) {
   const script = `

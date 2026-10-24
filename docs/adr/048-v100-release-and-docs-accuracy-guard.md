@@ -7,7 +7,7 @@
 
 ## Context
 
-README and the docs advertised a tool/resource/prompt/skill surface (99/146/24/89) that had silently drifted: after the architect split the real surface is 90/168/21/80. Nothing verified the claims — only `docs-scan` checked that referenced tool _names_ still exist. The repository had also never cut a release: version stayed 1.0.0, everything lived under `[Unreleased]`.
+README and the docs advertised a tool/resource/prompt/skill surface (99/146/24/89) that had silently drifted: after the architect split the real surface is 90/168/21/80. Nothing verified the claims, only `docs-scan` checked that referenced tool _names_ still exist. The repository had also never cut a release: version stayed 1.0.0, everything lived under `[Unreleased]`.
 
 ## Decision
 
@@ -16,5 +16,5 @@ README and the docs advertised a tool/resource/prompt/skill surface (99/146/24/8
 
 ## Consequences
 
-**Positive**: stale-claim regressions are structurally impossible; the repo has a reproducible release flow (tag → changelog-based GitHub Release); the status section in README doubles as a health snapshot.
+**Positive**: stale-claim regressions are structurally impossible; the repo has a reproducible release flow (tag -> changelog-based GitHub Release); the status section in README doubles as a health snapshot.
 **Negative**: npm distribution is still pending; the accuracy test adds a small runtime cost to the suite.

@@ -44,7 +44,7 @@ export function extraItems({ mode, hasClaude, agents = [], ruleFiles = [] }) {
     {
       id: "commands",
       label: "Agent slash commands",
-      detail: ["Writes the rule-* command files into the", `command directories of: ${forAgents}`],
+      detail: ["Writes the rule-mcp-* command files into the", `command directories of: ${forAgents}`],
     },
     {
       id: "hooks",
@@ -56,7 +56,7 @@ export function extraItems({ mode, hasClaude, agents = [], ruleFiles = [] }) {
     },
     {
       id: "skills",
-      label: "Bundled rule-* skills",
+      label: "Bundled rule-mcp-* skills",
       detail: ["Copies the skill catalog to ~/.agents/skills.", "", "Not required: the server already serves skills", "from its embedded catalog."],
     },
     {

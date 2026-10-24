@@ -12,7 +12,7 @@ const BIN = new URL("../../../bin/rule-mcp.js", import.meta.url).pathname;
 
 /** Run the CLI in a subprocess with a sandboxed home and state. */
 function runCli(args, { cwd, env = {} } = {}) {
-  const home = mkdtempSync(join(tmpdir(), "rule-cli-arms-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-cli-arms-"));
   try {
     const out = execFileSync(process.execPath, [BIN, ...args], {
       cwd: cwd ?? home,
@@ -43,7 +43,7 @@ test("doctor --json and --json-out render machine output", () => {
   assert.match(json.out, /"version"/, "the json report starts with the version");
   assert.equal(json.err, "", "no stderr noise");
 
-  const target = join(tmpdir(), `rule-doctor-out-${Date.now()}.json`);
+  const target = join(tmpdir(), `rule-mcp-doctor-out-${Date.now()}.json`);
   const out = runCli(["doctor", "--json-out", target]);
   assert.match(out.out, /JSON exported to/, "the export path is reported");
   assert.match(readFileSync(target, "utf8"), /"version"/, "the file carries the report");
@@ -52,7 +52,7 @@ test("doctor --json and --json-out render machine output", () => {
 
 test("skills list renders text and json", () => {
   const list = runCli(["skills", "list"]);
-  assert.match(list.out, /rule-.*skill|Pix/i, "the skills list renders");
+  assert.match(list.out, /rule-mcp\s+skills|RuleMCP/i, "the skills list renders");
   const json = runCli(["skills", "list", "--json"]);
   assert.match(json.out, /^\[/, "the json list opens with an array");
 });
@@ -71,7 +71,7 @@ test("agent-commands --list and --format booleans render", () => {
 });
 
 test("handoff with no arguments renders the contract text", () => {
-  const project = mkdtempSync(join(tmpdir(), "rule-cli-handoff-"));
+  const project = mkdtempSync(join(tmpdir(), "rule-mcp-cli-handoff-"));
   mkdirSync(join(project, "docs"), { recursive: true });
   const res = runCli(["handoff"], { cwd: project });
   assert.ok(res.out.length > 0, "the handoff prompt renders");
@@ -104,7 +104,7 @@ test("handoff doctor --fix-commits alone rewrites messages without moving files"
 });
 
 test("handoff honors explicit format and mode flags", () => {
-  const project = mkdtempSync(join(tmpdir(), "rule-cli-handoff-flags-"));
+  const project = mkdtempSync(join(tmpdir(), "rule-mcp-cli-handoff-flags-"));
   mkdirSync(join(project, "docs"), { recursive: true });
 
   const res = runCli(["handoff", "--format", "brief", "--mode", "close-session", "--compress"], { cwd: project });

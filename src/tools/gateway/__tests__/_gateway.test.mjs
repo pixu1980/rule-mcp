@@ -27,7 +27,7 @@ const T0 = 1_000_000; // injected clock base (ms)
 const TTL = 300_000;
 
 // ── Valid immediately ──
-const t1 = issueReceipt("const a = 1;", "rule-frontend-react", true, T0);
+const t1 = issueReceipt("const a = 1;", "rule-mcp-frontend-react", true, T0);
 check("valid at issue time", validateReceipt(t1, "const a = 1;", T0).valid === true);
 
 // ── Code-hash binding: modified code is rejected ──
@@ -35,10 +35,10 @@ const mismatch = validateReceipt(t1, "const a = 2;", T0);
 check("modified code rejected", mismatch.valid === false && /hash/i.test(mismatch.reason));
 
 // ── TTL enforced at validation time ──
-const t2 = issueReceipt("const b = 2;", "rule-frontend-vue", true, T0);
+const t2 = issueReceipt("const b = 2;", "rule-mcp-frontend-vue", true, T0);
 check("valid just before expiry", validateReceipt(t2, "const b = 2;", T0 + TTL - 1).valid === true);
 
-const t3 = issueReceipt("const c = 3;", "rule-frontend-svelte", true, T0);
+const t3 = issueReceipt("const c = 3;", "rule-mcp-frontend-svelte", true, T0);
 const expired = validateReceipt(t3, "const c = 3;", T0 + TTL + 1);
 check("expired receipt rejected", expired.valid === false && /expired/i.test(expired.reason));
 

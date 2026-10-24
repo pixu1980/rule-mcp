@@ -15,7 +15,7 @@ const BARREL = `export { Button } from '${"./_Button.js"}';\n`;
 
 /** Build a scratch project from a { relativePath: contents } map. */
 function project(files) {
-  const root = mkdtempSync(join(tmpdir(), "rule-scan-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-scan-"));
 
   for (const [relative, contents] of Object.entries(files)) {
     const file = join(root, relative);
@@ -27,7 +27,7 @@ function project(files) {
 }
 
 test("a project with no source directory passes with empty stats", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-scan-empty-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-scan-empty-"));
 
   try {
     const report = scanFileTree(root);

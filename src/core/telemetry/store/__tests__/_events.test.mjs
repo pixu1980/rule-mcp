@@ -22,7 +22,7 @@ function write(path, content) {
 
 /** Point RULE_MCP_HOME at a fresh temp dir for one scenario. */
 function withHome(fn) {
-  return withHomePrefix(fn, "rule-store-");
+  return withHomePrefix(fn, "rule-mcp-store-");
 }
 
 test.after(() => {
@@ -53,7 +53,7 @@ test("appendEvents refuses non-arrays and empty lists", () => {
   withHome(() => {
     assert.equal(appendEvents([]), false, "empty list is refused");
     assert.equal(appendEvents("nope"), false, "a non-array is refused");
-    assert.equal(appendEvents([{ tool: "pix_tool", ok: true }]), true, "a real event writes");
+    assert.equal(appendEvents([{ tool: "rule_tool", ok: true }]), true, "a real event writes");
   });
 });
 
@@ -62,8 +62,8 @@ test("appendEvents and writeEvents fail closed when the state root is unwritable
     writeFileSync(join(home, "blocker"), "i am a file, not a directory", "utf8");
     process.env.RULE_MCP_HOME = join(home, "blocker");
     assert.equal(ensureDirectory(), false, "mkdir under a file cannot happen");
-    assert.equal(appendEvents([{ tool: "pix_tool" }]), false, "append gives up silently");
-    assert.equal(writeEvents([{ tool: "pix_tool" }]), false, "write gives up silently");
+    assert.equal(appendEvents([{ tool: "rule_tool" }]), false, "append gives up silently");
+    assert.equal(writeEvents([{ tool: "rule_tool" }]), false, "write gives up silently");
     assert.deepEqual(readEvents(), [], "read gives up silently");
   });
 });
@@ -71,7 +71,7 @@ test("appendEvents and writeEvents fail closed when the state root is unwritable
 test("appendEvents fails closed when the target path is a directory", () => {
   withHome(() => {
     mkdirSync(eventsFile(), { recursive: true });
-    assert.equal(appendEvents([{ tool: "pix_tool" }]), false, "appending to a directory fails");
+    assert.equal(appendEvents([{ tool: "rule_tool" }]), false, "appending to a directory fails");
   });
 });
 
@@ -88,7 +88,7 @@ test("writeEvents renders the trailing newline only for a non-empty log", () => 
     assert.equal(writeEvents([]), true, "an empty write still succeeds");
     assert.equal(readFileSync(eventsFile(), "utf8"), "", "an empty log has no newline");
 
-    assert.equal(writeEvents([{ tool: "pix_tool" }]), true, "a real write succeeds");
+    assert.equal(writeEvents([{ tool: "rule_tool" }]), true, "a real write succeeds");
     assert.match(readFileSync(eventsFile(), "utf8"), /}\n$/, "a non-empty log ends with a newline");
   });
 });
@@ -96,6 +96,6 @@ test("writeEvents renders the trailing newline only for a non-empty log", () => 
 test("writeEvents fails closed when the target path is a directory", () => {
   withHome(() => {
     mkdirSync(eventsFile(), { recursive: true });
-    assert.equal(writeEvents([{ tool: "pix_tool" }]), false, "writing to a directory fails");
+    assert.equal(writeEvents([{ tool: "rule_tool" }]), false, "writing to a directory fails");
   });
 });

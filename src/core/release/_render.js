@@ -1,6 +1,6 @@
 
 
-/** @module core/release/render - the release and dependency lines /rule-init prints. */
+/** @module core/release/render - the release and dependency lines /rule-mcp-init prints. */
 
 import { releaseToolingLabels } from "./_detect.js";
 

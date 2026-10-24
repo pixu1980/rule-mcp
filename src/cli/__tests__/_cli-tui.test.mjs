@@ -9,7 +9,7 @@
 import { strict as assert } from "node:assert";
 import { banner, formatInstallResult, formatSkillsList, formatToolsList, formatUninstallResult } from "../index.js";
 
-console.log("rule CLI TUI test");
+console.log("rule-mcp CLI TUI test");
 
 // ── Banner alignment: every line must render the same terminal width ──
 // Wide emoji (astral code points, e.g. 🩺) occupy two columns; count them.
@@ -31,7 +31,7 @@ for (const [title, subtitle] of [
 }
 
 const toolsUi = formatToolsList([
-  { name: "rule", description: "Route prompts" },
+  { name: "rule-mcp", description: "Route prompts" },
   { name: "rule_tool_check", description: "Validate code" },
 ]);
 assert.ok(!toolsUi.trimStart().startsWith("["), "tools list default must not be raw JSON");
@@ -60,11 +60,11 @@ assert.ok(uninstallUi.includes("🧽"), "uninstall UI should include cleanup emo
 assert.ok(uninstallUi.includes("dry run"), "uninstall UI should show dry-run context");
 
 const skillsUi = formatSkillsList([
-  { name: "rule", description: "Router", installed: true },
-  { name: "rule-styleguide", description: "Standards", installed: false },
+  { name: "rule-mcp", description: "Router", installed: true },
+  { name: "rule-mcp-styleguide", description: "Standards", installed: false },
 ]);
 assert.ok(skillsUi.includes("🧠"), "skills UI should include skill emoji");
-assert.ok(skillsUi.includes("rule-styleguide"), "skills UI should show skill names");
+assert.ok(skillsUi.includes("rule-mcp-styleguide"), "skills UI should show skill names");
 assert.ok(skillsUi.includes("--json"), "skills UI should advertise JSON export");
 
 console.log("  ✅ shared CLI formatters render friendly TUI output");

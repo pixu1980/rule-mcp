@@ -9,7 +9,7 @@ import { test } from "node:test";
 
 import { agentCommandsCommand, printCommandTargets } from "../_targets.js";
 
-const dir = mkdtempSync(join(tmpdir(), "rule-targets-"));
+const dir = mkdtempSync(join(tmpdir(), "rule-mcp-targets-"));
 
 test.after(() => rmSync(dir, { recursive: true, force: true }));
 

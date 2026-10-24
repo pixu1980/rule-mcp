@@ -8,9 +8,9 @@
  * A router table is a list of links written by hand, so it drifts whenever a
  * skill is created, renamed or moved between areas: the leaf plan adds the
  * skill, the router keeps the old table, and a reader who lands on the router
- * cannot find it. The merge of three skills into `rule-process-ai` hit exactly
- * this, in both directions: two stale rows in `rule-styleguide` and one missing
- * row in `rule-process`.
+ * cannot find it. The merge of three skills into `rule-mcp-process-ai` hit exactly
+ * this, in both directions: two stale rows in `rule-mcp-styleguide` and one missing
+ * row in `rule-mcp-process`.
  *
  * The gaps that already existed are recorded in `scripts/data/router-gaps.data.mjs`
  * and the list only shrinks.
@@ -34,16 +34,16 @@ function skills() {
     .map((entry) => entry.name);
 }
 
-/** The children of one area: `rule-process` owns `rule-process-tdd`, not itself. */
+/** The children of one area: `rule-mcp-process` owns `rule-mcp-process-tdd`, not itself. */
 function childrenOf(area, all) {
   return all.filter((name) => name.startsWith(`${area}-`));
 }
 
 test("each area router links every child under it", () => {
   const all = skills();
-  // An area is `rule-<word>`. `rule` itself is the dispatcher, not an area, and its
+  // An area is `rule-mcp-<word>`. `rule-mcp` itself is the dispatcher, not an area, and its
   // table lists skills across every area on purpose.
-  const areas = all.filter((name) => name !== "rule" && !name.includes("-", 4));
+  const areas = all.filter((name) => name !== "rule-mcp" && !name.includes("-", 4));
   const unlisted = [];
 
   for (const area of areas) {

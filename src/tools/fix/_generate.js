@@ -63,7 +63,7 @@ export async function generateMode(arguments_) {
   }
 
   const lines = [
-    `# pix_fix: Generated ${arguments_.name}`,
+    `# rule_tool_fix: Generated ${arguments_.name}`,
     "",
     isDryRun ? "> This is a preview. Run with `dryRun=false` to write files." : "",
     "",

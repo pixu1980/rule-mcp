@@ -15,9 +15,9 @@ import { join } from "node:path";
 import { test } from "node:test";
 
 const originalCwd = process.cwd();
-const project = mkdtempSync(join(tmpdir(), "rule-read-extra-"));
+const project = mkdtempSync(join(tmpdir(), "rule-mcp-read-extra-"));
 
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-read-extra-state-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-read-extra-state-"));
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 
 for (const [name, body] of [
@@ -39,7 +39,7 @@ test.after(() => {
 });
 
 test("a project skill is a plugin row, with its own description or the documented fallback", async () => {
-  const result = await serveResource("rule://community");
+  const result = await serveResource("rulemcp://community");
   const community = JSON.parse(result.contents[0].text);
 
   assert.deepEqual(
@@ -56,11 +56,11 @@ test("a project skill is a plugin row, with its own description or the documente
 });
 
 test("an empty override of the routing skill serves an empty body", async () => {
-  mkdirSync(join(project, ".rule-mcp", "skills", "rule"), { recursive: true });
-  writeFileSync(join(project, ".rule-mcp", "skills", "rule", "SKILL.md"), "");
+  mkdirSync(join(project, ".rule-mcp", "skills", "rule-mcp"), { recursive: true });
+  writeFileSync(join(project, ".rule-mcp", "skills", "rule-mcp", "SKILL.md"), "");
   clearSkillResolution();
 
-  const result = await serveResource("rule://ai");
+  const result = await serveResource("rulemcp://ai");
 
   assert.equal(result.contents[0].mimeType, "text/markdown", "the URI keeps its mime type");
   assert.equal(result.contents[0].text, "", "an override with no body serves nothing rather than failing");

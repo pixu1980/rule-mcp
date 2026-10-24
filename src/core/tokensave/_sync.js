@@ -3,7 +3,7 @@
 /**
  * @module core/tokensave/sync
  *
- * The write-side counterpart of the adapter: after rule changes files, the graph
+ * The write-side counterpart of the adapter: after rule-mcp changes files, the graph
  * that answers every other call is stale until TokenSave is told.
  *
  * `tokensave sync` is incremental and is the command TokenSave's own git hooks

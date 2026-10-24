@@ -77,7 +77,7 @@ jobs:
       # npm on purpose: the tarball must install under any npm-family client.
       - name: Install the tarball from scratch # zizmor: ignore[adhoc-packages] -- installs our own just-built tarball, not a remote package
         run: |
-          rm -rf /tmp/rule-verify && mkdir -p /tmp/rule-verify && cd /tmp/rule-verify
+          rm -rf /tmp/rule-mcp-verify && mkdir -p /tmp/rule-mcp-verify && cd /tmp/rule-mcp-verify
           npm install "$GITHUB_WORKSPACE/dist/rule-mcp-"*.tgz
           ./node_modules/.bin/rule-mcp --version
 

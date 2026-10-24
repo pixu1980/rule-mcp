@@ -7,7 +7,7 @@
  * first:
  *
  *   1. an explicit `baseBranch` argument - a caller that already knows;
- *   2. `git config rule.baseBranch` - the repository stating it;
+ *   2. `git config rule-mcp.baseBranch` - the repository stating it;
  *   3. `RULE_MCP_BASE_BRANCH` - a CI or shell stating it;
  *   4. `origin/HEAD` - the remote's own default branch;
  *   5. the conventional trunks, in the order develop, main, master.
@@ -20,7 +20,7 @@ import { branchExists, remoteBranchExists } from "./_repo.js";
 import { git } from "./_run.js";
 
 /** The repository config key an explicit base branch is read from. */
-export const BASE_BRANCH_CONFIG_KEY = "rule.baseBranch";
+export const BASE_BRANCH_CONFIG_KEY = "rule-mcp.baseBranch";
 
 /** The environment variable an explicit base branch is read from. */
 export const BASE_BRANCH_ENV = "RULE_MCP_BASE_BRANCH";

@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-decision-gate-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-decision-gate-"));
 
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_DECISION_CACHE_SHADOW = "1";
@@ -37,10 +37,10 @@ function result(route) {
 
 function seed() {
   cacheClear();
-  cacheStore("pix_tool", { prompt: "create a react button component", framework: "react" }, result("rule-frontend-react"), {});
-  cacheStore("pix_tool", { prompt: "create a react form component", framework: "react" }, result("rule-frontend-react"), {});
-  cacheStore("pix_tool", { prompt: "create a react button", framework: "vue" }, result("rule-frontend-vue"), {});
-  cacheStore("other", { prompt: "create a react button" }, result("rule-other"), {});
+  cacheStore("rule_tool", { prompt: "create a react button component", framework: "react" }, result("rule-mcp-frontend-react"), {});
+  cacheStore("rule_tool", { prompt: "create a react form component", framework: "react" }, result("rule-mcp-frontend-react"), {});
+  cacheStore("rule_tool", { prompt: "create a react button", framework: "vue" }, result("rule-mcp-frontend-vue"), {});
+  cacheStore("other", { prompt: "create a react button" }, result("rule-mcp-other"), {});
 }
 
 async function scriptedServer() {
@@ -64,14 +64,14 @@ async function scriptedServer() {
 test("only same-tool, same-args, fresh, non-echoing calls become candidates", () => {
   seed();
 
-  const candidates = buildDecisionCandidates("pix_tool", { prompt: "create a react component", framework: "react" });
+  const candidates = buildDecisionCandidates("rule_tool", { prompt: "create a react component", framework: "react" });
 
   assert.equal(candidates.length, 2, "the store replicates L0/L1 but the gate dedupes the call");
   assert.equal(
     candidates.every((candidate) => candidate.label.startsWith("candidate-")),
     true,
   );
-  assert.equal(candidates[0].route, "rule-frontend-react");
+  assert.equal(candidates[0].route, "rule-mcp-frontend-react");
 });
 
 test("shadow records the model choice and never calls the cache replay", async () => {
@@ -83,17 +83,17 @@ test("shadow records the model choice and never calls the cache replay", async (
   process.env.RULE_MCP_DECISION_URL = server.url;
 
   try {
-    await observeDecisionShadow("pix_tool", { prompt: "create a react form component", framework: "react" }, { core: result("rule-frontend-react"), computeMs: 3 });
+    await observeDecisionShadow("rule_tool", { prompt: "create a react form component", framework: "react" }, { core: result("rule-mcp-frontend-react"), computeMs: 3 });
     await waitForDecisionShadows();
     const last = readShadows().at(-1);
 
-    assert.equal(last.tool, "pix_tool");
+    assert.equal(last.tool, "rule_tool");
     assert.equal(last.wouldReplay, true);
     assert.equal(last.choice, "candidate-1");
     assert.equal(last.probability, 0.95);
     assert.equal(last.decisionCacheHit, false);
-    assert.equal(last.goldRoute, "rule-frontend-react");
-    assert.equal(last.candidateRoute, "rule-frontend-react");
+    assert.equal(last.goldRoute, "rule-mcp-frontend-react");
+    assert.equal(last.candidateRoute, "rule-mcp-frontend-react");
     assert.equal(last.correct, true);
     assert.equal(last.goldMs, 3);
     assert.match(last.promptHash, /^[a-f0-9]{12}$/u);
@@ -109,7 +109,7 @@ test("the second identical shadow call answers from the decision cache", async (
   process.env.RULE_MCP_DECISION_URL = server.url;
 
   try {
-    await observeDecisionShadow("pix_tool", { prompt: "create a react form component", framework: "react" });
+    await observeDecisionShadow("rule_tool", { prompt: "create a react form component", framework: "react" });
     await waitForDecisionShadows();
     const last = readShadows().at(-1);
 
@@ -127,7 +127,7 @@ test("without the shadow flag the gate is inert", async () => {
   process.env.RULE_MCP_DECISION_URL = server.url;
 
   try {
-    await observeDecisionShadow("pix_tool", { prompt: "create a react form component", framework: "react" });
+    await observeDecisionShadow("rule_tool", { prompt: "create a react form component", framework: "react" });
     await waitForDecisionShadows();
 
     assert.equal(shadowEnabled(), false);

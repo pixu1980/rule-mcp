@@ -7,8 +7,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-daemon-status-"));
-const state = mkdtempSync(join(tmpdir(), "rule-daemon-status-state-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-daemon-status-"));
+const state = mkdtempSync(join(tmpdir(), "rule-mcp-daemon-status-state-"));
 
 process.env.HOME = home;
 process.env.RULE_MCP_STATE_DIR = state;

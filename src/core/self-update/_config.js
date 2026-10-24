@@ -24,9 +24,9 @@ export function updateMode() {
 
 /**
  * Parse the throttle interval from the environment.
- * - unset / empty / NaN / negative → 60s (default)
- * - "0" → check on every invocation (no throttle)
- * - positive → seconds (may be fractional)
+ * - unset / empty / NaN / negative -> 60s (default)
+ * - "0" -> check on every invocation (no throttle)
+ * - positive -> seconds (may be fractional)
  *
  * @returns {number} interval in milliseconds
  */
@@ -74,7 +74,7 @@ export function normalizeRemoteUrl(url) {
     return value.replace(/^file:\/\//, "").replace(/\/+$/, "") || null;
   }
 
-  // scp-style: git@host:owner/repo.git → host/owner/repo
+  // scp-style: git@host:owner/repo.git -> host/owner/repo
   const scp = value.match(/^(?:[^@/]+@)?([^/:]+):(?!\/)(.+)$/);
   value = scp ? `${scp[1]}/${scp[2]}` : value.replace(/^[a-z][a-z0-9+.-]*:\/\//i, "").replace(/^[^@/]+@/, "");
 

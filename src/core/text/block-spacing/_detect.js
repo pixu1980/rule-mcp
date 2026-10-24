@@ -45,7 +45,7 @@ export function findBlocks(lines) {
     const block = stack.pop();
     block.closeLine = index;
 
-    // Only consider blocks with ≥1 inner code line
+    // Only consider blocks with >=1 inner code line
     const innerLines = lines.slice(block.openLine + 1, block.closeLine).filter((l) => l.trim() !== "" && !/^\s*\/\//.test(l) && !/^\s*\/\*/.test(l));
 
     if (innerLines.length === 0) {
@@ -80,7 +80,7 @@ export function classifyBlock(block, allBlocks, lines) {
 
   if (!parent) {
     return "middle";
-  } // no parent → toplevel → always middle
+  } // no parent -> toplevel -> always middle
 
   // Check if block is at start of parent
   let isAtStart = true;
@@ -104,7 +104,7 @@ export function classifyBlock(block, allBlocks, lines) {
 
   if (isAtStart && isAtEnd) {
     return "start_end";
-  } // only child → both
+  } // only child -> both
   if (isAtStart) {
     return "start";
   }

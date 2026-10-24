@@ -15,7 +15,7 @@ test("the list prints the overlay files it skipped", () => {
 
 test("a role with no list fields still renders every heading", () => {
   const text = renderRole({
-    id: "rule",
+    id: "rule-mcp",
     role: "Test Role",
     layer: "bundled",
     status: "active",

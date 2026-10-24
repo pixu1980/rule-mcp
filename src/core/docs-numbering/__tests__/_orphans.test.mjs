@@ -22,7 +22,7 @@ function git(root, ...args) {
 
 /** A bare-bones repo with one commit whose message names a missing ADR path. */
 function seed({ candidates }) {
-  const root = mkdtempSync(join(tmpdir(), "rule-orphans-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-orphans-"));
   git(root, "init", "-q");
   git(root, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "--allow-empty", "-q", "-m", "docs(adr): retire docs/adr/001-old-slug.md");
   mkdirSync(join(root, "docs", "adr"), { recursive: true });
@@ -35,7 +35,7 @@ function seed({ candidates }) {
 }
 
 test("a repo with no commits contributes no orphans", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-orphans-empty-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-orphans-empty-"));
   git(root, "init", "-q");
 
   assert.deepEqual(orphanedPathReferences({ projectDir: root }), [], "an empty log reads empty");
@@ -68,7 +68,7 @@ test("an explicit all-scope reads the whole log, and a missing adr dir reads emp
 
   assert.equal(found.length, 1, "the all-scope finds the same rename");
 
-  const bare = mkdtempSync(join(tmpdir(), "rule-orphans-nodir-"));
+  const bare = mkdtempSync(join(tmpdir(), "rule-mcp-orphans-nodir-"));
   git(bare, "init", "-q");
   git(bare, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "--allow-empty", "-q", "-m", "docs(adr): retire docs/adr/001-old-slug.md");
 
@@ -78,7 +78,7 @@ test("an explicit all-scope reads the whole log, and a missing adr dir reads emp
 });
 
 test("a tracked upstream narrows the range to the local commits", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-orphans-upstream-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-orphans-upstream-"));
   git(root, "init", "-q");
   git(root, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "--allow-empty", "-q", "-m", "chore(setup): baseline");
   const branch = execFileSync("git", ["branch", "--show-current"], { cwd: root, encoding: "utf8" }).trim();

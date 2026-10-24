@@ -79,7 +79,7 @@ export function decorateWithTokensave(name, core, args = {}) {
 
   if (!_pipeline.directiveEmitted) {
     // Emit ONCE per process, but DEFER when the primary payload is JSON:
-    // several tools (pix_tool, gateway receipts) contract content[0] to be
+    // several tools (rule_tool, gateway receipts) contract content[0] to be
     // machine-parsed - decorating it would break their consumers.
     const first = content.find((item) => item?.type === "text" && typeof item.text === "string");
     const isJsonPayload = Boolean(first && (first.text.startsWith("{") || first.text.startsWith("[")));

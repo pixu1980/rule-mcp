@@ -9,8 +9,8 @@ import { test } from "node:test";
 
 const { readAgentUsage } = await import("../../index.js");
 
-const home = mkdtempSync(join(tmpdir(), "rule-transcripts-zero-"));
-const projectDir = mkdtempSync(join(tmpdir(), "rule-transcripts-project-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-transcripts-zero-"));
+const projectDir = mkdtempSync(join(tmpdir(), "rule-mcp-transcripts-project-"));
 
 test.after(() => {
   rmSync(home, { recursive: true, force: true });
@@ -66,7 +66,7 @@ test("opencode rows without cache or model fields still fold", () => {
 });
 
 test("a claude project with no sessions returns nothing", () => {
-  const emptyHome = mkdtempSync(join(tmpdir(), "rule-claude-empty-"));
+  const emptyHome = mkdtempSync(join(tmpdir(), "rule-mcp-claude-empty-"));
   assert.equal(readAgentUsage({ agent: "claude", projectDir, home: emptyHome }), undefined, "no claude transcripts means no usage");
   rmSync(emptyHome, { recursive: true, force: true });
 });

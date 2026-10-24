@@ -12,7 +12,7 @@ The scraping must happen server-side to avoid CORS issues and to keep the client
 ## Decision
 
 - **Server-side scraping** using `fetch()` (Node 20+ built-in) with AbortController timeout
-- **HTML parsing via regex** — no DOM parser dependency needed for extracting `<title>`, `<meta>` tags
+- **HTML parsing via regex**, no DOM parser dependency needed for extracting `<title>`, `<meta>` tags
 - **User-Agent** set to a descriptive string for transparent scraping
 - **Timeout** configurable via `SCRAPE_TIMEOUT_MS` env var (default 10s)
 - **Text preview** stripped of `<style>`/`<script>` + HTML tags, truncated to `MAX_CONTENT_LENGTH`

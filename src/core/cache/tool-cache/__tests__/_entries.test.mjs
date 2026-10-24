@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-toolcache-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-toolcache-"));
 
 test.before(() => {
   process.env.RULE_MCP_STATE_DIR = stateDir;
@@ -22,7 +22,7 @@ test.after(() => {
 const { cacheEntries, cacheGet, cacheSet, flush, cacheKey } = await import("../index.js");
 
 test("cacheSet and cacheGet round-trip a deep copy and count reuse", () => {
-  const key = cacheKey("pix_tool", { prompt: "x" });
+  const key = cacheKey("rule_tool", { prompt: "x" });
 
   assert.equal(cacheGet(key), undefined, "a miss is a miss");
   cacheSet(key, { content: [{ type: "text", text: "hit" }] }, {});
@@ -36,39 +36,39 @@ test("cacheSet and cacheGet round-trip a deep copy and count reuse", () => {
 });
 
 test("an entry whose dependency has moved is evicted on read", () => {
-  const key = cacheKey("pix_tool", { prompt: "reply" });
-  cacheSet(key, { content: [{ type: "text", text: "stale depends" }] }, { "rule-never-a-skill": "abc" });
+  const key = cacheKey("rule_tool", { prompt: "reply" });
+  cacheSet(key, { content: [{ type: "text", text: "stale depends" }] }, { "rule-mcp-never-a-skill": "abc" });
 
   assert.equal(cacheGet(key), undefined, "a stale dependence means no reuse");
 });
 
 test("error results and missing keys never store", () => {
-  const key = cacheKey("pix_tool", { prompt: "err" });
+  const key = cacheKey("rule_tool", { prompt: "err" });
   cacheSet(key, { isError: true, content: [] }, {});
   assert.equal(cacheGet(key), undefined, "an error result is not cached");
   cacheSet("", { content: [] }, {});
 });
 
 test("a stored call replays its tool and args through the catalog", () => {
-  const key = cacheKey("pix_tool", { prompt: "call" });
-  cacheSet(key, { content: [{ type: "text", text: "call" }] }, {}, { tool: "pix_tool", args: { prompt: "call" } });
+  const key = cacheKey("rule_tool", { prompt: "call" });
+  cacheSet(key, { content: [{ type: "text", text: "call" }] }, {}, { tool: "rule_tool", args: { prompt: "call" } });
 
   const stored = cacheEntries().find((entry) => entry.result?.content?.[0]?.text === "call");
-  assert.equal(stored.tool, "pix_tool", "the call tool survives the store");
+  assert.equal(stored.tool, "rule_tool", "the call tool survives the store");
 });
 
 test("a stored call without args reports none", () => {
-  const key = cacheKey("pix_tool", { prompt: "noargs" });
-  cacheSet(key, { content: [{ type: "text", text: "noargs" }] }, {}, { tool: "pix_tool" });
+  const key = cacheKey("rule_tool", { prompt: "noargs" });
+  cacheSet(key, { content: [{ type: "text", text: "noargs" }] }, {}, { tool: "rule_tool" });
 
   const stored = cacheEntries().find((entry) => entry.result?.content?.[0]?.text === "noargs");
-  assert.equal(stored.tool, "pix_tool", "the call tool survives the store");
+  assert.equal(stored.tool, "rule_tool", "the call tool survives the store");
   assert.deepEqual(stored.args, {}, "a call without args stores an empty args object");
 });
 
 test("a bare state entry still maps through the report", async () => {
   const { cacheState } = await import("../_state.js");
-  const key = "rule-bare-entry";
+  const key = "rule-mcp-bare-entry";
 
   cacheState.store.set(key, { result: undefined, deps: {} });
 
@@ -85,7 +85,7 @@ test("a bare state entry still maps through the report", async () => {
 });
 
 test("flush writes the gzipped file and tolerates an unwritable state", () => {
-  const key = cacheKey("pix_tool", { prompt: "persist" });
+  const key = cacheKey("rule_tool", { prompt: "persist" });
   cacheSet(key, { content: [{ type: "text", text: "keep" }] }, {});
   flush();
 
@@ -94,7 +94,7 @@ test("flush writes the gzipped file and tolerates an unwritable state", () => {
 
   writeFileSync(join(stateDir, "blocker"), "iamafile", "utf8");
   process.env.RULE_MCP_STATE_DIR = join(stateDir, "blocker", "deep");
-  cacheSet(cacheKey("pix_tool", { prompt: "again" }), { content: [] }, {});
+  cacheSet(cacheKey("rule_tool", { prompt: "again" }), { content: [] }, {});
   flush();
   delete process.env.RULE_MCP_STATE_DIR;
 });

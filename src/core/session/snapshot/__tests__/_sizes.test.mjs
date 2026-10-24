@@ -9,7 +9,7 @@ import { test } from "node:test";
 
 import { directorySize, tokensaveStats } from "../_sizes.js";
 
-const root = mkdtempSync(join(tmpdir(), "rule-sizes-"));
+const root = mkdtempSync(join(tmpdir(), "rule-mcp-sizes-"));
 
 test.after(() => rmSync(root, { recursive: true, force: true }));
 

@@ -13,7 +13,7 @@ const PREV_HOME = process.env.RULE_MCP_HOME;
 
 /** Point RULE_MCP_HOME at a fresh temp dir for one scenario. */
 function withHome(fn) {
-  return withHomePrefix(fn, "rule-sidecar-");
+  return withHomePrefix(fn, "rule-mcp-sidecar-");
 }
 
 test.after(() => {

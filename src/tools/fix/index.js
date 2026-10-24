@@ -10,7 +10,7 @@
  * ones that need a person (an a11y gap, a schema decision). This tool does the
  * first, over the changed files or an explicit list, and leaves the second to
  * `rule_tool_check`. The passes live in `core/fix`, shared with the repo's own
- * `scripts/fix` so the tool, the script and the `/rule-fix` command cannot drift.
+ * `scripts/fix` so the tool, the script and the `/rule-mcp-fix` command cannot drift.
  */
 
 import { execFileSync } from "node:child_process";

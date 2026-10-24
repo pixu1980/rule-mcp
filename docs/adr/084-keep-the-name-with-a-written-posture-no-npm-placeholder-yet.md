@@ -7,7 +7,7 @@
 
 ## Context
 
-OSS-26: the project name is neither protectable nor claimed. Pix is a common product word, and both the npm package name and the io.github.rule registry namespace are unclaimed. The registry side is settled by ADR 081 (owner namespace); the npm side cannot settle the same way because publication is out of scope.
+OSS-26: the project name is neither protectable nor claimed. RuleMCP is a common product word, and both the npm package name and the io.github.rule-mcp registry namespace are unclaimed. The registry side is settled by ADR 081 (owner namespace); the npm side cannot settle the same way because publication is out of scope.
 
 ## Decision
 

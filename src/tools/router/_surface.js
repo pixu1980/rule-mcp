@@ -119,7 +119,7 @@ function listTools() {
  * Execute a tool by name with the given arguments.
  * Validates args against the tool's Zod schema (if provided) before calling the handler.
  *
- * @param {string} name - Tool name (e.g. "pix_tool", "rule_tool_frontend_react")
+ * @param {string} name - Tool name (e.g. "rule_tool", "rule_tool_frontend_react")
  * @param {object} args - Tool-specific arguments
  * @returns {Promise<{ isError?: boolean, content: Array<{ type: string, text: string }> }>}
  */

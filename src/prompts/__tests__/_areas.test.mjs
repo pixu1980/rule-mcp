@@ -11,19 +11,19 @@ import { test } from "node:test";
 
 import { areaCommandName, areaOf, listAreaPrompts, skillAreas, skillToolName } from "../_areas.js";
 
-test("an area is the segment after the rule prefix", () => {
-  assert.deepEqual(areaOf("rule-frontend-react"), { area: "frontend", member: "react" });
-  assert.deepEqual(areaOf("rule-frontend"), { area: "frontend", member: "" }, "the bare name is the area's hub");
-  assert.deepEqual(areaOf("rule-frontend-meta-astro"), { area: "frontend", member: "meta-astro" }, "a deeper name keeps its tail whole");
-  assert.equal(areaOf("rule"), null, "the router is not an area");
-  assert.equal(areaOf("not-a-rule-skill"), null);
+test("an area is the segment after the rule-mcp prefix", () => {
+  assert.deepEqual(areaOf("rule-mcp-frontend-react"), { area: "frontend", member: "react" });
+  assert.deepEqual(areaOf("rule-mcp-frontend"), { area: "frontend", member: "" }, "the bare name is the area's hub");
+  assert.deepEqual(areaOf("rule-mcp-frontend-meta-astro"), { area: "frontend", member: "meta-astro" }, "a deeper name keeps its tail whole");
+  assert.equal(areaOf("rule-mcp"), null, "the router is not an area");
+  assert.equal(areaOf("not-a-rule-mcp-skill"), null);
 });
 
 test("every skill routes through its area hub command (ADR 117)", () => {
-  assert.equal(areaCommandName("rule-frontend"), "rule-area-frontend");
-  assert.equal(areaCommandName("rule-frontend-react"), "rule-area-frontend");
-  assert.equal(areaCommandName("rule-styleguide-a11y"), "rule-area-styleguide");
-  assert.equal(skillToolName("rule-frontend-react"), "rule_tool_frontend_react");
+  assert.equal(areaCommandName("rule-mcp-frontend"), "rule-mcp-area-frontend");
+  assert.equal(areaCommandName("rule-mcp-frontend-react"), "rule-mcp-area-frontend");
+  assert.equal(areaCommandName("rule-mcp-styleguide-a11y"), "rule-mcp-area-styleguide");
+  assert.equal(skillToolName("rule-mcp-frontend-react"), "rule_tool_frontend_react");
 });
 
 test("every skill lands in exactly one area", () => {
@@ -48,21 +48,21 @@ test("every skill lands in exactly one area", () => {
 test("the areas a derived map produces are the ones the catalog holds", () => {
   const areas = skillAreas();
 
-  assert.ok(areas.get("frontend").members.includes("rule-frontend-react"), "react belongs to frontend");
-  assert.equal(areas.get("frontend").hub, "rule-frontend", "and frontend has a hub");
-  assert.ok(areas.get("meta").members.includes("rule-meta-astro"), "astro belongs to the meta area");
-  assert.equal(areas.get("meta").hub, "rule-meta", "and meta has a hub of its own");
+  assert.ok(areas.get("frontend").members.includes("rule-mcp-frontend-react"), "react belongs to frontend");
+  assert.equal(areas.get("frontend").hub, "rule-mcp-frontend", "and frontend has a hub");
+  assert.ok(areas.get("meta").members.includes("rule-mcp-meta-astro"), "astro belongs to the meta area");
+  assert.equal(areas.get("meta").hub, "rule-mcp-meta", "and meta has a hub of its own");
 });
 
 test("one prompt per area hub only (ADR 117)", () => {
   const prompts = listAreaPrompts();
   const names = new Set(prompts.map((prompt) => prompt.name));
 
-  assert.ok(names.has("rule-area-frontend"), "the hub prompt");
-  assert.ok(!names.has("rule-area-frontend-react"), "no member slash/prompt");
+  assert.ok(names.has("rule-mcp-area-frontend"), "the hub prompt");
+  assert.ok(!names.has("rule-mcp-area-frontend-react"), "no member slash/prompt");
   assert.equal(names.size, prompts.length, "no name is minted twice");
   assert.equal(
-    prompts.every((p) => /^rule-area-[a-z]+$/.test(p.name)),
+    prompts.every((p) => /^rule-mcp-area-[a-z]+$/.test(p.name)),
     true,
     "every area prompt is a single-segment hub",
   );
@@ -75,13 +75,13 @@ test("one prompt per area hub only (ADR 117)", () => {
 });
 
 test("the hub prompt routes leaves from free text and names tools", () => {
-  const { text, members } = listAreaPrompts().find((prompt) => prompt.name === "rule-area-frontend");
+  const { text, members } = listAreaPrompts().find((prompt) => prompt.name === "rule-mcp-area-frontend");
 
   assert.match(text, /frontend area/, "it says which area it is");
-  assert.match(text, /rule-frontend-react/, "and lists the skills it can reach for");
+  assert.match(text, /rule-mcp-frontend-react/, "and lists the skills it can reach for");
   assert.match(text, /rule_tool_frontend_react/, "and the matching leaf tools");
-  assert.match(text, /pix_tool/, "it routes rather than guessing");
+  assert.match(text, /rule_tool/, "it routes rather than guessing");
   assert.match(text, /rule_tool_check/, "and validates what it produced");
   assert.match(text, /feat\(frontend\)/, "the commit example carries the area as its scope");
-  assert.ok(members.includes("rule-frontend-react"));
+  assert.ok(members.includes("rule-mcp-frontend-react"));
 });

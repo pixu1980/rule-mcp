@@ -12,7 +12,7 @@ import { join } from "node:path";
 // process loads it too, so it registers the hook as every entry point does.
 const ALIAS_HOOK = fileURLToPath(new URL("../../../../scripts/alias-hook.mjs", import.meta.url));
 
-const fakeHome = mkdtempSync(join(tmpdir(), "rule-vscode-uninstall-"));
+const fakeHome = mkdtempSync(join(tmpdir(), "rule-mcp-vscode-uninstall-"));
 const fakeProject = join(fakeHome, "project");
 const globalFile =
   process.platform === "darwin" ? join(fakeHome, "Library", "Application Support", "Code", "User", "mcp.json") : join(fakeHome, ".config", "Code", "User", "mcp.json");

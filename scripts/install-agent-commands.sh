@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Install rule agent commands for all supported coding agents.
+# Install rule-mcp agent commands for all supported coding agents.
 #
 # Registry-driven: each target directory is fed to `rule-mcp
 # agent-commands --dir <dir>`, which renders the command set from the same
 # generator that serves the MCP prompt registry (src/core/agent-commands.js).
 # A command renamed or deleted in the registry disappears from this installer
 # too - there is no second, hand-maintained list to drift. The set includes
-# the /rule router, the /rule-area-* commands, the one-shot workflow prompts
-# and the review-persona commands (rule-persona-*-plan / rule-persona-*-audit / rule-persona-*-review).
+# the /rule-mcp router, the /rule-mcp-area-* commands, the one-shot workflow prompts
+# and the review-persona commands (rule-mcp-persona-*-plan / rule-mcp-persona-*-audit / rule-mcp-persona-*-review).
 #
 # Supported agents: Pi, Claude Code, Gemini CLI, Windsurf, Cline, Cursor
 

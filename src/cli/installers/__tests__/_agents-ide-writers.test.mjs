@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-ide-writers-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-ide-writers-"));
 process.env.HOME = home;
 
 const { createGenericInstaller, installDevin, installEmacs } = await import("../_agents-ide.js");

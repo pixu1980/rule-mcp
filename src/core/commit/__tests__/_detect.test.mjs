@@ -8,7 +8,7 @@
  *
  * A machine-wide `core.hooksPath` is the user's, not the project's. Adopting it
  * meant an install wrote the gate into a directory every repository on the
- * machine shares, and kept a `.rule-backup` of whatever was already there. The
+ * machine shares, and kept a `.rule-mcp-backup` of whatever was already there. The
  * rule the fixtures below pin: only the repository's own setting is a
  * mechanism; a global or system one is ignored and git's own hooks directory is
  * used instead.
@@ -25,7 +25,7 @@ import { makeRepo, remove, run } from "../../git/__tests__/_fixture.mjs";
 
 /** A private global config that sets `core.hooksPath`, as a user's machine would. */
 function userHome(hooksDir) {
-  const home = mkdtempSync(join(tmpdir(), "rule-user-home-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-user-home-"));
   const config = join(home, "gitconfig");
 
   writeFileSync(config, `[core]\n\thooksPath = ${hooksDir}\n`);
@@ -70,7 +70,7 @@ test("a repository that configures core.hooksPath keeps that directory", () => {
 
 test("a machine-wide core.hooksPath is never a hook target", () => {
   const root = makeRepo();
-  const userHooks = mkdtempSync(join(tmpdir(), "rule-user-hooks-"));
+  const userHooks = mkdtempSync(join(tmpdir(), "rule-mcp-user-hooks-"));
   const { home, config } = userHome(userHooks);
 
   try {

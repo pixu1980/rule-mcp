@@ -49,7 +49,7 @@ for (const sub of forbidden ? sourceDirectories : []) {
   // Check file contents
   const contentMatches = [];
   for (const file of files) {
-    // Skip this file itself (contains 'pix_' in comments/messages)
+    // Skip this file itself (contains 'rule_tool_' in comments/messages)
     if (file === import.meta.filename || file.endsWith("repository-contract.test.mjs")) {
       continue;
     }
@@ -74,7 +74,7 @@ for (const sub of forbidden ? sourceDirectories : []) {
     contentMatches.length,
     0,
     `[${sub}] ${contentMatches.length} files contain '${forbidden}' in their content.\n` +
-      "Run: rg -l 'pix_' " +
+      "Run: rg -l 'rule_tool_' " +
       sub +
       "/\n" +
       "First 10:\n" +
@@ -83,13 +83,13 @@ for (const sub of forbidden ? sourceDirectories : []) {
 }
 
 // Root-level checks
-assert.ok(existsSync(join(root, "skills", "rule", "SKILL.md")), "router skill must be named rule");
+assert.ok(existsSync(join(root, "skills", "rule-mcp", "SKILL.md")), "router skill must be named rule-mcp");
 
-const promptTemplate = join(root, "prompts", "rule.md");
+const promptTemplate = join(root, "prompts", "rule-mcp.md");
 assert.ok(existsSync(promptTemplate), "Pi prompt template must exist");
 const prompt = readFileSync(promptTemplate, "utf8");
 assert.ok(prompt.includes("$ARGUMENTS"), "Pi prompt template must forward command arguments");
-assert.ok(prompt.includes("rule"), "Pi prompt template must route through rule tool");
+assert.ok(prompt.includes("rule-mcp"), "Pi prompt template must route through rule-mcp tool");
 
 const universalInstallerPath = join(root, "scripts", "install.sh");
 const universalInstaller = readFileSync(universalInstallerPath, "utf8");
@@ -101,10 +101,10 @@ execFileSync("bash", [universalInstallerPath, "--agent", "pi", "--force", "--dry
 // The bootstrap forwards to `rule-mcp setup` and writes nothing itself
 // (ADR 090), so the rules it used to carry are read where they live now.
 const installerRules = readFileSync(join(root, "src", "cli", "installers", "_instruction.data.js"), "utf8");
-for (const tool of ["pix_tool -", "rule_tool_process_adr", "rule_tool_handoff", "rule_tool_handon"]) {
+for (const tool of ["rule_tool -", "rule_tool_process_adr", "rule_tool_handoff", "rule_tool_handon"]) {
   assert.ok(installerRules.includes(tool), `universal installer rules must reference ${tool}`);
 }
-for (const tool of ["rule_tool_ai", "pix_adr", "pix_handoff"]) {
+for (const tool of ["rule_tool_ai", "rule_adr", "rule_handoff"]) {
   assert.ok(!installerRules.includes(tool), `universal installer rules must not reference obsolete ${tool}`);
   assert.ok(!universalInstaller.includes(tool), `the bootstrap must not reference obsolete ${tool}`);
   const obsoletePattern = new RegExp(`(?<![A-Za-z0-9_])${tool}(?![A-Za-z0-9_])`);

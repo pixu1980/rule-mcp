@@ -30,7 +30,7 @@ export const ENFORCEMENT = fileURLToPath(new URL("../../../src/core/enforcement/
 export const BASELINE_TOKENS = 3820;
 export const SESSION_CALLS = 30;
 export const SESSION_TOOLS = [
-  "pix_tool",
+  "rule_tool",
   "rule_tool_styleguide",
   "rule_tool_check",
   "rule_tool_search",
@@ -51,7 +51,7 @@ export function runSession(calls, environment = {}) {
   const script = String.raw`
     import { decorateWorkflowReminder } from ${JSON.stringify(ENFORCEMENT)};
     const tools = ${JSON.stringify(SESSION_TOOLS)};
-    const core = "routed: rule-frontend-react\nsections: forms, a11y\n".repeat(8);
+    const core = "routed: rule-mcp-frontend-react\nsections: forms, a11y\n".repeat(8);
     const kinds = [];
     let overhead = 0;
     for (let index = 0; index < ${calls}; index += 1) {
@@ -63,7 +63,7 @@ export function runSession(calls, environment = {}) {
       kinds.push(
         text.includes("Missing evidence means unknown")
           ? "full"
-          : (text.includes("## PIX WORKFLOW REMINDER") ? "terse" : "none"),
+          : (text.includes("## RULE-MCP WORKFLOW REMINDER") ? "terse" : "none"),
       );
     }
     process.stdout.write(JSON.stringify({ kinds, overhead }));

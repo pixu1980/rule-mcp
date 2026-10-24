@@ -13,7 +13,7 @@ import { renderSemantic } from "./_semantic-report.js";
  */
 export function registerCheckTool() {
   const CheckSchema = z.object({
-    skill: z.string().describe("Target rule skill name"),
+    skill: z.string().describe("Target rule-mcp skill name"),
     code: z.string().optional().describe("Code to validate against guardrails (omit with mode=project)"),
     framework: z.string().optional().describe("Framework (react, vue, svelte, angular, solid, astro, vanilla)"),
     fileName: z.string().optional().describe("File name for naming convention checks"),
@@ -26,7 +26,8 @@ export function registerCheckTool() {
   registerTool({
     name: "rule_tool_check",
     entry: "action",
-    description: "Run guardrail checks on code against any rule skill. Returns guardrail results with a re-check hint containing the current passing set. Run until allPass: true.",
+    description:
+      "Run guardrail checks on code against any rule-mcp skill. Returns guardrail results with a re-check hint containing the current passing set. Run until allPass: true.",
     zodSchema: CheckSchema,
     handler: async (arguments_) => {
       const { skill, code, fileName, isComponent, framework, mode, allowedDependencies, projectDir } = arguments_;
@@ -34,7 +35,7 @@ export function registerCheckTool() {
       if (mode === "project") {
         const project = checkProjectGuarded(projectDir ?? ".", { skill, diagnostics: arguments_.diagnostics === true });
 
-        return { isError: !project.allPass, content: [{ type: "text", text: renderProject(project) }], _meta: { pixProjectGuardrails: project } };
+        return { isError: !project.allPass, content: [{ type: "text", text: renderProject(project) }], _meta: { ruleProjectGuardrails: project } };
       }
 
       if (mode === "semantic") {
@@ -44,7 +45,7 @@ export function registerCheckTool() {
 
         const semantic = await checkSemantic(code, { skill });
 
-        return { isError: false, content: [{ type: "text", text: renderSemantic(semantic) }], _meta: { pixSemanticGuardrails: semantic } };
+        return { isError: false, content: [{ type: "text", text: renderSemantic(semantic) }], _meta: { ruleSemanticGuardrails: semantic } };
       }
 
       if (typeof code !== "string") {
@@ -99,7 +100,7 @@ export function registerCheckTool() {
           lines.push("- Fix: " + f.suggestion, "");
         }
       } else if (result.allPass) {
-        lines.push("✅ All " + result.total + " guardrails pass. Code is fully rule-compliant.");
+        lines.push("✅ All " + result.total + " guardrails pass. Code is fully rule-mcp-compliant.");
       }
       // Show skipped count if any
       if (result.skippedCount > 0) {
@@ -130,7 +131,7 @@ export function registerCheckTool() {
       return {
         isError: !result.allPass,
         content: [{ type: "text", text: lines.join("\n") }],
-        _meta: { pixGuardrails: result },
+        _meta: { ruleGuardrails: result },
       };
     },
   });

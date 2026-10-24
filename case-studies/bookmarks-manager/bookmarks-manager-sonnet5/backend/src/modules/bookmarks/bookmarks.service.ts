@@ -3,7 +3,7 @@
  *
  * Business logic for the bookmarks domain: validates the target URL is safe
  * to fetch, scrapes it, and persists the resulting bookmark. Pure
- * orchestration — no Express types leak into this layer.
+ * orchestration, no Express types leak into this layer.
  */
 
 import { randomUUID } from "node:crypto";

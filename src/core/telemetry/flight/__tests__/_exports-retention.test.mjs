@@ -20,7 +20,7 @@ import { pruneExports } from "../../../../../src/core/telemetry/flight/index.js"
 const DAY_MS = 86_400_000;
 
 function seedExports(spec) {
-  const dir = mkdtempSync(join(tmpdir(), "rule-exports-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-exports-"));
   mkdirSync(dir, { recursive: true });
   for (const [name, ageDays] of Object.entries(spec)) {
     const file = join(dir, name);

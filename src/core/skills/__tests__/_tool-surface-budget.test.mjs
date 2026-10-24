@@ -13,7 +13,7 @@
  *     reason
  *   - JSON tool output stays JSON, so the decoration layer never corrupts data
  *
- * Ported upstream behavior with the tool names rebranded to the rule-native
+ * Ported upstream behavior with the tool names rebranded to the rule-mcp-native
  * surface and the annotation assertions adapted to the current target surface.
  */
 
@@ -87,7 +87,7 @@ test("no mutating tool is advertised as read-only", () => {
 });
 
 test("a JSON tool result is still parseable after decoration", async () => {
-  const result = await callTool("pix_tool", { prompt: "react component with a form" });
+  const result = await callTool("rule_tool", { prompt: "react component with a form" });
   const parsed = JSON.parse(result.content[0].text);
   assert.ok(typeof parsed.route === "string", "the router's JSON must survive compression and fingerprint removal");
 });

@@ -3,7 +3,7 @@
 - **Date**: 2026-07-11
 - **Status**: accepted
 - **Tags**: security, scraping, ssrf, api
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

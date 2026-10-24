@@ -7,7 +7,7 @@
 
 ## Context
 
-The commit-governance installer detects a project's hook mechanism. It read `core.hooksPath` with `git config --get`, which also returns a value set in the user's global or system config. On a machine whose `~/.config/git/config` sets `core.hooksPath = ~/.config/git/hooks`, installing governance in any repository without its own `.githooks/` therefore wrote the `commit-msg` and `pre-push` shims into that shared directory and kept `.rule-backup` copies of whatever was there. The effect was observed on 2026-10-18: the shared hooks were rewritten, and every commit in every unrelated repository started going through this project's `commit-lint`, which rejects any subject that is not `type(scope): subject`. A second, quieter symptom was that the docs-numbering-doctor fixtures committed with `git commit -m first` in a temp repository and so passed inside the suite while failing on their own, because they inherited the user's hooks path instead of a private config.
+The commit-governance installer detects a project's hook mechanism. It read `core.hooksPath` with `git config --get`, which also returns a value set in the user's global or system config. On a machine whose `~/.config/git/config` sets `core.hooksPath = ~/.config/git/hooks`, installing governance in any repository without its own `.githooks/` therefore wrote the `commit-msg` and `pre-push` shims into that shared directory and kept `.rule-mcp-backup` copies of whatever was there. The effect was observed on 2026-10-18: the shared hooks were rewritten, and every commit in every unrelated repository started going through this project's `commit-lint`, which rejects any subject that is not `type(scope): subject`. A second, quieter symptom was that the docs-numbering-doctor fixtures committed with `git commit -m first` in a temp repository and so passed inside the suite while failing on their own, because they inherited the user's hooks path instead of a private config.
 
 ## Decision
 
@@ -15,7 +15,7 @@ The installer reads `core.hooksPath` with `--local`, so only a setting the repos
 
 ## Consequences
 
-Positive: an install can no longer reach outside the repository it was asked to govern, and no `.rule-backup` is written over a hook the user owns for every repository on the machine. A test pins the rule with a private global config that sets `core.hooksPath` and asserts the directory stays empty and the gate lands in `.git/hooks`. The docs-numbering-doctor fixture passes alone, not only inside the suite. Negative: a user who deliberately configures `core.hooksPath` globally and expects this installer to honour it now gets git's own hooks directory instead; that is the intended trade, since the global setting is the person's and not the project's.
+Positive: an install can no longer reach outside the repository it was asked to govern, and no `.rule-mcp-backup` is written over a hook the user owns for every repository on the machine. A test pins the rule with a private global config that sets `core.hooksPath` and asserts the directory stays empty and the gate lands in `.git/hooks`. The docs-numbering-doctor fixture passes alone, not only inside the suite. Negative: a user who deliberately configures `core.hooksPath` globally and expects this installer to honor it now gets git's own hooks directory instead; that is the intended trade, since the global setting is the person's and not the project's.
 
 ## What would end this
 

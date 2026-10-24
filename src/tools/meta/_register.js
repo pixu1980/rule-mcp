@@ -4,7 +4,7 @@
  * @module tools/meta/register
  *
  * `rule_tool_meta`: the dispatcher for the meta-framework set, the mirror of
- * `pix_tool` over four skills instead of ninety.
+ * `rule_tool` over four skills instead of ninety.
  *
  * It is deliberately narrower than the router. The router's corpus and
  * thresholds are measured over the whole skill set, and a meta-framework
@@ -14,7 +14,7 @@
  * for no gain.
  *
  * @see module:tools/ai/register - the dispatcher this mirrors
- * @see skills/rule-meta/SKILL.md - the dispatch contract in prose
+ * @see skills/rule-mcp-meta/SKILL.md - the dispatch contract in prose
  */
 
 import { z } from "zod/v4";
@@ -28,7 +28,7 @@ const MetaSchema = z.object({
 });
 
 /** The meta skills this process actually registered, hub excluded. */
-const metaSkills = () => getSkillNames().filter((name) => name.startsWith("rule-meta-"));
+const metaSkills = () => getSkillNames().filter((name) => name.startsWith("rule-mcp-meta-"));
 
 /** The framework a name or a concept in the prompt points at. */
 function matchFramework(prompt, hint) {
@@ -54,7 +54,7 @@ export function registerMetaTool() {
     name: "rule_tool_meta",
     entry: "skill",
     description:
-      "Route a meta-framework request to the right rule skill: Astro, Next.js, Nuxt or Remix. Returns the skill, its relevant sections and the base framework skill to load with it.",
+      "Route a meta-framework request to the right rule-mcp skill: Astro, Next.js, Nuxt or Remix. Returns the skill, its relevant sections and the base framework skill to load with it.",
     zodSchema: MetaSchema,
     handler: async (arguments_) => {
       const prompt = (arguments_.prompt || "").trim();
@@ -72,7 +72,7 @@ export function registerMetaTool() {
         });
       }
 
-      const scored = matchFramework(prompt, arguments_.framework).filter((hit) => available.includes(`rule-meta-${hit.framework}`));
+      const scored = matchFramework(prompt, arguments_.framework).filter((hit) => available.includes(`rule-mcp-meta-${hit.framework}`));
 
       if (scored.length === 0) {
         return answer({
@@ -80,13 +80,13 @@ export function registerMetaTool() {
           confidence: 0,
           uncertain: true,
           sections: [],
-          next_tools: ["pix_tool", "rule_tool_search", "rule_tool_detect"].filter((tool) => registered.has(tool)),
-          summary: `No meta-framework matched "${prompt}". Call rule_tool_detect to read the repository, or pix_tool to route across the whole skill set.`,
+          next_tools: ["rule_tool", "rule_tool_search", "rule_tool_detect"].filter((tool) => registered.has(tool)),
+          summary: `No meta-framework matched "${prompt}". Call rule_tool_detect to read the repository, or rule_tool to route across the whole skill set.`,
         });
       }
 
       const [primary, ...rest] = scored;
-      const skill = `rule-meta-${primary.framework}`;
+      const skill = `rule-mcp-meta-${primary.framework}`;
       const promptWords = [
         ...new Set(
           prompt
@@ -106,7 +106,7 @@ export function registerMetaTool() {
         sections: extractTopSections(skill, promptWords),
         with_skills: base,
         next_tools: [`rule_tool_meta_${primary.framework}`, "rule_tool_check"].filter((tool) => registered.has(tool)),
-        alternatives: rest.map((hit) => ({ route: `rule-meta-${hit.framework}`, confidence: Math.round((hit.score / total) * 100) / 100 })),
+        alternatives: rest.map((hit) => ({ route: `rule-mcp-meta-${hit.framework}`, confidence: Math.round((hit.score / total) * 100) / 100 })),
         summary: `${skill} answers "${prompt}". Load ${base.join(" and ")} with it: the meta skill owns rendering, routing and data loading, the framework skill owns the component. Generated code must pass rule_tool_check.`,
       });
     },

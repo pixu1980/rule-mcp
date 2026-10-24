@@ -18,7 +18,7 @@ import { join } from "node:path";
 const { GIT_HOOK_MARKER, HOOKED_GIT_EVENTS, uninstallGitHooks } = await import("../../../src/core/index.js");
 
 function hookTree() {
-  const dir = mkdtempSync(join(tmpdir(), "rule-git-hooks-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-git-hooks-"));
   for (const event of HOOKED_GIT_EVENTS) {
     writeFileSync(join(dir, event), "");
   }
@@ -84,7 +84,7 @@ test("a file without our marker is left alone", () => {
 });
 
 test("missing hook files are skipped", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-git-hooks-empty-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-git-hooks-empty-"));
   const result = uninstallGitHooks({ dir });
   assert.deepEqual(result.removed, []);
   rmSync(dir, { recursive: true, force: true });
@@ -97,7 +97,7 @@ test("the marker has the rule-mcp identity", () => {
 });
 
 test("an unreadable hook file is skipped without a crash", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-git-hooks-broken-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-git-hooks-broken-"));
   mkdirSync(join(dir, "post-merge"), { recursive: true }); // a directory at the hook path cannot be read
   const result = uninstallGitHooks({ dir });
   assert.deepEqual(result.removed, [], "an unreadable hook is skipped");

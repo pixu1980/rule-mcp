@@ -24,14 +24,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..", "..", "..");
 const sourceSkillsDir = join(root, "skills");
 
-// Minimum expected SKILL.md count (64 official rule-* + 1 rule)
+// Minimum expected SKILL.md count (64 official rule-mcp-* + 1 rule-mcp)
 const MIN_EXPECTED_SKILLS = 60;
 
 function countSkillFiles(dir) {
   let count = 0;
   try {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
-      if (!(entry.isDirectory() && (entry.name === "rule" || entry.name.startsWith("rule-")))) {
+      if (!(entry.isDirectory() && (entry.name === "rule-mcp" || entry.name.startsWith("rule-mcp-")))) {
         continue;
       }
 

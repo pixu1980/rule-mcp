@@ -25,7 +25,7 @@ function capture() {
 
 /** Write a message file under a throwaway directory. */
 function messageFile(text) {
-  const dir = mkdtempSync(join(tmpdir(), "rule-commit-msg-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-commit-msg-"));
   const path = join(dir, "COMMIT_EDITMSG");
   writeFileSync(path, text);
 

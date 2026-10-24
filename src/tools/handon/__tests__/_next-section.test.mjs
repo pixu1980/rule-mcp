@@ -14,7 +14,7 @@ test("a numbered Next section is read as the open items", () => {
   // "Next, in order of leverage" heading as an ordered list. Only unchecked
   // checkboxes were parsed, so a resumed session was told there was nothing to
   // do while the handoff listed five prioritized items.
-  const root = mkdtempSync(join(tmpdir(), "rule-handon-next-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-handon-next-"));
   mkdirSync(join(root, "docs", "handoff"), { recursive: true });
   mkdirSync(join(root, "docs", "adr"), { recursive: true });
   git(root, "init", "-q");

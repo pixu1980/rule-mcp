@@ -67,7 +67,7 @@ test("every source file passes the JavaScript guardrails", () => {
     if (CATALOGS.has(fileName) || cataloguedDir) {
       continue;
     }
-    const result = checkCode("rule-styleguide-javascript", readFileSync(file, "utf8"), { fileName });
+    const result = checkCode("rule-mcp-styleguide-javascript", readFileSync(file, "utf8"), { fileName });
 
     if (result.allPass) {
       continue;

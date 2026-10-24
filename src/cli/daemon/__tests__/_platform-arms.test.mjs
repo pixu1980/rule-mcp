@@ -27,8 +27,8 @@ test("darwin installs and removes a LaunchAgent", () => {
   assert.equal(macos.install.service, "launchd");
   assert.match(macos.install.result.action, /^dry-run/, "a dry run writes no plist");
   assert.equal(macos.uninstall.result.action, "not-installed", "there is nothing to remove in a scratch home");
-  assert.ok(macos.serviceFilePath.endsWith("io.github.rule.rule-mcp.plist"), `unexpected plist path: ${macos.serviceFilePath}`);
-  assert.equal(macos.serviceName, "io.github.rule.rule-mcp", "the label is the service name");
+  assert.ok(macos.serviceFilePath.endsWith("io.github.rule-mcp.rule-mcp.plist"), `unexpected plist path: ${macos.serviceFilePath}`);
+  assert.equal(macos.serviceName, "io.github.rule-mcp.rule-mcp", "the label is the service name");
   assert.deepEqual(macos.status.detailKeys, ["launchAgent", "process"], "both the agent and the process are reported");
   assert.match(macos.formatted, /Plist: {6}/, "the rendered status names the plist");
 });

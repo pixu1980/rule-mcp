@@ -387,7 +387,7 @@ button[data-part="group-pill"]:focus-visible {
 }
 
 /* ============================================================================
- * FAVOURITE TOGGLE ROW
+ * FAVORITE TOGGLE ROW
  * ============================================================================ */
 button[data-part="fav-toggle"] {
   display: flex;

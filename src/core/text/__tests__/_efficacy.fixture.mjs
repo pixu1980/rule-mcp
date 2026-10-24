@@ -18,8 +18,8 @@ import { mkdirSync, mkdtempSync, realpathSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-process-compression-eval-"));
-const projectDir = realpathSync(mkdtempSync(join(tmpdir(), "rule-process-compression-project-")));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-process-compression-eval-"));
+const projectDir = realpathSync(mkdtempSync(join(tmpdir(), "rule-mcp-process-compression-project-")));
 mkdirSync(join(projectDir, ".git"), { recursive: true });
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_NO_CACHE = "1";
@@ -38,7 +38,7 @@ export const { readEvents } = await import("../../telemetry/store/index.js");
  * Skill bodies are the prose-heavy end, the router payload is the data end.
  */
 export const CORPUS = [
-  ["pix_tool", { prompt: "React accessible form with validation" }],
+  ["rule_tool", { prompt: "React accessible form with validation" }],
   ["rule_tool_frontend_react", {}],
   ["rule_tool_styleguide_css", {}],
   ["rule_tool_backend_node", {}],

@@ -21,8 +21,8 @@ export function preprocessToolCall(name, arguments_) {
   assertSafeValue(arguments_ ?? {}, { keys: 0 });
   const normalized = normalizeArguments(arguments_ ?? {});
 
-  if (name === "pix_tool" && !normalized.prompt) {
-    throw new Error("pix_tool requires a non-blank prompt");
+  if (name === "rule_tool" && !normalized.prompt) {
+    throw new Error("rule_tool requires a non-blank prompt");
   }
 
   return normalized;

@@ -10,12 +10,12 @@
  * single check runs.
  *
  * Pinned here:
- *   - `ai-american-english` (British → US) and `ai-english-only-prose`
+ *   - `ai-american-english` (British -> US) and `ai-english-only-prose`
  *     (foreign-language prose) both run for EVERY skill;
  *   - comments and identifiers with non-English content are flagged, English
  *     ones pass;
  *   - a generated markdown document is checked as whole-prose in docs mode;
- *   - the rule-process-ai skill exists, is routed, and its advertised
+ *   - the rule-mcp-process-ai skill exists, is routed, and its advertised
  *     US/UK pairs are exactly the ones the fingerprint dictionary catches
  *     (no drift between what a skill tells a model and what the gate blocks);
  *   - every shared prompt/command surface carries the mandate.

@@ -76,7 +76,7 @@ test("a node below the floor fails the node check with the required version", ()
 });
 
 test("a working shim answers the binary and shim checks", { skip: process.platform === "win32" }, () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-preflight-shim-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-preflight-shim-"));
 
   try {
     const path = fakeShim(dir, `#!/bin/sh\n# ${ownEntrypoint()}\necho 9.9.9\n`);
@@ -91,7 +91,7 @@ test("a working shim answers the binary and shim checks", { skip: process.platfo
 });
 
 test("a working shim stands in for a checkout that has no local bin", { skip: process.platform === "win32" }, () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-preflight-elsewhere-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-preflight-elsewhere-"));
   const bin = join(root, "shim-bin");
   const saved = process.cwd();
 
@@ -113,7 +113,7 @@ test("a working shim stands in for a checkout that has no local bin", { skip: pr
 });
 
 test("a shim that launches something else warns instead of passing", { skip: process.platform === "win32" }, () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-preflight-stale-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-preflight-stale-"));
 
   try {
     const path = fakeShim(dir, "#!/bin/sh\necho 9.9.9\n");

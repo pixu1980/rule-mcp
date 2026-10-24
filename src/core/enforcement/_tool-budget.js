@@ -33,7 +33,7 @@
  * | ~16,700  | Added MCP annotations (+2k, then trimmed to non-defaults only)  |
  * | ~16,300  | Trimmed four long descriptions, omitted empty `required`        |
  * | ~16,440  | R0 added the i18n skill: 88 skills, 100 tools                   |
- * | ~16,520  | R1 added `pix_process_handon`, minus a 69-token trim         |
+ * | ~16,520  | R1 added `rule_tool_process_handon`, minus a 69-token trim         |
  * | ~13,820  | R4 stopped advertising three check-only fields on 87 tools       |
  * | ~14,080  | R4 added two AI skills: 90 skills, 103 tools                     |
  *
@@ -41,7 +41,7 @@
  * were the weight, and they were an eighth of it.
  *
  * R1 is the first raise. The trim came first and it was real - six `include*`
- * booleans on `pix_process_handoff` carried descriptions that restated their
+ * booleans on `rule_tool_process_handoff` carried descriptions that restated their
  * own property names, which is the exact fat the P7 audit found - but 69 tokens
  * do not pay for a 150-token tool, and there was no second trim of that size
  * that was not just deleting something a caller needs. So the ceiling moves,
@@ -84,7 +84,7 @@
  */
 export const TOOL_SURFACE_BUDGET_TOKENS = 26_000;
 
-// The first raise on the rule surface happened when the 6 item-9 action tools
+// The first raise on the rule-mcp surface happened when the 6 item-9 action tools
 // landed (plan, impersonation, stats, usage, a11y_report, process_handon at 97
 // tools): their schemas are naturally wide (usage carries the agent's token
 // fields one by one), a 400-token trim of descriptions was taken first, and

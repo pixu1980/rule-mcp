@@ -19,7 +19,7 @@ afterEach(() => {
 if (typeof CSSStyleSheet.prototype.replaceSync !== "function") {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (CSSStyleSheet.prototype as any).replaceSync = function replaceSync() {
-    /* no-op in jsdom — layout/styling is not under test here */
+    /* no-op in jsdom, layout/styling is not under test here */
   };
 }
 

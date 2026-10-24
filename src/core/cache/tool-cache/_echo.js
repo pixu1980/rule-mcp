@@ -14,7 +14,7 @@ export function resultText(result) {
 /**
  * Does this result quote the question it was asked?
  *
- * The allowlist is necessary and not sufficient. `pix_tool` does not echo the
+ * The allowlist is necessary and not sufficient. `rule_tool` does not echo the
  * prompt when it routes confidently, and DOES echo it when it cannot: the
  * uncertain answer carries `No strong match for "<prompt>"`. Replaying that for
  * a differently worded question would hand the caller a sentence about a prompt

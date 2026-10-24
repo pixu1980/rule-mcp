@@ -74,7 +74,7 @@ export function withEnv(patch, fn) {
  * @param {string} [prefix] - temp-dir prefix, so a leftover dir names its suite
  * @returns {unknown} fn's return value
  */
-export function withHome(fn, prefix = "rule-home-") {
+export function withHome(fn, prefix = "rule-mcp-home-") {
   const home = mkdtempSync(join(tmpdir(), prefix));
   const previous = process.env.RULE_MCP_HOME;
 

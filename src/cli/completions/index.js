@@ -11,7 +11,7 @@ import { generateZsh } from "./_zsh.js";
  * Generates completion scripts for zsh, bash, and fish.
  *
  * Usage:
- *   rule-mcp completions          → prints zsh completion (auto-detected)
+ *   rule-mcp completions          -> prints zsh completion (auto-detected)
  *   rule-mcp completions --shell zsh
  *   rule-mcp completions --shell bash
  *   rule-mcp completions --shell fish

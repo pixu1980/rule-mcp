@@ -3,7 +3,7 @@
 - **Date**: 2026-07-11
 - **Status**: accepted
 - **Tags**: architecture, tooling, monorepo
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 
@@ -15,7 +15,7 @@ Use a single git repository with pnpm workspaces (`frontend/`, `backend/`), a ro
 
 ## Consequences
 
-Positive: one `pnpm install` bootstraps everything, shared root scripts, no dependency duplication concerns since pnpm hoists per-package. Negative: the two packages still deploy as separate artifacts (SPA static bundle + Node process), so this is not a true single-deployable monolith — acceptable for a POC, revisit with a proper build/deploy pipeline (Docker Compose or Turborepo) before production.
+Positive: one `pnpm install` bootstraps everything, shared root scripts, no dependency duplication concerns since pnpm hoists per-package. Negative: the two packages still deploy as separate artifacts (SPA static bundle + Node process), so this is not a true single-deployable monolith, acceptable for a POC, revisit with a proper build/deploy pipeline (Docker Compose or Turborepo) before production.
 
 ## Alternatives Considered
 

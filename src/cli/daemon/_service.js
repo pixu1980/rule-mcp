@@ -50,7 +50,7 @@ export function detectPlatform() {
  * On Windows, creates a Windows service via sc.exe or New-Service.
  *
  * After installation on macOS, the daemon appears in
- * System Settings → General → Login Items & Extensions.
+ * System Settings -> General -> Login Items & Extensions.
  *
  * @param {{ dryRun?: boolean }} [opts]
  * @returns {{ ok: boolean, platform: string, service: string, result: object }}

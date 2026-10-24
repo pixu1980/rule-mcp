@@ -41,7 +41,7 @@ function skipped(skill, reason) {
  *   summary: string,
  * }>}
  */
-export async function checkSemantic(code, { skill = "rule-process-ai" } = {}) {
+export async function checkSemantic(code, { skill = "rule-mcp-process-ai" } = {}) {
   const candidates = SEMANTIC_GUARDRAILS.flatMap((rule) => rule.messages(code).map((message) => ({ rule, message })));
 
   if (candidates.length === 0) {

@@ -113,7 +113,7 @@ test("an out-of-order handoff index is reported and rebuilt", () => {
 });
 
 test("a project with no handoff directory gets no index", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-doctor-no-handoffs-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-no-handoffs-"));
 
   try {
     mkdirSync(join(root, "docs", "adr"), { recursive: true });

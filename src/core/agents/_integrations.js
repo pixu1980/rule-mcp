@@ -5,7 +5,7 @@
  *
  * Cross-agent integrations that reduce token usage:
  *
- * - tokensave: when the target project ships a `.tokensave/` code graph, rule
+ * - tokensave: when the target project ships a `.tokensave/` code graph, rule-mcp
  *   tools defer code exploration to tokensave and SUPPRESS their own redundant
  *   context dumps (file trees, git diffs), emitting a short directive instead.
  *

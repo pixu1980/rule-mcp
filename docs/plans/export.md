@@ -13,12 +13,12 @@ Steps re-derived from [the review](../reviews/export.md). Mark `[x]` when done.
 
 Ship a unified distill pipeline and commands:
 
-1. `/rule-export` — session map → merge MCP telemetry → emit `.flight` → mine
+1. `/rule-mcp-export`, session map -> merge MCP telemetry -> emit `.flight` -> mine
    caches (decision + tool) with heuristic interview for dubious decisions
-2. `/rule-export cleanup` — same + hard-delete sessions outside
+2. `/rule-mcp-export cleanup`, same + hard-delete sessions outside
    `(newest N ∪ {current})` after confirm
-3. `/rule-keep` — write one `confirmed` decision into decision-cache
-4. `/rule-adr` — `rule_tool_process_adr` + offer/run `/rule-keep`
+3. `/rule-mcp-keep`, write one `confirmed` decision into decision-cache
+4. `/rule-mcp-adr`, `rule_tool_process_adr` + offer/run `/rule-mcp-keep`
 
 Runtime hook short-circuit from decision-cache is **out of scope** until
 decision-models lands.
@@ -44,9 +44,9 @@ WS-0  session map adapters (list/sort/identify current)     EX-02
   |
   +--> WS-3  decision-cache store + schemaVersion           EX-04, EX-08
   |       |
-  |       +--> WS-4  /rule-keep + export interview           EX-08
+  |       +--> WS-4  /rule-mcp-keep + export interview           EX-08
   |       |
-  |       +--> WS-5  /rule-adr restore (+ product ADR)       EX-05
+  |       +--> WS-5  /rule-mcp-adr restore (+ product ADR)       EX-05
   |
   +--> WS-6  cleanup hard-delete + env keep-N               EX-01, EX-06
   |
@@ -57,8 +57,8 @@ WS-0  session map adapters (list/sort/identify current)     EX-02
 
 ## Env
 
-| Variable                              | Default | Meaning                                                                             |
-| ------------------------------------- | ------- | ----------------------------------------------------------------------------------- |
+| Variable                        | Default | Meaning                                                                             |
+| ------------------------------- | ------- | ----------------------------------------------------------------------------------- |
 | `RULE_MCP_EXPORT_KEEP_SESSIONS` | `5`     | Newest sessions retained on cleanup (current always retained even if outside top N) |
 
 Honor `RULE_MCP_NO_CACHE` for cache writes like other caches.
@@ -74,11 +74,11 @@ Minimum record:
 - `fingerprint` (alignable with DM-07: model id + questions + state + shortlist)
 - `choice` / payload
 - `status`: `pending` | `confirmed` | `rejected`
-- `source`: `rule-keep` | `rule-export-interview` | `rule-adr`
+- `source`: `rule-mcp-keep` | `rule-mcp-export-interview` | `rule-mcp-adr`
 - `agent`, `project`, timestamps
 
 DM-07 later: read + invalidate on model/shortlist change; may move
-`confirmed` → `rejected` after revalidation.
+`confirmed` -> `rejected` after revalidation.
 
 ## Agent policy v1
 
@@ -90,30 +90,30 @@ never delete.
 ## Steps
 
 - [ ] **Step 0 - EX-02 (high)**: Session map API per supported agent
-  - [ ] 0.1 Failing tests: list sessions for a fixture project, oldest→newest
+  - [ ] 0.1 Failing tests: list sessions for a fixture project, oldest->newest
   - [ ] 0.2 `current` detection per agent; if ambiguous, flag `currentUnknown`
   - [ ] 0.3 Gate: unit tests green; no deletes yet
 - [ ] **Step 1 - EX-03 (high)**: Idempotent telemetry merge
-  - [ ] 1.1 Failing tests: two exports → stats unchanged on second run
+  - [ ] 1.1 Failing tests: two exports -> stats unchanged on second run
   - [ ] 1.2 Merge transcript-derived fields into MCP telemetry store with digests
-  - [ ] 1.3 `/rule-stats` / `rule_tool_stats` read the merged truth
+  - [ ] 1.3 `/rule-mcp-stats` / `rule_tool_stats` read the merged truth
   - [ ] 1.4 Gate: stats suites + new merge suite
 - [ ] **Step 2 - EX-07 (medium)**: Flight emit in the pipeline
-  - [ ] 2.1 Document and test `keep` vs drain when invoked from `/rule-export`
+  - [ ] 2.1 Document and test `keep` vs drain when invoked from `/rule-mcp-export`
   - [ ] 2.2 Recommendation: default `keep: true` for distill-only; optional drain flag later
   - [ ] 2.3 Gate: flight export suites still green; no accidental drain in default path
 - [ ] **Step 3 - EX-04, EX-08 (high/medium)**: Decision-cache store
   - [ ] 3.1 Schema + persistence + `schemaVersion`
   - [ ] 3.2 Status transitions pending↔confirmed↔rejected
   - [ ] 3.3 Gate: store suite; `NO_CACHE` honored
-- [ ] **Step 4 - interview + `/rule-keep`**
+- [ ] **Step 4 - interview + `/rule-mcp-keep`**
   - [ ] 4.1 Heuristics: ADR writes, `rule_tool_process_adr`, conflicting choices, explicit markers
-  - [ ] 4.2 `/rule-export` interviews dubious → write pending/confirmed/discard
-  - [ ] 4.3 `/rule-keep` writes confirmed directly
+  - [ ] 4.2 `/rule-mcp-export` interviews dubious -> write pending/confirmed/discard
+  - [ ] 4.3 `/rule-mcp-keep` writes confirmed directly
   - [ ] 4.4 Gate: prompt defs + tool/handler tests; no hook short-circuit
-- [ ] **Step 5 - EX-05 (medium)**: Restore `/rule-adr`
+- [ ] **Step 5 - EX-05 (medium)**: Restore `/rule-mcp-adr`
   - [ ] 5.1 Product ADR: returns because it binds ADR + decision-cache keep
-  - [ ] 5.2 Prompt def: drive `rule_tool_process_adr`, then `/rule-keep`
+  - [ ] 5.2 Prompt def: drive `rule_tool_process_adr`, then `/rule-mcp-keep`
   - [ ] 5.3 Update contract/census/surface-map counts
   - [ ] 5.4 Gate: prompt contract tests, docs-accuracy
 - [ ] **Step 6 - EX-01, EX-06 (high)**: Cleanup
@@ -133,20 +133,20 @@ never delete.
 
 - If current-session detection cannot be made safe for an agent, that agent's
   **cleanup** stays disabled (usage/merge may still ship).
-- If merge cannot be proven idempotent in tests, `/rule-export` ships
+- If merge cannot be proven idempotent in tests, `/rule-mcp-export` ships
   report-only (no store write) until fixed.
 - If decision-cache fingerprint cannot be aligned with DM-07 draft, ship store
-  with `schemaVersion: 1` and an explicit adapter note — do not invent a second
+  with `schemaVersion: 1` and an explicit adapter note, do not invent a second
   incompatible cache on the DM branch.
 
 ## Command UX (agent-facing)
 
 ```
-/rule-export              # distill + interview; no session delete
-/rule-export cleanup      # distill + confirm + hard delete outside keep-set
-/rule-keep                # confirm one decision into decision-cache
-/rule-adr                 # ADR via rule_tool_process_adr, then keep offer
-/rule-stats               # unchanged reader; must reflect merged telemetry
+/rule-mcp-export              # distill + interview; no session delete
+/rule-mcp-export cleanup      # distill + confirm + hard delete outside keep-set
+/rule-mcp-keep                # confirm one decision into decision-cache
+/rule-mcp-adr                 # ADR via rule_tool_process_adr, then keep offer
+/rule-mcp-stats               # unchanged reader; must reflect merged telemetry
 ```
 
 ## Out of scope

@@ -7,17 +7,20 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import { dockerBlockers, dockerComposeUp, sseTokenPath } from "../_docker.js";
+const state = mkdtempSync(join(tmpdir(), "rule-mcp-docker-state-"));
+process.env.RULE_MCP_STATE_DIR = state;
+
+const { dockerBlockers, dockerComposeUp, sseTokenPath } = await import("../_docker.js");
 
 test("a project without compose is blocked", () => {
-  const cwd = mkdtempSync(join(tmpdir(), "rule-docker-branches-"));
+  const cwd = mkdtempSync(join(tmpdir(), "rule-mcp-docker-branches-"));
   const reason = dockerBlockers({ cwd });
 
   assert.match(reason, /docker-compose\.yml not found|Docker Compose/u);
 });
 
 test("a dry run with every precondition met is planned", () => {
-  const cwd = mkdtempSync(join(tmpdir(), "rule-docker-branches-"));
+  const cwd = mkdtempSync(join(tmpdir(), "rule-mcp-docker-branches-"));
 
   writeFileSync(join(cwd, "docker-compose.yml"), "services: {}\n");
   mkdirSync(join(sseTokenPath(), ".."), { recursive: true });
@@ -35,7 +38,7 @@ test("a dry run with every precondition met is planned", () => {
 });
 
 test("compose-up without a token is blocked before the shell", () => {
-  const cwd = mkdtempSync(join(tmpdir(), "rule-docker-branches-"));
+  const cwd = mkdtempSync(join(tmpdir(), "rule-mcp-docker-branches-"));
 
   writeFileSync(join(cwd, "docker-compose.yml"), "services: {}\n");
 

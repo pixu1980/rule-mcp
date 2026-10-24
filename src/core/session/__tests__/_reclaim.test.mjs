@@ -7,7 +7,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { test } from "node:test";
 
-const state = mkdtempSync(join(tmpdir(), "rule-retain-"));
+const state = mkdtempSync(join(tmpdir(), "rule-mcp-retain-"));
 
 test.before(() => {
   process.env.RULE_MCP_STATE_DIR = state;

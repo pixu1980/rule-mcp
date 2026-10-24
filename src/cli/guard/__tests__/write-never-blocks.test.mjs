@@ -28,7 +28,7 @@ function stops(answer) {
 
 /** A project with the file already on disk, the way PostToolUse finds it. */
 function project(files) {
-  const dir = realpathSync(mkdtempSync(join(tmpdir(), "rule-never-blocks-")));
+  const dir = realpathSync(mkdtempSync(join(tmpdir(), "rule-mcp-never-blocks-")));
   mkdirSync(join(dir, ".git"), { recursive: true });
 
   for (const [path, content] of Object.entries(files)) {
@@ -41,7 +41,7 @@ function project(files) {
 
 /** Run the hook exactly as a settings file does, and parse what it printed. */
 function guardWrite(payload, cwd) {
-  const stateDir = mkdtempSync(join(tmpdir(), "rule-never-blocks-state-"));
+  const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-never-blocks-state-"));
   const out = execFileSync(process.execPath, [BIN, "guard", "write"], {
     input: typeof payload === "string" ? payload : JSON.stringify(payload),
     encoding: "utf8",
@@ -53,8 +53,8 @@ function guardWrite(payload, cwd) {
 }
 
 const ITALIAN = "// restituisce il valore della configurazione\n";
-const EM_DASH = "/** A note — with an em dash. */\nexport const x = 1;\n";
-const BRITISH = "/** Normalise the colour. */\nexport const y = 2;\n";
+const EM_DASH = "/** A note, with an em dash. */\nexport const x = 1;\n";
+const BRITISH = "/** Normalize the color. */\nexport const y = 2;\n";
 const FAILING = 'export function Card(){ return <div className="card">hi</div>; }\n';
 
 const CASES = [

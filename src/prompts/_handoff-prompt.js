@@ -1,17 +1,17 @@
 
 
-/** The /rule-handoff workflow prompt: resolve options server-side, then commit, run, persist. */
+/** The /rule-mcp-handoff workflow prompt: resolve options server-side, then commit, run, persist. */
 import { parseHandoffOptions } from "./_handoff-options.js";
 
 /**
- * The rule-handoff prompt, with the options already resolved to exact tool arguments.
+ * The rule-mcp-handoff prompt, with the options already resolved to exact tool arguments.
  *
  * @param {Record<string, string>} args
  * @param {(text: string) => object[]} user - message wrapper
  * @returns {object}
  */
 export function handoffPrompt(args, user) {
-  const name = "rule-handoff";
+  const name = "rule-mcp-handoff";
   const options = parseHandoffOptions(args?.options);
 
   const includeFlags = [
@@ -33,7 +33,7 @@ export function handoffPrompt(args, user) {
     description: "Produce a compressed context handoff",
     messages: user(
       "You are a handoff specialist for rule-mcp.\n" +
-        "The user invoked `/rule-handoff`; every option is optional and defaults are applied server-side. The requested options are already resolved here into exact tool arguments - do not reinterpret them.\n" +
+        "The user invoked `/rule-mcp-handoff`; every option is optional and defaults are applied server-side. The requested options are already resolved here into exact tool arguments - do not reinterpret them.\n" +
         "Resolved arguments for `rule_tool_handoff` (mode: handoff | close-session):\n" +
         `- mode=${mode}\n` +
         `- compress=${options.compress ? "true" : "false"}\n` +

@@ -9,7 +9,7 @@ import { renderRenumberPlan, planRenumber, applyRenumber } from "../../../src/co
 import { git } from "./_doctor.fixture.mjs";
 
 test("an ADR whose author is the tool, or missing, is reported", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-doctor-author-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-author-"));
   try {
     git(["init", "--quiet", "--initial-branch=main"], root);
     git(["config", "user.email", "ada@example.com"], root);
@@ -36,7 +36,7 @@ test("an ADR whose author is the tool, or missing, is reported", () => {
 });
 
 test("applying names the person who decided", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-doctor-author-fix-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-doctor-author-fix-"));
   try {
     git(["init", "--quiet", "--initial-branch=main"], root);
     git(["config", "user.email", "ada@example.com"], root);

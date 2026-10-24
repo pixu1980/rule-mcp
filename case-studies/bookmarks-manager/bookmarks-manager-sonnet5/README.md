@@ -1,7 +1,7 @@
 # Bookmarks Manager
 
 Paste a link, get it saved instantly with its title, Open Graph preview
-image, favicon and a short text excerpt — no manual tagging required.
+image, favicon and a short text excerpt, no manual tagging required.
 
 A pnpm-workspace monorepo built to the [rule-mcp](https://github.com/rule-mcp)
 skill set: zero-CSS-class React frontend (element + `data-part` selectors
@@ -18,7 +18,7 @@ bookmarks-sonnet5/
 
 ## Quick start
 
-Requires Node ≥20 and `pnpm` (`corepack enable` if you don't have it yet).
+Requires Node >=20 and `pnpm` (`corepack enable` if you don't have it yet).
 
 ```bash
 pnpm install
@@ -42,8 +42,8 @@ pnpm --filter ./frontend test    # Vitest + Testing Library — unit
 pnpm --filter ./frontend test:a11y   # Playwright + @axe-core — WCAG 2.2 AA gate
 ```
 
-The a11y suite is mandatory per `rule-styleguide-a11y` and boots its own
-Vite dev server (`playwright.config.ts` → `webServer`), so it can run
+The a11y suite is mandatory per `rule-mcp-styleguide-a11y` and boots its own
+Vite dev server (`playwright.config.ts` -> `webServer`), so it can run
 standalone: `cd frontend && pnpm exec playwright install chromium && pnpm test:a11y`.
 
 ## API surface
@@ -68,7 +68,7 @@ Errors always have the shape:
 
 - **SSRF guard** (`backend/src/common/utils/ssrfGuard.ts`): http(s)-only,
   `localhost` rejected, hostname resolved via DNS and checked against
-  `ipaddr.js` — only publicly-routable (`unicast`) addresses are allowed.
+  `ipaddr.js`, only publicly-routable (`unicast`) addresses are allowed.
 - **Bounded scraping**: request timeout, streamed byte cap, `content-type`
   allowlist (HTML only).
 - **Rate limiting** on the expensive `POST /bookmarks` route.
@@ -82,19 +82,19 @@ a 1.25 modular type scale, a geometric spacing scale, 5-step radii and
 elevation, two motion durations + one easing curve, and an OKLCH
 neutral+accent palette with a `prefers-color-scheme: dark` override. Every
 component's CSS lives in an external `_Component.css` file adopted via
-`document.adoptedStyleSheets` — no CSS classes, no inline styles, anywhere.
+`document.adoptedStyleSheets`, no CSS classes, no inline styles, anywhere.
 
 ## Documentation
 
-- [`docs/adr/`](docs/adr/) — architecture decisions, numbered and dated.
-- [`docs/handoff/`](docs/handoff/) — end-of-session context for the next
+- [`docs/adr/`](docs/adr/), architecture decisions, numbered and dated.
+- [`docs/handoff/`](docs/handoff/), end-of-session context for the next
   agent or engineer.
-- [`backend/api/openapi.yaml`](backend/api/openapi.yaml) — API contract.
+- [`backend/api/openapi.yaml`](backend/api/openapi.yaml), API contract.
 
 ## Known limitations (POC scope)
 
 - Bookmarks are stored in-memory and reset when the backend restarts (see
-  ADR 006 — the repository module isolates the swap to a persistent store).
+  ADR 006, the repository module isolates the swap to a persistent store).
 - No auth/multi-user support.
 - a11y automation currently covers the frontend's static/loading states
-  only (no live backend in the Playwright run) — see ADR 007.
+  only (no live backend in the Playwright run), see ADR 007.

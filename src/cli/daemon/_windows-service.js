@@ -73,7 +73,7 @@ export function installWindowsService({ dryRun = false, exec = tryExecFile } = {
       timeout: 10_000,
       stdio: "pipe",
     });
-    exec("sc", ["description", name, "MCP server for the rule-* skill ecosystem. Serves styleguides, component templates, and framework best practices."]);
+    exec("sc", ["description", name, "MCP server for the rule-mcp-* skill ecosystem. Serves styleguides, component templates, and framework best practices."]);
     startWindowsService({ exec });
 
     return { ok: true, name, action: "created-and-started" };

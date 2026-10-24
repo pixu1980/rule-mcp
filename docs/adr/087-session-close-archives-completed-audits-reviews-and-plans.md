@@ -17,7 +17,7 @@ In close-session mode only, rule_tool_process_handoff folds each completed doc i
 
 ## Consequences
 
-Completed working papers leave the tree on session close; each survives as one ADR plus a Closeout section in the persisted handoff, with full text recoverable from git history. Close-session becomes the first destructive mode of the handoff tool. The rule blank-line guardrails are intentionally not adopted: every committed file violates them and the 150-line budget plus repo-wide consistency win.
+Completed working papers leave the tree on session close; each survives as one ADR plus a Closeout section in the persisted handoff, with full text recoverable from git history. Close-session becomes the first destructive mode of the handoff tool. The rule-mcp blank-line guardrails are intentionally not adopted: every committed file violates them and the 150-line budget plus repo-wide consistency win.
 
 ## What would end this
 

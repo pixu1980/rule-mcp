@@ -2,7 +2,7 @@
 
 // test/apply-containment: destination containment (findings 01 + 02).
 //
-// Audit findings 01 + 02 - pix_apply is the only tool that writes files, so
+// Audit findings 01 + 02 - rule_tool_apply is the only tool that writes files, so
 // its containment check carries all the security weight.
 //
 //   01. The containment root came from the caller's own `path` argument, so
@@ -27,7 +27,7 @@ import { join, parse, sep } from "node:path";
 import { resolveProjectRoot, resolveWriteTarget } from "../index.js";
 
 /** A realpath'd temp project root (macOS /tmp is a symlink to /private/tmp). */
-const project = realpathSync(mkdtempSync(join(tmpdir(), "rule-apply-")));
+const project = realpathSync(mkdtempSync(join(tmpdir(), "rule-mcp-apply-")));
 
 // ── resolveProjectRoot: the root itself must be plausible ──────────────────
 
@@ -70,7 +70,7 @@ test("resolveWriteTarget rejects an empty target", () => {
 });
 
 test("resolveWriteTarget follows symlinks before deciding", { skip: process.platform === "win32" }, () => {
-  const escapeTarget = realpathSync(mkdtempSync(join(tmpdir(), "rule-escape-")));
+  const escapeTarget = realpathSync(mkdtempSync(join(tmpdir(), "rule-mcp-escape-")));
   const link = join(project, "vendor");
   symlinkSync(escapeTarget, link, "dir");
   // Pure string math says "vendor/x.js is inside the project"; realpath says

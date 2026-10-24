@@ -56,7 +56,7 @@ export function registerStatsCommand(program) {
       const { telemetryEnabled } = await import("../core/telemetry/recorder/index.js");
 
       if (telemetryEnabled()) {
-        console.log(renderStats(aggregate(readEvents()), { title: "rule telemetry: local log" }));
+        console.log(renderStats(aggregate(readEvents()), { title: "rule-mcp telemetry: local log" }));
       } else {
         console.log("Telemetry is disabled (RULE_MCP_NO_TELEMETRY=1). Nothing has been recorded.");
       }

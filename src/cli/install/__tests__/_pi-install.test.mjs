@@ -32,7 +32,7 @@ execFileSync(
 );
 
 const mcpConfig = join(piDir, "mcp.json");
-const prompt = join(piDir, "prompts", "rule.md");
+const prompt = join(piDir, "prompts", "rule-mcp.md");
 assert.ok(existsSync(mcpConfig), "Pi MCP config must be installed");
 assert.ok(readFileSync(mcpConfig, "utf8").includes("rule-mcp"), "Pi MCP config must register server");
 assert.ok(existsSync(prompt), "Pi slash-command prompt must be installed");

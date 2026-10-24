@@ -1,8 +1,8 @@
 /**
  * @module common/middleware/error-handler
  * Centralized Express error handler.
- * Operational errors (AppError) → structured JSON.
- * Programmer errors → 500 with generic message.
+ * Operational errors (AppError) -> structured JSON.
+ * Programmer errors -> 500 with generic message.
  */
 
 import type { Request, Response, NextFunction } from "express";
@@ -44,7 +44,7 @@ export function errorHandler(
     return;
   }
 
-  // Programmer error — log full stack
+  // Programmer error, log full stack
   logger.error({ err }, "Unhandled error");
   res.status(500).json({
     statusCode: 500,

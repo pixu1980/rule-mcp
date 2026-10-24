@@ -6,7 +6,7 @@ const seed: Bookmark = {
   url: "https://www.nationalgeographic.com/travel/article/slow-travel",
   title: "The quiet atlas",
   description:
-    "Notes on travelling slowly, noticing more, and leaving room for wonder.",
+    "Notes on traveling slowly, noticing more, and leaving room for wonder.",
   image: null,
   domain: "nationalgeographic.com",
   preview:

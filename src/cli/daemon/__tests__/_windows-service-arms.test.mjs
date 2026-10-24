@@ -21,7 +21,7 @@ import { checkWindowsService, getWindowsServiceCommand, installWindowsService, u
 const ARMS = fileURLToPath(new URL("../_windows-service.js", import.meta.url));
 
 test("the arms leave no null-device artifact in the directory they run from", () => {
-  const scratch = mkdtempSync(join(tmpdir(), "rule-windows-arms-"));
+  const scratch = mkdtempSync(join(tmpdir(), "rule-mcp-windows-arms-"));
 
   execFileSync(
     process.execPath,

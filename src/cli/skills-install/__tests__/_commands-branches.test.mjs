@@ -14,7 +14,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const home = mkdtempSync(join(tmpdir(), "rule-skills-commands-branches-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-skills-commands-branches-"));
 
 process.env.HOME = home;
 
@@ -52,7 +52,7 @@ test("the list prints a table when --json is absent and the install dir does not
 
   assert.match(out, /rule-mcp skills/);
   assert.match(out, /Skill catalog/);
-  assert.match(out, /rule-/, "the catalog rows are listed");
+  assert.match(out, /rule-mcp-/, "the catalog rows are listed");
 });
 
 test("a batch run without --all reinstalls only the skills already present", async () => {

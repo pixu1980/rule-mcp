@@ -15,10 +15,10 @@ export async function pass(promptOf) {
   const tiers = { exact: 0, normalized: 0, miss: 0 };
   const entries = {};
   for (const entry of CORPUS) {
-    const result = await callTool("pix_tool", { prompt: promptOf(entry) });
-    const tier = result?._meta?.pixCache?.tier ?? "miss";
+    const result = await callTool("rule_tool", { prompt: promptOf(entry) });
+    const tier = result?._meta?.ruleCache?.tier ?? "miss";
     tiers[tier] += 1;
-    const path = entryPathOf("pix_tool");
+    const path = entryPathOf("rule_tool");
     entries[path] = (entries[path] ?? 0) + 1;
   }
 
@@ -65,7 +65,7 @@ export function invalidationCost() {
  * the same text. The whole cache rests on this, and nothing else verifies it.
  *
  * Parity: a cached hit must decorate to the same output as a miss. The one
- * permitted difference is `_meta.pixCache`, which names the tier that
+ * permitted difference is `_meta.ruleCache`, which names the tier that
  * answered and is the reason a hit is debuggable at all.
  *
  * @returns {Promise<{ determinism: string[], parity: string[], checked: number }>}
@@ -95,7 +95,7 @@ export async function correctness() {
     if ((hit?.content?.[0]?.text ?? "") !== (miss?.content?.[0]?.text ?? "")) {
       parity.push(tool);
     }
-    if (!hit?._meta?.pixCache?.tier) {
+    if (!hit?._meta?.ruleCache?.tier) {
       parity.push(`${tool} (no tier reported)`);
     }
     if ((miss?.content?.[0]?.text ?? "") !== uncached.get(tool)) {

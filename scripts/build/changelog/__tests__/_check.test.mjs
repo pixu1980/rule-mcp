@@ -11,7 +11,7 @@ import { test } from "node:test";
 import { checkChangelog, writeChangelog } from "../index.mjs";
 
 test("checkChangelog reports drift, then agrees after a generation", () => {
-  const root = mkdtempSync(join(tmpdir(), "rule-changelog-check-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-changelog-check-"));
   const git = (...args) => execFileSync("git", args, { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
 
   git("init", "--initial-branch=main", "-q");

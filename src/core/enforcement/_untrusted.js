@@ -25,7 +25,7 @@
 const DIRECTIVE_PATTERNS = [
   /^\s*(ignore|disregard|forget)\s+(all\s+)?(previous|prior|above|earlier)\s+(instructions?|rules?|prompts?)/i,
   /^\s*(system|assistant|user|developer)\s*:/i,
-  /^\s*#{1,6}\s*(rule(\s+galaxy)?(\s+mcp)?\s+workflow\s+reminder|system\s+prompt|new\s+instructions?)/i,
+  /^\s*#{1,6}\s*(rule-mcp(\s+galaxy)?(\s+mcp)?\s+workflow\s+reminder|system\s+prompt|new\s+instructions?)/i,
   /^\s*<\/?(system|instructions?|important)>/i,
   /^\s*you\s+are\s+now\s+/i,
   /^\s*(new|updated)\s+(instructions?|rules?|directives?)\s*:/i,

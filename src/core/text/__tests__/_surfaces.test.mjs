@@ -1,9 +1,9 @@
 
 
 /**
- * Phase 3 (plan: execution-plan.md) — the compression-surface manifest, pinned.
+ * Phase 3 (plan: execution-plan.md), the compression-surface manifest, pinned.
  *
- * Every server→model surface is listed in `../_surfaces.js` with the exact
+ * Every server->model surface is listed in `../_surfaces.js` with the exact
  * pass the handler runs. This test walks the manifest:
  *   - a "prose" surface shortens verbose text, keeps JSON identical, and
  *     never breaks structure (headings, urls, paths, inline and fenced code);
@@ -23,7 +23,7 @@ const { guardCompression } = await import("../compress-guard/index.js");
 const VERBOSE = "The server really just tries to make sure that every single turn pays for the smallest possible amount of the filler that nobody reads anyway.";
 
 /** JSON is data: the pass must short-circuit and hand it back verbatim. */
-const JSON_SAMPLE = '{"name":"rule","tokens":123}';
+const JSON_SAMPLE = '{"name":"rule-mcp","tokens":123}';
 
 /** Every structural kind the guard protects: heading, url, path, span, fences. */
 const STRUCTURED = "# Heading\n\nSee https://example.com/a and ./src/index.js and `inline`.\n\n```js\nconst a = 1;\n```\n";

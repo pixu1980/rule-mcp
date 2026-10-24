@@ -20,7 +20,7 @@ import { test } from "node:test";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "..");
 
 test("install.sh --no-wizard configures the agent even with a broken shim on PATH", () => {
-  const home = mkdtempSync(join(tmpdir(), "rule-setup-e2e-"));
+  const home = mkdtempSync(join(tmpdir(), "rule-mcp-setup-e2e-"));
   const bin = join(home, "bin");
 
   mkdirSync(join(home, ".pi", "agent"), { recursive: true });

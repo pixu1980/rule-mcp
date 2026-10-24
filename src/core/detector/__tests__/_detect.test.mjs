@@ -9,12 +9,12 @@ import { test } from "node:test";
 
 import { detectProject, detectProjectGraph, getFrameworkSuggestion, hasTokensave } from "../index.js";
 
-const dir = mkdtempSync(join(tmpdir(), "rule-detect-"));
+const dir = mkdtempSync(join(tmpdir(), "rule-mcp-detect-"));
 
 test.after(() => rmSync(dir, { recursive: true, force: true }));
 
 const project = (deps = {}, devDeps = {}, extra = {}) => {
-  const root = mkdtempSync(join(tmpdir(), "rule-detect-proj-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-detect-proj-"));
   writeFileSync(join(root, "package.json"), JSON.stringify({ name: "p", dependencies: deps, devDependencies: devDeps, ...extra }, null, 2));
   return root;
 };
@@ -33,14 +33,14 @@ test("detectProject reads react, typescript and vite from package.json", () => {
 });
 
 test("detectProject falls back for missing or malformed manifests", () => {
-  const empty = mkdtempSync(join(tmpdir(), "rule-detect-none-"));
+  const empty = mkdtempSync(join(tmpdir(), "rule-mcp-detect-none-"));
   const detected = detectProject(empty);
   assert.equal(detected.framework, "vanilla", "no manifest means vanilla");
   assert.equal(detected.projectName, "unknown", "no manifest means unknown name");
   assert.equal(detected.typescript, false, "no manifest means no typescript");
   rmSync(empty, { recursive: true, force: true });
 
-  const bad = mkdtempSync(join(tmpdir(), "rule-detect-bad-"));
+  const bad = mkdtempSync(join(tmpdir(), "rule-mcp-detect-bad-"));
   writeFileSync(join(bad, "package.json"), "{ nope");
   const fallback = detectProject(bad);
   assert.equal(fallback.framework, "vanilla", "a malformed manifest means vanilla");
@@ -79,12 +79,12 @@ test("detectProjectGraph falls back to the direct read when the client fails", (
 });
 
 test("getFrameworkSuggestion falls back for unknown frameworks", () => {
-  assert.equal(getFrameworkSuggestion("react").skillName, "rule-frontend-react", "known frameworks map");
-  assert.equal(getFrameworkSuggestion("mystery").skillName, "rule-frontend", "unknown frameworks fall back to the frontend area");
+  assert.equal(getFrameworkSuggestion("react").skillName, "rule-mcp-frontend-react", "known frameworks map");
+  assert.equal(getFrameworkSuggestion("mystery").skillName, "rule-mcp-frontend", "unknown frameworks fall back to the frontend area");
 });
 
 test("hasTokensave answers from the graph directory", () => {
-  const withGraph = mkdtempSync(join(tmpdir(), "rule-detect-ts-"));
+  const withGraph = mkdtempSync(join(tmpdir(), "rule-mcp-detect-ts-"));
   mkdirSync(join(withGraph, ".tokensave"), { recursive: true });
   assert.equal(hasTokensave(withGraph), true, "a graph directory counts");
   assert.equal(hasTokensave(dir), false, "without one it does not");

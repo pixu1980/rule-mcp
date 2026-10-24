@@ -26,8 +26,8 @@ test("the custom drill-down covers every area the catalog has", () => {
 
   const skillIds = new Set(surfaceSkillItems(["frontend"]).map((item) => item.id));
 
-  assert.ok(skillIds.has("rule-frontend"), "the hub is listed");
-  assert.ok(skillIds.has("rule-frontend-react"), "members are listed");
+  assert.ok(skillIds.has("rule-mcp-frontend"), "the hub is listed");
+  assert.ok(skillIds.has("rule-mcp-frontend-react"), "members are listed");
 });
 
 test("the rail, hints and views agree on nine install steps", () => {

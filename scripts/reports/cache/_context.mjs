@@ -14,7 +14,7 @@ if (exactOnly) {
   process.env.RULE_MCP_CACHE_EXACT_ONLY = "1";
 }
 
-export const stateDir = mkdtempSync(join(tmpdir(), "rule-cache-report-"));
+export const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-cache-report-"));
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";

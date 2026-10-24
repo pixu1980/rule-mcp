@@ -5,7 +5,7 @@
  * @module scripts/reports/nyx-routing
  *
  * Measures the real routing path, not a model of it: every prompt goes through
- * `callTool("pix_tool")`, so shared-sync bias, the name/tag scorer, the graph
+ * `callTool("rule_tool")`, so shared-sync bias, the name/tag scorer, the graph
  * candidates and the optional Nyx rerank all count.
  *
  * Run it twice, with and without the Nyx adapter, and compare:
@@ -47,7 +47,7 @@ const failures = [];
 
 for (const entry of CORPUS) {
   const started = performance.now();
-  const answer = JSON.parse((await callTool("pix_tool", { prompt: entry.prompt })).content[0].text);
+  const answer = JSON.parse((await callTool("rule_tool", { prompt: entry.prompt })).content[0].text);
   latencies.push(performance.now() - started);
 
   const routes = [answer.route, ...(answer.alternatives ?? []).map((alternative) => alternative.route)];

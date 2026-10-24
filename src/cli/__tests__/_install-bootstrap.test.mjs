@@ -76,7 +76,7 @@ test("a piped run stays non-interactive so it cannot hang", () => {
 });
 
 test("install.sh forwards the target agent and mode to the plan", () => {
-  const output = run("install.sh", ["--agent", "pi", "--mode", "daemon", "--dry-run", "--no-rules"], "rule-bootstrap-install-");
+  const output = run("install.sh", ["--agent", "pi", "--mode", "daemon", "--dry-run", "--no-rules"], "rule-mcp-bootstrap-install-");
 
   assert.match(output, /dry run/, "a dry run must announce itself");
   assert.match(output, /Configure pi/, "the requested agent must appear as its own step");
@@ -89,7 +89,7 @@ test("uninstall.sh translates --force into a non-interactive run", () => {
 
   assert.match(source, /--no-interactive/, "--force must keep meaning 'do not ask'");
 
-  const output = run("uninstall.sh", ["--force", "--dry-run"], "rule-bootstrap-uninstall-");
+  const output = run("uninstall.sh", ["--force", "--dry-run"], "rule-mcp-bootstrap-uninstall-");
 
   assert.match(output, /uninstall \(dry run\)/, "the uninstall direction must be selected");
 });

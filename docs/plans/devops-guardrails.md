@@ -1,9 +1,9 @@
-# rule-devops guardrails execution plan
+# rule-mcp-devops guardrails execution plan
 
-Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four rule-devops leaves.
-Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four rule-devops leaves. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four rule-devops leaves, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
+Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four rule-mcp-devops leaves.
+Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four rule-mcp-devops leaves. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four rule-mcp-devops leaves, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
 
-Scope: extend the deterministic guardrails of the five `rule-devops*` skills,
+Scope: extend the deterministic guardrails of the five `rule-mcp-devops*` skills,
 reorganize the four rules that already exist, and record every rule against a
 citable, de facto public source. Implementation happens in a dedicated session:
 this document is the plan only.
@@ -12,23 +12,23 @@ this document is the plan only.
 
 Audited in this session (read-only):
 
-- `skills/rule-devops/SKILL.md` and `guardrails/{index,_env-gitignore,_secret-detection}.js`
-- `skills/rule-devops-docker/SKILL.md` and `guardrails/{index,_docker-healthcheck,_docker-non-root}.js`
-- `skills/rule-devops-testing/SKILL.md` (no guardrails directory)
-- `skills/rule-devops-observability/SKILL.md` (no guardrails directory)
-- `skills/rule-devops-deploy-preview/SKILL.md` (no guardrails directory)
+- `skills/rule-mcp-devops/SKILL.md` and `guardrails/{index,_env-gitignore,_secret-detection}.js`
+- `skills/rule-mcp-devops-docker/SKILL.md` and `guardrails/{index,_docker-healthcheck,_docker-non-root}.js`
+- `skills/rule-mcp-devops-testing/SKILL.md` (no guardrails directory)
+- `skills/rule-mcp-devops-observability/SKILL.md` (no guardrails directory)
+- `skills/rule-mcp-devops-deploy-preview/SKILL.md` (no guardrails directory)
 - `src/core/guardrails/engine/_registry.js` (`getGuardrails`, baseline skills, inheritance)
 - `src/core/guardrails/_scaffold.js` (file-presence scaffold checks)
 - `tests/fixtures/guardrail-corpus.mjs` and `docs/08-engineering-guides.md` (100% precision/recall gate)
 
 Current state: 4 rules only.
 
-| Rule                 | Skill             | Trigger                |
-| -------------------- | ----------------- | ---------------------- |
-| `env-gitignore`      | rule-devops        | file name `.gitignore` |
-| `secret-detection`   | rule-devops        | any code               |
-| `docker-healthcheck` | rule-devops-docker | Dockerfile or compose  |
-| `docker-non-root`    | rule-devops-docker | Dockerfile or compose  |
+| Rule                 | Skill                  | Trigger                |
+| -------------------- | ---------------------- | ---------------------- |
+| `env-gitignore`      | rule-mcp-devops        | file name `.gitignore` |
+| `secret-detection`   | rule-mcp-devops        | any code               |
+| `docker-healthcheck` | rule-mcp-devops-docker | Dockerfile or compose  |
+| `docker-non-root`    | rule-mcp-devops-docker | Dockerfile or compose  |
 
 Sources fetched and used (each accepted rule cites one or more):
 
@@ -87,22 +87,22 @@ demote any Tier A rule to Tier B.
 
 ## Where each rule lives
 
-| Rule family   | Owning skill              | Why                                                              |
-| ------------- | ------------------------- | ---------------------------------------------------------------- |
-| CI/CD         | rule-devops                | No `rule-devops-ci` skill exists, and all devops children inherit |
-| Docker        | rule-devops-docker         | Topic owner                                                      |
-| Testing       | rule-devops-testing        | Topic owner, gains its first `guardrails/` directory             |
-| Observability | rule-devops-observability  | Topic owner, gains its first `guardrails/` directory             |
-| Preview       | rule-devops-deploy-preview | Topic owner, gains its first `guardrails/` directory             |
+| Rule family   | Owning skill                   | Why                                                                   |
+| ------------- | ------------------------------ | --------------------------------------------------------------------- |
+| CI/CD         | rule-mcp-devops                | No `rule-mcp-devops-ci` skill exists, and all devops children inherit |
+| Docker        | rule-mcp-devops-docker         | Topic owner                                                           |
+| Testing       | rule-mcp-devops-testing        | Topic owner, gains its first `guardrails/` directory                  |
+| Observability | rule-mcp-devops-observability  | Topic owner, gains its first `guardrails/` directory                  |
+| Preview       | rule-mcp-devops-deploy-preview | Topic owner, gains its first `guardrails/` directory                  |
 
-Reorganization: `env-gitignore` and `secret-detection` stay in `rule-devops`;
+Reorganization: `env-gitignore` and `secret-detection` stay in `rule-mcp-devops`;
 they are already shared. `docker-healthcheck` and `docker-non-root` stay in
-`rule-devops-docker`. No rule moves, and every skill's frontmatter `guardrails:`
+`rule-mcp-devops-docker`. No rule moves, and every skill's frontmatter `guardrails:`
 list is kept in sync with the registry after the change.
 
 ## Accepted rules
 
-### Docker (skill: rule-devops-docker, Tier A)
+### Docker (skill: rule-mcp-devops-docker, Tier A)
 
 | Rule id                   | Rejects                                                                  | Target file        | Source                               |
 | ------------------------- | ------------------------------------------------------------------------ | ------------------ | ------------------------------------ |
@@ -115,7 +115,7 @@ development compose file, because the dev stack mounts source by design.
 Presence of `.dockerignore` itself is a scaffold concern; the content rule
 above runs only when the file is checked.
 
-### CI/CD (skill: rule-devops, shared, Tier A except as noted)
+### CI/CD (skill: rule-mcp-devops, shared, Tier A except as noted)
 
 | Rule id                  | Rejects                                                   | Target file      | Tier | Source                           |
 | ------------------------ | --------------------------------------------------------- | ---------------- | ---- | -------------------------------- |
@@ -128,7 +128,7 @@ above runs only when the file is checked.
 `ci-no-allow-failure` accepts one escape hatch: an inline comment
 `# allow-failure-ok: <reason>` on the same or previous line.
 
-### Testing (skill: rule-devops-testing, Tier A)
+### Testing (skill: rule-mcp-devops-testing, Tier A)
 
 | Rule id                    | Rejects                                                          | Target file       | Source                  |
 | -------------------------- | ---------------------------------------------------------------- | ----------------- | ----------------------- |
@@ -143,7 +143,7 @@ marker in prose trips the existing `no-placeholder-implementation` rule, which
 matches it case-insensitively. The corpus convention judges a snippet on its
 target rule alone, so the fixture is the right place for the literal.
 
-### Observability (skill: rule-devops-observability)
+### Observability (skill: rule-mcp-devops-observability)
 
 | Rule id               | Rejects                                                            | Target file                | Tier | Source                      |
 | --------------------- | ------------------------------------------------------------------ | -------------------------- | ---- | --------------------------- |
@@ -152,7 +152,7 @@ target rule alone, so the fixture is the right place for the literal.
 | `obs-no-pii-in-logs`  | log call carrying `password`, `token`, `authorization`, `req.body` | `src/**`                   | B    | OWASP logging               |
 | `obs-span-versioning` | generation span without a prompt or model version attribute        | files creating GenAI spans | B    | OpenTelemetry GenAI semconv |
 
-### Preview (skill: rule-devops-deploy-preview, Tier A)
+### Preview (skill: rule-mcp-devops-deploy-preview, Tier A)
 
 | Rule id                      | Rejects                                                  | Target file           | Source                    |
 | ---------------------------- | -------------------------------------------------------- | --------------------- | ------------------------- |
@@ -170,8 +170,8 @@ target rule alone, so the fixture is the right place for the literal.
    does not block. Promotion to blocking happens in Phase 6 after the corpus
    gate reports 100% precision and recall for that rule id.
 3. **Registry wiring.** Each owning skill gets `guardrails/index.js` exporting
-   `GUARDRAILS`; `rule-devops` keeps its own and gains the CI ids, which all
-   children then inherit through the existing `inherits: [rule-devops]` edges.
+   `GUARDRAILS`; `rule-mcp-devops` keeps its own and gains the CI ids, which all
+   children then inherit through the existing `inherits: [rule-mcp-devops]` edges.
 4. **Tests.** Every rule gets at least one `good` and one `bad` entry in
    `tests/fixtures/guardrail-corpus.mjs`, a unit test under
    `guardrails/__tests__/`, and an inheritance test asserting the rule reaches
@@ -204,37 +204,37 @@ Shared files: none: absorbed into the leaf plans named above
 - [ ] Extend the guardrail engine with an optional `severity` field and keep
       `pass` semantics unchanged when the field is absent.
 
-### Phase 1 - CI/CD rules in rule-devops
+### Phase 1 - CI/CD rules in rule-mcp-devops
 
 - [ ] Implement `ci-image-digest-pinned` and `ci-no-secret-echo`.
 - [ ] Implement `ci-no-allow-failure` with the `# allow-failure-ok:` escape.
 - [ ] Implement `ci-protected-deploy` and `ci-provenance` as Tier B.
 - [ ] Add corpus fixtures, unit tests and the inheritance test.
-- [ ] Update `rule-devops/SKILL.md` frontmatter and rule section; cite sources.
+- [ ] Update `rule-mcp-devops/SKILL.md` frontmatter and rule section; cite sources.
 
-### Phase 2 - Docker rules in rule-devops-docker
+### Phase 2 - Docker rules in rule-mcp-devops-docker
 
 - [ ] Implement the three Docker rules.
 - [ ] Add corpus fixtures and unit tests; extend the inheritance test.
-- [ ] Update `rule-devops-docker/SKILL.md` rule section and sources.
+- [ ] Update `rule-mcp-devops-docker/SKILL.md` rule section and sources.
 
-### Phase 3 - Testing rules in rule-devops-testing
+### Phase 3 - Testing rules in rule-mcp-devops-testing
 
 - [ ] Create `guardrails/` with the four rules.
 - [ ] Add corpus fixtures and unit tests.
-- [ ] Update `rule-devops-testing/SKILL.md` frontmatter with `guardrails:`.
+- [ ] Update `rule-mcp-devops-testing/SKILL.md` frontmatter with `guardrails:`.
 
-### Phase 4 - Observability rules in rule-devops-observability
+### Phase 4 - Observability rules in rule-mcp-devops-observability
 
 - [ ] Create `guardrails/` with the four rules, Tier B where marked.
 - [ ] Confirm each rule's target file against a real project before shipping.
-- [ ] Update `rule-devops-observability/SKILL.md`.
+- [ ] Update `rule-mcp-devops-observability/SKILL.md`.
 
-### Phase 5 - Preview rules in rule-devops-deploy-preview
+### Phase 5 - Preview rules in rule-mcp-devops-deploy-preview
 
 - [ ] Create `guardrails/` with the four rules.
 - [ ] Add corpus fixtures against both template files.
-- [ ] Update `rule-devops-deploy-preview/SKILL.md`.
+- [ ] Update `rule-mcp-devops-deploy-preview/SKILL.md`.
 
 ### Phase 6 - Runtime scripts, promotion and documentation
 
@@ -249,15 +249,15 @@ Shared files: none: absorbed into the leaf plans named above
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step                                                      | Class      | Model                   | Why                            |
-| --------------------------------------------------------- | ---------- | ----------------------- | ------------------------------ |
-| Phase 0 - Decisions and scaffolding                       | `T1-plan`  | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - CI/CD rules in rule-devops                       | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
-| Phase 2 - Docker rules in rule-devops-docker               | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
-| Phase 3 - Testing rules in rule-devops-testing             | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
-| Phase 4 - Observability rules in rule-devops-observability | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
-| Phase 5 - Preview rules in rule-devops-deploy-preview      | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
-| Phase 6 - Runtime scripts, promotion and documentation    | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Step                                                           | Class      | Model                   | Why                            |
+| -------------------------------------------------------------- | ---------- | ----------------------- | ------------------------------ |
+| Phase 0 - Decisions and scaffolding                            | `T1-plan`  | `gemini-4-argon` (high) | planning and prose that argues |
+| Phase 1 - CI/CD rules in rule-mcp-devops                       | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 2 - Docker rules in rule-mcp-devops-docker               | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 3 - Testing rules in rule-mcp-devops-testing             | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 4 - Observability rules in rule-mcp-devops-observability | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 5 - Preview rules in rule-mcp-devops-deploy-preview      | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 6 - Runtime scripts, promotion and documentation         | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

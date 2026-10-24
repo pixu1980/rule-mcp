@@ -4,7 +4,7 @@ Install RuleMCP once, wire your agent, and route the first request in under five
 
 ## What it is
 
-**RuleMCP** is an [MCP](https://modelcontextprotocol.io) server for the rule skill catalog. It:
+**RuleMCP** is an [MCP](https://modelcontextprotocol.io) server for the rule-mcp skill catalog. It:
 
 1. **Routes** free-text requests to the matching skill (or area hub).
 2. **Serves** skills as MCP tools, resources, and prompts, no LLM inside the server.
@@ -18,7 +18,7 @@ Identical behavior behind any model. Everything runs on your machine.
 
 | Requirement        | Minimum | Check            |
 | ------------------ | ------- | ---------------- |
-| Node.js            | ≥ 20    | `node --version` |
+| Node.js            | >= 20   | `node --version` |
 | pnpm (recommended) | any     | `pnpm --version` |
 
 ### From a clone (current path)
@@ -104,4 +104,4 @@ The server never calls a model. Any agent that speaks MCP works: Claude, GPT, Ge
 - [Quick start](./07-quick-start.md): the main flows in short examples
 - [Reference overview](./README.md): map of architecture, surface table, and inventories
 - [Architecture](./02-architecture.md): the request path
-- [Surface map](./17-surface-map.md): the Command · Tool · Skill table
+- [Surface map](./17-surface-map.md): the Command - Tool - Skill table

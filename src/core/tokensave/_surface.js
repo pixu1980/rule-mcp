@@ -7,7 +7,7 @@
  *
  * TokenSave exposes its tools on two surfaces, and this adapter uses the CLI
  * one (`tokensave tool <name>`). The map is the audit trail: a reader can see
- * which slice of the surface rule depends on without reading every module, and
+ * which slice of the surface rule-mcp depends on without reading every module, and
  * the test beside it fails when a call is added, renamed or orphaned without
  * the map following.
  *

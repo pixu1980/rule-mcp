@@ -29,7 +29,7 @@ function getSheet(cssText: string): CSSStyleSheet {
 
 /**
  * Adopts `cssText` onto the document once. Safe to call from every
- * component instance — the underlying `CSSStyleSheet` is cached and only
+ * component instance, the underlying `CSSStyleSheet` is cached and only
  * appended to `document.adoptedStyleSheets` the first time it is seen.
  *
  * @param cssText - raw CSS source, typically from `import css from

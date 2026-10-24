@@ -21,10 +21,10 @@ const behavior = process.argv[2];
 
 Object.defineProperty(process, "platform", { value: "linux", configurable: true });
 
-const home = mkdtempSync(join(tmpdir(), "rule-install-home-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-install-home-"));
 
 process.env.HOME = home;
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-install-state-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-install-state-"));
 
 if (behavior !== "absent") {
   const bin = join(home, "stub-bin");

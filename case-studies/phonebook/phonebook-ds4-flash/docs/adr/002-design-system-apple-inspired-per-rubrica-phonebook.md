@@ -3,7 +3,7 @@
 - **Date**: 2026-07-11
 - **Status**: accepted
 - **Tags**: design-system, ui, electron, react, apple
-- **Author**: rule-architect
+- **Author**: rule-mcp-architect
 
 ## Context
 

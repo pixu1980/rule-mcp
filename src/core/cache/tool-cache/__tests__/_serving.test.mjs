@@ -14,11 +14,11 @@ test("a rephrased prompt is served from cache without recomputing", async () => 
   const { callTool: call } = await import("../../../../tools/router/index.js");
   cacheClear();
 
-  const first = await call("pix_tool", { prompt: "angular standalone component with signals" });
-  assert.equal(first._meta?.pixCache?.tier, undefined, "the first call computes");
+  const first = await call("rule_tool", { prompt: "angular standalone component with signals" });
+  assert.equal(first._meta?.ruleCache?.tier, undefined, "the first call computes");
 
-  const second = await call("pix_tool", { prompt: "Angular standalone components with signals?" });
-  assert.equal(second._meta?.pixCache?.tier, "normalized");
+  const second = await call("rule_tool", { prompt: "Angular standalone components with signals?" });
+  assert.equal(second._meta?.ruleCache?.tier, "normalized");
   assert.equal(second.content[0].text, first.content[0].text, "and returns the same answer");
 });
 
@@ -26,14 +26,14 @@ test("the tier is reported to the caller at every tier", async () => {
   const { callTool: call } = await import("../../../../tools/router/index.js");
   cacheClear();
 
-  const miss = await call("pix_tool", { prompt: "vue 3 composition api component" });
-  assert.equal(miss._meta?.pixCache, undefined, "a miss says nothing");
+  const miss = await call("rule_tool", { prompt: "vue 3 composition api component" });
+  assert.equal(miss._meta?.ruleCache, undefined, "a miss says nothing");
 
-  const exact = await call("pix_tool", { prompt: "vue 3 composition api component" });
-  assert.equal(exact._meta?.pixCache?.tier, "exact");
+  const exact = await call("rule_tool", { prompt: "vue 3 composition api component" });
+  assert.equal(exact._meta?.ruleCache?.tier, "exact");
 
-  const normalized = await call("pix_tool", { prompt: "Vue 3: composition API components?" });
-  assert.equal(normalized._meta?.pixCache?.tier, "normalized");
+  const normalized = await call("rule_tool", { prompt: "Vue 3: composition API components?" });
+  assert.equal(normalized._meta?.ruleCache?.tier, "normalized");
 });
 
 test("a tool outside the allowlist gets L0 and nothing else", async () => {

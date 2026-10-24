@@ -1,7 +1,7 @@
 
 
 /**
- * Phase 2b (plan: execution-plan.md) — tools/list descriptions.
+ * Phase 2b (plan: execution-plan.md), tools/list descriptions.
  *
  * The tool surface is paid on every model turn before the model has decided to
  * do anything. Names, schemas and annotations are the machine contract and are

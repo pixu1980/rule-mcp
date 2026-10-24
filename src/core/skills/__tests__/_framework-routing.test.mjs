@@ -4,7 +4,7 @@
  * @module test/framework-routing.test
  *
  * TDD tests for framework-biased routing.
- * rule should boost scores for skills matching the detected
+ * rule-mcp should boost scores for skills matching the detected
  * or explicitly provided framework.
  */
 
@@ -41,21 +41,21 @@ function getAllRoutes(parsed) {
 }
 
 // ── T6: framework bias boosts matching skill ──
-// Without framework, rule-frontend-react should appear in top results for a React query
-const r = await callTool("pix_tool", { prompt: "How do I create a React button component?" });
+// Without framework, rule-mcp-frontend-react should appear in top results for a React query
+const r = await callTool("rule_tool", { prompt: "How do I create a React button component?" });
 const parsed = JSON.parse(r.content[0].text);
 const allRoutes = getAllRoutes(parsed);
-check("T6 defaults: rule-frontend-react in top results", allRoutes.includes("rule-frontend-react"));
+check("T6 defaults: rule-mcp-frontend-react in top results", allRoutes.includes("rule-mcp-frontend-react"));
 
-// Now with framework="vue" - rule-frontend-vue should rank higher
-const rVue = await callTool("pix_tool", { prompt: "Vue 3 component with Composition API", framework: "vue" });
+// Now with framework="vue" - rule-mcp-frontend-vue should rank higher
+const rVue = await callTool("rule_tool", { prompt: "Vue 3 component with Composition API", framework: "vue" });
 const parsedVue = JSON.parse(rVue.content[0].text);
 const vueRoutes = getAllRoutes(parsedVue);
-check("T6.1 vue bias: rule-frontend-vue in results", vueRoutes.includes("rule-frontend-vue"));
-check("T6.2 vue bias: rule-frontend-vue is primary route with bias", parsedVue.route === "rule-frontend-vue");
+check("T6.1 vue bias: rule-mcp-frontend-vue in results", vueRoutes.includes("rule-mcp-frontend-vue"));
+check("T6.2 vue bias: rule-mcp-frontend-vue is primary route with bias", parsedVue.route === "rule-mcp-frontend-vue");
 
 // ── T6.3: framework bias with path auto-detection ──
-const tmpDir = mkdtempSync(join(tmpdir(), "rule-fw-"));
+const tmpDir = mkdtempSync(join(tmpdir(), "rule-mcp-fw-"));
 writeFileSync(
   join(tmpDir, "package.json"),
   JSON.stringify({
@@ -65,13 +65,13 @@ writeFileSync(
   }),
 );
 
-const rPath = await callTool("pix_tool", {
+const rPath = await callTool("rule_tool", {
   prompt: "How do I create a button component?",
   path: tmpDir,
 });
 const parsedPath = JSON.parse(rPath.content[0].text);
 const pathRoutes = getAllRoutes(parsedPath);
-check("T6.3 auto-detect: rule-frontend-svelte in results", pathRoutes.includes("rule-frontend-svelte"));
+check("T6.3 auto-detect: rule-mcp-frontend-svelte in results", pathRoutes.includes("rule-mcp-frontend-svelte"));
 
 // ── T6.4: explicit framework overrides path detection ──
 writeFileSync(
@@ -81,14 +81,14 @@ writeFileSync(
     dependencies: { "@angular/core": "^19.0.0" },
   }),
 );
-const rOverride = await callTool("pix_tool", {
+const rOverride = await callTool("rule_tool", {
   prompt: "How do I create a button component?",
   framework: "react",
   path: tmpDir,
 });
 const parsedOverride = JSON.parse(rOverride.content[0].text);
 const overrideRoutes = getAllRoutes(parsedOverride);
-check("T6.4 explicit framework overrides path: rule-frontend-react in results", overrideRoutes.includes("rule-frontend-react"));
+check("T6.4 explicit framework overrides path: rule-mcp-frontend-react in results", overrideRoutes.includes("rule-mcp-frontend-react"));
 
 // Cleanup
 rmSync(tmpDir, { recursive: true, force: true });

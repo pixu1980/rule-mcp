@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-decision-shadow-branches-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-decision-shadow-branches-"));
 
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
@@ -47,14 +47,14 @@ test("readShadows swallows malformed JSONL", () => {
 });
 
 test("recordShadow swallows an unwritable state directory", { skip: process.platform === "win32" }, () => {
-  const blocked = mkdtempSync(join(tmpdir(), "rule-shadow-blocked-"));
+  const blocked = mkdtempSync(join(tmpdir(), "rule-mcp-shadow-blocked-"));
   const asFile = join(blocked, "not-a-dir");
 
   writeFileSync(asFile, "x");
   process.env.RULE_MCP_STATE_DIR = asFile;
 
   try {
-    assert.doesNotThrow(() => recordShadow({ tool: "pix_tool" }));
+    assert.doesNotThrow(() => recordShadow({ tool: "rule_tool" }));
   } finally {
     process.env.RULE_MCP_STATE_DIR = stateDir;
     rmSync(blocked, { recursive: true, force: true });

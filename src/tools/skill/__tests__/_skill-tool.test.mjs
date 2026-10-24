@@ -1,6 +1,6 @@
 
 
-/** registerSkillTool: plugin names keep their prefix, rule names strip it. */
+/** registerSkillTool: plugin names keep their prefix, rule-mcp names strip it. */
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
@@ -16,27 +16,27 @@ test("a plugin skill keeps its full name in the tool surface", async () => {
   assert.doesNotThrow(() => registered.handler({ mode: "full" }), "a plugin handler runs");
 });
 
-test("a rule skill registers under its underscored name", async () => {
-  registerSkillTool("rule-backend-express");
+test("a rule-mcp skill registers under its underscored name", async () => {
+  registerSkillTool("rule-mcp-backend-express");
 
   const { _tools } = await import("../../router/_hooks.js");
   const registered = _tools.find((tool) => tool.name === "rule_tool_backend_express");
 
-  assert.ok(registered, "the rule skill registers as rule_tool_backend_express");
+  assert.ok(registered, "the rule-mcp skill registers as rule_tool_backend_express");
 });
 
 test("every mode arm of the handler answers", async () => {
-  registerSkillTool("rule-backend-express");
+  registerSkillTool("rule-mcp-backend-express");
 
   const { _tools } = await import("../../router/_hooks.js");
   const tool = _tools.find((t) => t.name === "rule_tool_backend_express");
   const text = (result) => result.content[0].text;
 
-  assert.match(text(await tool.handler({})), /^# rule-backend-express/, "no mode falls back to full");
-  assert.match(text(await tool.handler({ mode: "summary" })), /rule-backend-express/, "summary renders");
+  assert.match(text(await tool.handler({})), /^# rule-mcp-backend-express/, "no mode falls back to full");
+  assert.match(text(await tool.handler({ mode: "summary" })), /rule-mcp-backend-express/, "summary renders");
   assert.match(text(await tool.handler({ mode: "guardrails" })), /./, "guardrails renders a report");
   assert.match(text(await tool.handler({ mode: "search", query: "express" })), /./, "search with a query renders");
-  assert.match(text(await tool.handler({ mode: "search" })), /^# rule-backend-express/, "search without a query falls back to full");
+  assert.match(text(await tool.handler({ mode: "search" })), /^# rule-mcp-backend-express/, "search without a query falls back to full");
   assert.match(text(await tool.handler({ mode: "tldr", query: "routing" })), /./, "tldr renders");
 
   const noCode = await tool.handler({ mode: "check" });
@@ -44,11 +44,11 @@ test("every mode arm of the handler answers", async () => {
   assert.match(text(noCode), /requires a `code` argument/, "the missing code is named");
 
   const checked = await tool.handler({ mode: "check", code: "const x = 1;\n", fileName: "x.js" });
-  assert.match(text(checked), /Guardrail check: rule-backend-express/, "check renders the report");
+  assert.match(text(checked), /Guardrail check: rule-mcp-backend-express/, "check renders the report");
 });
 
-test("the scaffold mode answers only on rule-styleguide", async () => {
-  registerSkillTool("rule-styleguide");
+test("the scaffold mode answers only on rule-mcp-styleguide", async () => {
+  registerSkillTool("rule-mcp-styleguide");
 
   const { _tools } = await import("../../router/_hooks.js");
   const tool = _tools.find((t) => t.name === "rule_tool_styleguide");

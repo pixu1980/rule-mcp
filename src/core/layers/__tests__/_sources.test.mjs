@@ -14,7 +14,7 @@ import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
-const home = mkdtempSync(join(tmpdir(), "rule-layers-home-"));
+const home = mkdtempSync(join(tmpdir(), "rule-mcp-layers-home-"));
 
 process.env.RULE_MCP_HOME = home;
 
@@ -25,7 +25,7 @@ test.after(() => rmSync(home, { recursive: true, force: true }));
 
 /** A scratch project with the given marker directories created. */
 function project(...markers) {
-  const root = mkdtempSync(join(tmpdir(), "rule-layers-project-"));
+  const root = mkdtempSync(join(tmpdir(), "rule-mcp-layers-project-"));
 
   for (const marker of markers) {
     mkdirSync(join(root, marker), { recursive: true });
@@ -59,7 +59,7 @@ test("each layer points where that layer lives", () => {
 
     assert.equal(native.dir, fileURLToPath(new URL("../../../../skills", import.meta.url)), `the native layer is the bundled directory: ${native.dir}`);
     assert.equal(projectLayer.dir, join(root, ".rule-mcp", "skills"), "the project layer lives in the checkout");
-    assert.equal(user.dir, join(home, "skills"), "the user layer lives under the rule home");
+    assert.equal(user.dir, join(home, "skills"), "the user layer lives under the rule-mcp home");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

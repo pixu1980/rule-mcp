@@ -1,4 +1,4 @@
-# 077: Compress every server→model list surface (prompts/list, tools/list, resources/list)
+# 077: Compress every server->model list surface (prompts/list, tools/list, resources/list)
 
 - **Date**: 2026-09-10
 - **Status**: accepted
@@ -15,7 +15,7 @@ Compress the prose fields of all three list surfaces at the protocol boundary on
 
 ## Consequences
 
-Positive: every server→model list surface now runs the guarded pipeline; prompts/list saves ~4.5% of its descriptions every session start; tools/list saves ~0.7% of descriptions on every turn; one invariant across all surfaces; test coverage pinned per surface (router + resources listing tests + PERF-5 file). Negative: tool descriptions in tools/list and `pnpm tools` output read slightly terse (substance preserved by the guard); resources/list shows no measurable gain (accepted - it is an invariant, not a saving); tools/list memo is now keyed by caveman state as well as registry generation.
+Positive: every server->model list surface now runs the guarded pipeline; prompts/list saves ~4.5% of its descriptions every session start; tools/list saves ~0.7% of descriptions on every turn; one invariant across all surfaces; test coverage pinned per surface (router + resources listing tests + PERF-5 file). Negative: tool descriptions in tools/list and `pnpm tools` output read slightly terse (substance preserved by the guard); resources/list shows no measurable gain (accepted - it is an invariant, not a saving); tools/list memo is now keyed by caveman state as well as registry generation.
 
 ## What would end this
 

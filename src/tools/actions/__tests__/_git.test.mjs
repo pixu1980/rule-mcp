@@ -10,7 +10,7 @@ import { before, test } from "node:test";
 process.env.RULE_MCP_NO_CACHE = "1";
 process.env.RULE_MCP_NO_TELEMETRY = "1";
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-git-tool-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-git-tool-"));
 
 const { callTool } = await import("../../router/index.js");
 const { registerGitTool } = await import("../_git.js");

@@ -17,7 +17,7 @@ import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-gateway-core-"));
+process.env.RULE_MCP_STATE_DIR = mkdtempSync(join(tmpdir(), "rule-mcp-gateway-core-"));
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
 // This suite runs the clock backwards to 2023 to test receipt expiry, and the
 // recorder is project-scoped, so leaving it on would write 2023-dated events

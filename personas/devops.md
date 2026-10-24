@@ -13,11 +13,11 @@ skills:
   - "packaging, installers and self-update"
   - "artifact signing and integrity"
 evidenceSkills:
-  - "rule-devops-docker"
-    - "rule-devops-observability"
-  - "rule-process-npm-release"
-  - "rule-process-changelog"
-  - "rule-platform-desktop"
+  - "rule-mcp-devops-docker"
+    - "rule-mcp-devops-observability"
+  - "rule-mcp-process-npm-release"
+  - "rule-mcp-process-changelog"
+  - "rule-mcp-platform-desktop"
 aliases:
   - "devops-sre"
   - "release-engineering"

@@ -49,7 +49,7 @@ test("./personas is the native layer for the embedded personas", () => {
 });
 
 test("a persona can be added and removed at will via the folder", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-personas-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-personas-"));
   try {
     const efficiency = {
       id: "efficiency",
@@ -92,7 +92,7 @@ test("a persona can be added and removed at will via the folder", () => {
 });
 
 test("a broken persona file is reported by name, never fatal", () => {
-  const dir = mkdtempSync(join(tmpdir(), "rule-personas-bad-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-personas-bad-"));
   try {
     writeFileSync(join(dir, "broken.md"), "no frontmatter here, not a persona");
     const { roles, problems } = loadPersonaCatalog(dir);
@@ -105,17 +105,17 @@ test("a broken persona file is reported by name, never fatal", () => {
 });
 
 test("a missing dir, an unreadable dir and an id mismatch are reported, never thrown", () => {
-  const missing = loadPersonaCatalog(join(tmpdir(), "rule-personas-nowhere"));
+  const missing = loadPersonaCatalog(join(tmpdir(), "rule-mcp-personas-nowhere"));
   assert.equal(missing.roles.length, 0, "no roles from a missing dir");
   assert.match(missing.problems[0].reason, /does not exist/, "the missing dir is stated");
 
-  const asFile = mkdtempSync(join(tmpdir(), "rule-personas-flat-"));
+  const asFile = mkdtempSync(join(tmpdir(), "rule-mcp-personas-flat-"));
   writeFileSync(join(asFile, "roles"), "a file, not a dir");
   const unreadable = loadPersonaCatalog(join(asFile, "roles"));
   assert.match(unreadable.problems[0].reason, /directory unreadable|does not exist/, "an unreadable dir is stated");
   rmSync(asFile, { recursive: true, force: true });
 
-  const dir = mkdtempSync(join(tmpdir(), "rule-personas-mismatch-"));
+  const dir = mkdtempSync(join(tmpdir(), "rule-mcp-personas-mismatch-"));
   writeFileSync(
     join(dir, "wrong-name.md"),
     formatPersonaFile({

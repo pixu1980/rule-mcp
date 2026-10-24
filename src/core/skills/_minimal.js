@@ -17,7 +17,7 @@ export const IS_MINIMAL_TOOLS = process.env.RULE_MCP_MINIMAL_TOOLS === "1";
  * matter what upstream registration adds.
  */
 export const MINIMAL_ALLOWLIST = new Set([
-  "pix_tool", // router / dispatcher
+  "rule_tool", // router / dispatcher
   "rule_tool_meta", // meta-framework dispatcher
   "rule_tool_update", // self-update
   "rule_tool_init", // project init

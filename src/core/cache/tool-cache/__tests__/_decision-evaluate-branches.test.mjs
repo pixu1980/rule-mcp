@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-const stateDir = mkdtempSync(join(tmpdir(), "rule-decision-evaluate-branches-"));
+const stateDir = mkdtempSync(join(tmpdir(), "rule-mcp-decision-evaluate-branches-"));
 
 process.env.RULE_MCP_STATE_DIR = stateDir;
 process.env.RULE_MCP_NO_AUTOUPDATE = "1";
@@ -34,9 +34,9 @@ function seedCandidate() {
   clearDecisionCache();
   resetDecisionRuntime();
   cacheStore(
-    "pix_tool",
+    "rule_tool",
     { prompt: "create a react button component", framework: "react" },
-    { content: [{ type: "text", text: JSON.stringify({ route: "rule-frontend-react" }) }] },
+    { content: [{ type: "text", text: JSON.stringify({ route: "rule-mcp-frontend-react" }) }] },
     {},
   );
 }
@@ -45,15 +45,15 @@ test("cache disabled returns null before any gate work", async () => {
   process.env.RULE_MCP_NO_CACHE = "1";
 
   try {
-    assert.equal(await evaluateDecision("pix_tool", { prompt: "create a react form" }), null);
+    assert.equal(await evaluateDecision("rule_tool", { prompt: "create a react form" }), null);
   } finally {
     delete process.env.RULE_MCP_NO_CACHE;
   }
 });
 
 test("a tool call without a prompt field is a miss", async () => {
-  assert.equal(await evaluateDecision("pix_tool", { framework: "react" }), null);
-  assert.equal(await evaluateDecision("pix_tool", { prompt: " ".repeat(3) }), null);
+  assert.equal(await evaluateDecision("rule_tool", { framework: "react" }), null);
+  assert.equal(await evaluateDecision("rule_tool", { prompt: " ".repeat(3) }), null);
 });
 
 test("an empty candidate set returns no-candidates", async () => {
@@ -61,7 +61,7 @@ test("an empty candidate set returns no-candidates", async () => {
   clearDecisionCache();
   process.env.RULE_MCP_DECISION_MODEL = "laya";
 
-  const evaluated = await evaluateDecision("pix_tool", { prompt: "nothing matches this prompt", framework: "react" });
+  const evaluated = await evaluateDecision("rule_tool", { prompt: "nothing matches this prompt", framework: "react" });
 
   assert.equal(evaluated.reason, "no-candidates");
   assert.equal(evaluated.candidates.length, 0);
@@ -72,7 +72,7 @@ test("a configured gate with no model returns no-model", async () => {
   seedCandidate();
   delete process.env.RULE_MCP_DECISION_MODEL;
 
-  const evaluated = await evaluateDecision("pix_tool", { prompt: "create a react form component", framework: "react" });
+  const evaluated = await evaluateDecision("rule_tool", { prompt: "create a react form component", framework: "react" });
 
   assert.equal(evaluated.reason, "no-model");
   assert.ok(evaluated.candidates.length > 0);
@@ -86,7 +86,7 @@ test("a model that refuses the socket returns model-error", async () => {
   process.env.RULE_MCP_DECISION_TIMEOUT = "200";
 
   try {
-    const evaluated = await evaluateDecision("pix_tool", { prompt: "create a react form component", framework: "react" });
+    const evaluated = await evaluateDecision("rule_tool", { prompt: "create a react form component", framework: "react" });
 
     assert.equal(evaluated.reason, "model-error");
     assert.ok(evaluated.model);

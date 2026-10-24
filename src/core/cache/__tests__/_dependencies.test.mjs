@@ -8,8 +8,8 @@ import { REAL_SKILL, callTool, dependenciesOf, result, skillDigest } from "./_in
 // ── What each tool depends on ──
 
 test("the router depends on the route it chose and its alternatives", async () => {
-  const routed = await callTool("pix_tool", { prompt: "I need a React button component" });
-  const deps = dependenciesOf("pix_tool", { prompt: "I need a React button component" }, routed);
+  const routed = await callTool("rule_tool", { prompt: "I need a React button component" });
+  const deps = dependenciesOf("rule_tool", { prompt: "I need a React button component" }, routed);
 
   assert.ok(Object.keys(deps).length > 0, "a route produces dependencies");
   assert.ok(REAL_SKILL in deps, `expected ${REAL_SKILL} in ${Object.keys(deps).join(", ")}`);
@@ -21,13 +21,13 @@ test("the router depends on the route it chose and its alternatives", async () =
 test("a skill tool depends on its own skill and nothing else", () => {
   const deps = dependenciesOf("rule_tool_styleguide_css", { mode: "full" }, result("x"));
 
-  assert.deepEqual(Object.keys(deps), ["rule-styleguide-css"]);
+  assert.deepEqual(Object.keys(deps), ["rule-mcp-styleguide-css"]);
 });
 
 test("a check depends on the skill it checked", () => {
-  const deps = dependenciesOf("rule_tool_check", { skill: "rule-styleguide-css", code: "a{}" }, result("x"));
+  const deps = dependenciesOf("rule_tool_check", { skill: "rule-mcp-styleguide-css", code: "a{}" }, result("x"));
 
-  assert.deepEqual(Object.keys(deps), ["rule-styleguide-css"]);
+  assert.deepEqual(Object.keys(deps), ["rule-mcp-styleguide-css"]);
 });
 
 test("an action tool depends on no skill", () => {
