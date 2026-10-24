@@ -1,5 +1,5 @@
 #!/bin/sh
-# rule-mcp: enforce type(scope): subject and the DCO sign-off.
+# rule-mcp: enforce type(scope): subject.
 #
 # The rule lives in src/core/commit - this hook only wires it to git, so the
 # hook, the pre-push gate, the CLI and CI cannot drift apart.
@@ -15,20 +15,10 @@ cd "$(git rev-parse --show-toplevel)" || exit 1
 msg_file="$1"
 first="$(sed -n '1p' "$msg_file" 2>/dev/null)"
 
-# System-generated messages (merge / revert) cannot carry a scope, and are
-# exempt from the DCO trailer for the same reason. The rule exempts them too.
+# System-generated messages (merge / revert) cannot carry a scope.
 case "$first" in
   "Merge "*|"Revert "*) exit 0 ;;
 esac
 
 node scripts/build/commit-types/index.mjs --msg-file "$msg_file" || exit 1
-
-# DCO sign-off (OSS-10): every human commit certifies the Developer
-# Certificate of Origin with a trailer.
-if ! grep -Eq '^Signed-off-by: .+ <[^<>]+>$' "$msg_file"; then
-  echo "commit-msg: rejected - DCO sign-off required" >&2
-  echo "  add:      Signed-off-by: Your Name <you@example.com>" >&2
-  echo "  hint:     git commit -s adds it for you" >&2
-  exit 1
-fi
 exit 0

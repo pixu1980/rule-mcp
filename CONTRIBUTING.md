@@ -71,19 +71,10 @@ against that key before creating a release, and Vigilant Mode marks unsigned
 commits visibly on GitHub. Historical tag `v0.1.0` predates this gate and is
 not rewritten.
 
-Every commit also carries a DCO sign-off trailer:
-
-```text
-Signed-off-by: Your Name <you@example.com>
-```
-
-`git commit -s` adds it for you. The trailer is a provenance certification
-under the [Developer Certificate of Origin](https://developercertificate.org/)
-asserting you wrote the change (or have the right to submit it under the
-project's license). There is no CLA; inbound contributions are licensed under
-the MIT License (`inbound = outbound MIT`, matching `LICENSE` and
-`REUSE.toml`). The hook rejects a commit without the trailer, and CI checks
-every commit in the pull request range.
+There is no CLA and no DCO sign-off requirement. Inbound contributions are
+licensed under the MIT License (`inbound = outbound MIT`, matching `LICENSE`
+and `REUSE.toml`): by opening a pull request you agree that your contribution
+is provided under that license.
 
 ## Response times
 
