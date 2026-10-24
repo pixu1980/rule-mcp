@@ -94,14 +94,14 @@ test("the record round-trips through the JSONL file and clears", () => {
 test("a no-candidates record still carries the gold route and no prediction", async () => {
   cacheClear();
   clearShadows();
-  const core = { content: [{ type: "text", text: JSON.stringify({ route: "rule-mcp-frontend-react" }) }] };
+  const core = { content: [{ type: "text", text: JSON.stringify({ route: "rule-frontend-react" }) }] };
 
   await observeDecisionShadow("rule_tool", { prompt: "a prompt that matches no cached call", framework: "react" }, { core, computeMs: 2 });
   await waitForDecisionShadows();
   const last = readShadows().at(-1);
 
   assert.equal(last.reason, "no-candidates");
-  assert.equal(last.goldRoute, "rule-mcp-frontend-react");
+  assert.equal(last.goldRoute, "rule-frontend-react");
   assert.equal(last.candidateRoute, null);
   assert.equal(last.correct, null);
   assert.equal(last.wouldReplay, false);

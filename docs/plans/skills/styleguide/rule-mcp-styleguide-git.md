@@ -1,4 +1,4 @@
-# rule-mcp-styleguide-git - best-practice implementation plan
+# rule-styleguide-git - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,12 +9,12 @@ Area: styleguide. Order: reverse alphabetical, twentieth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-styleguide-git/SKILL.md` (260 lines): the commit rule, types,
+- `skills/rule-styleguide-git/SKILL.md` (260 lines): the commit rule, types,
   scope, subject, body, atomicity, branch names, merge requests, push, the
   three ways to ignore a file, recovery, enforcement, and a final "Conventions
   (rules -> skills merge)" section.
 - `src/core/commit/_rule.js`, the code that every commit gate reads.
-- `skills/rule-mcp-toolchain-husky/SKILL.md`, which owns the hook wiring.
+- `skills/rule-toolchain-husky/SKILL.md`, which owns the hook wiring.
 
 Public sources verified in this session:
 
@@ -98,7 +98,7 @@ different controls and the skill says so.
    `src/core/commit/_rule.js`.
 2. The commitlint example is corrected to `scope-empty: never`, with no scope
    enum.
-3. The hook wiring itself is linked to `rule-mcp-toolchain-husky`; this skill owns
+3. The hook wiring itself is linked to `rule-toolchain-husky`; this skill owns
    the rule, not the installation.
 
 ## Workstream G - Review templates
@@ -136,9 +136,9 @@ Severity: blocking in the hook, advisory in the documentation.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-styleguide` (HARD)
+Feeds: `rule-styleguide` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

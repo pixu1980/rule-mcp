@@ -20,7 +20,7 @@ check("T1.5 EARL outcomes are the five in the schema", EARL_OUTCOMES.join(",") =
 check("T1.6 WCAG-EM has its five steps", WCAG_EM_STEPS.length === 5 && WCAG_EM_STEPS[0].step === 1);
 
 // ── T2: guardrails cite the criterion they enforce ──
-const html = (body) => checkCode("rule-mcp-styleguide-a11y", body, { fileName: "page.html" });
+const html = (body) => checkCode("rule-styleguide-a11y", body, { fileName: "page.html" });
 const failed = (report, id) => report.failed.find((f) => f.id === id);
 
 const badImage = '<img src="a.png">';
@@ -36,12 +36,12 @@ check("T4.1 html with lang passes", !failed(html('<html lang="en"><body></body><
 
 check(
   "T5 outline:none with no replacement fails focus visible",
-  failed(checkCode("rule-mcp-styleguide-a11y", "button:focus { outline: none; }", { fileName: "a.css" }), "a11y-focus-visible")?.wcag === "2.4.11",
+  failed(checkCode("rule-styleguide-a11y", "button:focus { outline: none; }", { fileName: "a.css" }), "a11y-focus-visible")?.wcag === "2.4.11",
 );
 check(
   "T5.1 outline:none with a visible replacement passes",
   !failed(
-    checkCode("rule-mcp-styleguide-a11y", "button:focus { outline: none; box-shadow: 0 0 0 2px blue; }", {
+    checkCode("rule-styleguide-a11y", "button:focus { outline: none; box-shadow: 0 0 0 2px blue; }", {
       fileName: "a.css",
     }),
     "a11y-focus-visible",
@@ -56,13 +56,13 @@ check("T7.1 aria-hidden on a focusable element fails", failed(html('<button aria
 
 check(
   "T8 the rules do not fire on a JavaScript file",
-  checkCode("rule-mcp-styleguide-a11y", "const img = 1;", { fileName: "a.js" }).failed.every((f) => !f.id.startsWith("a11y-img")),
+  checkCode("rule-styleguide-a11y", "const img = 1;", { fileName: "a.js" }).failed.every((f) => !f.id.startsWith("a11y-img")),
 );
 
 // ── T3: every a11y guardrail maps to a criterion that exists ──
 await import("../../../core/guardrails/__tests__/_install.fixture.mjs");
 const { getGuardrails } = await import("../../../core/guardrails/index.js");
-const a11yRules = getGuardrails("rule-mcp-styleguide-a11y").filter((g) => g.id.startsWith("a11y-") && g.wcag);
+const a11yRules = getGuardrails("rule-styleguide-a11y").filter((g) => g.id.startsWith("a11y-") && g.wcag);
 check("T9 there are a11y rules with a criterion", a11yRules.length >= 8);
 check(
   "T9.1 every cited criterion exists in the vendored data",

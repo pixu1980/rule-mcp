@@ -1,4 +1,4 @@
-# rule-mcp-styleguide-typescript - best-practice implementation plan
+# rule-styleguide-typescript - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,13 +9,13 @@ Area: styleguide. Order: reverse alphabetical, twelfth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-styleguide-typescript/SKILL.md`: any and unknown, catch clauses,
+- `skills/rule-styleguide-typescript/SKILL.md`: any and unknown, catch clauses,
   type guards over assertions, unions over enums, `satisfies`, optional
   chaining, interface versus type, generics, `never`, `readonly`,
   `Record<string, unknown>`, self-documenting functions, impossible states,
   branded types, type placement, the guardrail table, and a final "Conventions
   (rules -> skills merge)" section.
-- `skills/rule-mcp-styleguide-typescript/COMPILER.md`: strict mode, base tsconfigs,
+- `skills/rule-styleguide-typescript/COMPILER.md`: strict mode, base tsconfigs,
   boundary types, path aliases, composite projects, CLI, enforcement.
 - `src/core/skills/__tests__/_content.test.mjs`, which asserts both files.
 
@@ -120,7 +120,7 @@ Existing, unchanged: `ts-no-explicit-any`, `ts-catch-unknown`,
 ## Workstream G - The ESLint boundary
 
 The guardrails run on one file with no project, so they catch what a pattern can
-see. `rule-mcp-toolchain-eslint` owns the type-aware rules that need the compiler:
+see. `rule-toolchain-eslint` owns the type-aware rules that need the compiler:
 floating promises, misused promises, and the rest. The plan states the split
 once and links the ESLint skill; it does not add a second copy of a rule that
 already lives there.
@@ -137,9 +137,9 @@ already lives there.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-styleguide` (HARD)
+Feeds: `rule-styleguide` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

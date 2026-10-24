@@ -1,19 +1,19 @@
-# rule-mcp-data-postgresql - plan
+# rule-data-postgresql - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#65`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: data, leaf. **736 lines**, one file, no auxiliary folders. Siblings:
-`rule-mcp-data-sql` (dialect-neutral rules), `rule-mcp-data-mysql`, `rule-mcp-data-mongodb`,
-`rule-mcp-data-sqlite`, `rule-mcp-data-duckdb`, `rule-mcp-data-indexed-db`,
-`rule-mcp-data-validation`, and `rule-mcp-data`.
+`rule-data-sql` (dialect-neutral rules), `rule-data-mysql`, `rule-data-mongodb`,
+`rule-data-sqlite`, `rule-data-duckdb`, `rule-data-indexed-db`,
+`rule-data-validation`, and `rule-data`.
 
 ## Evidence base (measured 2026-10-21)
 
 Shape: table of contents, DDL with every PostgreSQL feature, indexing strategy,
 JSONB, partitioning, replication, transactions, migrations, performance.
 
-`inherits: [rule-mcp-data]` is declared, so the four area rules
+`inherits: [rule-data]` is declared, so the four area rules
 (`connection-pool`, `migration-safety`, `parameterized-queries`,
 `transaction-safety`) reach this leaf - verified by running the engine on a
 concatenated query. The leaf adds only PostgreSQL-specific rules.
@@ -48,9 +48,9 @@ and `migration-safety` does not look for it.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD), `rule-mcp-data-sql` (ORDER)
+Depends on: `rule-process-ai` (HARD), `rule-data-sql` (ORDER)
 
-Feeds: `rule-mcp-data` (HARD)
+Feeds: `rule-data` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -64,25 +64,25 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 - [ ] `tests/fixtures/data-postgresql/`: `clean/`, `unindexed-fk/`,
       `serial-ids/`, `jsonb-as-tables/`, each with a one-line `README.md`.
-- [ ] Six `CORPUS` pairs bound to `rule-mcp-data-postgresql`.
+- [ ] Six `CORPUS` pairs bound to `rule-data-postgresql`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ### Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-data-postgresql/guardrails/`: six rule files plus `index.js`.
-- [ ] `guardrails:` frontmatter lists them; `inherits: [rule-mcp-data]` stays.
+- [ ] `skills/rule-data-postgresql/guardrails/`: six rule files plus `index.js`.
+- [ ] `guardrails:` frontmatter lists them; `inherits: [rule-data]` stays.
 - [ ] Green the Phase 1 suites.
 
 ### Phase 3 - Trim
 
-- [ ] Generic DDL and transaction prose becomes a pointer to `rule-mcp-data-sql` and
+- [ ] Generic DDL and transaction prose becomes a pointer to `rule-data-sql` and
       to the inherited rule ids.
 - [ ] Keep: indexing strategy, JSONB discipline, partitioning, replication.
 - [ ] Target ~350 lines.
 
 ### Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-data-postgresql/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-data-postgresql/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
 
@@ -103,7 +103,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-data-postgresql/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-data-postgresql/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
 pnpm census && pnpm census:check
@@ -116,6 +116,6 @@ pnpm lint
   rule the author believed in, written in bold, with no mechanism behind it. Two
   lines of regex catch the FK one.
 - This leaf, MySQL and SQLite repeat the same DDL skeleton. The dialect
-  differences are the value; the skeleton belongs in `rule-mcp-data-sql`.
+  differences are the value; the skeleton belongs in `rule-data-sql`.
 - No dangling references and no invented rule ids were found here. The data area
   needs rules, not repairs.

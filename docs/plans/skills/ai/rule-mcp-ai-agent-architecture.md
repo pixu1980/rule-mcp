@@ -1,4 +1,4 @@
-# rule-mcp-ai-agent-architecture - plan
+# rule-ai-agent-architecture - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#83`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
@@ -6,8 +6,8 @@ Notes:`planned` Notes: plan only, 2026-10-21. Index row `#83`, `pending` until t
 Area: ai, leaf and the area's architectural center. **205 lines**, one file, no
 `guardrails/`, **no dispatcher row**, no `inherits:` (it had one until this
 morning: a sentence that opened the Purpose by citing the retired
-`rule-mcp-platform-agent`, removed with ADR 151). Siblings: `rule-mcp-ai-prompting`,
-`rule-mcp-ai-evals`, `rule-mcp-ai-context-engineering`, `rule-mcp-ai`.
+`rule-platform-agent`, removed with ADR 151). Siblings: `rule-ai-prompting`,
+`rule-ai-evals`, `rule-ai-context-engineering`, `rule-ai`.
 
 ## Evidence base (measured 2026-10-21)
 
@@ -19,8 +19,8 @@ This leaf is where ADR 137's rules belong: every one of its eight is a statement
 about agent code - the tool schema, the call timeout, the token cap, output
 validation, secrets in a prompt, the generation span, eval presence, MCP token
 validation. The decision of 2026-10-21 (ADR 153, P10) put them here rather than in
-the router, so the leaf owns the floor and `rule-mcp-ai` stays a list. That is the same
-model `rule-mcp-data` and `rule-mcp-backend` use, with the rules one level lower because
+the router, so the leaf owns the floor and `rule-ai` stays a list. That is the same
+model `rule-data` and `rule-backend` use, with the rules one level lower because
 this is the leaf that describes the code they check.
 
 ## ADR 137's eight rules, owned here
@@ -68,16 +68,16 @@ Eight from ADR 137 plus three of its own:
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-ai` (HARD)
+Feeds: `rule-ai` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 
 - [ ] Implement ADR 137 here: eight `ai-*` rules in
-      `skills/rule-mcp-ai-agent-architecture/guardrails`, advisory first, each citing
+      `skills/rule-ai-agent-architecture/guardrails`, advisory first, each citing
       OWASP / MCP / OpenTelemetry where the ADR says so.
 - [ ] ADR: the AI family shape, amending 137's placement (rules in the leaf, not
       in the router) and superseding its proposed status.
@@ -88,13 +88,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
       `unbounded-generation/`, `unvalidated-output/`, `secret-in-prompt/`,
       `unbounded-loop/`, `graph-without-measurement/`, `unnamed-owner/`, each with
       a one-line `README.md`.
-- [ ] Eleven `CORPUS` pairs bound to `rule-mcp-ai-agent-architecture`, eight of them
+- [ ] Eleven `CORPUS` pairs bound to `rule-ai-agent-architecture`, eight of them
       for ADR 137's rules.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ### Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-ai-agent-architecture/guardrails/`: eleven rule files plus
+- [ ] `skills/rule-ai-agent-architecture/guardrails/`: eleven rule files plus
       `index.js`.
 - [ ] `guardrails:` frontmatter lists them all, equal to the exports.
 - [ ] Green the Phase 1 suites.
@@ -102,14 +102,14 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 ### Phase 3 - Door and neighbors
 
 - [ ] `rule-mcp` dispatcher row.
-- [ ] The browser-agent section points at `rule-mcp-platform-web` for the delivery
+- [ ] The browser-agent section points at `rule-platform-web` for the delivery
       contract, which owns it; the tool-surface argument stays here.
 - [ ] The telemetry assumption in "judging an agent framework" links
-      `rule-mcp-devops-observability`.
+      `rule-devops-observability`.
 
 ### Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-ai-agent-architecture/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-ai-agent-architecture/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
 

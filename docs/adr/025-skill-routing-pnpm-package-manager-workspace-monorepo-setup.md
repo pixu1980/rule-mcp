@@ -8,12 +8,12 @@
 ## Context
 
 Prompt: "pnpm package manager workspace monorepo setup"
-Routed to: **rule-mcp-toolchain-pnpm** (confidence: 1)
-Alternatives: rule-mcp-platform-library (0.5), rule-mcp-toolchain-turborepo (0.38), rule-mcp-devops-version (0.24)
+Routed to: **rule-toolchain-pnpm** (confidence: 1)
+Alternatives: rule-platform-library (0.5), rule-toolchain-turborepo (0.38), rule-devops-version (0.24)
 
 ## Decision
 
-Use `rule-mcp-toolchain-pnpm` for this task.
+Use `rule-toolchain-pnpm` for this task.
 
 ## Consequences
 

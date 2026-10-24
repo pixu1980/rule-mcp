@@ -10,12 +10,12 @@ import { test } from "node:test";
 import { GRAPH_BONUS, graphCandidates, skillOfFile } from "../_routing.js";
 
 test("skillOfFile maps only skills that resolve", () => {
-  const skills = ["rule-mcp-frontend-react", "rule-mcp-styleguide-json"];
+  const skills = ["rule-frontend-react", "rule-styleguide-json"];
 
-  assert.equal(skillOfFile("skills/rule-mcp-frontend-react/SKILL.md", skills), "rule-mcp-frontend-react");
-  assert.equal(skillOfFile("skills/rule-mcp-frontend-react/examples/a.js", skills), "rule-mcp-frontend-react");
+  assert.equal(skillOfFile("skills/rule-frontend-react/SKILL.md", skills), "rule-frontend-react");
+  assert.equal(skillOfFile("skills/rule-frontend-react/examples/a.js", skills), "rule-frontend-react");
   assert.equal(skillOfFile("src/core/skills/__tests__/_ai.test.mjs", skills), null, "a path under src/ is not a skill");
-  assert.equal(skillOfFile("skills/rule-mcp-nope/SKILL.md", skills), null, "an unknown skill is not a candidate");
+  assert.equal(skillOfFile("skills/rule-nope/SKILL.md", skills), null, "an unknown skill is not a candidate");
   assert.equal(skillOfFile(null, skills), null);
 });
 
@@ -36,10 +36,10 @@ test("graphCandidates returns nothing when disabled", () => {
 test("graphCandidates folds search hits onto their skill", () => {
   const client = () => ({
     ok: true,
-    value: [{ file: "skills/rule-mcp-frontend-react/SKILL.md" }, { file: "skills/rule-mcp-frontend-react/examples/a.js" }, { file: "src/core/skills/__tests__/_ai.test.mjs" }],
+    value: [{ file: "skills/rule-frontend-react/SKILL.md" }, { file: "skills/rule-frontend-react/examples/a.js" }, { file: "src/core/skills/__tests__/_ai.test.mjs" }],
   });
-  const result = graphCandidates("/tmp/p", "react button", { skills: ["rule-mcp-frontend-react"], probe: () => ({ available: true }), client });
+  const result = graphCandidates("/tmp/p", "react button", { skills: ["rule-frontend-react"], probe: () => ({ available: true }), client });
 
   assert.equal(result.size, 1);
-  assert.equal(result.get("rule-mcp-frontend-react"), GRAPH_BONUS);
+  assert.equal(result.get("rule-frontend-react"), GRAPH_BONUS);
 });

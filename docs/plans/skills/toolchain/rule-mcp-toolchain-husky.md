@@ -1,4 +1,4 @@
-# rule-mcp-toolchain-husky - best-practice implementation plan
+# rule-toolchain-husky - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,10 +9,10 @@ Area: toolchain. Order: reverse alphabetical, eighth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-toolchain-husky/SKILL.md`: install with `husky init`, lint-staged
+- `skills/rule-toolchain-husky/SKILL.md`: install with `husky init`, lint-staged
   in `package.json`, a commitlint config, two hook files, a lefthook
   alternative, and a Conventional Commits reference.
-- `skills/rule-mcp-styleguide-git/SKILL.md` (formerly `rule-mcp-toolchain-commits`),
+- `skills/rule-styleguide-git/SKILL.md` (formerly `rule-toolchain-commits`),
   which owns the commit rule.
 - This repository's own hook installer, `scripts/install/git-hooks/index.mjs`,
   and its tracked `.githooks/` hooks. It installs shims into `.git/hooks/` and
@@ -33,7 +33,7 @@ Facts and issues found:
 | ----------------------------------------- | ---------------------------------------------------------------------- |
 | install section stops at `husky init`     | v9 also wants `prepare: "husky"` so hooks install on install           |
 | hook file shape not stated                | verify it against the v9 docs rather than v8 examples                  |
-| Conventional Commits reference duplicated | the rule lives in `rule-mcp-styleguide-git`                            |
+| Conventional Commits reference duplicated | the rule lives in `rule-styleguide-git`                                |
 | commitlint config has no scope rule       | the repository rule requires a scope, so `scope-empty` must be `never` |
 | type list omits `build`                   | the accepted types include `build`                                     |
 | no local/CI statement                     | hooks are local; CI is the authority                                   |
@@ -45,19 +45,19 @@ stays context only; the plan anchors to the official documentation.
 
 ## Decisions
 
-| Question    | Decision                                                                                                            |
-| ----------- | ------------------------------------------------------------------------------------------------------------------- |
-| Scope       | Hook wiring only, Husky v9, lint-staged, commitlint, tracked hooks, lefthook, CI parity                             |
-| Approach    | A decision rule per project type, not one mandatory tool                                                            |
-| Boundaries  | The commit rule is `rule-mcp-styleguide-git`; the lint commands belong to biome/eslint; the tests to devops-testing |
-| Husky v9    | `prepare: "husky"`, `husky init`, hook shape verified against v9, `HUSKY=0` documented                              |
-| commitlint  | `scope-empty` never, `type-enum` identical to the repository types, header and subject rules                        |
-| lint-staged | Staged files only, commands aligned with the chosen linter, fix only where it applies                               |
-| Hooks       | pre-commit lint-staged, commit-msg commitlint, pre-push lint and tests                                              |
-| Performance | Light pre-commit, full tests on pre-push                                                                            |
-| CI parity   | Hooks are convenience, CI is the authority                                                                          |
-| Delivery    | Plan only now                                                                                                       |
-| ADR         | Only when a decision is structural                                                                                  |
+| Question    | Decision                                                                                                        |
+| ----------- | --------------------------------------------------------------------------------------------------------------- |
+| Scope       | Hook wiring only, Husky v9, lint-staged, commitlint, tracked hooks, lefthook, CI parity                         |
+| Approach    | A decision rule per project type, not one mandatory tool                                                        |
+| Boundaries  | The commit rule is `rule-styleguide-git`; the lint commands belong to biome/eslint; the tests to devops-testing |
+| Husky v9    | `prepare: "husky"`, `husky init`, hook shape verified against v9, `HUSKY=0` documented                          |
+| commitlint  | `scope-empty` never, `type-enum` identical to the repository types, header and subject rules                    |
+| lint-staged | Staged files only, commands aligned with the chosen linter, fix only where it applies                           |
+| Hooks       | pre-commit lint-staged, commit-msg commitlint, pre-push lint and tests                                          |
+| Performance | Light pre-commit, full tests on pre-push                                                                        |
+| CI parity   | Hooks are convenience, CI is the authority                                                                      |
+| Delivery    | Plan only now                                                                                                   |
+| ADR         | Only when a decision is structural                                                                              |
 
 ## Workstream A - Choosing the mechanism
 
@@ -83,7 +83,7 @@ reason: git honors one path, so setting it silences a global one.
 ## Workstream C - commitlint aligned with the repository rule
 
 1. `scope-empty: [2, "never"]`: a commit without a scope is rejected, which is
-   the rule `rule-mcp-styleguide-git` owns.
+   the rule `rule-styleguide-git` owns.
 2. `type-enum` matches the accepted types: `feat`, `fix`, `docs`, `style`,
    `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
 3. `header-max-length` and `subject-case` set the shape of the subject.
@@ -133,9 +133,9 @@ Advisory first, then blocking after 100% precision and recall.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-toolchain` (HARD)
+Feeds: `rule-toolchain` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -149,7 +149,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 ### Phase 1 - Content
 
 - [ ] Add `prepare: "husky"` and verify the v9 hook shape.
-- [ ] Remove the Conventional Commits reference and link `rule-mcp-styleguide-git`.
+- [ ] Remove the Conventional Commits reference and link `rule-styleguide-git`.
 - [ ] Align the commitlint config with the scope rule and the type list.
 - [ ] Document `HUSKY=0`.
 - [ ] Add the mechanism decision rule, including the tracked `.githooks` path.

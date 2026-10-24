@@ -12,10 +12,10 @@ skills:
   - "constraints and referential integrity"
   - "backup and restore rehearsal"
 evidenceSkills:
-  - "rule-mcp-data-sql"
-  - "rule-mcp-data-postgresql"
-  - "rule-mcp-data-sqlite"
-  - "rule-mcp-data-indexed-db"
+  - "rule-data-sql"
+  - "rule-data-postgresql"
+  - "rule-data-sqlite"
+  - "rule-data-indexed-db"
 aliases:
   - "data-engineer"
   - "data-quality"

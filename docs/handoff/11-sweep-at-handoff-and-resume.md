@@ -70,18 +70,18 @@ One unrelated test that was already failing at HEAD was fixed in its own commit.
 - ADR 087 is marked `superseded` with a pointer to 103, scoped to the mode
   question only: what counts as complete, the one-ADR-per-doc fold and the
   English gate stay as 087 wrote them.
-- Skill `rule-mcp-process-handoff` no longer claims `handon` is read-only, documents
+- Skill `rule-process-handoff` no longer claims `handon` is read-only, documents
   the `no-archive` token, and gains a "What the sweep does" section.
 - README, `docs/plans/github.md` and the census-owned docs regenerated.
 
 ## Verification
 
-| Gate                                 | Result                                                                                                                                                                                                                                                                                                                                                                  |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `scripts/ci/run-tests/index.mjs all` | 1779 tests, 1776 pass, 3 skipped, 0 fail (exit 0)                                                                                                                                                                                                                                                                                                                       |
-| `rule_tool_check` mode=project       | 2/5 red, both pre-existing: `project-circular` (3 cycles in `src/transport/session-registry/*`, `src/core/session/resume/*`, `src/cli/commands/_targets*` and the `skills/rule-mcp-frontend-vanilla-reactive/examples` tree) and `project-dead-code` (53 symbols; the 3 in `tools/handoff` and `tools/handon` are `register*Tool`, invoked dynamically by the registry) |
-| `pnpm lint`                          | Baseline already red at HEAD: 64 errors repo-wide. Every file this session added is clean; the 7 errors inside the touched directories are on pre-existing lines                                                                                                                                                                                                        |
-| census freshness                     | Green at the tip                                                                                                                                                                                                                                                                                                                                                        |
+| Gate                                 | Result                                                                                                                                                                                                                                                                                                                                                              |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `scripts/ci/run-tests/index.mjs all` | 1779 tests, 1776 pass, 3 skipped, 0 fail (exit 0)                                                                                                                                                                                                                                                                                                                   |
+| `rule_tool_check` mode=project       | 2/5 red, both pre-existing: `project-circular` (3 cycles in `src/transport/session-registry/*`, `src/core/session/resume/*`, `src/cli/commands/_targets*` and the `skills/rule-frontend-vanilla-reactive/examples` tree) and `project-dead-code` (53 symbols; the 3 in `tools/handoff` and `tools/handon` are `register*Tool`, invoked dynamically by the registry) |
+| `pnpm lint`                          | Baseline already red at HEAD: 64 errors repo-wide. Every file this session added is clean; the 7 errors inside the touched directories are on pre-existing lines                                                                                                                                                                                                    |
+| census freshness                     | Green at the tip                                                                                                                                                                                                                                                                                                                                                    |
 
 `nextPlanSteps` and `planLines` are not in the dead-code list: `handon` calls
 them.
@@ -146,5 +146,5 @@ false` is the read-only run
 - `src/tools/handon/_plans.js`, `_handon.js`, `_register.js`
 - `src/prompts/_handoff-options.js`, `_handoff-options.data.js`, `_handoff-prompt.js`
 - `src/cli/_register-handoff.js`, `src/cli/_register-session.js`
-- `skills/rule-mcp-process-handoff/SKILL.md`
+- `skills/rule-process-handoff/SKILL.md`
 - `docs/adr/103-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md`

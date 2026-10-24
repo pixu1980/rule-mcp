@@ -20,7 +20,7 @@ Additionally, the `rule-mcp-scaffold` umbrella directory itself served no purpos
 
 ### 1. Rename and absorb `scaffold-backend-node` -> `backend-node`
 
-The skill moves from `rule-mcp-scaffold-backend-node` to `rule-mcp-backend-node`, placing it alongside other backend framework skills. No content lost.
+The skill moves from `rule-mcp-scaffold-backend-node` to `rule-backend-node`, placing it alongside other backend framework skills. No content lost.
 
 ### 2. Merge `scaffold-ai-agents` -> `ai-agents`
 
@@ -28,15 +28,15 @@ The AI agents scaffold was an orchestrator that delegated to backend + frontend 
 
 ### 3. Merge `scaffold-expo` -> `platform-expo`
 
-All Expo/React Native scaffolding content moves into `rule-mcp-platform-expo`, the platform-level skill.
+All Expo/React Native scaffolding content moves into `rule-platform-expo`, the platform-level skill.
 
 ### 4. Split `scaffold-frontend-react-vite` into three targets
 
-| Content                                                        | Destination                              |
-| -------------------------------------------------------------- | ---------------------------------------- |
-| Vite configuration, vitest, build optimization                 | `rule-mcp-toolchain-vite` (new skill)    |
-| React-specific scaffolding (app bootstrap, routing, API layer) | `rule-mcp-frontend-react` (extant skill) |
-| Generic frontend project setup (package.json, tsconfig, biome) | `rule-mcp-platform-web` (extant skill)   |
+| Content                                                        | Destination                          |
+| -------------------------------------------------------------- | ------------------------------------ |
+| Vite configuration, vitest, build optimization                 | `rule-toolchain-vite` (new skill)    |
+| React-specific scaffolding (app bootstrap, routing, API layer) | `rule-frontend-react` (extant skill) |
+| Generic frontend project setup (package.json, tsconfig, biome) | `rule-platform-web` (extant skill)   |
 
 ### 5. Delete all remaining `rule-mcp-scaffold-*` directories
 

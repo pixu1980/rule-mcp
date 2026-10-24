@@ -60,7 +60,7 @@ Nota: la sessione GPT 5.6 Luna è partita con 1 swap di modello (`gpt-5.5` -> `g
 
 ### 1.3 Tool MCP resi disponibili
 
-Il server `rule-mcp` ha esposto **105 tool** + 186 risorse `rulemcp://*` + 1 router, organizzati in skill folder: `frontend/*`, `backend/*`, `data/*`, `devops/*`, `platform/*`, `process/*`, `styleguide/*`, `toolchain/*`, `ui/*`, `ai-agents/*`.
+Il server `rule-mcp` ha esposto **105 tool** + 186 risorse `rule://*` + 1 router, organizzati in skill folder: `frontend/*`, `backend/*`, `data/*`, `devops/*`, `platform/*`, `process/*`, `styleguide/*`, `toolchain/*`, `ui/*`, `ai-agents/*`.
 
 ---
 
@@ -311,16 +311,16 @@ Sonnet 4.6 ha 13 thinking blocks (pochi) ma 35K chars totali, pensa "a fondo" ma
 | `rule_tool_toolchain_project`          |        0 |     1 |      0 |
 | `rule_tool_detect`                     |        1 |     1 |      0 |
 | `rule_tool_process_adr`                |        0 |     1 |      0 |
-| `rulemcp://*` (resources)              |        0 | **5** |      0 |
+| `rule://*` (resources)                 |        0 | **5** |      0 |
 | **Totale invocazioni rule-mcp**        |   **25** |    14 |      5 |
 | Tool rule-mcp distinti usati           |   **15** |    14 |      5 |
 
 ### 4.3 Osservazioni strategiche
 
 - **GPT 5.6 Luna** è l'unico che ha usato il **loop check->fix** del MCP (`rule_tool_check` x 5, `rule_tool_fix` x 4). Ha anche usato il **router `rule_tool`**, `rule_tool_styleguide` (mode=scaffold) x 2, e skill di processo (`rule_tool_gateway`, `rule_tool_toolchain_vite`, `rule_tool_toolchain_pnpm`, `rule_tool_toolchain_typescript`). È il modello che ha _interrogato_ il server MCP nel modo più esplorativo. Tuttavia, nonostante tutta questa "validazione", ha prodotto l'output architetturalmente più scarno.
-- **DeepSeek v4 Flash** ha usato 5 risorse `rulemcp://*` (lettura skill intere) + 9 tool `rule_tool_*` (esecutivi). Ha anche usato `rule_tool_process_adr` (cosa che gli altri non hanno fatto). Approccio "leggi le skill prima, poi esegui".
+- **DeepSeek v4 Flash** ha usato 5 risorse `rule://*` (lettura skill intere) + 9 tool `rule_tool_*` (esecutivi). Ha anche usato `rule_tool_process_adr` (cosa che gli altri non hanno fatto). Approccio "leggi le skill prima, poi esegui".
 - **Sonnet 4.6** ha usato solo 5 tool rule-mcp, ciascuno in modalità `mode: "full"`. Approccio **sintetico e one-shot**, leggi 5 skill in blocco, produci 5.708 righe in 57 turn. Pagina un prezzo in context window ma vince su tempo-utente.
-- **Nessuno dei 3 ha usato il pattern `rulemcp://<skill>` come Sonnet 5 fa nel test bookmarks.** Tutti hanno preferito il pattern `mode: "full"` sui tool.
+- **Nessuno dei 3 ha usato il pattern `rule://<skill>` come Sonnet 5 fa nel test bookmarks.** Tutti hanno preferito il pattern `mode: "full"` sui tool.
 
 ### 4.4 Quanto il modello ha seguito le specifiche del server MCP
 
@@ -683,7 +683,7 @@ GPT 5.6 Luna ha usato il **maggior numero di tool MCP** (25 invocazioni, 15 dist
 
 - **`rule_tool_check` + `rule_tool_fix` funzionano solo se il modello li chiama**, e li ha chiamati solo GPT 5.6 Luna (9 invocazioni). Gli altri 2 modelli non hanno sfruttato il loop di validazione. Questo è un segnale che il loop check->fix è un pattern "GPT-friendly" ma non universale.
 
-- **Le risorse `rulemcp://*` (5 in DeepSeek) sono preziose** per modelli che vogliono fare "exploration" del parco skill prima di iniziare. Sonnet non le ha usate qui (a differenza del test bookmarks), ha preferito il pattern `mode: "full"` sui tool.
+- **Le risorse `rule://*` (5 in DeepSeek) sono preziose** per modelli che vogliono fare "exploration" del parco skill prima di iniziare. Sonnet non le ha usate qui (a differenza del test bookmarks), ha preferito il pattern `mode: "full"` sui tool.
 
 ### 10.2 Sul modello migliore per questo task
 
@@ -769,7 +769,7 @@ DEEPSEEK V4 FLASH (14 invocazioni, 14 tool distinti):
   rule_tool_styleguide_css               1×     rule_tool_styleguide_naming      1×
   rule_tool_styleguide_html              1×     rule_tool_toolchain_project      1×
   rule_tool_process_adr                  1×
-  + 5 rulemcp://* risorse (full content)
+  + 5 rule://* risorse (full content)
 
 CLAUDE SONNET 4.6 (5 invocazioni, 5 tool distinti):
   rule_tool_platform_desktop             1×     rule_tool_frontend_react         1×

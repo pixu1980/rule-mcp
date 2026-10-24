@@ -14,23 +14,185 @@ a client can cache: no call runs a model, and none of them writes.
 
 ### The fixed indexes
 
-| URI                         | Name                                                    | Media type         |
-| --------------------------- | ------------------------------------------------------- | ------------------ |
-| `rulemcp://skills`          | All rule-mcp skills index                               | `application/json` |
-| `rulemcp://templates`       | Design system component templates                       | `application/json` |
-| `rulemcp://project`         | Project analysis (detected framework + suggested tools) | `application/json` |
-| `rulemcp://community`       | Community rule-mcp skills index                         | `application/json` |
-| `rulemcp://ai`              | rule-mcp skill full content                             | `text/markdown`    |
-| `rulemcp://a11y`            | A11y testing guide (Playwright + axe-core)              | `text/markdown`    |
-| `rulemcp://a11y/test-basic` | Basic a11y test template                                | `text/plain`       |
-| `rulemcp://a11y/test-forms` | Form a11y test template                                 | `text/plain`       |
+| URI                                            | Name                                                         | Media type         |
+| ---------------------------------------------- | ------------------------------------------------------------ | ------------------ |
+| `rule://skills`                                | All rule-mcp skills index                                    | `application/json` |
+| `rule://templates`                             | Design system component templates                            | `application/json` |
+| `rule://project`                               | Project analysis (detected framework + suggested tools)      | `application/json` |
+| `rule://community`                             | Community rule-mcp skills index                              | `application/json` |
+| `rule://ai`                                    | rule-mcp skill full content                                  | `text/markdown`    |
+| `rule://a11y`                                  | A11y testing guide (Playwright + axe-core)                   | `text/markdown`    |
+| `rule://a11y/test-basic`                       | Basic a11y test template                                     | `text/plain`       |
+| `rule://a11y/test-forms`                       | Form a11y test template                                      | `text/plain`       |
+| `rule://rule-ai`                               | rule-ai skill full content                                   | `text/markdown`    |
+| `rule://rule-ai/summary`                       | rule-ai skill summary (first 30 lines)                       | `text/markdown`    |
+| `rule://rule-ai-agent-architecture`            | rule-ai-agent-architecture skill full content                | `text/markdown`    |
+| `rule://rule-ai-agent-architecture/summary`    | rule-ai-agent-architecture skill summary (first 30 lines)    | `text/markdown`    |
+| `rule://rule-ai-context-engineering`           | rule-ai-context-engineering skill full content               | `text/markdown`    |
+| `rule://rule-ai-context-engineering/summary`   | rule-ai-context-engineering skill summary (first 30 lines)   | `text/markdown`    |
+| `rule://rule-ai-evals`                         | rule-ai-evals skill full content                             | `text/markdown`    |
+| `rule://rule-ai-evals/summary`                 | rule-ai-evals skill summary (first 30 lines)                 | `text/markdown`    |
+| `rule://rule-ai-prompting`                     | rule-ai-prompting skill full content                         | `text/markdown`    |
+| `rule://rule-ai-prompting/summary`             | rule-ai-prompting skill summary (first 30 lines)             | `text/markdown`    |
+| `rule://rule-backend`                          | rule-backend skill full content                              | `text/markdown`    |
+| `rule://rule-backend/summary`                  | rule-backend skill summary (first 30 lines)                  | `text/markdown`    |
+| `rule://rule-backend-express`                  | rule-backend-express skill full content                      | `text/markdown`    |
+| `rule://rule-backend-express/summary`          | rule-backend-express skill summary (first 30 lines)          | `text/markdown`    |
+| `rule://rule-backend-fastify`                  | rule-backend-fastify skill full content                      | `text/markdown`    |
+| `rule://rule-backend-fastify/summary`          | rule-backend-fastify skill summary (first 30 lines)          | `text/markdown`    |
+| `rule://rule-backend-graphql`                  | rule-backend-graphql skill full content                      | `text/markdown`    |
+| `rule://rule-backend-graphql/summary`          | rule-backend-graphql skill summary (first 30 lines)          | `text/markdown`    |
+| `rule://rule-backend-hono`                     | rule-backend-hono skill full content                         | `text/markdown`    |
+| `rule://rule-backend-hono/summary`             | rule-backend-hono skill summary (first 30 lines)             | `text/markdown`    |
+| `rule://rule-backend-nestjs`                   | rule-backend-nestjs skill full content                       | `text/markdown`    |
+| `rule://rule-backend-nestjs/summary`           | rule-backend-nestjs skill summary (first 30 lines)           | `text/markdown`    |
+| `rule://rule-backend-node`                     | rule-backend-node skill full content                         | `text/markdown`    |
+| `rule://rule-backend-node/summary`             | rule-backend-node skill summary (first 30 lines)             | `text/markdown`    |
+| `rule://rule-backend-security`                 | rule-backend-security skill full content                     | `text/markdown`    |
+| `rule://rule-backend-security/summary`         | rule-backend-security skill summary (first 30 lines)         | `text/markdown`    |
+| `rule://rule-backend-workers`                  | rule-backend-workers skill full content                      | `text/markdown`    |
+| `rule://rule-backend-workers/summary`          | rule-backend-workers skill summary (first 30 lines)          | `text/markdown`    |
+| `rule://rule-data`                             | rule-data skill full content                                 | `text/markdown`    |
+| `rule://rule-data/summary`                     | rule-data skill summary (first 30 lines)                     | `text/markdown`    |
+| `rule://rule-data-duckdb`                      | rule-data-duckdb skill full content                          | `text/markdown`    |
+| `rule://rule-data-duckdb/summary`              | rule-data-duckdb skill summary (first 30 lines)              | `text/markdown`    |
+| `rule://rule-data-indexed-db`                  | rule-data-indexed-db skill full content                      | `text/markdown`    |
+| `rule://rule-data-indexed-db/summary`          | rule-data-indexed-db skill summary (first 30 lines)          | `text/markdown`    |
+| `rule://rule-data-mongodb`                     | rule-data-mongodb skill full content                         | `text/markdown`    |
+| `rule://rule-data-mongodb/summary`             | rule-data-mongodb skill summary (first 30 lines)             | `text/markdown`    |
+| `rule://rule-data-mysql`                       | rule-data-mysql skill full content                           | `text/markdown`    |
+| `rule://rule-data-mysql/summary`               | rule-data-mysql skill summary (first 30 lines)               | `text/markdown`    |
+| `rule://rule-data-postgresql`                  | rule-data-postgresql skill full content                      | `text/markdown`    |
+| `rule://rule-data-postgresql/summary`          | rule-data-postgresql skill summary (first 30 lines)          | `text/markdown`    |
+| `rule://rule-data-sql`                         | rule-data-sql skill full content                             | `text/markdown`    |
+| `rule://rule-data-sql/summary`                 | rule-data-sql skill summary (first 30 lines)                 | `text/markdown`    |
+| `rule://rule-data-sqlite`                      | rule-data-sqlite skill full content                          | `text/markdown`    |
+| `rule://rule-data-sqlite/summary`              | rule-data-sqlite skill summary (first 30 lines)              | `text/markdown`    |
+| `rule://rule-data-validation`                  | rule-data-validation skill full content                      | `text/markdown`    |
+| `rule://rule-data-validation/summary`          | rule-data-validation skill summary (first 30 lines)          | `text/markdown`    |
+| `rule://rule-devops`                           | rule-devops skill full content                               | `text/markdown`    |
+| `rule://rule-devops/summary`                   | rule-devops skill summary (first 30 lines)                   | `text/markdown`    |
+| `rule://rule-devops-deploy-preview`            | rule-devops-deploy-preview skill full content                | `text/markdown`    |
+| `rule://rule-devops-deploy-preview/summary`    | rule-devops-deploy-preview skill summary (first 30 lines)    | `text/markdown`    |
+| `rule://rule-devops-docker`                    | rule-devops-docker skill full content                        | `text/markdown`    |
+| `rule://rule-devops-docker/summary`            | rule-devops-docker skill summary (first 30 lines)            | `text/markdown`    |
+| `rule://rule-devops-observability`             | rule-devops-observability skill full content                 | `text/markdown`    |
+| `rule://rule-devops-observability/summary`     | rule-devops-observability skill summary (first 30 lines)     | `text/markdown`    |
+| `rule://rule-devops-testing`                   | rule-devops-testing skill full content                       | `text/markdown`    |
+| `rule://rule-devops-testing/summary`           | rule-devops-testing skill summary (first 30 lines)           | `text/markdown`    |
+| `rule://rule-frontend`                         | rule-frontend skill full content                             | `text/markdown`    |
+| `rule://rule-frontend/summary`                 | rule-frontend skill summary (first 30 lines)                 | `text/markdown`    |
+| `rule://rule-frontend-angular`                 | rule-frontend-angular skill full content                     | `text/markdown`    |
+| `rule://rule-frontend-angular/summary`         | rule-frontend-angular skill summary (first 30 lines)         | `text/markdown`    |
+| `rule://rule-frontend-react`                   | rule-frontend-react skill full content                       | `text/markdown`    |
+| `rule://rule-frontend-react/summary`           | rule-frontend-react skill summary (first 30 lines)           | `text/markdown`    |
+| `rule://rule-frontend-solidjs`                 | rule-frontend-solidjs skill full content                     | `text/markdown`    |
+| `rule://rule-frontend-solidjs/summary`         | rule-frontend-solidjs skill summary (first 30 lines)         | `text/markdown`    |
+| `rule://rule-frontend-svelte`                  | rule-frontend-svelte skill full content                      | `text/markdown`    |
+| `rule://rule-frontend-svelte/summary`          | rule-frontend-svelte skill summary (first 30 lines)          | `text/markdown`    |
+| `rule://rule-frontend-template-engine`         | rule-frontend-template-engine skill full content             | `text/markdown`    |
+| `rule://rule-frontend-template-engine/summary` | rule-frontend-template-engine skill summary (first 30 lines) | `text/markdown`    |
+| `rule://rule-frontend-vue`                     | rule-frontend-vue skill full content                         | `text/markdown`    |
+| `rule://rule-frontend-vue/summary`             | rule-frontend-vue skill summary (first 30 lines)             | `text/markdown`    |
+| `rule://rule-frontend-workers`                 | rule-frontend-workers skill full content                     | `text/markdown`    |
+| `rule://rule-frontend-workers/summary`         | rule-frontend-workers skill summary (first 30 lines)         | `text/markdown`    |
+| `rule://rule-meta`                             | rule-meta skill full content                                 | `text/markdown`    |
+| `rule://rule-meta/summary`                     | rule-meta skill summary (first 30 lines)                     | `text/markdown`    |
+| `rule://rule-meta-astro`                       | rule-meta-astro skill full content                           | `text/markdown`    |
+| `rule://rule-meta-astro/summary`               | rule-meta-astro skill summary (first 30 lines)               | `text/markdown`    |
+| `rule://rule-meta-next`                        | rule-meta-next skill full content                            | `text/markdown`    |
+| `rule://rule-meta-next/summary`                | rule-meta-next skill summary (first 30 lines)                | `text/markdown`    |
+| `rule://rule-meta-nuxt`                        | rule-meta-nuxt skill full content                            | `text/markdown`    |
+| `rule://rule-meta-nuxt/summary`                | rule-meta-nuxt skill summary (first 30 lines)                | `text/markdown`    |
+| `rule://rule-meta-remix`                       | rule-meta-remix skill full content                           | `text/markdown`    |
+| `rule://rule-meta-remix/summary`               | rule-meta-remix skill summary (first 30 lines)               | `text/markdown`    |
+| `rule://rule-platform`                         | rule-platform skill full content                             | `text/markdown`    |
+| `rule://rule-platform/summary`                 | rule-platform skill summary (first 30 lines)                 | `text/markdown`    |
+| `rule://rule-platform-auth`                    | rule-platform-auth skill full content                        | `text/markdown`    |
+| `rule://rule-platform-auth/summary`            | rule-platform-auth skill summary (first 30 lines)            | `text/markdown`    |
+| `rule://rule-platform-desktop`                 | rule-platform-desktop skill full content                     | `text/markdown`    |
+| `rule://rule-platform-desktop/summary`         | rule-platform-desktop skill summary (first 30 lines)         | `text/markdown`    |
+| `rule://rule-platform-library`                 | rule-platform-library skill full content                     | `text/markdown`    |
+| `rule://rule-platform-library/summary`         | rule-platform-library skill summary (first 30 lines)         | `text/markdown`    |
+| `rule://rule-platform-web`                     | rule-platform-web skill full content                         | `text/markdown`    |
+| `rule://rule-platform-web/summary`             | rule-platform-web skill summary (first 30 lines)             | `text/markdown`    |
+| `rule://rule-process`                          | rule-process skill full content                              | `text/markdown`    |
+| `rule://rule-process/summary`                  | rule-process skill summary (first 30 lines)                  | `text/markdown`    |
+| `rule://rule-process-adr`                      | rule-process-adr skill full content                          | `text/markdown`    |
+| `rule://rule-process-adr/summary`              | rule-process-adr skill summary (first 30 lines)              | `text/markdown`    |
+| `rule://rule-process-ai`                       | rule-process-ai skill full content                           | `text/markdown`    |
+| `rule://rule-process-ai/summary`               | rule-process-ai skill summary (first 30 lines)               | `text/markdown`    |
+| `rule://rule-process-bmad`                     | rule-process-bmad skill full content                         | `text/markdown`    |
+| `rule://rule-process-bmad/summary`             | rule-process-bmad skill summary (first 30 lines)             | `text/markdown`    |
+| `rule://rule-process-changelog`                | rule-process-changelog skill full content                    | `text/markdown`    |
+| `rule://rule-process-changelog/summary`        | rule-process-changelog skill summary (first 30 lines)        | `text/markdown`    |
+| `rule://rule-process-code-review`              | rule-process-code-review skill full content                  | `text/markdown`    |
+| `rule://rule-process-code-review/summary`      | rule-process-code-review skill summary (first 30 lines)      | `text/markdown`    |
+| `rule://rule-process-npm-release`              | rule-process-npm-release skill full content                  | `text/markdown`    |
+| `rule://rule-process-npm-release/summary`      | rule-process-npm-release skill summary (first 30 lines)      | `text/markdown`    |
+| `rule://rule-process-readme`                   | rule-process-readme skill full content                       | `text/markdown`    |
+| `rule://rule-process-readme/summary`           | rule-process-readme skill summary (first 30 lines)           | `text/markdown`    |
+| `rule://rule-process-tdd`                      | rule-process-tdd skill full content                          | `text/markdown`    |
+| `rule://rule-process-tdd/summary`              | rule-process-tdd skill summary (first 30 lines)              | `text/markdown`    |
+| `rule://rule-styleguide`                       | rule-styleguide skill full content                           | `text/markdown`    |
+| `rule://rule-styleguide/summary`               | rule-styleguide skill summary (first 30 lines)               | `text/markdown`    |
+| `rule://rule-styleguide-a11y`                  | rule-styleguide-a11y skill full content                      | `text/markdown`    |
+| `rule://rule-styleguide-a11y/summary`          | rule-styleguide-a11y skill summary (first 30 lines)          | `text/markdown`    |
+| `rule://rule-styleguide-baseline`              | rule-styleguide-baseline skill full content                  | `text/markdown`    |
+| `rule://rule-styleguide-baseline/summary`      | rule-styleguide-baseline skill summary (first 30 lines)      | `text/markdown`    |
+| `rule://rule-styleguide-comments`              | rule-styleguide-comments skill full content                  | `text/markdown`    |
+| `rule://rule-styleguide-comments/summary`      | rule-styleguide-comments skill summary (first 30 lines)      | `text/markdown`    |
+| `rule://rule-styleguide-configuration`         | rule-styleguide-configuration skill full content             | `text/markdown`    |
+| `rule://rule-styleguide-configuration/summary` | rule-styleguide-configuration skill summary (first 30 lines) | `text/markdown`    |
+| `rule://rule-styleguide-css`                   | rule-styleguide-css skill full content                       | `text/markdown`    |
+| `rule://rule-styleguide-css/summary`           | rule-styleguide-css skill summary (first 30 lines)           | `text/markdown`    |
+| `rule://rule-styleguide-file-tree`             | rule-styleguide-file-tree skill full content                 | `text/markdown`    |
+| `rule://rule-styleguide-file-tree/summary`     | rule-styleguide-file-tree skill summary (first 30 lines)     | `text/markdown`    |
+| `rule://rule-styleguide-git`                   | rule-styleguide-git skill full content                       | `text/markdown`    |
+| `rule://rule-styleguide-git/summary`           | rule-styleguide-git skill summary (first 30 lines)           | `text/markdown`    |
+| `rule://rule-styleguide-html`                  | rule-styleguide-html skill full content                      | `text/markdown`    |
+| `rule://rule-styleguide-html/summary`          | rule-styleguide-html skill summary (first 30 lines)          | `text/markdown`    |
+| `rule://rule-styleguide-i18n`                  | rule-styleguide-i18n skill full content                      | `text/markdown`    |
+| `rule://rule-styleguide-i18n/summary`          | rule-styleguide-i18n skill summary (first 30 lines)          | `text/markdown`    |
+| `rule://rule-styleguide-javascript`            | rule-styleguide-javascript skill full content                | `text/markdown`    |
+| `rule://rule-styleguide-javascript/summary`    | rule-styleguide-javascript skill summary (first 30 lines)    | `text/markdown`    |
+| `rule://rule-styleguide-json`                  | rule-styleguide-json skill full content                      | `text/markdown`    |
+| `rule://rule-styleguide-json/summary`          | rule-styleguide-json skill summary (first 30 lines)          | `text/markdown`    |
+| `rule://rule-styleguide-markdown`              | rule-styleguide-markdown skill full content                  | `text/markdown`    |
+| `rule://rule-styleguide-markdown/summary`      | rule-styleguide-markdown skill summary (first 30 lines)      | `text/markdown`    |
+| `rule://rule-styleguide-naming`                | rule-styleguide-naming skill full content                    | `text/markdown`    |
+| `rule://rule-styleguide-naming/summary`        | rule-styleguide-naming skill summary (first 30 lines)        | `text/markdown`    |
+| `rule://rule-styleguide-typescript`            | rule-styleguide-typescript skill full content                | `text/markdown`    |
+| `rule://rule-styleguide-typescript/summary`    | rule-styleguide-typescript skill summary (first 30 lines)    | `text/markdown`    |
+| `rule://rule-toolchain`                        | rule-toolchain skill full content                            | `text/markdown`    |
+| `rule://rule-toolchain/summary`                | rule-toolchain skill summary (first 30 lines)                | `text/markdown`    |
+| `rule://rule-toolchain-biome`                  | rule-toolchain-biome skill full content                      | `text/markdown`    |
+| `rule://rule-toolchain-biome/summary`          | rule-toolchain-biome skill summary (first 30 lines)          | `text/markdown`    |
+| `rule://rule-toolchain-eslint`                 | rule-toolchain-eslint skill full content                     | `text/markdown`    |
+| `rule://rule-toolchain-eslint/summary`         | rule-toolchain-eslint skill summary (first 30 lines)         | `text/markdown`    |
+| `rule://rule-toolchain-husky`                  | rule-toolchain-husky skill full content                      | `text/markdown`    |
+| `rule://rule-toolchain-husky/summary`          | rule-toolchain-husky skill summary (first 30 lines)          | `text/markdown`    |
+| `rule://rule-toolchain-parcel`                 | rule-toolchain-parcel skill full content                     | `text/markdown`    |
+| `rule://rule-toolchain-parcel/summary`         | rule-toolchain-parcel skill summary (first 30 lines)         | `text/markdown`    |
+| `rule://rule-toolchain-pnpm`                   | rule-toolchain-pnpm skill full content                       | `text/markdown`    |
+| `rule://rule-toolchain-pnpm/summary`           | rule-toolchain-pnpm skill summary (first 30 lines)           | `text/markdown`    |
+| `rule://rule-toolchain-rspack`                 | rule-toolchain-rspack skill full content                     | `text/markdown`    |
+| `rule://rule-toolchain-rspack/summary`         | rule-toolchain-rspack skill summary (first 30 lines)         | `text/markdown`    |
+| `rule://rule-toolchain-turborepo`              | rule-toolchain-turborepo skill full content                  | `text/markdown`    |
+| `rule://rule-toolchain-turborepo/summary`      | rule-toolchain-turborepo skill summary (first 30 lines)      | `text/markdown`    |
+| `rule://rule-toolchain-vite`                   | rule-toolchain-vite skill full content                       | `text/markdown`    |
+| `rule://rule-toolchain-vite/summary`           | rule-toolchain-vite skill summary (first 30 lines)           | `text/markdown`    |
+| `rule://rule-ui`                               | rule-ui skill full content                                   | `text/markdown`    |
+| `rule://rule-ui/summary`                       | rule-ui skill summary (first 30 lines)                       | `text/markdown`    |
+| `rule://rule-ui-design-system`                 | rule-ui-design-system skill full content                     | `text/markdown`    |
+| `rule://rule-ui-design-system/summary`         | rule-ui-design-system skill summary (first 30 lines)         | `text/markdown`    |
 
 ### Per skill
 
-162 more, two for each skill that mints them:
+0 more, two for each skill that mints them:
 
-- `rulemcp://<skill>` - the whole `SKILL.md`
-- `rulemcp://<skill>/summary` - the condensed form a router hands back
+- `rule://<skill>` - the whole `SKILL.md`
+- `rule://<skill>/summary` - the condensed form a router hands back
 
 Listing them one row at a time would restate [`09-skills.md`](09-skills.md).
 

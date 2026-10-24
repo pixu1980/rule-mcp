@@ -23,7 +23,7 @@ import { issueReceipt, issueFilesReceipt, validateReceipt, validateApply } from 
 
 const T0 = 2_000_000; // injected clock (ms)
 const TTL = 300_000;
-const SKILL = "rule-mcp-frontend-react";
+const SKILL = "rule-frontend-react";
 
 // ── Path-bound receipts ────────────────────────────────────────────────────
 

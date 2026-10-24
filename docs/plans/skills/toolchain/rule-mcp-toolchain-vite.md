@@ -1,4 +1,4 @@
-# rule-mcp-toolchain-vite - best-practice implementation plan
+# rule-toolchain-vite - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`. Family contract: `docs/plans/skills/toolchain/bundler-family.md` (Vite, Rspack, Parcel; webpack removed). This plan covers only what is Vite-specific.
@@ -9,12 +9,12 @@ Area: toolchain. Order: reverse alphabetical, third skill.
 
 Read in this session:
 
-- `skills/rule-mcp-toolchain-vite/SKILL.md` (75 lines): config example with
+- `skills/rule-toolchain-vite/SKILL.md` (75 lines): config example with
   `server.host: true` and `build.target: "es2022"`, a full `vitest.config.ts`
   block, env rules, build optimization bullets, test setup notes.
-- `skills/rule-mcp-toolchain/SKILL.md` (router, describes the skill as "Vite 8 +
+- `skills/rule-toolchain/SKILL.md` (router, describes the skill as "Vite 8 +
   Rolldown").
-- `skills/rule-mcp-toolchain-pnpm/guardrails/` (`pkg-exact-versions`,
+- `skills/rule-toolchain-pnpm/guardrails/` (`pkg-exact-versions`,
   `verified-dependencies-only`, `pkg-no-corepack`, `pkg-no-engines`).
 
 Public sources verified in this session:
@@ -34,7 +34,7 @@ Facts that make the current text out of date:
 | `build.minify: "esbuild"` | the build runs on Rolldown and Oxc; CSS minification is lightningcss by default                                     |
 | `manualChunks`            | Rolldown deprecates it in favor of `advancedChunks`                                                                 |
 | `server.host: true`       | `server.host` defaults to `localhost`; exposure needs `server.allowedHosts` after the dev-server host vulnerability |
-| full `vitest.config.ts`   | duplicated from `rule-mcp-devops-testing`                                                                           |
+| full `vitest.config.ts`   | duplicated from `rule-devops-testing`                                                                               |
 
 Local articles: no dedicated Vite article exists in
 the local article corpus. The tangential mentions are formatting tools
@@ -47,7 +47,7 @@ release announcement and is not used.
 | Question          | Decision                                                                                           |
 | ----------------- | -------------------------------------------------------------------------------------------------- |
 | Scope             | Config baseline, env and secrets, build performance, dev security, library and SSR, plugin policy  |
-| Boundaries        | Vite keeps build and env only; the test config moves to `rule-mcp-devops-testing`                  |
+| Boundaries        | Vite keeps build and env only; the test config moves to `rule-devops-testing`                      |
 | Version           | Pinned to Vite 8 plus Rolldown, with an upgrade section                                            |
 | `server.host`     | `localhost` by default; `host: true` only with an explicit `server.allowedHosts`                   |
 | Env               | No secret with the `VITE_` prefix, `envPrefix` documented, `vite-env.d.ts` typing, mode precedence |
@@ -55,7 +55,7 @@ release announcement and is not used.
 | Chunking          | `advancedChunks` with a `manualChunks` compatibility note                                          |
 | Dev security      | `server.allowedHosts`, restricted `server.fs.allow`, proxy instead of CORS                         |
 | Plugins           | Official or verified and pinned; prefer native/Oxc plugins; check Rollup compatibility             |
-| Test config       | Removed, links to `rule-mcp-devops-testing`                                                        |
+| Test config       | Removed, links to `rule-devops-testing`                                                            |
 | Pinned build deps | Reuses the pnpm rules, no new id                                                                   |
 | Delivery          | Plan only now                                                                                      |
 | ADR               | Only when a decision is structural                                                                 |
@@ -149,7 +149,7 @@ Advisory first, then blocking after 100% precision and recall.
 
 Pinned build dependencies are covered by the existing
 `pkg-exact-versions` and `verified-dependencies-only` rules in
-`rule-mcp-toolchain-pnpm`; this plan indexes them instead of adding a third copy.
+`rule-toolchain-pnpm`; this plan indexes them instead of adding a third copy.
 `build.target` overrides stay a guidance rule, not a guardrail, because a
 justified override is legitimate.
 
@@ -166,9 +166,9 @@ justified override is legitimate.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-toolchain` (HARD)
+Feeds: `rule-toolchain` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -185,7 +185,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] Rewrite the env section with the secret rule and the mode precedence.
 - [ ] Rewrite the build section around `advancedChunks` and the defaults.
 - [ ] Add the dev-security, library/SSR and plugin sections.
-- [ ] Remove the `vitest.config.ts` block and link `rule-mcp-devops-testing`.
+- [ ] Remove the `vitest.config.ts` block and link `rule-devops-testing`.
 - [ ] Add the Vite 7 to 8 upgrade section.
 
 ### Phase 2 - Guardrails and assets

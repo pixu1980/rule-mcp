@@ -11,7 +11,7 @@ The OpenReplay article review highlighted that SQL skills already covered many p
 
 ## Decision
 
-Integrate these rules into the rule-mcp-data-sql, rule-mcp-data-postgresql, and rule-mcp-data-mysql skills, keeping version-specific details of PostgreSQL 18 and MySQL/MariaDB separate.
+Integrate these rules into the rule-data-sql, rule-data-postgresql, and rule-data-mysql skills, keeping version-specific details of PostgreSQL 18 and MySQL/MariaDB separate.
 
 ## Consequences
 

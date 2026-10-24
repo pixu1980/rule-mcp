@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 //  Post-processing: format JS files with Prettier + blank-line rules
 //  ═══════════════════════════════════════════════════════════════════════════════
-//  Called after rule_tool_apply writes files. Ensures ALL files match rule-mcp-styleguide.
+//  Called after rule_tool_apply writes files. Ensures ALL files match rule-styleguide.
 //  Order: Prettier (syntax) -> blank-line fixer (semantic)
 //  ═══════════════════════════════════════════════════════════════════════════════
 

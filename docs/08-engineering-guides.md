@@ -72,7 +72,7 @@ commit - the docs follow the code instead of being remembered.
 
 - **Skills**: 96 `skills/*/SKILL.md` documents, each registered as a
   `rule-mcp-tool-<skill>` MCP tool with full/summary/tldr/search/guardrails/check
-  modes; 112 tools and 198 `rulemcp://` resources in total (runtime counts, see
+  modes; 112 tools and 198 `rule://` resources in total (runtime counts, see
   the generated blocks).
 - **Skill reading** is cached (LRU): a cache hit is sub-millisecond, a miss is
   one disk read.
@@ -133,15 +133,15 @@ why they are not compressed.
 By document category, the answer to "is it compressed before it reaches a
 model?":
 
-| Category                                                                                | Status                                                                                                                   |
-| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Markdown (handoffs, docs served via `rulemcp://` text resources, the resume hook block) | compressed (tool result, resource read, `caveman-resume`)                                                                |
-| Skills (full body + summary resources, tool-embedded evidence)                          | compressed (resource read + tool-result pass)                                                                            |
-| Resources                                                                               | read: compressed; list labels: pass-through (no-op, ADR 077)                                                             |
-| Instructions (session/prompt directives, agent-instruction files)                       | directives already terse by authorship; anything emitted runs the pass                                                   |
-| Prompts                                                                                 | get: compressed; list: descriptions compressed (ADR 077)                                                                 |
-| Tools                                                                                   | results: compressed; list: descriptions compressed, schemas never (ADR 077)                                              |
-| Personas                                                                                | served content (plan outputs): compressed via the tool-result pass; `src/roles/*.md` source files stay untouched on disk |
+| Category                                                                             | Status                                                                                                                   |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| Markdown (handoffs, docs served via `rule://` text resources, the resume hook block) | compressed (tool result, resource read, `caveman-resume`)                                                                |
+| Skills (full body + summary resources, tool-embedded evidence)                       | compressed (resource read + tool-result pass)                                                                            |
+| Resources                                                                            | read: compressed; list labels: pass-through (no-op, ADR 077)                                                             |
+| Instructions (session/prompt directives, agent-instruction files)                    | directives already terse by authorship; anything emitted runs the pass                                                   |
+| Prompts                                                                              | get: compressed; list: descriptions compressed (ADR 077)                                                                 |
+| Tools                                                                                | results: compressed; list: descriptions compressed, schemas never (ADR 077)                                              |
+| Personas                                                                             | served content (plan outputs): compressed via the tool-result pass; `src/roles/*.md` source files stay untouched on disk |
 
 Opt-outs apply everywhere: `RULE_MCP_NO_CAVEMAN=1` and
 `RULE_MCP_CAVEMAN_LEVEL=off` turn the pass off on every surface that

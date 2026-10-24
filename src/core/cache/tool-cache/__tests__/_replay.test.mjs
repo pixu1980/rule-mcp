@@ -37,7 +37,7 @@ test("cacheLookup answers exact, then normalized on whitespace drift", () => {
 
 test("cacheIsFresh respects the dep digests and cacheIsFresh answers", () => {
   cacheClear();
-  cacheStore("rule_tool", { prompt: "fresh ones" }, RESULT, { "rule-mcp-frontend-react": skillDigest("rule-mcp-frontend-react") });
+  cacheStore("rule_tool", { prompt: "fresh ones" }, RESULT, { "rule-frontend-react": skillDigest("rule-frontend-react") });
   assert.equal(cacheIsFresh("rule_tool", { prompt: "fresh ones" }), true, "a live digest keeps the entry fresh");
 
   cacheStore("rule_tool", { prompt: "stale ones" }, RESULT, { "rule-mcp-never-a-skill": "abc" });

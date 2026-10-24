@@ -25,7 +25,7 @@ test("the cap constant is 256 KiB", () => {
 test("oversize input is refused with the cap message, not scanned", () => {
   const oversize = adversarial(MAX_CHECK_INPUT_BYTES + 1024);
   const started = process.hrtime.bigint();
-  const result = checkCode("rule-mcp-styleguide-css", oversize, { fileName: "a.css" });
+  const result = checkCode("rule-styleguide-css", oversize, { fileName: "a.css" });
   const elapsedMs = Number(process.hrtime.bigint() - started) / 1e6;
 
   assert.ok(elapsedMs < 100, `refusal took ${elapsedMs}ms, budget is 100ms`);
@@ -38,7 +38,7 @@ test("oversize input is refused with the cap message, not scanned", () => {
 });
 
 test("input at the cap is checked normally", () => {
-  const result = checkCode("rule-mcp-styleguide-css", "a { color: red; }", { fileName: "a.css" });
+  const result = checkCode("rule-styleguide-css", "a { color: red; }", { fileName: "a.css" });
   assert.equal(result.inputTooLarge, undefined);
   assert.ok(result.total > 0);
 });

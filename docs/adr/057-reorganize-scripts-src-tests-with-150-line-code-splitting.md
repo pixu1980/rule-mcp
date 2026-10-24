@@ -11,7 +11,7 @@ src/ has 108 files and 32,993 lines; 24 files exceed 150 lines (up to 1089), vio
 
 ## Decision
 
-Reorganize scripts/, src/ and test/ (renamed to tests/) into thematic subfolders by feature; apply code splitting with a 150-line threshold (100 + 50 tolerance) to JS/MJS files, exempting the shell installers; adopt the module-per-concern pattern of rule-mcp-frontend-custom-element as the split model; make branch coverage of at least 95% measurable (baseline npm script + c8 for the subprocesses) and close the gaps with targeted tests before each split.
+Reorganize scripts/, src/ and test/ (renamed to tests/) into thematic subfolders by feature; apply code splitting with a 150-line threshold (100 + 50 tolerance) to JS/MJS files, exempting the shell installers; adopt the module-per-concern pattern of rule-frontend-custom-element as the split model; make branch coverage of at least 95% measurable (baseline npm script + c8 for the subprocesses) and close the gaps with targeted tests before each split.
 
 ## Consequences
 

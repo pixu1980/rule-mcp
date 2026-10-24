@@ -1,4 +1,4 @@
-# rule-mcp-toolchain-eslint - best-practice implementation plan
+# rule-toolchain-eslint - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,7 +9,7 @@ Area: toolchain. Order: reverse alphabetical, ninth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-toolchain-eslint/SKILL.md`: flat-config-only framing, a minimal
+- `skills/rule-toolchain-eslint/SKILL.md`: flat-config-only framing, a minimal
   Unicorn config, a TypeScript and React setup, the Unicorn preset table, the
   high-value rule table, the controversial-rule table, incremental adoption,
   `FlatCompat`, a legacy `.eslintrc` block, and a Biome migration section.
@@ -140,9 +140,9 @@ Advisory first, then blocking after 100% precision and recall.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-toolchain` (HARD)
+Feeds: `rule-toolchain` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

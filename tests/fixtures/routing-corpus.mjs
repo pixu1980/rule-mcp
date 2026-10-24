@@ -9,7 +9,7 @@
  * corpus of prompts written to pass measures nothing.
  *
  * `expect` is a substring of the skill name, so "javascript" accepts
- * rule-mcp-styleguide-javascript. `area` groups near misses: landing on a
+ * rule-styleguide-javascript. `area` groups near misses: landing on a
  * sibling in the right area is a different failure from landing in devops.
  *
  * @see docs/plans/token-first-upgrade.md - Workstream L
@@ -36,7 +36,7 @@ export const CORPUS = [
 
   // ── Inflection in the name signal ──
   // "test" against the skill part "testing" was scoring half credit, so this
-  // routed to rule-mcp-ai-prompting. A different inflection of a word is the same
+  // routed to rule-ai-prompting. A different inflection of a word is the same
   // word, and the name signal now says so.
   { prompt: "how do I test my code", expect: "devops-testing", area: "devops" },
 

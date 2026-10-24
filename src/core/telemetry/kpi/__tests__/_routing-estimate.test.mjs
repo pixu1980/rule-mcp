@@ -42,7 +42,7 @@ for (const prompt of PROMPTS) {
   answers.push({ prompt, text: result.content.map((part) => part.text).join("") });
 }
 
-await callTool("rule_tool_check", { skill: "rule-mcp-styleguide-javascript", code: "export const a = 1;\n" });
+await callTool("rule_tool_check", { skill: "rule-styleguide-javascript", code: "export const a = 1;\n" });
 flush();
 
 const events = readEvents();
@@ -82,8 +82,8 @@ test("the estimate never claims more than reading the file would cost", () => {
 
 test("the estimate is positive exactly when the skill costs more than the answer", () => {
   // Measured on this corpus: a large skill is worth routing to
-  // (rule-mcp-frontend-react is ~6100 tokens against a ~1900-token answer), and a
-  // small one is not - rule-mcp-toolchain-vite is ~510 tokens while the router's
+  // (rule-frontend-react is ~6100 tokens against a ~1900-token answer), and a
+  // small one is not - rule-toolchain-vite is ~510 tokens while the router's
   // own answer, which lists every skill, is ~1400. Routing that prompt costs
   // more than reading the file. The estimate says zero, and zero is the honest
   // answer rather than a missing field.

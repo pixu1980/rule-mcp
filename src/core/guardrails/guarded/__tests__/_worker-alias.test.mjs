@@ -26,7 +26,7 @@ await import(hook);
 
 const { checkCodeGuarded, shutdownGuardrailWorker } = await import(dispatch);
 const result = await checkCodeGuarded(
-  "rule-mcp-styleguide-javascript",
+  "rule-styleguide-javascript",
   "export const add = (a, b) => a + b;",
   { fileName: "_add.js", previousPassed: [] },
   { timeoutMs: 20000 },

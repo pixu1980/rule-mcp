@@ -35,7 +35,7 @@ narrower request. The server is deterministic and never calls a model.
 `rule_tool_check` runs the guardrails for the routed skill:
 
 ```json
-rule_tool_check({ "skill": "rule-mcp-frontend-react", "code": "<the generated code>" })
+rule_tool_check({ "skill": "rule-frontend-react", "code": "<the generated code>" })
 ```
 
 Failed guardrails are blocking. `mode: "project"` runs the graph checks

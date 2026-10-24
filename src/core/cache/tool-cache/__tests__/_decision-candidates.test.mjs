@@ -21,11 +21,11 @@ test("a candidate description carries the request and skill but no hashes or hit
   const description = describeCandidate({
     key: "abcdef012345",
     prompt: "  create   a button ",
-    route: "rule-mcp-frontend-react",
+    route: "rule-frontend-react",
     deps: "abcd1234",
   });
 
-  assert.equal(description, "request: create a button; skill: rule-mcp-frontend-react");
+  assert.equal(description, "request: create a button; skill: rule-frontend-react");
   assert.ok(describeCandidate({ key: "k", prompt: "x".repeat(500) }).length <= 200);
 });
 

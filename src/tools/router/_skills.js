@@ -50,7 +50,7 @@ function getSkillMetadata(skillName) {
  * measurement comparable - their extra bodies would otherwise dilute the
  * term-document frequencies (idf) the scorer's numbers are pinned to.
  */
-const TARGET_ONLY_SKILLS = new Set(["rule-mcp-frontend-template-engine", "rule-mcp-platform-auth"]);
+const TARGET_ONLY_SKILLS = new Set(["rule-frontend-template-engine", "rule-platform-auth"]);
 
 /**
  * Every skill name that resolves, sorted.
@@ -73,7 +73,7 @@ function getSkillNames() {
   for (const entry of resolved().values()) {
     // The bare `rule-mcp` directory backs the dispatcher, which is registered by
     // code; listing it here would mint a second, per-skill tool for it.
-    if (entry.name === "rule-mcp" || (baseUniverse && TARGET_ONLY_SKILLS.has(entry.name))) {
+    if (entry.name === "rule" || (baseUniverse && TARGET_ONLY_SKILLS.has(entry.name))) {
       continue;
     }
 
@@ -117,7 +117,7 @@ function exposesTool(skillName) {
  */
 function isPluginSkill(skillName) {
   // rule-mcp is the router skill, not a plugin
-  if (skillName === "rule-mcp") {
+  if (skillName === "rule") {
     return false;
   }
 

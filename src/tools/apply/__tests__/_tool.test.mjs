@@ -33,7 +33,7 @@ function project() {
 const text = (result) => result.content.map((part) => part.text).join("\n");
 
 /** A receipt that authorizes writing exactly these files. */
-const receiptFor = (files) => issueFilesReceipt(files, "rule-mcp-styleguide-javascript", true);
+const receiptFor = (files) => issueFilesReceipt(files, "rule-styleguide-javascript", true);
 
 test("a project root that is not one is rejected before anything else", async () => {
   const files = [{ path: "src/_Probe.js", content: "export const probe = 1;\n" }];

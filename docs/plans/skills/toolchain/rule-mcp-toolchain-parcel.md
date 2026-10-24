@@ -1,4 +1,4 @@
-# rule-mcp-toolchain-parcel - best-practice implementation plan
+# rule-toolchain-parcel - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`. Family contract: `docs/plans/skills/toolchain/bundler-family.md`. This plan covers only what is Parcel-specific.
@@ -9,7 +9,7 @@ Area: toolchain. Order: reverse alphabetical, seventh skill.
 
 Read in this session:
 
-- `skills/rule-mcp-toolchain-parcel/SKILL.md`: zero-config, entry point, scripts
+- `skills/rule-toolchain-parcel/SKILL.md`: zero-config, entry point, scripts
   with `npx serve`, `.parcelrc`, features, an environment section, production
   notes, a migration table that includes webpack.
 - `docs/plans/skills/toolchain/bundler-family.md` for the shared rules.
@@ -56,7 +56,7 @@ plan anchors only to the official documentation.
 
 ### The `engines` conflict, resolved
 
-`rule-mcp-toolchain-pnpm` owns `pkg-no-engines`, which rejects the field in a
+`rule-toolchain-pnpm` owns `pkg-no-engines`, which rejects the field in a
 `package.json`. Parcel reads `package.json#engines` for Node targets. The
 resolution: a Parcel project expresses its browser support with `browserslist`
 and the `targets` field, and never adds `engines`. The existing rule stands and
@@ -135,7 +135,7 @@ Advisory first, then blocking after 100% precision and recall.
 | `parcel-no-client-secret-env` | a secret-looking `process.env` name read in client code                 | A    | Node emulation |
 
 Two selected candidates reuse existing rules instead of adding copies:
-"Parcel version not pinned" is `pkg-exact-versions` in `rule-mcp-toolchain-pnpm`, and
+"Parcel version not pinned" is `pkg-exact-versions` in `rule-toolchain-pnpm`, and
 "`engines` used as a Parcel target" is `pkg-no-engines` in the same skill. The
 family rules own env exposure, dev host, target, IO, source maps and pinned
 dependencies.
@@ -152,9 +152,9 @@ dependencies.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-toolchain` (HARD)
+Feeds: `rule-toolchain` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

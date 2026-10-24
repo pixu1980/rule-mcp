@@ -57,7 +57,7 @@ not in `.gitignore`; deliberately not staged).
 | 064         | One global shim; hermetic PNPM_HOME in script tests                                                                        |
 | 063         | Plans carry nested sub-steps + exhaustiveness mandate                                                                      |
 | 062         | Persona plans are checklists; executed marks survive sync                                                                  |
-| 058         | Command surface restructure: /rule router, rule-area-*, compression implicit, rule-mcp-process-tdd                         |
+| 058         | Command surface restructure: /rule router, rule-area-*, compression implicit, rule-process-tdd                             |
 | 057         | Review personas split into per-operation commands (plan/audit/review)                                                      |
 | 056         | Gateway as single entrypoint with server-side receipts                                                                     |
 | 049         | v1.0.0 release + docs-accuracy guard (NOTE: release retargeted to v0.1.0-beta this session; ADR 049 predates the retarget) |

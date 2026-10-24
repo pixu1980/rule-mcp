@@ -3,7 +3,7 @@
  *
  * One MCP/slash prompt per area hub, built from the area mapping.
  *
- * The hub skill owns its area's command: `/rule-area-frontend` IS `rule-mcp-frontend`.
+ * The hub skill owns its area's command: `/rule-area-frontend` IS `rule-frontend`.
  * Leaf skills keep their tools; the hub routes to them from free text (ADR 117).
  */
 

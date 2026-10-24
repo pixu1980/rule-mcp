@@ -59,7 +59,7 @@ export function syncCommandTargets(opts) {
     // Remove sweeps the whole `rule-mcp` namespace in the target dir, so names that
     // left the registry (a rename, a deletion) are purged too instead of
     // lingering as stale commands next to the new set. The separator matters:
-    // the root command is `rule.md`, not `rule-mcp-something.md`, and a bare `rule-mcp-`
+    // the root command is `rule.md`, not `rule-mcp-something.md`, and a bare `rule-`
     // prefix left it behind on every uninstall.
     if (opts.remove) {
       // A detected agent does not always have its command directory yet -

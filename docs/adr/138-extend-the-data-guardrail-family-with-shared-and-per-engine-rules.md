@@ -7,11 +7,11 @@
 
 ## Context
 
-Eight rule-mcp-data skills exist and only rule-mcp-data owns guardrails: connection-pool, migration-safety, parameterized-queries and transaction-safety, inherited by the seven children. The engines add concerns none of the four covers: PostgreSQL does not auto-index foreign keys, MongoDB cursors need a projection and an ESR-ordered compound index, SQLite needs WAL and a busy timeout, and application queries should not use SELECT star or run without a limit or a statement timeout.
+Eight rule-data skills exist and only rule-data owns guardrails: connection-pool, migration-safety, parameterized-queries and transaction-safety, inherited by the seven children. The engines add concerns none of the four covers: PostgreSQL does not auto-index foreign keys, MongoDB cursors need a projection and an ESR-ordered compound index, SQLite needs WAL and a busy timeout, and application queries should not use SELECT star or run without a limit or a statement timeout.
 
 ## Decision
 
-Add nine rules split by owner: shared in rule-mcp-data (no-select-star, query-limit, query-timeout, db-least-privilege, migration-down), in rule-mcp-data-postgresql (index-on-fk), in rule-mcp-data-mongodb (mongo-projection, mongo-esr-index) and in rule-mcp-data-sqlite (sqlite-wal). Rules ship advisory and are promoted to blocking after the corpus gate reports full precision and recall. Two questions stay open: the MySQL reference manual is unreachable from this environment, and the ownership table for each rule needs confirmation.
+Add nine rules split by owner: shared in rule-data (no-select-star, query-limit, query-timeout, db-least-privilege, migration-down), in rule-data-postgresql (index-on-fk), in rule-data-mongodb (mongo-projection, mongo-esr-index) and in rule-data-sqlite (sqlite-wal). Rules ship advisory and are promoted to blocking after the corpus gate reports full precision and recall. Two questions stay open: the MySQL reference manual is unreachable from this environment, and the ownership table for each rule needs confirmation.
 
 ## Consequences
 
@@ -24,5 +24,5 @@ The assumption this leans on, and the observation that would make it wrong.
 ## Alternatives Considered
 
 1. Only tighten the four existing rules and add no id
-1. Put every rule in rule-mcp-data and give the engine skills no guardrails of their own
+1. Put every rule in rule-data and give the engine skills no guardrails of their own
 1. Add the MySQL-specific rules without a verified source

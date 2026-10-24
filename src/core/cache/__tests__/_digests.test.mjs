@@ -10,7 +10,7 @@ test("a skill has a stable content digest", () => {
 
   assert.match(digest, /^[0-9a-f]{16,64}$/, "a hex digest");
   assert.equal(digest, skillDigest(REAL_SKILL), "stable across calls");
-  assert.notEqual(digest, skillDigest("rule-mcp-styleguide-css"), "two skills differ");
+  assert.notEqual(digest, skillDigest("rule-styleguide-css"), "two skills differ");
 });
 
 test("an unknown skill has no digest", () => {
@@ -48,7 +48,7 @@ test("one skill changing leaves the entries that do not depend on it alone", () 
   const react = { prompt: "react button component" };
   const css = { prompt: "css selector strategy" };
   cacheStore("rule_tool", react, result("react"), { [REAL_SKILL]: "0000000000000000" });
-  cacheStore("rule_tool", css, result("css"), { "rule-mcp-styleguide-css": skillDigest("rule-mcp-styleguide-css") });
+  cacheStore("rule_tool", css, result("css"), { "rule-styleguide-css": skillDigest("rule-styleguide-css") });
 
   assert.equal(cacheLookup("rule_tool", react), undefined, "the dependent is dropped");
   assert.equal(cacheLookup("rule_tool", css)?.result.content[0].text, "css", "the independent survives");

@@ -71,7 +71,7 @@ test("picking areas keeps only those hubs", () => {
 });
 
 test("picking skills still keeps the hub of that area (leaves are tools, not slash)", () => {
-  const { commands } = resolveSelection({ families: ["areas"], areas: ["frontend"], skills: ["rule-mcp-frontend-react"] });
+  const { commands } = resolveSelection({ families: ["areas"], areas: ["frontend"], skills: ["rule-frontend-react"] });
 
   assert.ok(commands.includes("rule-area-frontend"), "the hub stays reachable");
   assert.ok(!commands.includes("rule-area-frontend-react"), "no leaf slash to select");

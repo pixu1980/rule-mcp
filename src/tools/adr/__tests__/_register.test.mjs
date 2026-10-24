@@ -107,7 +107,7 @@ test("auto-logging records a routed call as an informational entry", async () =>
     await autoLog(
       "rule_tool",
       { prompt: "build a react button", projectDir: root },
-      { content: [{ type: "text", text: JSON.stringify({ route: "rule-mcp-frontend-react", confidence: 0.9 }) }] },
+      { content: [{ type: "text", text: JSON.stringify({ route: "rule-frontend-react", confidence: 0.9 }) }] },
     );
 
     const [file] = adrs(root);

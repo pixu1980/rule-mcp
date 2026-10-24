@@ -7,7 +7,7 @@
 
 ## Context
 
-The project must satisfy both general test coverage expectations and the hard rule-mcp-styleguide-a11y requirement: every project must ship Playwright + @axe-core/playwright tests under `tests/a11y/`, and CI must fail on any violation.
+The project must satisfy both general test coverage expectations and the hard rule-styleguide-a11y requirement: every project must ship Playwright + @axe-core/playwright tests under `tests/a11y/`, and CI must fail on any violation.
 
 ## Decision
 
@@ -19,6 +19,6 @@ Positive: the a11y suite caught 3 real WCAG AA color-contrast violations during 
 
 ## Alternatives Considered
 
-1. Skip a11y automation and rely on manual review (rejected: explicitly forbidden by rule-mcp-styleguide-a11y, which treats this as a CI-blocking requirement)
+1. Skip a11y automation and rely on manual review (rejected: explicitly forbidden by rule-styleguide-a11y, which treats this as a CI-blocking requirement)
 1. Jest + Testing Library only, no Playwright (rejected: does not satisfy the mandated axe-core browser-level scan)
 1. End-to-end tests against the full stack including the real backend (deferred: the a11y suite intentionally only boots the frontend dev server; a future E2E suite can add the backend and real network calls)

@@ -1,7 +1,7 @@
 # Bundler family - shared contract (Vite, Rspack, Parcel)
 
 Status: `planned`
-Notes:`planned` Notes: plan only. Cross-skill plan, not tied to a single skill file. Owner when implemented: `rule-mcp-toolchain` (the router), inherited by every toolchain skill through `inherits`. Per-bundler plans: `rule-mcp-toolchain-vite` (this pass), `rule-mcp-toolchain-rspack`, `rule-mcp-toolchain-parcel`. Webpack is removed from the family entirely: no guidance, not even a migration section.
+Notes:`planned` Notes: plan only. Cross-skill plan, not tied to a single skill file. Owner when implemented: `rule-toolchain` (the router), inherited by every toolchain skill through `inherits`. Per-bundler plans: `rule-toolchain-vite` (this pass), `rule-toolchain-rspack`, `rule-toolchain-parcel`. Webpack is removed from the family entirely: no guidance, not even a migration section.
 
 ## Evidence base
 
@@ -31,7 +31,7 @@ Verified in this session:
 
 | Question     | Decision                                                                                                                     |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| Family owner | `rule-mcp-toolchain`; the bundler skills index the shared rules                                                              |
+| Family owner | `rule-toolchain`; the bundler skills index the shared rules                                                                  |
 | Shared rules | Public-variable secrets, dev-server exposure, pinned verified deps, declared target, declared entry/output, sourcemap policy |
 | Webpack      | Removed entirely                                                                                                             |
 | Plan shape   | This family document plus one specific plan per bundler                                                                      |
@@ -42,18 +42,18 @@ Verified in this session:
 Each row is one family rule, with the mechanism in each bundler. The rule is
 written once here; the bundler skills point at it.
 
-| Rule                              | Vite                                                                                        | Rspack                                                          | Parcel                                                                                             |
-| --------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| No secret in a public variable    | only `VITE_` reaches the client; never prefix a secret                                      | `EnvironmentPlugin` whitelists the names that reach the bundle  | any statically read `process.env.X` is inlined, so the name is a decision                          |
-| Dev server not exposed by default | `server.host` localhost; `host: true` needs `server.allowedHosts`                           | `devServer.host` with `devServer.allowedHosts`; never `'all'`   | the server binds all interfaces and allows CORS by default: restrict with `--host` and `--no-cors` |
-| Browser target declared           | `build.target` defaults to `baseline-widely-available`                                      | `target` defaults to `browserslist` when configured, else `web` | `browserslist` and `package.json#engines`                                                          |
-| Entry and output declared         | `build.rolldownOptions.input`, `build.outDir`, `base`                                       | `entry`, `output.path`, `output.publicPath`                     | `package.json#targets.*.source` and `distDir`                                                      |
-| Sourcemap policy                  | `build.sourcemap` defaults to false; enable where the project can store them                | `devtool` per mode, chosen deliberately                         | `--no-source-maps` / target source maps                                                            |
-| Pinned, verified deps             | indexed from `rule-mcp-toolchain-pnpm` (`pkg-exact-versions`, `verified-dependencies-only`) | same                                                            | same                                                                                               |
+| Rule                              | Vite                                                                                    | Rspack                                                          | Parcel                                                                                             |
+| --------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| No secret in a public variable    | only `VITE_` reaches the client; never prefix a secret                                  | `EnvironmentPlugin` whitelists the names that reach the bundle  | any statically read `process.env.X` is inlined, so the name is a decision                          |
+| Dev server not exposed by default | `server.host` localhost; `host: true` needs `server.allowedHosts`                       | `devServer.host` with `devServer.allowedHosts`; never `'all'`   | the server binds all interfaces and allows CORS by default: restrict with `--host` and `--no-cors` |
+| Browser target declared           | `build.target` defaults to `baseline-widely-available`                                  | `target` defaults to `browserslist` when configured, else `web` | `browserslist` and `package.json#engines`                                                          |
+| Entry and output declared         | `build.rolldownOptions.input`, `build.outDir`, `base`                                   | `entry`, `output.path`, `output.publicPath`                     | `package.json#targets.*.source` and `distDir`                                                      |
+| Sourcemap policy                  | `build.sourcemap` defaults to false; enable where the project can store them            | `devtool` per mode, chosen deliberately                         | `--no-source-maps` / target source maps                                                            |
+| Pinned, verified deps             | indexed from `rule-toolchain-pnpm` (`pkg-exact-versions`, `verified-dependencies-only`) | same                                                            | same                                                                                               |
 
 ## Proposed family guardrails
 
-Owned by `rule-mcp-toolchain`, inherited by the bundler skills. Advisory first, then
+Owned by `rule-toolchain`, inherited by the bundler skills. Advisory first, then
 blocking after 100% precision and recall.
 
 | Rule id                    | Rejects                                                                                           | Tier | Source                                                    |
@@ -68,9 +68,9 @@ blocking after 100% precision and recall.
 
 A cross-skill contract: the three bundler leaves inherit it and it depends on nothing but the prose rules.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-toolchain-vite`, `rule-mcp-toolchain-rspack`, `rule-mcp-toolchain-parcel` (HARD)
+Feeds: `rule-toolchain-vite`, `rule-toolchain-rspack`, `rule-toolchain-parcel` (HARD)
 
 Shared files: tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -81,9 +81,9 @@ The family cannot be implemented before its owner exists in the plan order.
 - [x] Verify the bundler facts and the shared mechanisms.
 - [x] Interview the owner and record the decisions.
 - [x] Write the family contract.
-- [ ] When `rule-mcp-toolchain` (skill 14) is planned, move this contract into its
+- [ ] When `rule-toolchain` (skill 14) is planned, move this contract into its
       plan and wire `inherits` for the toolchain skills.
-- [ ] Implement the family guardrails in `rule-mcp-toolchain`.
+- [ ] Implement the family guardrails in `rule-toolchain`.
 - [ ] Confirm each bundler plan points here instead of restating a row.
 
 ## Model assignment

@@ -13,7 +13,7 @@
  *   - comments and identifiers with non-English content are flagged, English
  *     ones pass;
  *   - a generated markdown document is checked as whole-prose in docs mode;
- *   - the rule-mcp-process-ai skill exists, is routed, and its advertised
+ *   - the rule-process-ai skill exists, is routed, and its advertised
  *     US/UK pairs are exactly the ones the fingerprint dictionary catches
  *     (no drift between what a skill tells a model and what the gate blocks);
  *   - every shared prompt/command surface carries the mandate.

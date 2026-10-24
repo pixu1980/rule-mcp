@@ -84,7 +84,7 @@ let sessionId;
   sessionId = res.headers.get("mcp-session-id");
   check("T2 initialize -> 200", res.status === 200);
   check("T2.1 initialize returns Mcp-Session-Id", !!sessionId);
-  check("T2.2 initialize result has serverInfo", body?.result?.serverInfo?.name === "rule-mcp");
+  check("T2.2 initialize result has serverInfo", body?.result?.serverInfo?.name === "rule");
 }
 
 // ── T3: a non-initialize request without a session id is rejected ──

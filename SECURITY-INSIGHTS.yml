@@ -9,13 +9,13 @@ header:
     form; those files stay the human-readable source of truth.
 
 project:
-  name: rule-mcp
+  name: rule
   administrators:
     - name: pixu1980
       email: pisuemiliano.1980@gmail.com
       primary: true
   repositories:
-    - name: rule-mcp
+    - name: rule
       url: https://github.com/pixu1980/rule
   vulnerability-reporting:
     reports-accepted: true

@@ -1,4 +1,4 @@
-# 055: Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-mcp-process-tdd skill
+# 055: Restructure the command surface: /rule router, rule-area-*, compression implicit, rule-process-tdd skill
 
 - **Date**: 2026-09-05
 - **Status**: accepted
@@ -7,15 +7,15 @@
 
 ## Context
 
-While completing the persona split (ADR 045), the user asked for a second, larger surface restructure: the /rule router becomes /rule; area prompts move under /rule-area-* ; the standalone `/rule-compression` command is removed and compression becomes implicit in every other command; /rule-mcp-code-review is superseded by the persona review commands (then `rule-mcp-review-*`, later `rule-persona-*-review` per ADR 113); the legacy one-shots /rule-mcp-a11y-audit, /rule-mcp-new-feature, /rule-mcp-pull-request, /rule-mcp-setup-project, /rule-mcp-write-tests and /rule-mcp-tdd are removed (write-tests and setup-project content merged into rule-mcp-process-tdd / rule-init); and at the time `/rule-check` was renamed toward a process-check one-shot (superseded by ADR 106 + ADR 113: `/rule-check` auto-detects, `/rule-area-*-check` per area). Deleted or renamed commands must be purged from every surface, including installers and uninstallers, and stale files removed from the local pi agent.
+While completing the persona split (ADR 045), the user asked for a second, larger surface restructure: the /rule router becomes /rule; area prompts move under /rule-area-* ; the standalone `/rule-compression` command is removed and compression becomes implicit in every other command; /rule-mcp-code-review is superseded by the persona review commands (then `rule-mcp-review-*`, later `rule-persona-*-review` per ADR 113); the legacy one-shots /rule-mcp-a11y-audit, /rule-mcp-new-feature, /rule-mcp-pull-request, /rule-mcp-setup-project, /rule-mcp-write-tests and /rule-mcp-tdd are removed (write-tests and setup-project content merged into rule-process-tdd / rule-init); and at the time `/rule-check` was renamed toward a process-check one-shot (superseded by ADR 106 + ADR 113: `/rule-check` auto-detects, `/rule-area-*-check` per area). Deleted or renamed commands must be purged from every surface, including installers and uninstallers, and stale files removed from the local pi agent.
 
 ## Decision
 
-Restructure the command surface: router rule-mcp -> rule-mcp; area prompts become rule-area-_; delete rule-mcp-a11y-audit, rule-mcp-code-review, the standalone rule-compression command, rule-mcp-new-feature, rule-mcp-pull-request, rule-mcp-setup-project, rule-mcp-write-tests and rule-mcp-tdd; create a rule-mcp-process-tdd skill that absorbs tdd + write-tests; make compression implicit in every command body (the compression *skill* later moves under process as `rule-mcp-process-compression` in ADR 113). The command set is registry-driven end to end: scripts/install-agent-commands.sh renders from the registry, agent-commands --remove and scripts/uninstall.sh sweep the rule-mcp-_ namespace, so renamed/deleted commands cannot survive in any agent.
+Restructure the command surface: router rule-mcp -> rule-mcp; area prompts become rule-area-_; delete rule-mcp-a11y-audit, rule-mcp-code-review, the standalone rule-compression command, rule-mcp-new-feature, rule-mcp-pull-request, rule-mcp-setup-project, rule-mcp-write-tests and rule-mcp-tdd; create a rule-process-tdd skill that absorbs tdd + write-tests; make compression implicit in every command body (the compression *skill* later moves under process as `rule-process-compression` in ADR 113). The command set is registry-driven end to end: scripts/install-agent-commands.sh renders from the registry, agent-commands --remove and scripts/uninstall.sh sweep the rule-mcp-_ namespace, so renamed/deleted commands cannot survive in any agent.
 
 ## Consequences
 
-Positive: one namespace per concern (rule-area-* for areas, rule-mcp-process-* for the process family incl. rule-mcp-process-tdd); compression is implicit in every command body instead of a standalone slash command; the router is a short /rule; scratch commands are gone. Negative: surface counts change and every consumer of the old names must migrate. ADR 106 and ADR 113 later remove leftover adr/process-check one-shots and fold the compression skill under process.
+Positive: one namespace per concern (rule-area-* for areas, rule-process-* for the process family incl. rule-process-tdd); compression is implicit in every command body instead of a standalone slash command; the router is a short /rule; scratch commands are gone. Negative: surface counts change and every consumer of the old names must migrate. ADR 106 and ADR 113 later remove leftover adr/process-check one-shots and fold the compression skill under process.
 
 ## What would end this
 
@@ -28,4 +28,4 @@ is reversed per-name rather than preserved.
 
 1. Keep the old names and just add the new area/review commands (leaves standalone compression and one-shot legacy commands active)
 1. Rename only the router and area prefixes, keep legacy one-shots (larger surface, more drift)
-1. Fold tdd under the existing rule-mcp-process skill instead of a dedicated rule-mcp-process-tdd skill dir
+1. Fold tdd under the existing rule-process skill instead of a dedicated rule-process-tdd skill dir

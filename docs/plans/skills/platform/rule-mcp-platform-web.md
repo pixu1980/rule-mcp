@@ -1,10 +1,10 @@
-# rule-mcp-platform-web - plan
+# rule-platform-web - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#36`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
-Area: platform. The router `rule-mcp-platform` is planned last in the area. Sibling
-plans: `rule-mcp-process-adr` and `rule-mcp-process` (same guardrail shape).
+Area: platform. The router `rule-platform` is planned last in the area. Sibling
+plans: `rule-process-adr` and `rule-process` (same guardrail shape).
 
 ## Scope decisions (owner, 2026-10-21)
 
@@ -12,7 +12,7 @@ plans: `rule-mcp-process-adr` and `rule-mcp-process` (same guardrail shape).
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | Scope of this pass | **Plan only**                                                                                                                               |
 | Identity           | A thin umbrella that delegates: the skill drops to roughly 80 lines, keeps only what nobody else owns, and points at the owner for the rest |
-| Framework chooser  | `rule-mcp-frontend` owns the choice; `rule-mcp-platform-web` links it and stops keeping a second copy                                       |
+| Framework chooser  | `rule-frontend` owns the choice; `rule-platform-web` links it and stops keeping a second copy                                               |
 | Scaffold block     | Moves into the template catalog; the skill stops carrying a project template in prose                                                       |
 | Rule set           | Six rules, all Tier B (advisory)                                                                                                            |
 | Detection          | Both: section and table parsing, plus injected `fileList`                                                                                   |
@@ -25,48 +25,48 @@ plans: `rule-mcp-process-adr` and `rule-mcp-process` (same guardrail shape).
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-platform-web/SKILL.md` is 281 lines, has no `guardrails/`, no
+`skills/rule-platform-web/SKILL.md` is 281 lines, has no `guardrails/`, no
 `references/`, no `guardrails:` frontmatter key, and one scaffold block at the
 end.
 
 ### What the body actually contains, and who owns each part
 
-| Section                              | Lines | Real owner today                                                                       |
-| ------------------------------------ | ----- | -------------------------------------------------------------------------------------- |
-| Core Rules (9 rules)                 | 9     | `rule-mcp-styleguide-css`, `rule-mcp-styleguide-html`, `rule-mcp-styleguide-file-tree` |
-| Framework Selection (6 rows)         | ~9    | `rule-mcp-frontend`                                                                    |
-| File Tree Convention                 | ~25   | `rule-mcp-styleguide-file-tree`                                                        |
-| Progressive Enhancement and PWA      | ~7    | **nobody else: keep**                                                                  |
-| Code Splitting                       | ~7    | `rule-mcp-toolchain-vite`                                                              |
-| Environment Configuration            | ~8    | `rule-mcp-styleguide-configuration`                                                    |
-| Error Handling                       | ~6    | `rule-mcp-backend` (response shape) and `rule-mcp-devops-observability`                |
-| Performance Budgets                  | ~10   | **nobody else: keep**                                                                  |
-| Security (CSP, headers)              | ~6    | `rule-mcp-frontend-*` security sections, `rule-mcp-devops-docker`                      |
-| SEO and Social                       | ~7    | **nobody else: keep**                                                                  |
-| Build and Deploy                     | ~7    | `rule-mcp-devops`, `rule-mcp-toolchain-*`                                              |
-| Accessibility                        | ~11   | `rule-mcp-styleguide-a11y`                                                             |
-| Internationalization                 | ~9    | `rule-mcp-styleguide-i18n`                                                             |
-| Browser APIs instead of a dependency | ~65   | `rule-mcp-styleguide-baseline` links here as the owner                                 |
-| Design System and CSS                | ~15   | `rule-mcp-ui-design-system`, `rule-mcp-styleguide-css`                                 |
-| Quick Reference                      | ~20   | derived from the sections above                                                        |
-| Scaffold block                       | 28    | the template catalog                                                                   |
+| Section                              | Lines | Real owner today                                                           |
+| ------------------------------------ | ----- | -------------------------------------------------------------------------- |
+| Core Rules (9 rules)                 | 9     | `rule-styleguide-css`, `rule-styleguide-html`, `rule-styleguide-file-tree` |
+| Framework Selection (6 rows)         | ~9    | `rule-frontend`                                                            |
+| File Tree Convention                 | ~25   | `rule-styleguide-file-tree`                                                |
+| Progressive Enhancement and PWA      | ~7    | **nobody else: keep**                                                      |
+| Code Splitting                       | ~7    | `rule-toolchain-vite`                                                      |
+| Environment Configuration            | ~8    | `rule-styleguide-configuration`                                            |
+| Error Handling                       | ~6    | `rule-backend` (response shape) and `rule-devops-observability`            |
+| Performance Budgets                  | ~10   | **nobody else: keep**                                                      |
+| Security (CSP, headers)              | ~6    | `rule-frontend-*` security sections, `rule-devops-docker`                  |
+| SEO and Social                       | ~7    | **nobody else: keep**                                                      |
+| Build and Deploy                     | ~7    | `rule-devops`, `rule-toolchain-*`                                          |
+| Accessibility                        | ~11   | `rule-styleguide-a11y`                                                     |
+| Internationalization                 | ~9    | `rule-styleguide-i18n`                                                     |
+| Browser APIs instead of a dependency | ~65   | `rule-styleguide-baseline` links here as the owner                         |
+| Design System and CSS                | ~15   | `rule-ui-design-system`, `rule-styleguide-css`                             |
+| Quick Reference                      | ~20   | derived from the sections above                                            |
+| Scaffold block                       | 28    | the template catalog                                                       |
 
 Two sections are genuinely unique to this skill: the performance budgets table
 and the PWA/offline rules. The browser-API catalog is the third, and
-`rule-mcp-styleguide-baseline` already defers to it.
+`rule-styleguide-baseline` already defers to it.
 
 ### The framework chooser exists twice
 
-`rule-mcp-platform-web` (lines 38-46) and `rule-mcp-frontend` (lines 24-29) both hold a
-six-row "choose one framework" table, plus `rule-mcp-frontend` a six-line Quick
+`rule-platform-web` (lines 38-46) and `rule-frontend` (lines 24-29) both hold a
+six-row "choose one framework" table, plus `rule-frontend` a six-line Quick
 Selection for the same decision. Same six skills, different wording. One of the
-two is redundant, and the owner picked `rule-mcp-frontend` as the survivor.
+two is redundant, and the owner picked `rule-frontend` as the survivor.
 
 ### The scaffold block is not consumed
 
 `src/core/scaffold/_parser.js` extracts the block that starts at
 `## Project Scaffolding`. The heading here is `# Scaffolding: Frontend Project
-Structure`, and `rule-mcp-frontend-react` does the same with `# Scaffolding: React
+Structure`, and `rule-frontend-react` does the same with `# Scaffolding: React
 Project Setup`, so neither block reaches the parser. The template catalog
 (`src/core/scaffold/templates/`) exposes `listTemplateCategories()` and
 `getTemplate(component, framework)`: it is component-shaped, so a project
@@ -82,9 +82,9 @@ skills. The plan scopes it to this skill, and records the rest as a follow-up.
 
 ### Reach
 
-Eight skills link here: `rule-mcp-devops-observability`, `rule-mcp-frontend-workers`,
-`rule-mcp-meta`, `rule-mcp-platform-desktop`, `rule-mcp-styleguide-baseline`, `rule-mcp-platform`
-(the router), the dispatcher, and `rule-mcp-ui`'s table. The router row describes it
+Eight skills link here: `rule-devops-observability`, `rule-frontend-workers`,
+`rule-meta`, `rule-platform-desktop`, `rule-styleguide-baseline`, `rule-platform`
+(the router), the dispatcher, and `rule-ui`'s table. The router row describes it
 as "PWA, service workers, offline, performance budgets", which is closer to the
 intended identity than the skill's own 281 lines are.
 
@@ -100,15 +100,15 @@ The skill keeps, and owns:
 4. SEO and social metadata, which nothing else claims.
 
 Everything else becomes one line with the owner's link. The nine Core Rules
-collapse to a pointer at `rule-mcp-styleguide-css` and `rule-mcp-styleguide-html`; the
-framework table becomes a pointer at `rule-mcp-frontend`.
+collapse to a pointer at `rule-styleguide-css` and `rule-styleguide-html`; the
+framework table becomes a pointer at `rule-frontend`.
 
 ## The six rules
 
 | id                                 | Rejects                                                                           | Reads                       | Tier | Today                                                          |
 | ---------------------------------- | --------------------------------------------------------------------------------- | --------------------------- | ---- | -------------------------------------------------------------- |
-| `platform-no-second-chooser`       | A framework-selection table outside `rule-mcp-frontend`                           | `code` (tables)             | B    | red: this skill holds one                                      |
-| `platform-scaffold-heading`        | A scaffold block whose heading the parser cannot read                             | `code` (headings)           | B    | red here and in `rule-mcp-frontend-react`                      |
+| `platform-no-second-chooser`       | A framework-selection table outside `rule-frontend`                               | `code` (tables)             | B    | red: this skill holds one                                      |
+| `platform-scaffold-heading`        | A scaffold block whose heading the parser cannot read                             | `code` (headings)           | B    | red here and in `rule-frontend-react`                          |
 | `platform-no-stale-skill-id`       | An `rule-mcp-...` id in prose that matches no skill directory                     | `code` + `context.fileList` | B    | clean: 7 of 7 ids resolve                                      |
 | `platform-owner-named`             | A delegating section that names no owner                                          | `code`                      | B    | red: the 281 lines name owners in five places and nowhere else |
 | `platform-budget-single-source`    | The performance numbers restated outside the budget table                         | `code`                      | B    | clean today; the duplication risk arrives with the trim        |
@@ -116,8 +116,8 @@ framework table becomes a pointer at `rule-mcp-frontend`.
 
 ## Phase 0 - Decisions
 
-- [ ] ADR: the umbrella boundary. `rule-mcp-frontend` owns the framework choice,
-      `rule-mcp-styleguide-*` own the markup and CSS rules, the umbrella owns the
+- [ ] ADR: the umbrella boundary. `rule-frontend` owns the framework choice,
+      `rule-styleguide-*` own the markup and CSS rules, the umbrella owns the
       three web-platform topics.
 - [ ] ADR: the rule design, Tier B, dual detection.
 
@@ -127,21 +127,21 @@ framework table becomes a pointer at `rule-mcp-frontend`.
       `bad-scaffold-heading/`, `stale-skill-id/`, `unnamed-owner/`, each with a
       one-line `README.md` stating what it proves.
 - [ ] Six `CORPUS` pairs in `tests/fixtures/guardrail-corpus.mjs` bound to
-      `rule-mcp-platform-web`.
+      `rule-platform-web`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ## Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-platform-web/guardrails/`: six rule files plus `index.js`.
+- [ ] `skills/rule-platform-web/guardrails/`: six rule files plus `index.js`.
 - [ ] `guardrails: [...]` frontmatter, ids equal to the exports.
 - [ ] Green the Phase 1 suites; the catalog scan reports only the known
       duplication in the other eight skills.
 
 ## Phase 3 - Trim to the umbrella
 
-- [ ] Delete the framework table and link `rule-mcp-frontend`.
+- [ ] Delete the framework table and link `rule-frontend`.
 - [ ] Collapse Core Rules to one pointer line naming
-      `rule-mcp-styleguide-css` and `rule-mcp-styleguide-html`.
+      `rule-styleguide-css` and `rule-styleguide-html`.
 - [ ] Replace the sections in the ownership table with one line each, owner
       named.
 - [ ] Keep and sharpen: budgets, PWA and offline, browser APIs, SEO.
@@ -152,22 +152,22 @@ framework table becomes a pointer at `rule-mcp-frontend`.
 
 - [ ] A project-skeleton template in `src/core/scaffold/templates/` beside the
       component lookup, consumed by the init flow.
-- [ ] `rule-mcp-frontend-react` moves its `# Scaffolding:` block the same way, or
+- [ ] `rule-frontend-react` moves its `# Scaffolding:` block the same way, or
       the heading rule keeps flagging it.
 - [ ] `platform-scaffold-heading` passes on the catalog.
 
 ## Phase 5 - Neighbors
 
-- [ ] `rule-mcp-frontend` gains the sentence that it owns the choice, and the
+- [ ] `rule-frontend` gains the sentence that it owns the choice, and the
       umbrella stops advertising it.
 - [ ] The eight linking skills keep a valid target: check each link and each
       sentence describing this skill.
-- [ ] `rule-mcp-platform` router row matches the new identity (it already describes
+- [ ] `rule-platform` router row matches the new identity (it already describes
       the shorter skill better than the body does).
 
 ## Phase 6 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-platform-web/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-platform-web/guardrails/`
 - [ ] `_corpus` and `_routing-corpus` suites.
 - [ ] Catalog scan with the six rules: only the documented duplication remains.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
@@ -191,7 +191,7 @@ Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for author
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-platform-web/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-platform-web/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
 pnpm census && pnpm census:check
@@ -202,9 +202,9 @@ pnpm lint
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-platform` (HARD)
+Feeds: `rule-platform` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

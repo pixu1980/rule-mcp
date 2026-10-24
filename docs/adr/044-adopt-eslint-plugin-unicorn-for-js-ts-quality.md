@@ -11,7 +11,7 @@ The OpenReplay article on eslint-plugin-unicorn: ESLint 10 removed the .eslintrc
 
 ## Decision
 
-Update rule-mcp-toolchain-eslint to ESLint 10 flat config + eslint-plugin-unicorn (preset and high-value rules, keep/warn/disable table for opinionated rules, incremental adoption strategy, pairing with @typescript-eslint/recommended-type-checked). Add modern idioms (Set.has, for...of, node: protocol, replaceAll, flatMap, new for builtins, ternary) to rule-mcp-styleguide-javascript. Add 7 deterministic JS/TS guardrails (js-throw-new-error, js-new-for-builtins, js-array-flat-map, js-prefer-set-has, js-node-protocol, js-prefer-replace-all, js-no-array-for-each) to JS_GUARDRAILS, applied to all JS frameworks. Opinionated rules remain documented as tunable, not enforced.
+Update rule-toolchain-eslint to ESLint 10 flat config + eslint-plugin-unicorn (preset and high-value rules, keep/warn/disable table for opinionated rules, incremental adoption strategy, pairing with @typescript-eslint/recommended-type-checked). Add modern idioms (Set.has, for...of, node: protocol, replaceAll, flatMap, new for builtins, ternary) to rule-styleguide-javascript. Add 7 deterministic JS/TS guardrails (js-throw-new-error, js-new-for-builtins, js-array-flat-map, js-prefer-set-has, js-node-protocol, js-prefer-replace-all, js-no-array-for-each) to JS_GUARDRAILS, applied to all JS frameworks. Opinionated rules remain documented as tunable, not enforced.
 
 ## Consequences
 
@@ -21,4 +21,4 @@ ESLint tooling is aligned with ESLint 10 and flat config; code validated by rule
 
 1. Also migrate the repo's internal tooling to ESLint 10 + unicorn (deferred: broad impact on lint:fix and config)
 1. Only add non-controversial rules without touching the styleguide skills
-1. Create a separate rule-mcp-toolchain-unicorn skill (avoided: the article treats it as part of ESLint)
+1. Create a separate rule-toolchain-unicorn skill (avoided: the article treats it as part of ESLint)

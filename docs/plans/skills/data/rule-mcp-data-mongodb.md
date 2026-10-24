@@ -1,11 +1,11 @@
-# rule-mcp-data-mongodb - plan
+# rule-data-mongodb - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#67`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: data, leaf. **735 lines**, one file, no auxiliary folders. Siblings:
-`rule-mcp-data-sql`, `rule-mcp-data-postgresql`, `rule-mcp-data-mysql`, `rule-mcp-data-sqlite`,
-`rule-mcp-data-duckdb`, `rule-mcp-data-indexed-db`, `rule-mcp-data-validation`, `rule-mcp-data`.
+`rule-data-sql`, `rule-data-postgresql`, `rule-data-mysql`, `rule-data-sqlite`,
+`rule-data-duckdb`, `rule-data-indexed-db`, `rule-data-validation`, `rule-data`.
 
 ## Evidence base (measured 2026-10-21)
 
@@ -13,7 +13,7 @@ Title: "MongoDB 7+". Shape: table of contents, schema design patterns (embedding
 vs referencing, a decision matrix, polymorphic schemas, time-series), CRUD
 scripts, indexes, aggregation, transactions, replication, performance.
 
-`inherits: [rule-mcp-data]`: the four area rules reach it, including
+`inherits: [rule-data]`: the four area rules reach it, including
 `transaction-safety` and `connection-pool`, which matter more here than the
 relational leaves assume (MongoDB transactions are opt-in and pools are the
 normal failure mode).
@@ -50,9 +50,9 @@ What it states and nothing checks:
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD), `rule-mcp-data-sql` (ORDER)
+Depends on: `rule-process-ai` (HARD), `rule-data-sql` (ORDER)
 
-Feeds: `rule-mcp-data` (HARD)
+Feeds: `rule-data` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -67,13 +67,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] `tests/fixtures/data-mongodb/`: `clean/`, `unbounded-array/`,
       `unindexed-query/`, `operator-injection/`, each with a one-line
       `README.md`.
-- [ ] Six `CORPUS` pairs bound to `rule-mcp-data-mongodb`.
+- [ ] Six `CORPUS` pairs bound to `rule-data-mongodb`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ### Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-data-mongodb/guardrails/`: six rule files plus `index.js`.
-- [ ] `guardrails:` frontmatter lists them; `inherits: [rule-mcp-data]` stays.
+- [ ] `skills/rule-data-mongodb/guardrails/`: six rule files plus `index.js`.
+- [ ] `guardrails:` frontmatter lists them; `inherits: [rule-data]` stays.
 - [ ] Green the Phase 1 suites.
 
 ### Phase 3 - Trim
@@ -85,7 +85,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 ### Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-data-mongodb/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-data-mongodb/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
 
@@ -106,7 +106,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-data-mongodb/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-data-mongodb/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
 pnpm census && pnpm census:check

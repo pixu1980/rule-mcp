@@ -1,5 +1,5 @@
 /**
- * Every `rulemcp://` URI the reader answers, and the one it refuses.
+ * Every `rule://` URI the reader answers, and the one it refuses.
  *
  * The reader is one long chain of URI equality checks: each arm is its own
  * mime type and its own body shape, and nothing but a test says which arm a
@@ -38,8 +38,8 @@ async function json(uri) {
   return JSON.parse(content.text);
 }
 
-test("rulemcp://skills indexes the bundled skills with their sizes", async () => {
-  const skills = await json("rulemcp://skills");
+test("rule://skills indexes the bundled skills with their sizes", async () => {
+  const skills = await json("rule://skills");
 
   assert.ok(Array.isArray(skills), "the index is a list");
   assert.ok(skills.length > 0, "the bundled skills are found");
@@ -51,29 +51,29 @@ test("rulemcp://skills indexes the bundled skills with their sizes", async () =>
   }
 });
 
-test("rulemcp://templates lists the template categories", async () => {
-  const categories = await json("rulemcp://templates");
+test("rule://templates lists the template categories", async () => {
+  const categories = await json("rule://templates");
 
   assert.ok(categories && typeof categories === "object", "the catalog is structured");
 });
 
-test("rulemcp://ai serves the routing skill as markdown", async () => {
-  const content = await body("rulemcp://ai");
+test("rule://ai serves the routing skill as markdown", async () => {
+  const content = await body("rule://ai");
 
   assert.equal(content.mimeType, "text/markdown");
   assert.ok(content.text.length > 0, "the rule-mcp skill is bundled, so this is never empty");
 });
 
-test("rulemcp://a11y points at the guide and styleguide/persona surfaces", async () => {
-  const content = await body("rulemcp://a11y");
+test("rule://a11y points at the guide and styleguide/persona surfaces", async () => {
+  const content = await body("rule://a11y");
 
   assert.equal(content.mimeType, "text/markdown");
   assert.match(content.text, /Playwright \+ axe-core/, "it names the tooling");
-  assert.match(content.text, /rule-mcp-styleguide-a11y|rule-persona-a11y|rule-area-styleguide/, "and the a11y surface (ADR 115)");
+  assert.match(content.text, /rule-styleguide-a11y|rule-persona-a11y|rule-area-styleguide/, "and the a11y surface (ADR 115)");
 });
 
 test("the a11y test templates serve as plain text", async () => {
-  for (const uri of ["rulemcp://a11y/test-basic", "rulemcp://a11y/test-forms"]) {
+  for (const uri of ["rule://a11y/test-basic", "rule://a11y/test-forms"]) {
     const content = await body(uri);
 
     assert.equal(content.mimeType, "text/plain", `${uri}: a template is plain text`);
@@ -81,16 +81,16 @@ test("the a11y test templates serve as plain text", async () => {
   }
 });
 
-test("rulemcp://community reports the plugin skills, counted", async () => {
-  const community = await json("rulemcp://community");
+test("rule://community reports the plugin skills, counted", async () => {
+  const community = await json("rule://community");
 
   assert.ok(Array.isArray(community.plugins), "the plugins are a list");
   assert.equal(community.total, community.plugins.length, "the total matches the list");
   assert.deepEqual(community.known_community, [], "nothing is claimed about skills the server does not ship");
 });
 
-test("rulemcp://project detects this repository and suggests tools for it", async () => {
-  const project = await json("rulemcp://project");
+test("rule://project detects this repository and suggests tools for it", async () => {
+  const project = await json("rule://project");
 
   assert.ok(project.framework, "a framework is always named");
   assert.equal(project.suggested_skills.length, 1, "one skill is suggested");
@@ -99,25 +99,25 @@ test("rulemcp://project detects this repository and suggests tools for it", asyn
 });
 
 test("a skill URI serves the skill, and its summary arm truncates", async () => {
-  const full = await body("rulemcp://rule-mcp-styleguide-css");
+  const full = await body("rule://rule-styleguide-css");
   assert.equal(full.mimeType, "text/markdown");
   assert.ok(full.text.length > 0, "the skill body is served whole");
 
-  const summary = await body("rulemcp://rule-mcp-styleguide-css/summary");
-  assert.match(summary.text, /^# rule-mcp-styleguide-css \(summary\)/, "the summary is labeled as one");
+  const summary = await body("rule://rule-styleguide-css/summary");
+  assert.match(summary.text, /^# rule-styleguide-css \(summary\)/, "the summary is labeled as one");
   assert.ok(summary.text.endsWith("...\n\n...") || summary.text.endsWith("..."), "and it says it was cut");
   assert.ok(summary.text.length < full.text.length, "a summary is shorter than the skill");
 });
 
 test("an unknown section of a known skill falls through to the whole skill", async () => {
-  const section = await body("rulemcp://rule-mcp-styleguide-css/nosuchsection");
-  const full = await body("rulemcp://rule-mcp-styleguide-css");
+  const section = await body("rule://rule-styleguide-css/nosuchsection");
+  const full = await body("rule://rule-styleguide-css");
 
   assert.equal(section.text, full.text, "only `summary` is special; any other section serves the skill");
 });
 
 test("a URI nothing answers to is refused in plain text", async () => {
-  for (const uri of ["rulemcp://rule-mcp-not-a-real-skill", "rulemcp://nonsense", "not-a-uri-at-all"]) {
+  for (const uri of ["rule://rule-not-a-real-skill", "rule://nonsense", "not-a-uri-at-all"]) {
     const content = await serveResource(uri);
 
     assert.equal(content.contents[0].mimeType, "text/plain", `${uri}: a refusal is plain text`);

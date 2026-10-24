@@ -50,7 +50,7 @@ session list/map, nor delete APIs.
 ### Commands / ADR surface
 
 - `/rule-mcp-adr` **removed** from MCP prompt registry (handoff 13): duplicated
-  `rule-mcp-process-adr` / `rule_tool_process_adr`
+  `rule-process-adr` / `rule_tool_process_adr`
 - `rule_tool_process_adr` remains the ADR engine
 - No `/rule-mcp-export`, `/rule-mcp-keep`
 

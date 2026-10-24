@@ -11,9 +11,9 @@ skills:
   - "lockfile and lifecycle scripts"
   - "vendored code"
 evidenceSkills:
-  - "rule-mcp-toolchain-pnpm"
-  - "rule-mcp-process-npm-release"
-  - "rule-mcp-devops-docker"
+  - "rule-toolchain-pnpm"
+  - "rule-process-npm-release"
+  - "rule-devops-docker"
 aliases:
   - "oss-compliance"
   - "open source compliance officer"

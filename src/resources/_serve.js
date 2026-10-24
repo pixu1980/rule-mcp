@@ -1,7 +1,7 @@
 /**
  * @module resources/serve
  *
- * The way out of a `rulemcp://` read.
+ * The way out of a `rule://` read.
  *
  * A resource body is prose the server emits and the model pays for, exactly
  * like a tool result, so it goes through the same compression pass and the

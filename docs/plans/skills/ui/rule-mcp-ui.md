@@ -1,4 +1,4 @@
-# rule-mcp-ui - best-practice implementation plan
+# rule-ui - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,14 +9,14 @@ Area: ui. Order: reverse alphabetical, second skill.
 
 Read in this session:
 
-- `skills/rule-mcp-ui/SKILL.md` (74 lines): routing contract with six intents, a
+- `skills/rule-ui/SKILL.md` (74 lines): routing contract with six intents, a
   six-step required workflow, nine non-negotiable UI constraints, an
   architecture checklist, four links.
-- `skills/rule-mcp-ui-design-system/SKILL.md` (guidance owner for visual design).
-- `skills/rule-mcp-frontend/SKILL.md` (the sibling router pattern: tables by
+- `skills/rule-ui-design-system/SKILL.md` (guidance owner for visual design).
+- `skills/rule-frontend/SKILL.md` (the sibling router pattern: tables by
   category, cross-cutting section, "when the framework is over-engineering").
-- `skills/rule-mcp-styleguide-css`, `-html`, `-a11y`, `-naming` guardrail ids, which
-  own the constraints `rule-mcp-ui` currently restates.
+- `skills/rule-styleguide-css`, `-html`, `-a11y`, `-naming` guardrail ids, which
+  own the constraints `rule-ui` currently restates.
 
 Public standards verified in this session:
 
@@ -40,7 +40,7 @@ skill):
 | ----------------- | ---------------------------------------------------------------------------------------------- |
 | Role              | Router plus the shared guardrails of the UI area                                               |
 | Routing table     | Generated from the skill registry, so it cannot drift                                          |
-| Constraints       | The styleguides own them; `rule-mcp-ui` indexes them and stops restating them                  |
+| Constraints       | The styleguides own them; `rule-ui` indexes them and stops restating them                      |
 | Standards         | WCAG 2.2, ARIA APG, DTCG, Open UI, Custom Elements Everywhere, MDN                             |
 | Routing quality   | Explicit "use when" description and tags, a decision tree, `rule_tool_detect`, prompt examples |
 | Reach             | Broad, with a "See also" to the meta area without duplicating its tables                       |
@@ -53,16 +53,16 @@ skill):
 
 ## Workstream A - Route everything, own nothing
 
-1. **`rule-mcp-ui` owns router integrity, not content.** The nine constraints it
+1. **`rule-ui` owns router integrity, not content.** The nine constraints it
    restates today become an index of links: each points at the owning skill
-   (`rule-mcp-styleguide-css`, `-html`, `-a11y`, `-naming`, `rule-mcp-ui-design-system`).
+   (`rule-styleguide-css`, `-html`, `-a11y`, `-naming`, `rule-ui-design-system`).
    A rule lives in one place.
 2. **Own the shared guardrails.** The four router-integrity rules below are
-   owned by `rule-mcp-ui` and inherited by any skill that declares
-   `inherits: [rule-mcp-ui]`. No content rule moves here.
+   owned by `rule-ui` and inherited by any skill that declares
+   `inherits: [rule-ui]`. No content rule moves here.
 3. **Broad reach.** The routing contract covers the design system, the frontend
    frameworks, the meta-frameworks under "See also" (their tables stay in
-   `rule-mcp-frontend` and `rule-mcp-meta`), the UI styleguides and `rule-mcp-platform-web`.
+   `rule-frontend` and `rule-meta`), the UI styleguides and `rule-platform-web`.
 
 ## Workstream B - Generated routing table
 
@@ -91,10 +91,10 @@ The router cites the standard, it does not restate it:
 
 | Standard                               | Owner of the rule                                   |
 | -------------------------------------- | --------------------------------------------------- |
-| WCAG 2.2 and ARIA APG                  | `rule-mcp-styleguide-a11y`                          |
-| W3C DTCG Design Tokens                 | `rule-mcp-ui-design-system`                         |
+| WCAG 2.2 and ARIA APG                  | `rule-styleguide-a11y`                              |
+| W3C DTCG Design Tokens                 | `rule-ui-design-system`                             |
 | Open UI and Custom Elements Everywhere | removed with ADR 152: neither skill exists any more |
-| MDN, `<dialog>` and Popover            | `rule-mcp-styleguide-html`                          |
+| MDN, `<dialog>` and Popover            | `rule-styleguide-html`                              |
 
 ## Proposed guardrails
 
@@ -126,7 +126,7 @@ instead.
 
 The router closes after its leaves and after the shared router rules and the route-table generator are exported.
 
-Depends on: `rule-mcp-ui-design-system` (HARD), `rule-mcp-process#2` (CONTRACT), `rule-mcp-process#3` (CONTRACT)
+Depends on: `rule-ui-design-system` (HARD), `rule-process#2` (CONTRACT), `rule-process#3` (CONTRACT)
 
 Feeds:,
 

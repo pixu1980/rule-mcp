@@ -14,7 +14,7 @@ const role = {
   yearsOfExperience: 10,
   skills: ["threat modeling"],
   lenses: ["depth over breadth"],
-  evidenceSkills: ["rule-mcp-backend-security"],
+  evidenceSkills: ["rule-backend-security"],
   status: "active",
 };
 

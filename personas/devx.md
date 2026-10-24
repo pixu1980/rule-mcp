@@ -10,9 +10,9 @@ skills:
   - "lint and format pipelines"
   - "monorepo ergonomics"
 evidenceSkills:
-  - "rule-mcp-toolchain-pnpm"
-  - "rule-mcp-toolchain-eslint"
-  - "rule-mcp-styleguide-configuration"
+  - "rule-toolchain-pnpm"
+  - "rule-toolchain-eslint"
+  - "rule-styleguide-configuration"
 aliases:
   - "dx-toolchain"
   - "developer experience engineer"

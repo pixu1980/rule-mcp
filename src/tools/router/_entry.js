@@ -86,7 +86,7 @@ function dependenciesOf(name, args, result) {
   }
 
   if (entryPathOf(name) === "skill") {
-    return withDigests([`rule-mcp-${name.replace(/^rule_tool_/, "").replaceAll("_", "-")}`]);
+    return withDigests([`rule-${name.replace(/^rule_tool_/, "").replaceAll("_", "-")}`]);
   }
 
   if (name === "rule_tool_check" && typeof args?.skill === "string") {

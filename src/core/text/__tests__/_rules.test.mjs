@@ -8,9 +8,9 @@ import { check, finish } from "./_simplicity.fixture.mjs";
 console.log("=== Simplicity: guardrails ===\n");
 
 // The simplicity rules live in the skills that own them (ADR 089):
-// rule-mcp-process-ai keeps two, rule-mcp-styleguide-comments the third.
+// rule-process-ai keeps two, rule-styleguide-comments the third.
 await loadAllSkills();
-const SIMPLICITY_GUARDRAILS = [...ownedGuardrails("rule-mcp-process-ai"), ...ownedGuardrails("rule-mcp-styleguide-comments")].filter((rule) =>
+const SIMPLICITY_GUARDRAILS = [...ownedGuardrails("rule-process-ai"), ...ownedGuardrails("rule-styleguide-comments")].filter((rule) =>
   ["ai-no-speculative-audit-table", "no-future-use-code", "no-commented-out-code"].includes(rule.id),
 );
 
@@ -22,7 +22,7 @@ check(
   "T4.1 simplicity guardrails are part of the baseline",
   simplicityIds.every((id) => baselineIds.has(id)),
 );
-for (const skill of ["rule-mcp-data-postgresql", "rule-mcp-backend-express", "rule-mcp-frontend-react"]) {
+for (const skill of ["rule-data-postgresql", "rule-backend-express", "rule-frontend-react"]) {
   const ids = new Set(getGuardrails(skill).map((g) => g.id));
   check(
     `T4.2 ${skill} enforces them`,

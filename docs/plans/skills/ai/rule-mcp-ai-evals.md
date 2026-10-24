@@ -1,11 +1,11 @@
-# rule-mcp-ai-evals - plan
+# rule-ai-evals - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#81`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: ai, leaf. **247 lines**, one file, no `guardrails/`, **no dispatcher row**,
-no `inherits:`. Siblings: `rule-mcp-ai-prompting`, `rule-mcp-ai-context-engineering`,
-`rule-mcp-ai-agent-architecture`, `rule-mcp-ai`.
+no `inherits:`. Siblings: `rule-ai-prompting`, `rule-ai-context-engineering`,
+`rule-ai-agent-architecture`, `rule-ai`.
 
 ## Evidence base (measured 2026-10-21)
 
@@ -36,17 +36,17 @@ three that make an eval worth running.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-ai` (HARD)
+Feeds: `rule-ai` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 
-- [ ] Implement ADR 137: the eight `ai-*` rules in `rule-mcp-ai/guardrails`, including
+- [ ] Implement ADR 137: the eight `ai-*` rules in `rule-ai/guardrails`, including
       `ai-eval-presence`, which is this leaf's floor.
-- [ ] The four children declare `inherits: [rule-mcp-ai]` (ADR 137's open question).
+- [ ] The four children declare `inherits: [rule-ai]` (ADR 137's open question).
 - [ ] ADR: the AI family shape, superseding the proposed status of 137.
 
 ### Phase 1 - Fixtures first (red)
@@ -54,25 +54,25 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] `tests/fixtures/ai-evals/`: `clean/`, `no-error-analysis/`,
       `uncalibrated-judge/`, `multi-mode-scale/`, each with a one-line
       `README.md`.
-- [ ] Four `CORPUS` pairs bound to `rule-mcp-ai-evals`.
+- [ ] Four `CORPUS` pairs bound to `rule-ai-evals`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ### Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-ai-evals/guardrails/`: four rule files plus `index.js`.
-- [ ] `guardrails:` and `inherits: [rule-mcp-ai]` in the frontmatter.
+- [ ] `skills/rule-ai-evals/guardrails/`: four rule files plus `index.js`.
+- [ ] `guardrails:` and `inherits: [rule-ai]` in the frontmatter.
 - [ ] Green the Phase 1 suites.
 
 ### Phase 3 - Door and neighbors
 
 - [ ] `rule-mcp` dispatcher row.
-- [ ] The telemetry it assumes points at `rule-mcp-devops-observability`, which owns
+- [ ] The telemetry it assumes points at `rule-devops-observability`, which owns
       spans and cost per session: the two skills describe the same trace from
       different ends and neither links the other.
 
 ### Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-ai-evals/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-ai-evals/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
 

@@ -17,7 +17,7 @@ const seed = (dir, name) => {
 };
 
 test("the copied names are the catalog plus the generated persona skills", () => {
-  assert.ok(catalogSkillNames().includes("rule-mcp-data-sqlite"), "a catalog skill is a copied name");
+  assert.ok(catalogSkillNames().includes("rule-data-sqlite"), "a catalog skill is a copied name");
   assert.ok(personaSkillNames().includes("rule-persona-security"), "a generated persona skill is a copied name");
 });
 

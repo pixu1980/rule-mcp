@@ -1,7 +1,7 @@
-# rule-mcp-process-npm-release - best-practice implementation plan
+# rule-process-npm-release - best-practice implementation plan
 
 Status: `planned`
-Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`. Order: `docs/plans/skills/DEPENDENCIES.md`, after `rule-mcp-process-ai`.
+Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`. Order: `docs/plans/skills/DEPENDENCIES.md`, after `rule-process-ai`.
 
 Area: process. Order: reverse alphabetical, twenty-ninth skill.
 
@@ -9,12 +9,12 @@ Area: process. Order: reverse alphabetical, twenty-ninth skill.
 
 Read and measured in this session:
 
-- `skills/rule-mcp-process-npm-release/SKILL.md`: 320 lines, eighth longest in the catalog. Sections: how to run this skill, the fact gathering step, the manual settings step, the repo changes step (five sub-steps, one of them a 70-line YAML template), not yet published packages, monorepo specifics, how to release now, fewer dependencies, a final checklist of eight items, see also.
-- `skills/rule-mcp-process-npm-release/guardrails/`: absent. The skill owns no rule at all.
+- `skills/rule-process-npm-release/SKILL.md`: 320 lines, eighth longest in the catalog. Sections: how to run this skill, the fact gathering step, the manual settings step, the repo changes step (five sub-steps, one of them a 70-line YAML template), not yet published packages, monorepo specifics, how to release now, fewer dependencies, a final checklist of eight items, see also.
+- `skills/rule-process-npm-release/guardrails/`: absent. The skill owns no rule at all.
 - Twelve statements in the body are checkable against a file the project owns: tag trigger, `npm stage publish`, no `NPM_TOKEN`, SHA-pinned actions, `--ignore-scripts`, `id-token` confined to the publish job, no install or cache in that job, build in its own job, `persist-credentials: false`, `contents: read`, cooldown config, dependency `ignore-scripts`. The remaining statements live on npmjs.com and github.com and no rule can read them.
 - `tests/docs/action-pins.test.mjs`, `tests/docs/npmrc.test.mjs`, `tests/docs/version-sync.test.mjs`, `tests/docs/server-json.test.mjs`: four existing tests in this repository that enforce exactly the kind of rule this skill only describes. They are the prior art, not a new idea.
 - `package.json`: no YAML dependency. The guardrail engine is regex and hand-rolled scanning, which is why the publish-job isolation check needs a worklist and not a `yaml.parse` call.
-- `skills/rule-mcp-toolchain-pnpm/guardrails/`: owns `pkg-exact-versions`, `pkg-no-corepack` and `pkg-no-engines`, so package-manager configuration already has an owner.
+- `skills/rule-toolchain-pnpm/guardrails/`: owns `pkg-exact-versions`, `pkg-no-corepack` and `pkg-no-engines`, so package-manager configuration already has an owner.
 - `personas/oss.md`, `personas/supply-chain.md`, `personas/devops.md`: three personas carry this skill as evidence, so a change here reaches three review paths.
 
 Problems found:
@@ -36,7 +36,7 @@ Problems found:
 | Shape           | The body drops to about 150 lines; the workflow template and the manual settings move to `references/` |
 | Rule set        | Eight rules: the structural set, not the minimum and not the full twelve                               |
 | YAML parsing    | A shared `_workflow.js` helper reads jobs and steps by indentation and is tested on its own            |
-| Cooldown        | Moves to `rule-mcp-toolchain-pnpm` beside `pkg-*`; this skill keeps the reason and a link              |
+| Cooldown        | Moves to `rule-toolchain-pnpm` beside `pkg-*`; this skill keeps the reason and a link                  |
 | Severity        | Four security rules block, the other four are advisory                                                 |
 | Manual settings | `references/manual-settings.md`, out of the body but still in the skill                                |
 | Delivery        | Plan only                                                                                              |
@@ -52,7 +52,7 @@ and a closing table that says which rule enforces what. Everything else leaves:
 | ------------------------------------- | ---------------------------------------------------------------------- |
 | The 70-line workflow template         | `references/publish-workflow.md`                                       |
 | The manual settings checklist         | `references/manual-settings.md`                                        |
-| The cooldown snippets                 | `rule-mcp-toolchain-pnpm`, with a one-line link here                   |
+| The cooldown snippets                 | `rule-toolchain-pnpm`, with a one-line link here                       |
 | The four `--ignore-scripts` arguments | one sentence, because the rule enforces it                             |
 | The eight-item final checklist        | the rule table (what a rule enforces) plus two items a rule cannot see |
 | The zizmor command                    | `references/publish-workflow.md`, beside the workflow it lints         |
@@ -63,7 +63,7 @@ that finds no claim without a home.
 
 ## Workstream B - The workflow helper
 
-`skills/rule-mcp-process-npm-release/guardrails/_workflow.js`, one module shared by three rules:
+`skills/rule-process-npm-release/guardrails/_workflow.js`, one module shared by three rules:
 
 - split a workflow file into jobs by top-level keys under `jobs:`;
 - split a job into steps, each with its own `with:`, `run:` and `uses:` lines;
@@ -99,7 +99,7 @@ Advisory because each has a legitimate exception: a workflow triggered by `workf
 
 ## Workstream E - The cooldown moves
 
-`rule-mcp-toolchain-pnpm` gains one rule beside `pkg-exact-versions`: a project with a lockfile must set the cooldown for the manager it uses (`.npmrc` `min-release-age`, pnpm `minimumReleaseAge` in seconds, yarn `npmMinimalAgeGate`, bun `minimumReleaseAge` in `bunfig.toml`), and the value must be at least the documented floor. This plan does not write it; it records the requirement and the boundary so the pnpm plan does not have to rediscover it.
+`rule-toolchain-pnpm` gains one rule beside `pkg-exact-versions`: a project with a lockfile must set the cooldown for the manager it uses (`.npmrc` `min-release-age`, pnpm `minimumReleaseAge` in seconds, yarn `npmMinimalAgeGate`, bun `minimumReleaseAge` in `bunfig.toml`), and the value must be at least the documented floor. This plan does not write it; it records the requirement and the boundary so the pnpm plan does not have to rediscover it.
 
 ## Workstream F - The manual settings
 
@@ -126,9 +126,9 @@ Blocking first for the four that a hacked workflow can defeat; advisory for the 
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-process` (HARD)
+Feeds: `rule-process` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -164,7 +164,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 - [ ] Run the gates below.
 - [ ] Run the eight rules against this repository's own `.github/workflows/` and fix what they report, since a rule the author's own repository fails is a rule nobody will trust.
-- [ ] Hand the cooldown requirement to the `rule-mcp-toolchain-pnpm` plan.
+- [ ] Hand the cooldown requirement to the `rule-toolchain-pnpm` plan.
 
 ## Model assignment
 
@@ -183,7 +183,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-process-npm-release/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-process-npm-release/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/guardrails/__tests__/_enforcement.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/guardrails/__tests__/_false-positives.test.mjs
 node --import ./scripts/alias-hook.mjs --test tests/docs/action-pins.test.mjs
@@ -194,7 +194,7 @@ pnpm lint
 
 ## Open notes
 
-- The interview chose the structural eight, and the cooldown then left the family for `rule-mcp-toolchain-pnpm`. Eight minus one left seven, so the eighth slot went to `release-least-privilege`, which the same helper answers for free. That is an addition to the agreed set, recorded here rather than made silently.
+- The interview chose the structural eight, and the cooldown then left the family for `rule-toolchain-pnpm`. Eight minus one left seven, so the eighth slot went to `release-least-privilege`, which the same helper answers for free. That is an addition to the agreed set, recorded here rather than made silently.
 - The YAML helper is the only structural risk in this plan. A workflow written with tabs, or with a `jobs:` key nested under an anchor, is out of scope: the helper reports nothing and the rule passes. That failure mode is chosen deliberately, because a rule that blocks a legitimate workflow on a parser limitation is worse than one that misses it.
 - A rule cannot see npmjs.com or github.com, so the settings checklist stays prose. The plan keeps it in `references/` rather than deleting it, because it is the half of the job the user performs.
 - Monorepos are read as one workflow plus N packages: the rules check the workflow once, and the per-package settings remain a checklist item, since nothing in the repository names a Trusted Publisher.

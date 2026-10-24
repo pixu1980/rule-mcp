@@ -49,7 +49,7 @@ test("area and router bodies fold check intent via keywords; rule-check stays de
   assert.match(area.body, /Check intent/i);
   assert.match(area.body, /controlla/);
   assert.match(area.body, /rule_tool_check/);
-  assert.match(area.body, /rule-mcp-frontend/, "area check path binds the hub skill");
+  assert.match(area.body, /rule-frontend/, "area check path binds the hub skill");
   assert.match(area.body, /rule_tool_frontend_react|Leaf skills/, "hub lists leaf tools for routing");
 
   const router = listAgentCommands().find((c) => c.name === ROUTER_COMMAND);

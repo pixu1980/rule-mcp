@@ -7,7 +7,7 @@
 
 ## Context
 
-rule-mcp-ui-design-system and rule-mcp-styleguide-css mandate zero CSS classes, zero inline styles, and semantic HTML with `[data-part]`/`[data-*]` selectors, plus a proportional, tokenized design system (typography, spacing, radii, elevation, motion) and WCAG 2.2 AA compliance. The brief also asked for an "Apple-grade" UI with microinteractions.
+rule-ui-design-system and rule-styleguide-css mandate zero CSS classes, zero inline styles, and semantic HTML with `[data-part]`/`[data-*]` selectors, plus a proportional, tokenized design system (typography, spacing, radii, elevation, motion) and WCAG 2.2 AA compliance. The brief also asked for an "Apple-grade" UI with microinteractions.
 
 ## Decision
 
@@ -19,6 +19,6 @@ Positive: fully compliant with the mandated guardrails, verified automatically b
 
 ## Alternatives Considered
 
-1. Tailwind CSS or a component library (rejected: explicitly forbidden by rule-mcp-styleguide-css/rule-mcp-ui-design-system)
+1. Tailwind CSS or a component library (rejected: explicitly forbidden by rule-styleguide-css/rule-ui-design-system)
 1. CSS Modules with generated class names (rejected: still classes, and the skill requires adoptedStyleSheets/external CSS with element+data-part selectors)
 1. Inline styles / styled-components (rejected: zero-inline-styles is a hard guardrail)

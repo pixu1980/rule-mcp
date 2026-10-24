@@ -1,4 +1,4 @@
-# rule-mcp-styleguide-markdown - best-practice implementation plan
+# rule-styleguide-markdown - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,14 +9,14 @@ Area: styleguide. Order: reverse alphabetical, fifteenth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-styleguide-markdown/SKILL.md` (150 lines): document structure,
+- `skills/rule-styleguide-markdown/SKILL.md` (150 lines): document structure,
   headings, lists, code blocks, inline code, links, images, tables, formatting,
   tone, repo conventions, a generic validation note and a skeleton.
 - The repository tooling: `package.json` runs Prettier over `**/*.{js,mjs,json,md}`
   in `format` and `format:fix`; no markdownlint is installed.
-- `skills/rule-mcp-styleguide-fingerprint/SKILL.md`,
-  `skills/rule-mcp-styleguide-english/SKILL.md`, `skills/rule-mcp-process-readme/SKILL.md`
-  and `skills/rule-mcp-process-adr/SKILL.md`, the neighboring owners.
+- `skills/rule-styleguide-fingerprint/SKILL.md`,
+  `skills/rule-styleguide-english/SKILL.md`, `skills/rule-process-readme/SKILL.md`
+  and `skills/rule-process-adr/SKILL.md`, the neighboring owners.
 
 Public sources verified in this session:
 
@@ -104,10 +104,10 @@ anchors to the specifications and the tool documentation.
 
 ## Workstream F - Boundaries
 
-- `rule-mcp-styleguide-fingerprint` owns ASCII punctuation, dashes and prose tells.
-- `rule-mcp-styleguide-english` owns American spelling and English-only prose.
-- `rule-mcp-process-readme` owns the README structure.
-- `rule-mcp-process-adr` owns the ADR template.
+- `rule-styleguide-fingerprint` owns ASCII punctuation, dashes and prose tells.
+- `rule-styleguide-english` owns American spelling and English-only prose.
+- `rule-process-readme` owns the README structure.
+- `rule-process-adr` owns the ADR template.
 - This skill owns the Markdown syntax and the document structure those owners
   write inside.
 
@@ -138,9 +138,9 @@ Trigger: `.md` files only.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-styleguide` (HARD)
+Feeds: `rule-styleguide` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

@@ -48,7 +48,7 @@ function entriesOf(dir, problems, layer) {
  * Every skill that resolves, by name, with the layer that won.
  *
  * A skill is a directory carrying a SKILL.md. The name is the directory name:
- * a custom layer is the user's namespace, so it is not held to the `rule-mcp-`
+ * a custom layer is the user's namespace, so it is not held to the `rule-`
  * prefix the bundled catalog uses.
  *
  * @param {{ cwd?: string }} [options]

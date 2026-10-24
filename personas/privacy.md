@@ -11,8 +11,8 @@ skills:
   - "retention and erasure"
   - "telemetry ethics"
 evidenceSkills:
-  - "rule-mcp-backend-security"
-    - "rule-mcp-devops-observability"
+  - "rule-backend-security"
+    - "rule-devops-observability"
 aliases:
   - "privacy engineer"
   - "compliance engineer"

@@ -1,4 +1,4 @@
-# 141: Merge the TypeScript compiler skill into rule-mcp-styleguide-typescript
+# 141: Merge the TypeScript compiler skill into rule-styleguide-typescript
 
 - **Date**: 2026-10-17
 - **Status**: accepted
@@ -7,11 +7,11 @@
 
 ## Context
 
-Two skills covered TypeScript: rule-mcp-toolchain-typescript held the compiler configuration and rule-mcp-styleguide-typescript held the code rules, and each one opened by pointing at the other. The split made the router choose between two halves of one topic and duplicated the tsconfig guidance in the toolchain index. The name rule-mcp-styleguide-typescript already existed, so the toolchain skill could not be renamed to it without a merge.
+Two skills covered TypeScript: rule-toolchain-typescript held the compiler configuration and rule-styleguide-typescript held the code rules, and each one opened by pointing at the other. The split made the router choose between two halves of one topic and duplicated the tsconfig guidance in the toolchain index. The name rule-styleguide-typescript already existed, so the toolchain skill could not be renamed to it without a merge.
 
 ## Decision
 
-Remove rule-mcp-toolchain-typescript and move its content into skills/rule-mcp-styleguide-typescript/COMPILER.md, linked from SKILL.md as the compiler half of the same skill. The four guardrails stay in rule-mcp-styleguide-typescript. The tool rule_tool_toolchain_typescript is removed, the routing corpus sends tsconfig prompts to styleguide-typescript, the tool-surface snapshot drops the entry, and the census regenerates the skill, tool and resource counts. Handoffs and ADRs keep their historical mentions unchanged.
+Remove rule-toolchain-typescript and move its content into skills/rule-styleguide-typescript/COMPILER.md, linked from SKILL.md as the compiler half of the same skill. The four guardrails stay in rule-styleguide-typescript. The tool rule_tool_toolchain_typescript is removed, the routing corpus sends tsconfig prompts to styleguide-typescript, the tool-surface snapshot drops the entry, and the census regenerates the skill, tool and resource counts. Handoffs and ADRs keep their historical mentions unchanged.
 
 ## Consequences
 
@@ -23,6 +23,6 @@ The assumption this leans on, and the observation that would make it wrong.
 
 ## Alternatives Considered
 
-1. Rename the skill to rule-mcp-styleguide-tsconfig and keep two TypeScript skills
+1. Rename the skill to rule-styleguide-tsconfig and keep two TypeScript skills
 1. Keep both skills and change only the label in the toolchain router
-1. Move the compiler configuration into rule-mcp-toolchain-project
+1. Move the compiler configuration into rule-toolchain-project

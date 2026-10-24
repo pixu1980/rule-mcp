@@ -35,7 +35,7 @@ export function surfaceAreaItems() {
   const skills = getSkillNames();
 
   return areasOfSkills(skills).map((area) => {
-    const members = skills.filter((name) => name === `rule-mcp-${area}` || name.startsWith(`rule-mcp-${area}-`));
+    const members = skills.filter((name) => name === `rule-${area}` || name.startsWith(`rule-${area}-`));
 
     return { id: area, label: `${area} (${members.length} skills)`, detail: [`The ${area} hub and its ${members.length - 1} member skills.`] };
   });

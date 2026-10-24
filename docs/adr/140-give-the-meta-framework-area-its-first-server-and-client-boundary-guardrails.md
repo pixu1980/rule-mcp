@@ -7,11 +7,11 @@
 
 ## Context
 
-Five meta-framework skills exist (rule-mcp-meta plus next, astro, nuxt and remix) and none owns a guardrail or declares inherits. The recurring failures in this area are at the server and client boundary: a public environment variable that carries a secret, a loader that serializes a secret field to the client, a render that reads the clock and breaks hydration, and a route that trusts unvalidated input.
+Five meta-framework skills exist (rule-meta plus next, astro, nuxt and remix) and none owns a guardrail or declares inherits. The recurring failures in this area are at the server and client boundary: a public environment variable that carries a secret, a loader that serializes a secret field to the client, a render that reads the clock and breaks hydration, and a route that trusts unvalidated input.
 
 ## Decision
 
-Create rule-mcp-meta/guardrails with seven rules. Tier A: meta-public-env-secret, meta-server-data-leak, hydration-safe, meta-route-validation. Tier B: meta-client-directive, astro-client-directive, meta-cache-explicit. Rules ship advisory and are promoted to blocking after the corpus gate reports full precision and recall. One question stays open: whether the four children add inherits: [rule-mcp-meta] so the shared rules reach them.
+Create rule-meta/guardrails with seven rules. Tier A: meta-public-env-secret, meta-server-data-leak, hydration-safe, meta-route-validation. Tier B: meta-client-directive, astro-client-directive, meta-cache-explicit. Rules ship advisory and are promoted to blocking after the corpus gate reports full precision and recall. One question stays open: whether the four children add inherits: [rule-meta] so the shared rules reach them.
 
 ## Consequences
 

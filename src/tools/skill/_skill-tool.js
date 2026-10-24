@@ -6,25 +6,29 @@ import { getGuardrailsReport } from "../../core/guardrails/index.js";
 import { checkMode, scaffoldMode, searchMode, summaryMode, tldrMode } from "./_skill-modes.js";
 
 /**
- * The MCP tool name a skill mints: `rule-mcp-frontend-react` serves `rule_tool_frontend_react`.
+ * The MCP tool name a skill mints: `rule-frontend-react` serves `rule_tool_frontend_react`.
  *
- * @param {string} skillName - The skill name (e.g. "rule-mcp-frontend-react" or "my-custom-rule")
+ * @param {string} skillName - The skill name (e.g. "rule-frontend-react" or "my-custom-rule")
  */
 export function toolNameForSkill(skillName) {
-  const displayName = isPluginSkill(skillName) ? skillName.replaceAll("-", "_") : skillName.replace(/^rule-mcp-/, "").replaceAll("-", "_");
+  if (skillName === "rule") {
+    return "rule_tool";
+  }
+
+  const displayName = isPluginSkill(skillName) ? skillName.replaceAll("-", "_") : skillName.replace(/^rule-/, "").replaceAll("-", "_");
 
   return `rule_tool_${displayName}`;
 }
 
 /**
  * Register a single skill as an MCP tool.
- * Supports both official rule-mcp-* skills and custom plugins.
+ * Supports both official rule-* skills and custom plugins.
  *
- * @param {string} skillName - The skill name (e.g. "rule-mcp-frontend-react" or "my-custom-rule")
+ * @param {string} skillName - The skill name (e.g. "rule-frontend-react" or "my-custom-rule")
  */
 export function registerSkillTool(skillName) {
   const displayName = toolNameForSkill(skillName).replace(/^rule_tool_/, "");
-  const isStyleguides = skillName === "rule-mcp-styleguide";
+  const isStyleguides = skillName === "rule-styleguide";
   const modes = isStyleguides ? ["full", "summary", "search", "guardrails", "check", "scaffold", "tldr"] : ["full", "summary", "search", "guardrails", "check", "tldr"];
   const SkillSchema = z.object({
     query: z.string().optional().describe("Search query (mode=search/tldr)"),

@@ -1,4 +1,4 @@
-# rule-mcp-styleguide-json - best-practice implementation plan
+# rule-styleguide-json - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,10 +9,10 @@ Area: styleguide. Order: reverse alphabetical, sixteenth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-styleguide-json/SKILL.md` (150 lines): validity, structure,
+- `skills/rule-styleguide-json/SKILL.md` (150 lines): validity, structure,
   naming, numbers and units, dates, booleans and null, the schema mindset,
   formatting, key order, examples, and a duplicated `package.json` section.
-- `skills/rule-mcp-toolchain-pnpm/SKILL.md`, the owner of `pkg-no-corepack` and
+- `skills/rule-toolchain-pnpm/SKILL.md`, the owner of `pkg-no-corepack` and
   `pkg-no-engines`.
 
 Public sources verified in this session:
@@ -48,7 +48,7 @@ Problems found:
 | ---------------- | ----------------------------------------------------------------------------------------------------- |
 | Scope            | Validity, semantics, schema, dialects, formatting, and the removal of the duplicated manifest section |
 | Boundaries       | JSON owns the format and its conventions; everything else is linked                                   |
-| Manifest section | Removed and linked to `rule-mcp-toolchain-pnpm`                                                       |
+| Manifest section | Removed and linked to `rule-toolchain-pnpm`                                                           |
 | Standards        | RFC 8259, I-JSON, JSON Schema, JCS, ECMA-404, ISO 8601 and 4217, JSON Lines, JSONC                    |
 | JSONC            | `.json` is strict; `.jsonc` is allowed for configuration files                                        |
 | Missing rules    | Duplicate keys, integers past 2^53, top-level objects, `$schema`, JSONL                               |
@@ -59,7 +59,7 @@ Problems found:
 
 ## Workstream A - Remove the duplication
 
-The `package.json` section goes. The skill links `rule-mcp-toolchain-pnpm`, which
+The `package.json` section goes. The skill links `rule-toolchain-pnpm`, which
 owns `pkg-no-corepack` and `pkg-no-engines`, and the pnpm plan already carries
 the current version line. Nothing about the manifest stays here.
 
@@ -136,9 +136,9 @@ contradict each other.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-styleguide` (HARD)
+Feeds: `rule-styleguide` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -151,7 +151,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 ### Phase 1 - Content
 
-- [ ] Remove the `package.json` section and link `rule-mcp-toolchain-pnpm`.
+- [ ] Remove the `package.json` section and link `rule-toolchain-pnpm`.
 - [ ] Add the I-JSON rules.
 - [ ] Add the `$schema` and versioning guidance.
 - [ ] Add the JSONC and JSON Lines sections with their sources.

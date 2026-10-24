@@ -100,4 +100,4 @@ See [05-env-variables.md](05-env-variables.md) for the complete reference table,
 Flex first is the default layout: `display: flex` for rows and columns.
 `display: grid` only for named template areas, subgrid, explicit item placement
 or overlap, and auto-fit/auto-fill tracks, justified with a `/* grid: why */`
-comment (see rule-mcp-styleguide-css).
+comment (see rule-styleguide-css).

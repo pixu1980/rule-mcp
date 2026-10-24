@@ -84,8 +84,8 @@ session ended by running `format:fix`, which is the workaround, not the fix.
 
 All four held at the end of the session:
 
-- `rule-mcp-styleguide-english` on the three documents: `allPass: true` (59/59 each)
-- `rule-mcp-styleguide-markdown` on the three documents: `allPass: true` (59/59 each)
+- `rule-styleguide-english` on the three documents: `allPass: true` (59/59 each)
+- `rule-styleguide-markdown` on the three documents: `allPass: true` (59/59 each)
 - `pnpm exec prettier --check` on the three documents: clean
 - `node --test tests/docs/*.test.mjs`: 20/20 pass
 

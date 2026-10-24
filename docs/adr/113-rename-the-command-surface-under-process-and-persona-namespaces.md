@@ -13,9 +13,9 @@ The slash-command surface still mixed namespaces: flight lived as a top-level on
 
 Breaking rename of the public command/skill/tool surface:
 
-1. Flight leaves the slash/prompt surface: conceptual id `rule-area-process-flight`, injected on every prompt via the session directive (ADR 114). `/rule-mcp-flight` and `/rule-mcp-process-flight` are hard-deleted.
-2. Hard-delete `/rule-mcp-adr` and `/rule-mcp-process-check`; callers use `/rule-area-process-adr` and `/rule-area-process-check`. `/rule-check` remains the auto-detecting agent command.
-3. Rename skill `rule-compression` -> `rule-mcp-process-compression` (inherits `rule-mcp-process`). Area commands become `/rule-area-process-compression[-check]`. Skill tool becomes `rule_tool_process_compression`. `rule_tool_compress` (pure text) is unchanged.
+1. Flight leaves the slash/prompt surface: conceptual id `rule-area-process-flight`, injected on every prompt via the session directive (ADR 114). `/rule-mcp-flight` and `/rule-process-flight` are hard-deleted.
+2. Hard-delete `/rule-mcp-adr` and `/rule-process-check`; callers use `/rule-area-process-adr` and `/rule-area-process-check`. `/rule-check` remains the auto-detecting agent command.
+3. Rename skill `rule-compression` -> `rule-process-compression` (inherits `rule-process`). Area commands become `/rule-area-process-compression[-check]`. Skill tool becomes `rule_tool_process_compression`. `rule_tool_compress` (pure text) is unchanged.
 4. Persona commands become `rule-persona-<role>-<operation>` (operation last). Shared helpers `personaCommandName` / `parsePersonaCommand` drive registry, MCP getPrompt, agent commands, and skills-install. Legacy `rule-mcp-{op}-{role}` persona skill dirs are purged on regenerate.
 5. `/rule-handoff`, `/rule-handon`, and `/rule-check` stay as named.
 6. No compatibility aliases. Package version bumps to `0.2.0-rc`.

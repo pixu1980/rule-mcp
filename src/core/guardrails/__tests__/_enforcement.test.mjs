@@ -80,19 +80,19 @@ for (const toolName of route.next_tools) {
 const emptyPrompt = await callTool("rule_tool", { prompt: " ".repeat(3) });
 assert.equal(emptyPrompt.isError, true, "blank routing prompt must fail closed before execution");
 
-const placeholderReport = checkCode("rule-mcp-frontend-react", "export function Demo() { /* TODO */ }");
+const placeholderReport = checkCode("rule-frontend-react", "export function Demo() { /* TODO */ }");
 assert.ok(
   placeholderReport.failed.some((item) => item.id === "ai-no-placeholder-implementation"),
   "TODO code must fail guardrails",
 );
 
-const suppressedReport = checkCode("rule-mcp-frontend-react", "// @ts-ignore\ntry { work(); } catch {}\n");
+const suppressedReport = checkCode("rule-frontend-react", "// @ts-ignore\ntry { work(); } catch {}\n");
 assert.ok(
   suppressedReport.failed.some((item) => item.id === "ai-no-suppressed-errors"),
   "suppressed errors must fail guardrails",
 );
 
-const dependencyReport = checkCode("rule-mcp-frontend-react", 'import invented from "invented-sdk";\nexport function Demo() { return invented; }', {
+const dependencyReport = checkCode("rule-frontend-react", 'import invented from "invented-sdk";\nexport function Demo() { return invented; }', {
   allowedDependencies: ["react"],
 });
 assert.ok(
@@ -101,13 +101,13 @@ assert.ok(
 );
 
 const failedCheck = await callTool("rule_tool_check", {
-  skill: "rule-mcp-frontend-react",
+  skill: "rule-frontend-react",
   code: "export function Demo() { /* TODO */ }",
 });
 assert.equal(failedCheck.isError, true, "rule_tool_check must block downstream use when guardrails fail");
 
 const dependencyCheck = await callTool("rule_tool_check", {
-  skill: "rule-mcp-frontend-react",
+  skill: "rule-frontend-react",
   code: 'import invented from "invented-sdk";\nexport function Demo() { return invented; }',
   allowedDependencies: ["react"],
 });

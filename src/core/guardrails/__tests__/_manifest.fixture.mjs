@@ -48,7 +48,7 @@ export function finish() {
 
 /** Run the manifest guardrails over one manifest body. */
 export const run = (manifest, fileName = "package.json") =>
-  checkCode("rule-mcp-toolchain-pnpm", typeof manifest === "string" ? manifest : JSON.stringify(manifest, undefined, 2), {
+  checkCode("rule-toolchain-pnpm", typeof manifest === "string" ? manifest : JSON.stringify(manifest, undefined, 2), {
     fileName,
   });
 

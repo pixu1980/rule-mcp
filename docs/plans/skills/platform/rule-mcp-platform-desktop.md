@@ -1,10 +1,10 @@
-# rule-mcp-platform-desktop - plan
+# rule-platform-desktop - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#38`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
-Area: platform. Sibling plans: `rule-mcp-platform-web`, `rule-mcp-platform-library`
-(same trim model), `rule-mcp-process-adr`, `rule-mcp-process` (same guardrail shape).
+Area: platform. Sibling plans: `rule-platform-web`, `rule-platform-library`
+(same trim model), `rule-process-adr`, `rule-process` (same guardrail shape).
 
 ## Scope decisions (owner, 2026-10-21)
 
@@ -13,7 +13,7 @@ Area: platform. Sibling plans: `rule-mcp-platform-web`, `rule-mcp-platform-libra
 | Scope of this pass | **Plan only**                                                                                                               |
 | Identity           | `SKILL.md` becomes a thin navigable umbrella; the deep material moves to `references/`                                      |
 | Aux files          | Move into `references/` **and serve them**: unserved files are the bug, not their size                                      |
-| Ghost plugins      | Become real skills: `rule-mcp-toolchain-electron` and `rule-mcp-toolchain-tauri`                                            |
+| Ghost plugins      | Become real skills: `rule-toolchain-electron` and `rule-toolchain-tauri`                                                    |
 | Similar libraries  | The owner asked which other candidates are worth evaluating; Phase 0 carries the measured shortlist and waits for a verdict |
 | Core rules         | Collapse to one pointer line at the markup and CSS owners                                                                   |
 | Rule set           | Six rules, all Tier B (advisory)                                                                                            |
@@ -27,7 +27,7 @@ Area: platform. Sibling plans: `rule-mcp-platform-web`, `rule-mcp-platform-libra
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-platform-desktop/SKILL.md` is **808 lines**, the largest skill in
+`skills/rule-platform-desktop/SKILL.md` is **808 lines**, the largest skill in
 the catalog, and the only one with a full auxiliary tree:
 
 | Folder        | Files  | Lines   |
@@ -45,18 +45,18 @@ and `readSkill()` reads one file. No tool, test or resource walks
 `checklists/`, `knowledge/`, `prompts/`, `templates/` or `references/`.
 
 Across the catalog that is **81 files and 4,535 lines** nobody can reach
-through the rule-mcp surface: five frontend skills, `rule-mcp-meta-astro`,
-`rule-mcp-styleguide-a11y` and this one. The size is not the problem; the absence of
+through the rule-mcp surface: five frontend skills, `rule-meta-astro`,
+`rule-styleguide-a11y` and this one. The size is not the problem; the absence of
 a consumer is.
 
 ### Two ghost surfaces
 
 1. **Framework plugins.** The "Supported Desktop Frameworks" table lists
-   `rule-mcp-platform-desktop/electron`, `rule-mcp-platform-desktop/tauri` and
-   `rule-mcp-platform-desktop/neutralino` as skill plugins. None exists as a skill
+   `rule-platform-desktop/electron`, `rule-platform-desktop/tauri` and
+   `rule-platform-desktop/neutralino` as skill plugins. None exists as a skill
    or as a directory. The body then documents full Tauri patterns (Rust
    commands, updater, deep links) against a plugin that is not there.
-2. **Mobile.** `rule-mcp-platform` describes itself as covering "desktop, mobile
+2. **Mobile.** `rule-platform` describes itself as covering "desktop, mobile
    (Expo), library authoring, and web" and carries an `expo` tag. There is no
    mobile skill anywhere in the catalog, and `Expo` is mentioned in 12 skills,
    the highest count of any runtime this plan measured. The router advertises a
@@ -70,9 +70,9 @@ a consumer is.
 | Tauri                   |                    1 | skill: the owner asked for it; content already exists |
 | Neutralinojs            |  1 (this skill only) | no skill: no demand beyond the roadmap line           |
 | Wails, NW.js            |                    0 | no skill: no demand at all                            |
-| Expo / React Native     |               12 / 5 | **`rule-mcp-platform-mobile` is the real gap**        |
+| Expo / React Native     |               12 / 5 | **`rule-platform-mobile` is the real gap**            |
 | Capacitor               |                    0 | no skill yet; watch                                   |
-| Vitest / Playwright     |               9 / 13 | owned by `rule-mcp-devops-testing`; no split          |
+| Vitest / Playwright     |               9 / 13 | owned by `rule-devops-testing`; no split              |
 | webpack / esbuild / Bun |            6 / 5 / 7 | build-tool candidates, none urgent                    |
 
 The shortlist is deliberately short: the catalog already carries 84 skills and
@@ -86,7 +86,7 @@ several skills that already exist.
   "inherited from rule-mcp skills".
 - `src/core/detector/_rules.data.js` maps `electron` to this skill, so the
   rename or the plugin split must keep that mapping honest.
-- `rule-mcp-platform` (the router) describes this skill as "Desktop (Electron),
+- `rule-platform` (the router) describes this skill as "Desktop (Electron),
   cross-platform desktop apps, IPC, native APIs" - still accurate after the
   trim, and it needs a row per new plugin skill.
 
@@ -120,7 +120,7 @@ docs-accuracy test move with it:
   size), plus a body fetch by name;
 - `references/` becomes the single served folder name, which is why the four
   folders move into it rather than being served under four names;
-- the five frontend skills, `rule-mcp-meta-astro` and `rule-mcp-styleguide-a11y` are
+- the five frontend skills, `rule-meta-astro` and `rule-styleguide-a11y` are
   migrated by their own plans, not here.
 
 ## The six rules
@@ -139,7 +139,7 @@ docs-accuracy test move with it:
 - [ ] ADR: the skill shape and the plugin decision. Electron and Tauri become
       real skills; the umbrella stops naming paths that do not exist.
 - [ ] ADR: the rule design, Tier B, dual detection.
-- [ ] Owner verdict on the shortlist: `rule-mcp-platform-mobile` (Expo) is the
+- [ ] Owner verdict on the shortlist: `rule-platform-mobile` (Expo) is the
       measured gap; Neutralinojs, Wails, NW.js get no skill; Vitest, Playwright,
       webpack, esbuild and Bun stay where they are.
 
@@ -149,12 +149,12 @@ docs-accuracy test move with it:
       `unserved-aux/`, `duplicate-core-rules/`, `unnamed-owner/`,
       `matrix-drift/`, each with a one-line `README.md`.
 - [ ] Six `CORPUS` pairs in `tests/fixtures/guardrail-corpus.mjs` bound to
-      `rule-mcp-platform-desktop`.
+      `rule-platform-desktop`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ## Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-platform-desktop/guardrails/`: six rule files plus
+- [ ] `skills/rule-platform-desktop/guardrails/`: six rule files plus
       `index.js`.
 - [ ] `guardrails: [...]` frontmatter, ids equal to the exports.
 - [ ] Green the Phase 1 suites.
@@ -170,9 +170,9 @@ docs-accuracy test move with it:
 
 ## Phase 4 - Real plugin skills
 
-- [ ] `rule-mcp-toolchain-electron`: main/preload/IPC, native APIs, packaging,
+- [ ] `rule-toolchain-electron`: main/preload/IPC, native APIs, packaging,
       signing, auto-update, the performance playbook.
-- [ ] `rule-mcp-toolchain-tauri`: Rust commands, config, updater, deep links.
+- [ ] `rule-toolchain-tauri`: Rust commands, config, updater, deep links.
 - [ ] The umbrella table keeps one row per real skill and a roadmap line for
       Neutralinojs with no path in it.
 - [ ] Index rows in `docs/plans/skills/README.md` and `DEPENDENCIES.md`; the
@@ -180,15 +180,15 @@ docs-accuracy test move with it:
 
 ## Phase 5 - Neighbors
 
-- [ ] `rule-mcp-platform` router: rows for the two new skills, `expo` tag and the
-      mobile claim removed until `rule-mcp-platform-mobile` exists.
+- [ ] `rule-platform` router: rows for the two new skills, `expo` tag and the
+      mobile claim removed until `rule-platform-mobile` exists.
 - [ ] `src/core/detector/_rules.data.js`: `electron` maps to
-      `rule-mcp-toolchain-electron`, with the umbrella as the fallback.
+      `rule-toolchain-electron`, with the umbrella as the fallback.
 - [ ] Dispatcher rows regenerated.
 
 ## Phase 6 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-platform-desktop/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-platform-desktop/guardrails/`
 - [ ] `_corpus` and `_routing-corpus` suites; the electron detector test.
 - [ ] Catalog scan with the six rules: only the documented cases remain.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
@@ -212,7 +212,7 @@ Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for author
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-platform-desktop/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-platform-desktop/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
 pnpm census && pnpm census:check
@@ -223,17 +223,17 @@ pnpm lint
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-platform` (HARD)
+Feeds: `rule-platform` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ## Open notes
 
 - The naming the owner chose puts a desktop runtime in the toolchain area
-  (`rule-mcp-toolchain-electron`), beside Vite, Rspack and Biome. The alternative
-  was `rule-mcp-platform-desktop-electron`, which matches the wording the skill
+  (`rule-toolchain-electron`), beside Vite, Rspack and Biome. The alternative
+  was `rule-platform-desktop-electron`, which matches the wording the skill
   already uses ("skill plugin"). Both work; the toolchain area is where the
   build and packaging tooling already lives, and it is the owner's call, so the
   plan follows it. Consequence: the toolchain area was already planned as
@@ -246,6 +246,6 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
   prefers to keep the surface stable, the fallback is declaring the files in
   the body and serving them later - but then `desktop-aux-served` drops to
   "declared", and the 4,535 unserved lines stay unserved.
-- The mobile gap is the finding with the most leverage here. `rule-mcp-platform`
+- The mobile gap is the finding with the most leverage here. `rule-platform`
   promises Expo and carries the tag; twelve skills mention it; no skill owns
   it. That is a routing promise the catalog cannot keep.

@@ -10,8 +10,8 @@ skills:
   - "flakiness hunting"
   - "the test pyramid"
 evidenceSkills:
-  - "rule-mcp-devops-testing"
-  - "rule-mcp-data-validation"
+  - "rule-devops-testing"
+  - "rule-data-validation"
 aliases:
   - "qa-testing"
   - "qa engineer"

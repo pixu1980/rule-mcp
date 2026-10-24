@@ -1,10 +1,10 @@
-# rule-mcp-devops-observability - plan
+# rule-devops-observability - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#58`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
-Area: devops, leaf. Sibling plans: `rule-mcp-devops-testing`, `rule-mcp-devops-docker`,
-`rule-mcp-devops-deploy-preview` (same series) and `rule-mcp-devops` (the router).
+Area: devops, leaf. Sibling plans: `rule-devops-testing`, `rule-devops-docker`,
+`rule-devops-deploy-preview` (same series) and `rule-devops` (the router).
 
 ## Scope decisions (owner)
 
@@ -27,7 +27,7 @@ Inherited from the platform, meta and frontend interviews, 2026-10-21:
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-devops-observability/SKILL.md` is **214 lines**, one file only: no
+`skills/rule-devops-observability/SKILL.md` is **214 lines**, one file only: no
 `guardrails/`, no `references/`, no auxiliary folders.
 
 Sections: service objectives, correlated telemetry (logs, metrics, traces),
@@ -56,7 +56,7 @@ are exactly the kind of statement a rule can hold.
 ### Overlap to keep an eye on
 
 The agent tracing section (spans, cost per session, replay, behavior versioning)
-overlaps `rule-mcp-ai-agent-architecture` and `rule-mcp-ai-evals`. The boundary that holds:
+overlaps `rule-ai-agent-architecture` and `rule-ai-evals`. The boundary that holds:
 this leaf owns the telemetry contract, the AI leaves own the harness and the
 evaluation. The plan states it; the rule `observability-owner-named` is what
 keeps it stated.
@@ -83,12 +83,12 @@ keeps it stated.
 - [ ] `tests/fixtures/devops-observability/`: `clean/`, `unredacted-payload/`,
       `trace-without-versions/`, `alert-without-slo/`, each with a one-line
       `README.md`.
-- [ ] Six `CORPUS` pairs bound to `rule-mcp-devops-observability`.
+- [ ] Six `CORPUS` pairs bound to `rule-devops-observability`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ## Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-devops-observability/guardrails/`: six rule files plus
+- [ ] `skills/rule-devops-observability/guardrails/`: six rule files plus
       `index.js`.
 - [ ] `guardrails:` frontmatter, ids equal to the exports.
 - [ ] Green the Phase 1 suites.
@@ -101,7 +101,7 @@ keeps it stated.
 
 ## Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-devops-observability/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-devops-observability/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] Catalog scan with the six rules.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
@@ -123,7 +123,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-devops-observability/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-devops-observability/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
 pnpm census && pnpm census:check
@@ -134,9 +134,9 @@ pnpm lint
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-devops` (HARD)
+Feeds: `rule-devops` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -149,4 +149,4 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
   versioning rule is the one that keeps it useful, because it makes the trace
   answer "what changed" instead of "what happened".
 - This leaf is the natural place to state the redaction rule once for the whole
-  catalog, which is why the rule ships here rather than in `rule-mcp-backend-security`.
+  catalog, which is why the rule ships here rather than in `rule-backend-security`.

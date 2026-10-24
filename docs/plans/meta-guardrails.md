@@ -1,7 +1,7 @@
-# rule-mcp-meta guardrails execution plan
+# rule-meta guardrails execution plan
 
-Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four rule-mcp-meta leaves.
-Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four rule-mcp-meta leaves. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four rule-mcp-meta leaves, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
+Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four rule-meta leaves.
+Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four rule-meta leaves. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the four rule-meta leaves, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
 
 Scope: give the meta-framework area its first deterministic guardrails, focused
 on the server/client boundary, and record every rule against a citable public
@@ -19,11 +19,11 @@ per-rule source).
 
 Audited in this session (read-only):
 
-- `skills/rule-mcp-meta/SKILL.md` (router, no guardrails, no inherits)
-- `skills/rule-mcp-meta-astro/SKILL.md`
-- `skills/rule-mcp-meta-next/SKILL.md`
-- `skills/rule-mcp-meta-nuxt/SKILL.md`
-- `skills/rule-mcp-meta-remix/SKILL.md`
+- `skills/rule-meta/SKILL.md` (router, no guardrails, no inherits)
+- `skills/rule-meta-astro/SKILL.md`
+- `skills/rule-meta-next/SKILL.md`
+- `skills/rule-meta-nuxt/SKILL.md`
+- `skills/rule-meta-remix/SKILL.md`
 
 Current state: 5 skills, 0 guardrails, 0 `inherits` lines.
 
@@ -43,7 +43,7 @@ is found.
 
 | Question      | Decision                                                             |
 | ------------- | -------------------------------------------------------------------- |
-| Target skills | All five: `rule-mcp-meta` shared plus next, astro, nuxt, remix       |
+| Target skills | All five: `rule-meta` shared plus next, astro, nuxt, remix           |
 | Candidates    | All seven selected                                                   |
 | Trigger       | Devops default: target file or framework import                      |
 | Severity      | Devops default: advisory, then blocking after corpus proof           |
@@ -53,9 +53,9 @@ is found.
 
 ### Open item: the shared rules need an inherits graph
 
-No meta skill declares `inherits`, so a rule owned by `rule-mcp-meta` never reaches
-`rule-mcp-meta-next`, `-astro`, `-nuxt` or `-remix`. Same choice as the AI and
-frontend plans: add `inherits: [rule-mcp-meta]` to the four children, or duplicate
+No meta skill declares `inherits`, so a rule owned by `rule-meta` never reaches
+`rule-meta-next`, `-astro`, `-nuxt` or `-remix`. Same choice as the AI and
+frontend plans: add `inherits: [rule-meta]` to the four children, or duplicate
 the shared ids in each.
 
 ### Tiering
@@ -83,7 +83,7 @@ name ends in `_KEY`, `_SECRET`, `_TOKEN` or `_PASSWORD` is the signal.
 
 ## Enforcement model
 
-1. **Owner**: `rule-mcp-meta` gets a `guardrails/index.js` with the shared ids; each
+1. **Owner**: `rule-meta` gets a `guardrails/index.js` with the shared ids; each
    meta-framework skill keeps the framework form of its own rules.
 2. **Triggers**: shared rules run on server files, route files and components;
    a framework rule runs when the file imports that framework or lives in its
@@ -112,14 +112,14 @@ Shared files: none: absorbed into the leaf plans named above
 - [ ] Confirm the `inherits` change (open item).
 - [ ] Create the ADR for the meta guardrail family.
 
-### Phase 1 - Shared rules in rule-mcp-meta
+### Phase 1 - Shared rules in rule-meta
 
 - [ ] Implement `meta-public-env-secret` and `meta-server-data-leak`.
 - [ ] Implement `hydration-safe` and `meta-route-validation`.
 - [ ] Implement `meta-client-directive`, `astro-client-directive` and
       `meta-cache-explicit` as Tier B.
 - [ ] Add corpus fixtures, unit tests and the inheritance test.
-- [ ] Update `rule-mcp-meta/SKILL.md` frontmatter and rule section.
+- [ ] Update `rule-meta/SKILL.md` frontmatter and rule section.
 
 ### Phase 2 - Promotion and documentation
 
@@ -131,11 +131,11 @@ Shared files: none: absorbed into the leaf plans named above
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step                                    | Class      | Model                   | Why                            |
-| --------------------------------------- | ---------- | ----------------------- | ------------------------------ |
-| Phase 0 - Decisions and scaffolding     | `T1-plan`  | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Shared rules in rule-mcp-meta | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
-| Phase 2 - Promotion and documentation   | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Step                                  | Class      | Model                   | Why                            |
+| ------------------------------------- | ---------- | ----------------------- | ------------------------------ |
+| Phase 0 - Decisions and scaffolding   | `T1-plan`  | `gemini-4-argon` (high) | planning and prose that argues |
+| Phase 1 - Shared rules in rule-meta   | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 2 - Promotion and documentation | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

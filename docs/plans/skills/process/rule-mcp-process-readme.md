@@ -1,4 +1,4 @@
-# rule-mcp-process-readme - best-practice implementation plan
+# rule-process-readme - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -23,11 +23,11 @@ Area counts move: styleguide loses one, process gains one. The catalog stays at
 
 Read in this session:
 
-- `skills/rule-mcp-process-readme/SKILL.md`: the progressive-JPEG structure, the
+- `skills/rule-process-readme/SKILL.md`: the progressive-JPEG structure, the
   opening block, the facts, the example, getting started, the internal-repository
   section list, the formatting rules and the checklist.
-- `skills/rule-mcp-styleguide-markdown/SKILL.md` and
-  `skills/rule-mcp-styleguide-configuration/SKILL.md`, the neighboring owners.
+- `skills/rule-styleguide-markdown/SKILL.md` and
+  `skills/rule-styleguide-configuration/SKILL.md`, the neighboring owners.
 - `personas/oss.md` and `personas/docs.md`.
 
 Public sources verified in this session:
@@ -59,7 +59,7 @@ cites is external, and the plan keeps it as the origin of the structure.
 | Question     | Decision                                                                                                           |
 | ------------ | ------------------------------------------------------------------------------------------------------------------ |
 | Area         | `process`; the rename is done (ADR 145)                                                                            |
-| OSS persona  | `rule-mcp-process-readme` added to evidence skills, plus a lens on the README as the first contact                 |
+| OSS persona  | `rule-process-readme` added to evidence skills, plus a lens on the README as the first contact                     |
 | Scope        | The skill covers both the open source and the internal repository structure; the description is corrected          |
 | Badges       | A minimal set is allowed when a badge states a fact that is not already in the text                                |
 | OSS sections | License and copyright, contributing and code of conduct, security policy, support and funding, changelog delegated |
@@ -103,13 +103,13 @@ needed" is not an instruction is what the guardrail checks.
 
 ## Workstream E - Boundaries
 
-- `rule-mcp-styleguide-markdown` owns the markdown syntax; this skill owns the
+- `rule-styleguide-markdown` owns the markdown syntax; this skill owns the
   structure and the content.
-- `rule-mcp-styleguide-configuration` owns whether the file exists and the templates
+- `rule-styleguide-configuration` owns whether the file exists and the templates
   for `LICENSE`, `CONTRIBUTING` and friends; this skill owns what the README
   says about them.
-- `rule-mcp-process-changelog` owns the release notes; the README links them.
-- `rule-mcp-process-npm-release` owns the package that the README advertises.
+- `rule-process-changelog` owns the release notes; the README links them.
+- `rule-process-npm-release` owns the package that the README advertises.
 
 ## Proposed guardrails
 
@@ -136,16 +136,16 @@ Advisory first, then blocking after 100% precision and recall.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-process` (HARD)
+Feeds: `rule-process` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Evaluation, move and decisions
 
 - [x] Evaluate the area and record the outcome.
-- [x] Move the skill to `rule-mcp-process-readme` (ADR 145).
+- [x] Move the skill to `rule-process-readme` (ADR 145).
 - [x] Add the skill to the Open Source Steward persona.
 - [x] Interview the owner and record the decisions.
 - [x] Create this plan and the index entry.

@@ -78,13 +78,13 @@ test("new refuses with no id, an existing id, or a missing title/skills, and wri
   assert.equal(process.exitCode, 1);
 
   process.exitCode = 0;
-  const written = out(() => rolesCommand("new", { id: "probe-role", role: "Probe Role", skills: "rule-mcp-styleguide-css, rule-mcp-styleguide-html" }));
+  const written = out(() => rolesCommand("new", { id: "probe-role", role: "Probe Role", skills: "rule-styleguide-css, rule-styleguide-html" }));
 
   assert.match(written, /Wrote/);
   assert.ok(existsSync(join(userRolesDir(), "probe-role.md")), "the user layer gets the new role file");
 
   process.exitCode = 0;
-  const duplicate = out(() => rolesCommand("new", { id: "probe-role", role: "Probe Role", skills: "rule-mcp-styleguide-css" }));
+  const duplicate = out(() => rolesCommand("new", { id: "probe-role", role: "Probe Role", skills: "rule-styleguide-css" }));
 
   assert.match(duplicate, /already has "probe-role"/);
   assert.equal(process.exitCode, 1);

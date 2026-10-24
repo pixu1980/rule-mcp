@@ -55,7 +55,7 @@ function hubNames() {
 
 /** The area a `rule-area-*` command belongs to. */
 function areaOfCommand(name) {
-  return areaOf(`rule-mcp-${name.slice("rule-area-".length)}`)?.area;
+  return areaOf(`rule-${name.slice("rule-area-".length)}`)?.area;
 }
 
 /**
@@ -134,7 +134,7 @@ export function resolveSelection(selection = {}) {
       return false;
     }
 
-    return !skills || skills.has(`rule-mcp-${name.slice("rule-area-".length)}`);
+    return !skills || skills.has(`rule-${name.slice("rule-area-".length)}`);
   });
 
   return { commands, problems };

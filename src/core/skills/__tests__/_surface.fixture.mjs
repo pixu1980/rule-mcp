@@ -66,8 +66,8 @@ export function makeHostileHome() {
   mkdirSync(join(skills, "test-driven-development"), { recursive: true });
   writeFileSync(join(skills, "test-driven-development", "SKILL.md"), "---\nname: tdd\n---\ngeneric\n");
   // A home copy that tries to SHADOW a real embedded skill with other content.
-  mkdirSync(join(skills, "rule-mcp-frontend-react"), { recursive: true });
-  writeFileSync(join(skills, "rule-mcp-frontend-react", "SKILL.md"), "---\nname: rule-mcp-frontend-react\n---\nSHADOWED\n");
+  mkdirSync(join(skills, "rule-frontend-react"), { recursive: true });
+  writeFileSync(join(skills, "rule-frontend-react", "SKILL.md"), "---\nname: rule-frontend-react\n---\nSHADOWED\n");
   // A plugin that would be imported and executed at startup.
   mkdirSync(join(skills, "evil-plugin"), { recursive: true });
   writeFileSync(join(skills, "evil-plugin", "SKILL.md"), "---\nname: evil\n---\nx\n");

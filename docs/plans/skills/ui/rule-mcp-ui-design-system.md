@@ -1,4 +1,4 @@
-# rule-mcp-ui-design-system - best-practice implementation plan
+# rule-ui-design-system - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,13 +9,13 @@ Area: ui. Order: reverse alphabetical, started from this skill.
 
 Read in this session:
 
-- `skills/rule-mcp-ui-design-system/SKILL.md` (262 lines): aesthetic direction, the
+- `skills/rule-ui-design-system/SKILL.md` (262 lines): aesthetic direction, the
   non-negotiable rule-mcp constraints, design thinking sequence, implementation
   pattern, four-pass critique, review checklist.
-- `skills/rule-mcp-styleguide-css/guardrails/` (6 rules: `no-css-classes`,
+- `skills/rule-styleguide-css/guardrails/` (6 rules: `no-css-classes`,
   `no-inline-styles`, `external-css`, `css-flex-first`, `css-no-ellipsis`,
   `css-comments-required`).
-- `skills/rule-mcp-styleguide-a11y/guardrails/` (10 rules including
+- `skills/rule-styleguide-a11y/guardrails/` (10 rules including
   `a11y-focus-visible`, `a11y-form-label`, `a11y-test-required`).
 
 Local articles consulted (inspiration only, see the numeric-claims note):
@@ -51,7 +51,7 @@ They do not enter the skill; the underlying practice does.
 | Question         | Decision                                                                                                                           |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | Scope            | Tokens, component contract, states, critique, docs artifact, versioning, a11y conformance                                          |
-| Output path      | `docs/plans/skills/ui/rule-mcp-ui-design-system.md`                                                                                |
+| Output path      | `docs/plans/skills/ui/rule-ui-design-system.md`                                                                                    |
 | Depth            | Guidance plus guardrails plus assets and templates                                                                                 |
 | Sources          | Every recommendation cites a public standard                                                                                       |
 | Standards        | DTCG, ARIA APG, WCAG 2.2 Quickref, Open UI, Custom Elements Everywhere, MDN CSSStyleSheet and `@layer`, SemVer                     |
@@ -60,8 +60,8 @@ They do not enter the skill; the underlying practice does.
 | Token levels     | Two categories: foundations (primitive plus semantic) and components                                                               |
 | Component docs   | Decided per project: static page by default, Storybook when the project already uses it, a custom internal site for larger systems |
 | Component API    | Compound components, Rule of Three, no prop explosion, reuse before creating                                                       |
-| Token ownership  | This skill decides the tokens; `rule-mcp-styleguide-css` owns the CSS syntax                                                       |
-| A11y ownership   | `rule-mcp-styleguide-a11y` owns the checks; this skill invokes the criteria report                                                 |
+| Token ownership  | This skill decides the tokens; `rule-styleguide-css` owns the CSS syntax                                                           |
+| A11y ownership   | `rule-styleguide-a11y` owns the checks; this skill invokes the criteria report                                                     |
 | Framework truth  | Confirmed; the plan adds per-framework examples and a CSS mechanism matrix                                                         |
 | Hardcoded rule   | Applies to `src/`, with a documented escape hatch                                                                                  |
 | Delivery         | Plan only now                                                                                                                      |
@@ -104,7 +104,7 @@ They do not enter the skill; the underlying practice does.
 The four passes stay, with three additions:
 
 1. **State the exclusion per pass**, so each answer stays on one axis.
-2. **Pass 1 becomes a criteria report**, referencing `rule-mcp-styleguide-a11y` and
+2. **Pass 1 becomes a criteria report**, referencing `rule-styleguide-a11y` and
    WCAG 2.2 criteria by number, including the criteria nothing tested.
 3. **Fix one finding at a time**, in the order of the passes.
 
@@ -161,9 +161,9 @@ owns the rest of the state matrix. The two never check the same property.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-ui` (HARD)
+Feeds: `rule-ui` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

@@ -7,7 +7,7 @@
  * intensity, `RULE_MCP_NO_COMPRESSION=1` turns it off).
  *
  * Inspired by the deterministic compression rules in the compression skill
- * (`skills/rule-mcp-process-compression/SKILL.md`): the vocabulary tables, the
+ * (`skills/rule-process-compression/SKILL.md`): the vocabulary tables, the
  * classification guards and the structural validator are ported, while the LLM
  * compression step is deliberately left out. An LLM in the output path costs
  * determinism, cacheability and the zero-dependency contract; the guard plus
@@ -54,7 +54,7 @@ export function compressText(text, options) {
 
 /**
  * Compress one text payload from a surface that is not a tool result: a
- * `rulemcp://` resource body, a prompt body. Same pipeline, same guard, booked
+ * `rule://` resource body, a prompt body. Same pipeline, same guard, booked
  * under its own source so `rule_tool_stats` can say which surface saved what.
  *
  * @param {string} text

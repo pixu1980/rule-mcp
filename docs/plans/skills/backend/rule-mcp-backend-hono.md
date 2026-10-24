@@ -1,10 +1,10 @@
-# rule-mcp-backend-hono - plan
+# rule-backend-hono - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#75`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: backend, leaf. **89 lines**, one file, no `guardrails/`. It inherits the
-router's six rules through `inherits: [rule-mcp-backend]`.
+router's six rules through `inherits: [rule-backend]`.
 
 ## Evidence base (measured 2026-10-21)
 
@@ -41,9 +41,9 @@ What it states and nothing checks:
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-backend` (HARD)
+Feeds: `rule-backend` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -57,13 +57,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 - [ ] `tests/fixtures/backend-hono/`: `clean/`, `untyped-bindings/`,
       `wrong-middleware-order/`, `node-only-api/`, each with a one-line `README.md`.
-- [ ] Four `CORPUS` pairs bound to `rule-mcp-backend-hono`.
+- [ ] Four `CORPUS` pairs bound to `rule-backend-hono`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ### Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-backend-hono/guardrails/`: four rule files plus `index.js`.
-- [ ] `guardrails:` frontmatter lists them; `inherits: [rule-mcp-backend]` stays.
+- [ ] `skills/rule-backend-hono/guardrails/`: four rule files plus `index.js`.
+- [ ] `guardrails:` frontmatter lists them; `inherits: [rule-backend]` stays.
 - [ ] Green the Phase 1 suites.
 
 ### Phase 3 - Shape
@@ -73,7 +73,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 ### Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-backend-hono/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-backend-hono/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
 

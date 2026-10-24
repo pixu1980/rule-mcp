@@ -1,4 +1,4 @@
-# rule-mcp-styleguide-configuration - best-practice implementation plan
+# rule-styleguide-configuration - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, except the dedupe recorded below, which is applied now. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,15 +9,15 @@ Area: styleguide. Order: reverse alphabetical, twenty-fifth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-styleguide-configuration/SKILL.md`, the base repository files.
-- `skills/rule-mcp-styleguide/SKILL.md`, its "Project Scaffolding" section: the
+- `skills/rule-styleguide-configuration/SKILL.md`, the base repository files.
+- `skills/rule-styleguide/SKILL.md`, its "Project Scaffolding" section: the
   verbatim templates the scaffold mode returns.
-- `src/tools/skill/_skill-tool.js`: `isStyleguides = skillName === "rule-mcp-styleguide"`,
+- `src/tools/skill/_skill-tool.js`: `isStyleguides = skillName === "rule-styleguide"`,
   so the scaffold mode exists only on that tool.
 - `src/core/guardrails/engine/_registry.js`: the scaffold family is gated by
-  `skillName === "rule-mcp-styleguide" && mode === "scaffold"`.
+  `skillName === "rule-styleguide" && mode === "scaffold"`.
 - `src/core/scaffold/_parser.js`: the parser reads the "Project Scaffolding"
-  section of `rule-mcp-styleguide`.
+  section of `rule-styleguide`.
 
 Public sources verified in this session:
 
@@ -36,11 +36,11 @@ Problems found:
 | Problem                            | Detail                                                                                        |
 | ---------------------------------- | --------------------------------------------------------------------------------------------- |
 | `.eslintrc.json` was recommended   | ESLint 10 removed the format; the scaffold template already ships `eslint.config.mjs`         |
-| tsconfig was duplicated            | the frontend `tsconfig` restated `rule-mcp-styleguide-typescript/COMPILER.md`                 |
+| tsconfig was duplicated            | the frontend `tsconfig` restated `rule-styleguide-typescript/COMPILER.md`                     |
 | `.nvmrc` appeared twice            | two sections for one file                                                                     |
 | the corepack policy was repeated   | the pnpm skill owns it                                                                        |
 | the scaffold instruction was false | it named `rule_tool_styleguide_configuration mode=scaffold`, a mode that tool does not expose |
-| scaffold ownership is split        | the templates and the mode live in `rule-mcp-styleguide`, the description lives here          |
+| scaffold ownership is split        | the templates and the mode live in `rule-styleguide`, the description lives here              |
 | `.gitattributes` is missing        | its line-ending rule is cited by the fingerprint and CSS skills and the file does not exist   |
 | health files are partial           | `SECURITY.md`, `SUPPORT.md`, `FUNDING.yml`, `CODEOWNERS` are not named here                   |
 
@@ -69,7 +69,7 @@ Done in this pass:
    the See also list.
 3. The second `.nvmrc` section is removed; the first stays.
 4. The corepack section becomes one paragraph and a link to
-   `rule-mcp-toolchain-pnpm`.
+   `rule-toolchain-pnpm`.
 5. The scaffold instruction now names `rule_tool_styleguide`, the tool that
    actually exposes the mode, and says the move is planned.
 
@@ -78,13 +78,13 @@ Done in this pass:
 ## Workstream B - Move the scaffold ownership
 
 1. `isStyleguides` in `_skill-tool.js` becomes a check that includes
-   `rule-mcp-styleguide-configuration`.
+   `rule-styleguide-configuration`.
 2. The scaffold family gate in `_registry.js` points at
-   `rule-mcp-styleguide-configuration`.
+   `rule-styleguide-configuration`.
 3. `extractScaffoldSection` reads the configuration skill's scaffolding
    section, so the templates live beside the description they belong to.
-4. The `rule-mcp` and `rule-mcp-styleguide` docs that mention the mode are updated, and
-   the test "the scaffold mode answers only on rule-mcp-styleguide" becomes the
+4. The `rule-mcp` and `rule-styleguide` docs that mention the mode are updated, and
+   the test "the scaffold mode answers only on rule-styleguide" becomes the
    contract for the new owner.
 
 ## Workstream C - Line endings
@@ -96,7 +96,7 @@ skill that owns the base files is the right place to ship it.
 ## Workstream D - Health files
 
 `SECURITY.md`, `SUPPORT.md`, `FUNDING.yml` and `CODEOWNERS` are named with what
-each one answers, and the links point at `rule-mcp-process-readme` for the README
+each one answers, and the links point at `rule-process-readme` for the README
 copy and at the GitHub docs for the files the platform reads. `.gitmessage`,
 `.git-blame-ignore-revs` and `.node-version` are listed with their purpose.
 
@@ -132,9 +132,9 @@ The eight `scaffold-*` rules stay. Four join them with the same behavior:
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-styleguide` (HARD)
+Feeds: `rule-styleguide` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

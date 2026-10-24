@@ -7,18 +7,18 @@
 
 ## Context
 
-The `rule-mcp-backend-*` category had only `api-design` and `security` as dedicated skills, plus the umbrella `rule-mcp-backend`. Development teams use a variety of Node.js backend frameworks, each with distinct patterns, tooling, and best practices. Without dedicated skills, agents had no framework-specific guidance.
+The `rule-backend-*` category had only `api-design` and `security` as dedicated skills, plus the umbrella `rule-backend`. Development teams use a variety of Node.js backend frameworks, each with distinct patterns, tooling, and best practices. Without dedicated skills, agents had no framework-specific guidance.
 
 ## Decision
 
 Add four backend framework skills covering the major Node.js HTTP framework ecosystems:
 
-| Skill                      | Framework     | Focus                                                                                          |
-| -------------------------- | ------------- | ---------------------------------------------------------------------------------------------- |
-| `rule-mcp-backend-nestjs`  | NestJS 10+    | Modular architecture, decorators, DI, guards, interceptors, GraphQL, microservices, TypeORM    |
-| `rule-mcp-backend-express` | Express.js 5+ | Middleware patterns, error handling, routing, performance, security headers, graceful shutdown |
-| `rule-mcp-backend-fastify` | Fastify 5+    | Plugin system, hooks lifecycle, JSON Schema validation, serialization, high throughput         |
-| `rule-mcp-backend-hono`    | Hono 4+       | Edge-compatible, multi-runtime (Node/CF Workers/Bun/Deno), RPC type sharing, minimal footprint |
+| Skill                  | Framework     | Focus                                                                                          |
+| ---------------------- | ------------- | ---------------------------------------------------------------------------------------------- |
+| `rule-backend-nestjs`  | NestJS 10+    | Modular architecture, decorators, DI, guards, interceptors, GraphQL, microservices, TypeORM    |
+| `rule-backend-express` | Express.js 5+ | Middleware patterns, error handling, routing, performance, security headers, graceful shutdown |
+| `rule-backend-fastify` | Fastify 5+    | Plugin system, hooks lifecycle, JSON Schema validation, serialization, high throughput         |
+| `rule-backend-hono`    | Hono 4+       | Edge-compatible, multi-runtime (Node/CF Workers/Bun/Deno), RPC type sharing, minimal footprint |
 
 Each skill covers:
 
@@ -39,7 +39,7 @@ Each skill covers:
 **Negative:**
 
 - Four new skills to maintain as frameworks evolve
-- Routing may sometimes hit the umbrella `rule-mcp-backend` instead of framework-specific skills
+- Routing may sometimes hit the umbrella `rule-backend` instead of framework-specific skills
 
 ## Routing
 

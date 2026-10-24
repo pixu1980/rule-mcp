@@ -26,8 +26,8 @@ export function guardCandidate(candidate, live = {}) {
 }
 
 /**
- * The taxonomy guard: a hub result (`rule-mcp-frontend`) is ambiguous when the same
- * candidate set also carries a leaf (`rule-mcp-frontend-vue`). The live router may
+ * The taxonomy guard: a hub result (`rule-frontend`) is ambiguous when the same
+ * candidate set also carries a leaf (`rule-frontend-vue`). The live router may
  * route an equivalent request to either, so the safe choice is to compute.
  *
  * A leaf pick stays valid even when the hub is present: the specific result is

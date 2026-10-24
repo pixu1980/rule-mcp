@@ -11,7 +11,7 @@ The `design-system` persona owned design tokens, semantic HTML and component API
 
 ## Decision
 
-Rename the role id `design-system` to `ui` and its title to UI/UX Lead. Widen its lenses from five to ten - user goals, accessibility as baseline, semantics/tokens/styling order, component API durability, flex-first layout, purposeful motion, visual hierarchy, consistency via tokens, cross-framework parity, and industry standards as the floor. Expand evidence skills to include `rule-mcp-ui`, `rule-mcp-styleguide-a11y` and every frontend framework skill.
+Rename the role id `design-system` to `ui` and its title to UI/UX Lead. Widen its lenses from five to ten - user goals, accessibility as baseline, semantics/tokens/styling order, component API durability, flex-first layout, purposeful motion, visual hierarchy, consistency via tokens, cross-framework parity, and industry standards as the floor. Expand evidence skills to include `rule-ui`, `rule-styleguide-a11y` and every frontend framework skill.
 
 ## Consequences
 

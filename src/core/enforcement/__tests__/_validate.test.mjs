@@ -38,11 +38,11 @@ test("validateResultShape enforces the output cap across all parts", () => {
 });
 
 const tools = new Set(["rule_tool_check"]);
-const skills = new Set(["rule-mcp-frontend-react"]);
+const skills = new Set(["rule-frontend-react"]);
 const answer = (routing) => text(JSON.stringify(routing));
 
 test("validateRouterResult accepts a well-formed answer, none and unknown included", () => {
-  for (const route of ["rule-mcp-frontend-react", "none", "unknown"]) {
+  for (const route of ["rule-frontend-react", "none", "unknown"]) {
     validateRouterResult(answer({ route, next_tools: ["rule_tool_check"], confidence: 0.8 }), tools, skills);
   }
 });

@@ -53,7 +53,7 @@ test("editing one skill no longer empties the cache", async () => {
 
   console.log(`  ${entries.length} entries; worst case is ${worst} (${hit} dependents), ${Math.round(survival * 100)}% survive`);
   // The union surface (94 skills, item 11) concentrates the corpus dependents
-  // on a few hubs (rule-mcp-ai-evals at ~100/198); the bar follows the measured
+  // on a few hubs (rule-ai-evals at ~100/198); the bar follows the measured
   // equilibrium of this surface rather than the 6-skill corpus it was set on.
   assert.ok(survival > 0.45, `a single skill edit must leave most of the cache alone, got ${Math.round(survival * 100)}%`);
 });
@@ -64,7 +64,7 @@ test("editing one skill no longer empties the cache", async () => {
 const WORKLOAD = [
   ["rule_tool", { prompt: "react button component" }],
   ["rule_tool_frontend_react", { mode: "tldr", query: "hooks" }],
-  ["rule_tool_check", { skill: "rule-mcp-styleguide-css", code: "a{color:red}" }],
+  ["rule_tool_check", { skill: "rule-styleguide-css", code: "a{color:red}" }],
   ["rule_tool_search", { query: "container query" }],
   ["rule_tool_stats", {}],
   ["rule_tool_compress", { text: "It is important to note that this is filler." }],

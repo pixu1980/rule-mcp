@@ -1,4 +1,4 @@
-# 148: Merge simplicity, English and fingerprint into rule-mcp-process-ai
+# 148: Merge simplicity, English and fingerprint into rule-process-ai
 
 - **Date**: 2026-10-20
 - **Status**: accepted
@@ -7,11 +7,11 @@
 
 ## Context
 
-Four skills described one body of rules. rule-mcp-process-ai-sdlc carried the lifecycle and owned no guardrail; rule-mcp-process-simplicity carried the scope contract and three rules; rule-mcp-styleguide-english and rule-mcp-styleguide-fingerprint both documented the British to American spelling map and both claimed fp-american-english. The same rule in two documents is the drift ADR 058 exists to prevent, and four index rows and three plans meant four places to keep in step. The English and fingerprint skills also sat in the styleguide area while describing prose that applies to every output, not to a code style.
+Four skills described one body of rules. rule-process-ai-sdlc carried the lifecycle and owned no guardrail; rule-process-simplicity carried the scope contract and three rules; rule-styleguide-english and rule-styleguide-fingerprint both documented the British to American spelling map and both claimed fp-american-english. The same rule in two documents is the drift ADR 058 exists to prevent, and four index rows and three plans meant four places to keep in step. The English and fingerprint skills also sat in the styleguide area while describing prose that applies to every output, not to a code style.
 
 ## Decision
 
-One skill, rule-mcp-process-ai, owns the four bodies: SKILL.md keeps the lifecycle, the scope contract and the reference table, and references/simplicity.md, references/english.md and references/fingerprint.md hold the detail, the shape rule-mcp-styleguide-a11y already uses. The nine guardrails move into one family under the ai- prefix. The name changes from rule-mcp-process-ai-sdlc, and because the tool id is derived from the skill name, the tool becomes rule_tool_process_ai. The three absorbed directories are deleted rather than tombstoned: their names join removedSkillNames in the skill corpus test, so a surviving reference fails the suite instead of rotting. The four plan rows collapse into one, docs/plans/skills/DEPENDENCIES.md records the run order, and this plan runs first because every other plan is written by these rules.
+One skill, rule-process-ai, owns the four bodies: SKILL.md keeps the lifecycle, the scope contract and the reference table, and references/simplicity.md, references/english.md and references/fingerprint.md hold the detail, the shape rule-styleguide-a11y already uses. The nine guardrails move into one family under the ai- prefix. The name changes from rule-process-ai-sdlc, and because the tool id is derived from the skill name, the tool becomes rule_tool_process_ai. The three absorbed directories are deleted rather than tombstoned: their names join removedSkillNames in the skill corpus test, so a surviving reference fails the suite instead of rotting. The four plan rows collapse into one, docs/plans/skills/DEPENDENCIES.md records the run order, and this plan runs first because every other plan is written by these rules.
 
 ## Consequences
 

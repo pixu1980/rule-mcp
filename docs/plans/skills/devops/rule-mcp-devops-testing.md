@@ -1,10 +1,10 @@
-# rule-mcp-devops-testing - plan
+# rule-devops-testing - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#57`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
-Area: devops, leaf. Sibling plans: `rule-mcp-devops-observability`,
-`rule-mcp-devops-docker`, `rule-mcp-devops-deploy-preview` (same series) and `rule-mcp-devops`
+Area: devops, leaf. Sibling plans: `rule-devops-observability`,
+`rule-devops-docker`, `rule-devops-deploy-preview` (same series) and `rule-devops`
 (the router, planned last).
 
 ## Scope decisions (owner)
@@ -28,7 +28,7 @@ Inherited from the platform, meta and frontend interviews, 2026-10-21:
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-devops-testing/SKILL.md` is **366 lines**, one file only: no
+`skills/rule-devops-testing/SKILL.md` is **366 lines**, one file only: no
 `guardrails/`, no `references/`, no auxiliary folders.
 
 It is the **most cited skill in the catalog** as an owner: the frontend, meta and
@@ -45,9 +45,9 @@ exception. It enforces nothing.
 | The Expo/React Native `jest-expo` exception                                                          | **no**, and it names no rule to follow |
 | Threshold numbers appear in two config blocks (lines 56 and 88)                                      | two places, both unchecked             |
 
-### The exception it states is the one `rule-mcp-process-tdd` cites wrongly
+### The exception it states is the one `rule-process-tdd` cites wrongly
 
-`rule-mcp-process-tdd` says "See `expo` rule", and no such rule exists anywhere. This
+`rule-process-tdd` says "See `expo` rule", and no such rule exists anywhere. This
 skill states the same exception without naming any rule. The mobile plan owns
 `mobile-test-runner`; this leaf should point at it, and this plan adds the rule
 that makes a stated exception name its owner.
@@ -56,7 +56,7 @@ that makes a stated exception name its owner.
 
 The body says thresholds are "verified in CI". The `skills` suite - the one whose
 globs cover skill-local tests - is **not included in `all`**, and `all` is what CI
-runs (measured in the `rule-mcp-frontend-workers` plan). For tests, that is the same
+runs (measured in the `rule-frontend-workers` plan). For tests, that is the same
 class of mistake as a rule with no fixture: a claim with nothing behind it.
 
 ## The six rules
@@ -83,18 +83,18 @@ class of mistake as a rule with no fixture: a claim with nothing behind it.
 - [ ] `tests/fixtures/devops-testing/`: `clean/`, `second-runner/`,
       `unlinked-exception/`, `no-thresholds/`, `restated-numbers/`, each with a
       one-line `README.md`.
-- [ ] Six `CORPUS` pairs bound to `rule-mcp-devops-testing`.
+- [ ] Six `CORPUS` pairs bound to `rule-devops-testing`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ## Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-devops-testing/guardrails/`: six rule files plus `index.js`.
+- [ ] `skills/rule-devops-testing/guardrails/`: six rule files plus `index.js`.
 - [ ] `guardrails:` frontmatter, ids equal to the exports.
 - [ ] Green the Phase 1 suites.
 
 ## Phase 3 - Fix the claims
 
-- [ ] The Expo exception names `mobile-test-runner`, the rule `rule-mcp-process-tdd`
+- [ ] The Expo exception names `mobile-test-runner`, the rule `rule-process-tdd`
       should also have cited.
 - [ ] The threshold numbers live once; the second block points at the first.
 - [ ] The "verified in CI" sentence either becomes true (the `skills` suite joins
@@ -102,7 +102,7 @@ class of mistake as a rule with no fixture: a claim with nothing behind it.
 
 ## Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-devops-testing/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-devops-testing/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] Catalog scan with the six rules.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
@@ -124,7 +124,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-devops-testing/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-devops-testing/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
 pnpm census && pnpm census:check
@@ -135,9 +135,9 @@ pnpm lint
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-devops` (HARD)
+Feeds: `rule-devops` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -145,7 +145,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 - The gap between citation and enforcement is the widest in the catalog here:
   five plans defer to this skill, and none of its five claims is checked. That
-  is the same shape as `rule-mcp-platform-auth` having no door, mirrored.
+  is the same shape as `rule-platform-auth` having no door, mirrored.
 - `testing-single-runner` is the rule a reader would most expect to exist
   already, because the body says the policy twice in bold. Bold is not a rule.
 - The CI claim is a repository-level truth, not a skill-level one: fixing it

@@ -71,7 +71,7 @@ Nota: la sessione Sonnet 5 è partita con 2 swap di modello (gpt-5.6-luna -> cla
 
 ### 1.3 Tool MCP resi disponibili
 
-Il server `rule-mcp` ha esposto **105 tool** + 186 risorse `rulemcp://*` + 1 router, organizzati in skill folder: `frontend/*`, `backend/*`, `data/*`, `devops/*`, `platform/*`, `process/*`, `styleguide/*`, `toolchain/*`, `ui/*`, `ai-agents/*`.
+Il server `rule-mcp` ha esposto **105 tool** + 186 risorse `rule://*` + 1 router, organizzati in skill folder: `frontend/*`, `backend/*`, `data/*`, `devops/*`, `platform/*`, `process/*`, `styleguide/*`, `toolchain/*`, `ui/*`, `ai-agents/*`.
 
 ---
 
@@ -320,7 +320,7 @@ Sonnet 5 ha il **minor tasso di errore dei tool (2.9%)**, segno che pianifica le
 | `rule_tool_styleguide_markdown`        |      0 |        1 |           0 |
 | `rule_tool_check`                      |      0 | **5** ⭐ |           0 |
 | `rule_tool_detect`                     |      1 |        0 |           0 |
-| `rulemcp://skills`                     |      0 |        0 |           1 |
+| `rule://skills`                        |      0 |        0 |           1 |
 | **Totale invocazioni rule-mcp**        | **10** |   **30** |      **23** |
 | Tool rule-mcp distinti usati           |     10 |   **19** |          12 |
 | Errori su tool result                  |      0 |        1 |           0 |
@@ -329,9 +329,9 @@ Sonnet 5 ha il **minor tasso di errore dei tool (2.9%)**, segno che pianifica le
 ### 4.3 Osservazioni strategiche
 
 - **GPT 5.6 Luna** è l'unico che ha usato il **loop check->fix** del MCP (`rule_tool_check` x 5). Ha anche usato il **router `rule_tool`** e skill di processo (`rule_tool_styleguide_markdown`, `rule_tool_handoff`, `rule_tool_process_adr`). È il modello che ha _interrogato_ il server MCP nel modo più esplorativo.
-- **Sonnet 5** ha usato pesantemente `rule_tool_process_adr` (5 chiamate), il tool che produce ADR strutturati. Ha anche letto l'**indice completo delle skill** con `rulemcp://skills` (1 volta, 11.565 chars ritornati) per poi chiamare skill specifiche in modalità `full`. Approccio "indice globale -> drill-down chirurgico".
+- **Sonnet 5** ha usato pesantemente `rule_tool_process_adr` (5 chiamate), il tool che produce ADR strutturati. Ha anche letto l'**indice completo delle skill** con `rule://skills` (1 volta, 11.565 chars ritornati) per poi chiamare skill specifiche in modalità `full`. Approccio "indice globale -> drill-down chirurgico".
 - **DeepSeek v4 Flash** ha usato solo 10 tool rule-mcp, ognuno **in modalità `mode: "full"`** (skill intera letta). Approccio "leggi tutto, produci tutto" ma su un sottoinsieme minimo di skill (10 su 105 disponibili).
-- **Nessuno dei 3 ha usato le risorse `rulemcp://*` ad eccezione di Sonnet 5** (1 chiamata all'indice). Le risorse individuali (`rulemcp://<skill>`) non sono state esplorate, i modelli hanno preferito il pattern `mode: "full"` sui tool `rule_tool_*`.
+- **Nessuno dei 3 ha usato le risorse `rule://*` ad eccezione di Sonnet 5** (1 chiamata all'indice). Le risorse individuali (`rule://<skill>`) non sono state esplorate, i modelli hanno preferito il pattern `mode: "full"` sui tool `rule_tool_*`.
 
 ### 4.4 Quanto il modello ha seguito le specifiche del server MCP
 
@@ -349,7 +349,7 @@ Sonnet 5 ha il **minor tasso di errore dei tool (2.9%)**, segno che pianifica le
 | `rule_tool_process_adr` usato esplicitamente                |       ❌        |              ✅               |           ✅ (5x)            |
 | **Score di aderenza**                                       |     🟡 4/10     |            🟢 7/10            |           🟢 9/10            |
 
--> **Sonnet 5 ha l'aderenza più alta (9/10)**, soprattutto grazie al pattern `data-part + adoptedStyleSheets` (skill `rule-mcp-styleguide-css`) che gli altri 2 modelli non hanno implementato.
+-> **Sonnet 5 ha l'aderenza più alta (9/10)**, soprattutto grazie al pattern `data-part + adoptedStyleSheets` (skill `rule-styleguide-css`) che gli altri 2 modelli non hanno implementato.
 
 ---
 
@@ -552,7 +552,7 @@ bookmarks-manager-gpt56-luna/
 
 2. **GPT 5.6 Luna ha barato sull'architettura CSS.** Ha il design system **peggiore** dei 3:
    - 1 solo file `_global.css` da 561 righe (vs 8 file in Sonnet e 9 in DS4)
-   - Usa **classi CSS** invece di `data-part` (viola `rule-mcp-styleguide-css`)
+   - Usa **classi CSS** invece di `data-part` (viola `rule-styleguide-css`)
    - Bundle 2.4x più pesante (391K vs 166K di Sonnet)
    - Ma ha la **documentazione più ricca** (architecture.mdx, mint.json, OpenAPI YAML, 6 ADR)
 
@@ -679,7 +679,7 @@ Il prompt richiedeva esplicitamente:
 
 **Perché?** Tre ragioni concorrenti:
 
-1. **Ha letto l'indice completo delle skill** (1 chiamata a `rulemcp://skills`) -> ha avuto la mappa dell'intero parco skill prima di iniziare
+1. **Ha letto l'indice completo delle skill** (1 chiamata a `rule://skills`) -> ha avuto la mappa dell'intero parco skill prima di iniziare
 2. **Ha usato `rule_tool_process_adr` 5 volte** -> ha generato ADR strutturati e conformi al template Nygard
 3. **Ha pianificato in anticipo la "three-layer test strategy"** (ADR 007) -> invece di scrivere test a posteriori, ha definito la strategia prima di scrivere il codice
 
@@ -752,7 +752,7 @@ GPT 5.6 Luna ha il secondo posto per la completezza di docs e OpenAPI, ma ha bar
 
 - **`rule_tool_check` + `rule_tool_fix` funzionano solo se il modello li chiama**, e li ha chiamati solo GPT 5.6 Luna (5x). Gli altri 2 modelli non hanno sfruttato il loop di validazione. Questo è un segnale che il loop check->fix è un pattern "GPT-friendly" ma non universale.
 
-- **Le risorse `rulemcp://*` (1 sola chiamata in Sonnet) sono preziose** per modelli che vogliono fare "exploration" del parco skill prima di iniziare. Nessuno dei 3 ha usato `rulemcp://*` per leggere una skill specifica, hanno preferito il pattern `mode: "full"` sui tool `rule_tool_*`.
+- **Le risorse `rule://*` (1 sola chiamata in Sonnet) sono preziose** per modelli che vogliono fare "exploration" del parco skill prima di iniziare. Nessuno dei 3 ha usato `rule://*` per leggere una skill specifica, hanno preferito il pattern `mode: "full"` sui tool `rule_tool_*`.
 
 ### 10.2 Sul modello migliore per questo task
 
@@ -851,7 +851,7 @@ SONNET 5 (23 invocazioni, 12 tool distinti):
   rule_tool_styleguide_a11y              2×     rule_tool_styleguide_css         2×
   rule_tool_styleguide (mode=scaffold)   1×     rule_tool_process_adr            5× ⭐
   rule_tool_handoff                      1×
-  + 1 rulemcp://skills (risorsa: indice globale, 11565 chars)
+  + 1 rule://skills (risorsa: indice globale, 11565 chars)
 ```
 
 ## Allegato C, Conteggi file per progetto

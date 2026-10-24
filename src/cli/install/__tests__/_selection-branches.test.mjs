@@ -25,7 +25,7 @@ test("a skill filter keeps matching leaves when hubsOnly is off", () => {
   const { commands } = resolveSelection({
     families: ["areas"],
     hubsOnly: false,
-    skills: ["rule-mcp-frontend-react"],
+    skills: ["rule-frontend-react"],
   });
 
   assert.ok(commands.includes(ROUTER_COMMAND));

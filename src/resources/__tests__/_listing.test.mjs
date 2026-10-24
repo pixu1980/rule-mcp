@@ -36,10 +36,10 @@ test("resources/list keeps every uri and mimeType, and the labels pass the compr
 
 test("the listing pass does shorten prose when there is something to shorten", () => {
   const out = compressResourceListing([
-    { uri: "rulemcp://probe", name: "The guide was basically written to really just show you the whole pattern in detail", mimeType: "text/markdown" },
+    { uri: "rule://probe", name: "The guide was basically written to really just show you the whole pattern in detail", mimeType: "text/markdown" },
   ]);
 
   assert.ok(out[0].name.length < 75, "verbose label sheds filler");
-  assert.equal(out[0].uri, "rulemcp://probe");
+  assert.equal(out[0].uri, "rule://probe");
   assert.equal(out[0].mimeType, "text/markdown");
 });

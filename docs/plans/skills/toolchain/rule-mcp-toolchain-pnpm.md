@@ -1,4 +1,4 @@
-# rule-mcp-toolchain-pnpm - best-practice implementation plan
+# rule-toolchain-pnpm - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,10 +9,10 @@ Area: toolchain. Order: reverse alphabetical, sixth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-toolchain-pnpm/SKILL.md` (200 lines): exact versions, the
+- `skills/rule-toolchain-pnpm/SKILL.md` (200 lines): exact versions, the
   no packageManager/engines/corepack policy, workspace, store, CI and
   migration sections.
-- `skills/rule-mcp-toolchain-pnpm/guardrails/` (`pkg-exact-versions`,
+- `skills/rule-toolchain-pnpm/guardrails/` (`pkg-exact-versions`,
   `pkg-no-corepack`, `pkg-no-engines`, `verified-dependencies-only`).
 
 Public sources verified in this session:
@@ -106,14 +106,14 @@ and unified Node runtimes; it stays context only and is not cited.
 --prod` gives a build layer that is reused until the lockfile changes.
 4. `pnpm deploy --prod` produces the deployable tree without devDependencies.
 5. `node-linker` is set explicitly only when a tool needs a hoisted layout.
-6. The Dockerfile stays in `rule-mcp-devops-docker`; this skill owns only the pnpm
+6. The Dockerfile stays in `rule-devops-docker`; this skill owns only the pnpm
    steps.
 
 ## Workstream F - Dependency hygiene
 
 `pnpm audit --prod` on a cadence and before a release, `pnpm dedupe` after an
 upgrade burst, and `pnpm licenses list` when a license inventory is required.
-Publishing and provenance stay with `rule-mcp-process-npm-release`.
+Publishing and provenance stay with `rule-process-npm-release`.
 
 ## Proposed guardrails
 
@@ -141,9 +141,9 @@ The four existing rules stay: `pkg-exact-versions`, `pkg-no-corepack`,
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-toolchain` (HARD)
+Feeds: `rule-toolchain` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -208,7 +208,7 @@ pnpm test
 
 - The Docker question returned both the three integration options and "no
   Docker section". The plan resolves it as: the pnpm steps are documented here
-  and the Dockerfile stays in `rule-mcp-devops-docker`, which is the reading that
+  and the Dockerfile stays in `rule-devops-docker`, which is the reading that
   keeps the no-duplication rule.
 - The `pkg-minimum-release-age` rule is prescriptive, so it stays Tier B and
   might never promote: a project can reasonably decide its own freshness window.

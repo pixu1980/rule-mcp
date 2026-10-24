@@ -7,7 +7,7 @@
 
 ## Context
 
-rule-mcp-backend-express and rule-mcp-backend-api-design mandate a feature-based, layered structure (`routes → handlers → services → repositories`), zod validation at the edge, a centralized error handler with a stable JSON error contract, and OpenAPI documentation.
+rule-backend-express and rule-backend-api-design mandate a feature-based, layered structure (`routes → handlers → services → repositories`), zod validation at the edge, a centralized error handler with a stable JSON error contract, and OpenAPI documentation.
 
 ## Decision
 

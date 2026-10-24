@@ -13,7 +13,7 @@ import { cell, table } from "./_format.mjs";
 import { cliCommands } from "./_registries.mjs";
 
 /** A markdown anchor for the heading this section writes. */
-const anchor = (name) => `#rule-mcp-${name.replaceAll(".", "")}`;
+const anchor = (name) => `#rule-${name.replaceAll(".", "")}`;
 
 /** An empty cell reads better as a dash than as nothing. */
 const orDash = (value) => (value === undefined || value === null || value === "" ? "-" : cell(String(value)));

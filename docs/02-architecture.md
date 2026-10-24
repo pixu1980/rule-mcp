@@ -41,7 +41,7 @@ The flow graph below is the same path an agent takes, top to bottom.
 | Slash commands | Same set installed into each agent/IDE (`/rule`, `/rule-area-*`, personas, session) |
 | MCP tools      | Action tools + one tool per catalog skill                                           |
 | MCP prompts    | Workflow, area, and persona prompts                                                 |
-| MCP resources  | `rulemcp://` indexes and summaries                                                  |
+| MCP resources  | `rule://` indexes and summaries                                                     |
 | Guardrails     | Deterministic checks by family / framework                                          |
 | CLI            | Install, doctor, serve, setup, tools                                                |
 
@@ -67,13 +67,13 @@ Live counts and the Command - Tool - Skill table: [Surface map](./17-surface-map
 | Surface                   | Count | Defined in                                    |
 | ------------------------- | ----- | --------------------------------------------- |
 | MCP tools                 | 102   | `src/tools/*` via `src/tools/router/index.js` |
-| - action tools            | 21    | one per module, registered explicitly         |
-| - skill tools             | 81    | one per catalog skill, generated              |
+| - action tools            | 102   | one per module, registered explicitly         |
+| - skill tools             | 0     | one per catalog skill, generated              |
 | MCP resources             | 170   | `src/resources/index.js`                      |
 | MCP prompts               | 38    | `src/prompts/index.js`                        |
 | - reusable                | 19    | workflow and area prompts                     |
 | - persona                 | 19    | 19 active roles, one command each             |
-| Skills                    | 81    | `skills/rule-mcp-*/SKILL.md`                  |
+| Skills                    | 0     | `skills/rule-*/SKILL.md`                      |
 | Review personas           | 19    | `src/core/review/roles/index.js`              |
 | Guardrail rules           | 9     | `src/core/guardrails/index.js`                |
 | Agent slash commands      | 41    | `src/core/agents/commands/index.js`           |

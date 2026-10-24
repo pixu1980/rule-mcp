@@ -17,7 +17,7 @@
  *   node scripts/reports/compression/index.mjs --json    # machine-readable
  *
  * @see src/core/text/__tests__/_efficacy.test.mjs - the CI floors
- * @see skills/rule-mcp-process-compression/SKILL.md - the rules this ports
+ * @see skills/rule-process-compression/SKILL.md - the rules this ports
  */
 
 process.env.RULE_MCP_NO_TELEMETRY ??= "1";

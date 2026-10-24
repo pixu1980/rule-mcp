@@ -1,4 +1,4 @@
-# rule-mcp-styleguide-baseline - best-practice implementation plan
+# rule-styleguide-baseline - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan plus the vocabulary alignment, the floor section and the three corpus fixes, applied now. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,10 +9,10 @@ Area: styleguide. Order: reverse alphabetical, twenty-seventh skill.
 
 Read in this session:
 
-- `skills/rule-mcp-styleguide-baseline/SKILL.md`: three states, three fallback costs,
+- `skills/rule-styleguide-baseline/SKILL.md`: three states, three fallback costs,
   supports queries, the project floor, the annotation convention.
-- The three skills that already annotate a feature: `rule-mcp-frontend-workers`,
-  `rule-mcp-styleguide-css`, `rule-mcp-platform-web`.
+- The three skills that already annotate a feature: `rule-frontend-workers`,
+  `rule-styleguide-css`, `rule-platform-web`.
 - `package.json`: no `browserslist`, no browser build tool, so the floor has no
   configuration face in this repository.
 
@@ -33,15 +33,15 @@ sense. Confirmed with the owner; nothing is cited from there.
 
 Problems found:
 
-| Problem                            | Detail                                                                                                               |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| the standard was never named       | the three states are Baseline's states with different words                                                          |
-| the corpus violated its own rule   | `rule-mcp-frontend-workers` cited a date, `rule-mcp-styleguide-css` and `rule-mcp-platform-web` made a blanket claim |
-| the floor had one face             | prose only; nothing said how the build tools learn it                                                                |
-| polyfills were unmentioned         | the more expensive cousin of a fallback had no decision                                                              |
-| supports pitfalls were unmentioned | a declaration test is not a feature test; selectors need `selector()`                                                |
-| the trade-off had no name          | progressive enhancement versus graceful degradation                                                                  |
-| no way to check a state            | the skill said to verify and gave no resource                                                                        |
+| Problem                            | Detail                                                                                                   |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| the standard was never named       | the three states are Baseline's states with different words                                              |
+| the corpus violated its own rule   | `rule-frontend-workers` cited a date, `rule-styleguide-css` and `rule-platform-web` made a blanket claim |
+| the floor had one face             | prose only; nothing said how the build tools learn it                                                    |
+| polyfills were unmentioned         | the more expensive cousin of a fallback had no decision                                                  |
+| supports pitfalls were unmentioned | a declaration test is not a feature test; selectors need `selector()`                                    |
+| the trade-off had no name          | progressive enhancement versus graceful degradation                                                      |
+| no way to check a state            | the skill said to verify and gave no resource                                                            |
 
 ## Decisions
 
@@ -64,11 +64,11 @@ stated, so a reader can check a claim instead of trusting it.
 
 ## Workstream B - The corpus fixes, applied
 
-| Skill                       | Was                              | Now                                             |
-| --------------------------- | -------------------------------- | ----------------------------------------------- |
-| `rule-mcp-frontend-workers` | cited a date for the feature     | names the state and the 2.5-year window         |
-| `rule-mcp-styleguide-css`   | claimed everything was supported | says every Baseline browser, which is checkable |
-| `rule-mcp-platform-web`     | claimed everything was baseline  | says every Baseline browser, which is checkable |
+| Skill                   | Was                              | Now                                             |
+| ----------------------- | -------------------------------- | ----------------------------------------------- |
+| `rule-frontend-workers` | cited a date for the feature     | names the state and the 2.5-year window         |
+| `rule-styleguide-css`   | claimed everything was supported | says every Baseline browser, which is checkable |
+| `rule-platform-web`     | claimed everything was baseline  | says every Baseline browser, which is checkable |
 
 ## Workstream C - The floor with two faces, applied
 
@@ -125,9 +125,9 @@ they start as advisory and earn their tier on the corpus.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-styleguide` (HARD)
+Feeds: `rule-styleguide` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

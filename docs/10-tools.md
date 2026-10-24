@@ -7,35 +7,116 @@ a tool, a skill, a prompt, a role, a command or a guardrail;
 `tests/docs/census-generated.test.mjs` compares this file against the live
 registry, so a stale copy fails the build instead of misleading a reader.
 
-## Action tools (21)
+## Action tools (102)
 
 The tools that do something rather than serve a skill. Every one is
 deterministic: none of them calls a model, so the same arguments return the
 same result behind any client.
 
-| Tool                                                | What it does                                                                                                                                                                                                                                                                                                                                  |
-| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`rule_tool`](#ruletool)                            | Route prompt to correct rule-mcp skill.                                                                                                                                                                                                                                                                                                       |
-| [`rule_tool_search`](#ruletoolsearch)               | Semantic search across ALL rule-mcp skills using BM25 ranking.                                                                                                                                                                                                                                                                                |
-| [`rule_tool_check`](#ruletoolcheck)                 | Run guardrail checks on code against any rule-mcp skill.                                                                                                                                                                                                                                                                                      |
-| [`rule_tool_detect`](#ruletooldetect)               | Detect project framework, TypeScript usage, and build tool from package.json.                                                                                                                                                                                                                                                                 |
-| [`rule_tool_compress`](#ruletoolcompress)           | Sole compression engine (ADR 115): preprocess enriched prompts/contexts and postprocess model prose.                                                                                                                                                                                                                                          |
-| [`rule_tool_fix`](#ruletoolfix)                     | Apply deterministic guardrail fixes of every skill (blank lines, braces, ASCII typography, American spelling) to changed files or explicit list.                                                                                                                                                                                              |
-| [`rule_tool_structural`](#ruletoolstructural)       | Declare current task structural or architectural.                                                                                                                                                                                                                                                                                             |
-| [`rule_tool_git`](#ruletoolgit)                     | Audit the feature history and normalize it: base branch, merge base, commit range, Conventional Commit violations and merge commits.                                                                                                                                                                                                          |
-| [`rule_tool_init`](#ruletoolinit)                   | Prepare project for rule-mcp: create central recorder directory under state dir, install or integrate git governance (commit-msg gate and pre-push gate that enforce type(scope): subject, installing Husky only when Node project has no hook mechanism), migrate leftover local.rule-mcp if present, and run tokensave init when installed. |
-| [`rule_tool_plan`](#ruletoolplan)                   | Ask expert review persona to audit, review or plan this project; returns operation contract.                                                                                                                                                                                                                                                  |
-| [`rule_tool_audit`](#ruletoolaudit)                 | Run audit as expert review persona; returns audit operation contract.                                                                                                                                                                                                                                                                         |
-| [`rule_tool_review`](#ruletoolreview)               | Run review as expert review persona; returns review operation contract.                                                                                                                                                                                                                                                                       |
-| [`rule_tool_impersonation`](#ruletoolimpersonation) | Create or refresh audit/review/plan documents for review persona run (impersonation bookkeeping).                                                                                                                                                                                                                                             |
-| [`rule_tool_stats`](#ruletoolstats)                 | Read the local telemetry log and summarize it: call counts, cache hit rate, saved/estimated tokens, latency.                                                                                                                                                                                                                                  |
-| [`rule_tool_sync`](#ruletoolsync)                   | Check how far base branch has moved since this branch forked, and propose rebase.                                                                                                                                                                                                                                                             |
-| [`rule_tool_usage`](#ruletoolusage)                 | Declare an agent usage sidecar for this project when no transcript can be read: input/output tokens, cost.                                                                                                                                                                                                                                    |
-| [`rule_tool_update`](#ruletoolupdate)               | Force-update this local MCP server to newest release tag (checkout main, pull, reinstall), or fast-forward upstream branch when no tags exist yet.                                                                                                                                                                                            |
-| [`rule_tool_handon`](#ruletoolhandon)               | Read last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work.                                                                                                                                                                                                               |
-| [`rule_tool_handoff`](#ruletoolhandoff)             | Generate compressed LLM handoff summary from ADR logs and project context.                                                                                                                                                                                                                                                                    |
-| [`rule_tool_gateway`](#ruletoolgateway)             | Single-entry orchestrator: routes prompt -> loads skill evidence -> checks code against guardrails -> returns receipt.                                                                                                                                                                                                                        |
-| [`rule_tool_apply`](#ruletoolapply)                 | Write files to disk after rule_tool_gateway validation.                                                                                                                                                                                                                                                                                       |
+| Tool                                                                     | What it does                                                                                                                                                                                                                                                                                                                                  |
+| ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`rule_tool`](#ruletool)                                                 | Route prompt to correct rule-mcp skill.                                                                                                                                                                                                                                                                                                       |
+| [`rule_tool_meta`](#ruletoolmeta)                                        | Route meta-framework request to right rule-mcp skill: Astro, Next.js, Nuxt or Remix.                                                                                                                                                                                                                                                          |
+| [`rule_tool_search`](#ruletoolsearch)                                    | Semantic search across ALL rule-mcp skills using BM25 ranking.                                                                                                                                                                                                                                                                                |
+| [`rule_tool_check`](#ruletoolcheck)                                      | Run guardrail checks on code against any rule-mcp skill.                                                                                                                                                                                                                                                                                      |
+| [`rule_tool_detect`](#ruletooldetect)                                    | Detect project framework, TypeScript usage, and build tool from package.json.                                                                                                                                                                                                                                                                 |
+| [`rule_tool_compress`](#ruletoolcompress)                                | Sole compression engine (ADR 115): preprocess enriched prompts/contexts and postprocess model prose.                                                                                                                                                                                                                                          |
+| [`rule_tool_fix`](#ruletoolfix)                                          | Apply deterministic guardrail fixes of every skill (blank lines, braces, ASCII typography, American spelling) to changed files or explicit list.                                                                                                                                                                                              |
+| [`rule_tool_structural`](#ruletoolstructural)                            | Declare current task structural or architectural.                                                                                                                                                                                                                                                                                             |
+| [`rule_tool_git`](#ruletoolgit)                                          | Audit the feature history and normalize it: base branch, merge base, commit range, Conventional Commit violations and merge commits.                                                                                                                                                                                                          |
+| [`rule_tool_init`](#ruletoolinit)                                        | Prepare project for rule-mcp: create central recorder directory under state dir, install or integrate git governance (commit-msg gate and pre-push gate that enforce type(scope): subject, installing Husky only when Node project has no hook mechanism), migrate leftover local.rule-mcp if present, and run tokensave init when installed. |
+| [`rule_tool_plan`](#ruletoolplan)                                        | Ask expert review persona to audit, review or plan this project; returns operation contract.                                                                                                                                                                                                                                                  |
+| [`rule_tool_audit`](#ruletoolaudit)                                      | Run audit as expert review persona; returns audit operation contract.                                                                                                                                                                                                                                                                         |
+| [`rule_tool_review`](#ruletoolreview)                                    | Run review as expert review persona; returns review operation contract.                                                                                                                                                                                                                                                                       |
+| [`rule_tool_impersonation`](#ruletoolimpersonation)                      | Create or refresh audit/review/plan documents for review persona run (impersonation bookkeeping).                                                                                                                                                                                                                                             |
+| [`rule_tool_stats`](#ruletoolstats)                                      | Read the local telemetry log and summarize it: call counts, cache hit rate, saved/estimated tokens, latency.                                                                                                                                                                                                                                  |
+| [`rule_tool_sync`](#ruletoolsync)                                        | Check how far base branch has moved since this branch forked, and propose rebase.                                                                                                                                                                                                                                                             |
+| [`rule_tool_usage`](#ruletoolusage)                                      | Declare an agent usage sidecar for this project when no transcript can be read: input/output tokens, cost.                                                                                                                                                                                                                                    |
+| [`rule_tool_update`](#ruletoolupdate)                                    | Force-update this local MCP server to newest release tag (checkout main, pull, reinstall), or fast-forward upstream branch when no tags exist yet.                                                                                                                                                                                            |
+| [`rule_tool_handon`](#ruletoolhandon)                                    | Read last handoff in docs/handoff/ and report which of its claims are still true: branch, commit range, files, ADRs, open work.                                                                                                                                                                                                               |
+| [`rule_tool_process_adr`](#ruletoolprocessadr)                           | Save Architecture Decision Record (ADR) to docs/adr/.                                                                                                                                                                                                                                                                                         |
+| [`rule_tool_handoff`](#ruletoolhandoff)                                  | Generate compressed LLM handoff summary from ADR logs and project context.                                                                                                                                                                                                                                                                    |
+| [`rule_tool_ai`](#ruletoolai)                                            | rule-ai skill.                                                                                                                                                                                                                                                                                                                                |
+| [`rule_tool_ai_agent_architecture`](#ruletoolaiagentarchitecture)        | rule-ai-agent-architecture skill.                                                                                                                                                                                                                                                                                                             |
+| [`rule_tool_ai_context_engineering`](#ruletoolaicontextengineering)      | rule-ai-context-engineering skill.                                                                                                                                                                                                                                                                                                            |
+| [`rule_tool_ai_evals`](#ruletoolaievals)                                 | rule-ai-evals skill.                                                                                                                                                                                                                                                                                                                          |
+| [`rule_tool_ai_prompting`](#ruletoolaiprompting)                         | rule-ai-prompting skill.                                                                                                                                                                                                                                                                                                                      |
+| [`rule_tool_backend`](#ruletoolbackend)                                  | rule-backend skill.                                                                                                                                                                                                                                                                                                                           |
+| [`rule_tool_backend_express`](#ruletoolbackendexpress)                   | rule-backend-express skill.                                                                                                                                                                                                                                                                                                                   |
+| [`rule_tool_backend_fastify`](#ruletoolbackendfastify)                   | rule-backend-fastify skill.                                                                                                                                                                                                                                                                                                                   |
+| [`rule_tool_backend_graphql`](#ruletoolbackendgraphql)                   | rule-backend-graphql skill.                                                                                                                                                                                                                                                                                                                   |
+| [`rule_tool_backend_hono`](#ruletoolbackendhono)                         | rule-backend-hono skill.                                                                                                                                                                                                                                                                                                                      |
+| [`rule_tool_backend_nestjs`](#ruletoolbackendnestjs)                     | rule-backend-nestjs skill.                                                                                                                                                                                                                                                                                                                    |
+| [`rule_tool_backend_node`](#ruletoolbackendnode)                         | rule-backend-node skill.                                                                                                                                                                                                                                                                                                                      |
+| [`rule_tool_backend_security`](#ruletoolbackendsecurity)                 | rule-backend-security skill.                                                                                                                                                                                                                                                                                                                  |
+| [`rule_tool_backend_workers`](#ruletoolbackendworkers)                   | rule-backend-workers skill.                                                                                                                                                                                                                                                                                                                   |
+| [`rule_tool_data`](#ruletooldata)                                        | rule-data skill.                                                                                                                                                                                                                                                                                                                              |
+| [`rule_tool_data_duckdb`](#ruletooldataduckdb)                           | rule-data-duckdb skill.                                                                                                                                                                                                                                                                                                                       |
+| [`rule_tool_data_indexed_db`](#ruletooldataindexeddb)                    | rule-data-indexed-db skill.                                                                                                                                                                                                                                                                                                                   |
+| [`rule_tool_data_mongodb`](#ruletooldatamongodb)                         | rule-data-mongodb skill.                                                                                                                                                                                                                                                                                                                      |
+| [`rule_tool_data_mysql`](#ruletooldatamysql)                             | rule-data-mysql skill.                                                                                                                                                                                                                                                                                                                        |
+| [`rule_tool_data_postgresql`](#ruletooldatapostgresql)                   | rule-data-postgresql skill.                                                                                                                                                                                                                                                                                                                   |
+| [`rule_tool_data_sql`](#ruletooldatasql)                                 | rule-data-sql skill.                                                                                                                                                                                                                                                                                                                          |
+| [`rule_tool_data_sqlite`](#ruletooldatasqlite)                           | rule-data-sqlite skill.                                                                                                                                                                                                                                                                                                                       |
+| [`rule_tool_data_validation`](#ruletooldatavalidation)                   | rule-data-validation skill.                                                                                                                                                                                                                                                                                                                   |
+| [`rule_tool_devops`](#ruletooldevops)                                    | rule-devops skill.                                                                                                                                                                                                                                                                                                                            |
+| [`rule_tool_devops_deploy_preview`](#ruletooldevopsdeploypreview)        | rule-devops-deploy-preview skill.                                                                                                                                                                                                                                                                                                             |
+| [`rule_tool_devops_docker`](#ruletooldevopsdocker)                       | rule-devops-docker skill.                                                                                                                                                                                                                                                                                                                     |
+| [`rule_tool_devops_observability`](#ruletooldevopsobservability)         | rule-devops-observability skill.                                                                                                                                                                                                                                                                                                              |
+| [`rule_tool_devops_testing`](#ruletooldevopstesting)                     | rule-devops-testing skill.                                                                                                                                                                                                                                                                                                                    |
+| [`rule_tool_frontend`](#ruletoolfrontend)                                | rule-frontend skill.                                                                                                                                                                                                                                                                                                                          |
+| [`rule_tool_frontend_angular`](#ruletoolfrontendangular)                 | rule-frontend-angular skill.                                                                                                                                                                                                                                                                                                                  |
+| [`rule_tool_frontend_react`](#ruletoolfrontendreact)                     | rule-frontend-react skill.                                                                                                                                                                                                                                                                                                                    |
+| [`rule_tool_frontend_solidjs`](#ruletoolfrontendsolidjs)                 | rule-frontend-solidjs skill.                                                                                                                                                                                                                                                                                                                  |
+| [`rule_tool_frontend_svelte`](#ruletoolfrontendsvelte)                   | rule-frontend-svelte skill.                                                                                                                                                                                                                                                                                                                   |
+| [`rule_tool_frontend_template_engine`](#ruletoolfrontendtemplateengine)  | rule-frontend-template-engine skill.                                                                                                                                                                                                                                                                                                          |
+| [`rule_tool_frontend_vue`](#ruletoolfrontendvue)                         | rule-frontend-vue skill.                                                                                                                                                                                                                                                                                                                      |
+| [`rule_tool_frontend_workers`](#ruletoolfrontendworkers)                 | rule-frontend-workers skill.                                                                                                                                                                                                                                                                                                                  |
+| [`rule_tool_meta_astro`](#ruletoolmetaastro)                             | rule-meta-astro skill.                                                                                                                                                                                                                                                                                                                        |
+| [`rule_tool_meta_next`](#ruletoolmetanext)                               | rule-meta-next skill.                                                                                                                                                                                                                                                                                                                         |
+| [`rule_tool_meta_nuxt`](#ruletoolmetanuxt)                               | rule-meta-nuxt skill.                                                                                                                                                                                                                                                                                                                         |
+| [`rule_tool_meta_remix`](#ruletoolmetaremix)                             | rule-meta-remix skill.                                                                                                                                                                                                                                                                                                                        |
+| [`rule_tool_platform`](#ruletoolplatform)                                | rule-platform skill.                                                                                                                                                                                                                                                                                                                          |
+| [`rule_tool_platform_auth`](#ruletoolplatformauth)                       | rule-platform-auth skill.                                                                                                                                                                                                                                                                                                                     |
+| [`rule_tool_platform_desktop`](#ruletoolplatformdesktop)                 | rule-platform-desktop skill.                                                                                                                                                                                                                                                                                                                  |
+| [`rule_tool_platform_library`](#ruletoolplatformlibrary)                 | rule-platform-library skill.                                                                                                                                                                                                                                                                                                                  |
+| [`rule_tool_platform_web`](#ruletoolplatformweb)                         | rule-platform-web skill.                                                                                                                                                                                                                                                                                                                      |
+| [`rule_tool_process`](#ruletoolprocess)                                  | rule-process skill.                                                                                                                                                                                                                                                                                                                           |
+| [`rule_tool_process_ai`](#ruletoolprocessai)                             | rule-process-ai skill.                                                                                                                                                                                                                                                                                                                        |
+| [`rule_tool_process_bmad`](#ruletoolprocessbmad)                         | rule-process-bmad skill.                                                                                                                                                                                                                                                                                                                      |
+| [`rule_tool_process_changelog`](#ruletoolprocesschangelog)               | rule-process-changelog skill.                                                                                                                                                                                                                                                                                                                 |
+| [`rule_tool_process_code_review`](#ruletoolprocesscodereview)            | rule-process-code-review skill.                                                                                                                                                                                                                                                                                                               |
+| [`rule_tool_process_npm_release`](#ruletoolprocessnpmrelease)            | rule-process-npm-release skill.                                                                                                                                                                                                                                                                                                               |
+| [`rule_tool_process_readme`](#ruletoolprocessreadme)                     | rule-process-readme skill.                                                                                                                                                                                                                                                                                                                    |
+| [`rule_tool_process_tdd`](#ruletoolprocesstdd)                           | rule-process-tdd skill.                                                                                                                                                                                                                                                                                                                       |
+| [`rule_tool_styleguide`](#ruletoolstyleguide)                            | rule-styleguide skill.                                                                                                                                                                                                                                                                                                                        |
+| [`rule_tool_styleguide_a11y`](#ruletoolstyleguidea11y)                   | rule-styleguide-a11y skill.                                                                                                                                                                                                                                                                                                                   |
+| [`rule_tool_styleguide_baseline`](#ruletoolstyleguidebaseline)           | rule-styleguide-baseline skill.                                                                                                                                                                                                                                                                                                               |
+| [`rule_tool_styleguide_comments`](#ruletoolstyleguidecomments)           | rule-styleguide-comments skill.                                                                                                                                                                                                                                                                                                               |
+| [`rule_tool_styleguide_configuration`](#ruletoolstyleguideconfiguration) | rule-styleguide-configuration skill.                                                                                                                                                                                                                                                                                                          |
+| [`rule_tool_styleguide_css`](#ruletoolstyleguidecss)                     | rule-styleguide-css skill.                                                                                                                                                                                                                                                                                                                    |
+| [`rule_tool_styleguide_file_tree`](#ruletoolstyleguidefiletree)          | rule-styleguide-file-tree skill.                                                                                                                                                                                                                                                                                                              |
+| [`rule_tool_styleguide_git`](#ruletoolstyleguidegit)                     | rule-styleguide-git skill.                                                                                                                                                                                                                                                                                                                    |
+| [`rule_tool_styleguide_html`](#ruletoolstyleguidehtml)                   | rule-styleguide-html skill.                                                                                                                                                                                                                                                                                                                   |
+| [`rule_tool_styleguide_i18n`](#ruletoolstyleguidei18n)                   | rule-styleguide-i18n skill.                                                                                                                                                                                                                                                                                                                   |
+| [`rule_tool_styleguide_javascript`](#ruletoolstyleguidejavascript)       | rule-styleguide-javascript skill.                                                                                                                                                                                                                                                                                                             |
+| [`rule_tool_styleguide_json`](#ruletoolstyleguidejson)                   | rule-styleguide-json skill.                                                                                                                                                                                                                                                                                                                   |
+| [`rule_tool_styleguide_markdown`](#ruletoolstyleguidemarkdown)           | rule-styleguide-markdown skill.                                                                                                                                                                                                                                                                                                               |
+| [`rule_tool_styleguide_naming`](#ruletoolstyleguidenaming)               | rule-styleguide-naming skill.                                                                                                                                                                                                                                                                                                                 |
+| [`rule_tool_styleguide_typescript`](#ruletoolstyleguidetypescript)       | rule-styleguide-typescript skill.                                                                                                                                                                                                                                                                                                             |
+| [`rule_tool_toolchain`](#ruletooltoolchain)                              | rule-toolchain skill.                                                                                                                                                                                                                                                                                                                         |
+| [`rule_tool_toolchain_biome`](#ruletooltoolchainbiome)                   | rule-toolchain-biome skill.                                                                                                                                                                                                                                                                                                                   |
+| [`rule_tool_toolchain_eslint`](#ruletooltoolchaineslint)                 | rule-toolchain-eslint skill.                                                                                                                                                                                                                                                                                                                  |
+| [`rule_tool_toolchain_husky`](#ruletooltoolchainhusky)                   | rule-toolchain-husky skill.                                                                                                                                                                                                                                                                                                                   |
+| [`rule_tool_toolchain_parcel`](#ruletooltoolchainparcel)                 | rule-toolchain-parcel skill.                                                                                                                                                                                                                                                                                                                  |
+| [`rule_tool_toolchain_pnpm`](#ruletooltoolchainpnpm)                     | rule-toolchain-pnpm skill.                                                                                                                                                                                                                                                                                                                    |
+| [`rule_tool_toolchain_rspack`](#ruletooltoolchainrspack)                 | rule-toolchain-rspack skill.                                                                                                                                                                                                                                                                                                                  |
+| [`rule_tool_toolchain_turborepo`](#ruletooltoolchainturborepo)           | rule-toolchain-turborepo skill.                                                                                                                                                                                                                                                                                                               |
+| [`rule_tool_toolchain_vite`](#ruletooltoolchainvite)                     | rule-toolchain-vite skill.                                                                                                                                                                                                                                                                                                                    |
+| [`rule_tool_ui`](#ruletoolui)                                            | rule-ui skill.                                                                                                                                                                                                                                                                                                                                |
+| [`rule_tool_ui_design_system`](#ruletooluidesignsystem)                  | rule-ui-design-system skill.                                                                                                                                                                                                                                                                                                                  |
+| [`rule_tool_gateway`](#ruletoolgateway)                                  | Single-entry orchestrator: routes prompt -> loads skill evidence -> checks code against guardrails -> returns receipt.                                                                                                                                                                                                                        |
+| [`rule_tool_apply`](#ruletoolapply)                                      | Write files to disk after rule_tool_gateway validation.                                                                                                                                                                                                                                                                                       |
 
 Call any of them from a shell with `rule-mcp tools call <name> --json '{...}'`.
 
@@ -48,6 +129,15 @@ Route prompt to correct rule-mcp skill. Returns structured routing with relevant
 | `prompt`    | string | yes      | -       | User's question about frontend development                                  |
 | `framework` | string | no       | -       | Optional framework hint (react, vue, svelte, angular, etc.) to bias routing |
 | `path`      | string | no       | -       | Optional project path for auto-detecting framework                          |
+
+### rule_tool_meta
+
+Route meta-framework request to right rule-mcp skill: Astro, Next.js, Nuxt or Remix. Returns skill, its relevant sections and base framework skill to load with it.
+
+| Parameter   | Type   | Required | Default | Description                                                                               |
+| ----------- | ------ | -------- | ------- | ----------------------------------------------------------------------------------------- |
+| `prompt`    | string | yes      | -       | What to build or change in a meta-framework: rendering, routing, data loading, deployment |
+| `framework` | string | no       | -       | Optional framework hint (astro, next, nuxt, remix) to skip the concept match              |
 
 ### rule_tool_search
 
@@ -241,6 +331,21 @@ Read last handoff in docs/handoff/ and report which of its claims are still true
 | `list`       | boolean | no       | `false` | List the handoffs and verify nothing                                                                                 |
 | `closeout`   | boolean | no       | `true`  | Archive completed audits/reviews/plans into ADRs before verifying (default on; false = verify only, nothing written) |
 
+### rule_tool_process_adr
+
+Save Architecture Decision Record (ADR) to docs/adr/. Auto-numbers, maintains index, uses Nygard template.
+
+| Parameter      | Type                                                     | Required | Default            | Description                                                           |
+| -------------- | -------------------------------------------------------- | -------- | ------------------ | --------------------------------------------------------------------- |
+| `title`        | string                                                   | yes      | -                  | ADR title, in English (e.g. 'Use PostgreSQL as the primary database') |
+| `status`       | `proposed` \| `accepted` \| `deprecated` \| `superseded` | no       | `"accepted"`       | ADR status                                                            |
+| `context`      | string                                                   | no       | -                  | Context: what forcing factors led to this decision                    |
+| `decision`     | string                                                   | no       | -                  | The decision made and why                                             |
+| `consequences` | string                                                   | no       | -                  | Consequences: positive and negative outcomes                          |
+| `alternatives` | array of string                                          | no       | -                  | Alternative options considered                                        |
+| `tags`         | array of string                                          | no       | `["architecture"]` | Tags for categorization (e.g. database, api, frontend)                |
+| `projectDir`   | string                                                   | no       | `"."`              | Project root directory                                                |
+
 ### rule_tool_handoff
 
 Generate compressed LLM handoff summary from ADR logs and project context. Archives completed audits/reviews/plans as ADRs and repairs ADR numbering first (pass closeout: false to diagnose without writing). Paste output into new chat to resume work seamlessly.
@@ -259,6 +364,1270 @@ Generate compressed LLM handoff summary from ADR logs and project context. Archi
 | `compress`        | boolean                        | no       | `true`      | Aggressively compress output (default: on)                                                                                                     |
 | `maxTokens`       | number                         | no       | `0`         | Target max tokens (0 = no limit)                                                                                                               |
 | `format`          | `full` \| `brief` \| `minimal` | no       | `"full"`    | Output detail level                                                                                                                            |
+
+### rule_tool_ai
+
+rule-ai skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_ai_agent_architecture
+
+rule-ai-agent-architecture skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_ai_context_engineering
+
+rule-ai-context-engineering skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_ai_evals
+
+rule-ai-evals skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_ai_prompting
+
+rule-ai-prompting skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_backend
+
+rule-backend skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_backend_express
+
+rule-backend-express skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_backend_fastify
+
+rule-backend-fastify skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_backend_graphql
+
+rule-backend-graphql skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_backend_hono
+
+rule-backend-hono skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_backend_nestjs
+
+rule-backend-nestjs skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_backend_node
+
+rule-backend-node skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_backend_security
+
+rule-backend-security skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_backend_workers
+
+rule-backend-workers skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_data
+
+rule-data skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_data_duckdb
+
+rule-data-duckdb skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_data_indexed_db
+
+rule-data-indexed-db skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_data_mongodb
+
+rule-data-mongodb skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_data_mysql
+
+rule-data-mysql skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_data_postgresql
+
+rule-data-postgresql skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_data_sql
+
+rule-data-sql skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_data_sqlite
+
+rule-data-sqlite skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_data_validation
+
+rule-data-validation skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_devops
+
+rule-devops skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_devops_deploy_preview
+
+rule-devops-deploy-preview skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_devops_docker
+
+rule-devops-docker skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_devops_observability
+
+rule-devops-observability skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_devops_testing
+
+rule-devops-testing skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_frontend
+
+rule-frontend skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_frontend_angular
+
+rule-frontend-angular skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_frontend_react
+
+rule-frontend-react skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_frontend_solidjs
+
+rule-frontend-solidjs skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_frontend_svelte
+
+rule-frontend-svelte skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_frontend_template_engine
+
+rule-frontend-template-engine skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_frontend_vue
+
+rule-frontend-vue skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_frontend_workers
+
+rule-frontend-workers skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_meta_astro
+
+rule-meta-astro skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_meta_next
+
+rule-meta-next skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_meta_nuxt
+
+rule-meta-nuxt skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_meta_remix
+
+rule-meta-remix skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_platform
+
+rule-platform skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_platform_auth
+
+rule-platform-auth skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_platform_desktop
+
+rule-platform-desktop skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_platform_library
+
+rule-platform-library skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_platform_web
+
+rule-platform-web skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_process
+
+rule-process skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_process_ai
+
+rule-process-ai skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_process_bmad
+
+rule-process-bmad skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_process_changelog
+
+rule-process-changelog skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_process_code_review
+
+rule-process-code-review skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_process_npm_release
+
+rule-process-npm-release skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_process_readme
+
+rule-process-readme skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_process_tdd
+
+rule-process-tdd skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_styleguide
+
+rule-styleguide skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content), scaffold (project structure).
+
+| Parameter             | Type                                                                               | Required | Default  | Description                                                         |
+| --------------------- | ---------------------------------------------------------------------------------- | -------- | -------- | ------------------------------------------------------------------- |
+| `query`               | string                                                                             | no       | -        | Search query (mode=search/tldr)                                     |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `scaffold` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check, scaffold |
+| `code`                | string                                                                             | no       | -        | Code to check (mode=check)                                          |
+| `framework`           | string                                                                             | no       | -        | Framework hint                                                      |
+| `file`                | string                                                                             | no       | -        | Scaffold file                                                       |
+| `target`              | string                                                                             | no       | -        | Target dir                                                          |
+| `fileName`            | string                                                                             | no       | -        | File name                                                           |
+| `isComponent`         | boolean                                                                            | no       | -        |                                                                     |
+| `allowedDependencies` | array of string                                                                    | no       | -        |                                                                     |
+
+### rule_tool_styleguide_a11y
+
+rule-styleguide-a11y skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_styleguide_baseline
+
+rule-styleguide-baseline skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_styleguide_comments
+
+rule-styleguide-comments skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_styleguide_configuration
+
+rule-styleguide-configuration skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_styleguide_css
+
+rule-styleguide-css skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_styleguide_file_tree
+
+rule-styleguide-file-tree skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_styleguide_git
+
+rule-styleguide-git skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_styleguide_html
+
+rule-styleguide-html skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_styleguide_i18n
+
+rule-styleguide-i18n skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_styleguide_javascript
+
+rule-styleguide-javascript skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_styleguide_json
+
+rule-styleguide-json skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_styleguide_markdown
+
+rule-styleguide-markdown skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_styleguide_naming
+
+rule-styleguide-naming skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_styleguide_typescript
+
+rule-styleguide-typescript skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_toolchain
+
+rule-toolchain skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_toolchain_biome
+
+rule-toolchain-biome skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_toolchain_eslint
+
+rule-toolchain-eslint skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_toolchain_husky
+
+rule-toolchain-husky skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_toolchain_parcel
+
+rule-toolchain-parcel skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_toolchain_pnpm
+
+rule-toolchain-pnpm skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_toolchain_rspack
+
+rule-toolchain-rspack skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_toolchain_turborepo
+
+rule-toolchain-turborepo skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_toolchain_vite
+
+rule-toolchain-vite skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_ui
+
+rule-ui skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
+
+### rule_tool_ui_design_system
+
+rule-ui-design-system skill. Modes: full (rules), guardrails (testable assertions), check (validate code), search (find in content).
+
+| Parameter             | Type                                                                 | Required | Default  | Description                                               |
+| --------------------- | -------------------------------------------------------------------- | -------- | -------- | --------------------------------------------------------- |
+| `query`               | string                                                               | no       | -        | Search query (mode=search/tldr)                           |
+| `mode`                | `full` \| `summary` \| `search` \| `guardrails` \| `check` \| `tldr` | no       | `"full"` | Tool mode: full, summary, tldr, search, guardrails, check |
+| `code`                | string                                                               | no       | -        | Code to check (mode=check)                                |
+| `framework`           | string                                                               | no       | -        | Framework hint                                            |
+| `file`                | string                                                               | no       | -        | Scaffold file                                             |
+| `target`              | string                                                               | no       | -        | Target dir                                                |
+| `fileName`            | string                                                               | no       | -        | File name                                                 |
+| `isComponent`         | boolean                                                              | no       | -        |                                                           |
+| `allowedDependencies` | array of string                                                      | no       | -        |                                                           |
 
 ### rule_tool_gateway
 
@@ -283,7 +1652,7 @@ Write files to disk after rule_tool_gateway validation. Needs valid receipt from
 | `path`    | string          | no       | `"."`   | Project root directory                                              |
 | `dryRun`  | boolean         | no       | `true`  | Preview without writing (default: true)                             |
 
-## Skill tools (81)
+## Skill tools (0)
 
 One per catalog skill, generated from the directory. Each serves its
 `SKILL.md` and the sections a route selected, and every one takes the same
@@ -291,16 +1660,12 @@ arguments, so they are listed by area rather than one heading at a time.
 The catalog itself, with what each skill covers, is
 [`09-skills.md`](09-skills.md).
 
-| Area | Tools                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| mcp  | `rule_tool_ai`, `rule_tool_ai_agent_architecture`, `rule_tool_ai_context_engineering`, `rule_tool_ai_evals`, `rule_tool_ai_prompting`, `rule_tool_backend`, `rule_tool_backend_express`, `rule_tool_backend_fastify`, `rule_tool_backend_graphql`, `rule_tool_backend_hono`, `rule_tool_backend_nestjs`, `rule_tool_backend_node`, `rule_tool_backend_security`, `rule_tool_backend_workers`, `rule_tool_data`, `rule_tool_data_duckdb`, `rule_tool_data_indexed_db`, `rule_tool_data_mongodb`, `rule_tool_data_mysql`, `rule_tool_data_postgresql`, `rule_tool_data_sql`, `rule_tool_data_sqlite`, `rule_tool_data_validation`, `rule_tool_devops`, `rule_tool_devops_deploy_preview`, `rule_tool_devops_docker`, `rule_tool_devops_observability`, `rule_tool_devops_testing`, `rule_tool_frontend`, `rule_tool_frontend_angular`, `rule_tool_frontend_react`, `rule_tool_frontend_solidjs`, `rule_tool_frontend_svelte`, `rule_tool_frontend_template_engine`, `rule_tool_frontend_vue`, `rule_tool_frontend_workers`, `rule_tool_meta`, `rule_tool_meta_astro`, `rule_tool_meta_next`, `rule_tool_meta_nuxt`, `rule_tool_meta_remix`, `rule_tool_platform`, `rule_tool_platform_auth`, `rule_tool_platform_desktop`, `rule_tool_platform_library`, `rule_tool_platform_web`, `rule_tool_process`, `rule_tool_process_adr`, `rule_tool_process_ai`, `rule_tool_process_bmad`, `rule_tool_process_changelog`, `rule_tool_process_code_review`, `rule_tool_process_npm_release`, `rule_tool_process_readme`, `rule_tool_process_tdd`, `rule_tool_styleguide`, `rule_tool_styleguide_a11y`, `rule_tool_styleguide_baseline`, `rule_tool_styleguide_comments`, `rule_tool_styleguide_configuration`, `rule_tool_styleguide_css`, `rule_tool_styleguide_file_tree`, `rule_tool_styleguide_git`, `rule_tool_styleguide_html`, `rule_tool_styleguide_i18n`, `rule_tool_styleguide_javascript`, `rule_tool_styleguide_json`, `rule_tool_styleguide_markdown`, `rule_tool_styleguide_naming`, `rule_tool_styleguide_typescript`, `rule_tool_toolchain`, `rule_tool_toolchain_biome`, `rule_tool_toolchain_eslint`, `rule_tool_toolchain_husky`, `rule_tool_toolchain_parcel`, `rule_tool_toolchain_pnpm`, `rule_tool_toolchain_rspack`, `rule_tool_toolchain_turborepo`, `rule_tool_toolchain_vite`, `rule_tool_ui`, `rule_tool_ui_design_system` |
+| Area | Tools |
+| ---- | ----- |
 
-### Arguments, the same for all 81
+### Arguments, the same for all 0
 
-| Parameter   | Type   | Required | Default | Description                                                                               |
-| ----------- | ------ | -------- | ------- | ----------------------------------------------------------------------------------------- |
-| `prompt`    | string | yes      | -       | What to build or change in a meta-framework: rendering, routing, data loading, deployment |
-| `framework` | string | no       | -       | Optional framework hint (astro, next, nuxt, remix) to skip the concept match              |
+Takes no parameters.
 
 ## The rest of the census
 

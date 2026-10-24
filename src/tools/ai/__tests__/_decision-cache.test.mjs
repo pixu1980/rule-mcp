@@ -15,16 +15,14 @@ const { startFakeServer } = await import("../../../core/decision/__tests__/fixtu
 
 await loadAllSkills(true);
 
-const top = ["rule-mcp-frontend-react", "rule-mcp-styleguide-a11y", "rule-mcp-devops-testing", "rule-mcp-platform-web", "rule-mcp-frontend", "rule-mcp-styleguide-i18n"].map(
-  (skill, index) => ({
-    skill,
-    relativeScore: 1 - index / 10,
-    absoluteScore: 20 - index,
-    sections: [],
-    next_tools: [],
-    description: getSkillMetadata(skill)?.description ?? "",
-  }),
-);
+const top = ["rule-frontend-react", "rule-styleguide-a11y", "rule-devops-testing", "rule-platform-web", "rule-frontend", "rule-styleguide-i18n"].map((skill, index) => ({
+  skill,
+  relativeScore: 1 - index / 10,
+  absoluteScore: 20 - index,
+  sections: [],
+  next_tools: [],
+  description: getSkillMetadata(skill)?.description ?? "",
+}));
 const primaryRoute = top[0];
 const ITALIAN = "Come faccio a creare un componente React?";
 const ENGLISH = "I need a React button component";
@@ -98,7 +96,7 @@ test("a cached decision short-circuits before the runtime switches models", asyn
       assert.equal(again.confidence, italian.confidence);
       assert.deepEqual(models, ["ggml-org/Julia-1-GGUF:Q8_0", "ggml-org/Laya-GGUF:Q8_0"]);
       assert.equal(requests.length, before, "a cached decision must not touch the router");
-      assert.equal(english.skill, "rule-mcp-frontend-react");
+      assert.equal(english.skill, "rule-frontend-react");
     });
   } finally {
     await server.close();

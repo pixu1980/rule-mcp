@@ -13,12 +13,12 @@ Database expertise is required in most projects but was absent from the skill ta
 
 Create four database skills spanning relational and document databases:
 
-| Skill                      | Scope                  | Content                                                                                                                                 |
-| -------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `rule-mcp-data-sql`        | General SQL            | Query writing, normalization, transactions, indexing theory, migrations, data types                                                     |
-| `rule-mcp-data-postgresql` | PostgreSQL 16+         | Connection pooling (PgBouncer), schema design, indexing (B-tree, BRIN, partial), streaming replication, partitioning, RLS, ORM patterns |
-| `rule-mcp-data-mysql`      | MySQL 8+ / MariaDB 11+ | InnoDB tuning, utf8mb4, replication (async/semi-sync/GTID), xtrabackup, performance schema                                              |
-| `rule-mcp-data-mongodb`    | MongoDB 7+             | Schema design (embed vs reference), aggregation pipeline, indexing (compound, TTL, text), sharding, WiredTiger, Mongoose patterns       |
+| Skill                  | Scope                  | Content                                                                                                                                 |
+| ---------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `rule-data-sql`        | General SQL            | Query writing, normalization, transactions, indexing theory, migrations, data types                                                     |
+| `rule-data-postgresql` | PostgreSQL 16+         | Connection pooling (PgBouncer), schema design, indexing (B-tree, BRIN, partial), streaming replication, partitioning, RLS, ORM patterns |
+| `rule-data-mysql`      | MySQL 8+ / MariaDB 11+ | InnoDB tuning, utf8mb4, replication (async/semi-sync/GTID), xtrabackup, performance schema                                              |
+| `rule-data-mongodb`    | MongoDB 7+             | Schema design (embed vs reference), aggregation pipeline, indexing (compound, TTL, text), sharding, WiredTiger, Mongoose patterns       |
 
 ## Consequences
 

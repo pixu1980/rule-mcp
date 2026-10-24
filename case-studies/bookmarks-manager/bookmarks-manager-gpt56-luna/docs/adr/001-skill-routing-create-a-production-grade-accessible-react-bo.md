@@ -8,12 +8,12 @@
 ## Context
 
 Prompt: "Create a production-grade accessible React bookmarks manager frontend plus Node/Express/TypeScript backend. Need design system, microinteractions, link scraping, metadata/open graph/image extraction, "
-Routed to: **rule-mcp-frontend-react** (confidence: 1)
-Alternatives: rule-mcp-platform-web (0.59), rule-mcp-architect (0.51), rule-mcp-ui-design-system (0.49)
+Routed to: **rule-frontend-react** (confidence: 1)
+Alternatives: rule-platform-web (0.59), rule-mcp-architect (0.51), rule-ui-design-system (0.49)
 
 ## Decision
 
-Use `rule-mcp-frontend-react` for this task.
+Use `rule-frontend-react` for this task.
 
 ## Consequences
 

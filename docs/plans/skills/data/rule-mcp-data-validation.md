@@ -1,4 +1,4 @@
-# rule-mcp-data-validation - best-practice implementation plan
+# rule-data-validation - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -14,7 +14,7 @@ why a validation skill sits under data.
 - The content is data shape and country formats, not code style.
 - The same values are validated in a client form, sent to the API and stored,
   so the data area is the umbrella that already covers where those values go.
-- No new area and no router: `rule-mcp-data` lists the skill as a child.
+- No new area and no router: `rule-data` lists the skill as a child.
 - The data area description was broadened to "Databases and storage, and the
   shape and validation of the data that reaches them", which is the one
   hand-written line the derived areas cannot produce.
@@ -23,11 +23,11 @@ why a validation skill sits under data.
 
 Read in this session:
 
-- `skills/rule-mcp-data-validation/SKILL.md`: email, phone, VAT, postal code, tax ID,
+- `skills/rule-data-validation/SKILL.md`: email, phone, VAT, postal code, tax ID,
   address, entity validation by country, and library integration with Zod, Joi,
   Yup and class-validator.
-- `skills/rule-mcp-data/SKILL.md`, which now indexes the skill.
-- `skills/rule-mcp-backend-security/SKILL.md`, the owner of validation at the
+- `skills/rule-data/SKILL.md`, which now indexes the skill.
+- `skills/rule-backend-security/SKILL.md`, the owner of validation at the
   request boundary.
 
 Local articles found (context only):
@@ -59,7 +59,7 @@ Standards to anchor (each section cites its own):
 | Question   | Decision                                                                                                                        |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | Area       | `data`; the rename is done (ADR 144)                                                                                            |
-| Router     | `rule-mcp-data` lists the skill; no new area and no router                                                                      |
+| Router     | `rule-data` lists the skill; no new area and no router                                                                          |
 | Scope      | Rename plus a restructure into sections by domain                                                                               |
 | Boundaries | Country formats and checksums here; boundary validation, schema constraints, locale formatting and forms stay with their owners |
 | Additions  | IBAN/SEPA and payment card numbers with Luhn                                                                                    |
@@ -95,11 +95,11 @@ standard it comes from:
 
 ## Workstream C - Boundaries
 
-- `rule-mcp-backend-security` owns validation at the request boundary and the trust
+- `rule-backend-security` owns validation at the request boundary and the trust
   model; this skill owns the format of the value.
-- `rule-mcp-data-*` owns the database constraints; a Zod schema is not a substitute
+- `rule-data-*` owns the database constraints; a Zod schema is not a substitute
   for a `CHECK` or a uniqueness constraint.
-- `rule-mcp-styleguide-i18n` owns locale and `Intl` formatting; this skill owns
+- `rule-styleguide-i18n` owns locale and `Intl` formatting; this skill owns
   whether the value is well formed.
 - The frontend skills own the form; the schema they use is the one defined here.
 
@@ -125,16 +125,16 @@ that a pattern cannot reliably detect. The real verification is the test vectors
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD), `rule-mcp-data-sql` (ORDER)
+Depends on: `rule-process-ai` (HARD), `rule-data-sql` (ORDER)
 
-Feeds: `rule-mcp-data` (HARD)
+Feeds: `rule-data` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Evaluation, move and decisions
 
 - [x] Evaluate the area and record the outcome.
-- [x] Move the skill to `rule-mcp-data-validation` (ADR 144).
+- [x] Move the skill to `rule-data-validation` (ADR 144).
 - [x] Interview the owner and record the decisions.
 - [x] Create this plan and the index entry.
 

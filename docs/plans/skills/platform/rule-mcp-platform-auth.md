@@ -1,12 +1,12 @@
-# rule-mcp-platform-auth - plan
+# rule-platform-auth - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#39`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
-Area: platform. Sibling plans: `rule-mcp-platform-desktop` (which introduces the
-served-references surface this plan needs), `rule-mcp-platform-web`,
-`rule-mcp-platform-library`, `rule-mcp-process` (which regenerates the dispatcher),
-`rule-mcp-process-adr` (the guardrail shape).
+Area: platform. Sibling plans: `rule-platform-desktop` (which introduces the
+served-references surface this plan needs), `rule-platform-web`,
+`rule-platform-library`, `rule-process` (which regenerates the dispatcher),
+`rule-process-adr` (the guardrail shape).
 
 ## Scope decisions (owner, 2026-10-21)
 
@@ -14,7 +14,7 @@ served-references surface this plan needs), `rule-mcp-platform-web`,
 | ------------------ | --------------------------------------------------------------------------------------------------------------- |
 | Scope of this pass | **Plan only**                                                                                                   |
 | Identity           | Thin body plus `references/`: the body keeps the choice and the matrix, the flows and patterns move out         |
-| Boundary           | This skill owns **strategy and protocols**; `rule-mcp-backend-security` owns the **lifecycle**                  |
+| Boundary           | This skill owns **strategy and protocols**; `rule-backend-security` owns the **lifecycle**                      |
 | Reach              | All three fixes land here: the router row, the dispatcher row, and the router description that never names auth |
 | Dated claims       | Both: a year-stamped claim needs a named source, and the skill records when it was last reviewed                |
 | Rule set           | Six rules, all Tier B (advisory)                                                                                |
@@ -29,43 +29,43 @@ served-references surface this plan needs), `rule-mcp-platform-web`,
 ## Cross-plan dependencies
 
 - **Served references.** Splitting the body only works if `references/` is
-  reachable. `rule-mcp-platform-desktop` plans that resource; this plan consumes it.
+  reachable. `rule-platform-desktop` plans that resource; this plan consumes it.
   If the resource is dropped there, this plan's Phase 3 falls back to declaring
   the files in the body.
 - **Router and dispatcher.** The rows for this skill belong to tables owned by
-  `rule-mcp-process` (dispatcher) and by the `rule-mcp-platform` router plan. This plan
+  `rule-process` (dispatcher) and by the `rule-platform` router plan. This plan
   makes the edits anyway, because the owner asked for the doors to open here;
   the other two plans must not undo them.
-- **`ROUTER_GAPS`.** The entry `"rule-mcp-platform": ["rule-mcp-platform-auth"]` is
+- **`ROUTER_GAPS`.** The entry `"rule-platform": ["rule-platform-auth"]` is
   deleted in Phase 5, and the coverage test fails if it outlives the row.
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-platform-auth/SKILL.md` is **675 lines**, 30 sections, no
+`skills/rule-platform-auth/SKILL.md` is **675 lines**, 30 sections, no
 `guardrails/`, no `references/`, no `guardrails:` frontmatter key.
 
 ### It has no doors at all
 
-| Door                                | State                                                                                          |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `rule-mcp-platform` router table    | missing: recorded in `scripts/data/router-gaps.data.mjs`                                       |
-| `rule-mcp` dispatcher table         | missing: one of the 22 unlisted skills                                                         |
-| `rule-mcp-platform` description     | does not mention auth: "Covers desktop, mobile (Expo), library authoring, and web conventions" |
-| `rule-mcp-platform` Quick Selection | no line reaches auth                                                                           |
-| Inbound links                       | one skill mentions it in passing; the only other hits are generated docs                       |
+| Door                            | State                                                                                          |
+| ------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `rule-platform` router table    | missing: recorded in `scripts/data/router-gaps.data.mjs`                                       |
+| `rule-mcp` dispatcher table     | missing: one of the 22 unlisted skills                                                         |
+| `rule-platform` description     | does not mention auth: "Covers desktop, mobile (Expo), library authoring, and web conventions" |
+| `rule-platform` Quick Selection | no line reaches auth                                                                           |
+| Inbound links                   | one skill mentions it in passing; the only other hits are generated docs                       |
 
 A 675-line skill that no reader can reach from either index is the strongest
 single finding in this plan series. It was written well and never wired.
 
-### The boundary with `rule-mcp-backend-security` is undecided
+### The boundary with `rule-backend-security` is undecided
 
-`rule-mcp-backend-security` describes itself as owning "the authentication
+`rule-backend-security` describes itself as owning "the authentication
 lifecycle: JWT verification, session revocation, logout, password reset,
 remembered devices, step-up auth, and CSRF", and carries the
 `authentication` tag. This skill covers sessions, JWT, token storage, CSRF and
 cookie flags too. Measured overlap:
 
-| Topic                   | In `rule-mcp-platform-auth`     | In `rule-mcp-backend-security`            |
+| Topic                   | In `rule-platform-auth`         | In `rule-backend-security`                |
 | ----------------------- | ------------------------------- | ----------------------------------------- |
 | JWT                     | comparison, revocation, hygiene | "a JWT is trustworthy because it decoded" |
 | CSRF                    | double-submit pattern           | named in the description                  |
@@ -113,19 +113,19 @@ decision matrix by archetype, the guards, the pointers. Roughly 200 lines.
 
 ## The six rules
 
-| id                                 | Rejects                                                                  | Reads                       | Tier | Today                                             |
-| ---------------------------------- | ------------------------------------------------------------------------ | --------------------------- | ---- | ------------------------------------------------- |
-| `auth-reachable`                   | A skill that no area router table lists                                  | `code` + `context.fileList` | B    | red: this skill                                   |
-| `auth-no-duplicate-security-rules` | JWT, CSRF or cookie-flag rules restated outside the owner decided in ADR | `code`                      | B    | red: both skills                                  |
-| `auth-owner-named`                 | A delegated section naming no owner                                      | `code`                      | B    | red: no link to `rule-mcp-backend-security` today |
-| `auth-no-stale-skill-id`           | A `rule-mcp-...` id with no skill directory                              | `code` + `context.fileList` | B    | clean                                             |
-| `auth-dated-claims`                | A year in the text with no source named nearby                           | `code`                      | B    | red: two claims                                   |
-| `auth-matrix-single-source`        | The archetype matrix restated in a reference or a second table           | `code` (tables)             | B    | clean; the split creates the risk                 |
+| id                                 | Rejects                                                                  | Reads                       | Tier | Today                                         |
+| ---------------------------------- | ------------------------------------------------------------------------ | --------------------------- | ---- | --------------------------------------------- |
+| `auth-reachable`                   | A skill that no area router table lists                                  | `code` + `context.fileList` | B    | red: this skill                               |
+| `auth-no-duplicate-security-rules` | JWT, CSRF or cookie-flag rules restated outside the owner decided in ADR | `code`                      | B    | red: both skills                              |
+| `auth-owner-named`                 | A delegated section naming no owner                                      | `code`                      | B    | red: no link to `rule-backend-security` today |
+| `auth-no-stale-skill-id`           | A `rule-mcp-...` id with no skill directory                              | `code` + `context.fileList` | B    | clean                                         |
+| `auth-dated-claims`                | A year in the text with no source named nearby                           | `code`                      | B    | red: two claims                               |
+| `auth-matrix-single-source`        | The archetype matrix restated in a reference or a second table           | `code` (tables)             | B    | clean; the split creates the risk             |
 
 ## Phase 0 - Decisions
 
 - [ ] ADR: the auth boundary. Strategy and protocols here, lifecycle in
-      `rule-mcp-backend-security`, with the sentence that decides a disputed case.
+      `rule-backend-security`, with the sentence that decides a disputed case.
 - [ ] ADR: the rule design, Tier B, dual detection.
 
 ## Phase 1 - Fixtures first (red)
@@ -134,12 +134,12 @@ decision matrix by archetype, the guards, the pointers. Roughly 200 lines.
       `duplicate-jwt-rules/`, `unsourced-year/`, `matrix-restated/`, each with a
       one-line `README.md`.
 - [ ] Six `CORPUS` pairs in `tests/fixtures/guardrail-corpus.mjs` bound to
-      `rule-mcp-platform-auth`.
+      `rule-platform-auth`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ## Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-platform-auth/guardrails/`: six rule files plus `index.js`.
+- [ ] `skills/rule-platform-auth/guardrails/`: six rule files plus `index.js`.
 - [ ] `guardrails: [...]` frontmatter, ids equal to the exports.
 - [ ] `reviewed:` frontmatter support: the parser key, the metadata exposure,
       the census field if reported. Three files, one test each.
@@ -156,23 +156,23 @@ decision matrix by archetype, the guards, the pointers. Roughly 200 lines.
 ## Phase 4 - Resolve the boundary
 
 - [ ] This skill keeps strategy, protocols and passkeys; it links
-      `rule-mcp-backend-security` for verification, revocation, logout, reset and
+      `rule-backend-security` for verification, revocation, logout, reset and
       step-up.
-- [ ] `rule-mcp-backend-security` keeps the lifecycle and links here for the choice
+- [ ] `rule-backend-security` keeps the lifecycle and links here for the choice
       and the protocols; its description stops claiming the whole of auth.
 - [ ] Neither skill restates the other's rules; the rule enforces it.
 
 ## Phase 5 - Open the doors
 
-- [ ] `rule-mcp-platform` router: a table row and a Quick Selection line.
-- [ ] `rule-mcp-platform` description: name auth among the platforms.
-- [ ] Dispatcher row (regenerated if the `rule-mcp-process` plan lands first).
-- [ ] Delete `"rule-mcp-platform": ["rule-mcp-platform-auth"]` from
+- [ ] `rule-platform` router: a table row and a Quick Selection line.
+- [ ] `rule-platform` description: name auth among the platforms.
+- [ ] Dispatcher row (regenerated if the `rule-process` plan lands first).
+- [ ] Delete `"rule-platform": ["rule-platform-auth"]` from
       `scripts/data/router-gaps.data.mjs`.
 
 ## Phase 6 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-platform-auth/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-platform-auth/guardrails/`
 - [ ] `_corpus`, `_routing-corpus` and `_router-child-coverage` suites.
 - [ ] Catalog scan with the six rules: only the documented cases remain.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
@@ -196,7 +196,7 @@ Plan default: `T5-bulk` - `minimax-m3.1-flash`. Fallback: `step-5-preview` for a
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-platform-auth/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-platform-auth/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_router-child-coverage.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
@@ -208,9 +208,9 @@ pnpm lint
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD), `rule-mcp-platform-desktop#3` (CONTRACT), `rule-mcp-platform-desktop#3` (CONTRACT)
+Depends on: `rule-process-ai` (HARD), `rule-platform-desktop#3` (CONTRACT), `rule-platform-desktop#3` (CONTRACT)
 
-Feeds: `rule-mcp-platform` (HARD)
+Feeds: `rule-platform` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

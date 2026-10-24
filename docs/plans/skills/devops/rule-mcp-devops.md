@@ -1,12 +1,12 @@
-# rule-mcp-devops - plan
+# rule-devops - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#61`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: devops, router, planned last in the area (`DEPENDENCIES.md`). Sibling
-plans: `rule-mcp-devops-testing`, `rule-mcp-devops-observability`, `rule-mcp-devops-docker`,
-`rule-mcp-devops-deploy-preview`. The shared router rules and the route-table
-generator come from `rule-mcp-process`.
+plans: `rule-devops-testing`, `rule-devops-observability`, `rule-devops-docker`,
+`rule-devops-deploy-preview`. The shared router rules and the route-table
+generator come from `rule-process`.
 
 ## Scope decisions (owner)
 
@@ -30,18 +30,18 @@ Inherited from the platform, meta and frontend interviews, 2026-10-21:
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-devops/SKILL.md` is **42 lines**: frontmatter with a `guardrails:`
+`skills/rule-devops/SKILL.md` is **42 lines**: frontmatter with a `guardrails:`
 key, a three-row table, a four-line Quick Selection, and three See-also links. It
 is the smallest router in the catalog and one of only two that own rules.
 
 ### The table and the Quick Selection disagree
 
-| Skill                            | Table row | Quick Selection line |
-| -------------------------------- | --------- | -------------------- |
-| `rule-mcp-devops-docker`         | yes       | yes                  |
-| `rule-mcp-devops-observability`  | yes       | yes                  |
-| `rule-mcp-devops-testing`        | yes       | yes                  |
-| `rule-mcp-devops-deploy-preview` | **no**    | **yes**              |
+| Skill                        | Table row | Quick Selection line |
+| ---------------------------- | --------- | -------------------- |
+| `rule-devops-docker`         | yes       | yes                  |
+| `rule-devops-observability`  | yes       | yes                  |
+| `rule-devops-testing`        | yes       | yes                  |
+| `rule-devops-deploy-preview` | **no**    | **yes**              |
 
 So the router's short list advertises a skill its own table omits, and the gap
 recorded in `ROUTER_GAPS` agrees with the table and not with the prose. Two
@@ -51,7 +51,7 @@ in the series for generating both from one source.
 ### The two rules it owns
 
 `env-gitignore` and `secret-detection` are the only area-level rules in the
-catalog besides `rule-mcp-backend`'s. They are the right rules to own at this level:
+catalog besides `rule-backend`'s. They are the right rules to own at this level:
 leaking a `.env` or a secret is a devops failure, not a framework one. The router
 plan keeps them and adds the shared six beside them.
 
@@ -60,7 +60,7 @@ plan keeps them and adds the shared six beside them.
 Nine tags: `devops`, `ci`, `cd`, `docker`, `preview`, `testing`,
 `observability`, `version`, `index`. Seven of them are the subjects of the four
 leaves, so a prompt about Docker can match this router and the docker leaf
-equally. The same pruning `rule-mcp-platform`, `rule-mcp-meta` and `rule-mcp-frontend` needed.
+equally. The same pruning `rule-platform`, `rule-meta` and `rule-frontend` needed.
 
 ### Reach
 
@@ -96,7 +96,7 @@ equally. The same pruning `rule-mcp-platform`, `rule-mcp-meta` and `rule-mcp-fro
 - [ ] `tests/fixtures/devops-router/`: `clean/`, `missing-child/`,
       `selection-without-row/`, `tag-overlap/`, each with a one-line
       `README.md`.
-- [ ] Eight `CORPUS` pairs bound to `rule-mcp-devops`, two of them for the rules it
+- [ ] Eight `CORPUS` pairs bound to `rule-devops`, two of them for the rules it
       already owns.
 - [ ] Suites written and watched to fail with "rule not found".
 
@@ -152,7 +152,7 @@ pnpm lint
 
 The router closes after its leaves and after the shared router rules and the route-table generator are exported.
 
-Depends on: `rule-mcp-devops-deploy-preview` (HARD), `rule-mcp-devops-docker` (HARD), `rule-mcp-devops-observability` (HARD), `rule-mcp-devops-testing` (HARD), `rule-mcp-process#2` (CONTRACT), `rule-mcp-process#3` (CONTRACT)
+Depends on: `rule-devops-deploy-preview` (HARD), `rule-devops-docker` (HARD), `rule-devops-observability` (HARD), `rule-devops-testing` (HARD), `rule-process#2` (CONTRACT), `rule-process#3` (CONTRACT)
 
 Feeds:,
 

@@ -24,23 +24,23 @@ export function installedSkillNames() {
 
 /**
  * Whether a directory name belongs to the server. Every skill the installer
- * copies lives in the `rule-mcp-` namespace, so a `rule-mcp-` directory in one of the
+ * copies lives in the `rule-` namespace, so a `rule-` directory in one of the
  * install targets is the installer's, including a name an earlier release wrote
- * and a later one renamed away (`rule-mcp-process-compression`), plus the
+ * and a later one renamed away (`rule-process-compression`), plus the
  * generated persona skills (`rule-persona-<role>` and the older per-operation shape).
  *
  * @param {string} name
  * @returns {boolean}
  */
 export function isInstallerOwned(name) {
-  return name === "rule-mcp" || (typeof name === "string" && (name.startsWith("rule-mcp-") || name.startsWith("rule-persona-")));
+  return name === "rule" || (typeof name === "string" && (name.startsWith("rule-mcp-") || name.startsWith("rule-persona-")));
 }
 
 /**
  * Remove the copied skills from one target directory.
  *
  * Only the installer's namespace is removed; a skill the user wrote by hand
- * (`caveman`, `compress`) is not `rule-mcp-`, so it survives. A missing directory is
+ * (`caveman`, `compress`) is not `rule-`, so it survives. A missing directory is
  * a no-op.
  *
  * @param {string} targetDir

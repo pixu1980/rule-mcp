@@ -34,13 +34,13 @@ test("no selection flag means no selection, which every caller reads as all of t
 test("a selection survives the round trip through the argv of the sync run", () => {
   assert.deepEqual(selectionArgs({ preset: "minimal" }), ["--preset", "minimal"]);
   assert.deepEqual(selectionArgs(selectionOf({ preset: "full" })), ["--preset", "full"]);
-  assert.deepEqual(selectionArgs({ families: ["areas", "tasks"], areas: ["frontend"], skills: ["rule-mcp-frontend-react"] }), [
+  assert.deepEqual(selectionArgs({ families: ["areas", "tasks"], areas: ["frontend"], skills: ["rule-frontend-react"] }), [
     "--families",
     "areas,tasks",
     "--areas",
     "frontend",
     "--skills",
-    "rule-mcp-frontend-react",
+    "rule-frontend-react",
   ]);
 });
 

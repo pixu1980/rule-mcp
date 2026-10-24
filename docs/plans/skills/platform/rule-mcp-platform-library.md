@@ -1,10 +1,10 @@
-# rule-mcp-platform-library - plan
+# rule-platform-library - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#37`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
-Area: platform. Sibling plans: `rule-mcp-platform-web` (same thin-umbrella model),
-`rule-mcp-process-adr`, `rule-mcp-process` (same guardrail shape).
+Area: platform. Sibling plans: `rule-platform-web` (same thin-umbrella model),
+`rule-process-adr`, `rule-process` (same guardrail shape).
 
 ## Scope decisions (owner, 2026-10-21)
 
@@ -12,8 +12,8 @@ Area: platform. Sibling plans: `rule-mcp-platform-web` (same thin-umbrella model
 | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
 | Scope of this pass | **Plan only**                                                                                                      |
 | Identity           | A thin umbrella that delegates: keep the package/API surface, hand the rest to its owner                           |
-| Publishing         | `rule-mcp-process-npm-release` owns it. The section here becomes one link                                          |
-| Changelog          | `rule-mcp-process-changelog` owns it. The format block here becomes one link                                       |
+| Publishing         | `rule-process-npm-release` owns it. The section here becomes one link                                              |
+| Changelog          | `rule-process-changelog` owns it. The format block here becomes one link                                           |
 | Router row         | Corrected here, in Phase 5: the platform router and the dispatcher both describe this skill as the publishing path |
 | Rule set           | Six rules, all Tier B (advisory)                                                                                   |
 | Detection          | Both: section parsing plus injected `fileList`                                                                     |
@@ -26,29 +26,29 @@ Area: platform. Sibling plans: `rule-mcp-platform-web` (same thin-umbrella model
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-platform-library/SKILL.md` is 258 lines, has no `guardrails/`, no
+`skills/rule-platform-library/SKILL.md` is 258 lines, has no `guardrails/`, no
 `references/`, no `guardrails:` frontmatter key, and **links none of the skills
-whose content it restates**: `rule-mcp-process-npm-release`,
-`rule-mcp-process-changelog`, `rule-mcp-styleguide-file-tree`, `rule-mcp-toolchain-pnpm`,
-`rule-mcp-process-tdd` and `rule-mcp-styleguide-typescript` are each mentioned zero times.
-The only two skill ids in the body are `rule-mcp` and `rule-mcp-platform`, both in See
+whose content it restates**: `rule-process-npm-release`,
+`rule-process-changelog`, `rule-styleguide-file-tree`, `rule-toolchain-pnpm`,
+`rule-process-tdd` and `rule-styleguide-typescript` are each mentioned zero times.
+The only two skill ids in the body are `rule-mcp` and `rule-platform`, both in See
 also.
 
 ### What the body contains, and who owns each part
 
-| Section                                  | Owner today                                                                  |
-| ---------------------------------------- | ---------------------------------------------------------------------------- |
-| Core Rules (8 items)                     | `rule-mcp-styleguide-*`, `rule-mcp-toolchain-pnpm`, `rule-mcp-process-tdd`   |
-| Tree-Shaking and Bundle Size             | **nobody else: keep** (library-specific)                                     |
-| File Tree Convention                     | `rule-mcp-styleguide-file-tree`                                              |
-| Package.json Structure, sub-path exports | **split**: the exports map is library-shaped, the pnpm fields are not        |
-| Monorepo Integration                     | `rule-mcp-toolchain-pnpm` (workspaces) with a library-specific consumer note |
-| Public API Contract, barrel, deprecation | **nobody else: keep**                                                        |
-| Build (dual ESM/CJS)                     | **nobody else: keep**                                                        |
-| Testing                                  | `rule-mcp-process-tdd`                                                       |
-| Publishing                               | `rule-mcp-process-npm-release`                                               |
-| Changelog Format                         | `rule-mcp-process-changelog`                                                 |
-| Quick Reference                          | derived from the above                                                       |
+| Section                                  | Owner today                                                              |
+| ---------------------------------------- | ------------------------------------------------------------------------ |
+| Core Rules (8 items)                     | `rule-styleguide-*`, `rule-toolchain-pnpm`, `rule-process-tdd`           |
+| Tree-Shaking and Bundle Size             | **nobody else: keep** (library-specific)                                 |
+| File Tree Convention                     | `rule-styleguide-file-tree`                                              |
+| Package.json Structure, sub-path exports | **split**: the exports map is library-shaped, the pnpm fields are not    |
+| Monorepo Integration                     | `rule-toolchain-pnpm` (workspaces) with a library-specific consumer note |
+| Public API Contract, barrel, deprecation | **nobody else: keep**                                                    |
+| Build (dual ESM/CJS)                     | **nobody else: keep**                                                    |
+| Testing                                  | `rule-process-tdd`                                                       |
+| Publishing                               | `rule-process-npm-release`                                               |
+| Changelog Format                         | `rule-process-changelog`                                                 |
+| Quick Reference                          | derived from the above                                                   |
 
 Kept content: the public API contract, dual ESM/CJS build, the exports map,
 tree-shaking, and the monorepo consumer note. Everything else is a pointer.
@@ -57,13 +57,13 @@ tree-shaking, and the monorepo consumer note. Everything else is a pointer.
 
 1. **Publishing.** This skill ends its release flow with `pnpm publish` and the
    comment "Publish to pnpm" (four occurrences, one of them rendered inside the
-   Quick Reference table). `rule-mcp-process-npm-release` says the opposite:
+   Quick Reference table). `rule-process-npm-release` says the opposite:
    publish with `npm` unless the package relies on `workspace:` or a
    `beforePacking` hook, use trusted publishing from CI, and reach for
    `pnpm stage publish` only in that case. "Publish to pnpm" is also factually
    wrong: pnpm publishes to the npm registry.
 2. **Changelog.** This skill teaches writing `CHANGELOG.md` by hand ("Update
-   CHANGELOG.md", then bump and publish). `rule-mcp-process-changelog` says the file
+   CHANGELOG.md", then bump and publish). `rule-process-changelog` says the file
    is generated at the release tag from the commits, never formatted by hand,
    and belongs in the formatter's ignore list. The two cannot both be true.
 
@@ -71,12 +71,12 @@ tree-shaking, and the monorepo consumer note. Everything else is a pointer.
 
 Three places point here and two of them route the wrong question:
 
-| Where                                   | Says                                                                                 |
-| --------------------------------------- | ------------------------------------------------------------------------------------ |
-| `rule-mcp-platform` table               | "npm package"                                                                        |
-| `rule-mcp-platform` Quick Selection     | "Need to publish an npm package? -> `rule-mcp-platform-library`"                     |
-| `rule-mcp` dispatcher                   | "Reusable library/package development ... pnpm package structure, public API design" |
-| `rule-mcp-process-npm-release` See also | "Package structure and public API design for the thing being published"              |
+| Where                               | Says                                                                                 |
+| ----------------------------------- | ------------------------------------------------------------------------------------ |
+| `rule-platform` table               | "npm package"                                                                        |
+| `rule-platform` Quick Selection     | "Need to publish an npm package? -> `rule-platform-library`"                         |
+| `rule-mcp` dispatcher               | "Reusable library/package development ... pnpm package structure, public API design" |
+| `rule-process-npm-release` See also | "Package structure and public API design for the thing being published"              |
 
 The last line is the correct boundary, and the neighbor already states it.
 
@@ -103,12 +103,12 @@ The last line is the correct boundary, and the neighbor already states it.
       `hand-written-changelog/`, `unnamed-owner/`, `duplicate-file-tree/`, each
       with a one-line `README.md` stating what it proves.
 - [ ] Six `CORPUS` pairs in `tests/fixtures/guardrail-corpus.mjs` bound to
-      `rule-mcp-platform-library`.
+      `rule-platform-library`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ## Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-platform-library/guardrails/`: six rule files plus
+- [ ] `skills/rule-platform-library/guardrails/`: six rule files plus
       `index.js`.
 - [ ] `guardrails: [...]` frontmatter, ids equal to the exports.
 - [ ] Green the Phase 1 suites.
@@ -116,14 +116,14 @@ The last line is the correct boundary, and the neighbor already states it.
 ## Phase 3 - Resolve the contradictions
 
 - [ ] Delete the Publishing section; one line points at
-      `rule-mcp-process-npm-release`.
+      `rule-process-npm-release`.
 - [ ] Delete the Changelog Format block; one line points at
-      `rule-mcp-process-changelog`. The rule keeps the hand-written form from coming
+      `rule-process-changelog`. The rule keeps the hand-written form from coming
       back.
 - [ ] Delete the File Tree Convention section; one line points at
-      `rule-mcp-styleguide-file-tree`, which already explains the underscore.
-- [ ] Testing section points at `rule-mcp-process-tdd`; JSDoc requirements point at
-      `rule-mcp-styleguide-typescript`.
+      `rule-styleguide-file-tree`, which already explains the underscore.
+- [ ] Testing section points at `rule-process-tdd`; JSDoc requirements point at
+      `rule-styleguide-typescript`.
 - [ ] Core Rules collapse to what this skill actually owns, with the rest named
       by owner.
 
@@ -136,23 +136,23 @@ The last line is the correct boundary, and the neighbor already states it.
       them work.
 - [ ] Tree-shaking: `sideEffects: false`, the barrel trade-off above ~50
       exports.
-- [ ] Monorepo consumption note, pointing at `rule-mcp-toolchain-pnpm` for
+- [ ] Monorepo consumption note, pointing at `rule-toolchain-pnpm` for
       workspaces.
 - [ ] Target: ~90 lines of kept content plus pointers.
 
 ## Phase 5 - Router and reach
 
-- [ ] `rule-mcp-platform` row becomes "npm package structure, public API, dual
+- [ ] `rule-platform` row becomes "npm package structure, public API, dual
       ESM/CJS".
-- [ ] `rule-mcp-platform` Quick Selection: publishing routes to
-      `rule-mcp-process-npm-release`, package shape routes here.
+- [ ] `rule-platform` Quick Selection: publishing routes to
+      `rule-process-npm-release`, package shape routes here.
 - [ ] Dispatcher row regenerated from the new description.
-- [ ] `rule-mcp-process-npm-release` See also keeps its line and gains the reverse
+- [ ] `rule-process-npm-release` See also keeps its line and gains the reverse
       link here.
 
 ## Phase 6 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-platform-library/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-platform-library/guardrails/`
 - [ ] `_corpus` and `_routing-corpus` suites.
 - [ ] Catalog scan with the six rules: only the documented duplication remains.
 - [ ] Owner coherence: every owner named here says the thing it is cited for.
@@ -177,7 +177,7 @@ Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for author
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-platform-library/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-platform-library/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
 pnpm census && pnpm census:check
@@ -188,9 +188,9 @@ pnpm lint
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-platform` (HARD)
+Feeds: `rule-platform` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

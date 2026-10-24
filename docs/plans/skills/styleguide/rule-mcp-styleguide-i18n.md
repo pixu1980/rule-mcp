@@ -1,4 +1,4 @@
-# rule-mcp-styleguide-i18n - best-practice implementation plan
+# rule-styleguide-i18n - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,7 +9,7 @@ Area: styleguide. Order: reverse alphabetical, eighteenth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-styleguide-i18n/SKILL.md` (308 lines): externalization, key
+- `skills/rule-styleguide-i18n/SKILL.md` (308 lines): externalization, key
   naming, plurals, gender and ordinals, `Intl.DateTimeFormat`,
   `Intl.NumberFormat`, RTL, pseudo-localization, CI, what never goes in a
   translation file, a checklist, and a final "Conventions (rules -> skills
@@ -101,7 +101,7 @@ bidi control characters and when not to use them.
 3. Text expansion is planned for: German and Finnish run longer than English,
    and a layout that fits English breaks.
 4. The `lang` attribute is set per document and per foreign-language run; the
-   boundary with `rule-mcp-styleguide-a11y` is a link.
+   boundary with `rule-styleguide-a11y` is a link.
 
 ## Workstream G - Pseudo-localization
 
@@ -139,9 +139,9 @@ Trigger: UI files (`.js`, `.jsx`, `.ts`, `.tsx`, `.vue`, `.svelte`, `.html`,
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-styleguide` (HARD)
+Feeds: `rule-styleguide` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

@@ -64,7 +64,7 @@ export const SCAFFOLD_GUARDRAILS = [
     return {
       pass: hasEslint,
       failCount: hasEslint ? 0 : 1,
-      suggestion: "Create eslint.config.mjs with @eslint/js + eslint-plugin-unicorn (see rule-mcp-toolchain-eslint).",
+      suggestion: "Create eslint.config.mjs with @eslint/js + eslint-plugin-unicorn (see rule-toolchain-eslint).",
     };
   }),
   SCAFFOLD_CHECK("tsconfig.json", "TypeScript config present", (code) => {

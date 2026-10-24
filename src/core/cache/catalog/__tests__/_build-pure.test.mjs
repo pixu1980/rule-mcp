@@ -19,7 +19,7 @@ test("a string that names a place on this machine is caught", () => {
 });
 
 test("a string that names nothing local passes", () => {
-  for (const value of ["react", "src/index.js", "rule-mcp-frontend-react", "https://example.com/a", ""]) {
+  for (const value of ["react", "src/index.js", "rule-frontend-react", "https://example.com/a", ""]) {
     assert.equal(namesALocalPath(value), false, `${value} is portable`);
   }
 });

@@ -24,7 +24,7 @@ test.after(() => {
 
 test("the multilingual model is excluded from the cache gate", async () => {
   cacheClear();
-  cacheStore("rule_tool", { prompt: "create a react button component" }, { content: [{ type: "text", text: JSON.stringify({ route: "rule-mcp-frontend-react" }) }] }, {});
+  cacheStore("rule_tool", { prompt: "create a react button component" }, { content: [{ type: "text", text: JSON.stringify({ route: "rule-frontend-react" }) }] }, {});
 
   const evaluated = await evaluateDecision("rule_tool", { prompt: "create a react form component" });
 

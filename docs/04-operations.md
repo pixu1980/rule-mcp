@@ -11,7 +11,7 @@ never hand-edited; this document points at them instead of restating them.
 
 - Every tool, with its schema and modes: [10-tools.md](./10-tools.md)
 - Every prompt and its arguments: [11-prompts.md](./11-prompts.md)
-- Every `rulemcp://` resource URI: [16-resources.md](./16-resources.md)
+- Every `rule://` resource URI: [16-resources.md](./16-resources.md)
 - What each skill covers: [09-skills.md](./09-skills.md)
 
 ## Plugins
@@ -20,7 +20,7 @@ never hand-edited; this document points at them instead of restating them.
 
 Any directory in `~/.agents/skills/` with a `SKILL.md` file is auto-detected as a skill.
 
-- **Official rule-mcp skills** start with `rule-mcp-` (e.g., `rule-mcp-frontend-react`, `rule-mcp-frontend-vue`)
+- **Official rule-mcp skills** start with `rule-` (e.g., `rule-frontend-react`, `rule-frontend-vue`)
 - **Community/plugin skills** can use any name (e.g., `my-company-rules`)
 
 Plugins are automatically registered as MCP tools (`rule_tool_<plugin-name>`) and support
@@ -100,7 +100,7 @@ export const generators = {
 ├── my-company-rules/
 │   ├── SKILL.md
 │   └── plugin.js
-└── rule-mcp-frontend-react/                ← Official rule-mcp skills coexist
+└── rule-frontend-react/                ← Official rule-mcp skills coexist
     └── SKILL.md
 ```
 
@@ -114,12 +114,12 @@ export const generators = {
 
 ### Community skills
 
-The `rulemcp://community` resource lists all installed plugins:
+The `rule://community` resource lists all installed plugins:
 
 ```bash
 rule-mcp tools call rule-mcp --json '{"prompt": "List available community skills"}'
 # Or directly via MCP resource:
-# rulemcp://community
+# rule://community
 ```
 
 ### Best practices

@@ -65,8 +65,8 @@ test("formatToolsList renders the registry with blank descriptions tolerated", (
 
 test("formatSkillsList marks installed and available skills apart", () => {
   const ui = formatSkillsList([
-    { name: "rule-mcp-frontend-react", installed: true, description: "react" },
-    { name: "rule-mcp-backend-node", installed: false },
+    { name: "rule-frontend-react", installed: true, description: "react" },
+    { name: "rule-backend-node", installed: false },
   ]);
 
   assert.match(ui, /2 available skills/);

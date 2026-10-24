@@ -11,10 +11,10 @@ skills:
   - "release management"
   - "community building and engagement"
 evidenceSkills:
-  - "rule-mcp-process-adr"
-  - "rule-mcp-process-changelog"
-  - "rule-mcp-process-npm-release"
-  - "rule-mcp-process-readme"
+  - "rule-process-adr"
+  - "rule-process-changelog"
+  - "rule-process-npm-release"
+  - "rule-process-readme"
 aliases:
   - "oss"
   - "open source steward"

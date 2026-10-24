@@ -10,9 +10,9 @@ skills:
   - "bundle and startup cost"
   - "measurement-first optimization"
 evidenceSkills:
-  - "rule-mcp-backend-workers"
-  - "rule-mcp-frontend-workers"
-  - "rule-mcp-toolchain-vite"
+  - "rule-backend-workers"
+  - "rule-frontend-workers"
+  - "rule-toolchain-vite"
 aliases:
   - "performance engineer"
   - "esperto di performance"

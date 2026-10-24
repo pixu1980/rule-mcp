@@ -34,7 +34,7 @@ function scan(dir) {
         // trailing underscore, so `rule_tool_*` is the family wildcard in
         // prose rather than a reference that went stale.
         for (const m of line.matchAll(/\brule_(?!tool\b|mcp\b)[a-z0-9_]*[a-z0-9]\b/g)) {
-          if (tools.has(m[0]) || m[0] === "rule-mcp" || m[0] === "rule_tool_process_handoff") {
+          if (tools.has(m[0]) || m[0] === "rule" || m[0] === "rule_tool_process_handoff") {
             continue;
           }
 

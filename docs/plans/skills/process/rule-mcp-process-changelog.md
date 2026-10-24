@@ -1,7 +1,7 @@
-# rule-mcp-process-changelog - best-practice implementation plan
+# rule-process-changelog - best-practice implementation plan
 
 Status: `planned`
-Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`. Order: `docs/plans/skills/DEPENDENCIES.md`, after `rule-mcp-process-ai`.
+Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`. Order: `docs/plans/skills/DEPENDENCIES.md`, after `rule-process-ai`.
 
 Area: process. Order: reverse alphabetical, thirty-first skill (`#31` in the index).
 
@@ -9,11 +9,11 @@ Area: process. Order: reverse alphabetical, thirty-first skill (`#31` in the ind
 
 Read and measured in this session:
 
-- `skills/rule-mcp-process-changelog/SKILL.md`: 161 lines. Sections: purpose, the
+- `skills/rule-process-changelog/SKILL.md`: 161 lines. Sections: purpose, the
   conventional-commit prerequisite (with an inline hook script), when to
   generate, do-not-gate-on-freshness, type-to-section table, tags and shallow
   clones, entry shape, formatter ignore, seven-item checklist, see also.
-- `skills/rule-mcp-process-changelog/guardrails/`: absent. The skill owns no rule.
+- `skills/rule-process-changelog/guardrails/`: absent. The skill owns no rule.
 - `scripts/build/changelog/`: the generator this skill describes, already
   built here, `index.mjs` (preamble, `build`/`write`/`check`), `_history.mjs`,
   `_render.mjs` (shared `parseCommitMessage` + `stripFingerprint`),
@@ -30,15 +30,15 @@ Read and measured in this session:
   GitHub Release body; checkout uses `fetch-depth: 0`.
 - `src/core/commit/`: the real commit-msg / pre-push hooks
   (`rule-mcp commit-lint`), not the inline shell snippet in the skill.
-- `skills/rule-mcp-process/SKILL.md`: the skill is in the area table; it is **not**
+- `skills/rule-process/SKILL.md`: the skill is in the area table; it is **not**
   in the quick-selection guide.
-- `skills/rule-mcp-styleguide-git/SKILL.md`: owns the Conventional Commit rule and
+- `skills/rule-styleguide-git/SKILL.md`: owns the Conventional Commit rule and
   the hook story this skill depends on.
-- `skills/rule-mcp-process-npm-release/SKILL.md`: owns the release the changelog is
+- `skills/rule-process-npm-release/SKILL.md`: owns the release the changelog is
   generated for; already links here.
-- `skills/rule-mcp-platform-library/SKILL.md`: still teaches a hand-written
+- `skills/rule-platform-library/SKILL.md`: still teaches a hand-written
   CHANGELOG and `pnpm changeset version` as the default publish path.
-- `skills/rule-mcp-process-readme/SKILL.md`: frontmatter excludes CHANGELOG work;
+- `skills/rule-process-readme/SKILL.md`: frontmatter excludes CHANGELOG work;
   body still mentions a "hand-maintained changelog" in one line.
 - Keep a Changelog 1.1.0 sections: Added, Changed, Deprecated, Removed, Fixed,
   Security. This repository (and the skill) add **Documentation** for `docs`
@@ -50,7 +50,7 @@ Problems found:
 | Problem                          | Detail                                                                                                                                                                  |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | skill disagrees with ADR 127     | the skill says never gate on freshness; this repository gates byte-identity with `--check` once tags define the release boundary, and skips only when there are no tags |
-| the hook is a second source      | a 7-line `commit-msg` script is pasted in the skill while `src/core/commit` and `rule-mcp-styleguide-git` own the real hook; the two will drift                         |
+| the hook is a second source      | a 7-line `commit-msg` script is pasted in the skill while `src/core/commit` and `rule-styleguide-git` own the real hook; the two will drift                             |
 | zero skill guardrails            | twelve checkable claims sit in prose while the author's own tests already enforce several of them outside the skill family                                              |
 | quick selection omits it         | the area router table lists changelog; the quick-selection guide does not, so routing by glance misses it                                                               |
 | KaC extension is undeclared      | `Documentation` is not a Keep a Changelog section; Deprecated and Security are missing; the skill claims KaC without naming the house delta                             |
@@ -60,16 +60,16 @@ Problems found:
 
 ## Decisions
 
-| Question          | Decision                                                                                                                                                                                                                                                                                                                                                 |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Freshness gate    | Align the skill with ADR 127: **shape always**; **byte-identity `--check` when tags exist**; skip when the clone has no tags. The skill's "never gate freshness" paragraph is rewritten, not kept                                                                                                                                                        |
-| Hook ownership    | Delete the inline hook script. Point at `rule-mcp-styleguide-git` and at `rule-mcp commit-lint` / `src/core/commit`. One sentence: a documented hook that is not installed is not a hook                                                                                                                                                                 |
-| KaC mapping       | Keep `Documentation` for `docs` as a **documented house extension**. Add an explicit "delta from Keep a Changelog" note. Do not invent Deprecated/Security entries from commit types that do not exist in the Conventional Commit set this project uses                                                                                                  |
-| Boundary          | This skill owns generation policy, type->section mapping, entry shape, and when CI may check. `rule-mcp-styleguide-git` owns the commit rule. `rule-mcp-process-npm-release` owns the publish workflow. `rule-mcp-platform-library` links here for libraries that generate; changesets stay an acknowledged monorepo alternative, not the default advice |
-| Shape of the body | Cut to about 120 lines. Move the shallow-clone checkout snippet and the long conflict essay into `references/ci-and-checkout.md`                                                                                                                                                                                                                         |
-| Guardrails        | Five rules (table below): two blocking, three advisory                                                                                                                                                                                                                                                                                                   |
-| Router            | Add a quick-selection line for changelog                                                                                                                                                                                                                                                                                                                 |
-| Delivery          | Plan only                                                                                                                                                                                                                                                                                                                                                |
+| Question          | Decision                                                                                                                                                                                                                                                                                                                                     |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Freshness gate    | Align the skill with ADR 127: **shape always**; **byte-identity `--check` when tags exist**; skip when the clone has no tags. The skill's "never gate freshness" paragraph is rewritten, not kept                                                                                                                                            |
+| Hook ownership    | Delete the inline hook script. Point at `rule-styleguide-git` and at `rule-mcp commit-lint` / `src/core/commit`. One sentence: a documented hook that is not installed is not a hook                                                                                                                                                         |
+| KaC mapping       | Keep `Documentation` for `docs` as a **documented house extension**. Add an explicit "delta from Keep a Changelog" note. Do not invent Deprecated/Security entries from commit types that do not exist in the Conventional Commit set this project uses                                                                                      |
+| Boundary          | This skill owns generation policy, type->section mapping, entry shape, and when CI may check. `rule-styleguide-git` owns the commit rule. `rule-process-npm-release` owns the publish workflow. `rule-platform-library` links here for libraries that generate; changesets stay an acknowledged monorepo alternative, not the default advice |
+| Shape of the body | Cut to about 120 lines. Move the shallow-clone checkout snippet and the long conflict essay into `references/ci-and-checkout.md`                                                                                                                                                                                                             |
+| Guardrails        | Five rules (table below): two blocking, three advisory                                                                                                                                                                                                                                                                                       |
+| Router            | Add a quick-selection line for changelog                                                                                                                                                                                                                                                                                                     |
+| Delivery          | Plan only                                                                                                                                                                                                                                                                                                                                    |
 
 ## Workstream A - Align the skill with the generator and ADR 127
 
@@ -91,7 +91,7 @@ import in a skill-side fixture) fails when they diverge.
 
 | Section of today's file          | Goes to                                                                                                                     |
 | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| Inline `commit-msg` shell script | deleted; link to `rule-mcp-styleguide-git`                                                                                  |
+| Inline `commit-msg` shell script | deleted; link to `rule-styleguide-git`                                                                                      |
 | Long pre-commit conflict essay   | `references/ci-and-checkout.md` (keep a three-line summary in the body)                                                     |
 | checkout `fetch-depth: 0` YAML   | same reference                                                                                                              |
 | Seven-item checklist             | the rule table (what a rule enforces) plus the two items a rule cannot see (installed hook; human confirms release cadence) |
@@ -115,19 +115,19 @@ touches git history does not need depth zero.
 
 ## Workstream D - Neighbor boundaries
 
-1. `rule-mcp-process` quick selection: add
-   `Need a changelog from the commits? → rule-mcp-process-changelog`.
-2. `rule-mcp-platform-library`: replace the hand-write / changesets-default block
+1. `rule-process` quick selection: add
+   `Need a changelog from the commits? → rule-process-changelog`.
+2. `rule-platform-library`: replace the hand-write / changesets-default block
    with a pointer to this skill for the generated default, and one short note
    that changesets remain valid for multi-package version trains.
-3. `rule-mcp-process-readme`: drop or rephrase the "hand-maintained changelog"
+3. `rule-process-readme`: drop or rephrase the "hand-maintained changelog"
    fragment so it does not contradict this skill.
-4. `rule-mcp-styleguide-git` / `rule-mcp-process-npm-release`: keep bidirectional links;
+4. `rule-styleguide-git` / `rule-process-npm-release`: keep bidirectional links;
    no ownership change.
 
 ## Workstream E - Tests the skill must grow
 
-- Good/bad fixtures per rule under `skills/rule-mcp-process-changelog/guardrails/`.
+- Good/bad fixtures per rule under `skills/rule-process-changelog/guardrails/`.
 - A lock that `SECTION_FOR_TYPE` in the skill's documented table matches
   `_sections.mjs` (import the module in the test; do not duplicate the map).
 - Router child coverage already exists; only the quick-selection prose needs
@@ -152,9 +152,9 @@ rest.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-process` (HARD)
+Feeds: `rule-process` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -167,15 +167,15 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 ### Phase 1 - Align prose and references
 
 - [ ] Rewrite the freshness / CI section to match ADR 127.
-- [ ] Delete the inline hook; link to `rule-mcp-styleguide-git`.
+- [ ] Delete the inline hook; link to `rule-styleguide-git`.
 - [ ] Add `references/ci-and-checkout.md`; cut the body toward 120 lines.
 - [ ] Document the Keep a Changelog house delta (`Documentation`).
 - [ ] Gate: corpus still routes the four changelog prompts; skill corpus tests green.
 
 ### Phase 2 - Boundaries
 
-- [ ] Quick-selection line in `rule-mcp-process`.
-- [ ] `rule-mcp-platform-library` and `rule-mcp-process-readme` contradiction fixes.
+- [ ] Quick-selection line in `rule-process`.
+- [ ] `rule-platform-library` and `rule-process-readme` contradiction fixes.
 - [ ] Gate: router-child-coverage green; grep shows no "hand-maintained changelog" left in those two skills.
 
 ### Phase 3 - Guardrails
@@ -208,7 +208,7 @@ Plan default: `T7-author` - `qwen3.8-max`. Fallback: `step-5-preview` for author
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-process-changelog/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-process-changelog/guardrails/
 node --import ./scripts/alias-hook.mjs --test scripts/build/changelog/__tests__/
 node --import ./scripts/alias-hook.mjs --test tests/docs/changelog.test.mjs
 node --import ./scripts/alias-hook.mjs --test tests/docs/changelog-header.test.mjs
@@ -225,7 +225,7 @@ pnpm lint
 - Quick-selection prose is not covered by `router-child-coverage`. Either accept
   that gap or extend the ratchet later; this plan only edits the guide.
 - Changesets remain legitimate for multi-package repos. The plan refuses to
-  delete that path from `rule-mcp-platform-library`; it demotes it from the default
+  delete that path from `rule-platform-library`; it demotes it from the default
   sentence to an alternative.
 - Deprecated / Security sections are not invented from commit types this
   Conventional Commit set does not carry. A future `security` type or footer

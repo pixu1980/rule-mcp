@@ -50,7 +50,7 @@ test("every tool traces back to a rule-mcp-* directory in ./skills", () => {
     if (ACTION.has(name)) {
       continue;
     }
-    const dir = `rule-mcp-${name.replace(/^rule_tool_/, "").replaceAll("_", "-")}`;
+    const dir = `rule-${name.replace(/^rule_tool_/, "").replaceAll("_", "-")}`;
     assert.ok(dirs.has(dir), `${name} has no backing directory in ./skills (expected ${dir})`);
   }
 });

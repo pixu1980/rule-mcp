@@ -26,7 +26,7 @@ const DEFAULT_MAX_RESULTS = 20;
 /**
  * @typedef {Object} Bm25Doc
  * @property {number} id - document ID
- * @property {string} skill - skill name (e.g. "rule-mcp-frontend-react")
+ * @property {string} skill - skill name (e.g. "rule-frontend-react")
  * @property {string} section - section heading (e.g. "CSS Architecture")
  * @property {string} text - full section text
  * @property {string} snippet - first 200 chars of text

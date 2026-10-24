@@ -48,7 +48,7 @@ check(
 
 const events = readEvents();
 const routed = events.find((event) => event.tool === "rule_tool" && !event.cacheHit);
-check("T3.3 the routed skill is recorded", routed.routedSkill === "rule-mcp-frontend-react");
+check("T3.3 the routed skill is recorded", routed.routedSkill === "rule-frontend-react");
 check("T3.4 duration, outcome and cache hit are recorded", routed.durationMs === 12 && routed.ok === true && routed.cacheHit === false);
 check(
   "T3.5 the session is carried on every event",

@@ -1,4 +1,4 @@
-# rule-mcp-toolchain - best-practice implementation plan
+# rule-toolchain - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,23 +9,23 @@ Area: toolchain. Order: reverse alphabetical, eleventh skill (the router).
 
 Read in this session:
 
-- `skills/rule-mcp-toolchain/SKILL.md`: four routing tables, a quick selection
+- `skills/rule-toolchain/SKILL.md`: four routing tables, a quick selection
   guide, a long "Choosing a formatter and a linter" section with a prescribed
   "rule-mcp default" of Prettier plus ESLint, and two links.
 - `docs/plans/skills/toolchain/bundler-family.md`, which names this router as
   the owner of the shared bundler contract.
-- `docs/plans/skills/ui/rule-mcp-ui.md`, the sibling router plan, which proposed
+- `docs/plans/skills/ui/rule-ui.md`, the sibling router plan, which proposed
   router-integrity rules owned by that skill.
 
 Problems found:
 
-| Problem                                       | Detail                                                                                                      |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| the prescribed default is stale               | it says Prettier plus ESLint while `rule-mcp-toolchain-biome` recommends Biome                              |
-| the comparison duplicates the tool skills     | a ten-row table restates what the Biome and ESLint skills own                                               |
-| webpack still appears                         | the bundler family removed it                                                                               |
-| the tables are hand-maintained                | nine children, and `rule-mcp-styleguide-configuration` and `rule-mcp-styleguide-git` recently left the area |
-| the bundler family has no implementation home | the contract exists only as a plan document                                                                 |
+| Problem                                       | Detail                                                                                              |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| the prescribed default is stale               | it says Prettier plus ESLint while `rule-toolchain-biome` recommends Biome                          |
+| the comparison duplicates the tool skills     | a ten-row table restates what the Biome and ESLint skills own                                       |
+| webpack still appears                         | the bundler family removed it                                                                       |
+| the tables are hand-maintained                | nine children, and `rule-styleguide-configuration` and `rule-styleguide-git` recently left the area |
+| the bundler family has no implementation home | the contract exists only as a plan document                                                         |
 
 Local articles: the formatting-tools piece covers Biome, ESLint and husky. It
 stays context only; the plan anchors to the tool documentation.
@@ -37,7 +37,7 @@ stays context only; the plan anchors to the tool documentation.
 | Role                   | Router plus short comparison guidance, not a rule owner for tool content                     |
 | Comparison section     | Brief summary with links to the owning skills                                                |
 | Default                | None prescribed; a decision rule instead                                                     |
-| Bundler family         | `rule-mcp-toolchain` owns the contract; the bundler skills inherit it                        |
+| Bundler family         | `rule-toolchain` owns the contract; the bundler skills inherit it                            |
 | Family guardrails      | Public-variable secrets, dev-server exposure, declared target, declared IO, sourcemap policy |
 | Routing table          | Generated from the registry                                                                  |
 | Routing quality        | Verified quick guide, a decision tree, cross-references to the styleguides                   |
@@ -49,8 +49,8 @@ stays context only; the plan anchors to the tool documentation.
 
 1. The router indexes the nine toolchain children and states the area boundary.
 2. The comparison section shrinks to a short guide: what a formatter and a
-   linter each do, and a link to `rule-mcp-toolchain-biome` and
-   `rule-mcp-toolchain-eslint` for the rules.
+   linter each do, and a link to `rule-toolchain-biome` and
+   `rule-toolchain-eslint` for the rules.
 3. The "rule-mcp default" disappears. In its place, a decision rule: a new project
    picks one formatter and one linter and enforces them in CI; a project with a
    large ESLint ecosystem keeps it; a project willing to take the one-time
@@ -58,10 +58,10 @@ stays context only; the plan anchors to the tool documentation.
 
 ## Workstream B - The bundler family contract
 
-1. `rule-mcp-toolchain` owns the shared rules: public-variable secrets, dev-server
+1. `rule-toolchain` owns the shared rules: public-variable secrets, dev-server
    exposure, declared target, declared entry and output, sourcemap policy.
-2. `rule-mcp-toolchain-vite`, `rule-mcp-toolchain-rspack` and `rule-mcp-toolchain-parcel`
-   declare `inherits: [rule-mcp-toolchain]`, so the family rules reach them once.
+2. `rule-toolchain-vite`, `rule-toolchain-rspack` and `rule-toolchain-parcel`
+   declare `inherits: [rule-toolchain]`, so the family rules reach them once.
 3. The `guardrails/index.js` here exports the family rules; the plan document
    `bundler-family.md` becomes the design note behind them.
 4. No bundler skill restates a family row; each points here.
@@ -70,20 +70,20 @@ stays context only; the plan anchors to the tool documentation.
 
 The four tables become one generated block, written between census markers
 from the skill registry and the area map, the same mechanism proposed for
-`rule-mcp-ui`. A child added to the area appears without an edit here.
+`rule-ui`. A child added to the area appears without an edit here.
 
 ## Workstream D - Routing quality
 
 1. The quick selection guide stays and is checked against the registry.
 2. A decision tree covers build tool, lint and format, package manager,
    monorepo, hooks and configuration.
-3. Cross-references point at `rule-mcp-styleguide-configuration` and
-   `rule-mcp-styleguide-git`, which left the area and are easy to mis-route.
+3. Cross-references point at `rule-styleguide-configuration` and
+   `rule-styleguide-git`, which left the area and are easy to mis-route.
 
 ## Workstream E - Router-integrity rules live in rule-mcp
 
 The four integrity rules are owned by the central `rule-mcp` router and inherited
-by every area router, so `rule-mcp`, `rule-mcp-ui` and `rule-mcp-toolchain` share one
+by every area router, so `rule-mcp`, `rule-ui` and `rule-toolchain` share one
 definition: links resolve, every child is reachable, no rule is duplicated, and
 the description states a use case.
 
@@ -108,7 +108,7 @@ inherits them.
 ## Assets and templates to ship
 
 - `assets/templates/toolchain-decision-tree.md`.
-- A registry-backed routing table generator, shared with the `rule-mcp-ui` plan.
+- A registry-backed routing table generator, shared with the `rule-ui` plan.
 
 ## Phases
 
@@ -116,7 +116,7 @@ inherits them.
 
 The router closes after its leaves and after the shared router rules and the route-table generator are exported.
 
-Depends on: `bundler-family` (HARD), `rule-mcp-toolchain-biome` (HARD), `rule-mcp-toolchain-eslint` (HARD), `rule-mcp-toolchain-husky` (HARD), `rule-mcp-toolchain-parcel` (HARD), `rule-mcp-toolchain-pnpm` (HARD), `rule-mcp-toolchain-rspack` (HARD), `rule-mcp-toolchain-turborepo` (HARD), `rule-mcp-toolchain-vite` (HARD), `rule-mcp-process#2` (CONTRACT), `rule-mcp-process#3` (CONTRACT)
+Depends on: `bundler-family` (HARD), `rule-toolchain-biome` (HARD), `rule-toolchain-eslint` (HARD), `rule-toolchain-husky` (HARD), `rule-toolchain-parcel` (HARD), `rule-toolchain-pnpm` (HARD), `rule-toolchain-rspack` (HARD), `rule-toolchain-turborepo` (HARD), `rule-toolchain-vite` (HARD), `rule-process#2` (CONTRACT), `rule-process#3` (CONTRACT)
 
 Feeds:,
 
@@ -139,7 +139,7 @@ Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fix
 ### Phase 2 - Family contract and guardrails
 
 - [ ] Add `guardrails/index.js` with the five bundler-family rules.
-- [ ] Add `inherits: [rule-mcp-toolchain]` to vite, rspack and parcel.
+- [ ] Add `inherits: [rule-toolchain]` to vite, rspack and parcel.
 - [ ] Implement `toolchain-no-webpack` and `toolchain-no-prescribed-default`.
 - [ ] Move the four integrity rules to `rule-mcp` and inherit them here.
 - [ ] Promote the Tier A rules after the corpus gate reports 100%.
@@ -178,8 +178,8 @@ pnpm test
 
 ## Open notes
 
-- The `rule-mcp-ui` plan proposed the router-integrity rules with `ui-router-*` ids
-  owned by `rule-mcp-ui`. The decision here supersedes that: the ids become
+- The `rule-ui` plan proposed the router-integrity rules with `ui-router-*` ids
+  owned by `rule-ui`. The decision here supersedes that: the ids become
   `router-*` and the owner is `rule-mcp`. The sibling plan needs the same update
   when it is implemented.
 - The family rules move from the `bundler-family.md` design note into this

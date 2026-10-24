@@ -5,9 +5,9 @@
  *
  * Every MCP host namespaces the prompts a server exposes, and none of them let a
  * server drop that prefix:
- *   - Claude Code -> `/rule:rule-mcp-backend (MCP)`
- *   - VS Code (Copilot Chat) -> `/mcp.rule-mcp.rule-mcp-backend`
- * The only surface that yields a bare `/rule-mcp-backend` is the host's own
+ *   - Claude Code -> `/rule:rule-backend (MCP)`
+ *   - VS Code (Copilot Chat) -> `/mcp.rule-mcp.rule-backend`
+ * The only surface that yields a bare `/rule-backend` is the host's own
  * command/prompt FILES. This module is the single registry of those file
  * locations, so "clean commands everywhere" is a property of the codebase rather
  * than a per-installer accident:

@@ -99,7 +99,7 @@ check("T14 refreshing twice is stable", readFileSync(claudeMd, "utf8") === refre
 
 // ── A dry run still writes nothing ──
 
-const dryTarget = join(commandsDir, "rule-mcp-backend.md");
+const dryTarget = join(commandsDir, "rule-backend.md");
 const dryBefore = existsSync(dryTarget) ? readFileSync(dryTarget, "utf8") : null;
 install({ dryRun: true, force: true });
 const dryAfter = existsSync(dryTarget) ? readFileSync(dryTarget, "utf8") : null;

@@ -8,7 +8,7 @@
  *   - the JS/TS idiom guardrails fire on stale patterns and pass on the modern
  *     idioms the styleguide mandates.
  *
- * The component templates are data served through `rulemcp://templates` (the
+ * The component templates are data served through `rule://templates` (the
  * template tool was removed by ADR 115), so the check reads them where they
  * live rather than through a tool that no longer exists.
  */
@@ -41,7 +41,7 @@ await loadAllSkills();
 const sharedIds = BASELINE_SKILLS.flatMap((skill) => ownedGuardrails(skill).map((rule) => rule.id));
 
 // ── T1: the baseline applies to EVERY domain ──
-for (const skill of ["rule-mcp-frontend-react", "rule-mcp-frontend-vue", "rule-mcp-backend-express", "rule-mcp-data-postgresql", "rule-mcp-devops-docker", "rule-mcp-styleguide"]) {
+for (const skill of ["rule-frontend-react", "rule-frontend-vue", "rule-backend-express", "rule-data-postgresql", "rule-devops-docker", "rule-styleguide"]) {
   const ids = new Set(getGuardrails(skill).map((g) => g.id));
   check(
     `T1 ${skill} includes the whole baseline`,
@@ -52,9 +52,9 @@ for (const skill of ["rule-mcp-frontend-react", "rule-mcp-frontend-vue", "rule-m
 // ── T2/T3: the shipped templates exist and hold the core principles ──
 const CORE_IDS = new Set(["no-css-classes", "no-inline-styles"]);
 for (const [component, framework, skill] of [
-  ["button", "react", "rule-mcp-frontend-react"],
-  ["card", "vue", "rule-mcp-frontend-vue"],
-  ["button", "vanilla", "rule-mcp-styleguide"],
+  ["button", "react", "rule-frontend-react"],
+  ["card", "vue", "rule-frontend-vue"],
+  ["button", "vanilla", "rule-styleguide"],
 ]) {
   const template = getTemplate(component, framework);
   const code = typeof template === "string" ? template : [template?.html, template?.css].filter(Boolean).join("\n");
@@ -76,7 +76,7 @@ throw Error('boom');
 str.replace(/-/g, ' ');
 rows.map((r) => r.cells).flat();
 const cache = Map();`;
-const badReport = checkCode("rule-mcp-styleguide-javascript", BAD_JS, { fileName: "demo.js", framework: "vanilla" });
+const badReport = checkCode("rule-styleguide-javascript", BAD_JS, { fileName: "demo.js", framework: "vanilla" });
 for (const id of JS_IDIOM_IDS) {
   check(
     `T4 ${id} fires on non-idiomatic JS`,
@@ -93,7 +93,7 @@ throw new Error('boom');
 str.replaceAll('-', ' ');
 rows.flatMap((r) => r.cells);
 const cache = new Map();`;
-const goodReport = checkCode("rule-mcp-styleguide-javascript", GOOD_JS, { fileName: "demo.js", framework: "vanilla" });
+const goodReport = checkCode("rule-styleguide-javascript", GOOD_JS, { fileName: "demo.js", framework: "vanilla" });
 const goodFailed = new Set(goodReport.failed.map((f) => f.id));
 for (const id of JS_IDIOM_IDS) {
   check(`T4 ${id} passes idiomatic JS`, !goodFailed.has(id));

@@ -59,10 +59,10 @@ assert.ok(uninstallUi.includes("dry run"), "uninstall UI should show dry-run con
 
 const skillsUi = formatSkillsList([
   { name: "rule-mcp", description: "Router", installed: true },
-  { name: "rule-mcp-styleguide", description: "Standards", installed: false },
+  { name: "rule-styleguide", description: "Standards", installed: false },
 ]);
 assert.ok(skillsUi.includes("🧠"), "skills UI should include skill emoji");
-assert.ok(skillsUi.includes("rule-mcp-styleguide"), "skills UI should show skill names");
+assert.ok(skillsUi.includes("rule-styleguide"), "skills UI should show skill names");
 assert.ok(skillsUi.includes("--json"), "skills UI should advertise JSON export");
 
 console.log("  ✅ shared CLI formatters render friendly TUI output");

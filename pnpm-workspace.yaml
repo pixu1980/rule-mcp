@@ -4,6 +4,7 @@ minimumReleaseAgeExclude:
   - eslint-plugin-unicorn@75.0.0 || 76.0.0
   - '@modelcontextprotocol/inspector@2.9.0'
   - globals@17.13.0
+  - '@modelcontextprotocol/sdk@1.32.2'
 overrides:
   # Transitive advisories that `@modelcontextprotocol/sdk` has not caught up
   # to. Overrides, not ranges: the pin is the remediation, and the audit gate

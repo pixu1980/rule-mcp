@@ -38,7 +38,7 @@ function expectedEntry(name) {
     return "gateway";
   }
 
-  return skillDirectories().has(`rule-mcp-${name.replace(/^rule_tool_/, "").replaceAll("_", "-")}`) ? "skill" : "action";
+  return skillDirectories().has(`rule-${name.replace(/^rule_tool_/, "").replaceAll("_", "-")}`) ? "skill" : "action";
 }
 
 /** The bundled skill directories, as the surface test reads them. */

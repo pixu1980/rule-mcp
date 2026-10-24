@@ -1,4 +1,4 @@
-# rule-mcp-styleguide-html - best-practice implementation plan
+# rule-styleguide-html - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,12 +9,12 @@ Area: styleguide. Order: reverse alphabetical, nineteenth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-styleguide-html/SKILL.md` (454 lines): the mandatory boilerplate,
+- `skills/rule-styleguide-html/SKILL.md` (454 lines): the mandatory boilerplate,
   semantics and the div ban, the elements that replaced a library, accessibility
   essentials, typography, media, nesting, formatting and validation.
-- `skills/rule-mcp-styleguide-html/guardrails/`: `semantic-html` and
+- `skills/rule-styleguide-html/guardrails/`: `semantic-html` and
   `data-part-naming`.
-- `skills/rule-mcp-styleguide-a11y/guardrails/`: ten rules including
+- `skills/rule-styleguide-a11y/guardrails/`: ten rules including
   `a11y-html-lang`, `a11y-form-label` and `a11y-img-alt`.
 
 Public sources verified in this session:
@@ -46,12 +46,12 @@ Problems found:
 | -------------- | -------------------------------------------------------------------------------------------- |
 | Scope          | Boilerplate, semantics, modern elements, validation, standards, media and forms              |
 | Boundaries     | Structure, semantics and HTML elements; accessibility, CSS and templates are linked          |
-| Accessibility  | Reduced to one line and a link to `rule-mcp-styleguide-a11y`                                 |
+| Accessibility  | Reduced to one line and a link to `rule-styleguide-a11y`                                     |
 | Standards      | WHATWG, W3C and Nu validator, ARIA in HTML, MDN, HTML-validate, custom elements              |
 | Missing topics | `template` and `slot`, responsive images, modern forms, metadata, JSON-LD, obsolete elements |
 | Validation     | HTML-validate in CI, W3C/Nu for the manual checks                                            |
 | Guardrails     | Boilerplate, nesting, obsolete elements, image dimensions, landmarks                         |
-| Overlap        | `lang`, `alt` and `label` stay with `rule-mcp-styleguide-a11y`                               |
+| Overlap        | `lang`, `alt` and `label` stay with `rule-styleguide-a11y`                                   |
 | Severity       | Advisory first, then blocking after the corpus gate                                          |
 | Verification   | Corpus, an HTML-validate fixture, and a boilerplate identity check                           |
 | Delivery       | Plan only now                                                                                |
@@ -133,9 +133,9 @@ and component files that return markup.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-styleguide` (HARD)
+Feeds: `rule-styleguide` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -191,7 +191,7 @@ pnpm test
 
 ## Open notes
 
-- The `lang` attribute is deliberately left to `rule-mcp-styleguide-a11y`; the
+- The `lang` attribute is deliberately left to `rule-styleguide-a11y`; the
   boilerplate rule names the split so a reader is not surprised.
 - HTML-validate is not installed today; the plan adds it deliberately and
   records the dependency.

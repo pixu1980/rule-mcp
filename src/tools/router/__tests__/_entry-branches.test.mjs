@@ -15,7 +15,7 @@ test("a router answer without JSON falls back to the conservative digest set", (
 });
 
 test("a router answer with a route and no alternatives names that route", () => {
-  const digests = dependenciesOf("rule_tool", {}, { content: [{ text: JSON.stringify({ route: "rule-mcp-styleguide-css" }) }] });
+  const digests = dependenciesOf("rule_tool", {}, { content: [{ text: JSON.stringify({ route: "rule-styleguide-css" }) }] });
 
   assert.equal(typeof digests, "object");
 });
@@ -25,7 +25,7 @@ test("alternatives without a route are skipped", () => {
     "rule_tool",
     {},
     {
-      content: [{ text: JSON.stringify({ alternatives: [{ route: "rule-mcp-styleguide-css" }, {}, null] }) }],
+      content: [{ text: JSON.stringify({ alternatives: [{ route: "rule-styleguide-css" }, {}, null] }) }],
     },
   );
 
@@ -45,5 +45,5 @@ test("a non-string route has no routed skill", () => {
 });
 
 test("a routed skill is returned", () => {
-  assert.equal(routedSkillOf("rule_tool", { content: [{ text: JSON.stringify({ route: "rule-mcp-styleguide-css" }) }] }), "rule-mcp-styleguide-css");
+  assert.equal(routedSkillOf("rule_tool", { content: [{ text: JSON.stringify({ route: "rule-styleguide-css" }) }] }), "rule-styleguide-css");
 });

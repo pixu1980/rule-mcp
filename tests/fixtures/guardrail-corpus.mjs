@@ -17,21 +17,21 @@
  * only runs for the skills that carry it.
  */
 
-const JS = "rule-mcp-styleguide-javascript";
-const COMMENTS = "rule-mcp-styleguide-comments";
-const TS = "rule-mcp-styleguide-typescript";
-const REACT = "rule-mcp-frontend-react";
-const CSS = "rule-mcp-styleguide-css";
-const EXPRESS = "rule-mcp-backend-express";
-const HTML = "rule-mcp-styleguide-html";
-const A11Y = "rule-mcp-styleguide-a11y";
-const ANGULAR = "rule-mcp-frontend-angular";
-const SVELTE = "rule-mcp-frontend-svelte";
-const VUE = "rule-mcp-frontend-vue";
-const PG = "rule-mcp-data-postgresql";
-const DOCKER = "rule-mcp-devops-docker";
-const STYLEGUIDE = "rule-mcp-styleguide";
-const PNPM = "rule-mcp-toolchain-pnpm";
+const JS = "rule-styleguide-javascript";
+const COMMENTS = "rule-styleguide-comments";
+const TS = "rule-styleguide-typescript";
+const REACT = "rule-frontend-react";
+const CSS = "rule-styleguide-css";
+const EXPRESS = "rule-backend-express";
+const HTML = "rule-styleguide-html";
+const A11Y = "rule-styleguide-a11y";
+const ANGULAR = "rule-frontend-angular";
+const SVELTE = "rule-frontend-svelte";
+const VUE = "rule-frontend-vue";
+const PG = "rule-data-postgresql";
+const DOCKER = "rule-devops-docker";
+const STYLEGUIDE = "rule-styleguide";
+const PNPM = "rule-toolchain-pnpm";
 
 /** @type {Array<{rule: string, skill: string, label: "good"|"bad", fileName?: string, isComponent?: boolean, mode?: string, why: string, code: string}>} */
 export const CORPUS = [

@@ -1,4 +1,4 @@
-# rule-mcp-styleguide-naming - best-practice implementation plan
+# rule-styleguide-naming - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,15 +9,15 @@ Area: styleguide, confirmed. Naming stays where it is.
 
 Read in this session:
 
-- `skills/rule-mcp-styleguide-naming/SKILL.md` (231 lines): naming tokens, file
+- `skills/rule-styleguide-naming/SKILL.md` (231 lines): naming tokens, file
   naming, file suffixes, the project tree, the barrel pattern, import
   conventions and a quick reference.
-- `skills/rule-mcp-styleguide-naming/guardrails/_file-naming.js`: the only rule,
+- `skills/rule-styleguide-naming/guardrails/_file-naming.js`: the only rule,
   component files must be `_PascalCase.ext`.
-- `skills/rule-mcp-styleguide-file-tree/SKILL.md` and its five guardrails
+- `skills/rule-styleguide-file-tree/SKILL.md` and its five guardrails
   (`barrel-exports-match-files`, `barrel-file-tree`, `component-export-check`,
   `component-file-prefix`, `component-folder-barrel`).
-- `skills/rule-mcp-toolchain-eslint/SKILL.md`, which enables the unicorn
+- `skills/rule-toolchain-eslint/SKILL.md`, which enables the unicorn
   `filename-case` rule.
 
 Public sources verified in this session:
@@ -35,7 +35,7 @@ Problems found:
 | Problem                                  | Detail                                                                                                                  |
 | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | Italian prose in the tree                | "UNICO index.html", "barrel principale", "Componenti UI", "NO prefisso", "Sibling di...", against the English-only rule |
-| the tree duplicates file-tree            | 30+ lines of structure that `rule-mcp-styleguide-file-tree` owns, with five guardrails behind it                        |
+| the tree duplicates file-tree            | 30+ lines of structure that `rule-styleguide-file-tree` owns, with five guardrails behind it                            |
 | boundary with `filename-case` is unnamed | both the guardrail and the unicorn rule judge file names                                                                |
 | missing conventions                      | hooks, boolean prefixes, acronyms, plurals, abbreviations, type names                                                   |
 
@@ -45,19 +45,19 @@ guides above.
 
 ## Decisions
 
-| Question        | Decision                                                                                         |
-| --------------- | ------------------------------------------------------------------------------------------------ |
-| Area            | `styleguide`, confirmed                                                                          |
-| English fix     | The tree comments are translated or removed with the section                                     |
-| Tree            | The tree diagram moves to `rule-mcp-styleguide-file-tree`; naming keeps small examples and links |
-| Boundary        | `file-naming` owns component names; unicorn `filename-case` owns the rest                        |
-| New conventions | Hooks, boolean prefixes, acronyms, plurals, no abbreviations, type names                         |
-| Quick reference | Stays; it is naming content, not a general cheat sheet                                           |
-| Imports         | Confirmed, aligned with the linter where the linter can order them                               |
-| Guardrails      | Constants, boolean names, file suffixes, type prefixes                                           |
-| Severity        | Advisory first, then blocking after the corpus gate                                              |
-| Standards       | One external style guide cited where the convention comes from                                   |
-| Delivery        | Plan only now                                                                                    |
+| Question        | Decision                                                                                     |
+| --------------- | -------------------------------------------------------------------------------------------- |
+| Area            | `styleguide`, confirmed                                                                      |
+| English fix     | The tree comments are translated or removed with the section                                 |
+| Tree            | The tree diagram moves to `rule-styleguide-file-tree`; naming keeps small examples and links |
+| Boundary        | `file-naming` owns component names; unicorn `filename-case` owns the rest                    |
+| New conventions | Hooks, boolean prefixes, acronyms, plurals, no abbreviations, type names                     |
+| Quick reference | Stays; it is naming content, not a general cheat sheet                                       |
+| Imports         | Confirmed, aligned with the linter where the linter can order them                           |
+| Guardrails      | Constants, boolean names, file suffixes, type prefixes                                       |
+| Severity        | Advisory first, then blocking after the corpus gate                                          |
+| Standards       | One external style guide cited where the convention comes from                               |
+| Delivery        | Plan only now                                                                                |
 
 ### Boundary conflict, resolved
 
@@ -76,7 +76,7 @@ translation pass.
 ## Workstream B - The tree moves to file-tree
 
 1. The tree diagram and the seven structural rules move to
-   `rule-mcp-styleguide-file-tree`, the owner of barrels, prefixes and folder
+   `rule-styleguide-file-tree`, the owner of barrels, prefixes and folder
    layout.
 2. Naming keeps three or four illustrative lines and a link, enough to show
    where a name lives without restating the structure.
@@ -113,7 +113,7 @@ linter enforces.
 ## Workstream F - Quick reference
 
 The ASCII box stays: it is the naming token summary, the one thing the removed
-`rule-mcp-styleguide-patterns` did that belongs here.
+`rule-styleguide-patterns` did that belongs here.
 
 ## Proposed guardrails
 
@@ -143,9 +143,9 @@ The existing `file-naming` stays; it is the component-file rule. The unicorn
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-styleguide` (HARD)
+Feeds: `rule-styleguide` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -158,7 +158,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 ### Phase 1 - Content
 
-- [ ] Move the tree and the structural rules to `rule-mcp-styleguide-file-tree`.
+- [ ] Move the tree and the structural rules to `rule-styleguide-file-tree`.
 - [ ] Keep small examples here and link the owner.
 - [ ] Add the six missing conventions with their sources.
 - [ ] Keep the suffix table and add the new-suffix rule.
@@ -202,7 +202,7 @@ pnpm test
 
 ## Open notes
 
-- The tree move is a dependency for the `rule-mcp-styleguide-file-tree` plan; this
+- The tree move is a dependency for the `rule-styleguide-file-tree` plan; this
   plan states the decision, and that plan performs the reception.
 - No local article is cited; the external style guides and the repository's own
   conventions are the sources.

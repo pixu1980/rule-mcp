@@ -1,4 +1,4 @@
-# rule-mcp-toolchain-turborepo - best-practice implementation plan
+# rule-toolchain-turborepo - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,11 +9,11 @@ Area: toolchain. Order: reverse alphabetical, fourth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-toolchain-turborepo/SKILL.md` (80 lines): a `turbo.json` block
+- `skills/rule-toolchain-turborepo/SKILL.md` (80 lines): a `turbo.json` block
   that still uses `pipeline`, `dependsOn`, `outputs`, `inputs`, `persistent`,
   `cache`, a remote-cache section based on `turbo login` and `turbo link`, key
   commands, and a Lerna/Nx migration section.
-- `skills/rule-mcp-toolchain-pnpm/SKILL.md` (workspace and lockfile owner).
+- `skills/rule-toolchain-pnpm/SKILL.md` (workspace and lockfile owner).
 
 Public sources verified in this session:
 
@@ -49,7 +49,7 @@ a Node package roundup, TypeScript 7). They stay context only and are not cited.
 | Dev tasks    | `persistent: true` implies `cache: false`, always                                                                      |
 | Remote cache | Provider-agnostic, artifact integrity verified, token as a CI secret                                                   |
 | CI           | `--affected` with full Git history, `--dry=json`, `--continue`, explicit `concurrency`                                 |
-| Prune        | Short section, the Dockerfile stays with `rule-mcp-devops-docker`                                                      |
+| Prune        | Short section, the Dockerfile stays with `rule-devops-docker`                                                          |
 | Migration    | Keep the Lerna/Nx section, verified and reduced                                                                        |
 | Delivery     | Plan only now                                                                                                          |
 | ADR          | Only when a decision is structural                                                                                     |
@@ -101,7 +101,7 @@ a Node package roundup, TypeScript 7). They stay context only and are not cited.
 ## Workstream E - Prune and Docker
 
 A short section: `turbo prune <package>` produces a reduced workspace, and the
-Dockerfile that consumes it stays in `rule-mcp-devops-docker`. `pruneIncludesGlobalFiles`
+Dockerfile that consumes it stays in `rule-devops-docker`. `pruneIncludesGlobalFiles`
 is mentioned for projects that need `globalDependencies` inside the pruned
 output.
 
@@ -137,9 +137,9 @@ project can legitimately hash a public identifier that ends in `_KEY`.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-toolchain` (HARD)
+Feeds: `rule-toolchain` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

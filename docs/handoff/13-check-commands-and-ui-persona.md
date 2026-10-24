@@ -7,10 +7,10 @@
 ## Session Summary
 
 The command surface spoke with two check names for one job: the MCP prompt
-registry carried `/rule-mcp-process-check`, the agent command surface carried
+registry carried `/rule-process-check`, the agent command surface carried
 `/rule-check`, and `/rule-mcp-adr` duplicated the process-adr skill. A single generic
 check also gave no way to ask for one area's guardrails. This session removed
-`/rule-mcp-adr` and `/rule-mcp-process-check` from the MCP registry, added a check command
+`/rule-mcp-adr` and `/rule-process-check` from the MCP registry, added a check command
 per area prompt (91 of them) and a general `/rule-check` that auto-detects the
 area, and renamed the `design-system` persona to the wider `ui` (UI/UX Lead).
 Two ADRs record both decisions.
@@ -26,14 +26,14 @@ Two ADRs record both decisions.
   area prompt and returns a guardrail-validation definition; `rule-check` returns
   the general auto-detecting definition.
 - `_bodies.js`: added `checkBody(area, skill)` and `generalCheckBody`.
-- `src/prompts/_defs.data.js`: removed the `rule-mcp-adr` and `rule-mcp-process-check`
-  prompt definitions and the `rule-mcp-process-check` example.
+- `src/prompts/_defs.data.js`: removed the `rule-mcp-adr` and `rule-process-check`
+  prompt definitions and the `rule-process-check` example.
 
 ### 2. Persona rename (`personas/`)
 
 - `personas/design-system.md` deleted; `personas/ui.md` added with id `ui`,
   title "UI/UX Lead", and lenses widened from five to ten.
-- Evidence skills grow from four to thirteen: `rule-mcp-ui`, `rule-mcp-styleguide-a11y`
+- Evidence skills grow from four to thirteen: `rule-ui`, `rule-styleguide-a11y`
   and every frontend framework skill join the original four.
 - `src/core/review/personas/__tests__/_registry.test.mjs` follows: the active
   catalog ships `ui` in place of `design-system` (still 19 roles).
@@ -46,7 +46,7 @@ Two ADRs record both decisions.
   156 to 246.
 - `src/cli/install/__tests__/_selection.test.mjs` expects `rule-check` in the
   tasks family; `src/cli/__tests__/_install-agent-commands.test.mjs` expects
-  `rule-area-frontend-check.md` present and `rule-mcp-process-check.md` stale.
+  `rule-area-frontend-check.md` present and `rule-process-check.md` stale.
 
 ### 4. Docs, census and ADRs
 

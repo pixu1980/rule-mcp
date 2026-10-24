@@ -1,4 +1,4 @@
-# rule-mcp-styleguide-file-tree - best-practice implementation plan
+# rule-styleguide-file-tree - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,14 +9,14 @@ Area: styleguide. Order: reverse alphabetical, twenty-second skill.
 
 Read in this session:
 
-- `skills/rule-mcp-styleguide-file-tree/SKILL.md` (51 lines): the convention, the
+- `skills/rule-styleguide-file-tree/SKILL.md` (51 lines): the convention, the
   reason for the underscore, and the checking note.
-- `skills/rule-mcp-styleguide-file-tree/guardrails/`: `barrel-exports-match-files`,
+- `skills/rule-styleguide-file-tree/guardrails/`: `barrel-exports-match-files`,
   `barrel-file-tree`, `component-export-check`, `component-file-prefix`,
   `component-folder-barrel`.
 - `src/core/file-tree/`: the scan, the fix, the rename, the barrel
   regeneration and the generator.
-- `docs/plans/skills/styleguide/rule-mcp-styleguide-naming.md`, which decided to move
+- `docs/plans/skills/styleguide/rule-styleguide-naming.md`, which decided to move
   the tree diagram and the seven structural rules here.
 
 Public sources verified in this session:
@@ -58,7 +58,7 @@ Problems found:
 ## Workstream A - Receive the tree
 
 The tree diagram and the seven structural rules arrive from
-`rule-mcp-styleguide-naming`. The diagram is a rectangular ASCII box, because the
+`rule-styleguide-naming`. The diagram is a rectangular ASCII box, because the
 fingerprint pass fails a box whose right edge steps in and out. The rules keep
 their numbering and their examples.
 
@@ -90,8 +90,8 @@ their numbering and their examples.
 
 ## Workstream E - Monorepo layout
 
-`apps/` and `packages/` are named, with a link to `rule-mcp-toolchain-pnpm` and
-`rule-mcp-toolchain-turborepo`. This skill does not duplicate the workspace or task
+`apps/` and `packages/` are named, with a link to `rule-toolchain-pnpm` and
+`rule-toolchain-turborepo`. This skill does not duplicate the workspace or task
 configuration.
 
 ## Workstream F - The tools
@@ -134,9 +134,9 @@ The orphan stylesheet stays a report: the fix never deletes it.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-styleguide` (HARD)
+Feeds: `rule-styleguide` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

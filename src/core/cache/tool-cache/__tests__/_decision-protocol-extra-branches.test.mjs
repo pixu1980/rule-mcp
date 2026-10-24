@@ -27,10 +27,10 @@ test("a long state is capped", () => {
 });
 
 test("a bare pick with a numeric probability is read", () => {
-  const candidates = [{ label: "rule-mcp-styleguide-css", description: "d" }];
-  const parsed = parseGateAnswer({ pick: "rule-mcp-styleguide-css", probability: 0.9 }, candidates);
+  const candidates = [{ label: "rule-styleguide-css", description: "d" }];
+  const parsed = parseGateAnswer({ pick: "rule-styleguide-css", probability: 0.9 }, candidates);
 
-  assert.equal(parsed.choice, "rule-mcp-styleguide-css");
+  assert.equal(parsed.choice, "rule-styleguide-css");
   assert.equal(parsed.probability, 0.9);
   assert.equal(parsed.wouldReplay, true);
 });

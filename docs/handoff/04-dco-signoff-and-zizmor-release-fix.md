@@ -69,7 +69,7 @@
 - 080 accepted: One installer, a Node wizard with shell bootstraps (installer, cli, tui)
 - 079 accepted: Add the OSS Architect review persona (persona, oss)
 - 078-077 accepted: token-efficiency compression (agent files, list surfaces)
-- 076/075/074/073: coverage wave five floor 91, rule-mcp-meta namespace, CLI lazy-load, 4-level compression
+- 076/075/074/073: coverage wave five floor 91, rule-meta namespace, CLI lazy-load, 4-level compression
 - 001-072: taxonomy, installer, prompts registry, gateway receipts, skills, performance (see docs/adr/)
 
 ### Recent commits at handoff

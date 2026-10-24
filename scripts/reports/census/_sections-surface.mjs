@@ -24,7 +24,7 @@ export function summarySection(data) {
         ["MCP prompts", data.prompts.length, "`src/prompts/index.js`"],
         ["- reusable", data.reusablePrompts.length, "workflow and area prompts"],
         ["- persona", data.personaPrompts.length, `${activeRoles().length} active roles, one command each`],
-        ["Skills", data.catalog.length, "`skills/rule-mcp-*/SKILL.md`"],
+        ["Skills", data.catalog.length, "`skills/rule-*/SKILL.md`"],
         ["Review personas", data.roles.length, "`src/core/review/roles/index.js`"],
         ["Guardrail rules", data.guardrailIds.size, "`src/core/guardrails/index.js`"],
         ["Agent slash commands", data.commands.length, "`src/core/agents/commands/index.js`"],

@@ -18,16 +18,16 @@ startup branch, the benchmark, and the attribution.
 | 2    | PERF-2 levels       | `RULE_MCP_CAVEMAN_LEVEL=off\|lite\|full\|ultra` (`_level.js`), threaded as `{ level }`, part of the tool cache key                                                                                                                              |
 | 3    | PERF-3 guard        | `src/core/text/compress-guard/` is `validate.py` ported, with per-block rollback in `_caveman-blocks.js`. The python CLI contract is asserted against the JS in a test that skips when python3 is absent                                        |
 | 4    | PERF-4 traps        | Phrase-before-word order enforced in one place (`_caveman-line.js`); anchored pleasantry openers added                                                                                                                                          |
-| 5    | PERF-5 surfaces     | `rulemcp://` resource bodies and `prompts/get` bodies now compress; each books its own source                                                                                                                                                   |
+| 5    | PERF-5 surfaces     | `rule://` resource bodies and `prompts/get` bodies now compress; each books its own source                                                                                                                                                      |
 | 6    | PERF-8 startup      | `pnpm report:startup`; compiled code cache in `bin/`; handlers deferred into their actions; `listTools()` memoized                                                                                                                              |
-| 7    | PERF-9 meta surface | `rule-mcp-meta-*` namespace, `rule_tool_meta` dispatcher, `rule-area-toolset` prompt rename (branch `perf/meta-surface`)                                                                                                                        |
+| 7    | PERF-9 meta surface | `rule-meta-*` namespace, `rule_tool_meta` dispatcher, `rule-area-toolset` prompt rename (branch `perf/meta-surface`)                                                                                                                            |
 | 8    | PERF-6 benchmark    | `pnpm report:compression` over four corpora                                                                                                                                                                                                     |
 | 9    | PERF-7 attribution  | Credit lines in the module doc and the guides; ADR 073                                                                                                                                                                                          |
 
 ## Commits
 
 ```
-949c25c9 feat(skills): rule-mcp-meta namespace with a narrow dispatcher          [perf/meta-surface]
+949c25c9 feat(skills): rule-meta namespace with a narrow dispatcher          [perf/meta-surface]
 78ef4f2b docs(plan): mark steps 1-6, 8 and 9 executed and correct the level table by measurement
 0f1a4b1e docs(perf): quote the measured compression and startup numbers, credit the source
 fd480cb4 perf(cli): warm --help from 216 ms to 48 ms, measured not assumed

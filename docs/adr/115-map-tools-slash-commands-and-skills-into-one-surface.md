@@ -22,9 +22,9 @@ The live surface mixed three naming systems that looked alike but meant differen
 
 ### Converge (BREAKING)
 
-1. **Handoff**: only `/rule-handoff` + `rule_tool_handoff`. Drop skill `rule-mcp-process-handoff`, `/rule-area-process-handoff*`, and `rule_tool_process_handoff`.
+1. **Handoff**: only `/rule-handoff` + `rule_tool_handoff`. Drop skill `rule-process-handoff`, `/rule-area-process-handoff*`, and `rule_tool_process_handoff`.
 2. **Handon**: `/rule-handon` + `rule_tool_handon` (rename from `rule_tool_process_handon`). No skill.
-3. **Compress**: `/rule-compress` + `rule_tool_compress` is the sole compression engine (prompt/context preprocessing and prose postprocessing). Drop skill/tool/area `rule-mcp-process-compression`.
+3. **Compress**: `/rule-compress` + `rule_tool_compress` is the sole compression engine (prompt/context preprocessing and prose postprocessing). Drop skill/tool/area `rule-process-compression`.
 4. **Init**: add `rule_tool_init` aligned with `/rule-init`.
 5. **Stats / usage**: keep tools; add `/rule-stats` and `/rule-usage`.
 6. **Remove tools** (use slash/skill styleguide or persona a11y instead): `rule_tool_form`, `rule_tool_scaffold`, `rule_tool_component`, `rule_tool_a11y_report`.

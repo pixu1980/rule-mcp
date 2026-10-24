@@ -11,7 +11,7 @@ The review catalog covers every engineering axis except the one that keeps an op
 
 ## Decision
 
-Add `personas/oss.md` as an active persona named `Open Source Steward` with id `oss`. Its skills cover open source governance, contributor management, donor and funding management, release management, and community building and engagement. Its evidence skills point at the process skills that already exist (`rule-mcp-process-adr`, `rule-mcp-process-changelog`, `rule-mcp-process-npm-release`). Because the catalog is read from the `personas/` folder at startup, the role gains its MCP prompt, its slash commands (`rule-persona-oss-plan`, `rule-persona-oss-audit`, `rule-persona-oss-review`) and its tool surfaces with no code change.
+Add `personas/oss.md` as an active persona named `Open Source Steward` with id `oss`. Its skills cover open source governance, contributor management, donor and funding management, release management, and community building and engagement. Its evidence skills point at the process skills that already exist (`rule-process-adr`, `rule-process-changelog`, `rule-process-npm-release`). Because the catalog is read from the `personas/` folder at startup, the role gains its MCP prompt, its slash commands (`rule-persona-oss-plan`, `rule-persona-oss-audit`, `rule-persona-oss-review`) and its tool surfaces with no code change.
 
 ## Consequences
 

@@ -34,4 +34,4 @@ export const { loadAllSkills } = await import("../../skills/index.js");
 await loadAllSkills(true);
 
 export const result = (text) => ({ content: [{ type: "text", text }] });
-export const REAL_SKILL = "rule-mcp-frontend-react";
+export const REAL_SKILL = "rule-frontend-react";

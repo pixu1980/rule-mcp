@@ -1,4 +1,4 @@
-# rule-mcp-styleguide-javascript - best-practice implementation plan
+# rule-styleguide-javascript - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,16 +9,16 @@ Area: styleguide. Order: reverse alphabetical, seventeenth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-styleguide-javascript/SKILL.md` (903 lines): language rules,
+- `skills/rule-styleguide-javascript/SKILL.md` (903 lines): language rules,
   naming, async (a 200-line section), built-ins, loops, strings, readability,
   truthy and falsy, modern idioms, types, DOM and custom elements, JSDoc,
   Playwright and axe-core testing, scaffolding.
-- `skills/rule-mcp-styleguide-javascript/guardrails/index.js`: seventeen rules, all
+- `skills/rule-styleguide-javascript/guardrails/index.js`: seventeen rules, all
   about spacing, braces, const placement and JSDoc presence.
-- `skills/rule-mcp-styleguide-a11y/SKILL.md` (Playwright and axe-core, with the
-  `a11y-test-required` guardrail), `skills/rule-mcp-toolchain-eslint/SKILL.md`
+- `skills/rule-styleguide-a11y/SKILL.md` (Playwright and axe-core, with the
+  `a11y-test-required` guardrail), `skills/rule-toolchain-eslint/SKILL.md`
   (the unicorn rules),
-  `skills/rule-mcp-styleguide-comments/SKILL.md` and `skills/rule-mcp-devops-testing/SKILL.md`.
+  `skills/rule-styleguide-comments/SKILL.md` and `skills/rule-devops-testing/SKILL.md`.
 
 Public sources verified in this session:
 
@@ -33,14 +33,14 @@ the event loop. They stay context only; the plan anchors to MDN, Node and TC39.
 
 Problems found:
 
-| Problem                       | Detail                                                                                                   |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------- |
-| testing duplicated            | the Playwright and axe-core section restates `rule-mcp-styleguide-a11y`, which owns `a11y-test-required` |
-| idioms duplicated             | the unicorn idiom table restates `rule-mcp-toolchain-eslint`                                             |
-| DOM duplicated                | the custom element section restated a skill removed in ADR 152                                           |
-| JSDoc has no clear owner      | it sits here while `rule-mcp-styleguide-comments` owns comment hygiene                                   |
-| 17 guardrails, all formatting | nothing checks the semantic rules a reader would expect                                                  |
-| missing runtime topics        | modules, error handling, iterators, `structuredClone`, `AbortController`, memory                         |
+| Problem                       | Detail                                                                                               |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------- |
+| testing duplicated            | the Playwright and axe-core section restates `rule-styleguide-a11y`, which owns `a11y-test-required` |
+| idioms duplicated             | the unicorn idiom table restates `rule-toolchain-eslint`                                             |
+| DOM duplicated                | the custom element section restated a skill removed in ADR 152                                       |
+| JSDoc has no clear owner      | it sits here while `rule-styleguide-comments` owns comment hygiene                                   |
+| 17 guardrails, all formatting | nothing checks the semantic rules a reader would expect                                              |
+| missing runtime topics        | modules, error handling, iterators, `structuredClone`, `AbortController`, memory                     |
 
 ## Decisions
 
@@ -48,10 +48,10 @@ Problems found:
 | ----------------------- | ------------------------------------------------------------------------------------- |
 | Scope                   | Runtime and language rules, plus the removal of four duplicated areas                 |
 | Boundaries              | The skill owns runtime JS and language rules only                                     |
-| Testing                 | Removed; linked to `rule-mcp-styleguide-a11y`                                         |
-| Idioms table            | Reduced to a link to `rule-mcp-toolchain-eslint`                                      |
+| Testing                 | Removed; linked to `rule-styleguide-a11y`                                             |
+| Idioms table            | Reduced to a link to `rule-toolchain-eslint`                                          |
 | DOM and custom elements | Removed; the skill it linked was itself removed in ADR 152                            |
-| JSDoc                   | Moves to `rule-mcp-styleguide-comments` as part of the runtime-only boundary          |
+| JSDoc                   | Moves to `rule-styleguide-comments` as part of the runtime-only boundary              |
 | Missing topics          | Modules, errors, iterators, `structuredClone`, `AbortController`, memory              |
 | Async                   | Expanded, and its claims verified against MDN and TC39                                |
 | Semantic guardrails     | Not duplicated: the six rules map to ESLint core rules that are enabled in the config |
@@ -64,23 +64,23 @@ Problems found:
 Two answers crossed again, and the more specific one wins:
 
 1. **JSDoc.** The scope included it and the boundary says runtime only. The
-   boundary wins: JSDoc moves to `rule-mcp-styleguide-comments`, and this skill links
+   boundary wins: JSDoc moves to `rule-styleguide-comments`, and this skill links
    it.
 2. **Semantic guardrails.** Six rules were selected, then the next answer said
    ESLint owns them and the guardrails stay on what ESLint does not see. The
    second wins: no new guardrails. `no-var`, `no-with`, `no-eval`,
    `no-new-wrappers`, `prefer-rest-params` and `no-extend-native` are ESLint
-   core rules and must be enabled as errors in `rule-mcp-toolchain-eslint`.
+   core rules and must be enabled as errors in `rule-toolchain-eslint`.
 
 ## Workstream A - Remove the duplication
 
-1. The Playwright and axe-core section goes; `rule-mcp-styleguide-a11y` owns the
+1. The Playwright and axe-core section goes; `rule-styleguide-a11y` owns the
    tests and the `a11y-test-required` guardrail.
 2. The unicorn idiom table becomes one sentence and a link to
-   `rule-mcp-toolchain-eslint`, which owns the rules and their tuning.
+   `rule-toolchain-eslint`, which owns the rules and their tuning.
 3. The DOM and custom element section becomes a link to
    the custom element and reactive-vanilla skills, both removed in ADR 152.
-4. JSDoc moves to `rule-mcp-styleguide-comments`, which already owns comment
+4. JSDoc moves to `rule-styleguide-comments`, which already owns comment
    hygiene; this skill keeps only the one-line rule that exported symbols are
    documented.
 
@@ -113,7 +113,7 @@ before it is recommended.
 
 The seventeen formatting guardrails stay. The semantic rules are not copied
 here: the six ESLint core rules named above are enabled in
-`rule-mcp-toolchain-eslint` as errors, and this skill states the mapping once.
+`rule-toolchain-eslint` as errors, and this skill states the mapping once.
 
 ## Verification
 
@@ -128,9 +128,9 @@ here: the six ESLint core rules named above are enabled in
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-styleguide` (HARD)
+Feeds: `rule-styleguide` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -143,10 +143,10 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 ### Phase 1 - Remove the duplication
 
-- [ ] Remove the testing section and link `rule-mcp-styleguide-a11y`.
+- [ ] Remove the testing section and link `rule-styleguide-a11y`.
 - [ ] Reduce the idiom table to a link.
 - [ ] Remove the DOM and custom element section and link the owners.
-- [ ] Move JSDoc to `rule-mcp-styleguide-comments` and leave the one-line rule.
+- [ ] Move JSDoc to `rule-styleguide-comments` and leave the one-line rule.
 
 ### Phase 2 - Content
 
@@ -158,7 +158,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 ### Phase 3 - Guardrails and verification
 
 - [ ] Confirm the seventeen formatting guardrails still hold.
-- [ ] Enable the six ESLint core rules as errors in `rule-mcp-toolchain-eslint`.
+- [ ] Enable the six ESLint core rules as errors in `rule-toolchain-eslint`.
 - [ ] Add the Vitest fixture for the async examples.
 - [ ] Add the TC39 stage check.
 - [ ] Regenerate `docs/15-guardrails.md` with `pnpm census`.
@@ -188,7 +188,7 @@ pnpm test
 ## Open notes
 
 - The JSDoc move is an inference from the runtime-only boundary; the
-  `rule-mcp-styleguide-comments` plan receives it when its turn comes.
+  `rule-styleguide-comments` plan receives it when its turn comes.
 - The six semantic rules are documented here but owned by ESLint; this keeps
   the repository's rule that a rule has one home.
 - No local article is cited; MDN, Node and TC39 are the sources.

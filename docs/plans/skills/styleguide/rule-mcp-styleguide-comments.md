@@ -1,4 +1,4 @@
-# rule-mcp-styleguide-comments - best-practice implementation plan
+# rule-styleguide-comments - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, except the JSDoc reception and the span fix, applied now. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,10 +9,10 @@ Area: styleguide. Order: reverse alphabetical, twenty-sixth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-styleguide-comments/SKILL.md`: what a comment is for, the three
+- `skills/rule-styleguide-comments/SKILL.md`: what a comment is for, the three
   things that never ship, what to write instead, and three guardrails.
 - The JSDoc section and the `jsdoc-required` rule in
-  `rule-mcp-styleguide-javascript`, which the javascript plan decided to move here.
+  `rule-styleguide-javascript`, which the javascript plan decided to move here.
 - `src/core/layers/_guardrails.js`, the frontmatter-versus-folder check.
 - The seven frontend skills that point at `javascript.md` for the JSDoc rule.
 
@@ -62,7 +62,7 @@ Done in this pass:
    here and no longer there.
 3. The JSDoc section moved into this skill, before the See also list.
 4. The corpus fixtures and the false-positive test now check the rule against
-   `rule-mcp-styleguide-comments`.
+   `rule-styleguide-comments`.
 5. The seven frontend skills point at `comments.md` instead of `javascript.md`;
    the contract with the interface is unchanged, only the owner moved.
 
@@ -119,9 +119,9 @@ The three existing rules and `jsdoc-required` stay.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-styleguide` (HARD)
+Feeds: `rule-styleguide` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

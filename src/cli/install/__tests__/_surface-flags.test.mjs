@@ -18,7 +18,7 @@ test("surfaceOf reads nothing as untouched", () => {
 test("surfaceOf reads presets and lists", () => {
   assert.deepEqual(surfaceOf({ surface: "standard" }), { preset: "standard" });
   assert.deepEqual(surfaceOf({ surface: "areas:frontend,data" }), { areas: ["frontend", "data"] });
-  assert.deepEqual(surfaceOf({ surface: "skills:rule-mcp-ai" }), { skills: ["rule-mcp-ai"] });
+  assert.deepEqual(surfaceOf({ surface: "skills:rule-ai" }), { skills: ["rule-ai"] });
 });
 
 test("surfaceOf warns and ignores garbage", () => {

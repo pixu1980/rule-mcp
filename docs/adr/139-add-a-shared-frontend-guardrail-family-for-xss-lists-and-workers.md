@@ -7,11 +7,11 @@
 
 ## Context
 
-Ten rule-mcp-frontend skills exist. Five own rules (react, vue, svelte, angular and vanilla-reactive, fourteen rules total) and none declares inherits, so a rule owned by one skill never reaches another. The router rule-mcp-frontend owns nothing. The checkable gaps that are not style or accessibility, which the styleguide area already covers, are the XSS sinks, the list key, the effect cleanup, the custom element shape, the template escaping and the worker boundary.
+Ten rule-frontend skills exist. Five own rules (react, vue, svelte, angular and vanilla-reactive, fourteen rules total) and none declares inherits, so a rule owned by one skill never reaches another. The router rule-frontend owns nothing. The checkable gaps that are not style or accessibility, which the styleguide area already covers, are the XSS sinks, the list key, the effect cleanup, the custom element shape, the template escaping and the worker boundary.
 
 ## Decision
 
-Create rule-mcp-frontend/guardrails with seven rules. Tier A: xss-sink-sanitized, fe-list-key, fe-effect-cleanup, ce-valid, template-escape, worker-no-dom. Tier B: worker-transferable. Rules ship advisory and are promoted to blocking after the corpus gate reports full precision and recall. Two questions stay open: whether the framework skills add inherits: [rule-mcp-frontend], and whether custom-element and template-engine join the target list for ce-valid and template-escape.
+Create rule-frontend/guardrails with seven rules. Tier A: xss-sink-sanitized, fe-list-key, fe-effect-cleanup, ce-valid, template-escape, worker-no-dom. Tier B: worker-transferable. Rules ship advisory and are promoted to blocking after the corpus gate reports full precision and recall. Two questions stay open: whether the framework skills add inherits: [rule-frontend], and whether custom-element and template-engine join the target list for ce-valid and template-escape.
 
 ## Consequences
 

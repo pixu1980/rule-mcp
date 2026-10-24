@@ -21,7 +21,7 @@ test("depsFingerprint is stable and distinguishes deps", () => {
 
 test("describeCandidate redacts, truncates, and adds the route", () => {
   assert.equal(describeCandidate({ prompt: "x".repeat(300) }).length, "request: ".length + 160);
-  assert.match(describeCandidate({ prompt: "p", route: "rule-mcp-frontend-react" }), /skill: rule-mcp-frontend-react/u);
+  assert.match(describeCandidate({ prompt: "p", route: "rule-frontend-react" }), /skill: rule-frontend-react/u);
   assert.match(describeCandidate({ prompt: "password=secret" }), /request:/u);
 });
 

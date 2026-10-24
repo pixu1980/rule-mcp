@@ -32,26 +32,26 @@ export function skillForPath(path) {
   const extension = extname(path);
 
   if (extension === ".sql" || extension === ".prisma") {
-    return "rule-mcp-data-sql";
+    return "rule-data-sql";
   }
 
   if (extension === ".vue") {
-    return "rule-mcp-frontend-vue";
+    return "rule-frontend-vue";
   }
 
   if (extension === ".svelte") {
-    return "rule-mcp-frontend-svelte";
+    return "rule-frontend-svelte";
   }
 
   if (extension === ".jsx" || extension === ".tsx") {
-    return "rule-mcp-frontend-react";
+    return "rule-frontend-react";
   }
 
   if (extension === ".css") {
-    return "rule-mcp-styleguide-css";
+    return "rule-styleguide-css";
   }
 
-  return "rule-mcp-styleguide-javascript";
+  return "rule-styleguide-javascript";
 }
 
 /**

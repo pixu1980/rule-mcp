@@ -8,12 +8,12 @@
 ## Context
 
 Prompt: "Parcel bundler zero config build tool"
-Routed to: **rule-mcp-toolchain-parcel** (confidence: 1)
-Alternatives: rule-mcp-toolchain-vite (1), rule-mcp-platform-expo (0.82), rule-mcp-agents (0.59)
+Routed to: **rule-toolchain-parcel** (confidence: 1)
+Alternatives: rule-toolchain-vite (1), rule-platform-expo (0.82), rule-mcp-agents (0.59)
 
 ## Decision
 
-Use `rule-mcp-toolchain-parcel` for this task.
+Use `rule-toolchain-parcel` for this task.
 
 ## Consequences
 

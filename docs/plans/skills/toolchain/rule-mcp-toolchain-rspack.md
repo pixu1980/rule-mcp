@@ -1,4 +1,4 @@
-# rule-mcp-toolchain-rspack - best-practice implementation plan
+# rule-toolchain-rspack - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`. Family contract: `docs/plans/skills/toolchain/bundler-family.md`. This plan covers only what is Rspack-specific.
@@ -9,12 +9,12 @@ Area: toolchain. Order: reverse alphabetical, fifth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-toolchain-rspack/SKILL.md`: config example with
+- `skills/rule-toolchain-rspack/SKILL.md`: config example with
   `builtins.html`, `experiments.css` and `target: "es2022"`; CSS strategy,
   splitChunks guidance, type checking, assets, profiling, migration 1.x to 2.x,
   source-map security.
-- `skills/rule-mcp-toolchain-vite/SKILL.md` and the family plan for the shared rules.
-- `skills/rule-mcp-styleguide-typescript/COMPILER.md` for the TypeScript baseline.
+- `skills/rule-toolchain-vite/SKILL.md` and the family plan for the shared rules.
+- `skills/rule-styleguide-typescript/COMPILER.md` for the TypeScript baseline.
 
 Public sources verified in this session:
 
@@ -160,9 +160,9 @@ a second copy.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-toolchain` (HARD)
+Feeds: `rule-toolchain` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

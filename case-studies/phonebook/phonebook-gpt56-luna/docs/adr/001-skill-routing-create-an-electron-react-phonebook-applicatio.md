@@ -8,12 +8,12 @@
 ## Context
 
 Prompt: "Create an Electron React phonebook application with Apple-quality UI, microinteractions, sample data, and a base design system with proportional typography, spacings, focus, radii, elevations. Use web"
-Routed to: **rule-mcp-frontend-react** (confidence: 1)
-Alternatives: rule-mcp-platform-web (0.43), rule-mcp-platform-desktop (0.35), rule-mcp-frontend-vue (0.33)
+Routed to: **rule-frontend-react** (confidence: 1)
+Alternatives: rule-platform-web (0.43), rule-platform-desktop (0.35), rule-frontend-vue (0.33)
 
 ## Decision
 
-Use `rule-mcp-frontend-react` for this task.
+Use `rule-frontend-react` for this task.
 
 ## Consequences
 

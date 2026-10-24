@@ -1,4 +1,4 @@
-# 142: Rename rule-mcp-toolchain-project to rule-mcp-styleguide-configuration
+# 142: Rename rule-toolchain-project to rule-styleguide-configuration
 
 - **Date**: 2026-10-17
 - **Status**: accepted
@@ -11,7 +11,7 @@ The skill held the base repository configuration: .gitignore, .editorconfig, .nv
 
 ## Decision
 
-Rename the directory and the skill to rule-mcp-styleguide-configuration, change the generated tool to rule_tool_styleguide_configuration, move its row from the toolchain tables into the styleguide tables in rule-mcp and rule-mcp-styleguide, update every cross-reference and the devx persona evidence skill, and regenerate the census. The skill content stays as it is; the duplicated tsconfig and lint configuration sections are a separate cleanup.
+Rename the directory and the skill to rule-styleguide-configuration, change the generated tool to rule_tool_styleguide_configuration, move its row from the toolchain tables into the styleguide tables in rule-mcp and rule-styleguide, update every cross-reference and the devx persona evidence skill, and regenerate the census. The skill content stays as it is; the duplicated tsconfig and lint configuration sections are a separate cleanup.
 
 ## Consequences
 
@@ -25,4 +25,4 @@ The assumption this leans on, and the observation that would make it wrong.
 
 1. Keep the skill in the toolchain area and change only its title
 1. Split the repository configuration into a new styleguide skill and leave the toolchain one
-1. Fold the file templates into rule-mcp-styleguide as one long guide
+1. Fold the file templates into rule-styleguide as one long guide

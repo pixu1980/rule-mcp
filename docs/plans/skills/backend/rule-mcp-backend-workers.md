@@ -1,11 +1,11 @@
-# rule-mcp-backend-workers - plan
+# rule-backend-workers - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#71`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
-Area: backend, leaf and the server-side counterpart of `rule-mcp-frontend-workers`.
+Area: backend, leaf and the server-side counterpart of `rule-frontend-workers`.
 **424 lines**, one file, no `guardrails/`. It inherits the router's six rules
-through `inherits: [rule-mcp-backend]`.
+through `inherits: [rule-backend]`.
 
 ## Evidence base (measured 2026-10-21)
 
@@ -19,7 +19,7 @@ server-side counterpart" while this leaf defers back. The pair is coherent.
 
 ### It has no door
 
-`rule-mcp-backend-workers` appears **zero times** in the `rule-mcp` dispatcher. The area
+`rule-backend-workers` appears **zero times** in the `rule-mcp` dispatcher. The area
 router lists it, the central table does not. It is the only backend leaf in that
 position.
 
@@ -51,16 +51,16 @@ a three-line check catches the pattern.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-backend` (HARD)
+Feeds: `rule-backend` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 
 - [ ] ADR (area): the backend family shape; this leaf owns the runtime model and
-      the worker contract, `rule-mcp-frontend-workers` owns the browser side.
+      the worker contract, `rule-frontend-workers` owns the browser side.
 - [ ] ADR (area): the rule design, Tier B, dual detection.
 
 ### Phase 1 - Fixtures first (red)
@@ -68,13 +68,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] `tests/fixtures/backend-workers/`: `clean/`, `cpu-in-handler/`,
       `worker-per-request/`, `read-after-transfer/`, each with a one-line
       `README.md`.
-- [ ] Five `CORPUS` pairs bound to `rule-mcp-backend-workers`.
+- [ ] Five `CORPUS` pairs bound to `rule-backend-workers`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ### Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-backend-workers/guardrails/`: five rule files plus `index.js`.
-- [ ] `guardrails:` frontmatter lists them; `inherits: [rule-mcp-backend]` stays.
+- [ ] `skills/rule-backend-workers/guardrails/`: five rule files plus `index.js`.
+- [ ] `guardrails:` frontmatter lists them; `inherits: [rule-backend]` stays.
 - [ ] Green the Phase 1 suites.
 
 ### Phase 3 - Door and shape
@@ -87,7 +87,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 ## Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-backend-workers/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-backend-workers/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
 

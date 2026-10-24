@@ -25,7 +25,7 @@ export const { cacheStore, cacheLookup, cacheClear, cacheEntries, promotableEntr
 export const { CATALOG_FILE, MIN_HITS, catalogPath, buildCatalog, writeCatalog, readCatalog, primeFromCatalog, verifyCache } = await import("../index.js");
 
 /** A skill that exists, so its digest is real and freshness can be checked. */
-export const SKILL = "rule-mcp-frontend-react";
+export const SKILL = "rule-frontend-react";
 
 export const result = (text) => ({ content: [{ type: "text", text }] });
 export const args = (prompt) => ({ prompt });

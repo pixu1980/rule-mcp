@@ -1,17 +1,17 @@
-# rule-mcp-toolchain-tauri - plan
+# rule-toolchain-tauri - plan
 
 Status: `planned`
 Notes:`planned`
 
-Notes: new skill, created by `rule-mcp-platform-desktop` phase 4 (ADR 152's ghost plugins). Index row `#87`, planned.
+Notes: new skill, created by `rule-platform-desktop` phase 4 (ADR 152's ghost plugins). Index row `#87`, planned.
 
 Area: toolchain, leaf. It takes the Tauri material that today sits inside
-`rule-mcp-platform-desktop` as a second framework under an Electron-shaped umbrella.
-Siblings: `rule-mcp-toolchain-electron`, the eight build tool leaves, `rule-mcp-toolchain`.
+`rule-platform-desktop` as a second framework under an Electron-shaped umbrella.
+Siblings: `rule-toolchain-electron`, the eight build tool leaves, `rule-toolchain`.
 
 ## Evidence base (measured 2026-10-21)
 
-`rule-mcp-platform-desktop` documents Tauri in four places, all of them reachable only
+`rule-platform-desktop` documents Tauri in four places, all of them reachable only
 by reading 808 lines:
 
 | Section           | Content                                                        |
@@ -21,7 +21,7 @@ by reading 808 lines:
 | Code Signing      | the signing path shared with the desktop build                 |
 | Protocol Handling | deep links in `tauri.conf.json`                                |
 
-The same file advertises `rule-mcp-platform-desktop/tauri` as a skill plugin, and no
+The same file advertises `rule-platform-desktop/tauri` as a skill plugin, and no
 such plugin, skill or directory exists. This plan is that plugin, named in the
 area the owner chose.
 
@@ -40,45 +40,45 @@ area the owner chose.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-toolchain` (HARD)
+Feeds: `rule-toolchain` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 
-- [ ] ADR: the desktop family shape, shared with `rule-mcp-toolchain-electron`: one
+- [ ] ADR: the desktop family shape, shared with `rule-toolchain-electron`: one
       leaf per runtime, the umbrella keeps the choice.
 
 ### Phase 1 - Fixtures first (red)
 
 - [ ] `tests/fixtures/toolchain-tauri/`: `clean/`, `open-command/`,
       `no-csp/`, `unsigned-update/`, each with a one-line `README.md`.
-- [ ] Four `CORPUS` pairs bound to `rule-mcp-toolchain-tauri`.
+- [ ] Four `CORPUS` pairs bound to `rule-toolchain-tauri`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ### Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-toolchain-tauri/guardrails/`: four rule files plus `index.js`.
+- [ ] `skills/rule-toolchain-tauri/guardrails/`: four rule files plus `index.js`.
 - [ ] `guardrails:` frontmatter, ids equal to the exports.
 - [ ] Green the Phase 1 suites.
 
 ### Phase 3 - The skill
 
-- [ ] `skills/rule-mcp-toolchain-tauri/SKILL.md`: Rust commands, config, updater,
+- [ ] `skills/rule-toolchain-tauri/SKILL.md`: Rust commands, config, updater,
       deep links, plus the migration note from Electron.
-- [ ] `rule-mcp-platform-desktop` phase 4 drops the moved sections and links here.
+- [ ] `rule-platform-desktop` phase 4 drops the moved sections and links here.
 
 ### Phase 4 - Wire it in
 
-- [ ] `rule-mcp-toolchain` router row.
+- [ ] `rule-toolchain` router row.
 - [ ] `src/core/detector/_rules.data.js`: `tauri` maps here.
-- [ ] `rule-mcp-platform-desktop` roadmap line for Neutralinojs keeps no path.
+- [ ] `rule-platform-desktop` roadmap line for Neutralinojs keeps no path.
 
 ### Phase 5 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-toolchain-tauri/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-toolchain-tauri/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
 
@@ -100,7 +100,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
 ## Open notes
 
 - Tauri has one measured mention in the whole catalog today, all of it inside
-  `rule-mcp-platform-desktop`. That is the honest demand signal: this leaf exists so
+  `rule-platform-desktop`. That is the honest demand signal: this leaf exists so
   the umbrella can stop pretending to be two runtimes at once.
 - If the Tauri material does not survive the move, the alternative is to delete
   it and let the umbrella say "Electron only" (see the plan's own note on the

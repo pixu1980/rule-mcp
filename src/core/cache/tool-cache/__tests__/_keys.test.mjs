@@ -31,7 +31,7 @@ test("a field whose value reaches the output is not normalizable", async () => {
 
   const routed = await call("rule_tool", { prompt: "react button component" });
   assert.ok(normalizedKey("rule_tool", { prompt: "react button component" }), "the router's prompt is on the allowlist");
-  assert.ok(routed.content[0].text.includes("rule-mcp-frontend-react"), "and it routed");
+  assert.ok(routed.content[0].text.includes("rule-frontend-react"), "and it routed");
 });
 
 test("an answer that quotes the question gets no normalized entry", async () => {

@@ -3,7 +3,7 @@
  *
  * The clean-command guarantee: EVERY supported agent/IDE either has a declared
  * slash-command target (so `/rule-mcp-*` is invoked bare, never as
- * `/mcp.rule-mcp.rule-mcp-backend` or `/rule:rule-mcp-backend`)
+ * `/mcp.rule-mcp.rule-backend` or `/rule:rule-backend`)
  * or is explicitly listed as having no file-based command surface, with a reason.
  *
  * Verifies:

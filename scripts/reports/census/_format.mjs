@@ -43,5 +43,5 @@ export const areaOf = (name) => {
   return parts.length > 1 ? parts[1] : name;
 };
 
-/** The MCP tool a catalog skill directory mints: `rule-mcp-frontend-react` -> `rule_tool_frontend_react`. */
-export const toolOf = (name) => (name === "rule-mcp" ? "rule_tool" : `rule_tool_${name.slice("rule-mcp-".length).replaceAll("-", "_")}`);
+/** The MCP tool a catalog skill directory mints: `rule-frontend-react` -> `rule_tool_frontend_react`. */
+export const toolOf = (name) => (name === "rule" ? "rule_tool" : `rule_tool_${name.slice("rule-mcp-".length).replaceAll("-", "_")}`);

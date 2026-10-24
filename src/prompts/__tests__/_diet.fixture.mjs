@@ -49,7 +49,7 @@ export function runSession(calls, environment = {}) {
   const script = String.raw`
     import { decorateWorkflowReminder } from ${JSON.stringify(ENFORCEMENT)};
     const tools = ${JSON.stringify(SESSION_TOOLS)};
-    const core = "routed: rule-mcp-frontend-react\nsections: forms, a11y\n".repeat(8);
+    const core = "routed: rule-frontend-react\nsections: forms, a11y\n".repeat(8);
     const kinds = [];
     let overhead = 0;
     for (let index = 0; index < ${calls}; index += 1) {

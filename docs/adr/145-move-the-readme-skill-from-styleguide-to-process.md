@@ -11,7 +11,7 @@ The skill owns the structure of a project README: the opening block, the facts, 
 
 ## Decision
 
-Rename rule-mcp-styleguide-readme to rule-mcp-process-readme, change the tool to rule_tool_process_readme, move its row from the styleguide tables into the process tables in rule-mcp and rule-mcp-process, update the docs persona, add the skill to the Open Source Steward evidence skills with a lens about the README as the first contact, and regenerate the census.
+Rename rule-styleguide-readme to rule-process-readme, change the tool to rule_tool_process_readme, move its row from the styleguide tables into the process tables in rule-mcp and rule-process, update the docs persona, add the skill to the Open Source Steward evidence skills with a lens about the README as the first contact, and regenerate the census.
 
 ## Consequences
 

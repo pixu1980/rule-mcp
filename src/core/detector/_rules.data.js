@@ -34,15 +34,15 @@ export const BUILD_TOOL_RULES = [
 /**
  * Framework key -> canonical thematic skill mapping.
  * Tool names are derived from the skill name by the same rule used by
- * registerSkillTool(): strip `rule-mcp-`, replace `-` with `_`, prefix `rule_tool_`.
+ * registerSkillTool(): strip `rule-`, replace `-` with `_`, prefix `rule_tool_`.
  */
 export const FRAMEWORK_SKILL_MAP = {
-  agents: "rule-mcp-ai",
-  angular: "rule-mcp-frontend-angular",
-  astro: "rule-mcp-meta-astro",
-  electron: "rule-mcp-platform-desktop",
-  react: "rule-mcp-frontend-react",
-  solid: "rule-mcp-frontend-solidjs",
-  svelte: "rule-mcp-frontend-svelte",
-  vue: "rule-mcp-frontend-vue",
+  agents: "rule-ai",
+  angular: "rule-frontend-angular",
+  astro: "rule-meta-astro",
+  electron: "rule-platform-desktop",
+  react: "rule-frontend-react",
+  solid: "rule-frontend-solidjs",
+  svelte: "rule-frontend-svelte",
+  vue: "rule-frontend-vue",
 };

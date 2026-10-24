@@ -42,7 +42,7 @@ pnpm --filter ./frontend test    # Vitest + Testing Library — unit
 pnpm --filter ./frontend test:a11y   # Playwright + @axe-core — WCAG 2.2 AA gate
 ```
 
-The a11y suite is mandatory per `rule-mcp-styleguide-a11y` and boots its own
+The a11y suite is mandatory per `rule-styleguide-a11y` and boots its own
 Vite dev server (`playwright.config.ts` -> `webServer`), so it can run
 standalone: `cd frontend && pnpm exec playwright install chromium && pnpm test:a11y`.
 

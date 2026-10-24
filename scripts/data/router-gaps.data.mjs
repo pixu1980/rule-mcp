@@ -17,9 +17,9 @@
 
 /** `rule-mcp-<area>` -> the children its table does not link yet. */
 export const ROUTER_GAPS = {
-  "rule-mcp-devops": ["rule-mcp-devops-deploy-preview"],
-  "rule-mcp-frontend": ["rule-mcp-frontend-template-engine"],
-  "rule-mcp-platform": ["rule-mcp-platform-auth"],
-  "rule-mcp-process": ["rule-mcp-process-tdd"],
-  "rule-mcp-styleguide": ["rule-mcp-styleguide-comments", "rule-mcp-styleguide-file-tree"],
+  "rule-devops": ["rule-devops-deploy-preview"],
+  "rule-frontend": ["rule-frontend-template-engine"],
+  "rule-platform": ["rule-platform-auth"],
+  "rule-process": ["rule-process-tdd"],
+  "rule-styleguide": ["rule-styleguide-comments", "rule-styleguide-file-tree"],
 };

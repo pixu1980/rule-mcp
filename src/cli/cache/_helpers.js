@@ -2,7 +2,7 @@
 
 export const print = (value) => process.stdout.write(`${value}\n`);
 
-/** The area a routed skill belongs to: `rule-mcp-styleguide-css` is styleguide. */
+/** The area a routed skill belongs to: `rule-styleguide-css` is styleguide. */
 export function areaOf(skill) {
   const [, area] = String(skill).split("-", 2);
 

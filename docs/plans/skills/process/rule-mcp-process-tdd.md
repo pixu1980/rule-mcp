@@ -1,4 +1,4 @@
-# rule-mcp-process-tdd - best-practice implementation plan
+# rule-process-tdd - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -10,24 +10,24 @@ the process area.
 
 Read in this session:
 
-- `skills/rule-mcp-process-tdd/SKILL.md`: 112 lines. Six numbered sections (red,
+- `skills/rule-process-tdd/SKILL.md`: 112 lines. Six numbered sections (red,
   green, refactor, what to cover, accessibility tests, close the loop), then a
   merged legacy block from line 77 to the end. The block is 36 lines, 32% of the
   file, and carries a second `<h1>` at line 79.
-- `skills/rule-mcp-devops-testing/SKILL.md`: 366 lines. Owns the runner, the mocking,
+- `skills/rule-devops-testing/SKILL.md`: 366 lines. Owns the runner, the mocking,
   the coverage gates and the cost of a flaky test. The same threshold table
   (60/50/60/60) sits at line 288, the same Expo exception at line 38, and the
   same "Vitest is the runner, and the only one" rule at line 35.
-- `skills/rule-mcp-process/SKILL.md`: 57 lines, the area router. It has 10 table rows
-  and 7 quick-selection entries, and `rule-mcp-process-tdd` is in neither.
-- `skills/rule-mcp-process-simplicity/SKILL.md`: the sibling that already owns a
+- `skills/rule-process/SKILL.md`: 57 lines, the area router. It has 10 table rows
+  and 7 quick-selection entries, and `rule-process-tdd` is in neither.
+- `skills/rule-process-simplicity/SKILL.md`: the sibling that already owns a
   guardrail family (three rules), and the model for what a process-area rule
   looks like.
-- `skills/rule-mcp-process-readme/SKILL.md` and
-  `docs/plans/skills/process/rule-mcp-process-readme.md`: the sibling plan, for the
+- `skills/rule-process-readme/SKILL.md` and
+  `docs/plans/skills/process/rule-process-readme.md`: the sibling plan, for the
   shape of this one.
-- `skills/rule-mcp-styleguide-a11y/SKILL.md` (598 lines) and
-  `skills/rule-mcp-styleguide-a11y/guardrails/`: 10 rules, among them
+- `skills/rule-styleguide-a11y/SKILL.md` (598 lines) and
+  `skills/rule-styleguide-a11y/guardrails/`: 10 rules, among them
   `a11y-test-required`, which already requires Playwright plus
   `@axe-core/playwright` in `tests/a11y/`.
 - `src/core/scaffold/_template-data.data.js`: the templates the skill points at
@@ -38,8 +38,8 @@ Read in this session:
   `## See also`, resolvable relative links and a list of removed skill names.
 - `src/core/skills/__tests__/_content.test.mjs`: where a per-skill
   required-content assertion would go.
-- `skills/rule-mcp-platform-library/SKILL.md` (line 31: "node:test or Vitest,
-  minimum 80% coverage") and `skills/rule-mcp-backend-node/SKILL.md` (line 386:
+- `skills/rule-platform-library/SKILL.md` (line 31: "node:test or Vitest,
+  minimum 80% coverage") and `skills/rule-backend-node/SKILL.md` (line 386:
   "`node:test` replaces a runner for most projects"). These are the two children
   that contradict the Vitest-only rule today.
 
@@ -72,27 +72,27 @@ there.
 
 Problems found:
 
-| Problem                                | Detail                                                                                                                                                                                                                            |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| the merged block duplicated            | lines 77-112 repeat the Vitest-only rule, the Expo exception and the 60/50/60/60 table that `rule-mcp-devops-testing` (line 288) and `rule-mcp-toolchain-vite` also state, and it adds a second `<h1>`                            |
-| three references point at nothing      | "Use `testing` skill", "`coverage-gates` skill" and "See `expo` rule" name a skill, a skill and a rule that do not exist                                                                                                          |
-| the runner rule contradicts the corpus | this skill and `rule-mcp-devops-testing` say Vitest is the only framework, `rule-mcp-platform-library` allows `node:test`, `rule-mcp-backend-node` calls it the default for most projects, and this repository runs `node --test` |
-| a template is named wrong              | the skill lists `components`; the catalog key is `a11y-test-components`                                                                                                                                                           |
-| the router cannot route to the skill   | `rule-mcp-process` is 10 rows and 7 quick-selection entries, and tdd is in neither, so the area index never reaches it                                                                                                            |
-| the a11y mandate is owned twice        | section 5 states the Playwright plus axe-core requirement that `rule-mcp-styleguide-a11y` owns through `a11y-test-required`, and `rule-mcp-styleguide-javascript` repeats it again                                                |
+| Problem                                | Detail                                                                                                                                                                                                                |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| the merged block duplicated            | lines 77-112 repeat the Vitest-only rule, the Expo exception and the 60/50/60/60 table that `rule-devops-testing` (line 288) and `rule-toolchain-vite` also state, and it adds a second `<h1>`                        |
+| three references point at nothing      | "Use `testing` skill", "`coverage-gates` skill" and "See `expo` rule" name a skill, a skill and a rule that do not exist                                                                                              |
+| the runner rule contradicts the corpus | this skill and `rule-devops-testing` say Vitest is the only framework, `rule-platform-library` allows `node:test`, `rule-backend-node` calls it the default for most projects, and this repository runs `node --test` |
+| a template is named wrong              | the skill lists `components`; the catalog key is `a11y-test-components`                                                                                                                                               |
+| the router cannot route to the skill   | `rule-process` is 10 rows and 7 quick-selection entries, and tdd is in neither, so the area index never reaches it                                                                                                    |
+| the a11y mandate is owned twice        | section 5 states the Playwright plus axe-core requirement that `rule-styleguide-a11y` owns through `a11y-test-required`, and `rule-styleguide-javascript` repeats it again                                            |
 
 ## Decisions
 
-| Question     | Decision                                                                                                                                                                           |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Scope        | The discipline and the test design stay; the tooling leaves. Vitest, mocking and coverage gates belong to `rule-mcp-devops-testing`, the a11y matrix to `rule-mcp-styleguide-a11y` |
-| Merged block | Deleted. The two dangling skill references become a link to `rule-mcp-devops-testing`                                                                                              |
-| Runner       | `node:test` is admitted as a first-class runner outside Vite; Vitest stays the default for Vite and frontend projects, Jest stays the Expo exception                               |
-| Router       | `rule-mcp-process-tdd` joins the table and the quick selection guide, with a coverage test that fails when a child is missing                                                      |
-| Test layers  | The pyramid stays the default shape, plus the twelve Test Desiderata properties and what each trades against                                                                       |
-| Coverage     | The thresholds are `rule-mcp-devops-testing` property. This skill states that a threshold is a floor and not evidence, and points at the owner                                     |
-| Guardrails   | Four advisory rules: no assertionless test, no committed `.only`, no tautological assertion, no mocked subject                                                                     |
-| Delivery     | Plan only now                                                                                                                                                                      |
+| Question     | Decision                                                                                                                                                                   |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope        | The discipline and the test design stay; the tooling leaves. Vitest, mocking and coverage gates belong to `rule-devops-testing`, the a11y matrix to `rule-styleguide-a11y` |
+| Merged block | Deleted. The two dangling skill references become a link to `rule-devops-testing`                                                                                          |
+| Runner       | `node:test` is admitted as a first-class runner outside Vite; Vitest stays the default for Vite and frontend projects, Jest stays the Expo exception                       |
+| Router       | `rule-process-tdd` joins the table and the quick selection guide, with a coverage test that fails when a child is missing                                                  |
+| Test layers  | The pyramid stays the default shape, plus the twelve Test Desiderata properties and what each trades against                                                               |
+| Coverage     | The thresholds are `rule-devops-testing` property. This skill states that a threshold is a floor and not evidence, and points at the owner                                 |
+| Guardrails   | Four advisory rules: no assertionless test, no committed `.only`, no tautological assertion, no mocked subject                                                             |
+| Delivery     | Plan only now                                                                                                                                                              |
 
 ## Workstream A - The discipline stays, the tooling leaves
 
@@ -117,13 +117,13 @@ sections that survive, rewritten where the evidence demands it:
 
 A boundary table closes the section, so the reader knows where to go next:
 
-| Question                                           | Owner                                              |
-| -------------------------------------------------- | -------------------------------------------------- |
-| Which runner, config, mocking                      | `rule-mcp-devops-testing`                          |
-| Coverage thresholds and the CI gate                | `rule-mcp-devops-testing`                          |
-| What to cover and how to name the test             | this skill                                         |
-| a11y criteria, tools and the Playwright spec shape | `rule-mcp-styleguide-a11y`                         |
-| E2E journeys that protect the product              | `rule-mcp-devops-testing`, `rule-mcp-process-bmad` |
+| Question                                           | Owner                                      |
+| -------------------------------------------------- | ------------------------------------------ |
+| Which runner, config, mocking                      | `rule-devops-testing`                      |
+| Coverage thresholds and the CI gate                | `rule-devops-testing`                      |
+| What to cover and how to name the test             | this skill                                 |
+| a11y criteria, tools and the Playwright spec shape | `rule-styleguide-a11y`                     |
+| E2E journeys that protect the product              | `rule-devops-testing`, `rule-process-bmad` |
 
 ## Workstream B - The merged legacy block
 
@@ -131,12 +131,12 @@ The block that begins at `## Conventions (rules -> skills merge)` is deleted.
 What is in it goes to exactly one place each:
 
 - **Mandatory constraints** (Vitest only, the Expo exception, the thresholds
-  table): already in `rule-mcp-devops-testing`, which is linked instead of copied.
+  table): already in `rule-devops-testing`, which is linked instead of copied.
 - **Required conventions** (`*.test.ts` naming, the package-level `tests/`
-  directory, CI failing below the thresholds): also `rule-mcp-devops-testing`.
+  directory, CI failing below the thresholds): also `rule-devops-testing`.
 - **Implementation reference** ("Use `testing` skill", "`coverage-gates`
   skill"): two dangling names replaced by the single link to
-  `rule-mcp-devops-testing`.
+  `rule-devops-testing`.
 
 Nothing in the block is unique to this skill, so nothing is moved back into the
 body.
@@ -158,19 +158,19 @@ This repository is the live example of the admitted case: `pnpm test` runs
 `node --test` through `scripts/alias-hook.mjs`, so the rule has a citable case
 instead of an abstract one.
 
-The companion edit in `skills/rule-mcp-devops-testing/SKILL.md` carries the same
+The companion edit in `skills/rule-devops-testing/SKILL.md` carries the same
 three bullets, because that file states the old rule first. It is recorded here
-and listed as a step, since `rule-mcp-devops-testing` has no plan of its own yet.
+and listed as a step, since `rule-devops-testing` has no plan of its own yet.
 
 ## Workstream D - The router row and the coverage test
 
-1. `skills/rule-mcp-process/SKILL.md` gains one row for `rule-mcp-process-tdd` in the
+1. `skills/rule-process/SKILL.md` gains one row for `rule-process-tdd` in the
    table and one line in the quick selection guide.
 2. A `router-child-coverage` test compares the router's links with the
-   directories whose name begins with `rule-mcp-process-`, so the next process child
+   directories whose name begins with `rule-process-`, so the next process child
    fails the suite until it is listed.
 
-The same test is proposed by the `rule-mcp-styleguide` plan for its own area; if both
+The same test is proposed by the `rule-styleguide` plan for its own area; if both
 land, the shared helper should live in one place rather than twice.
 
 ## Workstream E - The twelve properties
@@ -204,12 +204,12 @@ and the few honest end-to-end ones.
 Section 5 keeps only the part this skill owns: an accessibility assertion is
 still an assertion, written before the fix, and the manual keyboard path is the
 test automation cannot write. Everything about tooling becomes a link:
-`rule-mcp-styleguide-a11y` for the criteria and the tool matrix, and
+`rule-styleguide-a11y` for the criteria and the tool matrix, and
 `a11y-test-required` for the Playwright plus `@axe-core/playwright` requirement.
 
 The template names are corrected in the same pass: `a11y-test-basic`,
 `a11y-test-forms`, `a11y-test-components` and `playwright-config`, read through
-the `rulemcp://templates` resource and `rulemcp://a11y`.
+the `rule://templates` resource and `rule://a11y`.
 
 ## Proposed guardrails
 
@@ -238,9 +238,9 @@ None. The four templates already exist in the scaffold catalog and only the name
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD), `rule-mcp-platform-mobile#2` (CONTRACT)
+Depends on: `rule-process-ai` (HARD), `rule-platform-mobile#2` (CONTRACT)
 
-Feeds: `rule-mcp-process` (HARD)
+Feeds: `rule-process` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -262,10 +262,10 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 ### Phase 2 - Router and runner
 
-- [ ] Add the row and the quick-selection entry to `rule-mcp-process/SKILL.md`.
+- [ ] Add the row and the quick-selection entry to `rule-process/SKILL.md`.
 - [ ] Add the router coverage test.
 - [ ] State the `node:test` admission here, and carry the companion edit in
-      `rule-mcp-devops-testing`.
+      `rule-devops-testing`.
 - [ ] Extend the required-content assertion in `_content.test.mjs`.
 
 ### Phase 3 - Guardrails
@@ -312,11 +312,11 @@ pnpm test
 - The twelve properties have no rank in the source. Beck states the oppositions
   and says some properties support each other, so the table keeps his order and
   names the trade rather than asserting an order he does not.
-- `rule-mcp-devops-testing` has no per-skill plan yet (index entry 61), so the
+- `rule-devops-testing` has no per-skill plan yet (index entry 61), so the
   companion runner edit is recorded here and must be carried when that plan is
   written.
-- The 60/50/60/60 table is stated in three places: `rule-mcp-devops-testing` (line
-  288), `rule-mcp-toolchain-vite`, and this skill. Workstream B takes it from three
-  to two; the last copy is the `rule-mcp-toolchain-vite` plan's business.
+- The 60/50/60/60 table is stated in three places: `rule-devops-testing` (line
+  288), `rule-toolchain-vite`, and this skill. Workstream B takes it from three
+  to two; the last copy is the `rule-toolchain-vite` plan's business.
 - After Workstream F this skill contains no tool instruction at all, which is
   the point: one owner per rule, and the reader is sent to it.

@@ -1,7 +1,7 @@
-# rule-mcp-frontend guardrails execution plan
+# rule-frontend guardrails execution plan
 
-Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the seven rule-mcp-frontend leaves.
-Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the seven rule-mcp-frontend leaves. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the seven rule-mcp-frontend leaves, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
+Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the seven rule-frontend leaves.
+Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the seven rule-frontend leaves. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: the seven rule-frontend leaves, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
 
 Scope: add the framework-agnostic rules the frontend area is missing, extend
 the per-framework set, and record every rule against a citable public source.
@@ -17,21 +17,21 @@ test; census, ADR, changelog, per-rule source).
 
 Audited in this session (read-only):
 
-- `skills/rule-mcp-frontend/SKILL.md` (router, no guardrails, no inherits)
-- `skills/rule-mcp-frontend-react/` (2 rules: react-hooks-rules, react-no-classname)
-- `skills/rule-mcp-frontend-vue/` (1 rule: vue-no-class-binding)
-- `skills/rule-mcp-frontend-svelte/` (1 rule: svelte-no-class-directive)
-- `skills/rule-mcp-frontend-angular/` (1 rule: angular-no-ngclass)
-- `skills/rule-mcp-frontend-{template-engine,workers,solidjs}/` (none)
+- `skills/rule-frontend/SKILL.md` (router, no guardrails, no inherits)
+- `skills/rule-frontend-react/` (2 rules: react-hooks-rules, react-no-classname)
+- `skills/rule-frontend-vue/` (1 rule: vue-no-class-binding)
+- `skills/rule-frontend-svelte/` (1 rule: svelte-no-class-directive)
+- `skills/rule-frontend-angular/` (1 rule: angular-no-ngclass)
+- `skills/rule-frontend-{template-engine,workers,solidjs}/` (none)
 
-Two skills audited here, `rule-mcp-frontend-vanilla-reactive` (9 rules) and
-`rule-mcp-frontend-custom-element`, were removed from the catalog afterwards (ADR 152),
+Two skills audited here, `rule-frontend-vanilla-reactive` (9 rules) and
+`rule-frontend-custom-element`, were removed from the catalog afterwards (ADR 152),
 so the rule count in this plan is historical.
 
 Current state: 10 skills, 14 rules, and no `inherits` line anywhere, so a rule
 owned by one skill never reaches another.
 
-Style and accessibility already live in the styleguide area (`rule-mcp-styleguide-css`,
+Style and accessibility already live in the styleguide area (`rule-styleguide-css`,
 `-html`, `-a11y`), which is why this plan stays on framework behavior, XSS
 sinks, custom elements and workers.
 
@@ -48,29 +48,29 @@ Sources fetched and used:
 
 ## Decisions from the interview
 
-| Question      | Decision                                                                |
-| ------------- | ----------------------------------------------------------------------- |
-| Target skills | `rule-mcp-frontend` shared, react, vue, svelte, solid, angular, workers |
-| Candidates    | All seven selected                                                      |
-| Trigger       | Devops default: target file or framework import                         |
-| Severity      | Devops default: advisory, then blocking after corpus proof              |
-| Corpus/tests  | Devops default: fixtures, unit tests, inheritance test                  |
-| Artifacts     | Devops default: frontmatter, census, ADR, changelog, per-rule source    |
-| Phasing       | Plan only now; implementation in a dedicated session                    |
+| Question      | Decision                                                             |
+| ------------- | -------------------------------------------------------------------- |
+| Target skills | `rule-frontend` shared, react, vue, svelte, solid, angular, workers  |
+| Candidates    | All seven selected                                                   |
+| Trigger       | Devops default: target file or framework import                      |
+| Severity      | Devops default: advisory, then blocking after corpus proof           |
+| Corpus/tests  | Devops default: fixtures, unit tests, inheritance test               |
+| Artifacts     | Devops default: frontmatter, census, ADR, changelog, per-rule source |
+| Phasing       | Plan only now; implementation in a dedicated session                 |
 
 ### Open item 1: the shared rules need an inherits graph
 
-No frontend skill declares `inherits`, so the shared rules in `rule-mcp-frontend`
-only run when the check is routed to `rule-mcp-frontend` itself. The same shape as
-the AI open item: either the framework skills add `inherits: [rule-mcp-frontend]`,
+No frontend skill declares `inherits`, so the shared rules in `rule-frontend`
+only run when the check is routed to `rule-frontend` itself. The same shape as
+the AI open item: either the framework skills add `inherits: [rule-frontend]`,
 or each framework skill keeps its own copy of the shared ids.
 
 ### Open item 2: two selected candidates have unselected owners
 
 `template-escape` belongs to
-`rule-mcp-frontend-template-engine`, but only the candidates were selected in the
+`rule-frontend-template-engine`, but only the candidates were selected in the
 interview, not those two skills. Either the two skills join the target list, or
-the two rules ship on `rule-mcp-frontend` and run whenever the file matches.
+the two rules ship on `rule-frontend` and run whenever the file matches.
 
 ### Tiering
 
@@ -97,7 +97,7 @@ corpus pins both so a single escape hatch cannot satisfy the pair.
 
 ## Enforcement model
 
-1. **Owner**: `rule-mcp-frontend` gets a `guardrails/index.js` with the shared ids;
+1. **Owner**: `rule-frontend` gets a `guardrails/index.js` with the shared ids;
    each framework skill keeps its own and gains its new ids.
 2. **Triggers**: the shared rules run on component, template and worker files;
    a framework rule runs when the file imports that framework.
@@ -126,7 +126,7 @@ Shared files: none: absorbed into the leaf plans named above
 - [ ] Resolve the two unselected owners (open item 2).
 - [ ] Create the ADR for the frontend guardrail family.
 
-### Phase 1 - Shared rules in rule-mcp-frontend
+### Phase 1 - Shared rules in rule-frontend
 
 - [ ] Implement `xss-sink-sanitized`, `fe-list-key`, `fe-effect-cleanup`.
 - [ ] Implement `ce-valid`, `template-escape`, `worker-no-dom`.
@@ -150,12 +150,12 @@ Shared files: none: absorbed into the leaf plans named above
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step                                        | Class      | Model                   | Why                            |
-| ------------------------------------------- | ---------- | ----------------------- | ------------------------------ |
-| Phase 0 - Decisions and scaffolding         | `T1-plan`  | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Shared rules in rule-mcp-frontend | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
-| Phase 2 - Per-framework rules               | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
-| Phase 3 - Promotion and documentation       | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Step                                    | Class      | Model                   | Why                            |
+| --------------------------------------- | ---------- | ----------------------- | ------------------------------ |
+| Phase 0 - Decisions and scaffolding     | `T1-plan`  | `gemini-4-argon` (high) | planning and prose that argues |
+| Phase 1 - Shared rules in rule-frontend | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 2 - Per-framework rules           | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 3 - Promotion and documentation   | `T3-rules` | `kimi-k2.7-code`        | small deterministic code       |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

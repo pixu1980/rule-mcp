@@ -1,4 +1,4 @@
-# rule-mcp-backend - plan
+# rule-backend - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#79`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
@@ -6,40 +6,40 @@ Notes:`planned` Notes: plan only, 2026-10-21. Index row `#79`, `pending` until t
 Area: backend, router, planned last in the area (`DEPENDENCIES.md`). Siblings:
 the eight leaves (`workers`, `security`, `node`, `nestjs`, `hono`, `graphql`,
 `fastify`, `express`). The shared router rules and the route-table generator come
-from `rule-mcp-process`.
+from `rule-process`.
 
 ## Why this router matters
 
-Like `rule-mcp-data`, it owns the area's safety rules and the leaves inherit them:
+Like `rule-data`, it owns the area's safety rules and the leaves inherit them:
 
 ```
 cors-explicit, error-exposure, helmet-headers, input-validation,
 rate-limiting, sql-injection
 ```
 
-All eight leaves declare `inherits: [rule-mcp-backend]` and none of them carries a
+All eight leaves declare `inherits: [rule-backend]` and none of them carries a
 copy. It is the largest area using the inheritance model (8 inheritors against
 data's 7), and the rules are the HTTP surface every backend shares: headers,
 CORS, rate limiting, input validation, error exposure and injection.
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-backend/SKILL.md` is **139 lines**: frontmatter with a `guardrails:`
+`skills/rule-backend/SKILL.md` is **139 lines**: frontmatter with a `guardrails:`
 key, a backend-framework table, a database table with four **data-area** rows,
 an API and architecture section, "Six ideas that replace memorizing
 architectures", "Structuring a backend: the layouts, and when each stops paying",
 a Quick Reference, and See also.
 
-| Fact            | State                                                                                              |
-| --------------- | -------------------------------------------------------------------------------------------------- |
-| Children        | 8: express, fastify, nestjs, hono, graphql, node, security, workers                                |
-| Table rows      | 12: the 8 children plus **4 rows for `rule-mcp-data-*` skills**                                    |
-| Quick Selection | none: this router uses a Quick Reference instead                                                   |
-| Dispatcher rows | 8 of 9: **`rule-mcp-backend-workers` is missing**                                                  |
-| Own rules       | 6, inherited by 8 leaves                                                                           |
-| Tags            | backend, api, server, umbrella, index                                                              |
-| Cross-area rows | 4 data rows, which also restate dependency versions                                                |
-| Version claims  | "PostgreSQL 16+", "MySQL 8+ / MariaDB 11+" and "MongoDB 7+" appear here **and** in `rule-mcp-data` |
+| Fact            | State                                                                                          |
+| --------------- | ---------------------------------------------------------------------------------------------- |
+| Children        | 8: express, fastify, nestjs, hono, graphql, node, security, workers                            |
+| Table rows      | 12: the 8 children plus **4 rows for `rule-data-*` skills**                                    |
+| Quick Selection | none: this router uses a Quick Reference instead                                               |
+| Dispatcher rows | 8 of 9: **`rule-backend-workers` is missing**                                                  |
+| Own rules       | 6, inherited by 8 leaves                                                                       |
+| Tags            | backend, api, server, umbrella, index                                                          |
+| Cross-area rows | 4 data rows, which also restate dependency versions                                            |
+| Version claims  | "PostgreSQL 16+", "MySQL 8+ / MariaDB 11+" and "MongoDB 7+" appear here **and** in `rule-data` |
 
 ### The six ideas and the layouts are the content
 
@@ -50,7 +50,7 @@ the catalog covers them, and no rule can check them. They stay.
 
 ### What the router actually lacks
 
-1. **A dispatcher row for `rule-mcp-backend-workers`**, the last backend leaf without
+1. **A dispatcher row for `rule-backend-workers`**, the last backend leaf without
    a door.
 2. **One pointer instead of four data rows.** The data area lists those skills,
    and its own table is the maintained one. Here they are a third place where the
@@ -82,7 +82,7 @@ the catalog covers them, and no rule can check them. They stay.
 
 The router closes after its leaves and after the shared router rules and the route-table generator are exported.
 
-Depends on: `rule-mcp-backend-express` (HARD), `rule-mcp-backend-fastify` (HARD), `rule-mcp-backend-graphql` (HARD), `rule-mcp-backend-hono` (HARD), `rule-mcp-backend-nestjs` (HARD), `rule-mcp-backend-node` (HARD), `rule-mcp-backend-security` (HARD), `rule-mcp-backend-workers` (HARD), `rule-mcp-process#2` (CONTRACT), `rule-mcp-process#3` (CONTRACT)
+Depends on: `rule-backend-express` (HARD), `rule-backend-fastify` (HARD), `rule-backend-graphql` (HARD), `rule-backend-hono` (HARD), `rule-backend-nestjs` (HARD), `rule-backend-node` (HARD), `rule-backend-security` (HARD), `rule-backend-workers` (HARD), `rule-process#2` (CONTRACT), `rule-process#3` (CONTRACT)
 
 Feeds:,
 
@@ -98,7 +98,7 @@ Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fix
 
 - [ ] `tests/fixtures/backend-router/`: `clean/`, `cross-area-rows/`,
       `missing-child/`, `tag-overlap/`, each with a one-line `README.md`.
-- [ ] Twelve `CORPUS` pairs bound to `rule-mcp-backend`, six of them for the rules it
+- [ ] Twelve `CORPUS` pairs bound to `rule-backend`, six of them for the rules it
       already owns.
 - [ ] Suites written and watched to fail with "rule not found".
 
@@ -110,9 +110,9 @@ Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fix
 
 ### Phase 3 - Finish the area
 
-- [ ] Dispatcher row for `rule-mcp-backend-workers`.
-- [ ] The four data rows become one pointer to `rule-mcp-data`.
-- [ ] The version strings leave this table; `rule-mcp-data` owns them.
+- [ ] Dispatcher row for `rule-backend-workers`.
+- [ ] The four data rows become one pointer to `rule-data`.
+- [ ] The version strings leave this table; `rule-data` owns them.
 - [ ] Table regenerated by the census generator once it exists.
 
 ### Phase 4 - Verification
@@ -120,7 +120,7 @@ Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fix
 - [ ] `_router-child-coverage`, `_corpus`, `_routing-corpus` suites.
 - [ ] One routing prompt per leaf: eight requests that name no skill reach the
       eight leaves.
-- [ ] An inheritance check: every backend leaf declares `inherits: [rule-mcp-backend]`.
+- [ ] An inheritance check: every backend leaf declares `inherits: [rule-backend]`.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
 
 ## Model assignment

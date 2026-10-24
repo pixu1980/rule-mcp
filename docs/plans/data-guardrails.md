@@ -1,7 +1,7 @@
-# rule-mcp-data guardrails execution plan
+# rule-data guardrails execution plan
 
-Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-mcp-data and the eight data leaves.
-Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-mcp-data and the eight data leaves. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-mcp-data and the eight data leaves, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
+Status: `superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-data and the eight data leaves.
+Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-data and the eight data leaves. Notes:`superseded` by `docs/plans/skills/skills-plan.md` (ADR 153). Absorbed by: rule-data and the eight data leaves, one rule set per plan. Graph: not a node; see the absorbed table in `skills-plan.md`.
 
 Scope: extend the four guardrails the data area already owns and add
 engine-specific rules, each against a citable public source. Implementation
@@ -16,17 +16,17 @@ per-rule source).
 
 Audited in this session (read-only):
 
-- `skills/rule-mcp-data/SKILL.md` and `guardrails/` (connection-pool,
+- `skills/rule-data/SKILL.md` and `guardrails/` (connection-pool,
   migration-safety, parameterized-queries, transaction-safety)
-- `skills/rule-mcp-data-postgresql/SKILL.md` (736 lines)
-- `skills/rule-mcp-data-mysql/SKILL.md` (633 lines)
-- `skills/rule-mcp-data-mongodb/SKILL.md` (735 lines)
-- `skills/rule-mcp-data-sql/SKILL.md` (821 lines)
-- `skills/rule-mcp-data-sqlite/SKILL.md` (243 lines)
-- `skills/rule-mcp-data-{duckdb,indexed-db}/SKILL.md` (no guardrails)
+- `skills/rule-data-postgresql/SKILL.md` (736 lines)
+- `skills/rule-data-mysql/SKILL.md` (633 lines)
+- `skills/rule-data-mongodb/SKILL.md` (735 lines)
+- `skills/rule-data-sql/SKILL.md` (821 lines)
+- `skills/rule-data-sqlite/SKILL.md` (243 lines)
+- `skills/rule-data-{duckdb,indexed-db}/SKILL.md` (no guardrails)
 
-Current state: 4 rules, all owned by `rule-mcp-data` and inherited by the seven
-children through `inherits: [rule-mcp-data]`.
+Current state: 4 rules, all owned by `rule-data` and inherited by the seven
+children through `inherits: [rule-data]`.
 
 Sources fetched and used:
 
@@ -42,7 +42,7 @@ Sources fetched and used:
 
 | Question      | Decision                                                             |
 | ------------- | -------------------------------------------------------------------- |
-| Target skills | `rule-mcp-data` shared plus postgres, mongodb, mysql, sqlite, sql    |
+| Target skills | `rule-data` shared plus postgres, mongodb, mysql, sqlite, sql        |
 | Scope         | High-signal selection (5-7)                                          |
 | Candidates    | All nine selected                                                    |
 | Trigger       | Devops default: target file or content heuristic                     |
@@ -61,20 +61,20 @@ shared ones on that skill.
 
 ### Open item 2: where each rule lives
 
-| Rule id              | Owner                    | Why                                         |
-| -------------------- | ------------------------ | ------------------------------------------- |
-| `index-on-fk`        | rule-mcp-data-postgresql | PostgreSQL does not auto-index foreign keys |
-| `no-select-star`     | rule-mcp-data            | Shared SQL hygiene                          |
-| `query-limit`        | rule-mcp-data            | Shared, API4 resource consumption           |
-| `query-timeout`      | rule-mcp-data            | Shared driver concern                       |
-| `mongo-projection`   | rule-mcp-data-mongodb    | MongoDB cursor concern                      |
-| `mongo-esr-index`    | rule-mcp-data-mongodb    | MongoDB ESR guideline                       |
-| `sqlite-wal`         | rule-mcp-data-sqlite     | SQLite connection pragmas                   |
-| `db-least-privilege` | rule-mcp-data            | Shared, applies to every engine             |
-| `migration-down`     | rule-mcp-data            | Extends the existing `migration-safety`     |
+| Rule id              | Owner                | Why                                         |
+| -------------------- | -------------------- | ------------------------------------------- |
+| `index-on-fk`        | rule-data-postgresql | PostgreSQL does not auto-index foreign keys |
+| `no-select-star`     | rule-data            | Shared SQL hygiene                          |
+| `query-limit`        | rule-data            | Shared, API4 resource consumption           |
+| `query-timeout`      | rule-data            | Shared driver concern                       |
+| `mongo-projection`   | rule-data-mongodb    | MongoDB cursor concern                      |
+| `mongo-esr-index`    | rule-data-mongodb    | MongoDB ESR guideline                       |
+| `sqlite-wal`         | rule-data-sqlite     | SQLite connection pragmas                   |
+| `db-least-privilege` | rule-data            | Shared, applies to every engine             |
+| `migration-down`     | rule-data            | Extends the existing `migration-safety`     |
 
-`rule-mcp-data-sql` and `rule-mcp-data-mysql` inherit the shared rules and get no rule of
-their own in this pass; `rule-mcp-data-duckdb` and `rule-mcp-data-indexed-db` were not
+`rule-data-sql` and `rule-data-mysql` inherit the shared rules and get no rule of
+their own in this pass; `rule-data-duckdb` and `rule-data-indexed-db` were not
 selected and stay narrative.
 
 ### Tiering: nine rules against a 5-7 budget
@@ -100,8 +100,8 @@ Tier B: `mongo-esr-index`, `db-least-privilege`, `migration-down`.
 
 ## Enforcement model
 
-1. **Owner**: `rule-mcp-data` keeps its `guardrails/index.js` and gains the shared
-   ids; `rule-mcp-data-postgresql`, `rule-mcp-data-mongodb` and `rule-mcp-data-sqlite` gain
+1. **Owner**: `rule-data` keeps its `guardrails/index.js` and gains the shared
+   ids; `rule-data-postgresql`, `rule-data-mongodb` and `rule-data-sqlite` gain
    their own `guardrails/index.js`.
 2. **Triggers**: SQL and DDL rules run on files that contain queries or DDL;
    engine rules run when the file imports that engine's client.
@@ -130,7 +130,7 @@ Shared files: none: absorbed into the leaf plans named above
 - [ ] Confirm the ownership table (open item 2).
 - [ ] Create the ADR for the data guardrail family.
 
-### Phase 1 - Shared rules in rule-mcp-data
+### Phase 1 - Shared rules in rule-data
 
 - [ ] Implement `no-select-star`, `query-limit`, `query-timeout`.
 - [ ] Implement `db-least-privilege` and `migration-down` as Tier B.
@@ -138,8 +138,8 @@ Shared files: none: absorbed into the leaf plans named above
 
 ### Phase 2 - Postgres and SQLite
 
-- [ ] Implement `index-on-fk` in rule-mcp-data-postgresql.
-- [ ] Implement `sqlite-wal` in rule-mcp-data-sqlite.
+- [ ] Implement `index-on-fk` in rule-data-postgresql.
+- [ ] Implement `sqlite-wal` in rule-data-sqlite.
 - [ ] Add fixtures and the inheritance test.
 
 ### Phase 3 - MongoDB
@@ -157,13 +157,13 @@ Shared files: none: absorbed into the leaf plans named above
 
 Classes and evidence: section 14 of `docs/plans/plan-of-plans.md`.
 
-| Step                                    | Class       | Model                   | Why                            |
-| --------------------------------------- | ----------- | ----------------------- | ------------------------------ |
-| Phase 0 - Decisions and scaffolding     | `T1-plan`   | `gemini-4-argon` (high) | planning and prose that argues |
-| Phase 1 - Shared rules in rule-mcp-data | `T3-rules`  | `kimi-k2.7-code`        | small deterministic code       |
-| Phase 2 - Postgres and SQLite           | `T7-author` | `qwen3.8-max`           | skill bodies and references    |
-| Phase 3 - MongoDB                       | `T7-author` | `qwen3.8-max`           | skill bodies and references    |
-| Phase 4 - Promotion and documentation   | `T3-rules`  | `kimi-k2.7-code`        | small deterministic code       |
+| Step                                  | Class       | Model                   | Why                            |
+| ------------------------------------- | ----------- | ----------------------- | ------------------------------ |
+| Phase 0 - Decisions and scaffolding   | `T1-plan`   | `gemini-4-argon` (high) | planning and prose that argues |
+| Phase 1 - Shared rules in rule-data   | `T3-rules`  | `kimi-k2.7-code`        | small deterministic code       |
+| Phase 2 - Postgres and SQLite         | `T7-author` | `qwen3.8-max`           | skill bodies and references    |
+| Phase 3 - MongoDB                     | `T7-author` | `qwen3.8-max`           | skill bodies and references    |
+| Phase 4 - Promotion and documentation | `T3-rules`  | `kimi-k2.7-code`        | small deterministic code       |
 
 Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for authoring, `glm-5.3-flash` for bulk edits.
 

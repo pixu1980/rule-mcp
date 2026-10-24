@@ -46,11 +46,11 @@ export async function buildIndex(force = false) {
       await new Promise((resolve) => setImmediate(resolve));
     }
 
-    // A hub skill ("rule-mcp", "rule-mcp-meta") is a dispatcher's own directory, not a
+    // A hub skill ("rule-mcp", "rule-meta") is a dispatcher's own directory, not a
     // body of knowledge: indexed, its near-ubiquitous vocabulary dilutes the
     // document frequency of every common term and drags the whole routing
     // surface down with it.
-    if (skillName === "rule-mcp" || skillName === "rule-mcp-meta") {
+    if (skillName === "rule" || skillName === "rule-meta") {
       continue;
     }
 

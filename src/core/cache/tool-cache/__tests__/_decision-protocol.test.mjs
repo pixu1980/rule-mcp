@@ -21,8 +21,8 @@ const candidates = [
 ];
 
 const routed = [
-  { label: "candidate-1", description: "request: a; skill: rule-mcp-frontend", route: "rule-mcp-frontend", argsKey: "{}", echo: false, fresh: true, isError: false },
-  { label: "candidate-2", description: "request: b; skill: rule-mcp-frontend-vue", route: "rule-mcp-frontend-vue", argsKey: "{}", echo: false, fresh: true, isError: false },
+  { label: "candidate-1", description: "request: a; skill: rule-frontend", route: "rule-frontend", argsKey: "{}", echo: false, fresh: true, isError: false },
+  { label: "candidate-2", description: "request: b; skill: rule-frontend-vue", route: "rule-frontend-vue", argsKey: "{}", echo: false, fresh: true, isError: false },
 ];
 
 function answer(choice, probability) {
@@ -113,7 +113,7 @@ test("a guarded choice whose candidate echoes never replays", () => {
 test("a hub pick beside a leaf of the same area is ambiguous", () => {
   assert.equal(guardAmbiguity(routed[0], routed), "ambiguous-hub");
   assert.equal(guardAmbiguity(routed[1], routed), null, "the specific leaf wins over the hub");
-  assert.equal(guardAmbiguity({ ...routed[0], route: "rule-mcp-backend" }, routed), null);
+  assert.equal(guardAmbiguity({ ...routed[0], route: "rule-backend" }, routed), null);
   assert.equal(guardAmbiguity({ ...routed[0], route: undefined }, routed), null);
 });
 

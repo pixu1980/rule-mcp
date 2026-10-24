@@ -67,7 +67,7 @@ try {
 
 if (isParsed2) {
   const allRoutes = [isParsed2.route, ...(isParsed2.alternatives || []).map((a) => a.route)];
-  const hasReact = allRoutes.some((r) => r?.includes("rule-mcp-frontend-react"));
+  const hasReact = allRoutes.some((r) => r?.includes("rule-frontend-react"));
   check("T3 multi-skill: React routes", hasReact);
 }
 
@@ -82,7 +82,7 @@ try {
 }
 if (isParsed3) {
   const allRoutes = [isParsed3.route, ...(isParsed3.alternatives || []).map((a) => a.route)];
-  const hasA11y = allRoutes.some((r) => r?.includes("rule-mcp-styleguide"));
+  const hasA11y = allRoutes.some((r) => r?.includes("rule-styleguide"));
   check("T3.1 a11y query routes to styleguides", hasA11y);
 }
 

@@ -1,12 +1,12 @@
-# rule-mcp-ai-prompting - plan
+# rule-ai-prompting - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#80`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: ai, leaf. **159 lines**, one file, no `guardrails/`, **no dispatcher row**
-(zero occurrences in `rule-mcp/SKILL.md`), and no `inherits:` line. Siblings:
-`rule-mcp-ai-evals`, `rule-mcp-ai-context-engineering`, `rule-mcp-ai-agent-architecture`, and
-`rule-mcp-ai` (the router).
+(zero occurrences in `rule/SKILL.md`), and no `inherits:` line. Siblings:
+`rule-ai-evals`, `rule-ai-context-engineering`, `rule-ai-agent-architecture`, and
+`rule-ai` (the router).
 
 ## Evidence base (measured 2026-10-21)
 
@@ -19,7 +19,7 @@ a boundary of principle: **"no code in, no code out"** in learning mode, so the
 agent teaches instead of replacing the thinking.
 
 None of it is enforced, and the area has no floor at all: ADR 137 (proposed,
-2026-10-17) records that **five rule-mcp-ai skills exist and none owns a guardrail,
+2026-10-17) records that **five rule-ai skills exist and none owns a guardrail,
 none declares `inherits`**. That ADR is the spine of this plan and of the four
 that follow it; the eight rules it lists live in the router and reach the leaves
 through inheritance.
@@ -50,19 +50,19 @@ prompt, and it owns three things ADR 137 does not name:
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-ai` (HARD)
+Feeds: `rule-ai` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 
-- [ ] Implement ADR 137: the eight `ai-*` rules land in `rule-mcp-ai/guardrails`,
+- [ ] Implement ADR 137: the eight `ai-*` rules land in `rule-ai/guardrails`,
       advisory first, each citing OWASP / MCP / OpenTelemetry where the ADR says
       so.
 - [ ] Answer ADR 137's open question: **the four children declare
-      `inherits: [rule-mcp-ai]`**, the same model `rule-mcp-data` and `rule-mcp-backend` already
+      `inherits: [rule-ai]`**, the same model `rule-data` and `rule-backend` already
       use. This plan assumes yes; the ADR records it.
 - [ ] ADR: the AI family shape, replacing the "proposed" status of 137 with an
       accepted one that includes the inheritance decision.
@@ -71,25 +71,25 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 - [ ] `tests/fixtures/ai-prompting/`: `clean/`, `pasted-file/`,
       `teaching-code/`, `unreviewed-merge/`, each with a one-line `README.md`.
-- [ ] Four `CORPUS` pairs bound to `rule-mcp-ai-prompting`.
+- [ ] Four `CORPUS` pairs bound to `rule-ai-prompting`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ### Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-ai-prompting/guardrails/`: four rule files plus `index.js`.
-- [ ] `guardrails:` and `inherits: [rule-mcp-ai]` in the frontmatter.
+- [ ] `skills/rule-ai-prompting/guardrails/`: four rule files plus `index.js`.
+- [ ] `guardrails:` and `inherits: [rule-ai]` in the frontmatter.
 - [ ] Green the Phase 1 suites.
 
 ### Phase 3 - Door and cross-links
 
 - [ ] `rule-mcp` dispatcher row: the leaf has none today.
-- [ ] The context-engineering section points at `rule-mcp-ai-context-engineering`
+- [ ] The context-engineering section points at `rule-ai-context-engineering`
       instead of summarizing it.
-- [ ] The review section points at `rule-mcp-process-code-review`.
+- [ ] The review section points at `rule-process-code-review`.
 
 ### Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-ai-prompting/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-ai-prompting/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
 

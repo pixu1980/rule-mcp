@@ -10,7 +10,7 @@ import { renderGatewayReply } from "../_render.js";
 
 /** A passing core with one matched section and a long evidence block. */
 const fullCore = (overrides = {}) => ({
-  effectiveRoute: "rule-mcp-frontend-react",
+  effectiveRoute: "rule-frontend-react",
   confidence: 0.5,
   matchedSections: ["layout"],
   routeNextTools: ["rule_tool_react", "rule_tool_check"],
@@ -31,7 +31,7 @@ test("a passing core with files renders evidence, truncation and a files receipt
     [],
   );
 
-  assert.match(lines.join("\n"), /## Route: rule-mcp-frontend-react \(confidence: 50%\)/, "the route line renders the rounded confidence");
+  assert.match(lines.join("\n"), /## Route: rule-frontend-react \(confidence: 50%\)/, "the route line renders the rounded confidence");
   assert.match(lines.join("\n"), /Matched sections:/, "the matched sections render");
   assert.match(lines.join("\n"), /## Evidence/, "evidence shows for a primary skill");
   assert.match(lines.join("\n"), /truncated/, "evidence over 8000 chars is truncated");

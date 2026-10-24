@@ -20,7 +20,7 @@ test("a generic third-party skill in ~/.agents/skills adds no tool", () => {
 test("a home copy cannot shadow the content of an embedded skill", async () => {
   const script = `
     const { readSkill } = await import(${JSON.stringify(new URL("../../../tools/router/index.js", import.meta.url).href)});
-    process.stdout.write(readSkill("rule-mcp-frontend-react") ?? "");
+    process.stdout.write(readSkill("rule-frontend-react") ?? "");
   `;
   const content = runWithHome(script);
   assert.doesNotMatch(content, /SHADOWED/, "embedded skill content is authoritative");

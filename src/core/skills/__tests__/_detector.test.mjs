@@ -50,7 +50,7 @@ writeFileSync(
 );
 const detectToolResult = await callTool("rule_tool_detect", { path: detectTmpDir });
 const detectPayload = JSON.parse(detectToolResult.content[0].text);
-check("T4b suggested skill uses existing thematic name", detectPayload.suggested_skills.includes("rule-mcp-frontend-react"));
+check("T4b suggested skill uses existing thematic name", detectPayload.suggested_skills.includes("rule-frontend-react"));
 check(
   "T4b suggested tool is registered",
   tools.some((t) => t.name === detectPayload.suggested_tools[0]),

@@ -8,39 +8,39 @@ import { skillDoc, skillFile } from "./_docs.fixture.mjs";
 console.log("rule-mcp skill documentation test: required content");
 
 const dispatcherSkill = skillDoc("rule-mcp");
-for (const requiredSkill of ["rule-mcp-backend-graphql", "rule-mcp-devops-observability", "rule-mcp-process-code-review"]) {
+for (const requiredSkill of ["rule-backend-graphql", "rule-devops-observability", "rule-process-code-review"]) {
   assert.ok(dispatcherSkill.includes(`../${requiredSkill}/SKILL.md`), `rule-mcp must link ${requiredSkill}`);
 }
 
-const uiSkill = skillDoc("rule-mcp-ui");
-for (const required of ["rule-mcp-ui-design-system", "rule-mcp-frontend", "rule-mcp-styleguide", "rule_tool_check"]) {
-  assert.ok(uiSkill.includes(required), `rule-mcp-ui must reference ${required}`);
+const uiSkill = skillDoc("rule-ui");
+for (const required of ["rule-ui-design-system", "rule-frontend", "rule-styleguide", "rule_tool_check"]) {
+  assert.ok(uiSkill.includes(required), `rule-ui must reference ${required}`);
 }
 
-const uiDesignSkill = skillDoc("rule-mcp-ui-design-system");
+const uiDesignSkill = skillDoc("rule-ui-design-system");
 for (const required of ["Zero CSS classes", "Zero inline styles", "Semantic HTML", "adoptedStyleSheets", "WCAG 2.2 AA", "rule_tool_check"]) {
-  assert.ok(uiDesignSkill.includes(required), `rule-mcp-ui-design-system must enforce ${required}`);
+  assert.ok(uiDesignSkill.includes(required), `rule-ui-design-system must enforce ${required}`);
 }
 
-const sqlSkill = skillDoc("rule-mcp-data-sql");
+const sqlSkill = skillDoc("rule-data-sql");
 for (const required of ["database is the authority", "EAV", "COMMENT ON COLUMN", "schema tests", "ORM", "Soft delete is a policy choice", "Avoid overloaded tables"]) {
-  assert.ok(sqlSkill.includes(required), `rule-mcp-data-sql must cover ${required}`);
+  assert.ok(sqlSkill.includes(required), `rule-data-sql must cover ${required}`);
 }
 
-const postgresSkill = skillDoc("rule-mcp-data-postgresql");
+const postgresSkill = skillDoc("rule-data-postgresql");
 for (const required of ["referencing side of a foreign key", "timestamptz", "PostgreSQL 18"]) {
-  assert.ok(postgresSkill.includes(required), `rule-mcp-data-postgresql must cover ${required}`);
+  assert.ok(postgresSkill.includes(required), `rule-data-postgresql must cover ${required}`);
 }
 
-const mysqlSkill = skillDoc("rule-mcp-data-mysql");
-assert.ok(mysqlSkill.includes("InnoDB automatically indexes foreign-key columns"), "rule-mcp-data-mysql must document InnoDB foreign-key indexing");
+const mysqlSkill = skillDoc("rule-data-mysql");
+assert.ok(mysqlSkill.includes("InnoDB automatically indexes foreign-key columns"), "rule-data-mysql must document InnoDB foreign-key indexing");
 
-const typescriptSkill = skillDoc("rule-mcp-styleguide-typescript");
+const typescriptSkill = skillDoc("rule-styleguide-typescript");
 for (const required of ["unknown` forces a check", "catch clauses take unknown", "discriminated union", "branded types"]) {
-  assert.ok(typescriptSkill.includes(required), `rule-mcp-styleguide-typescript must cover ${required}`);
+  assert.ok(typescriptSkill.includes(required), `rule-styleguide-typescript must cover ${required}`);
 }
 
-const typescriptCompiler = skillFile("rule-mcp-styleguide-typescript", "COMPILER.md");
+const typescriptCompiler = skillFile("rule-styleguide-typescript", "COMPILER.md");
 for (const required of [
   'exactOptionalPropertyTypes": true',
   "verbatimModuleSyntax",
@@ -50,10 +50,10 @@ for (const required of [
   "type-coverage",
   "tsc --noEmit",
 ]) {
-  assert.ok(typescriptCompiler.includes(required), `rule-mcp-styleguide-typescript/COMPILER.md must cover ${required}`);
+  assert.ok(typescriptCompiler.includes(required), `rule-styleguide-typescript/COMPILER.md must cover ${required}`);
 }
 
-const eslintSkill = skillDoc("rule-mcp-toolchain-eslint");
+const eslintSkill = skillDoc("rule-toolchain-eslint");
 for (const required of [
   "eslint-plugin-unicorn",
   "unicorn.configs.recommended",
@@ -72,12 +72,12 @@ for (const required of [
   "FlatCompat",
   "eslint.config.mjs",
 ]) {
-  assert.ok(eslintSkill.includes(required), `rule-mcp-toolchain-eslint must cover ${required}`);
+  assert.ok(eslintSkill.includes(required), `rule-toolchain-eslint must cover ${required}`);
 }
 
-const jsStyleguide = skillDoc("rule-mcp-styleguide-javascript");
+const jsStyleguide = skillDoc("rule-styleguide-javascript");
 for (const required of ["new Set(", "Set.has", "for...of", "node:fs", "throw new Error", "replaceAll", "flatMap", "new Map(", "prefer-const"]) {
-  assert.ok(jsStyleguide.includes(required), `rule-mcp-styleguide-javascript must cover ${required}`);
+  assert.ok(jsStyleguide.includes(required), `rule-styleguide-javascript must cover ${required}`);
 }
 
 await loadAllSkills(true);

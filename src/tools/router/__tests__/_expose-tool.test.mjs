@@ -30,8 +30,8 @@ function userSkill(name, frontmatter = "") {
 }
 
 test("a bundled skill keeps its tool without asking", () => {
-  assert.equal(exposesTool("rule-mcp-devops-docker"), true, "the bundled catalog is the surface this server advertises");
-  assert.equal(exposesTool("rule-mcp-styleguide-css"), true);
+  assert.equal(exposesTool("rule-devops-docker"), true, "the bundled catalog is the surface this server advertises");
+  assert.equal(exposesTool("rule-styleguide-css"), true);
 });
 
 test("a custom skill is discoverable but mints no tool by default", () => {
@@ -50,14 +50,14 @@ test("a custom skill that asks for a tool gets one", () => {
 test("exposeTool false on a bundled skill removes its tool", () => {
   // The flag reads both ways, so a fork can shrink the surface it ships
   // without deleting the skill and the rules it owns.
-  assert.equal(exposesTool("rule-mcp-process-tdd"), true);
+  assert.equal(exposesTool("rule-process-tdd"), true);
 
-  const dir = join(home, "skills", "rule-mcp-process-tdd");
+  const dir = join(home, "skills", "rule-process-tdd");
   mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "SKILL.md"), "---\nname: rule-mcp-process-tdd\nexposeTool: false\n---\n\n# Overridden\n");
+  writeFileSync(join(dir, "SKILL.md"), "---\nname: rule-process-tdd\nexposeTool: false\n---\n\n# Overridden\n");
   clearSkillResolution();
 
-  assert.equal(exposesTool("rule-mcp-process-tdd"), false, "the layer that won decides");
+  assert.equal(exposesTool("rule-process-tdd"), false, "the layer that won decides");
 });
 
 test("a name nothing resolves to exposes nothing", () => {

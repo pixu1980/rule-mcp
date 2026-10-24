@@ -1,11 +1,11 @@
-# rule-mcp-devops-docker - plan
+# rule-devops-docker - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#59`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
-Area: devops, leaf. Sibling plans: `rule-mcp-devops-testing`,
-`rule-mcp-devops-observability`, `rule-mcp-devops-deploy-preview` (same series) and
-`rule-mcp-devops` (the router).
+Area: devops, leaf. Sibling plans: `rule-devops-testing`,
+`rule-devops-observability`, `rule-devops-deploy-preview` (same series) and
+`rule-devops` (the router).
 
 ## Scope decisions (owner)
 
@@ -28,7 +28,7 @@ Inherited from the platform, meta and frontend interviews, 2026-10-21:
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-devops-docker/SKILL.md` is **169 lines** with a `guardrails/` folder
+`skills/rule-devops-docker/SKILL.md` is **169 lines** with a `guardrails/` folder
 exporting two rules:
 
 | Rule                 | Checks                           |
@@ -70,7 +70,7 @@ boot are neither.
 ## Phase 0 - Decisions
 
 - [ ] ADR (area): the devops family shape. Docker owns the image contract; the
-      preview pipeline and CI belong to `rule-mcp-devops-deploy-preview` and the
+      preview pipeline and CI belong to `rule-devops-deploy-preview` and the
       toolchain.
 - [ ] ADR (area): the rule design, Tier B, dual detection.
 
@@ -78,7 +78,7 @@ boot are neither.
 
 - [ ] `tests/fixtures/devops-docker/`: `clean/`, `latest-tag/`, `single-stage/`,
       `root-user/`, `no-healthcheck/`, each with a one-line `README.md`.
-- [ ] Five `CORPUS` pairs bound to `rule-mcp-devops-docker`, including the two
+- [ ] Five `CORPUS` pairs bound to `rule-devops-docker`, including the two
       existing rules if their pairs are missing.
 - [ ] Suites written and watched to fail with "rule not found".
 
@@ -98,7 +98,7 @@ boot are neither.
 
 ## Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-devops-docker/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-devops-docker/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] Catalog scan with the five rules.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
@@ -120,7 +120,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-devops-docker/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-devops-docker/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
 pnpm census && pnpm census:check
@@ -131,9 +131,9 @@ pnpm lint
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-devops` (HARD)
+Feeds: `rule-devops` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

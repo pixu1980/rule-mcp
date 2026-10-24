@@ -78,10 +78,10 @@ test("the model's distribution becomes the chosen skill's confidence", async () 
     await withDecision({ url: running.url }, async () => {
       const result = await routePrompt(PROMPT);
 
-      assert.equal(result.route, "rule-mcp-frontend-react");
+      assert.equal(result.route, "rule-frontend-react");
       assert.equal(result.confidence, 0.9);
       assert.equal(result.uncertain, false);
-      assert.equal(criteria()[0], "rule-mcp-frontend-react");
+      assert.equal(criteria()[0], "rule-frontend-react");
       assert.ok(criteria().length <= 6, "the model never sees more than six options");
     });
   } finally {
@@ -112,7 +112,7 @@ test("without a configured model the router never opens a socket", async () => {
     await withDecision({ model: null, url: server.url }, async () => {
       const result = await routePrompt(PROMPT);
 
-      assert.equal(result.route, "rule-mcp-frontend-react");
+      assert.equal(result.route, "rule-frontend-react");
       assert.equal(result.uncertain, false);
       assert.equal(server.count, 0);
     });

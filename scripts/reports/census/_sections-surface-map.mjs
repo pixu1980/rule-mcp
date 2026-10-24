@@ -57,7 +57,7 @@ export function surfaceMapSection(data) {
       skillsCovered.add(skill);
     } else if (COMMAND_TO_TOOL[name]) {
       tool = COMMAND_TO_TOOL[name];
-      if (name === "rule-mcp" && data.skillDirs.includes("rule-mcp")) {
+      if (name === "rule" && data.skillDirs.includes("rule-mcp")) {
         skill = "rule-mcp";
       }
     }

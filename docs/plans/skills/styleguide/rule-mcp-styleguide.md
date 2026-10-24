@@ -1,4 +1,4 @@
-# rule-mcp-styleguide - best-practice implementation plan
+# rule-styleguide - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -10,13 +10,13 @@ router).
 
 Read in this session:
 
-- `skills/rule-mcp-styleguide/SKILL.md`: 248 lines, of which 151 are a Project
+- `skills/rule-styleguide/SKILL.md`: 248 lines, of which 151 are a Project
   Scaffolding section that reproduces eight configuration files.
 - `skills/`: 16 styleguide children plus this router.
 - `src/tools/ai/_rank-skills.js`: BM25 over section text, plus name affinity,
   tag affinity, a graph bonus, framework bias and two hard-coded domain boosts.
 - `src/core/guardrails/engine/_registry.js`: `SCAFFOLD_GUARDRAILS` apply when the
-  skill is `rule-mcp-styleguide` and the mode is `scaffold`.
+  skill is `rule-styleguide` and the mode is `scaffold`.
 - `src/core/scaffold/_parser.js`: the scaffold mode reads the section from this
   skill's text, so moving the templates is a code change, not a copy.
 
@@ -41,7 +41,7 @@ Problems found:
 | ------------ | ------------------------------------------------------------------------------ |
 | Table        | One row per child, with a test that fails when the filesystem disagrees        |
 | Metadata     | Drop the ghost terms, name the three new areas                                 |
-| Scaffolding  | Templates move to `rule-mcp-styleguide-configuration`; the parser reads there  |
+| Scaffolding  | Templates move to `rule-styleguide-configuration`; the parser reads there      |
 | Shared rules | A rule-to-owner table, no copied descriptions                                  |
 | Content      | Purpose, routing contract, owner map, load order, one See also                 |
 | Routing text | Verified against the ranker, then written as a contract                        |
@@ -52,14 +52,14 @@ Problems found:
 
 The table becomes 16 rows. Three join:
 
-| Skill                           | Covers                                                        | When to use                      |
-| ------------------------------- | ------------------------------------------------------------- | -------------------------------- |
-| `rule-mcp-styleguide-comments`  | what a comment states, the three kinds that never ship, JSDoc | writing or reviewing a comment   |
-| `rule-mcp-styleguide-english`   | American spelling, plain language, the accent allowlist       | writing prose a reader will see  |
-| `rule-mcp-styleguide-file-tree` | the folder shape, barrels, scan and fix                       | creating or auditing a directory |
+| Skill                       | Covers                                                        | When to use                      |
+| --------------------------- | ------------------------------------------------------------- | -------------------------------- |
+| `rule-styleguide-comments`  | what a comment states, the three kinds that never ship, JSDoc | writing or reviewing a comment   |
+| `rule-styleguide-english`   | American spelling, plain language, the accent allowlist       | writing prose a reader will see  |
+| `rule-styleguide-file-tree` | the folder shape, barrels, scan and fix                       | creating or auditing a directory |
 
 The `router-child-coverage` test compares the table's links with the directories
-whose names begin with `rule-mcp-styleguide-`, so the next skill created in the area
+whose names begin with `rule-styleguide-`, so the next skill created in the area
 fails the suite until it is listed.
 
 ## Workstream B - The metadata
@@ -71,13 +71,13 @@ wrong association, which is worse than a dead link: it misroutes silently.
 
 ## Workstream C - The scaffolding move
 
-The eight file templates move to `rule-mcp-styleguide-configuration`, which already
+The eight file templates move to `rule-styleguide-configuration`, which already
 claims them. Three things follow:
 
 1. `src/core/scaffold/_parser.js` reads the section from the configuration skill.
    The tool name stays `rule_tool_styleguide mode=scaffold`, so the references in
    the frontend skills keep working.
-2. `SCAFFOLD_GUARDRAILS` stay keyed to `rule-mcp-styleguide` and `mode: scaffold`
+2. `SCAFFOLD_GUARDRAILS` stay keyed to `rule-styleguide` and `mode: scaffold`
    until the parser change lands, then key to the configuration skill. The
    registry comment and the census must agree before the key moves.
 3. The router keeps a three-line pointer to the owner instead of the 151 lines.
@@ -91,13 +91,13 @@ homes and pick the wrong one.
 The 11 shared-looking rules become a table of rule id to owning skill. The owners
 come from the loader's `ownedGuardrails`, not from reading the prose:
 
-| Rule family            | Owner                                         |
-| ---------------------- | --------------------------------------------- |
-| CSS shape and comments | `rule-mcp-styleguide-css`                     |
-| Markup semantics       | `rule-mcp-styleguide-html`                    |
-| File and folder naming | `rule-mcp-styleguide-naming` and `-file-tree` |
-| JSDoc                  | `rule-mcp-styleguide-comments`                |
-| Accessibility tests    | `rule-mcp-styleguide-a11y`                    |
+| Rule family            | Owner                                     |
+| ---------------------- | ----------------------------------------- |
+| CSS shape and comments | `rule-styleguide-css`                     |
+| Markup semantics       | `rule-styleguide-html`                    |
+| File and folder naming | `rule-styleguide-naming` and `-file-tree` |
+| JSDoc                  | `rule-styleguide-comments`                |
+| Accessibility tests    | `rule-styleguide-a11y`                    |
 
 The table is generated from the loader in the test, so a rule that moves again
 updates the map instead of leaving a sentence that was true in March.
@@ -143,7 +143,7 @@ Owned by `rule-mcp`, inherited here; advisory first, blocking after the corpus g
 
 The router closes after its leaves and after the shared router rules and the route-table generator are exported.
 
-Depends on: `rule-mcp-styleguide-a11y` (HARD), `rule-mcp-styleguide-baseline` (HARD), `rule-mcp-styleguide-comments` (HARD), `rule-mcp-styleguide-configuration` (HARD), `rule-mcp-styleguide-css` (HARD), `rule-mcp-styleguide-file-tree` (HARD), `rule-mcp-styleguide-git` (HARD), `rule-mcp-styleguide-html` (HARD), `rule-mcp-styleguide-i18n` (HARD), `rule-mcp-styleguide-javascript` (HARD), `rule-mcp-styleguide-json` (HARD), `rule-mcp-styleguide-markdown` (HARD), `rule-mcp-styleguide-naming` (HARD), `rule-mcp-styleguide-typescript` (HARD), `rule-mcp-process#2` (CONTRACT), `rule-mcp-process#3` (CONTRACT)
+Depends on: `rule-styleguide-a11y` (HARD), `rule-styleguide-baseline` (HARD), `rule-styleguide-comments` (HARD), `rule-styleguide-configuration` (HARD), `rule-styleguide-css` (HARD), `rule-styleguide-file-tree` (HARD), `rule-styleguide-git` (HARD), `rule-styleguide-html` (HARD), `rule-styleguide-i18n` (HARD), `rule-styleguide-javascript` (HARD), `rule-styleguide-json` (HARD), `rule-styleguide-markdown` (HARD), `rule-styleguide-naming` (HARD), `rule-styleguide-typescript` (HARD), `rule-process#2` (CONTRACT), `rule-process#3` (CONTRACT)
 
 Feeds:,
 

@@ -1,11 +1,11 @@
-# rule-mcp-ai-context-engineering - plan
+# rule-ai-context-engineering - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#82`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: ai, leaf. **195 lines**, one file, no `guardrails/`, **no dispatcher row**,
-no `inherits:`. Siblings: `rule-mcp-ai-prompting`, `rule-mcp-ai-evals`,
-`rule-mcp-ai-agent-architecture`, `rule-mcp-ai`.
+no `inherits:`. Siblings: `rule-ai-prompting`, `rule-ai-evals`,
+`rule-ai-agent-architecture`, `rule-ai`.
 
 ## Evidence base (measured 2026-10-21)
 
@@ -36,42 +36,42 @@ number in it is a preference.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-ai` (HARD)
+Feeds: `rule-ai` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 
 - [ ] Implement ADR 137 for the area floor; this leaf inherits it with
-      `inherits: [rule-mcp-ai]` even though its own subject is not agent code.
+      `inherits: [rule-ai]` even though its own subject is not agent code.
 - [ ] ADR: the AI family shape and the inheritance decision.
 
 ### Phase 1 - Fixtures first (red)
 
 - [ ] `tests/fixtures/ai-context-engineering/`: `clean/`, `no-budget/`,
       `pasted-files/`, `no-compaction-point/`, each with a one-line `README.md`.
-- [ ] Four `CORPUS` pairs bound to `rule-mcp-ai-context-engineering`.
+- [ ] Four `CORPUS` pairs bound to `rule-ai-context-engineering`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ### Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-ai-context-engineering/guardrails/`: four rule files plus
+- [ ] `skills/rule-ai-context-engineering/guardrails/`: four rule files plus
       `index.js`.
-- [ ] `guardrails:` and `inherits: [rule-mcp-ai]` in the frontmatter.
+- [ ] `guardrails:` and `inherits: [rule-ai]` in the frontmatter.
 - [ ] Green the Phase 1 suites.
 
 ### Phase 3 - Door and neighbors
 
 - [ ] `rule-mcp` dispatcher row.
-- [ ] The handoff section names `rule_tool_handoff` and `rule-mcp-process-ai`, which
+- [ ] The handoff section names `rule_tool_handoff` and `rule-process-ai`, which
       own the artifact; the compaction advice stays here.
-- [ ] Cross-link from `rule-mcp-ai-prompting` instead of duplicating the budget idea.
+- [ ] Cross-link from `rule-ai-prompting` instead of duplicating the budget idea.
 
 ### Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-ai-context-engineering/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-ai-context-engineering/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
 
@@ -95,4 +95,4 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
   six words. The rule set exists to stop the sentence from being decorative.
 - The usage-limit section is time-sensitive in a way the rest is not: model
   limits change quarterly. It is the one section that deserves a review date when
-  the frontmatter gains one (`rule-mcp-platform-auth` plans that mechanism).
+  the frontmatter gains one (`rule-platform-auth` plans that mechanism).

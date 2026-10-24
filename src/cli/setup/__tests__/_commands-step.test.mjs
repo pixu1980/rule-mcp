@@ -44,7 +44,7 @@ test("the custom drill-down is families, then areas, then the skills of those ar
   const skills = entries(skillItems(["frontend"]));
 
   assert.ok(
-    skills.every((item) => item.id.startsWith("rule-mcp-frontend")),
+    skills.every((item) => item.id.startsWith("rule-frontend")),
     "narrowing to one area narrows the skills to that area",
   );
   assert.ok(skills.length > 0 && skills.length < entries(skillItems(areas.map((item) => item.id))).length);

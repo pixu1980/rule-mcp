@@ -35,9 +35,9 @@ function result(route) {
 
 function seed() {
   cacheClear();
-  cacheStore("rule_tool", { prompt: "create a react button component", framework: "react" }, result("rule-mcp-frontend-react"), {});
-  cacheStore("rule_tool", { prompt: "create a react form component", framework: "react" }, result("rule-mcp-frontend-react"), {});
-  cacheStore("rule_tool", { prompt: "create a react button", framework: "vue" }, result("rule-mcp-frontend-vue"), {});
+  cacheStore("rule_tool", { prompt: "create a react button component", framework: "react" }, result("rule-frontend-react"), {});
+  cacheStore("rule_tool", { prompt: "create a react form component", framework: "react" }, result("rule-frontend-react"), {});
+  cacheStore("rule_tool", { prompt: "create a react button", framework: "vue" }, result("rule-frontend-vue"), {});
   cacheStore("other", { prompt: "create a react button" }, result("rule-mcp-other"), {});
 }
 
@@ -69,7 +69,7 @@ test("only same-tool, same-args, fresh, non-echoing calls become candidates", ()
     candidates.every((candidate) => candidate.label.startsWith("candidate-")),
     true,
   );
-  assert.equal(candidates[0].route, "rule-mcp-frontend-react");
+  assert.equal(candidates[0].route, "rule-frontend-react");
 });
 
 test("shadow records the model choice and never calls the cache replay", async () => {
@@ -81,7 +81,7 @@ test("shadow records the model choice and never calls the cache replay", async (
   process.env.RULE_MCP_DECISION_URL = server.url;
 
   try {
-    await observeDecisionShadow("rule_tool", { prompt: "create a react form component", framework: "react" }, { core: result("rule-mcp-frontend-react"), computeMs: 3 });
+    await observeDecisionShadow("rule_tool", { prompt: "create a react form component", framework: "react" }, { core: result("rule-frontend-react"), computeMs: 3 });
     await waitForDecisionShadows();
     const last = readShadows().at(-1);
 
@@ -90,8 +90,8 @@ test("shadow records the model choice and never calls the cache replay", async (
     assert.equal(last.choice, "candidate-1");
     assert.equal(last.probability, 0.95);
     assert.equal(last.decisionCacheHit, false);
-    assert.equal(last.goldRoute, "rule-mcp-frontend-react");
-    assert.equal(last.candidateRoute, "rule-mcp-frontend-react");
+    assert.equal(last.goldRoute, "rule-frontend-react");
+    assert.equal(last.candidateRoute, "rule-frontend-react");
     assert.equal(last.correct, true);
     assert.equal(last.goldMs, 3);
     assert.match(last.promptHash, /^[a-f0-9]{12}$/u);

@@ -4,7 +4,7 @@ import test from "node:test";
 
 import { checkCode, findFingerprints, getGuardrails } from "./_english.fixture.mjs";
 
-const SKILLS = ["rule-mcp-frontend-react", "rule-mcp-backend-express", "rule-mcp-data-postgresql", "rule-mcp-devops-docker", "rule-mcp-styleguide", "rule-mcp-toolchain-pnpm"];
+const SKILLS = ["rule-frontend-react", "rule-backend-express", "rule-data-postgresql", "rule-devops-docker", "rule-styleguide", "rule-toolchain-pnpm"];
 
 for (const skill of SKILLS) {
   test(`every skill carries the English guardrails (${skill})`, () => {
@@ -16,7 +16,7 @@ for (const skill of SKILLS) {
 }
 
 test("English comments pass, non-English comments are flagged", () => {
-  const good = checkCode("rule-mcp-styleguide-javascript", "// renders the totals in a table\nexport const rows = [];\n", {
+  const good = checkCode("rule-styleguide-javascript", "// renders the totals in a table\nexport const rows = [];\n", {
     fileName: "x.js",
   });
   const goodRule = good.failed.find((r) => r.id === "ai-english-only-prose");
@@ -28,7 +28,7 @@ test("English comments pass, non-English comments are flagged", () => {
     ["French", "// ce commentaire est écrit en français"],
     ["Spanish", "// este comentario está escrito en español"],
   ]) {
-    const result = checkCode("rule-mcp-styleguide-javascript", `${comment}\nexport const rows = [];\n`, {
+    const result = checkCode("rule-styleguide-javascript", `${comment}\nexport const rows = [];\n`, {
       fileName: "x.js",
     });
     const rule = result.failed.find((r) => r.id === "ai-english-only-prose");
@@ -38,11 +38,11 @@ test("English comments pass, non-English comments are flagged", () => {
 });
 
 test("a foreign function word in an identifier is flagged", () => {
-  const bad = checkCode("rule-mcp-styleguide-javascript", "export const dellaTabella = rows;\n", { fileName: "x.js" });
+  const bad = checkCode("rule-styleguide-javascript", "export const dellaTabella = rows;\n", { fileName: "x.js" });
   const badRule = bad.failed.find((r) => r.id === "ai-english-only-prose");
   assert.ok(badRule, "an identifier token that is a foreign function word must fire");
 
-  const good = checkCode("rule-mcp-styleguide-javascript", "export const tableRows = rows;\n", { fileName: "x.js" });
+  const good = checkCode("rule-styleguide-javascript", "export const tableRows = rows;\n", { fileName: "x.js" });
   assert.equal(
     good.failed.find((r) => r.id === "ai-english-only-prose"),
     undefined,
@@ -52,13 +52,13 @@ test("a foreign function word in an identifier is flagged", () => {
 
 test("a generated markdown document is checked as whole prose", () => {
   const md = "# Audit\n\nEvidence collected during the run, senza opinioni personali.\n";
-  const flagged = checkCode("rule-mcp-styleguide-markdown", md, { fileName: "docs/audits/security.md" });
+  const flagged = checkCode("rule-styleguide-markdown", md, { fileName: "docs/audits/security.md" });
   assert.ok(
     flagged.failed.find((r) => r.id === "ai-english-only-prose"),
     "Italian prose in a .md document must fire",
   );
 
-  const clean = checkCode("rule-mcp-styleguide-markdown", "# Audit\n\nEvidence collected during the run, with no personal opinions.\n", {
+  const clean = checkCode("rule-styleguide-markdown", "# Audit\n\nEvidence collected during the run, with no personal opinions.\n", {
     fileName: "docs/audits/security.md",
   });
   assert.equal(
@@ -79,7 +79,7 @@ test("British spellings are still flagged, including internationalised", () => {
 test("file and folder names must be English", () => {
   const source = "export const x = 1;\n";
 
-  const english = checkCode("rule-mcp-styleguide-javascript", source, {
+  const english = checkCode("rule-styleguide-javascript", source, {
     fileName: "src/components/user-table/summary-report.js",
   });
   assert.equal(
@@ -94,12 +94,12 @@ test("file and folder names must be English", () => {
     ["accented file name", "src/città.js"],
     ["Italian camelCase file name", "src/helpers/aggiungiElemento.js"],
   ]) {
-    const result = checkCode("rule-mcp-styleguide-javascript", source, { fileName });
+    const result = checkCode("rule-styleguide-javascript", source, { fileName });
     const rule = result.failed.find((r) => r.id === "ai-english-only-filenames");
     assert.ok(rule, `${label} ("${fileName}") must fail ai-english-only-filenames`);
   }
 
-  const noName = checkCode("rule-mcp-styleguide-javascript", source, {});
+  const noName = checkCode("rule-styleguide-javascript", source, {});
   assert.equal(
     noName.failed.find((r) => r.id === "ai-english-only-filenames"),
     undefined,

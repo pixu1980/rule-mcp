@@ -1,12 +1,12 @@
-# rule-mcp-frontend-react - plan
+# rule-frontend-react - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#53`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: frontend, framework leaf, and the largest one. Sibling plans:
-`rule-mcp-frontend-vue`, `rule-mcp-frontend-svelte`, `rule-mcp-frontend-solidjs` (same shape),
-`rule-mcp-frontend-workers`, `rule-mcp-frontend-template-engine`, `rule-mcp-frontend-angular`,
-and `rule-mcp-frontend` (the area router).
+`rule-frontend-vue`, `rule-frontend-svelte`, `rule-frontend-solidjs` (same shape),
+`rule-frontend-workers`, `rule-frontend-template-engine`, `rule-frontend-angular`,
+and `rule-frontend` (the area router).
 
 ## Scope decisions (owner)
 
@@ -20,7 +20,7 @@ Inherited from the platform, meta and workers interviews, 2026-10-21:
 | Contradiction          | The CSS Modules question is **decided**, not left standing: one answer in the body, the Guardrails section and the engine              |
 | Aux files and examples | 10 auxiliary files plus `examples/performance/` (10 files) move under `references/` and get served and checked                         |
 | Scaffold block         | Fixed here and in the six other affected skills, one catalog-level item                                                                |
-| Shared owners          | `rule-mcp-styleguide-*` own markup, CSS, a11y; `rule-mcp-platform-web` owns budgets; `rule-mcp-frontend` owns the framework choice     |
+| Shared owners          | `rule-styleguide-*` own markup, CSS, a11y; `rule-platform-web` owns budgets; `rule-frontend` owns the framework choice                 |
 | Rule set               | Seven rules including the two existing ones, all Tier B (advisory)                                                                     |
 | Detection              | Both: section and table parsing, plus injected `fileList`                                                                              |
 | Fixtures               | Shared corpus pairs plus skill trees on disk                                                                                           |
@@ -32,7 +32,7 @@ Inherited from the platform, meta and workers interviews, 2026-10-21:
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-frontend-react/SKILL.md` is **701 lines**: the largest framework
+`skills/rule-frontend-react/SKILL.md` is **701 lines**: the largest framework
 leaf and the largest file in the frontend area. It carries 24 files in total.
 
 | Folder                  | Files | Lines   |
@@ -76,7 +76,7 @@ it. A body that contains its own templates cannot be kept in sync with them.
 ### Two of the eleven rule ids are near-misses
 
 `barrel-file` (real: `barrel-file-tree`) and `data-part` (real:
-`data-part-naming`). The other nine resolve. Same defect as `rule-mcp-frontend-solidjs`,
+`data-part-naming`). The other nine resolve. Same defect as `rule-frontend-solidjs`,
 same rule would catch it.
 
 ### The scaffold block returns 466 lines
@@ -84,15 +84,15 @@ same rule would catch it.
 `## Guardrails` at 224, `## Project Scaffolding` at 236: the end marker is
 searched after the start, is not found, and the slice runs to the end of the
 file. **466 lines returned**, the largest of the seven skills with this bug (the
-full table is in `rule-mcp-frontend-vue`).
+full table is in `rule-frontend-vue`).
 
 ### Reach
 
-| Door                            | State                                                            |
-| ------------------------------- | ---------------------------------------------------------------- |
-| `rule-mcp-frontend` area router | listed, first row                                                |
-| `rule-mcp` dispatcher           | listed                                                           |
-| Inbound links                   | the most linked framework leaf: frontend, meta, platform, ui, ai |
+| Door                        | State                                                            |
+| --------------------------- | ---------------------------------------------------------------- |
+| `rule-frontend` area router | listed, first row                                                |
+| `rule-mcp` dispatcher       | listed                                                           |
+| Inbound links               | the most linked framework leaf: frontend, meta, platform, ui, ai |
 
 Reach is healthy. What the leaf lacks is a body small enough to be read and
 companion files anyone can open.
@@ -142,7 +142,7 @@ its own templates.
 - [ ] `tests/fixtures/frontend-react/`: `clean/`, `near-miss-rule-ids/`,
       `css-modules-contradiction/`, `unterminated-scaffold/`, `unserved-aux/`,
       `core-rules-restated/`, each with a one-line `README.md`.
-- [ ] Seven `CORPUS` pairs bound to `rule-mcp-frontend-react`, including the two
+- [ ] Seven `CORPUS` pairs bound to `rule-frontend-react`, including the two
       existing rules if their pairs are missing.
 - [ ] Suites written and watched to fail with "rule not found".
 
@@ -155,10 +155,10 @@ its own templates.
 ## Phase 3 - Settle the contradiction
 
 - [ ] Apply the ADR verdict in the body, in the Guardrails section and, if the
-      verdict is "forbid", in `rule-mcp-styleguide-css` too.
+      verdict is "forbid", in `rule-styleguide-css` too.
 - [ ] Fix `barrel-file` and `data-part` to the real ids.
-- [ ] The three `rule-mcp-styleguide -> *.md` references become links to
-      `rule-mcp-styleguide-comments`, `-css` and `-a11y`.
+- [ ] The three `rule-styleguide -> *.md` references become links to
+      `rule-styleguide-comments`, `-css` and `-a11y`.
 
 ## Phase 4 - Move the review material out
 
@@ -170,7 +170,7 @@ its own templates.
 
 ## Phase 5 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-frontend-react/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-frontend-react/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] Rule-id and scaffold checks across the catalog; the example lint from the
       workers plan covers these 10 files.
@@ -194,7 +194,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-frontend-react/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-frontend-react/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
 pnpm census && pnpm census:check
@@ -205,9 +205,9 @@ pnpm lint
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD), `rule-mcp-platform-desktop#3` (CONTRACT)
+Depends on: `rule-process-ai` (HARD), `rule-platform-desktop#3` (CONTRACT)
 
-Feeds: `rule-mcp-frontend` (HARD)
+Feeds: `rule-frontend` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -222,4 +222,4 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - `examples/performance/` is the only worked-example tree in the frontend area
   and the only one with a valid resource table pointing at it. It is worth
   keeping, serving and checking rather than deleting, which is why this plan
-  does not treat it like the `assets/` tree in `rule-mcp-frontend-workers`.
+  does not treat it like the `assets/` tree in `rule-frontend-workers`.

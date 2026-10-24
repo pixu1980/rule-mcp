@@ -12,10 +12,10 @@ skills:
   - "LLM security"
   - "retrieval and routing"
 evidenceSkills:
-  - "rule-mcp-ai-agent-architecture"
-  - "rule-mcp-ai-evals"
-  - "rule-mcp-ai-context-engineering"
-  - "rule-mcp-ai-prompting"
+  - "rule-ai-agent-architecture"
+  - "rule-ai-evals"
+  - "rule-ai-context-engineering"
+  - "rule-ai-prompting"
 aliases:
   - "ai-engineer"
   - "ai engineer"

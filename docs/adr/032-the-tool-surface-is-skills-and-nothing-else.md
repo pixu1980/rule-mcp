@@ -28,7 +28,7 @@ The bundled `skills/` directory is the single source of truth for the tool surfa
 - `getSkillNames()` scans only `skills/`, accepts only directories named `rule-mcp-*` that carry a `SKILL.md`, and excludes the bare `rule-mcp` router directory - its tool is the dispatcher, registered by code.
 - `readSkill()` reads only `skills/`, so embedded content is authoritative and cannot be shadowed.
 - The `plugin.js` import path is removed: `hasPluginJs()` is constant `false` and `loadPluginJs()` is gone, which also removes in-process code execution from the user's home directory.
-- The `rulemcp://skills` resource index reads the same single source.
+- The `rule://skills` resource index reads the same single source.
 - `isPluginSkill()` is kept as an explicit guard even though it can no longer be true for a registered skill.
 
 ## Consequences

@@ -11,9 +11,9 @@ skills:
   - "Core Web Vitals"
   - "progressive enhancement"
 evidenceSkills:
-  - "rule-mcp-platform-web"
-  - "rule-mcp-frontend-workers"
-  - "rule-mcp-styleguide-baseline"
+  - "rule-platform-web"
+  - "rule-frontend-workers"
+  - "rule-styleguide-baseline"
 aliases:
   - "web-engineer"
   - "frontend-engineer"

@@ -1,11 +1,11 @@
-# rule-mcp-frontend-workers - plan
+# rule-frontend-workers - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#47`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: frontend, leaf. Sibling plans: the rest of the frontend area, planned in
 the same series; the served-references surface this plan needs comes from
-`rule-mcp-platform-desktop`.
+`rule-platform-desktop`.
 
 ## Scope decisions (owner)
 
@@ -16,7 +16,7 @@ Inherited from the platform and meta interviews, 2026-10-21:
 | Scope of this pass | **Plan only**                                                                                                                                                      |
 | Identity           | Thin body plus served references: the mental model, the protocol and the anti-patterns stay; `patterns.md` and the examples move into `references/` and get served |
 | Examples           | The runnable reference implementation stays, and it becomes **checked**: lint scope, guardrails, and the suite that runs it                                        |
-| Shared owners      | `rule-mcp-platform-web` owns the budget numbers; `rule-mcp-styleguide-javascript` owns the code conventions; `rule-mcp-devops-testing` owns the runner             |
+| Shared owners      | `rule-platform-web` owns the budget numbers; `rule-styleguide-javascript` owns the code conventions; `rule-devops-testing` owns the runner                         |
 | Reach              | Fixed here: the dispatcher row the skill never got                                                                                                                 |
 | Rule set           | Six rules, all Tier B (advisory)                                                                                                                                   |
 | Detection          | Both: section and table parsing, plus injected `fileList`                                                                                                          |
@@ -29,7 +29,7 @@ Inherited from the platform and meta interviews, 2026-10-21:
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-frontend-workers/SKILL.md` is **564 lines**, 25 sections, with a
+`skills/rule-frontend-workers/SKILL.md` is **564 lines**, 25 sections, with a
 companion `patterns.md` (247 lines) at the skill root and 13 files under
 `examples/`. No `guardrails/`, no `references/`.
 
@@ -62,18 +62,18 @@ files** and **10 skill-local test files**.
 
 ### Reach
 
-| Door                            | State                                                                                                                                  |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `rule-mcp-frontend` area router | listed, with a Quick Selection line                                                                                                    |
-| `rule-mcp` dispatcher           | **missing**: zero occurrences                                                                                                          |
-| Inbound links                   | 5 links across 4 skills: `rule-mcp-backend-workers`, `rule-mcp-frontend`, `rule-mcp-platform-desktop`, `rule-mcp-platform-web` (twice) |
+| Door                        | State                                                                                                                  |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `rule-frontend` area router | listed, with a Quick Selection line                                                                                    |
+| `rule-mcp` dispatcher       | **missing**: zero occurrences                                                                                          |
+| Inbound links               | 5 links across 4 skills: `rule-backend-workers`, `rule-frontend`, `rule-platform-desktop`, `rule-platform-web` (twice) |
 
 ### What is genuinely unique here
 
-No other skill owns browser workers: `rule-mcp-platform-web` links here for
-"worker-pool libraries", `rule-mcp-backend-workers` owns the server-side counterpart
+No other skill owns browser workers: `rule-platform-web` links here for
+"worker-pool libraries", `rule-backend-workers` owns the server-side counterpart
 and links here for the browser side. The INP and LoAF measurement technique is
-also unique. The budget numbers are not: `rule-mcp-platform-web` owns the table.
+also unique. The budget numbers are not: `rule-platform-web` owns the table.
 
 ## Target shape
 
@@ -107,7 +107,7 @@ security, anti-patterns, and pointers. Around 200 lines.
 - [ ] ADR (area): the frontend family shape. Framework leaves own the component
       model; cross-framework concerns (workers, custom elements, template
       engine) own their subject and nothing else; budgets stay in
-      `rule-mcp-platform-web`.
+      `rule-platform-web`.
 - [ ] ADR (area): the rule design, Tier B, dual detection, and the
       example-code rule this leaf motivated.
 
@@ -116,12 +116,12 @@ security, anti-patterns, and pointers. Around 200 lines.
 - [ ] `tests/fixtures/frontend-workers/`: `clean/`, `example-fails-guardrail/`,
       `unserved-aux/`, `dispatcher-unlisted/`, `duplicate-budget/`, each with a
       one-line `README.md`.
-- [ ] Six `CORPUS` pairs bound to `rule-mcp-frontend-workers`.
+- [ ] Six `CORPUS` pairs bound to `rule-frontend-workers`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ## Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-frontend-workers/guardrails/`: six rule files plus
+- [ ] `skills/rule-frontend-workers/guardrails/`: six rule files plus
       `index.js`.
 - [ ] `guardrails: [...]` frontmatter, ids equal to the exports.
 - [ ] Green the Phase 1 suites.
@@ -146,17 +146,17 @@ security, anti-patterns, and pointers. Around 200 lines.
       references.
 - [ ] Body trimmed to the model plus pointers; `See also` keeps its ten
       entries, which are already correct.
-- [ ] Consume the served-references surface from `rule-mcp-platform-desktop`; if it
+- [ ] Consume the served-references surface from `rule-platform-desktop`; if it
       is dropped, declare the files in the body instead.
 
 ## Phase 5 - Open the door
 
-- [ ] Dispatcher row for `rule-mcp-frontend-workers`.
-- [ ] Keep the `rule-mcp-frontend` area row and Quick Selection line as they are.
+- [ ] Dispatcher row for `rule-frontend-workers`.
+- [ ] Keep the `rule-frontend` area row and Quick Selection line as they are.
 
 ## Phase 6 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-frontend-workers/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-frontend-workers/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] Example checks: lint and guardrails over `skills/**/examples/**`.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
@@ -180,7 +180,7 @@ Plan default: `T5-bulk` - `minimax-m3.1-flash`. Fallback: `step-5-preview` for a
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-frontend-workers/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-frontend-workers/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
 pnpm census && pnpm census:check
@@ -191,9 +191,9 @@ pnpm lint
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD), `rule-mcp-platform-desktop#3` (CONTRACT)
+Depends on: `rule-process-ai` (HARD), `rule-platform-desktop#3` (CONTRACT)
 
-Feeds: `rule-mcp-frontend` (HARD)
+Feeds: `rule-frontend` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

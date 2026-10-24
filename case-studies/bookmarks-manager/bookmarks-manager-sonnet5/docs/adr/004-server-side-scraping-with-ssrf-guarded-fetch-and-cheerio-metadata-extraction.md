@@ -19,6 +19,6 @@ Positive: blocks the most common SSRF payloads and unbounded/slow responses with
 
 ## Alternatives Considered
 
-1. No SSRF guard, backend fetch as-is (rejected: unacceptable security risk per rule-mcp-backend-security)
+1. No SSRF guard, backend fetch as-is (rejected: unacceptable security risk per rule-backend-security)
 1. Public-domain allowlist (rejected: defeats the 'paste any link' product requirement)
 1. Outsource scraping to a third-party API (rejected: adds an external dependency/cost not needed for a POC and loses control over the SSRF story)

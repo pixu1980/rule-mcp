@@ -4,7 +4,7 @@ import { test } from "node:test";
 
 import { buildChoiceQuestion, probabilityOf, rerankShortlist, SHORTLIST_CAP } from "../_rerank.js";
 
-const option = (name) => ({ skill: `rule-mcp-${name}`, description: `does ${name}` });
+const option = (name) => ({ skill: `rule-${name}`, description: `does ${name}` });
 
 test("a shortlist above six options is refused with the cap in the message", () => {
   const seven = Array.from({ length: 7 }, (_, index) => option(`s${index}`));

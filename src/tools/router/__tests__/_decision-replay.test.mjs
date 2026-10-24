@@ -62,7 +62,7 @@ test("the replay returns the chosen cached core before compute", async () => {
   clearShadows();
   clearDecisionCache();
   resetDecisionRuntime();
-  cacheStore("rule_tool", { prompt: "create a react button", framework: "react" }, result("rule-mcp-frontend-react"), {});
+  cacheStore("rule_tool", { prompt: "create a react button", framework: "react" }, result("rule-frontend-react"), {});
   const server = await scriptedServer();
   process.env.RULE_MCP_DECISION_URL = server.url;
 

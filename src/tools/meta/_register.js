@@ -12,7 +12,7 @@
  * for no gain.
  *
  * @see module:tools/ai/register - the dispatcher this mirrors
- * @see skills/rule-mcp-meta/SKILL.md - the dispatch contract in prose
+ * @see skills/rule-meta/SKILL.md - the dispatch contract in prose
  */
 
 import { z } from "zod/v4";
@@ -26,7 +26,7 @@ const MetaSchema = z.object({
 });
 
 /** The meta skills this process actually registered, hub excluded. */
-const metaSkills = () => getSkillNames().filter((name) => name.startsWith("rule-mcp-meta-"));
+const metaSkills = () => getSkillNames().filter((name) => name.startsWith("rule-meta-"));
 
 /** The framework a name or a concept in the prompt points at. */
 function matchFramework(prompt, hint) {
@@ -70,7 +70,7 @@ export function registerMetaTool() {
         });
       }
 
-      const scored = matchFramework(prompt, arguments_.framework).filter((hit) => available.includes(`rule-mcp-meta-${hit.framework}`));
+      const scored = matchFramework(prompt, arguments_.framework).filter((hit) => available.includes(`rule-meta-${hit.framework}`));
 
       if (scored.length === 0) {
         return answer({
@@ -84,7 +84,7 @@ export function registerMetaTool() {
       }
 
       const [primary, ...rest] = scored;
-      const skill = `rule-mcp-meta-${primary.framework}`;
+      const skill = `rule-meta-${primary.framework}`;
       const promptWords = [
         ...new Set(
           prompt
@@ -104,7 +104,7 @@ export function registerMetaTool() {
         sections: extractTopSections(skill, promptWords),
         with_skills: base,
         next_tools: [`rule_tool_meta_${primary.framework}`, "rule_tool_check"].filter((tool) => registered.has(tool)),
-        alternatives: rest.map((hit) => ({ route: `rule-mcp-meta-${hit.framework}`, confidence: Math.round((hit.score / total) * 100) / 100 })),
+        alternatives: rest.map((hit) => ({ route: `rule-meta-${hit.framework}`, confidence: Math.round((hit.score / total) * 100) / 100 })),
         summary: `${skill} answers "${prompt}". Load ${base.join(" and ")} with it: the meta skill owns rendering, routing and data loading, the framework skill owns the component. Generated code must pass rule_tool_check.`,
       });
     },

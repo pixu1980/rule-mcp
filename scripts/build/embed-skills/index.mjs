@@ -29,7 +29,7 @@ function countSkillFiles(dir) {
   let count = 0;
   try {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
-      if (!(entry.isDirectory() && (entry.name === "rule-mcp" || entry.name.startsWith("rule-mcp-")))) {
+      if (!(entry.isDirectory() && (entry.name === "rule" || entry.name.startsWith("rule-")))) {
         continue;
       }
 

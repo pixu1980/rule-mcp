@@ -9,39 +9,39 @@
 
 The original skill naming was flat: all skills lived under `rule-mcp-*` without any thematic grouping. This made it hard to discover related skills, understand the taxonomy at a glance, and navigate the growing collection (now 35 skills). Examples of the problem:
 
-- `rule-mcp-frontend-react`, `rule-mcp-frontend-vue`, `rule-mcp-frontend-angular`, and `rule-mcp-frontend-svelte` are all UI frameworks but their names don't reflect this shared category
-- `rule-mcp-devops-docker`, `rule-mcp-devops-testing`, and `rule-mcp-devops-gitlab-ci` are all DevOps concerns but appear unrelated
-- `rule-mcp-platform-desktop`, `rule-mcp-platform-library`, and `rule-mcp-platform-expo` are project-type/platform skills mixed in with everything else
+- `rule-frontend-react`, `rule-frontend-vue`, `rule-frontend-angular`, and `rule-frontend-svelte` are all UI frameworks but their names don't reflect this shared category
+- `rule-devops-docker`, `rule-devops-testing`, and `rule-devops-gitlab-ci` are all DevOps concerns but appear unrelated
+- `rule-platform-desktop`, `rule-platform-library`, and `rule-platform-expo` are project-type/platform skills mixed in with everything else
 
 ## Decision
 
 Adopt a prefix-based thematic taxonomy with the following categories:
 
-| Prefix                  | Category   | Skills                                                                    |
-| ----------------------- | ---------- | ------------------------------------------------------------------------- |
-| `rule-mcp-` (no prefix) | Core tools | ai, backend, check, component, detect, fix, scaffold, search, styleguides |
+| Prefix              | Category   | Skills                                                                    |
+| ------------------- | ---------- | ------------------------------------------------------------------------- |
+| `rule-` (no prefix) | Core tools | ai, backend, check, component, detect, fix, scaffold, search, styleguides |
 
-| `rule-mcp-backend-*` | Backend | api-design, security |
-| `rule-mcp-devops-*` | DevOps | docker, gitlab-ci, testing, version |
-| `rule-mcp-frontend-*` | UI frameworks | angular, astro, forms, react, solidjs, svelte, vanilla-reactive, vue |
-| `rule-mcp-meta-*` | Meta-frameworks | next, nuxt, remix |
-| `rule-mcp-platform-*` | Platforms | desktop, expo, library, web |
-| `rule-mcp-process-*` | Process | adr, architect, bmad, documentation, feature-workflow, handoff |
+| `rule-backend-*` | Backend | api-design, security |
+| `rule-devops-*` | DevOps | docker, gitlab-ci, testing, version |
+| `rule-frontend-*` | UI frameworks | angular, astro, forms, react, solidjs, svelte, vanilla-reactive, vue |
+| `rule-meta-*` | Meta-frameworks | next, nuxt, remix |
+| `rule-platform-*` | Platforms | desktop, expo, library, web |
+| `rule-process-*` | Process | adr, architect, bmad, documentation, feature-workflow, handoff |
 | `rule-mcp-scaffold-*` | Scaffolding | ai-agents, backend-node, expo, frontend-react-vite |
-| `rule-mcp-devops-*` | DevOps & engineering | docker, gitlab-ci, testing, version-management |
-| `rule-mcp-process-*` | Process & docs | feature-workflow, documentation |
+| `rule-devops-*` | DevOps & engineering | docker, gitlab-ci, testing, version-management |
+| `rule-process-*` | Process & docs | feature-workflow, documentation |
 
 Three skills keep their names (they are already correctly categorized or would lose meaning):
 
-- `rule-mcp-backend` stays as umbrella (no `backend-backend`)
-- `rule-mcp-backend-api-design` stays (no `backend-backend-api-design`)
+- `rule-backend` stays as umbrella (no `backend-backend`)
+- `rule-backend-api-design` stays (no `backend-backend-api-design`)
 
 ## Consequences
 
 **Positive:**
 
 - Clear visual grouping when listing skills (alphabetically sorted, skills cluster by prefix)
-- Easy to discover related skills (`rule-mcp-frontend-*` lists all UI frameworks)
+- Easy to discover related skills (`rule-frontend-*` lists all UI frameworks)
 - Self-documenting taxonomy: the name tells you the category
 - Scalable: new skills slot naturally into existing prefixes
 
@@ -63,43 +63,43 @@ Three skills keep their names (they are already correctly categorized or would l
 
 ### Phase 2: Backend framework skills
 
-Added `rule-mcp-backend-*` competitors:
+Added `rule-backend-*` competitors:
 
-- `rule-mcp-backend-nestjs` - NestJS 10+ (modular, decorators, GraphQL)
-- `rule-mcp-backend-express` - Express.js 5+ (middleware, REST)
-- `rule-mcp-backend-fastify` - Fastify 5+ (schema validation, performance)
-- `rule-mcp-backend-hono` - Hono 4+ (edge, multi-runtime, RPC)
+- `rule-backend-nestjs` - NestJS 10+ (modular, decorators, GraphQL)
+- `rule-backend-express` - Express.js 5+ (middleware, REST)
+- `rule-backend-fastify` - Fastify 5+ (schema validation, performance)
+- `rule-backend-hono` - Hono 4+ (edge, multi-runtime, RPC)
 
 ### Phase 3: Database skills
 
-Added `rule-mcp-database-*`:
+Added `rule-database-*`:
 
-- `rule-mcp-data-sql` - General SQL best practices
-- `rule-mcp-data-postgresql` - PostgreSQL 16+ (indexing, replication, pooling)
-- `rule-mcp-data-mysql` - MySQL 8+ / MariaDB 11+ (InnoDB, replication)
-- `rule-mcp-data-mongodb` - MongoDB 7+ (schema design, aggregation, sharding)
+- `rule-data-sql` - General SQL best practices
+- `rule-data-postgresql` - PostgreSQL 16+ (indexing, replication, pooling)
+- `rule-data-mysql` - MySQL 8+ / MariaDB 11+ (InnoDB, replication)
+- `rule-data-mongodb` - MongoDB 7+ (schema design, aggregation, sharding)
 
 ### Phase 4: Scaffold consolidation
 
-- `rule-mcp-meta-*` -> `rule-mcp-frontend-meta-*` (3 skills)
-- `rule-mcp-scaffold-backend-node` -> `rule-mcp-backend-node` + merged content
-- `rule-mcp-scaffold-expo` -> merged into `rule-mcp-platform-expo`
+- `rule-meta-*` -> `rule-frontend-meta-*` (3 skills)
+- `rule-mcp-scaffold-backend-node` -> `rule-backend-node` + merged content
+- `rule-mcp-scaffold-expo` -> merged into `rule-platform-expo`
 - `rule-mcp-scaffold-frontend-react-vite` split:
-  - Vite config -> `rule-mcp-toolchain-vite` (new)
-  - React scaffolding -> `rule-mcp-frontend-react` (merged)
-  - Generic frontend -> `rule-mcp-platform-web` (merged)
+  - Vite config -> `rule-toolchain-vite` (new)
+  - React scaffolding -> `rule-frontend-react` (merged)
+  - Generic frontend -> `rule-platform-web` (merged)
 - All remaining `rule-mcp-scaffold*` directories deleted
 
 ### Final taxonomy
 
-| Prefix                 | Count  | Skills                                                                                                 |
-| ---------------------- | ------ | ------------------------------------------------------------------------------------------------------ |
-| `rule-mcp-` (core)     | 9      | ai, backend, check, component, detect, fix, scaffold, search, styleguides                              |
-| `rule-mcp-backend-*`   | 7      | api-design, express, fastify, hono, nestjs, node, security                                             |
-| `rule-mcp-database-*`  | 4      | mongodb, mysql, postgresql, sql                                                                        |
-| `rule-mcp-devops-*`    | 4      | docker, gitlab-ci, testing, version                                                                    |
-| `rule-mcp-frontend-*`  | 11     | angular, astro, forms, meta-next, meta-nuxt, meta-remix, react, solidjs, svelte, vanilla-reactive, vue |
-| `rule-mcp-platform-*`  | 4      | desktop, expo, library, web                                                                            |
-| `rule-mcp-process-*`   | 6      | adr, architect, bmad, documentation, feature-workflow, handoff                                         |
-| `rule-mcp-toolchain-*` | 1      | vite                                                                                                   |
-| **Total**              | **46** |                                                                                                        |
+| Prefix             | Count  | Skills                                                                                                 |
+| ------------------ | ------ | ------------------------------------------------------------------------------------------------------ |
+| `rule-` (core)     | 9      | ai, backend, check, component, detect, fix, scaffold, search, styleguides                              |
+| `rule-backend-*`   | 7      | api-design, express, fastify, hono, nestjs, node, security                                             |
+| `rule-database-*`  | 4      | mongodb, mysql, postgresql, sql                                                                        |
+| `rule-devops-*`    | 4      | docker, gitlab-ci, testing, version                                                                    |
+| `rule-frontend-*`  | 11     | angular, astro, forms, meta-next, meta-nuxt, meta-remix, react, solidjs, svelte, vanilla-reactive, vue |
+| `rule-platform-*`  | 4      | desktop, expo, library, web                                                                            |
+| `rule-process-*`   | 6      | adr, architect, bmad, documentation, feature-workflow, handoff                                         |
+| `rule-toolchain-*` | 1      | vite                                                                                                   |
+| **Total**          | **46** |                                                                                                        |

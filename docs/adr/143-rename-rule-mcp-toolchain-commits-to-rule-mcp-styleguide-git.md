@@ -1,4 +1,4 @@
-# 143: Rename rule-mcp-toolchain-commits to rule-mcp-styleguide-git
+# 143: Rename rule-toolchain-commits to rule-styleguide-git
 
 - **Date**: 2026-10-17
 - **Status**: accepted
@@ -11,7 +11,7 @@ The skill owns the git commit rule: atomic Conventional Commits with a mandatory
 
 ## Decision
 
-Rename the directory and the skill to rule-mcp-styleguide-git, change the generated tool to rule_tool_styleguide_git, move its rows from the toolchain tables into the styleguide tables in rule-mcp and rule-mcp-styleguide, update every cross-reference and the deterministic git-domain boost in the skill ranker, and regenerate the census.
+Rename the directory and the skill to rule-styleguide-git, change the generated tool to rule_tool_styleguide_git, move its rows from the toolchain tables into the styleguide tables in rule-mcp and rule-styleguide, update every cross-reference and the deterministic git-domain boost in the skill ranker, and regenerate the census.
 
 ## Consequences
 

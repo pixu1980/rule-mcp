@@ -37,7 +37,7 @@ test.after(() => {
 });
 
 test("a project skill is a plugin row, with its own description or the documented fallback", async () => {
-  const result = await serveResource("rulemcp://community");
+  const result = await serveResource("rule://community");
   const community = JSON.parse(result.contents[0].text);
 
   assert.deepEqual(
@@ -58,7 +58,7 @@ test("an empty override of the routing skill serves an empty body", async () => 
   writeFileSync(join(project, ".rule-mcp", "skills", "rule-mcp", "SKILL.md"), "");
   clearSkillResolution();
 
-  const result = await serveResource("rulemcp://ai");
+  const result = await serveResource("rule://ai");
 
   assert.equal(result.contents[0].mimeType, "text/markdown", "the URI keeps its mime type");
   assert.equal(result.contents[0].text, "", "an override with no body serves nothing rather than failing");

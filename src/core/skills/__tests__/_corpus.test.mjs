@@ -9,23 +9,23 @@ import { markdownLinks, skillDirectories, skillsRoot } from "./_docs.fixture.mjs
 const removedSkillNames = [
   "rule-mcp-scaffolding",
   "rule-mcp-coverage-gates",
-  "rule-mcp-devops-docker-standards",
-  "rule-mcp-frontend-forms",
-  "rule-mcp-frontend-forms-validation",
-  // Merged into rule-mcp-process-ai, which owns their guardrails and references.
-  "rule-mcp-process-simplicity",
-  "rule-mcp-styleguide-english",
-  "rule-mcp-styleguide-fingerprint",
-  "rule-mcp-process-ai-sdlc",
+  "rule-devops-docker-standards",
+  "rule-frontend-forms",
+  "rule-frontend-forms-validation",
+  // Merged into rule-process-ai, which owns their guardrails and references.
+  "rule-process-simplicity",
+  "rule-styleguide-english",
+  "rule-styleguide-fingerprint",
+  "rule-process-ai-sdlc",
 ];
 
 console.log("rule-mcp skill documentation test: corpus");
 
 const directories = skillDirectories();
 assert.ok(directories.length > 0, "No skill directories found");
-assert.ok(directories.includes("rule-mcp-ui"), "rule-mcp-ui umbrella skill must be present");
-assert.ok(directories.includes("rule-mcp-ui-design-system"), "rule-mcp-ui-design-system skill must be present");
-for (const requiredSkill of ["rule-mcp-backend-graphql", "rule-mcp-devops-observability", "rule-mcp-process-code-review"]) {
+assert.ok(directories.includes("rule-ui"), "rule-ui umbrella skill must be present");
+assert.ok(directories.includes("rule-ui-design-system"), "rule-ui-design-system skill must be present");
+for (const requiredSkill of ["rule-backend-graphql", "rule-devops-observability", "rule-process-code-review"]) {
   assert.ok(directories.includes(requiredSkill), `${requiredSkill} must be present`);
 }
 

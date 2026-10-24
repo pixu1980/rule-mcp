@@ -8,7 +8,7 @@ services:
   mcp:
     build: .
     image: ghcr.io/rule/rule:latest
-    container_name: rule-mcp
+    container_name: rule
     # Loopback-only publication. An unqualified "37999:37999" binds the host's
     # 0.0.0.0 and puts the MCP server on the LAN, where the bearer token is the
     # only barrier and failed auth is neither rate-limited nor logged.

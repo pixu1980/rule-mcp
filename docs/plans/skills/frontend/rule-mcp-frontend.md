@@ -1,13 +1,13 @@
-# rule-mcp-frontend - plan
+# rule-frontend - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#56`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: frontend, router, planned last in the area (`DEPENDENCIES.md`). Sibling
 plans: the seven leaves (`workers`, `vue`, `svelte`, `solidjs`, `react`,
-`angular`, `template-engine`) and `rule-mcp-meta` (the dispatcher for the four
+`angular`, `template-engine`) and `rule-meta` (the dispatcher for the four
 meta-framework rows this router also carries). The shared router rules and the
-route-table generator come from `rule-mcp-process`.
+route-table generator come from `rule-process`.
 
 ## Scope decisions (owner)
 
@@ -17,10 +17,10 @@ Inherited from the platform and meta interviews, 2026-10-21:
 | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
 | Scope of this pass | **Plan only**                                                                                                    |
 | Sibling plans      | Assume the seven leaves are executed; this plan describes the state after them                                   |
-| Route table        | Waits for the census generator planned in `rule-mcp-process`; this router is one of the eleven                   |
+| Route table        | Waits for the census generator planned in `rule-process`; this router is one of the eleven                       |
 | Cross-area rows    | A frontend router may **point** at the meta-framework dispatcher; it may not carry the four meta rows as its own |
 | Tags               | The router keeps `frontend`, `ui`, `index`; the six framework subjects move to the leaves that own them          |
-| Rule set           | The six router rules from `rule-mcp-process`, plus one this router needs: no cross-area rows                     |
+| Rule set           | The six router rules from `rule-process`, plus one this router needs: no cross-area rows                         |
 | Detection          | Shared rule set, registered not copied                                                                           |
 | Fixtures           | Shared corpus pairs plus router trees on disk                                                                    |
 | Flow               | Failing test first                                                                                               |
@@ -31,7 +31,7 @@ Inherited from the platform and meta interviews, 2026-10-21:
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-frontend/SKILL.md` is **116 lines**: frontmatter, a UI-framework
+`skills/rule-frontend/SKILL.md` is **116 lines**: frontmatter, a UI-framework
 table, a cross-framework rules section, a cross-cutting table, a
 meta-framework table, an "over-engineering" section, a Quick Selection of
 eleven lines, and three See-also links.
@@ -40,7 +40,7 @@ eleven lines, and three See-also links.
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | Children after ADR 152 | 7: angular, react, solidjs, svelte, template-engine, vue, workers                                                        |
 | Table rows             | 10: the six UI frameworks, workers, and the four meta-frameworks                                                         |
-| Missing child          | **`rule-mcp-frontend-template-engine`**, the last entry in `ROUTER_GAPS`                                                 |
+| Missing child          | **`rule-frontend-template-engine`**, the last entry in `ROUTER_GAPS`                                                     |
 | Dispatcher row         | present                                                                                                                  |
 | Tags                   | frontend, ui, react, vue, angular, svelte, solidjs, astro, index                                                         |
 | Tag overlap            | each of `react`, `vue`, `angular`, `svelte`, `solidjs`, `astro` is claimed by exactly 2 skills: this router and its leaf |
@@ -48,8 +48,8 @@ eleven lines, and three See-also links.
 
 ### Four rows that belong to another area
 
-The router's tables carry `rule-mcp-meta-astro`, `rule-mcp-meta-next`, `rule-mcp-meta-nuxt` and
-`rule-mcp-meta-remix` - four skills `rule-mcp-meta` owns and lists. Two dispatchers, the
+The router's tables carry `rule-meta-astro`, `rule-meta-next`, `rule-meta-nuxt` and
+`rule-meta-remix` - four skills `rule-meta` owns and lists. Two dispatchers, the
 same four rows, and only one of them regenerates. The Quick Selection repeats
 them again (three lines).
 
@@ -60,17 +60,17 @@ find Astro from here; it is that the row is maintained twice and drifts twice.
 
 "Rules that hold whichever framework you route to" states the zero-classes and
 flex-first principles once, with the `/* grid: why */` marker and the
-`css-flex-first` rule id, and points at `rule-mcp-styleguide-css` for the
+`css-flex-first` rule id, and points at `rule-styleguide-css` for the
 conversions. That is the right place for a cross-framework rule: one statement,
 one owner, one link. It also demonstrates what the leaves should have done
 instead of copying six lines each.
 
 ### Reach
 
-| Door                  | State                                                                                    |
-| --------------------- | ---------------------------------------------------------------------------------------- |
-| `rule-mcp` dispatcher | listed                                                                                   |
-| Inbound links         | the largest hub in the area: every frontend leaf, the ui skills, `rule-mcp-platform-web` |
+| Door                  | State                                                                                |
+| --------------------- | ------------------------------------------------------------------------------------ |
+| `rule-mcp` dispatcher | listed                                                                               |
+| Inbound links         | the largest hub in the area: every frontend leaf, the ui skills, `rule-platform-web` |
 
 ## The seven rules
 
@@ -78,7 +78,7 @@ instead of copying six lines each.
 | ----------------------------- | ---------------------------------------------- | ---- | --------------------------------------------------------------- |
 | `router-dead-link`            | A relative link resolving to no `SKILL.md`     | B    | clean                                                           |
 | `router-tool-name`            | A tool name the registry does not know         | B    | clean                                                           |
-| `router-child-listed`         | A skill under the area with no row             | B    | **red**: `rule-mcp-frontend-template-engine`                    |
+| `router-child-listed`         | A skill under the area with no row             | B    | **red**: `rule-frontend-template-engine`                        |
 | `router-quick-selection`      | A row the Quick Selection cannot reach         | B    | **red**: template-engine, and the meta rows are reachable twice |
 | `router-no-stale-name`        | A reference to a skill that no longer exists   | B    | clean after ADR 152                                             |
 | `router-tag-single-owner`     | A subject tag claimed by the router and a leaf | B    | **red**: six tags                                               |
@@ -88,7 +88,7 @@ instead of copying six lines each.
 
 - [ ] ADR: the frontend family shape. Frameworks, cross-cutting concerns and
       the template engine belong here; the meta-frameworks belong to
-      `rule-mcp-meta`, which this router links.
+      `rule-meta`, which this router links.
 - [ ] ADR: the rule design, Tier B, dual detection, including the cross-area
       rule this router motivated.
 
@@ -97,7 +97,7 @@ instead of copying six lines each.
 - [ ] `tests/fixtures/frontend-router/`: `clean/`, `missing-child/`,
       `cross-area-rows/`, `tag-overlap/`, each with a one-line `README.md`.
 - [ ] Seven `CORPUS` pairs in `tests/fixtures/guardrail-corpus.mjs` bound to
-      `rule-mcp-frontend`.
+      `rule-frontend`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ## Phase 2 - The rules
@@ -108,10 +108,10 @@ instead of copying six lines each.
 
 ## Phase 3 - Open the last door
 
-- [ ] A row for `rule-mcp-frontend-template-engine` and a Quick Selection line.
-- [ ] Delete the `"rule-mcp-frontend"` entry from
+- [ ] A row for `rule-frontend-template-engine` and a Quick Selection line.
+- [ ] Delete the `"rule-frontend"` entry from
       `scripts/data/router-gaps.data.mjs`: the area has no gaps after this.
-- [ ] Replace the four meta rows with one pointer line to `rule-mcp-meta`, and the
+- [ ] Replace the four meta rows with one pointer line to `rule-meta`, and the
       three meta Quick Selection lines with one.
 - [ ] Tags reduced to `frontend`, `ui`, `index`.
 - [ ] Table regenerated by the census generator once it exists.
@@ -121,7 +121,7 @@ instead of copying six lines each.
 - [ ] `_router-child-coverage`, `_corpus`, `_routing-corpus` suites.
 - [ ] One routing prompt per leaf: a request that names no skill reaches each
       of the seven.
-- [ ] A prompt about rendering with no framework named reaches `rule-mcp-meta`, not
+- [ ] A prompt about rendering with no framework named reaches `rule-meta`, not
       this router.
 - [ ] Catalog scan with the seven rules.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
@@ -154,7 +154,7 @@ pnpm lint
 
 The router closes after its leaves and after the shared router rules and the route-table generator are exported.
 
-Depends on: `rule-mcp-frontend-angular` (HARD), `rule-mcp-frontend-react` (HARD), `rule-mcp-frontend-solidjs` (HARD), `rule-mcp-frontend-svelte` (HARD), `rule-mcp-frontend-template-engine` (HARD), `rule-mcp-frontend-vue` (HARD), `rule-mcp-frontend-workers` (HARD), `rule-mcp-process#2` (CONTRACT), `rule-mcp-process#3` (CONTRACT)
+Depends on: `rule-frontend-angular` (HARD), `rule-frontend-react` (HARD), `rule-frontend-solidjs` (HARD), `rule-frontend-svelte` (HARD), `rule-frontend-template-engine` (HARD), `rule-frontend-vue` (HARD), `rule-frontend-workers` (HARD), `rule-process#2` (CONTRACT), `rule-process#3` (CONTRACT)
 
 Feeds:,
 
@@ -167,7 +167,7 @@ Shared files: skills/rule/SKILL.md, scripts/data/router-gaps.data.mjs, tests/fix
   that states a cross-framework rule with a rule id behind it, which is the
   pattern the leaves should have copied and did not.
 - The meta rows are defensible as documentation and indefensible as
-  maintenance. One pointer line to `rule-mcp-meta` keeps the reader's path and drops
+  maintenance. One pointer line to `rule-meta` keeps the reader's path and drops
   the second place to edit. If the owner prefers keeping the rows, the rule
   becomes advisory-by-hand instead of a check, and the drift returns.
 - The area closes with this plan: after it, frontend has seven leaves and a

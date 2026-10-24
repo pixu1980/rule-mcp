@@ -34,7 +34,7 @@ function seedCandidate() {
   cacheStore(
     "rule_tool",
     { prompt: "create a react button component", framework: "react" },
-    { content: [{ type: "text", text: JSON.stringify({ route: "rule-mcp-frontend-react" }) }] },
+    { content: [{ type: "text", text: JSON.stringify({ route: "rule-frontend-react" }) }] },
     {},
   );
 }

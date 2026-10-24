@@ -1,4 +1,4 @@
-# rule-mcp-process-ai - best-practice implementation plan
+# rule-process-ai - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes:merge, rename and guardrail move applied; the absorbed content work is listed below and still open. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`. Order: `docs/plans/skills/DEPENDENCIES.md`, where this plan runs first.
@@ -9,12 +9,12 @@ Area: process. Order: first, because every other plan is written by these rules.
 
 Three plans and one pending row became this one:
 
-| Was                                         | Now                                                                 |
-| ------------------------------------------- | ------------------------------------------------------------------- |
-| `rule-mcp-process-ai-sdlc` (pending)        | the body of `skills/rule-mcp-process-ai/SKILL.md`                   |
-| `rule-mcp-process-simplicity` (planned)     | `references/simplicity.md` plus the new "Scope comes first" section |
-| `rule-mcp-styleguide-english` (planned)     | `references/english.md`                                             |
-| `rule-mcp-styleguide-fingerprint` (planned) | `references/fingerprint.md`                                         |
+| Was                                     | Now                                                                 |
+| --------------------------------------- | ------------------------------------------------------------------- |
+| `rule-process-ai-sdlc` (pending)        | the body of `skills/rule-process-ai/SKILL.md`                       |
+| `rule-process-simplicity` (planned)     | `references/simplicity.md` plus the new "Scope comes first" section |
+| `rule-styleguide-english` (planned)     | `references/english.md`                                             |
+| `rule-styleguide-fingerprint` (planned) | `references/fingerprint.md`                                         |
 
 Their decisions are carried here, not discarded: the accent allowlist, the `-ogue` stem fix, the bidi controls, the plain-language rules and the four new guardrail families each survive as a workstream below. What changed is the owner and the naming, because the owner is now one skill.
 
@@ -22,10 +22,10 @@ Their decisions are carried here, not discarded: the accent allowlist, the `-ogu
 
 Read and measured in this session:
 
-- `skills/rule-mcp-process-ai/SKILL.md`: 218 lines after the merge, from 177. The lifecycle body is unchanged; the scope contract, the ownership map and the reference table are new.
-- `skills/rule-mcp-process-ai/references/`: 275 lines of simplicity, 71 of English, 152 of fingerprint, moved with `git mv` so the text is the same text.
-- `skills/rule-mcp-process-ai/guardrails/`: nine rules in one family, moved from three directories and renamed with the `ai-` prefix.
-- The duplicated spelling map: `rule-mcp-styleguide-english` and `rule-mcp-styleguide-fingerprint` both documented the British to American table and both claimed `fp-american-english`. One rule, two documents, which is the drift ADR 058 exists to prevent.
+- `skills/rule-process-ai/SKILL.md`: 218 lines after the merge, from 177. The lifecycle body is unchanged; the scope contract, the ownership map and the reference table are new.
+- `skills/rule-process-ai/references/`: 275 lines of simplicity, 71 of English, 152 of fingerprint, moved with `git mv` so the text is the same text.
+- `skills/rule-process-ai/guardrails/`: nine rules in one family, moved from three directories and renamed with the `ai-` prefix.
+- The duplicated spelling map: `rule-styleguide-english` and `rule-styleguide-fingerprint` both documented the British to American table and both claimed `fp-american-english`. One rule, two documents, which is the drift ADR 058 exists to prevent.
 - `src/tools/ai/_reduction-signal.js`: 28 phrases, unchanged, and now the only thing that makes a scope prompt route here.
 - The surface after the merge: 84 skills, 105 tools, 176 resources, 38 prompts, 41 commands, from `tests/docs/docs-accuracy.test.mjs`.
 - The routing corpus, 95 prompts: 77 exact and 90 top-or-alternative before the merge and after it, once the vocabulary was restored to `SKILL.md`.
@@ -35,7 +35,7 @@ Problems found:
 | Problem                                    | Detail                                                                                                                                                                                                                                                                  |
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | one rule, two documents                    | the spelling map and `fp-american-english` lived in both the English and the fingerprint skill, so a rule change had two places to land and one to forget                                                                                                               |
-| the lifecycle skill owned no guardrail     | `rule-mcp-process-ai-sdlc` documented gates and enforced none, while the three skills it now absorbs carried all the enforceable discipline                                                                                                                             |
+| the lifecycle skill owned no guardrail     | `rule-process-ai-sdlc` documented gates and enforced none, while the three skills it now absorbs carried all the enforceable discipline                                                                                                                                 |
 | three plans and one pending row            | four index entries for one body of rules, and the one that was pending was the only one able to describe the whole                                                                                                                                                      |
 | moving a body to a reference loses routing | the simplicity vocabulary sat in `SKILL.md`, which is what the ranker indexes. Moving it to `references/` dropped a scope prompt from the top route to a data skill (T8 in `_reminder.test.mjs`), and the fix was to keep the contract and the vocabulary in `SKILL.md` |
 | the rename is a breaking surface           | the tool id is derived from the skill name, so `rule_tool_process_ai_sdlc` became `rule_tool_process_ai`; every client call and every document naming it had to follow                                                                                                  |
@@ -46,12 +46,12 @@ Problems found:
 | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Directories | The three are deleted, not tombstoned. Their names join `removedSkillNames`, so a surviving reference fails the suite                                                             |
 | Guardrails  | Nine rules move into one family and take the `ai-` prefix: `ai-english-only-*`, `ai-american-english`, `ai-no-emdash`, `ai-no-typographic-chars`, `ai-box-rectangular`, `ai-no-*` |
-| Rename      | Full, tool included: `rule-mcp-process-ai-sdlc` to `rule-mcp-process-ai`, and `rule_tool_process_ai_sdlc` to `rule_tool_process_ai`                                               |
+| Rename      | Full, tool included: `rule-process-ai-sdlc` to `rule-process-ai`, and `rule_tool_process_ai_sdlc` to `rule_tool_process_ai`                                                       |
 | Index       | One row for the merged skill; the four old rows are gone and the total is 84                                                                                                      |
-| Shape       | `SKILL.md` plus `references/`, the shape `rule-mcp-styleguide-a11y` already uses                                                                                                  |
+| Shape       | `SKILL.md` plus `references/`, the shape `rule-styleguide-a11y` already uses                                                                                                      |
 | Graph       | `docs/plans/skills/DEPENDENCIES.md` holds it, and this plan is first in it                                                                                                        |
 | Old plans   | Deleted, folded here                                                                                                                                                              |
-| Routers     | `rule-mcp-process` and `rule-mcp-styleguide` tables updated, and a child-coverage test guards them                                                                                |
+| Routers     | `rule-process` and `rule-styleguide` tables updated, and a child-coverage test guards them                                                                                        |
 | Delivery    | Merge applied in this session                                                                                                                                                     |
 
 ## Workstream A - The merge (applied)
@@ -89,7 +89,7 @@ The six-line contract is now in `SKILL.md` and the catalog is in the reference. 
 
 ## Workstream E - The router tables
 
-`rule-mcp-process` and `rule-mcp-styleguide` are corrected by hand. A `router-child-coverage` test compares each area router's links with the directories under it, so the next skill that moves fails the suite instead of leaving a stale row.
+`rule-process` and `rule-styleguide` are corrected by hand. A `router-child-coverage` test compares each area router's links with the directories under it, so the next skill that moves fails the suite instead of leaving a stale row.
 
 ## Workstream F - The reduction signal
 
@@ -103,7 +103,7 @@ The root of the graph: it owns the prose, scope and gate rules every other plan 
 
 Depends on: -
 
-Feeds: `rule-mcp-process` (HARD)
+Feeds: `rule-process` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -114,7 +114,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [x] Move and rename the nine guardrails into one family.
 - [x] Rewrite `SKILL.md` with the ownership map, the scope contract and the reference table.
 - [x] Delete the three directories and extend `removedSkillNames`.
-- [x] Correct the `rule-mcp-process` and `rule-mcp-styleguide` tables and the central index row.
+- [x] Correct the `rule-process` and `rule-styleguide` tables and the central index row.
 - [x] Regenerate the census and the README counts (84 skills, 105 tools, 176 resources).
 - [x] Re-measure the routing corpus and restore the scope vocabulary to `SKILL.md`.
 - [x] Delete the three absorbed plans and collapse the index to one row.

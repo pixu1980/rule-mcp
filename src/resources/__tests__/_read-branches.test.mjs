@@ -5,7 +5,7 @@ import { test } from "node:test";
 const { serveResource } = await import("../_read.js");
 
 test("the a11y templates, community, project and summary arms answer", async () => {
-  for (const uri of ["rulemcp://a11y/test-basic", "rulemcp://a11y/test-forms", "rulemcp://community", "rulemcp://project", "rulemcp://rule-mcp-styleguide-css/summary"]) {
+  for (const uri of ["rule://a11y/test-basic", "rule://a11y/test-forms", "rule://community", "rule://project", "rule://rule-styleguide-css/summary"]) {
     const result = await serveResource(uri);
 
     assert.equal(result.contents.length, 1, uri);

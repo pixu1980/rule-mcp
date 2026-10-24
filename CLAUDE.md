@@ -56,6 +56,6 @@ Available rule-mcp tools:
 - rule_tool_detect - Detect project framework
 - rule_tool_init / rule_tool_update - Project init and server update
 - Flex first: layout with display:flex; display:grid only for named areas, subgrid, explicit placement, or auto-fit tracks, justified with /* grid: why */
-- rulemcp://resources - Skill documentation as MCP resources
+- rule://resources - Skill documentation as MCP resources
 
 <!-- /rule-mcp-rules -->

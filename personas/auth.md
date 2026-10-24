@@ -11,7 +11,7 @@ skills:
   - "RBAC and least privilege"
   - "identity provider integration"
 evidenceSkills:
-  - "rule-mcp-backend-security"
+  - "rule-backend-security"
 aliases:
   - "auth-identity"
   - "authentication engineer"

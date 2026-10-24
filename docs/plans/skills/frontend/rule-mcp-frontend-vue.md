@@ -1,10 +1,10 @@
-# rule-mcp-frontend-vue - plan
+# rule-frontend-vue - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#48`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
-Area: frontend, framework leaf. Sibling plans: `rule-mcp-frontend-workers` (same
-series), the other framework leaves, and `rule-mcp-frontend` (the area router).
+Area: frontend, framework leaf. Sibling plans: `rule-frontend-workers` (same
+series), the other framework leaves, and `rule-frontend` (the area router).
 
 ## Scope decisions (owner)
 
@@ -17,7 +17,7 @@ Inherited from the platform, meta and workers interviews, 2026-10-21:
 | Existing guardrails | **Extend, do not replace**: this skill already owns `vue-no-class-binding`, and the plan adds five rules around it                     |
 | Aux files           | The 10 files under `checklists/`, `knowledge/`, `prompts/` and `templates/` move into `references/` and get served                     |
 | Scaffold block      | Fixed here and in the six other affected skills, as one catalog-level item                                                             |
-| Shared owners       | `rule-mcp-styleguide-*` own markup, CSS, a11y; `rule-mcp-frontend` owns the framework choice; `rule-mcp-platform-web` owns budgets     |
+| Shared owners       | `rule-styleguide-*` own markup, CSS, a11y; `rule-frontend` owns the framework choice; `rule-platform-web` owns budgets                 |
 | Rule set            | Six rules including the existing one, all Tier B (advisory)                                                                            |
 | Detection           | Both: section and table parsing, plus injected `fileList`                                                                              |
 | Fixtures            | Shared corpus pairs plus skill trees on disk                                                                                           |
@@ -29,7 +29,7 @@ Inherited from the platform, meta and workers interviews, 2026-10-21:
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-frontend-vue/SKILL.md` is **508 lines**, with a `guardrails/` folder
+`skills/rule-frontend-vue/SKILL.md` is **508 lines**, with a `guardrails/` folder
 that exports exactly one rule, and 10 auxiliary files under four folders.
 
 | Folder        | Files | Lines | Destination   |
@@ -49,14 +49,14 @@ start, is never found, and the slice runs to the end of the file.
 Measured across the catalog: **7 skills** have this shape, and the parser
 returns between 231 and 466 lines for each:
 
-| Skill                       | Lines returned |
-| --------------------------- | -------------: |
-| `rule-mcp-frontend-vue`     |            315 |
-| `rule-mcp-frontend-react`   |            466 |
-| `rule-mcp-frontend-angular` |            327 |
-| `rule-mcp-frontend-svelte`  |            325 |
-| `rule-mcp-frontend-solidjs` |            335 |
-| `rule-mcp-meta-astro`       |            347 |
+| Skill                   | Lines returned |
+| ----------------------- | -------------: |
+| `rule-frontend-vue`     |            315 |
+| `rule-frontend-react`   |            466 |
+| `rule-frontend-angular` |            327 |
+| `rule-frontend-svelte`  |            325 |
+| `rule-frontend-solidjs` |            335 |
+| `rule-meta-astro`       |            347 |
 
 This is one parser-contract bug with seven victims, not seven mistakes. The
 fix belongs in a shared phase, and the rule below is what keeps it fixed.
@@ -67,7 +67,7 @@ Seven lines restate rules the inherited sets already own. Two of them are
 already enforced by inherited rules, verified by running the check engine:
 
 ```
-scoped <style> in a .vue file -> FAIL: external-css (covered by rule-mcp-styleguide-css)
+scoped <style> in a .vue file -> FAIL: external-css (covered by rule-styleguide-css)
 :class binding             -> FAIL: vue-no-class-binding, data-part-naming
 ```
 
@@ -76,17 +76,17 @@ elsewhere; the copy adds no coverage, only a second place to edit.
 
 ### The auxiliary files are unserved
 
-Same finding as `rule-mcp-platform-desktop` and `rule-mcp-frontend-workers`:
+Same finding as `rule-platform-desktop` and `rule-frontend-workers`:
 `src/resources/_read.js` serves `SKILL.md` and nothing else, and `readSkill()`
 reads one file. 10 files, 563 lines, unreachable through the rule-mcp surface.
 
 ### Reach
 
-| Door                            | State                     |
-| ------------------------------- | ------------------------- |
-| `rule-mcp-frontend` area router | listed                    |
-| `rule-mcp` dispatcher           | listed                    |
-| Inbound links                   | 9 links from other skills |
+| Door                        | State                     |
+| --------------------------- | ------------------------- |
+| `rule-frontend` area router | listed                    |
+| `rule-mcp` dispatcher       | listed                    |
+| Inbound links               | 9 links from other skills |
 
 Reach is fine here: this leaf has doors. What it lacks is a consumer for its
 companion files.
@@ -115,7 +115,7 @@ playbook, and the four folders moved as-is.
 
 - [ ] ADR (area): the frontend family shape. One framework leaf per framework,
       each owning its component model and its patterns; shared markup, CSS and
-      a11y rules stay in `rule-mcp-styleguide-*`.
+      a11y rules stay in `rule-styleguide-*`.
 - [ ] ADR (area): the rule design, Tier B, dual detection, and the shared
       scaffold-termination item.
 
@@ -124,7 +124,7 @@ playbook, and the four folders moved as-is.
 - [ ] `tests/fixtures/frontend-vue/`: `clean/`, `core-rules-restated/`,
       `unterminated-scaffold/`, `unserved-aux/`, `unnamed-owner/`, each with a
       one-line `README.md`.
-- [ ] Six `CORPUS` pairs bound to `rule-mcp-frontend-vue`, including the existing
+- [ ] Six `CORPUS` pairs bound to `rule-frontend-vue`, including the existing
       `vue-no-class-binding` pair if it is missing.
 - [ ] Suites written and watched to fail with "rule not found".
 
@@ -149,13 +149,13 @@ playbook, and the four folders moved as-is.
 
 - [ ] Move the file tree, CSS loading and performance sections into
       `references/`; move the four folders under `references/` too.
-- [ ] Consume the served-references surface planned in `rule-mcp-platform-desktop`;
+- [ ] Consume the served-references surface planned in `rule-platform-desktop`;
       if it is dropped, declare the files in the body instead.
 - [ ] Core Rules collapse to one pointer line.
 
 ## Phase 5 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-frontend-vue/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-frontend-vue/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] Scaffold extraction check across all seven affected skills.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
@@ -178,7 +178,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-frontend-vue/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-frontend-vue/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
 pnpm census && pnpm census:check
@@ -189,9 +189,9 @@ pnpm lint
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD), `rule-mcp-platform-desktop#3` (CONTRACT)
+Depends on: `rule-process-ai` (HARD), `rule-platform-desktop#3` (CONTRACT)
 
-Feeds: `rule-mcp-frontend` (HARD)
+Feeds: `rule-frontend` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -206,5 +206,5 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
   the same bug affects the most-used framework skills in the catalog.
 - `knowledge/vue-performance-playbook.md` (245 lines) is the same shape as the
   Astro playbook: a performance review methodology that no surface serves and
-  that overlaps `rule-mcp-platform-web`'s budget ownership. It stays, as a served
+  that overlaps `rule-platform-web`'s budget ownership. It stays, as a served
   reference, because the budget table is not the methodology.

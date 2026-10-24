@@ -5,7 +5,7 @@ export function skillNextTools(skillName) {
 
   suggestions.push(`rule_tool_${base}`);
 
-  if (skillName.startsWith("rule-mcp-styleguide")) {
+  if (skillName.startsWith("rule-styleguide")) {
     suggestions.push("rule_tool_styleguide");
   }
 

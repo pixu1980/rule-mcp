@@ -1,10 +1,10 @@
-# rule-mcp-devops-deploy-preview - plan
+# rule-devops-deploy-preview - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#60`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
-Area: devops, leaf. Sibling plans: `rule-mcp-devops-testing`,
-`rule-mcp-devops-observability`, `rule-mcp-devops-docker` (same series) and `rule-mcp-devops`
+Area: devops, leaf. Sibling plans: `rule-devops-testing`,
+`rule-devops-observability`, `rule-devops-docker` (same series) and `rule-devops`
 (the router, which does not list this skill).
 
 ## Scope decisions (owner)
@@ -28,7 +28,7 @@ Inherited from the platform, meta and frontend interviews, 2026-10-21:
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-devops-deploy-preview/SKILL.md` is **111 lines**, with two template
+`skills/rule-devops-deploy-preview/SKILL.md` is **111 lines**, with two template
 assets:
 
 | File                                      | Purpose                            |
@@ -40,11 +40,11 @@ No `guardrails/`, no `references/`.
 
 ### It has zero doors, and its own router contradicts itself about it
 
-| Door                              | State                                                                                           |
-| --------------------------------- | ----------------------------------------------------------------------------------------------- |
-| `rule-mcp-devops` table           | **missing**: the entry `"rule-mcp-devops": ["rule-mcp-devops-deploy-preview"]` in `ROUTER_GAPS` |
-| `rule-mcp-devops` Quick Selection | **present**: "Need a preview app per merge request? -> `rule-mcp-devops-deploy-preview`"        |
-| `rule-mcp` dispatcher             | **missing**: zero rows                                                                          |
+| Door                          | State                                                                                   |
+| ----------------------------- | --------------------------------------------------------------------------------------- |
+| `rule-devops` table           | **missing**: the entry `"rule-devops": ["rule-devops-deploy-preview"]` in `ROUTER_GAPS` |
+| `rule-devops` Quick Selection | **present**: "Need a preview app per merge request? -> `rule-devops-deploy-preview`"    |
+| `rule-mcp` dispatcher         | **missing**: zero rows                                                                  |
 
 So the router's short list points at a skill its own table does not list, and the
 central dispatcher does not know it either. A reader who follows the Quick
@@ -70,7 +70,7 @@ replace. Otherwise the template silently rots into something that almost works.
 
 | id                          | Rejects                                                                                       | Reads                       | Tier | Today                    |
 | --------------------------- | --------------------------------------------------------------------------------------------- | --------------------------- | ---- | ------------------------ |
-| `preview-listed-in-area`    | A devops leaf missing from the `rule-mcp-devops` table                                        | `code`                      | B    | **red**: the gap         |
+| `preview-listed-in-area`    | A devops leaf missing from the `rule-devops` table                                            | `code`                      | B    | **red**: the gap         |
 | `preview-templates-served`  | A template no surface reaches and the body does not declare                                   | `context.fileList`          | B    | **red**: two files       |
 | `preview-templates-parse`   | A template that is not valid YAML                                                             | `context.fileList`          | B    | n/a: nothing parses them |
 | `preview-todos-labelled`    | A template marker that does not say what to replace                                           | `code`                      | B    | n/a                      |
@@ -88,27 +88,27 @@ replace. Otherwise the template silently rots into something that almost works.
 - [ ] `tests/fixtures/devops-deploy-preview/`: `clean/`, `unlisted/`,
       `unserved-templates/`, `invalid-yaml/`, `unlabelled-todos/`, each with a
       one-line `README.md`.
-- [ ] Six `CORPUS` pairs bound to `rule-mcp-devops-deploy-preview`.
+- [ ] Six `CORPUS` pairs bound to `rule-devops-deploy-preview`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ## Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-devops-deploy-preview/guardrails/`: six rule files plus
+- [ ] `skills/rule-devops-deploy-preview/guardrails/`: six rule files plus
       `index.js`.
 - [ ] `guardrails: [...]` frontmatter, ids equal to the exports.
 - [ ] Green the Phase 1 suites.
 
 ## Phase 3 - Doors and templates
 
-- [ ] `rule-mcp-devops` table row; delete the `"rule-mcp-devops"` gap entry.
+- [ ] `rule-devops` table row; delete the `"rule-devops"` gap entry.
 - [ ] `rule-mcp` dispatcher row.
 - [ ] Move `assets/templates/` under `references/` and consume the
-      served-references surface from `rule-mcp-platform-desktop`.
+      served-references surface from `rule-platform-desktop`.
 - [ ] Parse both templates in the suite; label every `# TODO`.
 
 ## Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-devops-deploy-preview/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-devops-deploy-preview/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] Template parse and TODO coverage.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
@@ -130,7 +130,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-devops-deploy-preview/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-devops-deploy-preview/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_router-child-coverage.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
@@ -142,15 +142,15 @@ pnpm lint
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD), `rule-mcp-platform-desktop#3` (CONTRACT)
+Depends on: `rule-process-ai` (HARD), `rule-platform-desktop#3` (CONTRACT)
 
-Feeds: `rule-mcp-devops` (HARD)
+Feeds: `rule-devops` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ## Open notes
 
-- The self-contradiction in `rule-mcp-devops` - a Quick Selection line for a row the
+- The self-contradiction in `rule-devops` - a Quick Selection line for a row the
   table does not carry - is the clearest evidence yet that Quick Selection and
   table need the same source. The router plan makes both generated.
 - This is the only GitLab-specific skill in a GitHub-Actions catalog. That is not

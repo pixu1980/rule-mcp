@@ -44,8 +44,8 @@ test("the bundled skills resolve as the native layer", () => {
   const resolved = resolveSkillDirs({ cwd: projectRoot });
 
   assert.ok(resolved.size > 80, `the bundled catalog resolves: ${resolved.size}`);
-  assert.equal(resolved.get("rule-mcp-devops-docker").layer, "native");
-  assert.ok(resolved.get("rule-mcp-devops-docker").dir.endsWith(join("skills", "rule-mcp-devops-docker")));
+  assert.equal(resolved.get("rule-devops-docker").layer, "native");
+  assert.ok(resolved.get("rule-devops-docker").dir.endsWith(join("skills", "rule-devops-docker")));
 });
 
 test("a project skill is added, and reports its layer", () => {
@@ -59,13 +59,13 @@ test("a project skill is added, and reports its layer", () => {
 });
 
 test("the user layer overrides the project layer, which overrides native", () => {
-  skill(join(projectRoot, ".rule-mcp"), "rule-mcp-devops-docker", "description: from the project");
+  skill(join(projectRoot, ".rule-mcp"), "rule-devops-docker", "description: from the project");
 
-  assert.equal(resolveSkillDirs({ cwd: projectRoot }).get("rule-mcp-devops-docker").layer, "project", "the repo overrides what the server ships");
+  assert.equal(resolveSkillDirs({ cwd: projectRoot }).get("rule-devops-docker").layer, "project", "the repo overrides what the server ships");
 
-  skill(home, "rule-mcp-devops-docker", "description: from the user");
+  skill(home, "rule-devops-docker", "description: from the user");
 
-  const resolved = resolveSkillDirs({ cwd: projectRoot }).get("rule-mcp-devops-docker");
+  const resolved = resolveSkillDirs({ cwd: projectRoot }).get("rule-devops-docker");
   assert.equal(resolved.layer, "user", "and the machine owner has the last word");
   assert.equal(resolved.meta.description, "from the user");
 });

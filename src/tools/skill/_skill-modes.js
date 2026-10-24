@@ -3,7 +3,7 @@
 import { checkCodeGuarded } from "../../core/guardrails/index.js";
 import { extractScaffoldSection, extractSingleScaffoldFile } from "../../core/scaffold/_parser.js";
 
-/** mode=scaffold (rule-mcp-styleguide only): the scaffold section, or one file of it. */
+/** mode=scaffold (rule-styleguide only): the scaffold section, or one file of it. */
 export function scaffoldMode(content, arguments_) {
   const scaffoldSection = extractScaffoldSection(content);
 

@@ -1,12 +1,12 @@
-# rule-mcp-data-sql - plan
+# rule-data-sql - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#64`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: data, leaf. It is the dialect-neutral member of the area and the largest
-file in it (**821 lines**). Siblings: `rule-mcp-data-postgresql`, `rule-mcp-data-mysql`,
-`rule-mcp-data-mongodb`, `rule-mcp-data-sqlite`, `rule-mcp-data-duckdb`,
-`rule-mcp-data-indexed-db`, `rule-mcp-data-validation`, and `rule-mcp-data` (the router).
+file in it (**821 lines**). Siblings: `rule-data-postgresql`, `rule-data-mysql`,
+`rule-data-mongodb`, `rule-data-sqlite`, `rule-data-duckdb`,
+`rule-data-indexed-db`, `rule-data-validation`, and `rule-data` (the router).
 
 ## Evidence base (measured 2026-10-21)
 
@@ -15,10 +15,10 @@ contents, then DDL scripts, table design patterns, indexing theory, transactions
 migrations, and query patterns.
 
 The data area behaves differently from every area planned so far, and it is
-better for it: the leaves declare `inherits: [rule-mcp-data]` and inherit the four
+better for it: the leaves declare `inherits: [rule-data]` and inherit the four
 area rules (`connection-pool`, `migration-safety`, `parameterized-queries`,
 `transaction-safety`). Verified by running the engine: a string-concatenated
-query fails `parameterized-queries` when checked as `rule-mcp-data-sql`. This leaf
+query fails `parameterized-queries` when checked as `rule-data-sql`. This leaf
 therefore adds **dialect-neutral rules only**; the safety set is already in
 place above it.
 
@@ -49,15 +49,15 @@ Two measured defects:
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-data` (HARD)
+Feeds: `rule-data` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 
-- [ ] ADR (area): the data family shape. **Area rules live in `rule-mcp-data` and are
+- [ ] ADR (area): the data family shape. **Area rules live in `rule-data` and are
       inherited**; a leaf owns only what its engine does differently. This is
       the pattern the frontend leaves should have used instead of copying.
 - [ ] ADR (area): the rule design, Tier B, dual detection.
@@ -67,13 +67,13 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] `tests/fixtures/data-sql/`: `clean/`, `select-star/`,
       `irreversible-migration/`, `unindexed-fk/`, `two-versions/`, each with a
       one-line `README.md`.
-- [ ] Six `CORPUS` pairs bound to `rule-mcp-data-sql`.
+- [ ] Six `CORPUS` pairs bound to `rule-data-sql`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ### Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-data-sql/guardrails/`: six rule files plus `index.js`.
-- [ ] `guardrails:` frontmatter lists the six; `inherits: [rule-mcp-data]` stays.
+- [ ] `skills/rule-data-sql/guardrails/`: six rule files plus `index.js`.
+- [ ] `guardrails:` frontmatter lists the six; `inherits: [rule-data]` stays.
 - [ ] Green the Phase 1 suites.
 
 ### Phase 3 - Trim
@@ -86,7 +86,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 ### Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-data-sql/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-data-sql/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
 
@@ -107,7 +107,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-data-sql/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-data-sql/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
 pnpm census && pnpm census:check
@@ -122,5 +122,5 @@ pnpm lint
 - The inheritance here is the catalog's best structural example and it is worth
   naming in the area ADR: four rules, one owner, seven inheritors, zero copies.
 - No dangling references were found in this area: unlike the frontend and meta
-  leaves, the data skills do not cite `rule-mcp-styleguide -> *.md`. The area is
+  leaves, the data skills do not cite `rule-styleguide -> *.md`. The area is
   cleaner than its siblings and the plan is correspondingly smaller.

@@ -59,7 +59,7 @@ export function seedEvents() {
     durationMs: 12,
     ok: true,
     cacheHit: false,
-    routedSkill: "rule-mcp-frontend-react",
+    routedSkill: "rule-frontend-react",
     saved: { cache: 0, compression: 120, tokensave: 0, estimatedRouting: 3400 },
     now: T0 + 2100,
   });

@@ -26,7 +26,7 @@ test("a value that is not a string comes back untouched", () => {
 });
 
 test("a JSON body is data, so no level compresses it", () => {
-  const body = JSON.stringify({ route: "rule-mcp-frontend-react", sections: ["really just prose"] });
+  const body = JSON.stringify({ route: "rule-frontend-react", sections: ["really just prose"] });
 
   for (const level of ["lite", "full", "ultra"]) {
     assert.equal(compressText(body, { level }), body, `${level} must not corrupt a payload`);

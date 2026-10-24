@@ -70,7 +70,7 @@ export function recordSampleSession({ setClientInfo, startSession, recordToolCal
     cacheHit: false,
     cacheTier: "miss",
     entry: "router",
-    routedSkill: "rule-mcp-frontend-react",
+    routedSkill: "rule-frontend-react",
     mode: "full",
     argsBytes: 96,
     resultBytes: 8000,

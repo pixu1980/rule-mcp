@@ -1,12 +1,12 @@
-# rule-mcp-frontend-angular - plan
+# rule-frontend-angular - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#55`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: frontend, framework leaf and the last leaf before the area router.
-Sibling plans: `rule-mcp-frontend-vue`, `rule-mcp-frontend-svelte`,
-`rule-mcp-frontend-solidjs`, `rule-mcp-frontend-react` (same shape),
-`rule-mcp-frontend-workers`, `rule-mcp-frontend-template-engine`, and `rule-mcp-frontend`.
+Sibling plans: `rule-frontend-vue`, `rule-frontend-svelte`,
+`rule-frontend-solidjs`, `rule-frontend-react` (same shape),
+`rule-frontend-workers`, `rule-frontend-template-engine`, and `rule-frontend`.
 
 ## Scope decisions (owner)
 
@@ -20,7 +20,7 @@ Inherited from the platform, meta and workers interviews, 2026-10-21:
 | Contradiction       | The CSS Modules question is decided for the whole area, in the React plan's ADR line, and applied here too                                          |
 | Aux files           | The 10 files under `checklists/`, `knowledge/`, `prompts/` and `templates/` move into `references/` and get served                                  |
 | Scaffold block      | Fixed here and in the six other affected skills, one catalog-level item                                                                             |
-| Shared owners       | `rule-mcp-styleguide-*` own markup, CSS, a11y; `rule-mcp-platform-web` owns budgets; `rule-mcp-frontend` owns the framework choice                  |
+| Shared owners       | `rule-styleguide-*` own markup, CSS, a11y; `rule-platform-web` owns budgets; `rule-frontend` owns the framework choice                              |
 | Rule set            | Seven rules including the existing one, all Tier B (advisory)                                                                                       |
 | Detection           | Both: section and table parsing, plus injected `fileList`                                                                                           |
 | Fixtures            | Shared corpus pairs plus skill trees on disk                                                                                                        |
@@ -32,7 +32,7 @@ Inherited from the platform, meta and workers interviews, 2026-10-21:
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-frontend-angular/SKILL.md` is **496 lines**, with a `guardrails/`
+`skills/rule-frontend-angular/SKILL.md` is **496 lines**, with a `guardrails/`
 folder exporting exactly one rule, and 10 auxiliary files.
 
 | Folder        | Files | Lines |
@@ -56,7 +56,7 @@ guardrail-a11y-test-required
 ```
 
 The engine exports 70 ids and none starts with `guardrail-`. This is the same
-defect as `rule-mcp-frontend-svelte`, in the same words, in a different skill:
+defect as `rule-frontend-svelte`, in the same words, in a different skill:
 whoever wrote one checklist copied it to the other.
 
 ### A core rule nothing enforces
@@ -97,11 +97,11 @@ duplication is the five; the two are the reason this leaf exists.
 
 ### Reach
 
-| Door                            | State                             |
-| ------------------------------- | --------------------------------- |
-| `rule-mcp-frontend` area router | listed                            |
-| `rule-mcp` dispatcher           | listed                            |
-| Inbound links                   | the area router and the ui skills |
+| Door                        | State                             |
+| --------------------------- | --------------------------------- |
+| `rule-frontend` area router | listed                            |
+| `rule-mcp` dispatcher       | listed                            |
+| Inbound links               | the area router and the ui skills |
 
 ## Target shape
 
@@ -136,7 +136,7 @@ playbook, the forms detail, and the four folders moved as-is.
       `invented-rule-ids/`, `css-modules-contradiction/`,
       `unterminated-scaffold/`, `unserved-aux/`, each with a one-line
       `README.md`.
-- [ ] Seven `CORPUS` pairs bound to `rule-mcp-frontend-angular`, including the
+- [ ] Seven `CORPUS` pairs bound to `rule-frontend-angular`, including the
       existing `angular-no-ngclass` pair if it is missing.
 - [ ] Suites written and watched to fail with "rule not found".
 
@@ -149,8 +149,8 @@ playbook, the forms detail, and the four folders moved as-is.
 ## Phase 3 - Fix the checklist and the contradiction
 
 - [ ] The eleven `guardrail-*` ids become real ids, or the checklist goes and
-      the section points at `rule-mcp-styleguide-css`, `-html`, `-a11y`, `-comments`.
-- [ ] The three `rule-mcp-styleguide -> *.md` references become links to the skills.
+      the section points at `rule-styleguide-css`, `-html`, `-a11y`, `-comments`.
+- [ ] The three `rule-styleguide -> *.md` references become links to the skills.
 - [ ] Apply the CSS Modules verdict from the area ADR here and in the React leaf.
 - [ ] Fix the scaffold block with the other six affected skills.
 
@@ -159,11 +159,11 @@ playbook, the forms detail, and the four folders moved as-is.
 - [ ] Move the file tree, CSS loading, performance and forms detail into
       `references/`; move the four folders under `references/` too.
 - [ ] Core Rules keep the two Angular lines and point at the owners for the rest.
-- [ ] Consume the served-references surface from `rule-mcp-platform-desktop`.
+- [ ] Consume the served-references surface from `rule-platform-desktop`.
 
 ## Phase 5 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-frontend-angular/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-frontend-angular/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] Rule-id and scaffold checks across the catalog.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
@@ -186,7 +186,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-frontend-angular/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-frontend-angular/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
 pnpm census && pnpm census:check
@@ -197,9 +197,9 @@ pnpm lint
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD), `rule-mcp-platform-desktop#3` (CONTRACT)
+Depends on: `rule-process-ai` (HARD), `rule-platform-desktop#3` (CONTRACT)
 
-Feeds: `rule-mcp-frontend` (HARD)
+Feeds: `rule-frontend` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

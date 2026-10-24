@@ -1,4 +1,4 @@
-# rule-mcp-styleguide-a11y - best-practice implementation plan
+# rule-styleguide-a11y - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,7 +9,7 @@ Area: styleguide. Order: reverse alphabetical, twenty-eighth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-styleguide-a11y/SKILL.md`: the POUR sections, the semantic HTML
+- `skills/rule-styleguide-a11y/SKILL.md`: the POUR sections, the semantic HTML
   decision table, the complex component protocol, the verification workflow,
   the WCAG-EM report, the reference library, and a merged legacy block at the
   end that repeats several of them.
@@ -203,9 +203,9 @@ that already vendors the criteria.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-styleguide` (HARD)
+Feeds: `rule-styleguide` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

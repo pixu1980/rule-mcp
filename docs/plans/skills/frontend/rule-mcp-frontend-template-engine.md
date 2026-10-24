@@ -1,35 +1,35 @@
-# rule-mcp-frontend-template-engine - plan
+# rule-frontend-template-engine - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#50`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
-Area: frontend, leaf. Sibling plans: `rule-mcp-frontend-workers`,
-`rule-mcp-frontend-vue` (same series), the remaining framework leaves, and
-`rule-mcp-frontend` (the area router).
+Area: frontend, leaf. Sibling plans: `rule-frontend-workers`,
+`rule-frontend-vue` (same series), the remaining framework leaves, and
+`rule-frontend` (the area router).
 
 ## Scope decisions (owner)
 
 Inherited from the platform, meta and workers interviews, 2026-10-21:
 
-| Question           | Decision                                                                                                                                         |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Scope of this pass | **Plan only**                                                                                                                                    |
-| Identity           | The one leaf in the area that ships runnable code: the procedure stays, the assets become served references, and the install step is checked     |
-| Assets             | `assets/` and `REFERENCE.md` move under `references/` and get served; the 8 test files join the suite that runs skill-local tests                |
-| Shared owners      | `rule-mcp-styleguide-html` owns markup rules; `rule-mcp-frontend-custom-element` is gone (ADR 152), so the engine is the only template path left |
-| Reach              | Fixed here: the last `ROUTER_GAPS` entry for the frontend area                                                                                   |
-| Rule set           | Six rules, all Tier B (advisory)                                                                                                                 |
-| Detection          | Both: section and table parsing, plus injected `fileList`                                                                                        |
-| Fixtures           | Shared corpus pairs plus skill trees on disk                                                                                                     |
-| Flow               | Failing test first                                                                                                                               |
-| Gates              | Skill suite, corpora, catalog clean, census, lint and typecheck, plus the asset checks                                                           |
-| Commits            | One per phase                                                                                                                                    |
-| ADR                | Two for the whole area: the frontend family shape, the rule design                                                                               |
-| Done               | The gap entry is gone, the assets are served and checked, and the rules pass                                                                     |
+| Question           | Decision                                                                                                                                     |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope of this pass | **Plan only**                                                                                                                                |
+| Identity           | The one leaf in the area that ships runnable code: the procedure stays, the assets become served references, and the install step is checked |
+| Assets             | `assets/` and `REFERENCE.md` move under `references/` and get served; the 8 test files join the suite that runs skill-local tests            |
+| Shared owners      | `rule-styleguide-html` owns markup rules; `rule-frontend-custom-element` is gone (ADR 152), so the engine is the only template path left     |
+| Reach              | Fixed here: the last `ROUTER_GAPS` entry for the frontend area                                                                               |
+| Rule set           | Six rules, all Tier B (advisory)                                                                                                             |
+| Detection          | Both: section and table parsing, plus injected `fileList`                                                                                    |
+| Fixtures           | Shared corpus pairs plus skill trees on disk                                                                                                 |
+| Flow               | Failing test first                                                                                                                           |
+| Gates              | Skill suite, corpora, catalog clean, census, lint and typecheck, plus the asset checks                                                       |
+| Commits            | One per phase                                                                                                                                |
+| ADR                | Two for the whole area: the frontend family shape, the rule design                                                                           |
+| Done               | The gap entry is gone, the assets are served and checked, and the rules pass                                                                 |
 
 ## Evidence base (measured 2026-10-21)
 
-`skills/rule-mcp-frontend-template-engine/SKILL.md` is **193 lines**, with a
+`skills/rule-frontend-template-engine/SKILL.md` is **193 lines**, with a
 companion `REFERENCE.md` (136 lines), an `assets/` tree carrying a working
 template engine (expression parser, filters, renderer, tagged runtime, four
 example projects) and one installer script.
@@ -37,7 +37,7 @@ example projects) and one installer script.
 ### The only frontend leaf with no door from its area
 
 `scripts/data/router-gaps.data.mjs` still lists
-`"rule-mcp-frontend": ["rule-mcp-frontend-template-engine"]`: it is the last entry for
+`"rule-frontend": ["rule-frontend-template-engine"]`: it is the last entry for
 that area. The `rule-mcp` dispatcher does list it, so the leaf is reachable from the
 top and not from the area it belongs to.
 
@@ -54,7 +54,7 @@ the frontend side.
 
 | Check                     | State                                                                                                                                           |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| Asset tests run in CI     | **no**: the `skills` suite globs them, but that suite is not part of `all` (the same finding as `rule-mcp-frontend-workers`)                    |
+| Asset tests run in CI     | **no**: the `skills` suite globs them, but that suite is not part of `all` (the same finding as `rule-frontend-workers`)                        |
 | Linted                    | **no**: `pnpm lint` covers `bin/ src/ tests/`                                                                                                   |
 | Guardrails                | **no**: the self-guardrails test scans `src/`                                                                                                   |
 | Served                    | **no**: `serveResource` reads `SKILL.md` only, so `REFERENCE.md`, the engine and the four examples are unreachable through the rule-mcp surface |
@@ -93,7 +93,7 @@ criteria. Around 140 lines, with every asset behind a served reference.
 | --------------------------- | ------------------------------------------------------------------- | --------------------------- | ---- | ----------------------------------------- |
 | `engine-assets-served`      | An asset no surface reaches and the body does not declare           | `context.fileList`          | B    | **red**: `REFERENCE.md`, engine, examples |
 | `engine-assets-tested`      | A shipped engine asset with no test in the suite                    | `context.fileList`          | B    | **red**: the suite never runs in CI       |
-| `engine-listed-in-area`     | A frontend leaf missing from the `rule-mcp-frontend` table          | `code`                      | B    | **red**: the last gap entry               |
+| `engine-listed-in-area`     | A frontend leaf missing from the `rule-frontend` table              | `code`                      | B    | **red**: the last gap entry               |
 | `engine-installer-verified` | An installer script named in the body with no test or dry-run check | `code` + `context.fileList` | B    | **red**                                   |
 | `engine-owner-named`        | A delegated section naming no owner                                 | `code`                      | B    | partially red                             |
 | `engine-no-stale-skill-id`  | A `rule-mcp-...` id with no skill directory                         | `code` + `context.fileList` | B    | clean                                     |
@@ -110,12 +110,12 @@ criteria. Around 140 lines, with every asset behind a served reference.
 - [ ] `tests/fixtures/frontend-template-engine/`: `clean/`, `unserved-assets/`,
       `untested-assets/`, `area-unlisted/`, `unverified-installer/`, each with
       a one-line `README.md`.
-- [ ] Six `CORPUS` pairs bound to `rule-mcp-frontend-template-engine`.
+- [ ] Six `CORPUS` pairs bound to `rule-frontend-template-engine`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ## Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-frontend-template-engine/guardrails/`: six rule files plus
+- [ ] `skills/rule-frontend-template-engine/guardrails/`: six rule files plus
       `index.js`.
 - [ ] `guardrails: [...]` frontmatter, ids equal to the exports.
 - [ ] Green the Phase 1 suites.
@@ -134,20 +134,20 @@ criteria. Around 140 lines, with every asset behind a served reference.
 ## Phase 4 - Serve, then trim
 
 - [ ] Move `assets/` and `REFERENCE.md` under `references/`; consume the
-      served-references surface planned in `rule-mcp-platform-desktop`.
+      served-references surface planned in `rule-platform-desktop`.
 - [ ] Remove the `TARGET_ONLY_SKILLS` entry once the routing corpus has been
       re-measured with this body in the universe, or record why it stays.
 - [ ] Body trimmed to the runbook plus pointers.
 
 ## Phase 5 - Open the door
 
-- [ ] `rule-mcp-frontend` table row and Quick Selection line.
-- [ ] Delete `"rule-mcp-frontend"` from `scripts/data/router-gaps.data.mjs`
+- [ ] `rule-frontend` table row and Quick Selection line.
+- [ ] Delete `"rule-frontend"` from `scripts/data/router-gaps.data.mjs`
       entirely: it is the last entry for the area.
 
 ## Phase 6 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-frontend-template-engine/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-frontend-template-engine/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] Asset checks: the 8 test files, the installer dry run, the lint scope.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
@@ -171,7 +171,7 @@ Plan default: `T5-bulk` - `minimax-m3.1-flash`. Fallback: `step-5-preview` for a
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-frontend-template-engine/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-frontend-template-engine/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_router-child-coverage.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
@@ -183,9 +183,9 @@ pnpm lint
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD), `rule-mcp-platform-desktop#3` (CONTRACT)
+Depends on: `rule-process-ai` (HARD), `rule-platform-desktop#3` (CONTRACT)
 
-Feeds: `rule-mcp-frontend` (HARD)
+Feeds: `rule-frontend` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 

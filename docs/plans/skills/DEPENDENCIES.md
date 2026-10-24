@@ -11,12 +11,12 @@ A plan starts when the plans it points at are done. Nothing else gates it: the p
 ## Graph
 
 ```
-rule-mcp-process-ai                    <- first: every other plan writes prose, scope and gates by its rules
+rule-process-ai                    <- first: every other plan writes prose, scope and gates by its rules
   |
   +--> the 83 leaf plans          <- reverse alphabetical, area by area
   |                                  (84 plans: the catalog plus the planned mobile skill)
           |
-          +--> the area router of that area   (rule-mcp-styleguide, rule-mcp-process, ...)
+          +--> the area router of that area   (rule-styleguide, rule-process, ...)
           |       |
           |       +--> nothing: a router is the last thing planned in its area
           |
@@ -27,16 +27,16 @@ rule-mcp-process-ai                    <- first: every other plan writes prose, 
 
 | From                  | To                             | Why                                                                                                                                                                                           |
 | --------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `rule-mcp-process-ai` | every other plan               | It owns English, American spelling, ASCII punctuation, the prose rules and the scope contract. Every plan is a document, and its nine guardrails run on the artifacts the other plans produce |
+| `rule-process-ai`     | every other plan               | It owns English, American spelling, ASCII punctuation, the prose rules and the scope contract. Every plan is a document, and its nine guardrails run on the artifacts the other plans produce |
 | a leaf plan           | the router plan of its area    | A router table can only list children that exist and have a plan                                                                                                                              |
 | a leaf plan           | any plan that adds a guardrail | A new rule needs the corpus naming and the family the leaf established                                                                                                                        |
 | every leaf of an area | the next area                  | Not a dependency, an ordering: an area is finished before the next begins so its router can be written against a stable set                                                                   |
 
 ## Execution order
 
-1. **`rule-mcp-process-ai`** - merged, renamed and applied. Everything after it inherits its rules.
+1. **`rule-process-ai`** - merged, renamed and applied. Everything after it inherits its rules.
 2. **The 83 leaves plus the one planned leaf** (84 plans), area by area in this order: ui, toolchain, styleguide, process, platform, meta, frontend, devops, data, backend, ai. Inside an area, reverse alphabetical, which is the order the index already carries.
-3. **The area routers**, each after its own children: `rule-mcp-styleguide`, `rule-mcp-process`, `rule-mcp-toolchain`, `rule-mcp-ui`, `rule-mcp-platform`, `rule-mcp-meta`, `rule-mcp-frontend`, `rule-mcp-devops`, `rule-mcp-data`, `rule-mcp-backend`, `rule-mcp-ai`.
+3. **The area routers**, each after its own children: `rule-styleguide`, `rule-process`, `rule-toolchain`, `rule-ui`, `rule-platform`, `rule-meta`, `rule-frontend`, `rule-devops`, `rule-data`, `rule-backend`, `rule-ai`.
 
 ## What is not a dependency
 

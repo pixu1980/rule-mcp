@@ -21,13 +21,13 @@ test("a fully described role renders every column", () => {
           lenses: ["threat model", "secrets"],
           aliases: ["sec", "appsec"],
           status: "active",
-          evidenceSkills: ["rule-mcp-backend-security"],
+          evidenceSkills: ["rule-backend-security"],
         },
       ],
     }),
   );
 
-  assert.match(out, /\| `security` +\| Security Engineer +\| 25 +\| 2 +\| active +\| `rule-mcp-backend-security` \|/);
+  assert.match(out, /\| `security` +\| Security Engineer +\| 25 +\| 2 +\| active +\| `rule-backend-security` \|/);
   assert.match(out, /### Security Engineer \(`security`\)/);
   assert.match(out, /- \*\*Lenses\*\*: `threat model`; `secrets`/);
   assert.match(out, /- \*\*Aliases\*\*: `sec`, `appsec`/);
@@ -85,22 +85,22 @@ test("the resource section separates the fixed indexes from the per-skill pair",
   const out = joined(
     resourceSection({
       resources: [
-        { uri: "rulemcp://skills", name: "All rule-mcp skills index", mimeType: "application/json" },
-        { uri: "rulemcp://rule-mcp-styleguide-css", name: "css skill", mimeType: "text/markdown" },
-        { uri: "rulemcp://rule-mcp-styleguide-css/summary", name: "css summary", mimeType: "text/markdown" },
+        { uri: "rule://skills", name: "All rule-mcp skills index", mimeType: "application/json" },
+        { uri: "rule://rule-styleguide-css", name: "css skill", mimeType: "text/markdown" },
+        { uri: "rule://rule-styleguide-css/summary", name: "css summary", mimeType: "text/markdown" },
       ],
-      skillDirs: ["rule-mcp-styleguide-css"],
+      skillDirs: ["rule-styleguide-css"],
     }),
   );
 
   assert.match(out, /## MCP resources \(3\)/);
   assert.match(out, /\| `rulemcp:\/\/skills` +\| All rule-mcp skills index +\| `application\/json` \|/);
   assert.match(out, /^2 more, two for each skill that mints them:$/m, "the per-skill pair is counted, not listed");
-  assert.doesNotMatch(out, /\| `rulemcp:\/\/rule-mcp-styleguide-css` /, "a skill resource is not in the fixed table");
+  assert.doesNotMatch(out, /\| `rulemcp:\/\/rule-styleguide-css` /, "a skill resource is not in the fixed table");
 });
 
 test("a fixed resource with no name or media type renders dashes", () => {
-  const out = joined(resourceSection({ resources: [{ uri: "rulemcp://bare" }], skillDirs: [] }));
+  const out = joined(resourceSection({ resources: [{ uri: "rule://bare" }], skillDirs: [] }));
 
   assert.match(out, /\| `rulemcp:\/\/bare` +\| - +\| `-` \|/);
   assert.doesNotMatch(out, /undefined/);

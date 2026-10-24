@@ -1,11 +1,11 @@
-# rule-mcp-data-indexed-db - plan
+# rule-data-indexed-db - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#68`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: data, leaf. **323 lines**, one file, no auxiliary folders. Siblings:
-`rule-mcp-data-sql`, `rule-mcp-data-postgresql`, `rule-mcp-data-mysql`, `rule-mcp-data-mongodb`,
-`rule-mcp-data-sqlite`, `rule-mcp-data-duckdb`, `rule-mcp-data-validation`, `rule-mcp-data`.
+`rule-data-sql`, `rule-data-postgresql`, `rule-data-mysql`, `rule-data-mongodb`,
+`rule-data-sqlite`, `rule-data-duckdb`, `rule-data-validation`, `rule-data`.
 
 ## Evidence base (measured 2026-10-21)
 
@@ -13,7 +13,7 @@ Title: "IndexedDB / File System". Shape: database setup and schema, object
 stores and indexes, CRUD, transactions, versioning, quota, worker usage,
 File System Access API.
 
-`inherits: [rule-mcp-data]` is declared. Two measured defects, both structural:
+`inherits: [rule-data]` is declared. Two measured defects, both structural:
 
 1. **No door:** zero rows in the `rule-mcp` dispatcher.
 2. **The title claims two technologies.** "IndexedDB / File System" - the File
@@ -50,9 +50,9 @@ transaction lets the transaction auto-commit, and the next request throws.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD), `rule-mcp-data-sql` (ORDER)
+Depends on: `rule-process-ai` (HARD), `rule-data-sql` (ORDER)
 
-Feeds: `rule-mcp-data` (HARD)
+Feeds: `rule-data` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -69,25 +69,25 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] `tests/fixtures/data-indexed-db/`: `clean/`, `adhoc-store/`,
       `await-in-transaction/`, `no-quota-branch/`, each with a one-line
       `README.md`.
-- [ ] Six `CORPUS` pairs bound to `rule-mcp-data-indexed-db`.
+- [ ] Six `CORPUS` pairs bound to `rule-data-indexed-db`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ### Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-data-indexed-db/guardrails/`: six rule files plus `index.js`.
-- [ ] `guardrails:` frontmatter lists them; `inherits: [rule-mcp-data]` stays.
+- [ ] `skills/rule-data-indexed-db/guardrails/`: six rule files plus `index.js`.
+- [ ] `guardrails:` frontmatter lists them; `inherits: [rule-data]` stays.
 - [ ] Green the Phase 1 suites.
 
 ### Phase 3 - Doors and title
 
 - [ ] `rule-mcp` dispatcher row.
 - [ ] The title says what the skill covers; the router row agrees with it.
-- [ ] The worker section points at `rule-mcp-frontend-workers` instead of restating
+- [ ] The worker section points at `rule-frontend-workers` instead of restating
       it.
 
 ### Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-data-indexed-db/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-data-indexed-db/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
 
@@ -108,7 +108,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-data-indexed-db/guardrails/
+node --import ./scripts/alias-hook.mjs --test skills/rule-data-indexed-db/guardrails/
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_corpus.test.mjs
 node --import ./scripts/alias-hook.mjs --test src/core/skills/__tests__/_routing-corpus.test.mjs
 pnpm census && pnpm census:check

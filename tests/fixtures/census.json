@@ -11,7 +11,7 @@
       "file": "02-architecture.md",
       "kind": "block",
       "marker": "surface-counts",
-      "sha256": "73a26355c47c34a4b662befebf20d0512cacbeb63ee886211753dcdacbb27365"
+      "sha256": "2cb3e0fe3c9a4f32b74493bb36f2fdf3101421d503b7f304ae9ce3a094b4efa7"
     },
     {
       "file": "05-env-variables.md",
@@ -23,17 +23,17 @@
       "file": "08-engineering-guides.md",
       "kind": "block",
       "marker": "command-surface",
-      "sha256": "e4a761e294bc98444fa9ecc805efe7b7afcdb9ea611cf262d5bc807601ebb824"
+      "sha256": "e62c6834d2ac0a1b6b8dd0e8df60e71197785720fe01c8f469c716a7b51869fe"
     },
     {
       "file": "09-skills.md",
       "kind": "document",
-      "sha256": "46450e6e0632d9cdf76a1fe2c98b9d0991b5b657cb1af090488587e0872210a1"
+      "sha256": "82d6991f26d372d6c5b5b22dcff0f7fee09cd0a25cc2a6882cd915dd1c3911bb"
     },
     {
       "file": "10-tools.md",
       "kind": "document",
-      "sha256": "2437bd2f586e57c8d3591a544821859f60435eb907d0e79c544f5ba32a4575c8"
+      "sha256": "4b5f37d5c163436f66408cb73f1b990a98bfe6dcd3033da9936562bc695199e8"
     },
     {
       "file": "11-prompts.md",
@@ -48,12 +48,12 @@
     {
       "file": "13-cli.md",
       "kind": "document",
-      "sha256": "ebe15c98a68b09e33257900cfe193f640b86e94eef90a5d726c8bc71b98d4b54"
+      "sha256": "865d2b362ecd821e054f8f786daef0fe0c3d2ff038ed9a06494fe2ebf14b6de1"
     },
     {
       "file": "14-personas.md",
       "kind": "document",
-      "sha256": "1118a30a7703ff95b943eb205412b3b6cb35a8d9f3613deae7e17d873253895d"
+      "sha256": "66c8318d4a13996bfa98b71e449dc2d4e1b4631ff91509352959734a9eb1ce5f"
     },
     {
       "file": "15-guardrails.md",
@@ -63,12 +63,12 @@
     {
       "file": "16-resources.md",
       "kind": "document",
-      "sha256": "0663a4eaf4ce7a4095ac595cc20721553cd099e56ed8e16bc5843ff250d21f4a"
+      "sha256": "e588c84d8e14cbacc72d702b0f592fb0678c74ddb5edb7ae65f6d8c17e84120c"
     },
     {
       "file": "17-surface-map.md",
       "kind": "document",
-      "sha256": "e8a220750c2c77c9276f7c24b8523809022dbc8c9114d1fd47b5af0abf986cfa"
+      "sha256": "26dcd4e1fb5ea70ee5528566febe6fe2f430998e27d192393f3567a74d404919"
     }
   ]
 }

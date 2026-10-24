@@ -1,4 +1,4 @@
-# rule-mcp-styleguide-css - best-practice implementation plan
+# rule-styleguide-css - best-practice implementation plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only. Each skill waits for the owner before implementation. Output convention: one plan per skill at `docs/plans/skills/<area>/<skill>.md`. Index: `docs/plans/skills/README.md`.
@@ -9,10 +9,10 @@ Area: styleguide. Order: reverse alphabetical, twenty-fourth skill.
 
 Read in this session:
 
-- `skills/rule-mcp-styleguide-css/SKILL.md` (786 lines): selectors, tokens, units,
+- `skills/rule-styleguide-css/SKILL.md` (786 lines): selectors, tokens, units,
   property order, nesting, cascade, comments, flex-first, layout, responsive,
   color, typography, motion, accessibility and tooling.
-- `skills/rule-mcp-styleguide-css/guardrails/`: six rules.
+- `skills/rule-styleguide-css/guardrails/`: six rules.
 - `src/core/layers/_guardrails.js`: the loader that compares the frontmatter
   declaration with the folder exports.
 
@@ -61,7 +61,7 @@ Problems found:
 ### One conflict, resolved
 
 The interview selected `css-logical-properties` and also confirmed that
-`rule-mcp-styleguide-i18n` owns the RTL rule. Adding both would be the same check
+`rule-styleguide-i18n` owns the RTL rule. Adding both would be the same check
 twice. The i18n plan's `i18n-rtl-logical-properties` stays the owner and this
 skill documents the syntax with a link; no duplicate rule is added.
 
@@ -76,13 +76,13 @@ skill documents the syntax with a link; no duplicate rule is added.
 
 ## Workstream B - The boundaries
 
-| Concern              | Owner                          | What this skill does         |
-| -------------------- | ------------------------------ | ---------------------------- |
-| Which tokens exist   | `rule-mcp-ui-design-system`    | consumes them                |
-| RTL logical property | `rule-mcp-styleguide-i18n`     | documents the syntax         |
-| Focus, contrast      | `rule-mcp-styleguide-a11y`     | consumes the states          |
-| Support floor        | `rule-mcp-styleguide-baseline` | cites the state of a feature |
-| `data-part` naming   | `rule-mcp-styleguide-html`     | selects on it                |
+| Concern              | Owner                      | What this skill does         |
+| -------------------- | -------------------------- | ---------------------------- |
+| Which tokens exist   | `rule-ui-design-system`    | consumes them                |
+| RTL logical property | `rule-styleguide-i18n`     | documents the syntax         |
+| Focus, contrast      | `rule-styleguide-a11y`     | consumes the states          |
+| Support floor        | `rule-styleguide-baseline` | cites the state of a feature |
+| `data-part` naming   | `rule-styleguide-html`     | selects on it                |
 
 ## Workstream C - Standards
 
@@ -138,9 +138,9 @@ rules stay.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-styleguide` (HARD)
+Feeds: `rule-styleguide` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -194,7 +194,7 @@ Plan default: `T8-verify` - `gemini-3.8-flash` (high). Fallback: `step-5-preview
 ## Verification gates
 
 ```bash
-node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-styleguide-css/guardrails/__tests__/*.test.mjs
+node --import ./scripts/alias-hook.mjs --test skills/rule-styleguide-css/guardrails/__tests__/*.test.mjs
 node --import ./scripts/alias-hook.mjs --test tests/core/guardrails-precision-recall.test.mjs
 pnpm lint
 pnpm census

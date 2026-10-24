@@ -18,7 +18,7 @@ check("T5.1 cache hit rate is measured", Math.round(stats.cacheHitRate * 100) ==
 check("T5.2 error rate is measured", Math.round(stats.errorRate * 100) === 33);
 check("T5.3 latency percentiles are present", stats.latencyP50 >= 0 && stats.latencyP95 >= stats.latencyP50);
 check("T5.4 measured and estimated savings are reported apart", stats.savedTokens === 1020 && stats.estimatedTokens === 3400);
-check("T5.5 routed skills are counted", stats.bySkill["rule-mcp-frontend-react"] === 1);
+check("T5.5 routed skills are counted", stats.bySkill["rule-frontend-react"] === 1);
 const rendered = renderStats(stats);
 check("T5.6 the rendered report marks estimates with a tilde", /~/.test(rendered) && /estimate/i.test(rendered));
 

@@ -15,23 +15,23 @@ test("a routing call records the prompt, the route and the runners-up", () => {
     "rule_tool",
     { prompt: "build a react button" },
     jsonResult({
-      route: "rule-mcp-frontend-react",
+      route: "rule-frontend-react",
       confidence: 0.92,
       alternatives: [
-        { route: "rule-mcp-frontend-vue", confidence: 0.4 },
-        { route: "rule-mcp-ui-design-system", confidence: 0.3 },
-        { route: "rule-mcp-styleguide-css", confidence: 0.2 },
-        { route: "rule-mcp-styleguide-html", confidence: 0.1 },
+        { route: "rule-frontend-vue", confidence: 0.4 },
+        { route: "rule-ui-design-system", confidence: 0.3 },
+        { route: "rule-styleguide-css", confidence: 0.2 },
+        { route: "rule-styleguide-html", confidence: 0.1 },
       ],
     }),
   );
 
   assert.equal(fields.title, "Skill routing: build a react button");
   assert.equal(fields.tags, "tool, auto-log, routing");
-  assert.deepEqual(fields.contextLines.slice(0, 2), ['Prompt: "build a react button"', "Routed to: **rule-mcp-frontend-react** (confidence: 0.92)"]);
+  assert.deepEqual(fields.contextLines.slice(0, 2), ['Prompt: "build a react button"', "Routed to: **rule-frontend-react** (confidence: 0.92)"]);
   assert.match(fields.contextLines[2], /^Alternatives: /, "the runners-up are recorded");
   assert.equal(fields.contextLines[2].split(", ").length, 3, "only the top three runners-up are kept");
-  assert.deepEqual(fields.decisionLines, ["Use `rule-mcp-frontend-react` for this task."]);
+  assert.deepEqual(fields.decisionLines, ["Use `rule-frontend-react` for this task."]);
 });
 
 test("a routing call with nothing to parse falls back instead of throwing", () => {
@@ -44,12 +44,12 @@ test("a routing call with nothing to parse falls back instead of throwing", () =
   const empty = autoLogFields("rule_tool", {});
   assert.deepEqual(empty.contextLines, ['Prompt: ""', "Routed to: **unknown** (confidence: 0)"], "a missing result is the same as an empty one");
 
-  const noAlternatives = autoLogFields("rule_tool", { prompt: "x" }, jsonResult({ route: "rule-mcp-ai", confidence: 1, alternatives: [] }));
+  const noAlternatives = autoLogFields("rule_tool", { prompt: "x" }, jsonResult({ route: "rule-ai", confidence: 1, alternatives: [] }));
   assert.equal(noAlternatives.contextLines.length, 2, "an empty alternatives list adds no line");
 });
 
 test("a long prompt is truncated in the body and again in the title", () => {
-  const fields = autoLogFields("rule_tool", { prompt: "x".repeat(500) }, jsonResult({ route: "rule-mcp-ai" }));
+  const fields = autoLogFields("rule_tool", { prompt: "x".repeat(500) }, jsonResult({ route: "rule-ai" }));
 
   assert.equal(fields.contextLines[0].length, 'Prompt: ""'.length + 200, "the body keeps 200 characters");
   assert.equal(fields.title, `Skill routing: ${"x".repeat(80)}`, "the title keeps 80");

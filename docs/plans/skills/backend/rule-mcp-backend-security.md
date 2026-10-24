@@ -1,10 +1,10 @@
-# rule-mcp-backend-security - plan
+# rule-backend-security - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#72`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
 
 Area: backend, leaf and the area's security owner. **425 lines**, one file, no
-`guardrails/`. It inherits the router's six rules through `inherits: [rule-mcp-backend]`.
+`guardrails/`. It inherits the router's six rules through `inherits: [rule-backend]`.
 
 ## Evidence base (measured 2026-10-21)
 
@@ -26,13 +26,13 @@ That last part is the best writing in the backend area:
 Five beliefs, stated as the attacker sees them, then corrected. Each one is a
 candidate for a rule and none has one.
 
-### The boundary with `rule-mcp-platform-auth`, already decided and not applied
+### The boundary with `rule-platform-auth`, already decided and not applied
 
-The `rule-mcp-platform-auth` plan (ADR line in that plan) decided: **strategy and
+The `rule-platform-auth` plan (ADR line in that plan) decided: **strategy and
 protocols there, the authentication lifecycle here**. This leaf's description
 still claims the whole of authentication ("the authentication lifecycle: JWT
 verification, session revocation, logout, password reset, remembered devices,
-step-up auth, and CSRF"), and `rule-mcp-platform-auth` covers sessions, JWT and CSRF
+step-up auth, and CSRF"), and `rule-platform-auth` covers sessions, JWT and CSRF
 too. Neither has been edited yet, so both still claim it. This plan applies the
 decision on this side.
 
@@ -45,13 +45,13 @@ level down. The rules exist; the prose should point at them.
 
 ## The five rules
 
-| id                          | Rejects                                                                                | Tier | Today   |
-| --------------------------- | -------------------------------------------------------------------------------------- | ---- | ------- |
-| `security-verify-not-parse` | A token decoded and trusted with no signature check                                    | B    | n/a     |
-| `security-authz-per-route`  | A route with authentication but no authorization decision                              | B    | n/a     |
-| `security-session-revoked`  | A logout that clears the cookie and leaves the session record                          | B    | n/a     |
-| `security-rate-limit-auth`  | An authentication endpoint with no limiter (inherited rule covers the generic case)    | B    | n/a     |
-| `security-owner-named`      | A section that keeps the auth strategy instead of pointing at `rule-mcp-platform-auth` | B    | **red** |
+| id                          | Rejects                                                                             | Tier | Today   |
+| --------------------------- | ----------------------------------------------------------------------------------- | ---- | ------- |
+| `security-verify-not-parse` | A token decoded and trusted with no signature check                                 | B    | n/a     |
+| `security-authz-per-route`  | A route with authentication but no authorization decision                           | B    | n/a     |
+| `security-session-revoked`  | A logout that clears the cookie and leaves the session record                       | B    | n/a     |
+| `security-rate-limit-auth`  | An authentication endpoint with no limiter (inherited rule covers the generic case) | B    | n/a     |
+| `security-owner-named`      | A section that keeps the auth strategy instead of pointing at `rule-platform-auth`  | B    | **red** |
 
 ## Phases
 
@@ -59,16 +59,16 @@ level down. The rules exist; the prose should point at them.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD), `rule-mcp-platform-auth` (HARD)
+Depends on: `rule-process-ai` (HARD), `rule-platform-auth` (HARD)
 
-Feeds: `rule-mcp-backend` (HARD)
+Feeds: `rule-backend` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
 ### Phase 0 - Decisions
 
 - [ ] ADR (area): the backend family shape, and the auth boundary applied: this
-      leaf keeps the lifecycle, `rule-mcp-platform-auth` keeps the strategy.
+      leaf keeps the lifecycle, `rule-platform-auth` keeps the strategy.
 - [ ] ADR (area): the rule design, Tier B, dual detection.
 
 ### Phase 1 - Fixtures first (red)
@@ -76,19 +76,19 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 - [ ] `tests/fixtures/backend-security/`: `clean/`, `parse-without-verify/`,
       `authn-without-authz/`, `logout-cookie-only/`, each with a one-line
       `README.md`.
-- [ ] Five `CORPUS` pairs bound to `rule-mcp-backend-security`.
+- [ ] Five `CORPUS` pairs bound to `rule-backend-security`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ### Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-backend-security/guardrails/`: five rule files plus `index.js`.
-- [ ] `guardrails:` frontmatter lists them; `inherits: [rule-mcp-backend]` stays.
+- [ ] `skills/rule-backend-security/guardrails/`: five rule files plus `index.js`.
+- [ ] `guardrails:` frontmatter lists them; `inherits: [rule-backend]` stays.
 - [ ] Green the Phase 1 suites.
 
 ### Phase 3 - Apply the boundary
 
 - [ ] The description stops claiming the whole of auth; it names the lifecycle
-      and links `rule-mcp-platform-auth` for the choice.
+      and links `rule-platform-auth` for the choice.
 - [ ] The header, rate-limit, CORS and validation sections point at the
       inherited rule ids instead of restating the principles.
 - [ ] The five attacker assumptions gain their rule ids, so a reader can run
@@ -96,7 +96,7 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 ### Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-backend-security/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-backend-security/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
 
@@ -120,7 +120,7 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
   read: the wrong belief first, the correction second, the rule third. Today the
   third step is missing on all five.
 - Two skills claiming the same subject is not a routing bug yet, because
-  `rule-mcp-platform-auth` has no door (its own plan fixes that). Applying the
+  `rule-platform-auth` has no door (its own plan fixes that). Applying the
   boundary here removes the collision before the door opens.
 - `security-verify-not-parse` is the highest-value rule in the area: a decoded
   JWT is the most common false sense of security in Node services.

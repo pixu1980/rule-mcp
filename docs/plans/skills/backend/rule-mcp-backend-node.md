@@ -1,4 +1,4 @@
-# rule-mcp-backend-node - plan
+# rule-backend-node - plan
 
 Status: `planned`
 Notes:`planned` Notes: plan only, 2026-10-21. Index row `#73`, `pending` until this file existed, now `planned`. Implementation waits for the owner.
@@ -6,7 +6,7 @@ Notes:`planned` Notes: plan only, 2026-10-21. Index row `#73`, `pending` until t
 Area: backend, leaf and the area's scaffolding runbook. **395 lines**, three
 files: the body plus `assets/templates/scripts/create-tool.ts` and
 `create-agent.ts`. It inherits the router's six rules through
-`inherits: [rule-mcp-backend]`.
+`inherits: [rule-backend]`.
 
 ## Evidence base (measured 2026-10-21)
 
@@ -14,7 +14,7 @@ Shape: `# Scaffolding Backend Node`, then project profile, dependency baseline,
 required layout, build order in numbered steps (baseline files, bootstrap the
 Express app, fill in the domain modules, ...), and a closing section.
 
-It is the second runbook in the catalog after `rule-mcp-frontend-template-engine`, and
+It is the second runbook in the catalog after `rule-frontend-template-engine`, and
 the only one whose scaffold produces a **server**.
 
 ### The two shipped scripts are unserved and unrun
@@ -37,11 +37,11 @@ leaf must agree**, and today the only thing connecting them is prose.
 
 ### Reach
 
-| Door                           | State                                                  |
-| ------------------------------ | ------------------------------------------------------ |
-| `rule-mcp-backend` area router | listed                                                 |
-| `rule-mcp` dispatcher          | listed                                                 |
-| Inbound links                  | the area router, `rule-mcp-platform`, the GraphQL leaf |
+| Door                       | State                                              |
+| -------------------------- | -------------------------------------------------- |
+| `rule-backend` area router | listed                                             |
+| `rule-mcp` dispatcher      | listed                                             |
+| Inbound links              | the area router, `rule-platform`, the GraphQL leaf |
 
 ## The five rules
 
@@ -59,9 +59,9 @@ leaf must agree**, and today the only thing connecting them is prose.
 
 This leaf closes before its area router, which cannot list a child that does not exist.
 
-Depends on: `rule-mcp-process-ai` (HARD)
+Depends on: `rule-process-ai` (HARD)
 
-Feeds: `rule-mcp-backend` (HARD)
+Feeds: `rule-backend` (HARD)
 
 Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, docs/adr/ADR.md
 
@@ -75,26 +75,26 @@ Shared files: tests/fixtures/guardrail-corpus.mjs, tests/fixtures/census.json, d
 
 - [ ] `tests/fixtures/backend-node/`: `clean/`, `scaffold-breaks-framework-rule/`,
       `unserved-assets/`, `env-at-use-site/`, each with a one-line `README.md`.
-- [ ] Five `CORPUS` pairs bound to `rule-mcp-backend-node`.
+- [ ] Five `CORPUS` pairs bound to `rule-backend-node`.
 - [ ] Suites written and watched to fail with "rule not found".
 
 ### Phase 2 - The rules
 
-- [ ] `skills/rule-mcp-backend-node/guardrails/`: five rule files plus `index.js`.
-- [ ] `guardrails:` frontmatter lists them; `inherits: [rule-mcp-backend]` stays.
+- [ ] `skills/rule-backend-node/guardrails/`: five rule files plus `index.js`.
+- [ ] `guardrails:` frontmatter lists them; `inherits: [rule-backend]` stays.
 - [ ] Green the Phase 1 suites.
 
 ### Phase 3 - Make the scaffold checkable
 
 - [ ] A dry run generates the app into a temp directory and runs the
-      `rule-mcp-backend-express` rules over the result.
+      `rule-backend-express` rules over the result.
 - [ ] The two template scripts are served (the references surface planned in
-      `rule-mcp-platform-desktop`) or declared in the body.
+      `rule-platform-desktop`) or declared in the body.
 - [ ] Trim the prose that restates the router's layout section.
 
 ### Phase 4 - Verification
 
-- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-mcp-backend-node/guardrails/`
+- [ ] `node --import ./scripts/alias-hook.mjs --test skills/rule-backend-node/guardrails/`
 - [ ] `_corpus`, `_routing-corpus`, `_router-child-coverage` suites.
 - [ ] Scaffold dry run green against the Express rules.
 - [ ] `pnpm census && pnpm census:check`, `pnpm lint`, typecheck.
@@ -120,5 +120,5 @@ Plan default: `T3-rules` - `kimi-k2.7-code`. Fallback: `step-5-preview` for auth
   agreement has to be a test, not a paragraph.
 - The two `create-*.ts` scripts are the only TypeScript in the catalog outside
   `src/`. They are also the only scaffold helpers that generate agents, which
-  makes them the closest thing to the retired `rule-mcp-platform-agent` content that
+  makes them the closest thing to the retired `rule-platform-agent` content that
   survived (ADR 151).

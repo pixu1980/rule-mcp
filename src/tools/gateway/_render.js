@@ -41,7 +41,7 @@ export function renderGatewayReply(core, arguments_, fileSet, lines, stripped = 
   let receipt = null;
 
   if (fileSet || code) {
-    const skillName = primarySkill || "rule-mcp-ui-design-system";
+    const skillName = primarySkill || "rule-ui-design-system";
 
     // The removal happens before the check, so the receipt below covers the
     // cleaned content. Saying so is the whole point: without it the caller
