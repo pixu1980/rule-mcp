@@ -1,6 +1,6 @@
 {
   "name": "rule-mcp-shared",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "type": "module",
   "description": "Cross-cutting helpers for the rule-mcp workspace",
