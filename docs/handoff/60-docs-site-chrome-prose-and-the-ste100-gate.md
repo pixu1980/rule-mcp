@@ -1,0 +1,96 @@
+# Session handoff 60 - the site chrome, the closing prose, and the STE100 gate
+
+- Branch: `main`
+- Commit range covered: `4a48bb06..98928971`, 5 commits
+- Date: 2026-11-10
+
+## State
+
+The tree is clean at `98928971`. `main` is ahead of `origin/main` by 5 commits, and nothing was pushed: every commit waits for review.
+
+The documentation site emits 24 pages, one fewer than before this session. The migration guide is gone from the tree and from the reference index.
+
+`~/.rule-mcp/config` holds `env.json` and `install.json` again, so open item 1 of handoff 59 is closed.
+
+## What this session changed
+
+### The published site, in the README and on GitHub
+
+The README states the documentation site URL, in the link line and in the project paragraph. The repository homepage field on GitHub carries the same URL, set with `gh repo edit --homepage`.
+
+The Node line reads `Node 24+`. The parenthetical about the wizard floor at 26.4 is gone.
+
+### The footer states the copyright
+
+`645840c2` reads the holder and the years from the first line of `LICENSE`, so the site and the license file cannot drift apart. `build.mjs` parses the line, and `layout()` renders `<p data-part="copyright">` after the build line. A `LICENSE` with no copyright line emits no paragraph.
+
+### The view transitions are gone
+
+`645840c2` removes `@view-transition`, the `transitions` layer with its two keyframes, and the `prefs` layer. The layer order is now `reset, tokens, base, layout, dropdown, home`.
+
+The "Reduce motion" switch left with the animation it controlled. It was the only motion on the site, so the switch was dead code. `data-motion` is gone from the head script, from `prefs.js`, and from the preferences menu.
+
+`transition.test.mjs` now pins the absence: no `@view-transition`, no `view-transition-name`, no `@keyframes`, and no motion control. Its page-change test stays, because the first frame must still carry the stored theme, the field and the text.
+
+### The subnav takes no gap
+
+Each item of the reference subnav carries its own inline padding, so a gap doubled the space. The `ul` now sets `gap: 0`, and the header menu keeps its own gap.
+
+### The home page ends with prose
+
+The `section[data-part="foot"]` left the home page, with its content. The README keeps the repository prose for GitHub: the workspace note, the license links.
+
+The page now closes with `<section data-part="closing">`, a band across both columns of the home grid. Its text is the README section `## What the server does`: 96 words on what the server does, with no URL.
+
+`decorateHome` places three sections by heading and drops the rest: `## How it works`, `## Start here`, `## What the server does`. A heading it does not place is not emitted, and `_decorate.test.mjs` pins that.
+
+### The migration guide left the site
+
+The page `Migrating to RuleMCP` is deleted, with its `## Migration` section in `docs/README.md`. `rename.test.mjs` no longer allow-lists the path.
+
+### Every site text follows STE100~80, and a gate enforces it
+
+`b634efbb` adds `scripts/__tests__/docs/site-prose-ste100.test.mjs`. Two checks run over every source the site emits, generated chapters included:
+
+1. A descriptive sentence stays under 25 words (ADR 232).
+2. ASCII punctuation and the banned patterns of `core/directive/_ste100.js` stay out, and the chrome strings are read too.
+
+The gate found five offenders. Two were handbook sentences, in `04-install.md` and `08-release.md`. Two were tool descriptions, in `_init.js` and `_git.js`, and `pnpm census` rewrote `14-tools.md` and the census fixture from them.
+
+## Verification
+
+- `pnpm test:foundations`: 3228 tests, 3225 pass, 0 fail, 3 skipped.
+- `pnpm test:e2e:docs-site`: 23 passed, axe WCAG 2.2 AA included.
+- `pnpm test`: the smoke checks pass.
+- `pnpm census:check`: the census is current.
+- `pnpm docs:build`: 24 pages.
+- `rule_tool_git action=audit`: base branch `main`, 0 feature commits, 0 Conventional Commit violations, 0 merge commits.
+- `rule_tool_check` in project mode: 6 of 7 checks pass, 1 skipped (diagnostics not requested).
+
+## Open items, in order
+
+1. Push the 5 local commits, or review them first. Nothing was pushed on purpose.
+2. Remove the `pnpm dlx rule-mcp` fallback. It is still in `scripts/install.sh:112`, `scripts/uninstall.sh:54`, `scripts/install.ps1:90` and `scripts/uninstall.ps1:61`. The npm name returns E404.
+3. Land the `withHome` fix from the `pensive-gauss-ae1b68` worktree, at `3d82ca7d`.
+4. Run `pnpm release --dry-run --version 0.1.0`, then `pnpm release --version 0.1.0`.
+
+## Doubts on record
+
+- The feature close ran as audit only. There was no feature branch and no feature commit, so squash had nothing to fold.
+- `decorateHome` drops any section it does not place. A future README section after `## Start here` will not appear on the site, and nothing warns.
+- The gate reads prose only. A table cell with a long sentence passes.
+- `docs/handoff/HANDOFF.md` is generated by the handoff sweep and lags behind: handoffs 55 to 60 are missing from its table.
+- The `pensive-gauss-ae1b68` and `busy-ptolemy-8ee616` worktrees still exist.
+- Not verified: the Windows and Linux browser runs, and the Docker build.
+
+### Resume Prompt
+
+```prompt
+Resume work on rule-mcp-workspace from docs/handoff/60-docs-site-chrome-prose-and-the-ste100-gate.md. Run `rule_tool_handon` first: it checks which claims in this handoff still hold before any of them is trusted.
+
+State: the tree is clean at 98928971, and `main` is 5 commits ahead of `origin/main` because nothing was pushed. The site emits 24 pages, ends the home page with the "What the server does" band, and carries a copyright footer read from LICENSE. A new gate in the foundations suite holds every site text at STE100~80.
+
+First step: review the 5 local commits with `git log --stat 4a48bb06..HEAD`, then push them. After that, remove the `pnpm dlx rule-mcp` fallback from the four install scripts, and land the `withHome` fix from the `pensive-gauss-ae1b68` worktree.
+
+Any site change is measured by `pnpm test:e2e:docs-site` (23 browser tests) and by `node --import ./scripts/alias-hook.mjs --test scripts/__tests__/docs/site-prose-ste100.test.mjs` for the prose. Check the exit code, not only the counts. Every commit is `type(scope): subject`; the commit-msg hook rejects a scope-less message. Writing: STE100~80. Short sentences, active voice, one idea per sentence, same word for the same thing.
+```
