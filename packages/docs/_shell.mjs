@@ -68,9 +68,7 @@ const PREFERENCE_GROUPS = [
   },
   {
     legend: "Display",
-    inputs: [
-      ["contrast", "more", "More contrast", "checkbox"],
-    ],
+    inputs: [["contrast", "more", "More contrast", "checkbox"]],
   },
 ];
 

@@ -42,7 +42,6 @@ Owns: `packages/mcp/cli/installers/_agents-ide.js`, `packages/mcp/cli/setup/_tas
 
 - `870e56a0` refactor(surface)!: drop the minimal tier and its feature switch - `7043afa7` fix(install): write Devin's command files only when the commands step asks - `fa57f40c` feat(setup): say what the depth and commands steps write - `5eea509b` docs(env): drop the minimal tools switch from the handbook - ADR 246: the server floor is Node 24 and the wizard floor stays 26.4
 
-
 ## Decision
 
 Fold the record into this ADR and the session handoff, then delete the source file. The full text stays in git history.
