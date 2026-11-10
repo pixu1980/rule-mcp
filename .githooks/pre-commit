@@ -1,5 +1,5 @@
 #!/bin/sh
-# rule-mcp: two jobs, in this order.
+# rule-mcp: three jobs, in this order.
 #
 # 1. Scan the patch this commit would add for credentials. The scan is
 #    betterleaks on stdin - offline, redacted, no validation - driven by
@@ -20,8 +20,14 @@
 #    fail over a missing dev dependency, so this stops early when prettier is
 #    not installed.
 #
-# `RULE_MCP_HOOK_NO_SIDE_EFFECTS=1` skips step 2: a test that runs this hook
-# must not rewrite and stage documentation while it measures an exit code.
+# 3. Format the files this commit stages, and stage the result. The CI
+#    formatting step is a gate, not a fixer: nothing it writes can come back to
+#    the commit. This step is where the fix happens, and it reads only the paths
+#    in the index, so a commit never picks up work it did not ask for. A missing
+#    dev dependency steps over, like the census step.
+#
+# `RULE_MCP_HOOK_NO_SIDE_EFFECTS=1` skips steps 2 and 3: a test that runs this
+# hook must not rewrite and stage files while it measures an exit code.
 #
 # Install: pnpm hooks:install
 set -e
@@ -58,5 +64,15 @@ git add docs/13-skills.md docs/14-tools.md docs/15-prompts.md docs/16-instructio
   docs/17-cli.md docs/18-personas.md docs/19-guardrails.md docs/20-resources.md \
   docs/21-surface-map.md docs/22-install-targets.md docs/23-env-readers.md \
   scripts/__tests__/fixtures/census.json
+
+# Only the paths in the index are read and staged again. `git add -u` would
+# stage every tracked modification, including the ones this commit leaves out.
+staged=$(git diff --cached --name-only --diff-filter=ACMR -- '*.js' '*.mjs' '*.json' '*.md')
+
+if [ -n "$staged" ]; then
+  printf '%s\n' "$staged" | tr '\n' '\0' | xargs -0 node_modules/.bin/prettier --write --ignore-path .gitignore >/dev/null \
+    || echo "pre-commit: prettier did not run; not blocking." >&2
+  printf '%s\n' "$staged" | tr '\n' '\0' | xargs -0 git add --
+fi
 
 exit 0
