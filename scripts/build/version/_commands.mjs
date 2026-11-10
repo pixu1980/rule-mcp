@@ -1,9 +1,9 @@
 /**
  * @module scripts/build/version/commands
  *
- * The four things the version entry point can do: read the three places that
- * carry the version, check them, stamp a version everywhere, and print or apply
- * the version derived from the commits.
+ * The four things the version entry point can do: read the places that carry the
+ * version, check them, stamp a version everywhere, and print or apply the version
+ * derived from the commits.
  */
 
 import { readFileSync, writeFileSync } from "node:fs";
@@ -12,6 +12,7 @@ import { fileURLToPath } from "node:url";
 
 import { refreshManifests } from "./_hashes.mjs";
 import { deriveNextVersion } from "./_derive.mjs";
+import { manifestFiles, staleSpecifier, stampEverywhere, workspaceManifests } from "./_stamp.mjs";
 
 /** The repository root this module's tree belongs to. */
 export const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
@@ -19,8 +20,8 @@ export const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..", ".
 const read = (file) => readFileSync(join(root, file), "utf8");
 
 /**
- * Every place the version is written: the two manifests and the newest CHANGELOG
- * release heading.
+ * Every place the version is written: the root manifest, server.json, every
+ * workspace package manifest and the newest CHANGELOG release heading.
  *
  * @returns {Array<[string, string]>} place to version
  */
@@ -34,6 +35,7 @@ export function readVersions() {
     ["package.json", manifest.version],
     ["server.json", server.version],
     ...server.packages.map((entry, index) => [`server.json packages[${index}]`, entry.version]),
+    ...workspaceManifests(root).map((file) => [file, JSON.parse(read(file)).version]),
     ["CHANGELOG.md", newest],
   ];
 }
@@ -57,9 +59,14 @@ export function check() {
   process.exitCode = 1;
 }
 
+/** True when every manifest already carries this version and every specifier names it. */
+function inPlace(version) {
+  return readVersions().every(([, current]) => current === version) && !manifestFiles(root).some((file) => staleSpecifier(root, file, version));
+}
+
 /**
- * Stamp one version in the two manifests, insert its CHANGELOG heading and
- * refresh the packaging manifests.
+ * Stamp one version in every manifest, insert its CHANGELOG heading and refresh
+ * the packaging manifests.
  *
  * @param {string} version - `x.y.z`, optionally with a prerelease suffix
  */
@@ -72,38 +79,20 @@ export function apply(version) {
     return;
   }
 
-  const versions = readVersions();
-
   // The first release forces the version already in place.
-  if (versions.every(([, current]) => current === version)) {
+  if (inPlace(version)) {
     process.stdout.write(`version ${version} is already in place.\n`);
 
     return;
   }
 
-  const oldPkg = versions[0][1];
-  const stamp = (file, old) => {
-    const text = read(file);
-    const stamped = text.split(`"version": "${old}"`).join(`"version": "${version}"`);
+  const oldPkg = readVersions()[0][1];
+  const result = stampEverywhere(root, version);
 
-    if (stamped === text) {
-      process.stderr.write(`${file}: no "version": "${old}" found.\n`);
-      process.exitCode = 1;
+  if (!result.ok) {
+    process.exitCode = 1;
 
-      return false;
-    }
-
-    writeFileSync(join(root, file), stamped);
-
-    return true;
-  };
-
-  const olds = new Set(versions.map(([, current]) => current).filter(Boolean));
-
-  for (const old of olds) {
-    if (!stamp("package.json", old) || !stamp("server.json", old)) {
-      return;
-    }
+    return;
   }
 
   const lines = read("CHANGELOG.md").split("\n");
@@ -116,10 +105,15 @@ export function apply(version) {
     return;
   }
 
-  lines.splice(at, 0, `## [${version}]`, "");
-  writeFileSync(join(root, "CHANGELOG.md"), lines.join("\n"));
+  // The heading is written once. A second run that only aligns the packages must
+  // not insert a duplicate.
+  if (!lines.includes(`## [${version}]`)) {
+    lines.splice(at, 0, `## [${version}]`, "");
+    writeFileSync(join(root, "CHANGELOG.md"), lines.join("\n"));
+  }
+
   refreshManifests(root, version, oldPkg);
-  process.stdout.write(`stamped ${version} in package.json, server.json, CHANGELOG.md and the manifests.\n`);
+  process.stdout.write(`stamped ${version} in ${result.stamped} manifest(s), CHANGELOG.md and the packaging manifests.\n`);
 }
 
 /** Print the next version derived from the commits since the newest tag. */

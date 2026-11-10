@@ -99,8 +99,8 @@
     "web"
   ],
   "dependencies": {
-    "rule-mcp": "workspace:0.1.0",
-    "rule-mcp-shared": "workspace:0.1.0",
+    "rule-mcp": "workspace:0.1.2",
+    "rule-mcp-shared": "workspace:0.1.2",
     "@modelcontextprotocol/sdk": "1.32.2",
     "zod": "4.6.7",
     "@clack/prompts": "1.8.1",

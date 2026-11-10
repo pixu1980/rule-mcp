@@ -1,6 +1,6 @@
 import { strict as assert } from "node:assert";
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
@@ -33,6 +33,39 @@ test("package.json, server.json and the newest CHANGELOG heading agree", () => {
 
   assert.equal(server.version, manifest.version, "server.json must track package.json");
   assert.equal(newestChangelogVersion(), manifest.version, "the newest CHANGELOG heading must track package.json");
+});
+
+test("every workspace package carries the root version", () => {
+  const root_ = JSON.parse(read("package.json")).version;
+  const packages = readdirSync(join(root, "packages")).filter((entry) => entry !== "node_modules");
+
+  assert.ok(packages.length > 0, "the workspace has packages");
+
+  for (const name of packages) {
+    const manifest = JSON.parse(read(`packages/${name}/package.json`));
+
+    assert.equal(manifest.version, root_, `packages/${name}/package.json must carry the root version`);
+  }
+});
+
+test("every workspace specifier names the root version", () => {
+  const root_ = JSON.parse(read("package.json")).version;
+  const manifests = [
+    "package.json",
+    ...readdirSync(join(root, "packages"))
+      .filter((entry) => entry !== "node_modules")
+      .map((name) => `packages/${name}/package.json`),
+  ];
+
+  for (const file of manifests) {
+    const manifest = JSON.parse(read(file));
+
+    for (const [name, version] of Object.entries(manifest.dependencies ?? {})) {
+      if (version.startsWith("workspace:")) {
+        assert.equal(version, `workspace:${root_}`, `${file}: ${name} must name the root version, or pnpm install refuses it`);
+      }
+    }
+  }
 });
 
 test("the version script --check exits 0", () => {

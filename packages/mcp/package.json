@@ -1,6 +1,6 @@
 {
   "name": "rule-mcp",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "RuleMCP - MCP server for the rule-mcp-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "type": "module",
   "license": "MIT",
@@ -43,7 +43,7 @@
     "@modelcontextprotocol/sdk": "1.32.2",
     "@opentui/core": "0.8.2",
     "commander": "15.0.0",
-    "rule-mcp-shared": "workspace:0.1.0",
+    "rule-mcp-shared": "workspace:0.1.2",
     "zod": "4.6.7"
   }
 }

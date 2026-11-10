@@ -6,7 +6,7 @@
   "architecture": {
     "64bit": {
       "url": "https://github.com/pixu1980/rule-mcp/releases/download/v0.1.2/rule-mcp-0.1.2.tgz",
-      "hash": "b235fa3501e0a57e54997d5ae1813e835fa331e6f9dd64334132f04bd538d035"
+      "hash": "99b57f38913633afc007b40105ddbdc23ecb89aa672d79cdc40736ee6f2eac17"
     }
   },
   "bin": [["bin/rule-mcp.js", "rule-mcp"]],

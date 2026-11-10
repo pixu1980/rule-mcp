@@ -76,9 +76,10 @@ export function buildSite({ projectDir = root, outDir = join(root, "site-dist") 
   const pages = collectPages(projectDir);
   const routes = sourceMap(pages);
   const base = repoBase(projectDir);
-  // What the home page states about itself: the package version it documents,
-  // and the repository the source lives in.
-  const version = JSON.parse(readFileSync(join(projectDir, "packages", "mcp", "package.json"), "utf8")).version;
+  // What the home page states about itself: the release version the root
+  // manifest carries, and the repository the source lives in. The site reads the
+  // root, because the release stamps that one and every package with it.
+  const version = JSON.parse(readFileSync(join(projectDir, "package.json"), "utf8")).version;
   const repo = base ? base.replace(/\/blob\/[^/]+\/$/u, "") : null;
   const copyright = copyrightLine(projectDir);
 

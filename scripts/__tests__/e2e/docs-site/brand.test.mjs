@@ -106,9 +106,9 @@ test("the home page states its version and links the repository", async ({ brows
       inHero: Boolean(line?.closest("section[data-part='hero']")),
     };
   });
-  const declared = JSON.parse(readFileSync(join(ROOT, "packages", "mcp", "package.json"), "utf8")).version;
+  const declared = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8")).version;
 
-  expect(meta.version, "the version is the package the site documents").toBe(`v${declared}`);
+  expect(meta.version, "the version is the release the root manifest carries").toBe(`v${declared}`);
   expect(meta.href, "the link opens the repository").toMatch(/^https:\/\/github\.com\/[^/]+\/[^/]+$/u);
   expect(meta.label, "the link is named, not an icon alone").toBe("GitHub");
   expect(meta.icon, "the GitHub mark travels with the link").toBe(true);
