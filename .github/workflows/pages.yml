@@ -1,9 +1,9 @@
 name: Pages
 
 # The publish waits for `ci` and reads its conclusion, so a red run never ships
-# the tree. A push cannot start this workflow on its own: the gate that decides
-# whether the site may go out is the run this one waits for.
+# the tree. A push cannot start this workflow on its own.
 on:
+  # zizmor: ignore[dangerous-triggers] -- the waited run is this repository on main, the guard reads its conclusion, and the checkout takes the head sha it measured, so no fork code reaches this workflow
   workflow_run:
     workflows: ["ci"]
     types: [completed]

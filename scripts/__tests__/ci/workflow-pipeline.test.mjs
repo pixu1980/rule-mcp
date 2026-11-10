@@ -56,6 +56,13 @@ test("the site deploys only after ci succeeds on main", () => {
   assert.match(pages, /github\.event\.workflow_run\.head_sha/u, "the publish checks out the tree the run measured");
 });
 
+test("the workflow_run trigger carries its zizmor suppression and the reason", () => {
+  const ignore = /^\s*# zizmor: ignore\[dangerous-triggers\] -- (.+)$/mu.exec(pages);
+
+  assert.notEqual(ignore, null, "zizmor flags workflow_run, so the suppression is explicit");
+  assert.ok((ignore?.[1] ?? "").length > 40, "the suppression states why the trigger is safe here");
+});
+
 test("a superseded ci run is cancelled", () => {
   assert.match(ci, /^concurrency:$/mu, "ci declares a concurrency group");
   assert.match(ci, /cancel-in-progress: true/u, "a newer push cancels the older run");
