@@ -5,10 +5,10 @@ import { test } from "node:test";
 
 const OLD = ["rule", "galaxy", "mcp"].join("-");
 const ROOT = execFileSync("git", ["rev-parse", "--show-toplevel"], { encoding: "utf8" }).trim();
-const ALLOWED = [/^docs\/adr\//u, /^docs\/handoff\//u, /^docs\/reviews\//u, /^docs\/audits\//u, /^CHANGELOG\.md$/u, /^docs\/migrations\/rule-mcp-rename\.md$/u];
+const ALLOWED = [/^docs\/adr\//u, /^docs\/handoff\//u, /^docs\/reviews\//u, /^docs\/audits\//u, /^CHANGELOG\.md$/u];
 
 /**
- * True when a path is a historical record or the migration note.
+ * True when a path is a historical record.
  * @param {string} path repository-relative path
  * @returns {boolean}
  */

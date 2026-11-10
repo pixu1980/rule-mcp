@@ -34,7 +34,3 @@ The census writes these pages from the live registries. Do not edit them.
 - [Environment readers](./23-env-readers.md): where the code reads each variable
 
 The site shows pages 3 and 16 as one Instructions page.
-
-## Migration
-
-- [Migration to RuleMCP](./migrations/rule-mcp-rename.md): upgrade from the package with the old name
