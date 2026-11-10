@@ -15,7 +15,7 @@ import test from "node:test";
  */
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
-const workflow = readFileSync(join(root, ".github", "workflows", "check-workflows.yml"), "utf8");
+const workflow = readFileSync(join(root, ".github", "workflows", "ci.yml"), "utf8");
 
 function zizmorStep() {
   const at = workflow.search(/zizmorcore\/zizmor-action@/u);
