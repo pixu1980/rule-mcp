@@ -8,6 +8,7 @@ this directory are the source of truth; this index is generated from them by
 
 | #                                                                                                                       | Title                                                                                                     | Date       | Status     | Tags                                                                                |
 | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ----------------------------------------------------------------------------------- |
+| [248](248-close-out-plan-install-surface-depth-skills.md)                                                               | Close out plan _install-surface-depth-skills                                                              | 2026-11-10 | accepted   | docs, closeout, plan                                                                |
 | [247](247-the-wizard-asks-its-questions-as-prompts-when-the-renderer-cannot-run.md)                                     | The wizard asks its questions as prompts when the renderer cannot run                                     | 2026-11-07 | accepted   | wizard, runtime, cli                                                                |
 | [246](246-the-server-floor-is-node-24-and-the-wizard-floor-stays-26-4.md)                                               | The server floor is Node 24, and the wizard floor stays 26.4                                              | 2026-11-07 | accepted   | runtime, install, wizard                                                            |
 | [245](245-the-release-asset-is-the-source-tree-built-with-pnpm-and-a-tag-needs-no-signatur.md)                          | The release asset is the source tree, built with pnpm, and a tag needs no signature                       | 2026-11-06 | accepted   | release, ci, packaging                                                              |
@@ -263,6 +264,7 @@ file. Where a line stops short the rest is in the ADR.
 
 | ADR                                                                                                                     | Decision                                                                                                                                                                                                                        | Consequence                                                                                                                                                                                                                     |
 | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [248](248-close-out-plan-install-surface-depth-skills.md)                                                               | Fold the record into this ADR and the session handoff, then delete the source file.                                                                                                                                             | docs/plans/_install-surface-depth-skills.md is gone from the tree; this ADR keeps what it delivered and the handoff of this session names it.                                                                                   |
 | [247](247-the-wizard-asks-its-questions-as-prompts-when-the-renderer-cannot-run.md)                                     | The flow talks to a six-method port - setStep, ask, askPath, confirm, progress, close - and the renderer is one adapter behind it.                                                                                              | A Node 24 terminal gets the same questions, defaults and review as the full-screen wizard, printed as prompts.                                                                                                                  |
 | [246](246-the-server-floor-is-node-24-and-the-wizard-floor-stays-26-4.md)                                               | Two floors, two readers.                                                                                                                                                                                                        | Node 24 hosts install and run the server, and get the flag-driven setup instead of the full-screen wizard.                                                                                                                      |
 | [245](245-the-release-asset-is-the-source-tree-built-with-pnpm-and-a-tag-needs-no-signatur.md)                          | scripts/package.sh writes the committed tree with git archive as rule-mcp-VERSION.tgz.                                                                                                                                          | An install from a tarball needs Node.js and pnpm, the same as a clone, and rule-mcp update works only in a clone.                                                                                                               |
@@ -518,6 +520,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### docs
 
+- [248](248-close-out-plan-install-surface-depth-skills.md) Close out plan _install-surface-depth-skills
 - [244](244-the-documentation-holds-no-html-and-the-census-writes-whole-files.md) The documentation holds no HTML and the census writes whole files
 - [243](243-close-out-plan-publication-cutover.md) Close out plan _publication-cutover
 - [242](242-close-out-plan-pi-integration-and-debt.md) Close out plan _pi-integration-and-debt
@@ -601,6 +604,39 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [031](031-fix-vscode-extension-and-derivatives-install-uninstall.md) Fix VS Code extension and derivatives install/uninstall
 - [020](020-clean-rule-mcp-commands-via-user-commands-prompt-suppression-not-a-plugin.md) Clean /rule-mcp-* commands via user commands + prompt suppression, not a plugin
 
+### closeout
+
+- [248](248-close-out-plan-install-surface-depth-skills.md) Close out plan _install-surface-depth-skills
+- [243](243-close-out-plan-publication-cutover.md) Close out plan _publication-cutover
+- [242](242-close-out-plan-pi-integration-and-debt.md) Close out plan _pi-integration-and-debt
+- [209](209-close-out-plan-tool-and-skill-surface-audit.md) Close out plan _tool-and-skill-surface-audit
+- [208](208-close-out-plan-oss-readiness-and-repo-health.md) Close out plan _oss-readiness-and-repo-health
+- [207](207-close-out-plan-installer-global-link-and-launcher-deploy.md) Close out plan _installer-global-link-and-launcher-deploy
+- [204](204-close-out-plan-plan-of-plans-reference.md) Close out plan _plan-of-plans-reference
+- [203](203-close-out-plan-secrets-guardrails.md) Close out plan _secrets-guardrails
+- [202](202-close-out-plan-rule-mcp-process-adr.md) Close out plan _rule-mcp-process-adr
+- [201](201-close-out-plan-rule-mcp-process-ai.md) Close out plan _rule-mcp-process-ai
+- [200](200-close-out-plan-decision-models.md) Close out plan _decision-models
+- [199](199-close-out-plan-rule-mcp-process-uv-release.md) Close out plan _rule-mcp-process-uv-release
+- [198](198-close-out-plan-rule-mcp-process-npm-release.md) Close out plan _rule-mcp-process-npm-release
+- [197](197-close-out-plan-rule-mcp-process-cargo-release.md) Close out plan _rule-mcp-process-cargo-release
+- [196](196-close-out-plan-scripts-mcp-layout.md) Close out plan _scripts-mcp-layout
+- [195](195-close-out-plan-asd-ste100.md) Close out plan _asd-ste100
+- [194](194-close-out-audit-export.md) Close out audit export
+- [193](193-close-out-review-export.md) Close out review export
+- [192](192-close-out-plan-stable-launcher-outside-the-checkout.md) Close out plan _stable-launcher-outside-the-checkout
+- [191](191-close-out-plan-mcp-host-integration-depth.md) Close out plan _mcp-host-integration-depth
+- [190](190-close-out-plan-export.md) Close out plan _export
+- [189](189-close-out-plan-installer-scope-adr-policy-features.md) Close out the port plan for ADR policy, project installs, features and host paths
+- [111](111-close-out-audit-ui.md) Close out audit ui
+- [110](110-close-out-review-ui.md) Close out review ui
+- [103](103-close-out-audit-security.md) Close out audit security
+- [102](102-close-out-review-security.md) Close out review security
+- [095](095-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
+- [092](092-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
+- [091](091-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
+- [087](087-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
+
 ### architecture
 
 - [231](231-pnpm-workspace-with-packages-mcp-shared-docs-and-publish-from-packages-mcp.md) pnpm workspace with packages mcp shared docs and publish from packages/mcp
@@ -632,38 +668,6 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 - [011](011-use-a-persistent-local-bearer-token-for-daemon-transport.md) use a persistent local bearer token for daemon transport
 - [010](010-fail-closed-mcp-enforcement-and-reusable-agent-commands.md) fail closed mcp enforcement and reusable agent commands
 - [008](008-forms-per-framework.md) Forms per Framework - Merger & Distribution
-
-### closeout
-
-- [243](243-close-out-plan-publication-cutover.md) Close out plan _publication-cutover
-- [242](242-close-out-plan-pi-integration-and-debt.md) Close out plan _pi-integration-and-debt
-- [209](209-close-out-plan-tool-and-skill-surface-audit.md) Close out plan _tool-and-skill-surface-audit
-- [208](208-close-out-plan-oss-readiness-and-repo-health.md) Close out plan _oss-readiness-and-repo-health
-- [207](207-close-out-plan-installer-global-link-and-launcher-deploy.md) Close out plan _installer-global-link-and-launcher-deploy
-- [204](204-close-out-plan-plan-of-plans-reference.md) Close out plan _plan-of-plans-reference
-- [203](203-close-out-plan-secrets-guardrails.md) Close out plan _secrets-guardrails
-- [202](202-close-out-plan-rule-mcp-process-adr.md) Close out plan _rule-mcp-process-adr
-- [201](201-close-out-plan-rule-mcp-process-ai.md) Close out plan _rule-mcp-process-ai
-- [200](200-close-out-plan-decision-models.md) Close out plan _decision-models
-- [199](199-close-out-plan-rule-mcp-process-uv-release.md) Close out plan _rule-mcp-process-uv-release
-- [198](198-close-out-plan-rule-mcp-process-npm-release.md) Close out plan _rule-mcp-process-npm-release
-- [197](197-close-out-plan-rule-mcp-process-cargo-release.md) Close out plan _rule-mcp-process-cargo-release
-- [196](196-close-out-plan-scripts-mcp-layout.md) Close out plan _scripts-mcp-layout
-- [195](195-close-out-plan-asd-ste100.md) Close out plan _asd-ste100
-- [194](194-close-out-audit-export.md) Close out audit export
-- [193](193-close-out-review-export.md) Close out review export
-- [192](192-close-out-plan-stable-launcher-outside-the-checkout.md) Close out plan _stable-launcher-outside-the-checkout
-- [191](191-close-out-plan-mcp-host-integration-depth.md) Close out plan _mcp-host-integration-depth
-- [190](190-close-out-plan-export.md) Close out plan _export
-- [189](189-close-out-plan-installer-scope-adr-policy-features.md) Close out the port plan for ADR policy, project installs, features and host paths
-- [111](111-close-out-audit-ui.md) Close out audit ui
-- [110](110-close-out-review-ui.md) Close out review ui
-- [103](103-close-out-audit-security.md) Close out audit security
-- [102](102-close-out-review-security.md) Close out review security
-- [095](095-every-handoff-mode-sweeps-completed-working-papers-and-closeout-false-is-the-rea.md) Every handoff mode sweeps completed working papers, and closeout false is the read-only run
-- [092](092-the-tokensave-integration-closes-out-and-the-adapter-is-the-code-graph-layer.md) The TokenSave integration closes out: the adapter and its graph-backed tools are the code-graph layer
-- [091](091-close-out-plan-develop-consolidation.md) Close out plan develop-consolidation
-- [087](087-close-out-the-install-and-uninstall-rework-plan.md) Close out the install and uninstall rework plan
 
 ### skills
 
@@ -754,6 +758,7 @@ theme it carries, and the early ADRs that predate the tag field are listed last.
 
 ### plan
 
+- [248](248-close-out-plan-install-surface-depth-skills.md) Close out plan _install-surface-depth-skills
 - [243](243-close-out-plan-publication-cutover.md) Close out plan _publication-cutover
 - [242](242-close-out-plan-pi-integration-and-debt.md) Close out plan _pi-integration-and-debt
 - [209](209-close-out-plan-tool-and-skill-surface-audit.md) Close out plan _tool-and-skill-surface-audit
