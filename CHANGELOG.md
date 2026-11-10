@@ -19,6 +19,10 @@ and the versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 - **ci**: publish the site only after the ci run passes (`d6d1358`)
 
+### Documentation
+
+- **engineering-guides**: state the four workflows and the pipeline (`0504690`)
+
 ## [0.1.0]
 
 ### Added
