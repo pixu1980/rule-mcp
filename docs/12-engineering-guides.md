@@ -28,15 +28,16 @@ This chapter tells how to work on this repository. Read `CONTRIBUTING.md` for th
 
 ## CI
 
-| Workflow              | Trigger            | Jobs                                                            |
-| --------------------- | ------------------ | --------------------------------------------------------------- |
-| `ci.yml`              | Push, pull request | Lint, secrets, tests on three systems, coverage, commits, audit |
-| `pages.yml`           | Push to `main`     | Builds the site with pnpm and publishes it to GitHub Pages      |
-| `release.yml`         | Tag `v*`           | Builds, verifies, and publishes the GitHub Release              |
-| `check-workflows.yml` | Push, pull request | Runs zizmor on the workflows                                    |
-| `scorecard.yml`       | Schedule, push     | OpenSSF Scorecard                                               |
+| Workflow        | Trigger                       | Jobs                                                                       |
+| --------------- | ----------------------------- | -------------------------------------------------------------------------- |
+| `ci.yml`        | Push, pull request            | Lint, secrets, tests on three systems, coverage, commits, audit, workflows |
+| `pages.yml`     | After `ci` succeeds on `main` | Builds the site with pnpm and publishes it to GitHub Pages                 |
+| `release.yml`   | Tag `v*`                      | Builds, verifies, and publishes the GitHub Release                         |
+| `scorecard.yml` | Schedule, push                | OpenSSF Scorecard                                                          |
 
-CI uses Node.js 24 and 26, and pnpm 11.25.0.
+CI uses Node.js 24 and 26, and pnpm 11.25.0. A newer push cancels the run it
+supersedes, and the site publishes only after the run that covers its tree
+passes.
 
 ## Guardrails
 
