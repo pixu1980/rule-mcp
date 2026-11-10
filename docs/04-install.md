@@ -68,7 +68,7 @@ The installer records each project in `~/.rule-mcp/state/projects.json`. `rule-m
 
 A host with no private project file refuses `local`. The error is "has no local project config".
 
-A project with Claude also gets three items at the project root: the rules block in `CLAUDE.md`, the commands in `.claude/commands/`, and the hooks in `.claude/settings.json`. A `local` install uses `.claude/settings.local.json`.
+A project with Claude also gets three items at the project root. The rules block goes in `CLAUDE.md`, the commands go in `.claude/commands/`, and the hooks go in `.claude/settings.json`. A `local` install uses `.claude/settings.local.json`.
 
 Each project also gets the git side of ADR numbering. `.githooks/post-merge` and `post-rewrite` run `rule-mcp handoff land --quiet --commit`. The `rule-mcp-index` merge driver builds `ADR.md` and `HANDOFF.md` again. A directory with no git repository skips this part.
 

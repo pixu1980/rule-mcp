@@ -33,7 +33,7 @@ Turn on GitHub Pages. In the repository, go to Settings, then Pages, then Source
 
 After `v0.1.0`, use `pnpm release` with no version. The commits since the last tag set the version: `fix` gives a patch, `feat` gives a minor, and `!` or `BREAKING CHANGE` gives a major.
 
-The command stops before it writes in these cases: the branch is not `main`, the tree has changes, `main` is behind `origin`, or the tag exists.
+The command stops before it writes in four cases. The branch is not `main`, the tree has changes, `main` is behind `origin`, or the tag exists.
 
 The command then does these steps:
 
