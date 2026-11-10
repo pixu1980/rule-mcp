@@ -1,12 +1,12 @@
 {
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "MCP server for the rule-mcp-* skill ecosystem",
   "homepage": "https://github.com/pixu1980/rule-mcp",
   "license": "MIT",
   "architecture": {
     "64bit": {
-      "url": "https://github.com/pixu1980/rule-mcp/releases/download/v0.1.1/rule-mcp-0.1.1.tgz",
-      "hash": "54a52b59e0720ea90610eff3e3d837077c5d931c8d9c54c4640db766c5487c19"
+      "url": "https://github.com/pixu1980/rule-mcp/releases/download/v0.1.2/rule-mcp-0.1.2.tgz",
+      "hash": "b235fa3501e0a57e54997d5ae1813e835fa331e6f9dd64334132f04bd538d035"
     }
   },
   "bin": [["bin/rule-mcp.js", "rule-mcp"]],

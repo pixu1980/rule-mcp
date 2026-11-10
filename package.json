@@ -1,6 +1,6 @@
 {
   "name": "rule-mcp-workspace",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "RuleMCP - MCP server for the rule-mcp-* skill ecosystem. Serves styleguides, component templates, framework best practices, and design system patterns.",
   "type": "module",
   "license": "MIT",

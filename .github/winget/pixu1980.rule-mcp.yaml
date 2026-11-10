@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.version.1.6.0.schema.json
 # Hash refreshed per release from the tarball the Step 6 pipeline attaches.
 PackageIdentifier: pixu1980.rule-mcp
-PackageVersion: "0.1.1"
+PackageVersion: "0.1.2"
 PackageLocale: en-US
 Publisher: pixu1980
 PublisherUrl: https://github.com/pixu1980
@@ -15,8 +15,8 @@ Moniker: rule-mcp
 Installers:
   - Architecture: x64
     InstallerType: portable
-    InstallerUrl: https://github.com/pixu1980/rule-mcp/releases/download/v0.1.1/rule-mcp-0.1.1.tgz
-    InstallerSha256: 54a52b59e0720ea90610eff3e3d837077c5d931c8d9c54c4640db766c5487c19
+    InstallerUrl: https://github.com/pixu1980/rule-mcp/releases/download/v0.1.2/rule-mcp-0.1.2.tgz
+    InstallerSha256: b235fa3501e0a57e54997d5ae1813e835fa331e6f9dd64334132f04bd538d035
     Commands:
       - rule-mcp
 ManifestType: singleton
