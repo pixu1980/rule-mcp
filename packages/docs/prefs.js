@@ -28,12 +28,6 @@ function applyPrefs(prefs) {
   } else {
     delete root.dataset.contrast;
   }
-
-  if (prefs.motion === "reduce") {
-    root.dataset.motion = "reduce";
-  } else {
-    delete root.dataset.motion;
-  }
 }
 
 function syncSummary(prefs) {
@@ -60,12 +54,6 @@ function syncControls(prefs) {
   if (contrast) {
     contrast.checked = prefs.contrast === "more";
   }
-
-  const motion = document.querySelector('input[name="motion"]');
-
-  if (motion) {
-    motion.checked = prefs.motion === "reduce";
-  }
 }
 
 function bind() {
@@ -91,10 +79,6 @@ function bind() {
 
     if (target.name === "contrast") {
       next.contrast = target.checked ? "more" : "default";
-    }
-
-    if (target.name === "motion") {
-      next.motion = target.checked ? "reduce" : "ok";
     }
 
     writePrefs(next);

@@ -1,11 +1,12 @@
 /**
- * The page change itself: one transition mechanism, and no unstyled frame.
+ * The page change: no transition to wait for, and no unstyled frame.
  *
- * A cross-document view transition is declared in the stylesheet, so the
- * browser holds the old snapshot until the new page can paint. The version this
- * replaced intercepted every click and called `startViewTransition` around a
- * `location.assign`, which resolved the transition before the new document
- * existed: the old page faded out over the bare canvas.
+ * The site used to declare a cross-document view transition. It is gone: the
+ * browser held the old snapshot for 0.25s on every navigation, which reads as
+ * latency on a documentation site, and the "Reduce motion" switch existed only
+ * to turn that single animation off, so the switch went with it. This test pins
+ * the removal and the property the transition was hiding: the new page paints
+ * its stored theme, its field and its text on the first frame.
  */
 
 import { readFileSync } from "node:fs";
@@ -19,12 +20,24 @@ const site = installSite(test);
 
 const DARK_BG = "rgb(17, 23, 36)";
 
-test("the stylesheet declares the transition, and carries a field behind it", () => {
+test("the stylesheet declares no page transition and no animation", () => {
   const css = readFileSync(join(import.meta.dirname, "..", "..", "..", "..", "packages", "docs", "style.css"), "utf8");
 
-  expect(css, "a cross-document transition is declared").toMatch(/@view-transition\s*\{[^}]*navigation:\s*auto/u);
-  expect(css, "the transition root has the page field, not the canvas").toMatch(/::view-transition\s*\{[^}]*background-color:\s*var\(--bg\)/u);
-  expect(css, "a stored reduce-motion preference disables it").toMatch(/\[data-motion="reduce"\]\s*\{[^}]*view-transition-name:\s*none/u);
+  expect(css, "no cross-document transition is declared").not.toMatch(/@view-transition/u);
+  expect(css, "no transition root is named").not.toMatch(/view-transition-name/u);
+  expect(css, "no keyframes are defined").not.toMatch(/@keyframes/u);
+});
+
+test("the preferences menu offers no motion switch", async ({ browser }) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+
+  await page.goto(site.url("index.html"));
+
+  await expect(page.locator('input[name="motion"]'), "the motion switch left with the transition").toHaveCount(0);
+  await expect(page.locator('input[name="contrast"]'), "the display group still holds the contrast switch").toHaveCount(1);
+
+  await context.close();
 });
 
 test("a page change never paints an unstyled or empty frame", async ({ browser }) => {

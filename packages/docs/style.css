@@ -3,18 +3,14 @@
  * USAGE: Classless stylesheet for the rule-mcp documentation site
  * SCOPE: every emitted page (header, nav, main, footer, preference menu)
  *
- * Layer order: reset, tokens, base, layout, dropdown, home, transitions, prefs.
+ * Layer order: reset, tokens, base, layout, dropdown, home.
  *
  * Typography uses a deliberate local-first stack: no webfont is downloaded, so
  * the serif display face degrades to the platform serif and the interface face
  * to the platform sans. Spacing is a single 0.25rem-based scale.
  */
 
-@view-transition {
-  navigation: auto;
-}
-
-@layer reset, tokens, base, layout, dropdown, home, transitions, prefs;
+@layer reset, tokens, base, layout, dropdown, home;
 
 /* Tokens */
 
@@ -391,6 +387,9 @@
   }
 
   body > nav[aria-label="Reference"] ul {
+    /* Each item carries its own inline padding, so a gap between them would
+       double the space and pull the submenu off the header's rhythm. */
+    gap: 0;
     font-size: 1.14rem;
   }
 
@@ -412,6 +411,12 @@
 
   footer > p {
     font-size: 1.08rem;
+  }
+
+  /* The copyright closes the page: a step down from the build line above it. */
+  footer > p[data-part="copyright"] {
+    margin-block: 0;
+    font-size: 0.98rem;
   }
 
   /* The request path: a vertical flow graph, one block per step, joined by a
@@ -713,7 +718,7 @@
       "head head"
       "hero flow"
       "hero cards"
-      "foot foot";
+      "closing closing";
     align-content: start;
     column-gap: var(--space-6);
     row-gap: var(--space-5);
@@ -725,11 +730,11 @@
     margin-block-end: 0;
   }
 
-  body[data-page="home"] section[data-part="foot"] {
-    grid-area: foot;
+  body[data-page="home"] section[data-part="closing"] {
+    grid-area: closing;
   }
 
-  body[data-page="home"] section[data-part="foot"] > p:last-child {
+  body[data-page="home"] section[data-part="closing"] > p:last-child {
     margin-block-end: 0;
   }
 
@@ -964,74 +969,5 @@
 
   body[data-page="home"] section[data-part="cards"] article a:hover {
     text-decoration: underline;
-  }
-}
-
-/* View transitions */
-
-@layer transitions {
-  /* Without a background on the transition root the browser composites the two
-     snapshots over the canvas, which reads as a white flash between pages. */
-  ::view-transition {
-    background-color: var(--bg);
-  }
-
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: 0.25s;
-    animation-timing-function: ease;
-  }
-
-  ::view-transition-old(root) {
-    animation-name: docs-fade-out;
-  }
-
-  ::view-transition-new(root) {
-    animation-name: docs-fade-in;
-  }
-
-  @keyframes docs-fade-out {
-    from {
-      opacity: 1;
-    }
-
-    to {
-      opacity: 0;
-      transform: translateY(-0.5rem);
-    }
-  }
-
-  @keyframes docs-fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(0.5rem);
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-}
-
-/* Motion preferences */
-
-@layer prefs {
-  /* The view transitions are the only motion on the site, so the preference
-     exists to switch those off. A root with no name is not captured, which is
-     how a stored preference disables the declarative cross-document one. */
-  html[data-motion="reduce"] {
-    view-transition-name: none;
-  }
-
-  html[data-motion="reduce"]::view-transition-old(root),
-  html[data-motion="reduce"]::view-transition-new(root) {
-    animation: none !important;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    html:not([data-motion="ok"])::view-transition-old(root),
-    html:not([data-motion="ok"])::view-transition-new(root) {
-      animation: none !important;
-    }
   }
 }

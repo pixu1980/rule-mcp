@@ -93,7 +93,7 @@ test("content reflows at 320 CSS px without horizontal scrolling (WCAG 1.4.10)",
   expect(failures, "reflow at 320px").toEqual([]);
 });
 
-test("no motion on the page except the view transition", async ({ browser }) => {
+test("no motion anywhere on the page", async ({ browser }) => {
   const context = await browser.newContext();
   const offenders = [];
 
@@ -121,6 +121,6 @@ test("no motion on the page except the view transition", async ({ browser }) => 
     await page.close();
   }
 
-  expect(offenders, "only the view transition may animate").toEqual([]);
+  expect(offenders, "nothing on the page may animate").toEqual([]);
   await context.close();
 });

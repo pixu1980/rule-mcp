@@ -7,7 +7,7 @@ import { nav, referenceNav, stripChapterNumber } from "./_nav.mjs";
 const STORAGE_KEY = "rule-mcp-docs-prefs";
 
 /**
- * A blocking script, not deferred, that applies a stored theme/contrast/motion
+ * A blocking script, not deferred, that applies a stored theme/contrast
  * preference to `<html>` before the stylesheet link below it loads. Without
  * this, `prefs.js` (deferred) only runs after the browser can have already
  * painted the default theme, flashing it for anyone whose stored preference
@@ -26,7 +26,6 @@ function themeScript() {
     "  var root = document.documentElement;",
     '  if (prefs.theme && prefs.theme !== "system") root.dataset.theme = prefs.theme;',
     '  if (prefs.contrast === "more") root.dataset.contrast = "more";',
-    '  if (prefs.motion === "reduce") root.dataset.motion = "reduce";',
     "})();",
     "</script>",
   ].join("\n");
@@ -71,7 +70,6 @@ const PREFERENCE_GROUPS = [
     legend: "Display",
     inputs: [
       ["contrast", "more", "More contrast", "checkbox"],
-      ["motion", "reduce", "Reduce motion", "checkbox"],
     ],
   },
 ];
@@ -91,10 +89,10 @@ function preferences() {
 }
 
 /**
- * @param {{ title: string, out: string, body: string, pages: Array<{ out: string, title?: string }>, version?: string, repo?: string|null }} options
+ * @param {{ title: string, out: string, body: string, pages: Array<{ out: string, title?: string }>, version?: string, repo?: string|null, copyright?: string }} options
  * @returns {string}
  */
-export function layout({ title, out, body, pages, version = "", repo = null }) {
+export function layout({ title, out, body, pages, version = "", repo = null, copyright = "" }) {
   const prefix = depthPrefix(out);
   const home = out === "index.html";
   // The build line belongs to the hero: as a loose child of the home grid it
@@ -129,7 +127,9 @@ export function layout({ title, out, body, pages, version = "", repo = null }) {
     '<main id="main" tabindex="-1">',
     content,
     "</main>",
-    "<footer><p>Generated from <code>docs/</code>, edit the Markdown, not this file.</p></footer>",
+    "<footer>",
+    `<p>Generated from <code>docs/</code>, edit the Markdown, not this file.</p>${copyright === "" ? "" : `\n<p data-part="copyright">${escapeHtml(copyright)}</p>`}`,
+    "</footer>",
     "</body>",
     "</html>",
     "",

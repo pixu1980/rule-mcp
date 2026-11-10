@@ -33,6 +33,10 @@ Second.
 ## Project
 
 Links.
+
+## What the server does
+
+Prose with no link.
 `;
 
 test("the home page gets its hero, stats, call to action, flow and cards", () => {
@@ -43,15 +47,16 @@ test("the home page gets its hero, stats, call to action, flow and cards", () =>
   assert.match(html, /<p data-part="cta"><a href="a.md">Go<\/a>/u);
   assert.match(html, /<section data-part="flow">\n<h2>How it works<\/h2>/u);
   assert.equal(html.match(/<article>/gu).length, 2, "one card per third-level heading");
-  assert.match(html, /<section data-part="foot">\n<h2>Project<\/h2>/u, "the closing prose is one block, so the foot area holds one item");
+  assert.match(html, /<section data-part="closing">\n<h2>What the server does<\/h2>/u, "the closing prose is one band under the cards");
+  assert.doesNotMatch(html, /<h2>Project<\/h2>/u, "the README's repository prose is not part of the site home");
 });
 
-test("a home page with no matching heading keeps its content", () => {
+test("a home page with no matching heading keeps the hero and drops the rest", () => {
   const html = decorateHome(marked.parse("# Name\n\nBody.\n\n## Other\n\nText.\n"));
 
   assert.match(html, /<section data-part="hero">/u);
-  assert.match(html, /<h2>Other<\/h2>\n<p>Text\.<\/p>/u);
-  assert.doesNotMatch(html, /data-part="(?:flow|cards)"/u);
+  assert.doesNotMatch(html, /data-part="(?:flow|cards|closing)"/u);
+  assert.doesNotMatch(html, /<h2>Other<\/h2>/u, "a section the home page does not place is not emitted");
 });
 
 test("the request path list becomes the diagram, and each bold lead a step title", () => {

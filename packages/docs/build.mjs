@@ -25,6 +25,23 @@ import { layout, titleOf } from "./_shell.mjs";
 
 export { collectPages } from "./_collect.mjs";
 
+/** The holder and the years, as LICENSE states them on its first line. */
+const COPYRIGHT = /Copyright \(c\)\s+([^.\n]+)/u;
+
+/**
+ * The copyright the footer states. It is read from LICENSE, so the site, the
+ * license file and the SPDX headers keep saying the same thing.
+ *
+ * @param {string} projectDir
+ * @returns {string}
+ */
+function copyrightLine(projectDir) {
+  const firstLine = readFileSync(join(projectDir, "LICENSE"), "utf8").split("\n", 1)[0] ?? "";
+  const holder = COPYRIGHT.exec(firstLine)?.[1].trim();
+
+  return holder ? `Copyright (c) ${holder}` : "";
+}
+
 /**
  * The title of a page and the HTML of its body.
  *
@@ -63,6 +80,7 @@ export function buildSite({ projectDir = root, outDir = join(root, "site-dist") 
   // and the repository the source lives in.
   const version = JSON.parse(readFileSync(join(projectDir, "packages", "mcp", "package.json"), "utf8")).version;
   const repo = base ? base.replace(/\/blob\/[^/]+\/$/u, "") : null;
+  const copyright = copyrightLine(projectDir);
 
   rmSync(outDir, { recursive: true, force: true });
   mkdirSync(outDir, { recursive: true });
@@ -74,7 +92,7 @@ export function buildSite({ projectDir = root, outDir = join(root, "site-dist") 
     const file = join(outDir, page.out);
 
     mkdirSync(dirname(file), { recursive: true });
-    writeFileSync(file, layout({ title, out: page.out, body: html, pages, version, repo }));
+    writeFileSync(file, layout({ title, out: page.out, body: html, pages, version, repo, copyright }));
   }
 
   copyAssets(outDir, projectDir);

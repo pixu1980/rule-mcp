@@ -40,9 +40,15 @@ export function decorateHome(html) {
       return `<section data-part="cards">\n${cards}</section>\n`;
     }
 
-    // The closing prose is one block, not loose paragraphs: the home grid puts
-    // one item in the foot area, and two loose paragraphs landed on each other.
-    return `<section data-part="foot">\n${section}</section>\n`;
+    if (section.startsWith("<h2>What the server does</h2>")) {
+      // The closing prose: one band across both columns, under the cards.
+      return `<section data-part="closing">\n${section}</section>\n`;
+    }
+
+    // Everything else stays in the README for the repository page and is not
+    // part of the site home. The page ends with the cards and this prose, and
+    // its own footer carries the build line and the copyright.
+    return "";
   });
 
   return [hero, ...sections].join("");
