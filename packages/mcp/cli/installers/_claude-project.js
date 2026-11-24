@@ -5,7 +5,7 @@ import { join } from "node:path";
 
 import { renderAgentCommandFiles } from "../../core/agents/commands/index.js";
 import { withHooks, withoutHooks } from "../../core/agents/_hooks.js";
-import { commandConfig } from "./_env-command.js";
+import { hookLauncher } from "./_env-command.js";
 import { parseJson, toJson } from "./_writers-json.js";
 import { appendInstruction, removeInstruction } from "./_writers-text.js";
 import { readText, writeText } from "./_paths.js";
@@ -46,10 +46,10 @@ export function installClaudeProjectExtras({ projectRoot, projectConfig = "share
   }
 
   const settingsFile = join(projectRoot, projectConfig === "local" ? CLAUDE_PROJECT_FILES.localSettings : CLAUDE_PROJECT_FILES.sharedSettings);
-  const launcher = commandConfig(entrypoint, { agentName: "claude", global: false });
+  // The hook launcher, not the server's: the server's args end in `serve`.
   const current = parseJson(readText(settingsFile)) ?? {};
 
-  writeText({ file: settingsFile, content: toJson(withHooks(current, { command: launcher.command, args: launcher.args ?? [] })), dryRun });
+  writeText({ file: settingsFile, content: toJson(withHooks(current, hookLauncher(entrypoint))), dryRun });
   written.push(settingsFile);
 
   return written;

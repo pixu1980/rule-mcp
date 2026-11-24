@@ -33,7 +33,7 @@
  * @see module:core/directive - the text those two inject
  */
 
-import { HOOK_MARKER } from "./_hook-commands.js";
+import { HOOK_MARKER, shellLine } from "./_hook-commands.js";
 
 export { HOOK_MARKER, isCommitCommand, isMigrationCommand, MIGRATION_PATTERNS } from "./_hook-commands.js";
 
@@ -47,7 +47,7 @@ export const HOOK_EVENTS = ["PreToolUse", "PostToolUse", "SessionStart", "UserPr
  * @returns {Record<string, Array<object>>} entries per hook event
  */
 export function hookEntries(launcher) {
-  const invoke = (subcommand) => [launcher.command, ...(launcher.args ?? []), "guard", subcommand].map((part) => (/\s/.test(part) ? JSON.stringify(part) : part)).join(" ");
+  const invoke = (subcommand) => shellLine([launcher.command, ...(launcher.args ?? []), "guard", subcommand]);
   const entry = (subcommand, statusMessage, extra = {}) => ({
     ...extra,
     hooks: [

@@ -81,3 +81,13 @@ test("the command matchers catch migrations, commits and miss the rest", () => {
   assert.equal(isCommitCommand("git status"), false, "git status does not");
   assert.equal(HOOK_EVENTS.length, 4, "the four hook events install: pre-tool, post-tool, session start and prompt submit");
 });
+
+test("a Windows launcher survives the shell: forward slashes, every path quoted", () => {
+  // Claude Code runs hook commands through Git Bash on Windows. An unquoted
+  // backslash is an escape there, so `C:\Users\me\x.js` arrives as `C:Usersmex.js`.
+  const launcher = { command: String.raw`C:\Program Files\nodejs\node.exe`, args: [String.raw`C:\Users\me\rule-mcp\bin\rule-mcp.js`] };
+  const command = hookEntries(launcher).PreToolUse[0].hooks[0].command;
+
+  assert.match(command, /^"C:\/Program Files\/nodejs\/node\.exe" "C:\/Users\/me\/rule-mcp\/bin\/rule-mcp\.js" guard bash {2}# rule-mcp-guard$/);
+  assert.equal(command.includes("\\"), false, "no backslash reaches the shell");
+});

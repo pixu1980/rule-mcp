@@ -1,6 +1,6 @@
 /** The shell line every documented host runs, and its marker. */
 
-import { HOOK_MARKER } from "../../core/agents/_hook-commands.js";
+import { HOOK_MARKER, shellLine } from "../../core/agents/_hook-commands.js";
 
 /** @param {{ command: string, args?: string[] }|string} launcher @returns {{ command: string, args?: string[] }} */
 export const normalized = (launcher) => (typeof launcher === "string" ? { command: launcher } : launcher);
@@ -18,7 +18,7 @@ export function guardCommand(launcher, subcommand) {
   // `--send` talks to the warm guard daemon (ADR 179). Install starts the daemon
   // when hooks are written; a missing daemon fails the hook loudly instead of
   // silently paying a full CLI spawn again.
-  const line = [command, ...args, "guard", "--send", subcommand].map((part) => (/\s/.test(part) ? JSON.stringify(part) : part)).join(" ");
+  const line = shellLine([command, ...args, "guard", "--send", subcommand]);
 
   return `${line}  # ${HOOK_MARKER}`;
 }

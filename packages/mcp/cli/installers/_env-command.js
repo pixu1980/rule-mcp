@@ -63,4 +63,19 @@ function mcpServerConfig(entrypoint, opts = {}) {
   return { [serverName]: commandConfig(entrypoint, opts) };
 }
 
-export { commandConfig, mcpServerConfig };
+/**
+ * The launcher a hook line runs. It mirrors the stdio config the agent gets -
+ * the global shim when one is on PATH, node plus the entrypoint otherwise - but
+ * without `serve`: a hook appends `guard <action>`, and `serve guard <action>`
+ * fails with "too many arguments for 'serve'".
+ *
+ * @param {string} entrypoint
+ * @returns {{ command: string, args?: string[] }}
+ */
+function hookLauncher(entrypoint) {
+  const config = commandConfig(entrypoint);
+
+  return config.command === process.execPath ? { command: config.command, args: [entrypoint] } : { command: config.command };
+}
+
+export { commandConfig, hookLauncher, mcpServerConfig };
