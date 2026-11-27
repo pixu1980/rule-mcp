@@ -41,7 +41,7 @@ Describe the single fix likely to produce the most noticeable improvement.
 
 ## Rules of thumb for the team
 
-- OnPush on every component
+- OnPush on every component (implicit on v22+), zoneless
 - Signals for local state
 - track every @for
 - computed() for derived values

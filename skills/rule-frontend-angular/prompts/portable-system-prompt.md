@@ -7,7 +7,7 @@ Always prefer structural fixes before micro-optimizations.
 Use this review order:
 
 1. Correctness risks (memory leaks, stale state)
-2. Change detection strategy (OnPush by default)
+2. Change detection strategy (OnPush, implicit on v22+; zoneless)
 3. Signals over RxJS for local state
 4. List tracking (track in @for)
 5. Derived values (computed vs effect)
@@ -18,7 +18,7 @@ Use this review order:
 
 Classify issues using these patterns:
 
-- Use `OnPush` change detection on every component
+- Use `OnPush` change detection on every component (explicit up to v21, the default on v22+) and stay zoneless
 - Use `signal()` for local state, RxJS only for complex async streams
 - Always use `track` with stable identity in `@for`
 - Use `computed()` for derived values, not `effect()` or lifecycle hooks

@@ -14,15 +14,34 @@ guardrails: [angular-no-ngclass]
 This skill adapts [rule-styleguide](../rule-styleguide/SKILL.md) and
 a store-and-signals architecture to **Angular standalone components**.
 
+## Step 0 - Pin the Angular version and load the official guidance
+
+Several rules below depend on the Angular major version. Before writing or
+reviewing code:
+
+1. Read the version: `frameworkVersion` from the Angular CLI MCP `list_projects`
+   tool, or `@angular/core` in `package.json`.
+2. With the Angular CLI MCP server available, call `get_best_practices` with the
+   workspace path to load the version-matched official guide, and
+   `search_documentation` (with the major version) for any API you are unsure of.
+   Never guess an API from memory.
+3. Apply the version notes in this skill (`v17+`, `v19+`, `v22+`). The examples
+   target v20+; on older versions fall back to the noted legacy form.
+4. Where the official guide and this skill disagree, this skill wins only on the
+   rule-mcp conventions it states explicitly as deviations (see Core Rules).
+
 ## Core Rules (inherited from rule-mcp skills)
 
-1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]`
-2. **Zero inline styles** - external `.css` files only (`styleUrls` / `@Component.styles`)
+1. **Zero CSS classes** - only element selectors + `[data-part="..."]` + `[data-*]`.
+   Deliberate deviation: the angular.dev guide suggests `[class]` bindings instead
+   of `ngClass`; rule-mcp forbids both and moves state into `[attr.data-*]`.
+2. **Zero inline styles** - external `.css` files only (`styleUrl` / `@Component.styles`)
 3. **Flex first** - `display: grid` only for named areas, subgrid, explicit placement, or auto-fit tracks; anything a flex row or column can do is flex.
 4. **Semantic HTML is mandatory** - never `<div>` where a semantic element exists
 5. **Barrel pattern** - every component folder has `index.ts`
 6. **No Angular Material CDK Overlay inline styles** - use CSS `[data-part]` instead
-7. **Standalone components** - no NgModules, `standalone: true`
+7. **Standalone components** - no NgModules. Omit `standalone: true`: it is the
+   default since v19 (write it explicitly only on v14-v18)
 
 ## File Tree Convention
 
@@ -53,29 +72,37 @@ src/
 
 ```typescript
 // components/TodoItem/_TodoItem.component.ts
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, input, output } from "@angular/core";
 
+import type { Todo } from "../../services";
+
+/** One todo row: toggles completion and asks its parent to delete it. */
 @Component({
   selector: "todo-item",
-  standalone: true,
-  styleUrls: ["./_TodoItem.component.css"],
+  styleUrl: "./_TodoItem.component.css",
   template: `
-    <article data-part="item" [attr.data-state-completed]="todo.completed ? 'done' : null">
-      <input type="checkbox" data-part="toggle" [checked]="todo.completed" (change)="toggle.emit(todo.id)" />
-      <span data-part="title">{{ todo.title }}</span>
-      <button data-part="delete" (click)="delete.emit(todo.id)">Delete</button>
+    <article data-part="item" [attr.data-state-completed]="todo().completed ? 'done' : null">
+      <label data-part="title">
+        <input type="checkbox" data-part="toggle" [checked]="todo().completed" (change)="toggle.emit(todo().id)" />
+        {{ todo().title }}
+      </label>
+      <button type="button" data-part="delete" [attr.aria-label]="'Delete ' + todo().title" (click)="delete.emit(todo().id)">Delete</button>
     </article>
   `,
 })
 export class TodoItem {
-  @Input({ required: true }) todo!: { id: string; title: string; completed: boolean };
-  @Output() toggle = new EventEmitter<string>();
-  @Output() delete = new EventEmitter<string>();
+  readonly todo = input.required<Todo>();
+  readonly toggle = output<string>();
+  readonly delete = output<string>();
 }
 ```
 
 ```css
-/* components/TodoItem/_TodoItem.component.css */
+/**
+ * FILE: components/TodoItem/_TodoItem.component.css
+ * USAGE: Styles for TodoItem
+ * SCOPE: todo-item
+ */
 article[data-part="item"] {
   display: flex;
   align-items: center;
@@ -92,30 +119,30 @@ article[data-part="item"][data-state-completed="done"] {
 
 | Store and signals           | Angular Equivalent                            |
 | --------------------------- | --------------------------------------------- |
-| `StateSignal`               | `signal()` (Angular 16+) / `BehaviorSubject`  |
-| `ComputedSignal`            | `computed()`                                  |
-| `effect()`                  | `effect()`                                    |
+| `StateSignal`               | `signal()`                                    |
+| `ComputedSignal`            | `computed()` / `linkedSignal()` (writable)    |
+| `effect()`                  | `effect()` (side effects only)                |
 | `Store (Proxy)`             | Service + `signal()`                          |
 | `html\`\`` tagged templates | Component `template`                          |
 | `{{ expr }}`                | `{{ expr }}`                                  |
 | `@click=${fn}`              | `(click)="fn()"`                              |
-| `model={...}` directive     | `[(ngModel)]` or `[value]` + `(input)`        |
-| `<for each="x in xs">`      | `*ngFor="let x of xs"` or `@for (x of xs)`    |
-| `<if condition="c">`        | `*ngIf="c"` or `@if (c)`                      |
-| `adoptedStyleSheets`        | `styleUrls` in @Component decorator           |
+| `model={...}` directive     | `model()` with `[(prop)]`                     |
+| `<for each="x in xs">`      | `@for (x of xs; track x.id)`                  |
+| `<if condition="c">`        | `@if (c)`                                     |
+| `adoptedStyleSheets`        | `styleUrl` in @Component decorator            |
 | `data-part="..."`           | `data-part="..."` or `[attr.data-part]="..."` |
-| `static {}` block           | Module-level CSS via `styleUrls`              |
 
 ## CSS Loading - Angular Style
 
-Use Angular's native `styleUrls` in the `@Component` decorator.
+Use Angular's native `styleUrl` (v17+; `styleUrls: [...]` before) in the
+`@Component` decorator, with a path relative to the component file.
 No fetch/adoptedStyleSheets needed - Angular handles scoped CSS loading.
 
 ```typescript
+/** Minimal component whose styles load from an external sheet. */
 @Component({
   selector: "my-component",
-  standalone: true,
-  styleUrls: ["./_MyComponent.component.css"],
+  styleUrl: "./_MyComponent.component.css",
   template: `...`,
 })
 export class MyComponent {}
@@ -123,13 +150,17 @@ export class MyComponent {}
 
 ## Lists and Conditionals (Angular 17+ @ syntax)
 
+Use the built-in control flow; `*ngIf` / `*ngFor` / `*ngSwitch` are legacy.
+
 ```typescript
+/** Todo list with an empty state, built on the @if / @for control flow. */
 @Component({
+  selector: "todo-list",
   template: `
     <section data-part="list">
-      @if (todos.length > 0) {
+      @if (todos().length > 0) {
         <ul data-part="items">
-          @for (todo of todos; track todo.id) {
+          @for (todo of todos(); track todo.id) {
             <li data-part="item">{{ todo.title }}</li>
           }
         </ul>
@@ -140,9 +171,26 @@ export class MyComponent {}
   `,
 })
 export class TodoList {
-  todos: Todo[] = [];
+  readonly todos = input<Todo[]>([]);
 }
 ```
+
+## Modern Angular APIs (v17+ unless noted)
+
+- **Inputs, outputs, two-way binding**: `input()` / `input.required()`, `output()`,
+  `model()`. Not `@Input` / `@Output` / `EventEmitter`.
+- **Dependency injection**: `inject()`, not constructor parameters.
+- **Host bindings**: the `host: {}` object of `@Component` / `@Directive`, not
+  `@HostBinding` / `@HostListener`.
+- **Template imports**: import only the directives and pipes the template uses
+  (`AsyncPipe`, `DatePipe`, ...). Never `CommonModule`.
+- **Derived state**: `computed()`; `linkedSignal()` (v19+) when derived state must
+  also be writable. Never `mutate()` on a signal: use `set()` / `update()`.
+- **Async data**: `resource()` / `httpResource()` (v19+/v20+) for signal-based
+  loading; RxJS only for real stream composition.
+- **Images**: `NgOptimizedImage` (`ngSrc`) for static images; it does not apply to
+  inline base64.
+- **Services**: `providedIn: "root"` for singletons (`@Service` on v22+).
 
 ## Barrel Pattern
 
@@ -156,13 +204,13 @@ export { TodoItem } from "./_TodoItem.component";
 ## Guardrails (Testable Assertions)
 
 - [ ] **guardrail-no-css-classes**: CSS uses element + [data-part="..."] + [data-*] selectors only. Zero .class selectors.
-- [ ] **guardrail-no-inline-styles**: Templates have zero style="..." attributes. External CSS via `styleUrls` in @Component.
+- [ ] **guardrail-no-inline-styles**: Templates have zero style="..." attributes. External CSS via `styleUrl` in @Component.
 - [ ] **guardrail-semantic-html**: No <div> where <header>/<section>/<article>/<footer>/<nav>/<main>/<aside>/<form>/<ul>/<ol>/<li> exists.
-- [ ] **guardrail-external-css**: CSS loaded as external file via Angular `styleUrls`. No fetch/adoptedStyleSheets needed.
+- [ ] **guardrail-external-css**: CSS loaded as external file via Angular `styleUrl`. No fetch/adoptedStyleSheets needed.
 - [ ] **guardrail-barrel-file**: Component folder has index.ts barrel. Files: _PascalCase.ext.
 - [ ] **guardrail-data-part**: Child elements use data-part="role" instead of class names.
 - [ ] **guardrail-no-framework-css**: No CSS-in-JS, no CSS Modules, no Tailwind. Pure external CSS only.
-- [ ] **guardrail-angular-specific**: Follows Angular rule-frontend-angular conventions. Use `styleUrls`, `standalone: true`, signals for state management.
+- [ ] **guardrail-angular-specific**: Follows Angular rule-frontend-angular conventions. Use `styleUrl`, standalone components without NgModules, signals for state management.
 - [ ] **guardrail-jsdoc-required**: Every JS/TS file MUST have complete JSDoc on all exported symbols (see rule-styleguide -> comments.md).
 - [ ] **guardrail-css-comments-required**: Every CSS file MUST have file-level + section comments (see rule-styleguide -> css.md).
 - [ ] **guardrail-a11y-test-required**: Every project MUST have Playwright + @axe-core/playwright a11y tests in `tests/a11y/` (see rule-styleguide -> a11y.md -> Automated Testing).
@@ -191,7 +239,7 @@ This section extends rule-frontend-angular with a structured performance review 
 
 ### Operating principles
 
-1. **Change detection is the key lever.** Default strategy checks every component on any async event. `OnPush` checks only when inputs change, events fire, or async pipes emit.
+1. **Change detection is the key lever.** With Zone.js and the `Default` strategy, every async event checks every component. `OnPush` checks only when inputs change, template events fire, async pipes emit, or a signal read in the template changes. Zoneless apps drop Zone.js and schedule checks only from those notifications.
 
 2. **Signals (Angular 16+) are the future.** Prefer `signal()` / `computed()` / `effect()` over `BehaviorSubject` + `async` pipe for component state.
 
@@ -210,21 +258,36 @@ This section extends rule-frontend-angular with a structured performance review 
 
 ### The 10 patterns
 
-#### 1. Use `OnPush` change detection by default
+#### 1. `OnPush` everywhere, zoneless where possible
 
-`ChangeDetectionStrategy.OnPush` reduces unnecessary checks. Components update only when inputs change, events fire, or async pipes emit.
+`OnPush` reduces unnecessary checks. Components update only when inputs change,
+template events fire, async pipes emit, or a template signal changes.
+
+- **v22+**: `OnPush` is the default. Do not set `changeDetection` explicitly.
+- **up to v21**: set it on every component.
 
 ```typescript
+// up to v21
+/** Component that opts in to OnPush explicitly (v21 and earlier). */
 @Component({
   selector: "my-component",
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `...`,
 })
 export class MyComponent {}
 ```
 
-Rule: _Set `OnPush` on every component. Use `Default` only when you have a specific reason and understand the cost._
+**Zoneless.** Zoneless is the default from v21: check that no
+`provideZoneChangeDetection()` overrides it. On v20 opt in with
+`provideZonelessChangeDetection()` at bootstrap
+(`provideExperimentalZonelessChangeDetection()` on v18-v19). Then remove `zone.js`
+and `zone.js/testing` from the build and test polyfills. Zoneless requires
+components that notify Angular through signals, inputs, template events, the
+`async` pipe or `markForCheck()` - the same contract as `OnPush`. With the Angular
+CLI MCP server available, its `onpush_zoneless_migration` tool plans the
+migration file by file.
+
+Rule: _`OnPush` on every component (implicit on v22+). Use `Default` only with a stated reason. Stay zoneless._
 
 #### 2. Prefer Signals over `BehaviorSubject` + `async` pipe
 
@@ -242,18 +305,23 @@ readonly data = this.dataSignal.asReadonly();
 
 Rule: _Use `signal()` for local state, RxJS for complex async streams (debounce, combineLatest, etc.)._
 
-#### 3. Always use `track` / `trackBy` in `@for`
+#### 3. Track a stable identity in `@for`
 
-Without tracking, Angular removes and recreates every DOM element on every list change.
+`track` is mandatory in `@for`: a block without it does not compile. The risk is
+the expression you pass. `track $index` matches items by position, so a list that
+reorders, filters, inserts or deletes rebuilds the wrong DOM nodes - the same bug
+as React's `key={index}`.
 
 ```html
-<!-- ❌ Angular 17+ @for without track recreates all -->
+<!-- ✅ Stable identity -->
 @for (item of items; track item.id) {
 <li data-part="item">{{ item.title }}</li>
 }
 
-<!-- ❌ Angular legacy ngFor with index -->
-<li *ngFor="let item of items; let i = index" [attr.data-part]="'item'">{{ item.title }}</li>
+<!-- ❌ Position-based identity on a mutable list -->
+@for (item of items; track $index) {
+<li data-part="item">{{ item.title }}</li>
+}
 ```
 
 Rule: _Always provide a stable identity `track` in `@for`. Never use index for mutable lists._
@@ -291,12 +359,24 @@ this.route.params.subscribe((params) => {
   this.loadData(params.id);
 });
 
-// ✅ takeUntilDestroyed (Angular 16+)
+// ✅ takeUntilDestroyed (Angular 16+) - no argument inside an injection context
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-this.route.params.pipe(takeUntilDestroyed()).subscribe((params) => {
-  this.loadData(params.id);
-});
+constructor() {
+  this.route.params.pipe(takeUntilDestroyed()).subscribe((params) => {
+    this.loadData(params.id);
+  });
+}
+
+// ✅ Outside an injection context (ngOnInit, methods) pass a DestroyRef,
+// or it throws NG0203
+private destroyRef = inject(DestroyRef);
+
+ngOnInit() {
+  this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+    this.loadData(params.id);
+  });
+}
 ```
 
 Rule: _Every subscription must be cleaned up. Prefer `takeUntilDestroyed` over manual `ngOnDestroy` Subject._
@@ -307,7 +387,8 @@ Service state persists across routes. Component-scoped state via `signal()` shou
 
 ```typescript
 // ✅ Local state - scoped to component
-@Component({ standalone: true, ... })
+/** Search box whose term lives and dies with the component. */
+@Component({ ... })
 export class SearchComponent {
   private searchTerm = signal("");
 }
@@ -323,10 +404,12 @@ Every route should be lazy-loaded. Never import everything in the root module.
 
 ```typescript
 // routes.ts - lazy by default
+/** Application routes; every entry loads its code on first navigation. */
 export const routes: Routes = [
   {
     path: "admin",
-    loadComponent: () => import("./admin/_AdminPanel.component"),
+    // A named export needs .then(); a bare import() expects a default export
+    loadComponent: () => import("./admin/_AdminPanel.component").then((m) => m.AdminPanel),
   },
 ];
 ```
@@ -339,17 +422,26 @@ Split when data fetching, state transitions, formatting, and UI layout change fo
 
 ```typescript
 // ✅ Service handles data
+/** Owns the current user and its loading and error state. */
 @Injectable({ providedIn: "root" })
 export class UserService {
   readonly user = signal<User | null>(null);
   readonly isLoading = signal(false);
   readonly error = signal<string | null>(null);
 
-  loadUser(id: string) { /* ... */ }
+  /**
+   * Fetch one user and publish it through the signals above.
+   *
+   * @param id - the user id
+   */
+  loadUser(id: string) {
+    // fetch, then set user / isLoading / error
+  }
 }
 
 // ✅ Component handles display only
-@Component({ standalone: true, ... })
+/** Renders the user that UserService owns; holds no state of its own. */
+@Component({ ... })
 export class UserProfile {
   private userService = inject(UserService);
   readonly user = this.userService.user.asReadonly();
@@ -396,17 +488,17 @@ Rule: _If you reach for `ngDoCheck`, you are fighting the framework. Use signals
 
 ### Decision matrix
 
-| Symptom                           | Check first               | Likely pattern                | Fix                             |
-| --------------------------------- | ------------------------- | ----------------------------- | ------------------------------- |
-| Slow typing / UI freezes          | Change detection strategy | `Default` instead of `OnPush` | Set `OnPush` on every component |
-| Too many change detection cycles  | State origin              | Service state used as local   | Move to component signal        |
-| List recreates all DOM on update  | Track identity            | Missing `track` in `@for`     | Add `track item.id`             |
-| Stale displayed value             | Derivation                | Derived in lifecycle hook     | Use `computed()`                |
-| Memory leak on page switch        | Subscriptions             | Missing unsubscribe           | Add `takeUntilDestroyed`        |
-| Slow initial bundle               | Module structure          | Eager imports                 | Lazy-load routes                |
-| Component too large               | Reasons to change         | Mixed responsibilities        | Extract service + view          |
-| Heavy chart blocks initial render | Defer strategy            | Eager heavy component         | Use `@defer (on viewport)`      |
-| Manual diff logic exists          | Lifecycle misuse          | `ngDoCheck`                   | Replace with `computed()`       |
+| Symptom                           | Check first               | Likely pattern                 | Fix                                |
+| --------------------------------- | ------------------------- | ------------------------------ | ---------------------------------- |
+| Slow typing / UI freezes          | Change detection strategy | `Default` instead of `OnPush`  | `OnPush` (implicit v22+), zoneless |
+| Too many change detection cycles  | State origin              | Service state used as local    | Move to component signal           |
+| List recreates all DOM on update  | Track identity            | `track $index` on mutable list | Add `track item.id`                |
+| Stale displayed value             | Derivation                | Derived in lifecycle hook      | Use `computed()`                   |
+| Memory leak on page switch        | Subscriptions             | Missing unsubscribe            | Add `takeUntilDestroyed`           |
+| Slow initial bundle               | Module structure          | Eager imports                  | Lazy-load routes                   |
+| Component too large               | Reasons to change         | Mixed responsibilities         | Extract service + view             |
+| Heavy chart blocks initial render | Defer strategy            | Eager heavy component          | Use `@defer (on viewport)`         |
+| Manual diff logic exists          | Lifecycle misuse          | `ngDoCheck`                    | Replace with `computed()`          |
 
 ### Supporting resources
 
@@ -426,63 +518,82 @@ Rule: _If you reach for `ngDoCheck`, you are fighting the framework. Use signals
 
 ---
 
-## Forms (Angular Reactive Forms)
+## Forms
 
-### Prerequisites
+### Which forms API
 
-- Use Angular Reactive Forms (`FormGroup`, `FormControl`, `FormArray`)
-- Use `zod` with custom validators for schema validation
-- Prefer Reactive Forms over Template-Driven Forms
+- **v22+**: prefer Signal Forms (`@angular/forms/signals`) for new forms:
+  signal-based state, type-safe field access, schema-based validation. On v21
+  they are experimental: use them only when the project accepts that.
+- **Otherwise**: typed Reactive Forms (`FormGroup`, `FormControl`, `FormArray`),
+  never template-driven forms.
+- **Zoneless + Reactive Forms**: `setValue`, `patchValue`, `FormArray.push` and
+  the like do not schedule change detection. A template that reads form state
+  must get it through a signal (`toSignal(form.valueChanges)`) or a
+  `markForCheck()`.
 
-### Step 1 - Define form with validation
+Check the exact Signal Forms API for the project version with
+`search_documentation` before writing it.
+
+### Typed Reactive Forms example
 
 ```typescript
-import { Component } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Component, inject, signal } from "@angular/core";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 
+/** Email and name form with typed controls and field-level errors. */
 @Component({
   selector: "app-my-form",
+  imports: [ReactiveFormsModule],
   template: `
     <form data-part="form" [formGroup]="form" (ngSubmit)="onSubmit()">
       <label data-part="field">
         <span data-part="label">Email</span>
         <input data-part="input" formControlName="email" type="email" />
-        <span data-part="error" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
-          {{ getError("email") }}
-        </span>
+        @if (form.controls.email.invalid && form.controls.email.touched) {
+          <span data-part="error">{{ getError("email") }}</span>
+        }
       </label>
-      <button data-part="submit" [disabled]="form.invalid || submitting">Save</button>
+      <button data-part="submit" [disabled]="form.invalid || submitting()">Save</button>
     </form>
   `,
 })
 export class MyFormComponent {
-  form: FormGroup;
-  submitting = false;
+  private readonly fb = inject(FormBuilder);
 
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
-      email: ["", [Validators.required, Validators.email]],
-      name: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
-    });
-  }
+  readonly submitting = signal(false);
+  readonly form = this.fb.nonNullable.group({
+    email: ["", [Validators.required, Validators.email]],
+    name: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(255)]],
+  });
 
-  getError(controlName: string): string {
-    const control = this.form.get(controlName);
-    if (control?.hasError("required")) return "This field is required";
-    if (control?.hasError("email")) return "Invalid email";
+  getError(controlName: "email" | "name"): string {
+    const control = this.form.controls[controlName];
+
+    if (control.hasError("required")) {
+      return "This field is required";
+    }
+
+    if (control.hasError("email")) {
+      return "Invalid email";
+    }
+
     return "";
   }
 
   onSubmit(): void {
-    if (this.form.invalid) return;
-    this.submitting = true;
+    if (this.form.invalid) {
+      return;
+    }
+
+    this.submitting.set(true);
   }
 }
 ```
 
 ### Checklist
 
-- [ ] Reactive Forms (not template-driven) used
+- [ ] Signal Forms on v22+, typed Reactive Forms otherwise (never template-driven)
 - [ ] Validators applied at `FormGroup`/`FormControl` level
 - [ ] Field-level errors rendered after touch
 - [ ] Submit button disabled when invalid or submitting

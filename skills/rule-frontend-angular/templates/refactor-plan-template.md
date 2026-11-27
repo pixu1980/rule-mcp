@@ -13,7 +13,7 @@ Describe what the refactor improves.
 ## Refactor steps
 
 1. Add test coverage for current behavior
-2. Set `ChangeDetectionStrategy.OnPush` on all components
+2. Set `ChangeDetectionStrategy.OnPush` on all components (up to v21; implicit on v22+)
 3. Replace local-state Subjects with signals
 4. Replace derived-state effects with computed()
 5. Add proper track in @for blocks

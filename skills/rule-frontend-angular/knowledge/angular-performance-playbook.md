@@ -8,12 +8,13 @@ Angular performance is about controlling **when change detection runs** and **ho
 
 Key levers:
 
-1. **ChangeDetectionStrategy.OnPush** - limits checks to input changes, events, and async pipes
-2. **Signals** - provide fine-grained reactivity without zone.js
-3. **Lazy loading** - defers code download until needed
-4. **`@defer`** - defers component rendering until conditions are met
+1. **ChangeDetectionStrategy.OnPush** - limits checks to input changes, events, async pipes and template signals (the default from v22)
+2. **Zoneless** - no zone.js; checks run only on those notifications (the default from v21)
+3. **Signals** - provide fine-grained reactivity without zone.js
+4. **Lazy loading** - defers code download until needed
+5. **`@defer`** - defers component rendering until conditions are met
 
-## Pattern 1 - OnPush by default
+## Pattern 1 - OnPush by default (implicit on v22+)
 
 `ChangeDetectionStrategy.Default` checks every component in the tree on any async activity (timer, HTTP response, click, etc.). `OnPush` checks only when:
 
@@ -22,11 +23,10 @@ Key levers:
 - An async pipe emits
 - A signal used in the template changes
 
-### Migration
+### Migration (up to v21; on v22+ OnPush is the default, omit it)
 
 ```typescript
 @Component({
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   // ...
 })
@@ -42,14 +42,14 @@ Key levers:
 
 ### When to use
 
-| Use case              | Tool                                  |
-| --------------------- | ------------------------------------- |
-| Local component state | `signal()`                            |
-| Derived values        | `computed()`                          |
-| Side effects          | `effect()`                            |
-| Complex async streams | RxJS (`Subject`, `mergeMap`, etc.)    |
-| HTTP requests         | RxJS (`HttpClient`)                   |
-| Forms                 | `FormsModule` / `ReactiveFormsModule` |
+| Use case              | Tool                                              |
+| --------------------- | ------------------------------------------------- |
+| Local component state | `signal()`                                        |
+| Derived values        | `computed()`                                      |
+| Side effects          | `effect()`                                        |
+| Complex async streams | RxJS (`Subject`, `mergeMap`, etc.)                |
+| HTTP requests         | RxJS (`HttpClient`)                               |
+| Forms                 | Signal Forms (v22+) / typed `ReactiveFormsModule` |
 
 ### Signal service pattern
 
@@ -77,7 +77,7 @@ Angular 17+ `@for` with `track`:
 }
 ```
 
-Without `track`, Angular identity-matches by index - same as React's key={index} bug.
+`track` is mandatory: `@for` without it does not compile. `track $index` matches by position - the same bug as React's `key={index}` on a list that reorders, filters, inserts or deletes.
 
 ## Pattern 4 - computed() over effect() for derivation
 
@@ -113,8 +113,16 @@ export class MyComponent {
   private destroyRef = inject(DestroyRef);
 
   constructor() {
+    // Injection context: no argument needed
     interval(1000)
       .pipe(takeUntilDestroyed())
+      .subscribe((v) => console.log(v));
+  }
+
+  ngOnInit() {
+    // Outside an injection context: pass the DestroyRef, or it throws NG0203
+    interval(5000)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((v) => console.log(v));
   }
 }
@@ -158,8 +166,9 @@ All routes should be lazy unless the component is needed on every page.
 
 ```typescript
 export const routes: Routes = [
-  { path: "", loadComponent: () => import("./home/_Home.component") },
-  { path: "settings", loadChildren: () => import("./settings/settings.routes") },
+  // Named exports need .then(); a bare import() expects a default export
+  { path: "", loadComponent: () => import("./home/_Home.component").then((m) => m.Home) },
+  { path: "settings", loadChildren: () => import("./settings/settings.routes").then((m) => m.routes) },
 ];
 ```
 
@@ -246,4 +255,4 @@ Browser Performance panel: identify long scripting tasks caused by change detect
 
 ## Final principle
 
-Angular performance is about reducing change detection work. `OnPush` + Signals + Lazy loading + `@defer` cover 90% of real-world performance issues.
+Angular performance is about reducing change detection work. `OnPush` + zoneless + Signals + Lazy loading + `@defer` cover 90% of real-world performance issues.

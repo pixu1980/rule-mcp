@@ -23,7 +23,7 @@ Observation: This component uses `ChangeDetectionStrategy.Default` and manages s
 
 Risk: Every change detection cycle checks this component and its children, even when nothing relevant changed.
 
-Suggested fix: Set `changeDetection: ChangeDetectionStrategy.OnPush` and consider replacing the `BehaviorSubject` with a `signal()` for simpler, zone-independent state.
+Suggested fix: Set `changeDetection: ChangeDetectionStrategy.OnPush` (up to v21; on v22+ remove the explicit `Default`) and consider replacing the `BehaviorSubject` with a `signal()` for simpler, zone-independent state.
 
 Rule of thumb: OnPush + Signals reduce change detection work and make component updates predictable.
 ````

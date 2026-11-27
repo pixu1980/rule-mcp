@@ -3,7 +3,7 @@ Refactor the following Angular component using the rule-frontend-angular perform
 Goals:
 
 - Preserve behavior
-- Add `OnPush` change detection
+- Add `OnPush` change detection (up to v21; it is the default on v22+)
 - Replace unnecessary RxJS with signals
 - Add proper track in @for
 - Move derived values to `computed()`

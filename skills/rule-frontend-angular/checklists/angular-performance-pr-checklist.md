@@ -2,7 +2,8 @@
 
 ## 1. Change detection
 
-- Is `ChangeDetectionStrategy.OnPush` set on every component?
+- Up to v21: is `ChangeDetectionStrategy.OnPush` set on every component? On v22+ it is the default: is it left implicit?
+- Is the app zoneless (default from v21), with no `provideZoneChangeDetection()` override?
 - Are there exceptions to `OnPush` with documented justification?
 - Is `ChangeDetectorRef.detectChanges()` or `.markForCheck()` used sparingly?
 

@@ -2,7 +2,7 @@ Review the following Angular code for performance and maintainability issues.
 
 Focus on:
 
-- `ChangeDetectionStrategy.Default` used instead of `OnPush`
+- `ChangeDetectionStrategy.Default` used instead of `OnPush` (or set explicitly on v22+, where `OnPush` is the default)
 - RxJS `BehaviorSubject` used where `signal()` would be simpler
 - Missing `track` in `@for` or index-based tracking
 - Derived values computed in `effect()` or lifecycle hooks instead of `computed()`
