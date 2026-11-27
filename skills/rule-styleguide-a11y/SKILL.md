@@ -21,6 +21,7 @@ frameworks: [all]
 guardrails:
   [
     a11y-aria-hidden-focusable,
+    a11y-button-name,
     a11y-focus-visible,
     a11y-form-label,
     a11y-html-lang,
@@ -28,6 +29,7 @@ guardrails:
     a11y-img-alt,
     a11y-no-autoplay,
     a11y-positive-tabindex,
+    a11y-role-button-focusable,
     a11y-test-required,
     a11y-video-captions,
   ]
@@ -143,7 +145,7 @@ To ensure technical integrity, any agent interacting with this framework **MUST*
 
 ### 3.4 Robust
 
-**References:** [`references/guide-governance.md`](./references/guide-governance.md) | [`references/guide-framework-mapping.md`](./references/guide-framework-mapping.md) | [`references/guide-platform-native.md`](./references/guide-platform-native.md)
+**References:** [`references/guide-governance.md`](./references/guide-governance.md) | [`references/guide-framework-mapping.md`](./references/guide-framework-mapping.md) | [`references/guide-platform-native.md`](./references/guide-platform-native.md) | [`references/guide-web-components.md`](./references/guide-web-components.md)
 
 - **Semantic HTML:** **MUST** prefer native (HTML5) elements over custom ones.
 - **Interoperability:** The code **MUST** be compatible with current assistive technologies (ISO 9241-171).
@@ -396,12 +398,14 @@ each failure names the criterion rather than only the fix:
 | `a11y-img-alt`               | 1.1.1 Non-text Content       |
 | `a11y-video-captions`        | 1.2.2 Captions (Prerecorded) |
 | `a11y-no-autoplay`           | 1.4.2 Audio Control          |
+| `a11y-role-button-focusable` | 2.1.1 Keyboard               |
 | `a11y-positive-tabindex`     | 2.4.3 Focus Order            |
 | `a11y-focus-visible`         | 2.4.11 Focus Appearance      |
 | `a11y-html-lang`             | 3.1.1 Language of Page       |
 | `a11y-form-label`            | 3.3.2 Labels or Instructions |
 | `a11y-iframe-title`          | 4.1.2 Name, Role, Value      |
 | `a11y-aria-hidden-focusable` | 4.1.2 Name, Role, Value      |
+| `a11y-button-name`           | 4.1.2 Name, Role, Value      |
 
 **These are a floor, not an audit.** A clean run means no machine-detectable
 violation of nine criteria out of 55. Contrast ratios need rendering; whether
@@ -438,6 +442,7 @@ These files in `references/` are **lazy-loaded** - read only the guide relevant 
 | Toasts & Notifications        | Dynamic Feedback           | [`references/guide-toasts-notifications.md`](./references/guide-toasts-notifications.md) |
 | Tooltips & Popovers           | Contextual Information     | [`references/guide-tooltips-popovers.md`](./references/guide-tooltips-popovers.md)       |
 | Visual Perception & Color     | Color & Contrast           | [`references/guide-visual-perception.md`](./references/guide-visual-perception.md)       |
+| Web Components                | Custom Elements            | [`references/guide-web-components.md`](./references/guide-web-components.md)             |
 
 ### Templates
 

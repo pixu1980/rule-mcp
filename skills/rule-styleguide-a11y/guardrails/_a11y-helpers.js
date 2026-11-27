@@ -24,6 +24,17 @@ function isStyles(context) {
 }
 
 /**
+ * The attributes of an opening tag: a `>` inside quotes or a JSX `{...}`
+ * expression (an arrow handler) does not end the tag, nor does a `/` that
+ * is not the self-closing `/>`.
+ * ponytail: one level of nested braces; deeper JSX object literals end the tag early.
+ */
+const TAG_ATTRIBUTES = String.raw`(?:[^>"'{}/]|\/(?!>)|"[^"]*"|'[^']*'|\{(?:[^{}]|\{[^{}]*\})*\})*`;
+
+/** Any opening, self-closing or closing tag, for stripping markup down to its text. */
+const ANY_TAG = new RegExp(String.raw`<\/?[a-z][\w-]*${TAG_ATTRIBUTES}\/?>`, "gi");
+
+/**
  * Build a markup rule. `find` returns the offending fragments.
  */
 function a11yRule(spec) {
@@ -56,4 +67,4 @@ function a11yRule(spec) {
  * replaceSync sheets, <style> blocks, or a bare stylesheet.
  */
 
-export { scannableLines, MARKUP_EXTENSION, STYLE_EXTENSION, isMarkup, isStyles, a11yRule };
+export { scannableLines, MARKUP_EXTENSION, STYLE_EXTENSION, TAG_ATTRIBUTES, ANY_TAG, isMarkup, isStyles, a11yRule };

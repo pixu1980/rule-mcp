@@ -22,7 +22,7 @@ When generating or reviewing code, **transpose** these patterns into the active 
 | :------------- | :--------------------------------- |
 | State binding  | `:aria-expanded="isOpen"` (v-bind) |
 | Event handling | `@keydown.enter="submit"`          |
-| Focus          | `$refs.element.focus()`            |
+| Focus          | `$refs.element.focus()`.           |
 
 ```html
 <button :aria-pressed="isActive" @click="isActive = !isActive">Toggle</button>
@@ -34,7 +34,7 @@ When generating or reviewing code, **transpose** these patterns into the active 
 | :------------- | :---------------------------------------------------- |
 | State binding  | `[attr.aria-expanded]="isOpen"` (note `attr.` prefix) |
 | Event handling | `(keydown.enter)="submit()"`                          |
-| Focus          | `@ViewChild` + `ElementRef`                           |
+| Focus          | `@ViewChild` + `ElementRef`.                          |
 
 ```html
 <button [attr.aria-pressed]="isActive" (click)="isActive = !isActive">Toggle</button>
@@ -42,11 +42,11 @@ When generating or reviewing code, **transpose** these patterns into the active 
 
 ## 3. Svelte
 
-| Concept        | Syntax                            |
-| :------------- | :-------------------------------- |
-| State binding  | `aria-expanded={isOpen}`          |
-| Event handling | `on:keydown`                      |
-| Directives     | `use:focusTrap` for complex logic |
+| Concept        | Syntax                             |
+| :------------- | :--------------------------------- |
+| State binding  | `aria-expanded={isOpen}`           |
+| Event handling | `on:keydown`                       |
+| Directives     | `use:focusTrap` for complex logic. |
 
 ```html
 <button aria-pressed="{isActive}" on:click="{()" ="">isActive = !isActive}> Toggle</button>
@@ -57,7 +57,7 @@ When generating or reviewing code, **transpose** these patterns into the active 
 | Concept        | Syntax                                     |
 | :------------- | :----------------------------------------- |
 | State binding  | `aria-expanded={isOpen()}` (invoke signal) |
-| Event handling | `onKeyDown={(e) => ...}`                   |
+| Event handling | `onKeyDown={(e) => ...}`.                  |
 
 ```jsx
 <button aria-pressed={isActive()} onClick={() => setIsActive(!isActive())}>
@@ -65,11 +65,29 @@ When generating or reviewing code, **transpose** these patterns into the active 
 </button>
 ```
 
-## 5. Vanilla JS / Web Components (Lit)
+## 5. Vanilla JS / Web Components
 
-| Concept            | Syntax                                                                                    |
-| :----------------- | :---------------------------------------------------------------------------------------- |
-| State binding      | `.ariaExpanded=${this.isOpen}` or `?aria-hidden=${this.isHidden}`                         |
+No framework: ARIA state is set through DOM properties.
+
+| Concept            | Syntax                                                                                        |
+| :----------------- | :-------------------------------------------------------------------------------------------- |
+| State binding      | `button.ariaExpanded = String(isOpen)`.                                                       |
+| ARIA boolean       | `button.ariaHidden = String(isHidden)` (`"true"`/`"false"`, never `toggleAttribute`).         |
+| Host semantics     | `this.#internals.role = "button"`, `this.#internals.ariaPressed = "true"` (ElementInternals). |
+| Shadow DOM caution | `aria-controls` / `aria-describedby` IDs do not cross Shadow DOM. Use `ElementInternals`.     |
+
+```js
+const toggle = this.shadowRoot.querySelector("button");
+
+toggle.addEventListener("click", () => {
+  toggle.ariaPressed = String(toggle.ariaPressed !== "true");
+});
+```
+
+Full authoring rules: [`guide-web-components.md`](./guide-web-components.md).
+
+----------------- | :---------------------------------------------------------------------------------------- |
+| State binding | `.ariaExpanded=${this.isOpen}` or `aria-hidden=${String(this.isHidden)}` |
 | Shadow DOM caution | `aria-controls` / `aria-describedby` IDs do not cross Shadow DOM - use `ElementInternals` |
 
 ```js

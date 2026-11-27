@@ -54,6 +54,34 @@ check("T6.1 muted autoplay is allowed", !failed(html("<video autoplay muted></vi
 check("T7 an iframe with no title fails", failed(html('<iframe src="x"></iframe>'), "a11y-iframe-title")?.wcag === "4.1.2");
 check("T7.1 aria-hidden on a focusable element fails", failed(html('<button aria-hidden="true">Go</button>'), "a11y-aria-hidden-focusable")?.wcag === "4.1.2");
 
+const tsx = (body) => checkCode("rule-styleguide-a11y", body, { fileName: "a.tsx" });
+
+check("T7.2 a div with role=button and no tabindex fails", failed(html('<div role="button">Go</div>'), "a11y-role-button-focusable")?.wcag === "2.1.1");
+check("T7.3 role=button with tabindex passes", !failed(html('<div role="button" tabindex="0">Go</div>'), "a11y-role-button-focusable"));
+check("T7.4 JSX tabIndex={0} passes", !failed(tsx('<div role="button" tabIndex={0}>Go</div>'), "a11y-role-button-focusable"));
+check("T7.5 JSX role={'button'} without tabIndex fails", Boolean(failed(tsx("<span role={'button'}>Go</span>"), "a11y-role-button-focusable")));
+check("T7.6 a native button with role=button is not flagged", !failed(html('<button role="button">Go</button>'), "a11y-role-button-focusable"));
+
+check("T7.7 an icon-only button with no name fails", failed(html('<button><svg viewBox="0 0 1 1"></svg></button>'), "a11y-button-name")?.wcag === "4.1.2");
+check("T7.8 a button with text passes", !failed(html("<button>Save</button>"), "a11y-button-name"));
+check("T7.9 aria-label names the button", !failed(html('<button aria-label="Close"><svg></svg></button>'), "a11y-button-name"));
+check("T7.10 JSX aria-label={...} names the button", !failed(tsx("<button aria-label={t('close')}><Icon /></button>"), "a11y-button-name"));
+check("T7.11 an expression child counts as text", !failed(tsx("<button>{label}</button>"), "a11y-button-name"));
+check("T7.12 an img with alt names the button", !failed(html('<button><img src="x.svg" alt="Search"></button>'), "a11y-button-name"));
+check("T7.13 an img with empty alt does not", Boolean(failed(html('<button><img src="x.svg" alt=""></button>'), "a11y-button-name")));
+check("T7.14 aria-labelledby names the button", !failed(html('<button aria-labelledby="t"><svg></svg></button>'), "a11y-button-name"));
+check("T7.15 an empty aria-label does not name the button", Boolean(failed(html('<button aria-label=""><svg></svg></button>'), "a11y-button-name")));
+check("T7.16 a whitespace-only aria-label does not name the button", Boolean(failed(html('<button aria-label="  "><svg></svg></button>'), "a11y-button-name")));
+check("T7.17 an empty title does not name the button", Boolean(failed(html("<button title=''><svg></svg></button>"), "a11y-button-name")));
+check("T7.18 a JSX empty string literal does not name the button", Boolean(failed(tsx('<button aria-label={""}><Icon /></button>'), "a11y-button-name")));
+check("T7.19 a self-closing JSX button with no name fails", Boolean(failed(tsx("<button />"), "a11y-button-name")));
+check("T7.20 a self-closing JSX button with aria-label passes", !failed(tsx('<button aria-label="Close" />'), "a11y-button-name"));
+check("T7.21 handler source in the opening tag is not visible text", Boolean(failed(tsx("<button onClick={() => save()}><Icon /></button>"), "a11y-button-name")));
+check("T7.22 a JSX arrow handler does not hide tabIndex", !failed(tsx('<div role="button" onClick={() => save()} tabIndex={0}>Save</div>'), "a11y-role-button-focusable"));
+check("T7.23 a link with href and role=button is already focusable", !failed(html('<a href="/save" role="button">Save</a>'), "a11y-role-button-focusable"));
+check("T7.24 an input with role=button is already focusable", !failed(html('<input type="button" role="button" value="Save">'), "a11y-role-button-focusable"));
+check("T7.25 a link without href and role=button still fails", Boolean(failed(html('<a role="button">Save</a>'), "a11y-role-button-focusable")));
+
 check(
   "T8 the rules do not fire on a JavaScript file",
   checkCode("rule-styleguide-a11y", "const img = 1;", { fileName: "a.js" }).failed.every((f) => !f.id.startsWith("a11y-img")),

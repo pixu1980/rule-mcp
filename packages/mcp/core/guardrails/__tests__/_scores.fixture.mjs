@@ -17,6 +17,7 @@ import { PROSE_CORPUS } from "../../../../../scripts/__tests__/fixtures/prose-co
 import { ADR_CORPUS } from "../../../../../scripts/__tests__/fixtures/adr-corpus.mjs";
 import { SECRET_CORPUS } from "../../../../../scripts/__tests__/fixtures/secret-corpus.mjs";
 import { BUNDLER_CORPUS } from "../../../../../scripts/__tests__/fixtures/bundler-corpus.mjs";
+import { A11Y_CORPUS } from "../../../../../scripts/__tests__/fixtures/a11y-corpus.mjs";
 import { checkCode, setSkillGuardrails } from "../index.js";
 import * as DEFS from "../index.js";
 import { loadLayerGuardrails } from "../../layers/_guardrails.js";
@@ -33,7 +34,7 @@ setSkillGuardrails(LAYERED);
  * precision and recall are read from the same place whether its fixture had a
  * line to spare or not.
  */
-export const CORPUS = [...GUARDRAIL_CORPUS, ...PROSE_CORPUS, ...ADR_CORPUS, ...SECRET_CORPUS, ...BUNDLER_CORPUS];
+export const CORPUS = [...GUARDRAIL_CORPUS, ...PROSE_CORPUS, ...ADR_CORPUS, ...SECRET_CORPUS, ...BUNDLER_CORPUS, ...A11Y_CORPUS];
 
 /** Every rule id the checker knows about, across every group. */
 export function allRuleIds() {

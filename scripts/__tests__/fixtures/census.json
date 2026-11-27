@@ -27,7 +27,7 @@
     },
     {
       "file": "19-guardrails.md",
-      "sha256": "8676346403733dbb61c6bd27053021359f1f00aa9487736d8976e603aab94b55"
+      "sha256": "4ce864868465006367793e5cd3e9f5405417d75b86147ee5e9f36dc12944b40c"
     },
     {
       "file": "20-resources.md",
@@ -35,7 +35,7 @@
     },
     {
       "file": "21-surface-map.md",
-      "sha256": "2bd6ed13aa3cd6c96248d4a549eb89f21b4311c8ca08c5d35fc2151040d0ab5f"
+      "sha256": "345b025a666d6cf8c2cf85a97bf49ef47d1edb38095045c9074a028ec11caa8d"
     },
     {
       "file": "22-install-targets.md",
