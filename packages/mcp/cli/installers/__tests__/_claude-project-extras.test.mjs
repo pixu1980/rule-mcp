@@ -42,6 +42,26 @@ test("the extras are the rules block, the slash commands and the hooks", () => {
   );
 });
 
+test("the project hooks run the guard, not the server's serve subcommand", () => {
+  const project = mkdtempSync(join(tmpdir(), "rule-claude-project-serve-"));
+
+  try {
+    installClaudeProjectExtras({ projectRoot: project, projectConfig: "local", entrypoint: "/tmp/rule.js" });
+
+    const settings = JSON.parse(readFileSync(join(project, ".claude", "settings.local.json"), "utf8"));
+    const commands = Object.values(settings.hooks).flatMap((entries) => entries.flatMap((entry) => entry.hooks.map((hook) => hook.command)));
+
+    assert.ok(commands.length > 0, "the hooks are written");
+    assert.ok(
+      commands.every((command) => !/\bserve\b/.test(command)),
+      "`serve guard` is rejected by the CLI: too many arguments for 'serve'",
+    );
+    assert.ok(commands.every((command) => / guard \S+ {2}#/.test(command)));
+  } finally {
+    rmSync(project, { recursive: true, force: true });
+  }
+});
+
 test("a local project config puts the hooks in settings.local.json", () => {
   const local = mkdtempSync(join(tmpdir(), "rule-claude-project-local-"));
 

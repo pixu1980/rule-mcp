@@ -1,7 +1,38 @@
-/** @module core/agents/hook-commands - the marker and the command classifiers */
+/** @module core/agents/hook-commands - the marker, the hook command line and the command classifiers */
 
 /** Marks our entries so merge and uninstall can find them without touching others. */
 export const HOOK_MARKER = "rule-mcp-guard";
+
+/**
+ * One word of a hook command line.
+ *
+ * Hosts hand the line to a shell - Git Bash, for Claude Code on Windows - where
+ * an unquoted backslash is an escape: `C:\Users\me\rule-mcp.js` reaches node as
+ * `C:Usersmerule-mcp.js`. A Windows path is written with forward slashes, which
+ * node and Windows both accept, and always quoted. Any other word is quoted only
+ * when it holds whitespace.
+ *
+ * @param {string} part
+ * @returns {string}
+ */
+export function shellWord(part) {
+  if (part.includes("\\")) {
+    return JSON.stringify(part.replaceAll("\\", "/"));
+  }
+
+  return /\s/.test(part) ? JSON.stringify(part) : part;
+}
+
+/**
+ * The shell line every hook writer builds, so a quoting fix cannot land in one
+ * writer and miss the other.
+ *
+ * @param {string[]} parts - launcher command, its args, then the guard words
+ * @returns {string}
+ */
+export function shellLine(parts) {
+  return parts.map(shellWord).join(" ");
+}
 
 /**
  * Commands that change a database schema. Matched against the Bash command

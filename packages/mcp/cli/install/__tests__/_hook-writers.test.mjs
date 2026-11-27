@@ -11,6 +11,12 @@ test("the guard line quotes a launcher path with spaces and carries the marker",
   assert.match(line, /^"\/opt\/rule mcp\/bin\/rule-mcp" guard --send bash {2}# rule-mcp-guard$/);
 });
 
+test("the guard line writes a Windows path with forward slashes and quotes it", () => {
+  const line = guardCommand({ command: String.raw`C:\Program Files\nodejs\node.exe`, args: [String.raw`C:\Users\me\rule-mcp\bin\rule-mcp.js`] }, "bash");
+
+  assert.match(line, /^"C:\/Program Files\/nodejs\/node\.exe" "C:\/Users\/me\/rule-mcp\/bin\/rule-mcp\.js" guard --send bash {2}# rule-mcp-guard$/);
+});
+
 test("Cursor gets its camelCase events, flat hooks and tool matchers", () => {
   const document = cursorHooks(launcher);
 

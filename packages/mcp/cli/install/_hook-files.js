@@ -4,10 +4,12 @@ import { join } from "node:path";
 
 import { HOME, atomicWrite, readText, removeFile } from "../installers/_paths.js";
 import { parseJson, toJson } from "../installers/_writers-json.js";
-import { commandConfig } from "../installers/_env-command.js";
+import { hookLauncher } from "../installers/_env-command.js";
 import { HOOK_MARKER } from "../../core/agents/_hook-commands.js";
 import { withHooks, withoutHooks } from "../../core/agents/_hooks.js";
 import { codexHooks, cursorHooks, geminiHooks, kiroHooks } from "./_hook-writers.js";
+
+export { hookLauncher } from "../installers/_env-command.js";
 
 /** The file a native host reads its hooks from, or null when it loads code. */
 export function hookFile(agent) {
@@ -20,19 +22,6 @@ export function hookFile(agent) {
   };
 
   return files[agent] ?? null;
-}
-
-/**
- * The launcher a hook line runs. It mirrors the stdio config the agent gets:
- * the global shim when one is on PATH, node plus the entrypoint otherwise.
- *
- * @param {string} entrypoint
- * @returns {{ command: string, args?: string[] }}
- */
-export function hookLauncher(entrypoint) {
-  const config = commandConfig(entrypoint);
-
-  return config.command === process.execPath ? { command: config.command, args: [entrypoint] } : { command: config.command };
 }
 
 const isNested = (entry) => (entry?.hooks ?? []).some((hook) => typeof hook?.command === "string" && hook.command.includes(HOOK_MARKER));
